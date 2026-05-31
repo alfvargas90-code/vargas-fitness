@@ -126,7 +126,7 @@ function renderScale() {
   const s = latestScale();
   const sub = document.getElementById("scale-sub");
   const grid = document.getElementById("scale-grid");
-  if (!s) { sub.textContent = "No readings yet."; grid.innerHTML = ""; renderScaleCharts(); return; }
+  if (!s) { sub.textContent = "No readings yet."; grid.innerHTML = ""; return; }
 
   const change = s.weight_change_lbs;
   const changeStr = change == null ? "" :
@@ -158,51 +158,6 @@ function renderScale() {
       <div class="text-xs mt-1 ${it.rating ? (ratingColor[it.rating] ?? "text-muted") : "text-muted"}">${it.rating ?? "—"}</div>
     </div>
   `).join("");
-
-  renderScaleCharts();
-}
-
-function renderScaleCharts() {
-  const sorted = [...scale].sort(byDate);
-  const wrap = document.getElementById("scale-charts-wrap");
-  if (sorted.length < 2) { wrap.classList.add("hidden"); return; }
-  wrap.classList.remove("hidden");
-
-  charts.scaleWeight?.destroy();
-  charts.scaleWeight = new Chart(document.getElementById("chart-scale-weight"), {
-    type: "line",
-    data: {
-      labels: sorted.map(s => s.date),
-      datasets: [{
-        label: "Scale weight (lbs)",
-        data: sorted.map(s => s.weight_lbs),
-        borderColor: "#22d3ee",
-        backgroundColor: "rgba(34,211,238,0.12)",
-        tension: 0.3,
-        fill: true,
-        pointRadius: 4,
-      }],
-    },
-    options: baseChartOpts,
-  });
-
-  charts.scaleBf?.destroy();
-  charts.scaleBf = new Chart(document.getElementById("chart-scale-bf"), {
-    type: "line",
-    data: {
-      labels: sorted.map(s => s.date),
-      datasets: [{
-        label: "Scale BF %",
-        data: sorted.map(s => s.body_fat_pct),
-        borderColor: "#a78bfa",
-        backgroundColor: "rgba(167,139,250,0.12)",
-        tension: 0.3,
-        fill: true,
-        pointRadius: 4,
-      }],
-    },
-    options: baseChartOpts,
-  });
 }
 
 function renderHistory() {
@@ -231,34 +186,6 @@ const baseChartOpts = {
     y: { ticks: { color: "#9ca3af" }, grid: { color: "#374151" } },
   },
 };
-
-function renderWeightChart() {
-  const sorted = [...weight].sort(byDate);
-  document.getElementById("weight-count").textContent = `${sorted.length} entr${sorted.length === 1 ? "y" : "ies"}`;
-  charts.weight?.destroy();
-  charts.weight = new Chart(document.getElementById("chart-weight"), {
-    type: "line",
-    data: {
-      labels: sorted.map(w => w.date),
-      datasets: [{
-        label: "Weight (lbs)",
-        data: sorted.map(w => w.weight_lbs),
-        borderColor: "#22d3ee",
-        backgroundColor: "rgba(34,211,238,0.15)",
-        tension: 0.3,
-        fill: true,
-        pointRadius: 4,
-      }, goals.target_weight_lbs && {
-        label: `Target (${goals.target_weight_lbs})`,
-        data: sorted.map(() => goals.target_weight_lbs),
-        borderColor: "#34d399",
-        borderDash: [5, 5],
-        pointRadius: 0,
-      }].filter(Boolean),
-    },
-    options: baseChartOpts,
-  });
-}
 
 function renderBfChart() {
   const sorted = [...scans].sort(byDate);
@@ -595,9 +522,8 @@ function renderAll() {
   renderKPIs();
   renderHealthMarkers();
   renderGoals();
-  renderScale(); // renderScaleCharts called inside
+  renderScale();
   renderHistory();
-  renderWeightChart();
   renderBfChart();
   renderRegionalChart();
   renderBalanceChart();
