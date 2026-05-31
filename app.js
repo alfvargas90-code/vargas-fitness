@@ -448,16 +448,19 @@ async function fetchJSON(path) {
   return r.json();
 }
 
-// tolerant field accessor — Polar mixes underscore_keys and hyphen-keys
-const pget = (o, ...keys) => { for (const k of keys) if (o && o[k] != null) return o[k]; return null; };
 const secsToHM = s => (s == null ? "—" : `${Math.floor(s / 3600)}h ${Math.round((s % 3600) / 60)}m`);
-function isoDurToSecs(d) {
-  if (d == null) return null;
-  if (typeof d === "number") return d;
-  const m = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/.exec(d);
-  return m ? (+m[1] || 0) * 3600 + (+m[2] || 0) * 60 + (+m[3] || 0) : null;
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const labelMD = d => { const [, m, day] = d.split("-"); return `${MONTHS[+m - 1]} ${+day}`; };
+
+// Build [oldest…today] list of YYYY-MM-DD for the last `daysBack` calendar days (local time).
+function lastN(daysBack = 14) {
+  const out = [], t = new Date();
+  for (let i = daysBack - 1; i >= 0; i--) {
+    const d = new Date(t.getFullYear(), t.getMonth(), t.getDate() - i);
+    out.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`);
+  }
+  return out;
 }
-const RECHARGE_LABELS = { 1: "Very low", 2: "Low", 3: "Compromised", 4: "OK", 5: "Good", 6: "Very good" };
 
 async function renderPolar() {
   const empty = document.getElementById("polar-empty");
@@ -467,20 +470,22 @@ async function renderPolar() {
   try {
     const manifest = await fetchJSON("polar/manifest.json");
     const cats = manifest.categories || {};
-    const recDates = cats.recharge || [], sleepDates = cats.sleep || [], actDates = cats.daily_activity || [];
-    if (!recDates.length && !sleepDates.length && !actDates.length) return showEmpty();
+    const recDates = (cats.recharge || []).slice().sort(), sleepDates = (cats.sleep || []).slice().sort();
+    if (!recDates.length && !sleepDates.length) return showEmpty();
 
-    const latestRec   = recDates.length   ? await fetchJSON(`polar/recharge/${recDates.at(-1)}.json`).catch(() => null)         : null;
-    const latestSleep = sleepDates.length ? await fetchJSON(`polar/sleep/${sleepDates.at(-1)}.json`).catch(() => null)          : null;
-    const latestAct   = actDates.length   ? await fetchJSON(`polar/daily_activity/${actDates.at(-1)}.json`).catch(() => null)   : null;
-    const rec7 = (await Promise.all(recDates.slice(-7).map(d => fetchJSON(`polar/recharge/${d}.json`).catch(() => null)))).filter(Boolean);
+    const recArr   = await Promise.all(recDates.map(d => fetchJSON(`polar/recharge/${d}.json`).catch(() => null)));
+    const sleepArr = await Promise.all(sleepDates.map(d => fetchJSON(`polar/sleep/${d}.json`).catch(() => null)));
+    const recMap = {}, sleepMap = {};
+    recDates.forEach((d, i) => { if (recArr[i]) recMap[d] = recArr[i]; });
+    sleepDates.forEach((d, i) => { if (sleepArr[i]) sleepMap[d] = sleepArr[i]; });
 
-    renderPolarKPIs(latestRec, latestSleep, latestAct, rec7);
-    renderPolarSleep(latestSleep);
-    renderPolarTrend(rec7);
+    const window14 = lastN(14);
+    renderRechargeStack(window14, recMap);
+    renderRechargeTrend(window14, recMap);
+    renderPolarSleep(sleepMap[sleepDates.at(-1)]);   // Block B — most recent date with sleep data
+    renderHRV(recDates, recMap);
 
-    document.getElementById("polar-sub").textContent =
-      "Latest: " + (recDates.at(-1) || sleepDates.at(-1) || actDates.at(-1) || "—");
+    document.getElementById("polar-sub").textContent = "Latest: " + (recDates.at(-1) || sleepDates.at(-1) || "—");
     empty.classList.add("hidden");
     content.classList.remove("hidden");
   } catch (e) {
@@ -488,45 +493,57 @@ async function renderPolar() {
   }
 }
 
-function renderPolarKPIs(rec, sleep, act, rec7) {
-  const status = rec ? pget(rec, "nightly_recharge_status") : null;
-  const ans = rec ? pget(rec, "ans_charge") : null;
-  let trend = "";
-  if (rec7.length >= 2) {
-    const a = pget(rec7.at(-2), "nightly_recharge_status"), b = pget(rec7.at(-1), "nightly_recharge_status");
-    if (a != null && b != null) trend = b > a ? "▲ improving" : b < a ? "▼ declining" : "→ steady";
-  }
-  const sleepSecs = sleep
-    ? (isoDurToSecs(pget(sleep, "light_sleep")) || 0) + (isoDurToSecs(pget(sleep, "deep_sleep")) || 0) + (isoDurToSecs(pget(sleep, "rem_sleep")) || 0)
-    : null;
-  const steps = act ? pget(act, "active-steps", "active_steps") : null;
-  const activeSecs = act ? isoDurToSecs(pget(act, "duration", "active-time", "active_time")) : null;
-
-  const cards = [
-    { label: "Nightly Recharge", value: status != null ? `${status}/6` : "—", sub: status != null ? `${RECHARGE_LABELS[status] || ""}${trend ? " · " + trend : ""}` : "no recharge yet" },
-    { label: "Sleep (last night)", value: sleepSecs ? secsToHM(sleepSecs) : "—", sub: sleep ? `score ${pget(sleep, "sleep_score") ?? "—"}` : "—" },
-    { label: "Steps today", value: steps != null ? Number(steps).toLocaleString() : "—", sub: "active steps" },
-    { label: "Active time", value: activeSecs != null ? secsToHM(activeSecs) : "—", sub: ans != null ? `ANS ${ans > 0 ? "+" : ""}${ans}` : "today" },
-  ];
-  document.getElementById("polar-kpis").innerHTML = cards.map(c => `
-    <div>
-      <div class="text-xs uppercase tracking-wider text-muted">${c.label}</div>
-      <div class="text-2xl font-semibold stat-num mt-1">${c.value}</div>
-      <div class="text-xs text-muted mt-1">${c.sub}</div>
-    </div>`).join("");
+// Block A — 14-day vertical stack of 6-dot Nightly Recharge rows (newest on top).
+function renderRechargeStack(days, recMap) {
+  const rows = days.slice().reverse().map(d => {
+    const st = recMap[d]?.ans_charge_status ?? null;
+    let cells;
+    if (st == null) {
+      cells = Array.from({ length: 6 }, () => `<span class="inline-block w-3 text-center text-line leading-3">–</span>`).join("");
+    } else {
+      cells = Array.from({ length: 6 }, (_, i) => i < st
+        ? `<span class="inline-block w-3 h-3 rounded-full" style="background:#22d3ee"></span>`
+        : `<span class="inline-block w-3 h-3 rounded-full bg-card border border-line"></span>`).join("");
+    }
+    return `<div class="flex items-center gap-2">
+      <span class="text-xs text-muted w-12 shrink-0">${labelMD(d)}</span>
+      <span class="flex items-center gap-1">${cells}</span>
+    </div>`;
+  });
+  document.getElementById("polar-recharge-stack").innerHTML = rows.join("");
 }
 
+// Least-squares trend of recharge status over the 14-day window's available points.
+function renderRechargeTrend(days, recMap) {
+  const el = document.getElementById("polar-recharge-trend");
+  const pts = [];
+  days.forEach((d, i) => { const st = recMap[d]?.ans_charge_status; if (st != null) pts.push([i, st]); });
+  if (pts.length < 2) { el.textContent = ""; return; }
+  const n = pts.length;
+  const sx = pts.reduce((a, p) => a + p[0], 0), sy = pts.reduce((a, p) => a + p[1], 0);
+  const sxx = pts.reduce((a, p) => a + p[0] * p[0], 0), sxy = pts.reduce((a, p) => a + p[0] * p[1], 0);
+  const denom = n * sxx - sx * sx;
+  if (!denom) { el.textContent = ""; return; }
+  const slope = (n * sxy - sx * sy) / denom;
+  // Change across the OBSERVED range, not extrapolated over empty days — keeps
+  // it honest on a 1–6 scale when points cluster. Clamp to the scale span.
+  const observed = pts.at(-1)[0] - pts[0][0];
+  let change = Math.round(slope * observed);
+  change = Math.max(-5, Math.min(5, change));
+  const arrow = change > 0 ? "↑" : change < 0 ? "↓" : "→";
+  el.textContent = `trending: ${arrow} ${change > 0 ? "+" : ""}${change} over 14 days`;
+}
+
+// Block B — sleep stage bar for the most recent date with sleep data (unchanged pattern).
 function renderPolarSleep(sleep) {
   const wrap = document.getElementById("polar-sleep-wrap");
-  if (!sleep) { wrap.innerHTML = ""; return; }
-  const light = isoDurToSecs(pget(sleep, "light_sleep")) || 0;
-  const deep  = isoDurToSecs(pget(sleep, "deep_sleep"))  || 0;
-  const rem   = isoDurToSecs(pget(sleep, "rem_sleep"))   || 0;
+  if (!wrap) return;
+  const light = sleep?.light_sleep || 0, deep = sleep?.deep_sleep || 0, rem = sleep?.rem_sleep || 0;
   const total = light + deep + rem;
   if (!total) { wrap.innerHTML = ""; return; }
   const pct = s => (s / total * 100).toFixed(1) + "%";
   wrap.innerHTML = `
-    <h3 class="text-sm font-medium text-muted mb-2">Sleep stages</h3>
+    <h3 class="text-sm font-medium text-muted mb-2">Sleep stages · ${labelMD(sleep.date)}</h3>
     <div class="stage-bar">
       <div style="width:${pct(deep)};background:#22d3ee" title="Deep ${secsToHM(deep)}"></div>
       <div style="width:${pct(light)};background:#60a5fa" title="Light ${secsToHM(light)}"></div>
@@ -539,28 +556,37 @@ function renderPolarSleep(sleep) {
     </div>`;
 }
 
-function renderPolarTrend(rec7) {
-  const el = document.getElementById("chart-polar-trend");
-  if (!el || !rec7.length) return;
-  charts.polarTrend?.destroy();
-  charts.polarTrend = new Chart(el, {
-    type: "line",
-    data: {
-      labels: rec7.map(r => pget(r, "date")),
-      datasets: [
-        { label: "Resting HR", data: rec7.map(r => pget(r, "heart_rate_avg", "beat_to_beat_avg")), borderColor: "#f87171", backgroundColor: "rgba(248,113,113,0.12)", tension: 0.3, yAxisID: "y", pointRadius: 3 },
-        { label: "Recharge (1–6)", data: rec7.map(r => pget(r, "nightly_recharge_status")), borderColor: "#34d399", backgroundColor: "rgba(52,211,153,0.12)", tension: 0.3, yAxisID: "y1", pointRadius: 3 },
-      ],
-    },
-    options: {
-      ...baseChartOpts,
-      scales: {
-        x: baseChartOpts.scales.x,
-        y:  { ...baseChartOpts.scales.y, position: "left",  title: { display: true, text: "HR", color: "#9ca3af" } },
-        y1: { position: "right", min: 0, max: 6, ticks: { color: "#9ca3af", stepSize: 1 }, grid: { drawOnChartArea: false } },
-      },
-    },
-  });
+// Block C — HRV big number + inline 7-day SVG sparkline + 7d avg/delta.
+function renderHRV(recDates, recMap) {
+  const numEl = document.getElementById("polar-hrv-num");
+  const sparkEl = document.getElementById("polar-hrv-spark");
+  const subEl = document.getElementById("polar-hrv-sub");
+  const hrvs = recDates.map(d => recMap[d]?.heart_rate_variability_avg).filter(v => v != null);
+  if (!hrvs.length) { numEl.textContent = "—"; sparkEl.innerHTML = ""; subEl.textContent = ""; return; }
+
+  numEl.innerHTML = `${hrvs.at(-1)} <span class="text-base text-muted font-normal">ms</span>`;
+  const last7 = hrvs.slice(-7), prior7 = hrvs.slice(-14, -7);
+  sparkEl.innerHTML = sparkline(last7);
+
+  const avg = a => a.reduce((x, y) => x + y, 0) / a.length;
+  let sub = `7-day avg ${Math.round(avg(last7))} ms`;
+  if (prior7.length) {
+    const d = Math.round(avg(last7) - avg(prior7));
+    sub += ` · ${d > 0 ? "↑" : d < 0 ? "↓" : "="} ${Math.abs(d)} vs prior 7d`;
+  }
+  subEl.textContent = sub;
+}
+
+// Inline SVG sparkline — 100×24 viewBox, normalized polyline, stroke=currentColor.
+function sparkline(vals) {
+  if (vals.length < 2) return "";
+  const w = 100, h = 24, pad = 2, min = Math.min(...vals), max = Math.max(...vals), span = max - min || 1;
+  const pts = vals.map((v, i) => {
+    const x = (i / (vals.length - 1)) * (w - pad * 2) + pad;
+    const y = h - pad - ((v - min) / span) * (h - pad * 2);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(" ");
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="24" preserveAspectRatio="none" fill="none"><polyline points="${pts}" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 }
 
 function renderAll() {

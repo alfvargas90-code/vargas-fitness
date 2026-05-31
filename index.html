@@ -112,11 +112,29 @@
         <span class="block text-xs mt-1 text-muted/80">(Serve this dashboard over http, not file://, for it to read the synced JSON.)</span>
       </div>
       <div id="polar-content" class="hidden">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="polar-kpis"></div>
-        <div class="mt-5" id="polar-sleep-wrap"></div>
-        <div class="mt-6">
-          <h3 class="text-sm font-medium text-muted mb-2">7-day Nightly Recharge &amp; resting HR</h3>
-          <canvas id="chart-polar-trend" height="160"></canvas>
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Block A — 14-day Nightly Recharge stack (newest on top) -->
+          <div>
+            <h3 class="text-sm font-medium text-muted mb-3">Nightly Recharge · last 14 days</h3>
+            <div class="space-y-1" id="polar-recharge-stack"></div>
+            <div class="text-xs text-muted mt-3" id="polar-recharge-trend"></div>
+          </div>
+
+          <!-- Right column: Block B (sleep) + Block C (HRV) -->
+          <div class="space-y-6">
+            <!-- Block B — Sleep stage bar (unchanged pattern) -->
+            <div id="polar-sleep-wrap"></div>
+
+            <!-- Block C — HRV big number + 7-day SVG sparkline -->
+            <div>
+              <h3 class="text-sm font-medium text-muted mb-2">Heart-rate variability</h3>
+              <div class="flex items-end gap-3">
+                <div class="text-3xl font-semibold stat-num leading-none" id="polar-hrv-num">—</div>
+                <div class="text-accent flex-1 min-w-0" id="polar-hrv-spark"></div>
+              </div>
+              <div class="text-xs text-muted mt-2" id="polar-hrv-sub"></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
