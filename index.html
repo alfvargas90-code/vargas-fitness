@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fitness & Body Composition Dashboard</title>
+<!-- PWA / Add to Home Screen -->
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="theme-color" content="#0a0a0a" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Fitness" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink:   "#0f172a",
+          panel: "#111827",
+          card:  "#1f2937",
+          line:  "#374151",
+          muted: "#9ca3af",
+          accent:"#22d3ee",
+          good:  "#34d399",
+          warn:  "#fbbf24",
+          bad:   "#f87171",
+        },
+      },
+    },
+  };
+</script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif; }
+  .stat-num { font-variant-numeric: tabular-nums; }
+  /* Mobile: comfortable tap targets (Apple HIG ≥44px) + no chart overflow */
+  @media (max-width: 768px) {
+    button { min-height: 44px; }
+    input, select { min-height: 44px; }
+    canvas { max-width: 100%; }
+  }
+  /* Polar sleep-stage bar */
+  .stage-bar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; }
+</style>
+</head>
+<body class="bg-ink text-slate-100 min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+    <!-- Header -->
+    <header class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-semibold tracking-tight">Fitness Dashboard</h1>
+        <p class="text-muted mt-1" id="header-sub">Loading…</p>
+        <p class="text-xs text-muted mt-1" id="profile-strip"></p>
+      </div>
+      <div class="flex gap-2">
+        <button id="btn-add-weight" class="flex-1 sm:flex-none bg-card hover:bg-line px-4 py-2 rounded-lg text-sm border border-line">+ Log weight</button>
+        <button id="btn-add-scan"   class="flex-1 sm:flex-none bg-accent hover:bg-cyan-400 text-ink font-medium px-4 py-2 rounded-lg text-sm">+ Add DEXA scan</button>
+      </div>
+    </header>
+
+    <!-- Top stat row -->
+    <section class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+      <div class="bg-card rounded-xl p-4 border border-line">
+        <div class="text-xs uppercase tracking-wider text-muted">Body fat</div>
+        <div class="text-2xl font-semibold stat-num mt-1" id="kpi-bf">—</div>
+        <div class="text-xs text-muted mt-1" id="kpi-bf-sub">—</div>
+      </div>
+      <div class="bg-card rounded-xl p-4 border border-line">
+        <div class="text-xs uppercase tracking-wider text-muted">Lean mass</div>
+        <div class="text-2xl font-semibold stat-num mt-1" id="kpi-lean">—</div>
+        <div class="text-xs text-muted mt-1">lbs</div>
+      </div>
+      <div class="bg-card rounded-xl p-4 border border-line">
+        <div class="text-xs uppercase tracking-wider text-muted">Fat mass</div>
+        <div class="text-2xl font-semibold stat-num mt-1" id="kpi-fat">—</div>
+        <div class="text-xs text-muted mt-1">lbs</div>
+      </div>
+      <div class="bg-card rounded-xl p-4 border border-line">
+        <div class="text-xs uppercase tracking-wider text-muted">Weight</div>
+        <div class="text-2xl font-semibold stat-num mt-1" id="kpi-weight">—</div>
+        <div class="text-xs text-muted mt-1" id="kpi-weight-sub">lbs</div>
+      </div>
+      <div class="bg-card rounded-xl p-4 border border-line">
+        <div class="text-xs uppercase tracking-wider text-muted">RMR</div>
+        <div class="text-2xl font-semibold stat-num mt-1" id="kpi-rmr">—</div>
+        <div class="text-xs text-muted mt-1">cal/day at rest</div>
+      </div>
+    </section>
+
+    <!-- Training & Recovery (live Polar Loop data via polar/sync.py) -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="polar-panel">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <h2 class="font-semibold">Training &amp; Recovery <span class="text-xs text-muted font-normal">· Polar Loop</span></h2>
+        <span class="text-xs text-muted" id="polar-sub"></span>
+      </div>
+      <div id="polar-empty" class="text-sm text-muted">
+        No Polar data yet — run <code class="text-accent">polar/sync.py</code> to populate Nightly Recharge, sleep &amp; activity.
+        <span class="block text-xs mt-1 text-muted/80">(Serve this dashboard over http, not file://, for it to read the synced JSON.)</span>
+      </div>
+      <div id="polar-content" class="hidden">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="polar-kpis"></div>
+        <div class="mt-5" id="polar-sleep-wrap"></div>
+        <div class="mt-6">
+          <h3 class="text-sm font-medium text-muted mb-2">7-day Nightly Recharge &amp; resting HR</h3>
+          <canvas id="chart-polar-trend" height="160"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Two column charts -->
+    <section class="grid lg:grid-cols-2 gap-6 mb-8">
+      <div class="bg-card rounded-xl p-5 border border-line">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-semibold">Weight over time</h2>
+          <span class="text-xs text-muted" id="weight-count"></span>
+        </div>
+        <canvas id="chart-weight" height="180"></canvas>
+      </div>
+      <div class="bg-card rounded-xl p-5 border border-line">
+        <h2 class="font-semibold mb-3">Body fat % over time</h2>
+        <canvas id="chart-bf" height="180"></canvas>
+      </div>
+    </section>
+
+    <!-- Regional + balance -->
+    <section class="grid lg:grid-cols-2 gap-6 mb-8">
+      <div class="bg-card rounded-xl p-5 border border-line">
+        <h2 class="font-semibold mb-3">Regional fat % (latest scan)</h2>
+        <canvas id="chart-regional" height="180"></canvas>
+      </div>
+      <div class="bg-card rounded-xl p-5 border border-line">
+        <h2 class="font-semibold mb-3">L/R balance (latest scan)</h2>
+        <canvas id="chart-balance" height="180"></canvas>
+        <p class="text-xs text-muted mt-3">Imbalances over 2 lbs may indicate developmental asymmetry.</p>
+      </div>
+    </section>
+
+    <!-- Training & Recovery -->
+    <section class="grid lg:grid-cols-2 gap-6 mb-8">
+      <div class="bg-card rounded-xl p-5 border border-line">
+        <h2 class="font-semibold mb-1">Training load — overreaching pattern</h2>
+        <p class="text-xs text-muted mb-3" id="training-note"></p>
+        <canvas id="chart-training-load" height="170"></canvas>
+        <p class="text-xs text-accent mt-3" id="training-structure"></p>
+      </div>
+      <div class="bg-card rounded-xl p-5 border border-line">
+        <h2 class="font-semibold mb-3">Recovery (ANS / HRV)</h2>
+        <div class="grid grid-cols-2 gap-4" id="recovery-states"></div>
+        <p class="text-xs text-muted mt-4" id="recovery-causes"></p>
+      </div>
+    </section>
+
+    <!-- Activity -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8">
+      <h2 class="font-semibold mb-4">Activity (Polar weekly averages)</h2>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="activity-grid"></div>
+      <div class="mt-5">
+        <h3 class="text-sm font-medium text-muted mb-2">Heart-rate zones (Max HR <span id="hr-max"></span> bpm)</h3>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-3" id="hr-zones"></div>
+      </div>
+    </section>
+
+    <!-- Nutrition -->
+    <section class="grid lg:grid-cols-3 gap-6 mb-8">
+      <div class="bg-card rounded-xl p-5 border border-line">
+        <h2 class="font-semibold mb-3">Macro targets</h2>
+        <div id="nutrition-targets" class="space-y-4"></div>
+      </div>
+      <div class="bg-card rounded-xl p-5 border border-line lg:col-span-2">
+        <h2 class="font-semibold mb-3">Meal-prep batches</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="text-muted text-xs uppercase tracking-wider border-b border-line">
+              <tr><th class="text-left py-2 pr-4">Batch</th><th class="text-right py-2 pr-4">kcal</th><th class="text-right py-2 pr-4">Protein</th><th class="text-right py-2 pr-4">Fat</th><th class="text-right py-2">Carbs</th></tr>
+            </thead>
+            <tbody id="mealprep-table"></tbody>
+          </table>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4 mt-5" id="nutrition-advice"></div>
+        <p class="text-xs text-muted mt-3" id="nutrition-note"></p>
+      </div>
+    </section>
+
+    <!-- Physique projection -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8">
+      <h2 class="font-semibold mb-3">Refinement projection (if recovery + nutrition stabilize)</h2>
+      <div class="grid md:grid-cols-3 gap-4" id="projection-grid"></div>
+    </section>
+
+    <!-- Goals + supplemental -->
+    <section class="grid lg:grid-cols-3 gap-6 mb-8">
+      <div class="bg-card rounded-xl p-5 border border-line">
+        <h2 class="font-semibold mb-3">Goals</h2>
+        <div id="goals-display" class="space-y-3"></div>
+        <button id="btn-edit-goals" class="text-xs text-accent mt-4">Edit goals</button>
+      </div>
+      <div class="bg-card rounded-xl p-5 border border-line lg:col-span-2">
+        <h2 class="font-semibold mb-3">Health markers (latest scan)</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="health-markers"></div>
+      </div>
+    </section>
+
+    <!-- Latest scale reading (bioimpedance — kept separate from DEXA) -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="font-semibold">Latest scale reading</h2>
+          <span class="text-xs text-muted" id="scale-sub">—</span>
+        </div>
+        <button id="btn-add-scale" class="bg-card hover:bg-line px-4 py-2 rounded-lg text-sm border border-line">+ Log scale reading</button>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="scale-grid"></div>
+      <!-- Scale trend charts -->
+      <div class="grid lg:grid-cols-2 gap-6 mt-6" id="scale-charts-wrap">
+        <div>
+          <h3 class="text-sm font-medium text-muted mb-2">Scale weight over time</h3>
+          <canvas id="chart-scale-weight" height="140"></canvas>
+        </div>
+        <div>
+          <h3 class="text-sm font-medium text-muted mb-2">Scale body fat % over time</h3>
+          <canvas id="chart-scale-bf" height="140"></canvas>
+        </div>
+      </div>
+      <p class="text-xs text-muted mt-4">Bioimpedance values (body-fat %, lean mass, visceral-fat rating) are not directly comparable to DEXA. Tracked here as a separate trendline.</p>
+    </section>
+
+    <!-- Scan history table -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8">
+      <h2 class="font-semibold mb-3">Scan history</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="text-muted text-xs uppercase tracking-wider border-b border-line">
+            <tr>
+              <th class="text-left py-2 pr-4">Date</th>
+              <th class="text-right py-2 pr-4">Weight</th>
+              <th class="text-right py-2 pr-4">BF %</th>
+              <th class="text-right py-2 pr-4">Fat</th>
+              <th class="text-right py-2 pr-4">Lean</th>
+              <th class="text-right py-2 pr-4">VAT</th>
+              <th class="text-right py-2">Source</th>
+            </tr>
+          </thead>
+          <tbody id="scan-history"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="text-xs text-muted text-center py-4">
+      Data stored locally in your browser (localStorage). Click "Reset" in the console to wipe: <code class="text-accent">localStorage.clear()</code>
+    </footer>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
+    <div class="bg-panel border border-line rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-5 border-b border-line flex items-center justify-between">
+        <h3 id="modal-title" class="font-semibold"></h3>
+        <button id="modal-close" class="text-muted hover:text-white">✕</button>
+      </div>
+      <div id="modal-body" class="p-5"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

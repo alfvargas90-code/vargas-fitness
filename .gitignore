@@ -1,0 +1,21 @@
+# --- SECRETS — never commit ---
+polar/.env
+polar/.env.*
+*.env
+
+# Python virtualenv
+polar/.venv/
+__pycache__/
+*.pyc
+
+# launchd job (machine-specific, references local paths)
+polar/com.alfredo.polar-sync.plist
+
+# logs
+*.log
+
+# local-only notes / source artifacts (not part of the public dashboard)
+*_handoff.md
+polar/next_steps.md
+dashboard_preview.png
+.DS_Store

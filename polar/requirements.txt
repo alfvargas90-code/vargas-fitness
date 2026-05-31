@@ -1,0 +1,4 @@
+# Polar AccessLink sync — minimal deps.
+# OAuth callback uses the stdlib http.server, so no Flask is needed.
+requests==2.32.5
+python-dotenv==1.2.1

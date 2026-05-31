@@ -1,0 +1,794 @@
+// ---------- Storage ----------
+const KEY_SCANS   = "fd.scans.v1";
+const KEY_WEIGHT  = "fd.weight.v2";   // v2: added 2026-05-20 lean reading
+const KEY_GOALS   = "fd.goals.v1";
+const KEY_SCALE   = "fd.scale.v2";    // v2: added 2026-05-20 lean reading
+
+function load(key, seed) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw) { try { return JSON.parse(raw); } catch {} }
+    localStorage.setItem(key, JSON.stringify(seed));
+  } catch (e) { /* storage blocked (e.g. Safari on file://) — render from seed in memory */ }
+  return seed;
+}
+function save(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
+
+let scans  = load(KEY_SCANS,  SEED_DEXA);
+let weight = load(KEY_WEIGHT, SEED_WEIGHT);
+let goals  = load(KEY_GOALS,  SEED_GOALS);
+let scale  = load(KEY_SCALE,  SEED_SCALE);
+
+// ---------- Helpers ----------
+const fmt = (n, d = 1) => (n == null || isNaN(n) ? "—" : Number(n).toFixed(d));
+const byDate = (a, b) => a.date.localeCompare(b.date);
+const latestScan = () => [...scans].sort(byDate).at(-1);
+const earliestScan = () => [...scans].sort(byDate).at(0);
+const latestScale = () => [...scale].sort(byDate).at(-1);
+
+function bfPercentileBand(age, bf) {
+  const row = BF_PERCENTILES_MEN.find(r => {
+    if (r.age === ">60") return age > 60;
+    const [lo, hi] = r.age.split("-").map(Number);
+    return age >= lo && age <= hi;
+  });
+  if (!row) return "—";
+  if (bf < row.p20) return "Top 20% (lean)";
+  if (bf < row.p40) return "20–40th percentile";
+  if (bf < row.p60) return "40–60th percentile";
+  if (bf < row.p80) return "60–80th percentile";
+  return "Above 80th percentile";
+}
+
+// ---------- Render ----------
+function renderHeader() {
+  const s = latestScan();
+  const sub = document.getElementById("header-sub");
+  if (!s) { sub.textContent = "No scans yet."; return; }
+  sub.textContent = `Latest: ${s.source} on ${s.date} · Height ${s.height_in}" · Age at scan: ${ageOn(s.date)}`;
+}
+
+function ageOn(dateStr) {
+  // DOB from DEXA: 1990-08-30
+  const dob = new Date("1990-08-30");
+  const d = new Date(dateStr);
+  let a = d.getFullYear() - dob.getFullYear();
+  const m = d.getMonth() - dob.getMonth();
+  if (m < 0 || (m === 0 && d.getDate() < dob.getDate())) a--;
+  return a;
+}
+
+function renderKPIs() {
+  const s = latestScan();
+  if (!s) return;
+  document.getElementById("kpi-bf").textContent      = fmt(s.body_fat_pct, 1) + "%";
+  document.getElementById("kpi-bf-sub").textContent  = bfPercentileBand(ageOn(s.date), s.body_fat_pct);
+  document.getElementById("kpi-lean").textContent    = fmt(s.lean_mass_lbs, 1);
+  document.getElementById("kpi-fat").textContent     = fmt(s.fat_mass_lbs, 1);
+
+  const latestWeight = [...weight].sort(byDate).at(-1);
+  document.getElementById("kpi-weight").textContent  = fmt(latestWeight?.weight_lbs ?? s.weight_lbs, 1);
+  document.getElementById("kpi-weight-sub").textContent = latestWeight ? `lbs · logged ${latestWeight.date}` : "lbs";
+  document.getElementById("kpi-rmr").textContent     = fmt(s.rmr_cal, 0);
+}
+
+function renderHealthMarkers() {
+  const s = latestScan();
+  if (!s) return;
+  const items = [
+    { label: "Visceral fat (VAT)",  value: fmt(s.vat_lbs, 2) + " lbs",  status: s.vat_lbs < 1 ? "good" : s.vat_lbs < 2 ? "warn" : "bad",
+      hint: "Target: as close to 0 as possible" },
+    { label: "Android/Gynoid ratio", value: fmt(s.ag_ratio, 2),         status: s.ag_ratio < 1.0 ? "good" : s.ag_ratio < 1.1 ? "warn" : "bad",
+      hint: "Target: < 1.0" },
+    { label: "Bone T-score",         value: fmt(s.bone_t_score, 1),     status: s.bone_t_score >= 1 ? "good" : s.bone_t_score >= -1 ? "warn" : "bad",
+      hint: "Higher = stronger bones" },
+    { label: "BMC (bone mineral)",   value: fmt(s.bmc_lbs, 1) + " lbs", status: "good", hint: "Total bone mineral content" },
+  ];
+  const colorOf = { good: "text-good", warn: "text-warn", bad: "text-bad" };
+  document.getElementById("health-markers").innerHTML = items.map(it => `
+    <div>
+      <div class="text-xs uppercase tracking-wider text-muted">${it.label}</div>
+      <div class="text-xl font-semibold stat-num mt-1 ${colorOf[it.status]}">${it.value}</div>
+      <div class="text-xs text-muted mt-1">${it.hint}</div>
+    </div>
+  `).join("");
+}
+
+function renderGoals() {
+  const s = latestScan();
+  const latestWeight = [...weight].sort(byDate).at(-1)?.weight_lbs ?? s?.weight_lbs;
+  const wPct = goals.target_weight_lbs && latestWeight
+    ? Math.max(0, Math.min(100, ((s.weight_lbs - latestWeight) / (s.weight_lbs - goals.target_weight_lbs)) * 100))
+    : 0;
+  const bfPct = goals.target_body_fat_pct && s
+    ? Math.max(0, Math.min(100, ((earliestScan().body_fat_pct - s.body_fat_pct) / (earliestScan().body_fat_pct - goals.target_body_fat_pct)) * 100))
+    : 0;
+  document.getElementById("goals-display").innerHTML = `
+    <div>
+      <div class="flex justify-between text-sm mb-1">
+        <span>Weight → ${goals.target_weight_lbs} lbs</span>
+        <span class="stat-num text-muted">${fmt(latestWeight,1)} lbs</span>
+      </div>
+      <div class="h-2 bg-line rounded-full overflow-hidden"><div class="h-full bg-accent" style="width:${wPct}%"></div></div>
+    </div>
+    <div>
+      <div class="flex justify-between text-sm mb-1">
+        <span>Body fat → ${goals.target_body_fat_pct}%</span>
+        <span class="stat-num text-muted">${fmt(s?.body_fat_pct,1)}%</span>
+      </div>
+      <div class="h-2 bg-line rounded-full overflow-hidden"><div class="h-full bg-good" style="width:${bfPct}%"></div></div>
+    </div>
+    <div class="text-xs text-muted pt-1">Target date: ${goals.target_date}</div>
+  `;
+}
+
+function renderScale() {
+  const s = latestScale();
+  const sub = document.getElementById("scale-sub");
+  const grid = document.getElementById("scale-grid");
+  if (!s) { sub.textContent = "No readings yet."; grid.innerHTML = ""; renderScaleCharts(); return; }
+
+  const change = s.weight_change_lbs;
+  const changeStr = change == null ? "" :
+    ` · ${change > 0 ? "▲" : change < 0 ? "▼" : ""} ${fmt(Math.abs(change), 1)} lbs since prior`;
+  sub.textContent = `${s.source} · ${s.date}${changeStr}`;
+
+  const ratingColor = { Excellent: "text-good", Fitness: "text-good", Standard: "text-slate-100", High: "text-warn", Low: "text-warn" };
+  const r = s.ratings || {};
+  const items = [
+    { label: "Weight",            value: `${fmt(s.weight_lbs, 1)} lbs`,               rating: null },
+    { label: "BMI",               value: fmt(s.bmi, 1),                               rating: r.bmi },
+    { label: "Body fat",          value: `${fmt(s.body_fat_pct, 1)}%`,                rating: r.body_fat_pct },
+    { label: "Muscle mass",       value: `${fmt(s.muscle_mass_lbs, 1)} lbs`,          rating: r.muscle_mass_lbs },
+    { label: "Fat-free weight",   value: `${fmt(s.fat_free_weight_lbs, 1)} lbs`,      rating: null },
+    { label: "Skeletal muscles",  value: `${fmt(s.skeletal_muscles_pct, 1)}%`,        rating: r.skeletal_muscles_pct },
+    { label: "Subcutaneous fat",  value: `${fmt(s.subcutaneous_fat_pct, 1)}%`,        rating: r.subcutaneous_fat_pct },
+    { label: "Visceral fat",      value: `${fmt(s.visceral_fat_rating, 0)} (rating)`, rating: r.visceral_fat_rating },
+    { label: "Body water",        value: `${fmt(s.body_water_pct, 1)}%`,              rating: r.body_water_pct },
+    { label: "Protein",           value: `${fmt(s.protein_pct, 1)}%`,                rating: r.protein_pct },
+    { label: "Bone mass",         value: `${fmt(s.bone_mass_lbs, 1)} lbs`,            rating: r.bone_mass_lbs },
+    { label: "BMR",               value: `${fmt(s.bmr_kcal, 0)} kcal`,                rating: r.bmr_kcal },
+    { label: "Metabolic age",     value: fmt(s.metabolic_age, 0),                     rating: r.metabolic_age },
+  ];
+
+  grid.innerHTML = items.map(it => `
+    <div>
+      <div class="text-xs uppercase tracking-wider text-muted">${it.label}</div>
+      <div class="text-xl font-semibold stat-num mt-1">${it.value}</div>
+      <div class="text-xs mt-1 ${it.rating ? (ratingColor[it.rating] ?? "text-muted") : "text-muted"}">${it.rating ?? "—"}</div>
+    </div>
+  `).join("");
+
+  renderScaleCharts();
+}
+
+function renderScaleCharts() {
+  const sorted = [...scale].sort(byDate);
+  const wrap = document.getElementById("scale-charts-wrap");
+  if (sorted.length < 2) { wrap.classList.add("hidden"); return; }
+  wrap.classList.remove("hidden");
+
+  charts.scaleWeight?.destroy();
+  charts.scaleWeight = new Chart(document.getElementById("chart-scale-weight"), {
+    type: "line",
+    data: {
+      labels: sorted.map(s => s.date),
+      datasets: [{
+        label: "Scale weight (lbs)",
+        data: sorted.map(s => s.weight_lbs),
+        borderColor: "#22d3ee",
+        backgroundColor: "rgba(34,211,238,0.12)",
+        tension: 0.3,
+        fill: true,
+        pointRadius: 4,
+      }],
+    },
+    options: baseChartOpts,
+  });
+
+  charts.scaleBf?.destroy();
+  charts.scaleBf = new Chart(document.getElementById("chart-scale-bf"), {
+    type: "line",
+    data: {
+      labels: sorted.map(s => s.date),
+      datasets: [{
+        label: "Scale BF %",
+        data: sorted.map(s => s.body_fat_pct),
+        borderColor: "#a78bfa",
+        backgroundColor: "rgba(167,139,250,0.12)",
+        tension: 0.3,
+        fill: true,
+        pointRadius: 4,
+      }],
+    },
+    options: baseChartOpts,
+  });
+}
+
+function renderHistory() {
+  const sorted = [...scans].sort(byDate).reverse();
+  document.getElementById("scan-history").innerHTML = sorted.map(s => `
+    <tr class="border-b border-line/50">
+      <td class="py-2 pr-4">${s.date}</td>
+      <td class="py-2 pr-4 text-right stat-num">${fmt(s.weight_lbs,1)}</td>
+      <td class="py-2 pr-4 text-right stat-num">${fmt(s.body_fat_pct,1)}%</td>
+      <td class="py-2 pr-4 text-right stat-num">${fmt(s.fat_mass_lbs,1)}</td>
+      <td class="py-2 pr-4 text-right stat-num">${fmt(s.lean_mass_lbs,1)}</td>
+      <td class="py-2 pr-4 text-right stat-num">${fmt(s.vat_lbs,2)}</td>
+      <td class="py-2 text-right text-muted">${s.source}</td>
+    </tr>
+  `).join("") || `<tr><td class="py-3 text-muted" colspan="7">No scans yet.</td></tr>`;
+}
+
+// ---------- Charts ----------
+const charts = {};
+const baseChartOpts = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: { legend: { labels: { color: "#cbd5e1" } } },
+  scales: {
+    x: { ticks: { color: "#9ca3af" }, grid: { color: "#374151" } },
+    y: { ticks: { color: "#9ca3af" }, grid: { color: "#374151" } },
+  },
+};
+
+function renderWeightChart() {
+  const sorted = [...weight].sort(byDate);
+  document.getElementById("weight-count").textContent = `${sorted.length} entr${sorted.length === 1 ? "y" : "ies"}`;
+  charts.weight?.destroy();
+  charts.weight = new Chart(document.getElementById("chart-weight"), {
+    type: "line",
+    data: {
+      labels: sorted.map(w => w.date),
+      datasets: [{
+        label: "Weight (lbs)",
+        data: sorted.map(w => w.weight_lbs),
+        borderColor: "#22d3ee",
+        backgroundColor: "rgba(34,211,238,0.15)",
+        tension: 0.3,
+        fill: true,
+        pointRadius: 4,
+      }, goals.target_weight_lbs && {
+        label: `Target (${goals.target_weight_lbs})`,
+        data: sorted.map(() => goals.target_weight_lbs),
+        borderColor: "#34d399",
+        borderDash: [5, 5],
+        pointRadius: 0,
+      }].filter(Boolean),
+    },
+    options: baseChartOpts,
+  });
+}
+
+function renderBfChart() {
+  const sorted = [...scans].sort(byDate);
+  charts.bf?.destroy();
+  charts.bf = new Chart(document.getElementById("chart-bf"), {
+    type: "line",
+    data: {
+      labels: sorted.map(s => s.date),
+      datasets: [{
+        label: "Body fat %",
+        data: sorted.map(s => s.body_fat_pct),
+        borderColor: "#fbbf24",
+        backgroundColor: "rgba(251,191,36,0.15)",
+        tension: 0.3,
+        fill: true,
+        pointRadius: 5,
+      }, goals.target_body_fat_pct && {
+        label: `Target (${goals.target_body_fat_pct}%)`,
+        data: sorted.map(() => goals.target_body_fat_pct),
+        borderColor: "#34d399",
+        borderDash: [5, 5],
+        pointRadius: 0,
+      }].filter(Boolean),
+    },
+    options: baseChartOpts,
+  });
+}
+
+function renderRegionalChart() {
+  const s = latestScan();
+  if (!s) return;
+  const labels = ["Arms", "Legs", "Trunk", "Android", "Gynoid"];
+  const data   = [s.regions.arms.fat_pct, s.regions.legs.fat_pct, s.regions.trunk.fat_pct, s.regions.android.fat_pct, s.regions.gynoid.fat_pct];
+  charts.regional?.destroy();
+  charts.regional = new Chart(document.getElementById("chart-regional"), {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [{ label: "Fat %", data, backgroundColor: "#22d3ee" }],
+    },
+    options: { ...baseChartOpts, plugins: { legend: { display: false } } },
+  });
+}
+
+function renderBalanceChart() {
+  const s = latestScan();
+  if (!s) return;
+  charts.balance?.destroy();
+  charts.balance = new Chart(document.getElementById("chart-balance"), {
+    type: "bar",
+    data: {
+      labels: ["Arms", "Legs"],
+      datasets: [
+        { label: "Right", data: [s.balance.right_arm_lbs, s.balance.right_leg_lbs], backgroundColor: "#22d3ee" },
+        { label: "Left",  data: [s.balance.left_arm_lbs,  s.balance.left_leg_lbs],  backgroundColor: "#a78bfa" },
+      ],
+    },
+    options: baseChartOpts,
+  });
+}
+
+// ---------- Training / Recovery / Activity / Nutrition ----------
+function renderProfileStrip() {
+  const p = typeof SEED_PROFILE !== "undefined" ? SEED_PROFILE : null;
+  const el = document.getElementById("profile-strip");
+  if (!el || !p) return;
+  el.textContent = `Polar profile · ${p.height_in}" · ${p.profile_weight_lbs} lb · Max HR ${p.max_hr} · Resting HR ${p.resting_hr} · Sleep goal ${p.sleep_goal_h}h`;
+}
+
+function renderTrainingLoad() {
+  if (typeof SEED_TRAINING === "undefined") return;
+  const t = SEED_TRAINING;
+  document.getElementById("training-note").textContent = t.conclusion;
+  document.getElementById("training-structure").textContent = "→ " + t.target_structure;
+  const colorFor = s => s >= 3 ? "#f87171" : s >= 2.5 ? "#fbbf24" : s >= 2 ? "#facc15" : "#34d399";
+  charts.training?.destroy();
+  charts.training = new Chart(document.getElementById("chart-training-load"), {
+    type: "bar",
+    data: {
+      labels: t.pattern.map(d => d.day),
+      datasets: [{ label: "Load", data: t.pattern.map(d => d.score), backgroundColor: t.pattern.map(d => colorFor(d.score)) }],
+    },
+    options: {
+      ...baseChartOpts,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => t.pattern[ctx.dataIndex].load } } },
+      scales: { x: baseChartOpts.scales.x, y: { ...baseChartOpts.scales.y, min: 0, max: 3, ticks: { color: "#9ca3af", stepSize: 1 } } },
+    },
+  });
+}
+
+function renderRecovery() {
+  if (typeof SEED_RECOVERY === "undefined") return;
+  const r = SEED_RECOVERY;
+  const card = (title, d, cls) => `
+    <div class="rounded-lg p-3 border border-line">
+      <div class="text-sm font-medium ${cls} mb-2">${title}</div>
+      <div class="text-xs text-muted space-y-1">
+        <div>ANS charge: <span class="text-slate-200">${d.ans_charge}</span></div>
+        <div>HRV: <span class="text-slate-200">${d.hrv}</span></div>
+        <div>HR: <span class="text-slate-200">${d.hr}</span></div>
+      </div>
+    </div>`;
+  document.getElementById("recovery-states").innerHTML =
+    card("Good recovery day", r.good_day, "text-good") + card("Compromised day", r.compromised_day, "text-bad");
+  document.getElementById("recovery-causes").textContent = "Compromised days driven by: " + r.causes.join(", ") + ".";
+}
+
+function renderActivity() {
+  if (typeof SEED_ACTIVITY === "undefined") return;
+  const a = SEED_ACTIVITY;
+  const cards = [
+    { label: "Steps / day",     value: a.steps_per_day.toLocaleString() },
+    { label: "Miles / week",    value: a.miles_per_week },
+    { label: "Activity goal",   value: a.activity_completion_pct + "%" },
+    { label: "Active-day burn", value: a.active_day_burn_kcal.join("–") },
+    { label: "Est. TDEE",       value: a.tdee_kcal.join("–") },
+  ];
+  document.getElementById("activity-grid").innerHTML = cards.map(c => `
+    <div>
+      <div class="text-xs uppercase tracking-wider text-muted">${c.label}</div>
+      <div class="text-xl font-semibold stat-num mt-1">${c.value}</div>
+    </div>`).join("");
+
+  const hrMaxEl = document.getElementById("hr-max");
+  if (hrMaxEl) hrMaxEl.textContent = (typeof SEED_PROFILE !== "undefined" ? SEED_PROFILE.max_hr : "—");
+  if (typeof HR_ZONES !== "undefined") {
+    document.getElementById("hr-zones").innerHTML = HR_ZONES.map(z => `
+      <div class="rounded-lg p-2 border border-line">
+        <div class="text-xs font-medium">${z.zone}</div>
+        <div class="text-xs text-muted">${z.pct}</div>
+        <div class="text-sm stat-num text-accent">${z.lo}–${z.hi}</div>
+      </div>`).join("");
+  }
+}
+
+function renderNutrition() {
+  if (typeof SEED_NUTRITION === "undefined") return;
+  const n = SEED_NUTRITION;
+  const block = (title, d, cls) => `
+    <div>
+      <div class="text-sm font-medium ${cls} mb-1">${title}</div>
+      <div class="text-xs text-muted">${d.kcal} kcal · P ${d.protein_g}g · C ${d.carbs_g} · F ${d.fat_g}</div>
+    </div>`;
+  document.getElementById("nutrition-targets").innerHTML =
+    block("Training days", n.training_day, "text-accent") + block("Recovery days", n.recovery_day, "text-good");
+
+  if (typeof SEED_MEALPREP !== "undefined") {
+    document.getElementById("mealprep-table").innerHTML = SEED_MEALPREP.map(m => `
+      <tr class="border-b border-line/50">
+        <td class="py-2 pr-4">${m.name}</td>
+        <td class="py-2 pr-4 text-right stat-num">${m.kcal}</td>
+        <td class="py-2 pr-4 text-right stat-num">${m.protein_g}g</td>
+        <td class="py-2 pr-4 text-right stat-num">${m.fat_g}g</td>
+        <td class="py-2 text-right stat-num">${m.carbs_g}g</td>
+      </tr>`).join("");
+  }
+
+  document.getElementById("nutrition-advice").innerHTML = `
+    <div>
+      <div class="text-xs uppercase tracking-wider text-good mb-1">Keep</div>
+      <ul class="text-xs text-muted list-disc list-inside space-y-1">${n.keep.map(x => `<li>${x}</li>`).join("")}</ul>
+    </div>
+    <div>
+      <div class="text-xs uppercase tracking-wider text-warn mb-1">Reduce</div>
+      <ul class="text-xs text-muted list-disc list-inside space-y-1">${n.reduce.map(x => `<li>${x}</li>`).join("")}</ul>
+    </div>`;
+  document.getElementById("nutrition-note").textContent = n.note;
+}
+
+function renderProjection() {
+  const el = document.getElementById("projection-grid");
+  if (!el || typeof PHYSIQUE_PROJECTION === "undefined") return;
+  el.innerHTML = PHYSIQUE_PROJECTION.map(p => `
+    <div class="rounded-lg p-3 border border-line">
+      <div class="text-sm font-medium text-accent">${p.window}</div>
+      <div class="text-xs text-muted mt-1">${p.outcome}</div>
+    </div>`).join("");
+}
+
+// ---------- Polar live data (Training & Recovery) ----------
+// Reads polar/manifest.json + per-day JSON written by polar/sync.py.
+// fetch() works when the dashboard is served over http(s); on file:// it
+// fails gracefully to the empty-state.
+async function fetchJSON(path) {
+  const r = await fetch(path, { cache: "no-store" });
+  if (!r.ok) throw new Error(r.status);
+  return r.json();
+}
+
+// tolerant field accessor — Polar mixes underscore_keys and hyphen-keys
+const pget = (o, ...keys) => { for (const k of keys) if (o && o[k] != null) return o[k]; return null; };
+const secsToHM = s => (s == null ? "—" : `${Math.floor(s / 3600)}h ${Math.round((s % 3600) / 60)}m`);
+function isoDurToSecs(d) {
+  if (d == null) return null;
+  if (typeof d === "number") return d;
+  const m = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/.exec(d);
+  return m ? (+m[1] || 0) * 3600 + (+m[2] || 0) * 60 + (+m[3] || 0) : null;
+}
+const RECHARGE_LABELS = { 1: "Very low", 2: "Low", 3: "Compromised", 4: "OK", 5: "Good", 6: "Very good" };
+
+async function renderPolar() {
+  const empty = document.getElementById("polar-empty");
+  const content = document.getElementById("polar-content");
+  if (!empty || !content) return;
+  const showEmpty = () => { empty.classList.remove("hidden"); content.classList.add("hidden"); };
+  try {
+    const manifest = await fetchJSON("polar/manifest.json");
+    const cats = manifest.categories || {};
+    const recDates = cats.recharge || [], sleepDates = cats.sleep || [], actDates = cats.daily_activity || [];
+    if (!recDates.length && !sleepDates.length && !actDates.length) return showEmpty();
+
+    const latestRec   = recDates.length   ? await fetchJSON(`polar/recharge/${recDates.at(-1)}.json`).catch(() => null)         : null;
+    const latestSleep = sleepDates.length ? await fetchJSON(`polar/sleep/${sleepDates.at(-1)}.json`).catch(() => null)          : null;
+    const latestAct   = actDates.length   ? await fetchJSON(`polar/daily_activity/${actDates.at(-1)}.json`).catch(() => null)   : null;
+    const rec7 = (await Promise.all(recDates.slice(-7).map(d => fetchJSON(`polar/recharge/${d}.json`).catch(() => null)))).filter(Boolean);
+
+    renderPolarKPIs(latestRec, latestSleep, latestAct, rec7);
+    renderPolarSleep(latestSleep);
+    renderPolarTrend(rec7);
+
+    document.getElementById("polar-sub").textContent =
+      "Latest: " + (recDates.at(-1) || sleepDates.at(-1) || actDates.at(-1) || "—");
+    empty.classList.add("hidden");
+    content.classList.remove("hidden");
+  } catch (e) {
+    showEmpty(); // file:// or no sync yet
+  }
+}
+
+function renderPolarKPIs(rec, sleep, act, rec7) {
+  const status = rec ? pget(rec, "nightly_recharge_status") : null;
+  const ans = rec ? pget(rec, "ans_charge") : null;
+  let trend = "";
+  if (rec7.length >= 2) {
+    const a = pget(rec7.at(-2), "nightly_recharge_status"), b = pget(rec7.at(-1), "nightly_recharge_status");
+    if (a != null && b != null) trend = b > a ? "▲ improving" : b < a ? "▼ declining" : "→ steady";
+  }
+  const sleepSecs = sleep
+    ? (isoDurToSecs(pget(sleep, "light_sleep")) || 0) + (isoDurToSecs(pget(sleep, "deep_sleep")) || 0) + (isoDurToSecs(pget(sleep, "rem_sleep")) || 0)
+    : null;
+  const steps = act ? pget(act, "active-steps", "active_steps") : null;
+  const activeSecs = act ? isoDurToSecs(pget(act, "duration", "active-time", "active_time")) : null;
+
+  const cards = [
+    { label: "Nightly Recharge", value: status != null ? `${status}/6` : "—", sub: status != null ? `${RECHARGE_LABELS[status] || ""}${trend ? " · " + trend : ""}` : "no recharge yet" },
+    { label: "Sleep (last night)", value: sleepSecs ? secsToHM(sleepSecs) : "—", sub: sleep ? `score ${pget(sleep, "sleep_score") ?? "—"}` : "—" },
+    { label: "Steps today", value: steps != null ? Number(steps).toLocaleString() : "—", sub: "active steps" },
+    { label: "Active time", value: activeSecs != null ? secsToHM(activeSecs) : "—", sub: ans != null ? `ANS ${ans > 0 ? "+" : ""}${ans}` : "today" },
+  ];
+  document.getElementById("polar-kpis").innerHTML = cards.map(c => `
+    <div>
+      <div class="text-xs uppercase tracking-wider text-muted">${c.label}</div>
+      <div class="text-2xl font-semibold stat-num mt-1">${c.value}</div>
+      <div class="text-xs text-muted mt-1">${c.sub}</div>
+    </div>`).join("");
+}
+
+function renderPolarSleep(sleep) {
+  const wrap = document.getElementById("polar-sleep-wrap");
+  if (!sleep) { wrap.innerHTML = ""; return; }
+  const light = isoDurToSecs(pget(sleep, "light_sleep")) || 0;
+  const deep  = isoDurToSecs(pget(sleep, "deep_sleep"))  || 0;
+  const rem   = isoDurToSecs(pget(sleep, "rem_sleep"))   || 0;
+  const total = light + deep + rem;
+  if (!total) { wrap.innerHTML = ""; return; }
+  const pct = s => (s / total * 100).toFixed(1) + "%";
+  wrap.innerHTML = `
+    <h3 class="text-sm font-medium text-muted mb-2">Sleep stages</h3>
+    <div class="stage-bar">
+      <div style="width:${pct(deep)};background:#22d3ee" title="Deep ${secsToHM(deep)}"></div>
+      <div style="width:${pct(light)};background:#60a5fa" title="Light ${secsToHM(light)}"></div>
+      <div style="width:${pct(rem)};background:#a78bfa" title="REM ${secsToHM(rem)}"></div>
+    </div>
+    <div class="flex flex-wrap gap-4 text-xs text-muted mt-2">
+      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#22d3ee"></span> Deep ${secsToHM(deep)}</span>
+      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#60a5fa"></span> Light ${secsToHM(light)}</span>
+      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#a78bfa"></span> REM ${secsToHM(rem)}</span>
+    </div>`;
+}
+
+function renderPolarTrend(rec7) {
+  const el = document.getElementById("chart-polar-trend");
+  if (!el || !rec7.length) return;
+  charts.polarTrend?.destroy();
+  charts.polarTrend = new Chart(el, {
+    type: "line",
+    data: {
+      labels: rec7.map(r => pget(r, "date")),
+      datasets: [
+        { label: "Resting HR", data: rec7.map(r => pget(r, "heart_rate_avg", "beat_to_beat_avg")), borderColor: "#f87171", backgroundColor: "rgba(248,113,113,0.12)", tension: 0.3, yAxisID: "y", pointRadius: 3 },
+        { label: "Recharge (1–6)", data: rec7.map(r => pget(r, "nightly_recharge_status")), borderColor: "#34d399", backgroundColor: "rgba(52,211,153,0.12)", tension: 0.3, yAxisID: "y1", pointRadius: 3 },
+      ],
+    },
+    options: {
+      ...baseChartOpts,
+      scales: {
+        x: baseChartOpts.scales.x,
+        y:  { ...baseChartOpts.scales.y, position: "left",  title: { display: true, text: "HR", color: "#9ca3af" } },
+        y1: { position: "right", min: 0, max: 6, ticks: { color: "#9ca3af", stepSize: 1 }, grid: { drawOnChartArea: false } },
+      },
+    },
+  });
+}
+
+function renderAll() {
+  renderHeader();
+  renderProfileStrip();
+  renderKPIs();
+  renderHealthMarkers();
+  renderGoals();
+  renderScale(); // renderScaleCharts called inside
+  renderHistory();
+  renderWeightChart();
+  renderBfChart();
+  renderRegionalChart();
+  renderBalanceChart();
+  renderTrainingLoad();
+  renderRecovery();
+  renderActivity();
+  renderNutrition();
+  renderProjection();
+  renderPolar(); // async, live Polar Loop data
+}
+
+// ---------- Modal ----------
+const modal = document.getElementById("modal");
+const modalBody = document.getElementById("modal-body");
+const modalTitle = document.getElementById("modal-title");
+function openModal(title, html) {
+  modalTitle.textContent = title;
+  modalBody.innerHTML = html;
+  modal.classList.remove("hidden");
+}
+function closeModal() { modal.classList.add("hidden"); modalBody.innerHTML = ""; }
+document.getElementById("modal-close").onclick = closeModal;
+modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+
+// ---------- Forms ----------
+const inputCls = "w-full bg-card border border-line rounded-md px-3 py-2 text-sm focus:outline-none focus:border-accent";
+const labelCls = "block text-xs uppercase tracking-wider text-muted mb-1";
+const today = () => new Date().toISOString().slice(0, 10);
+
+document.getElementById("btn-add-weight").onclick = () => {
+  openModal("Log a weight", `
+    <form id="weight-form" class="space-y-4">
+      <div><label class="${labelCls}">Date</label><input class="${inputCls}" name="date" type="date" value="${today()}" required></div>
+      <div><label class="${labelCls}">Weight (lbs)</label><input class="${inputCls}" name="weight" type="number" step="0.1" min="50" max="500" required></div>
+      <div><label class="${labelCls}">Note (optional)</label><input class="${inputCls}" name="note" type="text"></div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" id="cancel-weight" class="px-4 py-2 text-sm text-muted">Cancel</button>
+        <button class="bg-accent text-ink font-medium px-4 py-2 rounded-lg text-sm">Save</button>
+      </div>
+    </form>
+  `);
+  document.getElementById("cancel-weight").onclick = closeModal;
+  document.getElementById("weight-form").onsubmit = (e) => {
+    e.preventDefault();
+    const f = e.target;
+    weight = weight.filter(w => w.date !== f.date.value);
+    weight.push({ date: f.date.value, weight_lbs: parseFloat(f.weight.value), note: f.note.value });
+    save(KEY_WEIGHT, weight);
+    closeModal();
+    renderAll();
+  };
+};
+
+document.getElementById("btn-add-scan").onclick = () => {
+  openModal("Add DEXA scan", `
+    <form id="scan-form" class="space-y-4">
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="${labelCls}">Date</label><input class="${inputCls}" name="date" type="date" value="${today()}" required></div>
+        <div><label class="${labelCls}">Source</label><input class="${inputCls}" name="source" type="text" value="BodySpec"></div>
+        <div><label class="${labelCls}">Weight (lbs)</label><input class="${inputCls}" name="weight" type="number" step="0.1" required></div>
+        <div><label class="${labelCls}">Body fat %</label><input class="${inputCls}" name="bf" type="number" step="0.1" required></div>
+        <div><label class="${labelCls}">Fat mass (lbs)</label><input class="${inputCls}" name="fat" type="number" step="0.1" required></div>
+        <div><label class="${labelCls}">Lean mass (lbs)</label><input class="${inputCls}" name="lean" type="number" step="0.1" required></div>
+        <div><label class="${labelCls}">VAT (lbs)</label><input class="${inputCls}" name="vat" type="number" step="0.01" value="0"></div>
+        <div><label class="${labelCls}">RMR (cal)</label><input class="${inputCls}" name="rmr" type="number"></div>
+      </div>
+      <p class="text-xs text-muted">Regional/balance data carries over from your previous scan; you can edit per-scan later by editing localStorage if needed.</p>
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" id="cancel-scan" class="px-4 py-2 text-sm text-muted">Cancel</button>
+        <button class="bg-accent text-ink font-medium px-4 py-2 rounded-lg text-sm">Save scan</button>
+      </div>
+    </form>
+  `);
+  document.getElementById("cancel-scan").onclick = closeModal;
+  document.getElementById("scan-form").onsubmit = (e) => {
+    e.preventDefault();
+    const f = e.target;
+    const prev = latestScan() || {};
+    scans.push({
+      date: f.date.value,
+      source: f.source.value || "Manual",
+      height_in: prev.height_in ?? 67.0,
+      weight_lbs: parseFloat(f.weight.value),
+      body_fat_pct: parseFloat(f.bf.value),
+      fat_mass_lbs: parseFloat(f.fat.value),
+      lean_mass_lbs: parseFloat(f.lean.value),
+      bmc_lbs: prev.bmc_lbs ?? 7.3,
+      rmr_cal: parseInt(f.rmr.value || prev.rmr_cal || 1600, 10),
+      vat_lbs: parseFloat(f.vat.value || 0),
+      ag_ratio: prev.ag_ratio ?? 1.0,
+      bone_t_score: prev.bone_t_score ?? 0,
+      bone_z_score: prev.bone_z_score ?? 0,
+      regions: prev.regions ?? SEED_DEXA[0].regions,
+      balance: prev.balance ?? SEED_DEXA[0].balance,
+    });
+    save(KEY_SCANS, scans);
+    weight = weight.filter(w => w.date !== f.date.value);
+    weight.push({ date: f.date.value, weight_lbs: parseFloat(f.weight.value), note: "DEXA scan day" });
+    save(KEY_WEIGHT, weight);
+    closeModal();
+    renderAll();
+  };
+};
+
+document.getElementById("btn-edit-goals").onclick = () => {
+  openModal("Edit goals", `
+    <form id="goals-form" class="space-y-4">
+      <div><label class="${labelCls}">Target weight (lbs)</label><input class="${inputCls}" name="weight" type="number" step="0.1" value="${goals.target_weight_lbs}" required></div>
+      <div><label class="${labelCls}">Target body fat %</label><input class="${inputCls}" name="bf" type="number" step="0.1" value="${goals.target_body_fat_pct}" required></div>
+      <div><label class="${labelCls}">Target date</label><input class="${inputCls}" name="date" type="date" value="${goals.target_date}" required></div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" id="cancel-goals" class="px-4 py-2 text-sm text-muted">Cancel</button>
+        <button class="bg-accent text-ink font-medium px-4 py-2 rounded-lg text-sm">Save</button>
+      </div>
+    </form>
+  `);
+  document.getElementById("cancel-goals").onclick = closeModal;
+  document.getElementById("goals-form").onsubmit = (e) => {
+    e.preventDefault();
+    const f = e.target;
+    goals = {
+      target_weight_lbs: parseFloat(f.weight.value),
+      target_body_fat_pct: parseFloat(f.bf.value),
+      target_date: f.date.value,
+    };
+    save(KEY_GOALS, goals);
+    closeModal();
+    renderAll();
+  };
+};
+
+// ---------- Scale entry form ----------
+const RATING_OPTS = ["", "Excellent", "Fitness", "Standard", "High", "Low"];
+const ratingSelect = (name, val = "") =>
+  `<select class="${inputCls}" name="${name}">
+    ${RATING_OPTS.map(o => `<option value="${o}" ${o === val ? "selected" : ""}>${o || "— rating —"}</option>`).join("")}
+  </select>`;
+
+document.getElementById("btn-add-scale").onclick = () => {
+  const prev = latestScale() || {};
+  openModal("Log scale reading", `
+    <form id="scale-form" class="space-y-4">
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="${labelCls}">Date</label><input class="${inputCls}" name="date" type="date" value="${today()}" required></div>
+        <div><label class="${labelCls}">Source</label><input class="${inputCls}" name="source" type="text" value="${prev.source ?? "Alfie scale"}"></div>
+        <div><label class="${labelCls}">Weight (lbs)</label><input class="${inputCls}" name="weight_lbs" type="number" step="0.1" required></div>
+        <div><label class="${labelCls}">BMI</label><input class="${inputCls}" name="bmi" type="number" step="0.1"></div>
+        <div><label class="${labelCls}">Body fat %</label><input class="${inputCls}" name="body_fat_pct" type="number" step="0.1"></div>
+        <div><label class="${labelCls}">BF rating</label>${ratingSelect("r_body_fat_pct")}</div>
+        <div><label class="${labelCls}">Muscle mass (lbs)</label><input class="${inputCls}" name="muscle_mass_lbs" type="number" step="0.1"></div>
+        <div><label class="${labelCls}">Muscle rating</label>${ratingSelect("r_muscle_mass_lbs")}</div>
+        <div><label class="${labelCls}">Fat-free weight (lbs)</label><input class="${inputCls}" name="fat_free_weight_lbs" type="number" step="0.1"></div>
+        <div><label class="${labelCls}">Skeletal muscles %</label><input class="${inputCls}" name="skeletal_muscles_pct" type="number" step="0.1"></div>
+        <div><label class="${labelCls}">Subcutaneous fat %</label><input class="${inputCls}" name="subcutaneous_fat_pct" type="number" step="0.1"></div>
+        <div><label class="${labelCls}">Visceral fat (rating 1–59)</label><input class="${inputCls}" name="visceral_fat_rating" type="number" step="1" min="1" max="59"></div>
+        <div><label class="${labelCls}">Body water %</label><input class="${inputCls}" name="body_water_pct" type="number" step="0.1"></div>
+        <div><label class="${labelCls}">Protein %</label><input class="${inputCls}" name="protein_pct" type="number" step="0.1"></div>
+        <div><label class="${labelCls}">Bone mass (lbs)</label><input class="${inputCls}" name="bone_mass_lbs" type="number" step="0.1"></div>
+        <div><label class="${labelCls}">BMR (kcal)</label><input class="${inputCls}" name="bmr_kcal" type="number"></div>
+        <div><label class="${labelCls}">Metabolic age</label><input class="${inputCls}" name="metabolic_age" type="number"></div>
+        <div><label class="${labelCls}">Protein rating</label>${ratingSelect("r_protein_pct")}</div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" id="cancel-scale" class="px-4 py-2 text-sm text-muted">Cancel</button>
+        <button class="bg-accent text-ink font-medium px-4 py-2 rounded-lg text-sm">Save reading</button>
+      </div>
+    </form>
+  `);
+  document.getElementById("cancel-scale").onclick = closeModal;
+  document.getElementById("scale-form").onsubmit = (e) => {
+    e.preventDefault();
+    const f = e.target;
+    const n  = name => { const v = f[name]?.value; return v !== "" && v != null ? parseFloat(v) : null; };
+    const ni = name => { const v = f[name]?.value; return v !== "" && v != null ? parseInt(v, 10) : null; };
+
+    const prevScale = latestScale();
+    const newWeight = n("weight_lbs");
+    const weightChange = prevScale && newWeight != null ? +(newWeight - prevScale.weight_lbs).toFixed(1) : null;
+
+    const entry = {
+      date: f.date.value,
+      source: f.source.value || "Manual",
+      weight_lbs: newWeight,
+      weight_change_lbs: weightChange,
+      bmi: n("bmi"),
+      body_fat_pct: n("body_fat_pct"),
+      muscle_mass_lbs: n("muscle_mass_lbs"),
+      fat_free_weight_lbs: n("fat_free_weight_lbs"),
+      skeletal_muscles_pct: n("skeletal_muscles_pct"),
+      subcutaneous_fat_pct: n("subcutaneous_fat_pct"),
+      visceral_fat_rating: ni("visceral_fat_rating"),
+      body_water_pct: n("body_water_pct"),
+      protein_pct: n("protein_pct"),
+      bone_mass_lbs: n("bone_mass_lbs"),
+      bmr_kcal: ni("bmr_kcal"),
+      metabolic_age: ni("metabolic_age"),
+      ratings: {
+        body_fat_pct:    f.r_body_fat_pct.value    || undefined,
+        muscle_mass_lbs: f.r_muscle_mass_lbs.value || undefined,
+        protein_pct:     f.r_protein_pct.value     || undefined,
+      },
+    };
+    Object.keys(entry.ratings).forEach(k => entry.ratings[k] === undefined && delete entry.ratings[k]);
+
+    scale = scale.filter(s => s.date !== entry.date);
+    scale.push(entry);
+    save(KEY_SCALE, scale);
+
+    if (newWeight) {
+      weight = weight.filter(w => w.date !== entry.date);
+      weight.push({ date: entry.date, weight_lbs: newWeight, note: `${entry.source} scale` });
+      save(KEY_WEIGHT, weight);
+    }
+
+    closeModal();
+    renderAll();
+  };
+};
+
+renderAll();
