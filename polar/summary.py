@@ -91,6 +91,37 @@ def body_comp_line():
         return "no body-comp update"
 
 
+def nutrition_line():
+    """Today's macros from nutrition/sync.py, if present. Never raises."""
+    try:
+        from datetime import date as _date
+        path = os.path.join(ROOT, "nutrition", "daily", f"{_date.today().isoformat()}.json")
+        if not os.path.exists(path):
+            return None
+        n = load_json(path)
+        t = n.get("totals", {}) or {}
+        g = n.get("goals", {}) or {}
+
+        def fmt(val, goal, unit):
+            if val is None:
+                return None
+            s = f"{round(val)}{unit}"
+            if goal:
+                s += f" of {round(goal)}{unit} goal"
+            return s
+        bits = [
+            ("calories", fmt(t.get("calories"), g.get("calories"), "")),
+            ("protein", fmt(t.get("protein_g"), g.get("protein_g"), "g")),
+            ("carbs", fmt(t.get("carbs_g"), g.get("carbs_g"), "g")),
+            ("fat", fmt(t.get("fat_g"), g.get("fat_g"), "g")),
+        ]
+        parts = [f"{label} {v}" for label, v in bits if v]
+        return ", ".join(parts) if parts else None
+    except Exception as e:
+        log(f"nutrition parse failed (non-fatal): {e}")
+        return None
+
+
 def call_claude(prompt):
     claude = shutil.which("claude") or "/Users/alfredovargas/.local/bin/claude"
     out = subprocess.run(
@@ -143,14 +174,17 @@ def main():
     hrv_7d = rolling_mean(rec_dates, "recharge", hrv_of)
     slp_7d = rolling_mean(slp_dates, "sleep", sleep_hours)
     body = body_comp_line()
+    nutrition = nutrition_line()
 
+    nutrition_bullet = f"- Today's nutrition so far: {nutrition}\n" if nutrition else ""
     prompt = (
         "You are a recovery coach reading wearable data for an athlete. "
         "Here are the current numbers (Polar Nightly Recharge is a 1-6 scale, 6 best):\n"
         f"- Nightly Recharge today: {rec_today}/6 (7-day avg {rec_7d})\n"
         f"- HRV today: {hrv_today} ms (7-day avg {hrv_7d})\n"
         f"- Sleep last night: {slp_hours} hours (7-day avg {slp_7d})\n"
-        f"- Body composition: {body}\n\n"
+        f"- Body composition: {body}\n"
+        f"{nutrition_bullet}\n"
         "Write 3 to 5 sentences, plain English, no preamble, no markdown, no bullet points. "
         "First say what the data SAYS (1-2 sentences of fact). "
         "Then say what it SUGGESTS for today (1-2 sentences of action: train hard, "
@@ -171,6 +205,7 @@ def main():
             "sleep_hours": slp_hours,
             "hrv_today": hrv_today,
             "hrv_7d_avg": hrv_7d,
+            "nutrition": nutrition,
         },
     }
     with open(os.path.join(HERE, "summary.json"), "w") as f:

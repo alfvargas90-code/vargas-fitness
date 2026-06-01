@@ -323,8 +323,51 @@ async function renderTodaysRead() {
   }
 }
 
+// ---------- Nutrition (Calories Club macros via nutrition/sync.py) ----------
+async function renderNutrition() {
+  const empty = document.getElementById("nutrition-empty");
+  const content = document.getElementById("nutrition-content");
+  if (!content) return;
+  const today = new Date().toISOString().slice(0, 10);
+  try {
+    const n = await fetchJSON(`nutrition/daily/${today}.json`);
+    const t = n.totals || {};
+    const g = n.goals || {};
+    const macros = [
+      { label: "Calories", key: "calories", goal: g.calories, unit: "" },
+      { label: "Protein", key: "protein_g", goal: g.protein_g, unit: "g" },
+      { label: "Carbs", key: "carbs_g", goal: g.carbs_g, unit: "g" },
+      { label: "Fat", key: "fat_g", goal: g.fat_g, unit: "g" },
+    ];
+    content.innerHTML = macros.map(m => {
+      const val = t[m.key];
+      const valTxt = val != null ? Math.round(val) + m.unit : "—";
+      const goalTxt = m.goal != null ? `/ ${Math.round(m.goal)}${m.unit} goal` : "";
+      const pct = (val != null && m.goal) ? Math.min(100, Math.round((val / m.goal) * 100)) : null;
+      const bar = pct != null
+        ? `<div class="h-1.5 bg-line rounded-full mt-2 overflow-hidden"><div class="h-full bg-accent" style="width:${pct}%"></div></div>`
+        : "";
+      return `<div class="bg-bg rounded-lg p-3 border border-line">
+        <div class="text-xs text-muted">${m.label}</div>
+        <div class="text-2xl font-semibold stat-num mt-1">${valTxt}</div>
+        <div class="text-xs text-muted mt-1">${goalTxt}</div>${bar}
+      </div>`;
+    }).join("");
+    empty.classList.add("hidden");
+    content.classList.remove("hidden");
+    const sub = document.getElementById("nutrition-sub");
+    if (sub && n.synced_at) {
+      sub.textContent = "synced " + new Date(n.synced_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    }
+  } catch (e) {
+    empty.classList.remove("hidden");
+    content.classList.add("hidden");
+  }
+}
+
 function renderAll() {
   renderTodaysRead(); // async, AI health summary
+  renderNutrition(); // async, today's macros from Calories Club
   renderHeader();
   renderProfileStrip();
   renderKPIs();

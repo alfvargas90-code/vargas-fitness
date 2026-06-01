@@ -19,3 +19,8 @@ polar/com.alfredo.polar-sync.plist
 polar/next_steps.md
 dashboard_preview.png
 .DS_Store
+
+# --- nutrition secrets (recordo MCP tokens) ---
+nutrition/.env
+nutrition/.env.*
+nutrition/com.alfredo.nutrition-sync.plist

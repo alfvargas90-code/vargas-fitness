@@ -148,6 +148,18 @@
       </div>
     </section>
 
+    <!-- Nutrition — today's macros from Calories Club (nutrition/sync.py) -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="nutrition-panel">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-semibold">Nutrition · today</h2>
+        <span class="text-xs text-muted" id="nutrition-sub"></span>
+      </div>
+      <div id="nutrition-empty" class="text-sm text-muted">
+        No nutrition data yet — run <code class="text-accent">nutrition/sync.py</code> to pull today's macros from Calories Club.
+      </div>
+      <div id="nutrition-content" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+    </section>
+
     <!-- Latest scale reading (bioimpedance — kept separate from DEXA) -->
     <section class="bg-card rounded-xl p-5 border border-line mb-8">
       <div class="flex items-center justify-between mb-4">
