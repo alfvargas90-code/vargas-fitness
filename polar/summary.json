@@ -1,0 +1,11 @@
+{
+  "generated_at": "2026-05-31T19:54:38-05:00",
+  "slot": "evening",
+  "summary": "Your recovery markers are strong today: Nightly Recharge is 5 of 6 and HRV is 70 ms, both well above your 7-day baselines (3.7 and 63 ms), which signals your nervous system is well-recovered. The one soft spot is sleep \u2014 5.4 hours is nearly an hour under your weekly average. Your body is primed, so this is a green light to train hard today and hit a demanding session while the readiness is there. Just bank the recovery on the back end: protect tonight's sleep with an earlier wind-down to keep this trend going, and don't stack a second hard day on top if tonight comes up short again.",
+  "data_basis": {
+    "recharge_today": 5,
+    "sleep_hours": 5.4,
+    "hrv_today": 70,
+    "hrv_7d_avg": 63
+  }
+}
