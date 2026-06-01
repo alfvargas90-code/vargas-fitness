@@ -62,10 +62,11 @@ function bfPercentileBand(age, bf) {
 
 // ---------- Render ----------
 function renderHeader() {
-  const s = latestScan();
   const sub = document.getElementById("header-sub");
-  if (!s) { sub.textContent = "No scans yet."; return; }
-  sub.textContent = `Latest: ${s.source} on ${s.date} · Height ${s.height_in}" · Age at scan: ${ageOn(s.date)}`;
+  if (!sub) return;
+  sub.textContent = new Date().toLocaleDateString("en-US", {
+    weekday: "long", year: "numeric", month: "long", day: "numeric",
+  });
 }
 
 function ageOn(dateStr) {
@@ -146,8 +147,8 @@ const baseChartOpts = {
 function renderProfileStrip() {
   const p = typeof SEED_PROFILE !== "undefined" ? SEED_PROFILE : null;
   const el = document.getElementById("profile-strip");
-  if (!el || !p) return;
-  el.textContent = `Polar profile · ${p.height_in}" · ${p.profile_weight_lbs} lb · Max HR ${p.max_hr} · Resting HR ${p.resting_hr} · Sleep goal ${p.sleep_goal_h}h`;
+  if (!el) return;
+  el.textContent = "";
 }
 
 // ---------- Polar live data (Training & Recovery) ----------
