@@ -12,7 +12,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Fitness" />
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
   tailwind.config = {
     theme: {
@@ -136,19 +135,6 @@
             </div>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- Regional + balance -->
-    <section class="grid lg:grid-cols-2 gap-6 mb-8">
-      <div class="bg-card rounded-xl p-5 border border-line">
-        <h2 class="font-semibold mb-3">Regional fat % (latest scan)</h2>
-        <canvas id="chart-regional" height="180"></canvas>
-      </div>
-      <div class="bg-card rounded-xl p-5 border border-line">
-        <h2 class="font-semibold mb-3">L/R balance (latest scan)</h2>
-        <canvas id="chart-balance" height="180"></canvas>
-        <p class="text-xs text-muted mt-3">Imbalances over 2 lbs may indicate developmental asymmetry.</p>
       </div>
     </section>
 

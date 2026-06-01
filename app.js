@@ -137,39 +137,6 @@ const baseChartOpts = {
   },
 };
 
-function renderRegionalChart() {
-  const s = latestScan();
-  if (!s) return;
-  const labels = ["Arms", "Legs", "Trunk", "Android", "Gynoid"];
-  const data   = [s.regions.arms.fat_pct, s.regions.legs.fat_pct, s.regions.trunk.fat_pct, s.regions.android.fat_pct, s.regions.gynoid.fat_pct];
-  charts.regional?.destroy();
-  charts.regional = new Chart(document.getElementById("chart-regional"), {
-    type: "bar",
-    data: {
-      labels,
-      datasets: [{ label: "Fat %", data, backgroundColor: "#22d3ee" }],
-    },
-    options: { ...baseChartOpts, plugins: { legend: { display: false } } },
-  });
-}
-
-function renderBalanceChart() {
-  const s = latestScan();
-  if (!s) return;
-  charts.balance?.destroy();
-  charts.balance = new Chart(document.getElementById("chart-balance"), {
-    type: "bar",
-    data: {
-      labels: ["Arms", "Legs"],
-      datasets: [
-        { label: "Right", data: [s.balance.right_arm_lbs, s.balance.right_leg_lbs], backgroundColor: "#22d3ee" },
-        { label: "Left",  data: [s.balance.left_arm_lbs,  s.balance.left_leg_lbs],  backgroundColor: "#a78bfa" },
-      ],
-    },
-    options: baseChartOpts,
-  });
-}
-
 // ---------- Training / Recovery / Activity / Nutrition ----------
 function renderProfileStrip() {
   const p = typeof SEED_PROFILE !== "undefined" ? SEED_PROFILE : null;
@@ -335,8 +302,6 @@ function renderAll() {
   renderKPIs();
   renderScale();
   renderHistory();
-  renderRegionalChart();
-  renderBalanceChart();
   renderPolar(); // async, live Polar Loop data
 }
 
