@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "fitness",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8765"],
+      "runtimeExecutable": "polar/.venv/bin/python3",
+      "runtimeArgs": ["serve.py"],
       "port": 8765
     }
   ]

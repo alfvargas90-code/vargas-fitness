@@ -156,7 +156,7 @@ async function renderPolar() {
   }
 }
 
-// ---------- Energy throughout day (modeled) ----------
+// ---------- Recovery curve (modeled, NOT measured) ----------
 // Loop Gen 2 has no continuous daytime HR via AccessLink — so this is an HONEST
 // model: starting energy at wake is derived from last night's recovery metrics,
 // then decayed linearly across waking hours to viewing time.
@@ -212,7 +212,7 @@ async function renderEnergy() {
 
     const col = energyColor(current);
     const numEl = document.getElementById("energy-num");
-    numEl.textContent = `${Math.round(current)}%`;
+    numEl.textContent = `~${Math.round(current)}`;
     numEl.style.color = col;
     const bar = document.getElementById("energy-bar");
     bar.style.width = `${Math.round(current)}%`;
@@ -375,8 +375,7 @@ async function renderTodaysRead() {
     const s = await fetchJSON("polar/summary.json");
     clearWrap();
     const simple = s.simple || null;
-    const hasSimple = simple && (simple.recovery || simple.physical_themes
-      || simple.astrology_correlation || simple.performance_outlook);
+    const hasSimple = simple && (simple.recovery || simple.reading || simple.performance);
     if (hasSimple) {
       body.textContent = "";
       body.style.display = "none";
@@ -401,22 +400,22 @@ async function renderTodaysRead() {
         wrap.appendChild(badge);
       }
 
-      if (simple.physical_themes)
-        wrap.appendChild(readBlock("Physical", simple.physical_themes));
-      if (simple.astrology_correlation)
-        wrap.appendChild(readBlock("Astrology", simple.astrology_correlation));
+      // Reading — single flowing paragraph fusing physical + astrology texture.
+      // No section label: the Recovery badge is the only "header" element.
+      if (simple.reading)
+        wrap.appendChild(readBlock(null, simple.reading));
 
-      // Performance Outlook — bold the leading verdict phrase.
-      if (simple.performance_outlook) {
+      // Performance — inline bold "Performance:" prefix + bolded leading verdict.
+      if (simple.performance) {
         const sec = document.createElement("div");
-        const h = document.createElement("div");
-        h.className = "text-xs uppercase tracking-wider text-muted mb-1";
-        h.textContent = "Performance";
-        sec.appendChild(h);
         const p = document.createElement("p");
         p.className = "text-base leading-relaxed text-slate-200";
         p.style.fontSize = "15px";
-        const t = String(simple.performance_outlook).trim();
+        const lead = document.createElement("strong");
+        lead.className = "text-slate-100";
+        lead.textContent = "Performance: ";
+        p.appendChild(lead);
+        const t = String(simple.performance).trim();
         const v = PERF_VERDICTS.find(v => t.toLowerCase().startsWith(v.toLowerCase()));
         if (v) {
           const strong = document.createElement("strong");
@@ -425,15 +424,15 @@ async function renderTodaysRead() {
           p.appendChild(strong);
           p.appendChild(document.createTextNode(t.slice(v.length)));
         } else {
-          p.textContent = t;
+          p.appendChild(document.createTextNode(t));
         }
         sec.appendChild(p);
         wrap.appendChild(sec);
       }
 
-      // Transit Impact — only when a real transit is hitting (non-null/non-empty).
-      if (simple.transit_impact && String(simple.transit_impact).trim())
-        wrap.appendChild(readBlock("Transit", simple.transit_impact));
+      // Transit — only when a real transit is hitting (non-null/non-empty).
+      if (simple.transit && String(simple.transit).trim())
+        wrap.appendChild(readBlock(null, simple.transit));
 
       body.parentNode.insertBefore(wrap, body.nextSibling);
     } else {

@@ -3,10 +3,11 @@
 
 Reads the latest Polar recharge/sleep data + body-comp seed, asks `claude -p`
 (rides Alfie's Claude Max plan — no API key, no marginal cost) for a plain-English
-read in five sections (Recovery / Physical Themes / Astrology Correlation /
-Performance Outlook / Transit Impact), writes polar/summary.json with a `simple`
-block the dashboard card renders, and pushes so the live URL updates. The biometrics
-inform the read but never appear in it — no raw numbers, units, or jargon.
+read in four sections (Recovery / Reading / Performance / Transit), writes
+polar/summary.json with a `simple` block the dashboard card renders, and pushes so
+the live URL updates. The `Reading` section fuses physical body-area notes with the
+natal recovery trait into ONE flowing paragraph — astrology is texture, never named.
+The biometrics inform the read but never appear in it — no raw numbers, units, or jargon.
 
 Run by the com.alfredo.polar-summary LaunchAgent 5x/day (4:15, 9:05, 12:30, 16:45, 20:00 CST).
 (9:05, not 9:00, so it fires off the :00/:30 boundary the 30-min polar-sync timer hits — avoids the same-minute sync race that left "Today's Read" stale.)
@@ -67,23 +68,20 @@ _SIGNS = "|".join(BODY_MAPPING)
 
 OUTPUT_SECTIONS = [
     "Recovery",
-    "Physical Themes",
-    "Astrology Correlation",
-    "Performance Outlook",
-    "Transit Impact",
+    "Reading",
+    "Performance",
+    "Transit",
 ]
 
 # Section label -> key in the plain-English `simple` block the dashboard card reads.
 LABEL_TO_KEY = {
     "Recovery": "recovery",
-    "Physical Themes": "physical_themes",
-    "Astrology Correlation": "astrology_correlation",
-    "Performance Outlook": "performance_outlook",
-    "Transit Impact": "transit_impact",
+    "Reading": "reading",
+    "Performance": "performance",
+    "Transit": "transit",
 }
 RECOVERY_WORDS = ["Excellent", "Good", "Average", "Poor"]
-SIMPLE_KEYS = ["recovery", "physical_themes", "astrology_correlation",
-               "performance_outlook", "transit_impact"]
+SIMPLE_KEYS = ["recovery", "reading", "performance", "transit"]
 
 
 def log(msg):
@@ -367,21 +365,25 @@ def main():
         f"{NATAL_ARCHITECTURE}\n"
         "\n=== TODAY'S RELEVANT TRANSITS (context only) ===\n"
         f"{transit_block}\n\n"
-        "Produce EXACTLY these five sections, each starting on its own line with the exact label shown "
+        "Produce EXACTLY these four sections, each starting on its own line with the exact label shown "
         "followed by a colon. No markdown, no bullets, no preamble, no closing remarks.\n\n"
         "Recovery: ONE word only — Poor, Average, Good, or Excellent. Nothing else on this line.\n"
-        "Physical Themes: one or two short sentences about any body areas that deserve attention today "
-        "(joints, tendons, shoulders, neck, lower body). If nothing is flagged, say so plainly. "
-        "Example: \"Nothing currently suggests increased stress on joints, tendons, shoulders, or neck.\"\n"
-        "Astrology Correlation: translate today's chart themes into plain English about how he tends to "
-        "recover and perform, and whether today's data fits that pattern. "
-        "Example: \"You generally recover best through consistency, structure, and routine, and today's "
-        "data supports that pattern.\"\n"
-        "Performance Outlook: start with EXACTLY one of these verdicts — Push hard / Train normally / "
+        "Reading: ONE paragraph, two or three sentences, flowing prose. Blend two things so they read as "
+        "a single thought: (1) any body areas that deserve attention today (joints, tendons, shoulders, "
+        "neck, lower body) — if nothing is flagged, say so plainly; and (2) how he tends to recover and "
+        "perform, woven in as character rather than a separate topic. Make the trait feel like something "
+        "you simply know about him as a person, e.g. \"You're built to recover through steadiness and "
+        "consistency rather than big swings, and today fits that pattern.\" NEVER label, name, or hint that "
+        "this is astrology — no \"your chart\", no \"the stars\", no \"astrologically\", no planet or sign "
+        "names. No sub-headings inside the paragraph; one smooth read. "
+        "Example: \"Nothing right now points to extra strain on your knees, shoulders, neck, or any of your "
+        "usual watch areas. You're built to recover through steadiness and consistency rather than big "
+        "swings, and today fits that pattern — your body bounced back cleanly and your system feels calm.\"\n"
+        "Performance: start with EXACTLY one of these verdicts — Push hard / Train normally / "
         "Moderate effort / Prioritize recovery — then one short sentence of why. "
-        "Example: \"Push hard. Recovery is excellent and training should be above average — push if "
-        "technique stays solid.\"\n"
-        "Transit Impact: only if a meaningful planetary transit is actually affecting today; plain "
+        "Example: \"Push hard. You came in well above your normal recovery, so today's a green light to go "
+        "after it — just keep technique honest if you go heavy.\"\n"
+        "Transit: only if a meaningful planetary transit is actually affecting today; plain "
         "English, one short sentence (e.g. \"Mars is amplifying your drive — channel it into work, not "
         "friction.\"). If nothing meaningful is hitting today, write exactly: none\n"
     )
@@ -411,10 +413,10 @@ def main():
                      if re.search(rf"\b{w}\b", simple["recovery"], re.I)), None)
         if word:
             simple["recovery"] = word
-    ti = simple.get("transit_impact")
+    ti = simple.get("transit")
     if not transits or not ti or ti.strip().lower() == "none" \
             or re.search(r"\bno (significant|relevant|meaningful)\b", ti, re.I):
-        simple["transit_impact"] = None
+        simple["transit"] = None
 
     payload = {
         "generated_at": now.replace(microsecond=0).isoformat(),

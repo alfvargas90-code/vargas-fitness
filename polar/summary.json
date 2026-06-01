@@ -1,35 +1,30 @@
 {
-  "generated_at": "2026-06-01T15:04:58-05:00",
+  "generated_at": "2026-06-01T15:27:49-05:00",
   "slot": "afternoon",
-  "summary": "Recovery: Good\n\nPhysical Themes: Nothing right now points to extra strain on your knees, joints, tendons, shoulders, or neck. Your usual watch areas are quiet today, so there's no reason to baby anything \u2014 just keep your form honest if you go heavy.\n\nAstrology Correlation: You're built to recover through steadiness, structure, and routine rather than wild swings, and that's exactly what today looks like \u2014 your body bounced back well and your system is calm and ready. The pattern and the numbers are in agreement.\n\nPerformance Outlook: Push hard. You came in well above your normal recovery and your system is running cleaner than usual, so today is a green light to go after it as long as technique stays clean.\n\nTransit Impact: none",
+  "summary": "Recovery: Excellent\n\nReading: Nothing right now is flagging strain in your usual trouble spots \u2014 knees, joints, tendons, neck, or shoulders all look clear, so there's no area you need to baby today. You're someone who builds back through steadiness and discipline rather than dramatic swings, and today fits that perfectly \u2014 your body came back clean and your system feels calm and well-settled.\n\nPerformance: Push hard. You came in well above your normal recovery with steady sleep behind you, so today's a green light to go after it \u2014 just keep your protein climbing, you're running well short of where you want it.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
-      "text": "Good"
+      "text": "Excellent"
     },
     {
-      "label": "Physical Themes",
-      "text": "Nothing right now points to extra strain on your knees, joints, tendons, shoulders, or neck. Your usual watch areas are quiet today, so there's no reason to baby anything \u2014 just keep your form honest if you go heavy."
+      "label": "Reading",
+      "text": "Nothing right now is flagging strain in your usual trouble spots \u2014 knees, joints, tendons, neck, or shoulders all look clear, so there's no area you need to baby today. You're someone who builds back through steadiness and discipline rather than dramatic swings, and today fits that perfectly \u2014 your body came back clean and your system feels calm and well-settled."
     },
     {
-      "label": "Astrology Correlation",
-      "text": "You're built to recover through steadiness, structure, and routine rather than wild swings, and that's exactly what today looks like \u2014 your body bounced back well and your system is calm and ready. The pattern and the numbers are in agreement."
+      "label": "Performance",
+      "text": "Push hard. You came in well above your normal recovery with steady sleep behind you, so today's a green light to go after it \u2014 just keep your protein climbing, you're running well short of where you want it."
     },
     {
-      "label": "Performance Outlook",
-      "text": "Push hard. You came in well above your normal recovery and your system is running cleaner than usual, so today is a green light to go after it as long as technique stays clean."
-    },
-    {
-      "label": "Transit Impact",
+      "label": "Transit",
       "text": "none"
     }
   ],
   "simple": {
-    "recovery": "Good",
-    "physical_themes": "Nothing right now points to extra strain on your knees, joints, tendons, shoulders, or neck. Your usual watch areas are quiet today, so there's no reason to baby anything \u2014 just keep your form honest if you go heavy.",
-    "astrology_correlation": "You're built to recover through steadiness, structure, and routine rather than wild swings, and that's exactly what today looks like \u2014 your body bounced back well and your system is calm and ready. The pattern and the numbers are in agreement.",
-    "performance_outlook": "Push hard. You came in well above your normal recovery and your system is running cleaner than usual, so today is a green light to go after it as long as technique stays clean.",
-    "transit_impact": null
+    "recovery": "Excellent",
+    "reading": "Nothing right now is flagging strain in your usual trouble spots \u2014 knees, joints, tendons, neck, or shoulders all look clear, so there's no area you need to baby today. You're someone who builds back through steadiness and discipline rather than dramatic swings, and today fits that perfectly \u2014 your body came back clean and your system feels calm and well-settled.",
+    "performance": "Push hard. You came in well above your normal recovery with steady sleep behind you, so today's a green light to go after it \u2014 just keep your protein climbing, you're running well short of where you want it.",
+    "transit": null
   },
   "transits": [],
   "data_basis": {
