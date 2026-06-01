@@ -528,6 +528,52 @@ async function renderScaleSnapshot() {
   }
 }
 
+// ---------- Scale history (VeSync ESF-551 manual screenshot readings) ----------
+// Reads vesync/history.json — array of readings, newest first. Compact table,
+// no charts (per dashboard convention). Missing file / file:// → empty state.
+function fmtDelta(d) {
+  if (d == null || isNaN(d)) return "—";
+  const n = Number(d);
+  const sign = n > 0 ? "+" : "";
+  const cls = n > 0 ? "text-warn" : n < 0 ? "text-good" : "text-muted";
+  return `<span class="${cls}">${sign}${n.toFixed(1)}</span>`;
+}
+
+async function renderScaleHistory() {
+  const empty = document.getElementById("scale-history-empty");
+  const content = document.getElementById("scale-history-content");
+  const rows = document.getElementById("scale-history-rows");
+  const sub = document.getElementById("scale-history-sub");
+  const caption = document.getElementById("scale-history-caption");
+  if (!empty || !content || !rows) return;
+  const showEmpty = () => {
+    empty.classList.remove("hidden"); content.classList.add("hidden");
+    if (sub) sub.textContent = "";
+    if (caption) caption.textContent = "";
+  };
+  try {
+    const hist = await fetchJSON("vesync/history.json");
+    if (!Array.isArray(hist) || hist.length === 0) return showEmpty();
+    const sorted = [...hist].sort((a, b) => (a.date < b.date ? 1 : -1)); // newest first
+    rows.innerHTML = sorted.map(r => `
+      <tr class="border-b border-line/50">
+        <td class="py-2 pr-2 text-slate-200">${r.date}</td>
+        <td class="py-2 px-2 text-right">${fmt(r.weight_lb, 1)}</td>
+        <td class="py-2 px-2 text-right">${fmtDelta(r.delta_lb)}</td>
+        <td class="py-2 px-2 text-right">${r.body_fat_pct != null ? fmt(r.body_fat_pct, 1) + "%" : "—"}</td>
+        <td class="py-2 px-2 text-right">${fmt(r.muscle_mass_lb, 1)}</td>
+        <td class="py-2 pl-2 text-right">${r.visceral_fat_rating != null ? r.visceral_fat_rating : "—"}</td>
+      </tr>`).join("");
+    empty.classList.add("hidden");
+    content.classList.remove("hidden");
+    if (sub) sub.textContent = `${sorted.length} reading${sorted.length === 1 ? "" : "s"}`;
+    if (caption) caption.textContent =
+      `${sorted.length} manual readings, Feb–May 2026 · BT scale doesn't auto-sync to API · next reading: send screenshot to Penny.`;
+  } catch (e) {
+    showEmpty(); // file missing / file://
+  }
+}
+
 function renderAll() {
   renderTodaysRead(); // async, AI health summary
   renderNutrition(); // async, today's macros from Calories Club
@@ -535,6 +581,7 @@ function renderAll() {
   renderProfileStrip();
   renderKPIs();
   renderScaleSnapshot(); // async, VeSync screenshot OCR snapshot (manual via Penny)
+  renderScaleHistory(); // async, VeSync scale history table (manual via Penny)
   renderScale();
   renderEnergy(); // async, modeled energy-throughout-day from overnight Polar recovery
   renderPolar(); // async, live Polar Loop data

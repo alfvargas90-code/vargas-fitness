@@ -1,10 +1,11 @@
 {
-  "captured_at": "2026-06-01T12:30:00-05:00",
-  "source": "manual_screenshot",
-  "weight_lb": null,
-  "body_fat_pct": null,
-  "muscle_mass_lb": null,
-  "body_water_pct": null,
-  "bmr_cal": null,
-  "visceral_fat_rating": null
+  "captured_at": "2026-05-23T17:03:00-05:00",
+  "as_of": "2026-05-23",
+  "source": "vesync_app_screenshot",
+  "weight_lb": 169.9,
+  "body_fat_pct": 14.9,
+  "muscle_mass_lb": 137.2,
+  "body_water_pct": 61.3,
+  "bmr_cal": 1763,
+  "visceral_fat_rating": 9
 }
