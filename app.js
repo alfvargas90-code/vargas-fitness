@@ -72,56 +72,6 @@ function renderKPIs() {
   document.getElementById("kpi-rmr").textContent     = fmt(s.rmr_cal, 0);
 }
 
-function renderHealthMarkers() {
-  const s = latestScan();
-  if (!s) return;
-  const items = [
-    { label: "Visceral fat (VAT)",  value: fmt(s.vat_lbs, 2) + " lbs",  status: s.vat_lbs < 1 ? "good" : s.vat_lbs < 2 ? "warn" : "bad",
-      hint: "Target: as close to 0 as possible" },
-    { label: "Android/Gynoid ratio", value: fmt(s.ag_ratio, 2),         status: s.ag_ratio < 1.0 ? "good" : s.ag_ratio < 1.1 ? "warn" : "bad",
-      hint: "Target: < 1.0" },
-    { label: "Bone T-score",         value: fmt(s.bone_t_score, 1),     status: s.bone_t_score >= 1 ? "good" : s.bone_t_score >= -1 ? "warn" : "bad",
-      hint: "Higher = stronger bones" },
-    { label: "BMC (bone mineral)",   value: fmt(s.bmc_lbs, 1) + " lbs", status: "good", hint: "Total bone mineral content" },
-  ];
-  const colorOf = { good: "text-good", warn: "text-warn", bad: "text-bad" };
-  document.getElementById("health-markers").innerHTML = items.map(it => `
-    <div>
-      <div class="text-xs uppercase tracking-wider text-muted">${it.label}</div>
-      <div class="text-xl font-semibold stat-num mt-1 ${colorOf[it.status]}">${it.value}</div>
-      <div class="text-xs text-muted mt-1">${it.hint}</div>
-    </div>
-  `).join("");
-}
-
-function renderGoals() {
-  const s = latestScan();
-  const latestWeight = [...weight].sort(byDate).at(-1)?.weight_lbs ?? s?.weight_lbs;
-  const wPct = goals.target_weight_lbs && latestWeight
-    ? Math.max(0, Math.min(100, ((s.weight_lbs - latestWeight) / (s.weight_lbs - goals.target_weight_lbs)) * 100))
-    : 0;
-  const bfPct = goals.target_body_fat_pct && s
-    ? Math.max(0, Math.min(100, ((earliestScan().body_fat_pct - s.body_fat_pct) / (earliestScan().body_fat_pct - goals.target_body_fat_pct)) * 100))
-    : 0;
-  document.getElementById("goals-display").innerHTML = `
-    <div>
-      <div class="flex justify-between text-sm mb-1">
-        <span>Weight → ${goals.target_weight_lbs} lbs</span>
-        <span class="stat-num text-muted">${fmt(latestWeight,1)} lbs</span>
-      </div>
-      <div class="h-2 bg-line rounded-full overflow-hidden"><div class="h-full bg-accent" style="width:${wPct}%"></div></div>
-    </div>
-    <div>
-      <div class="flex justify-between text-sm mb-1">
-        <span>Body fat → ${goals.target_body_fat_pct}%</span>
-        <span class="stat-num text-muted">${fmt(s?.body_fat_pct,1)}%</span>
-      </div>
-      <div class="h-2 bg-line rounded-full overflow-hidden"><div class="h-full bg-good" style="width:${bfPct}%"></div></div>
-    </div>
-    <div class="text-xs text-muted pt-1">Target date: ${goals.target_date}</div>
-  `;
-}
-
 function renderScale() {
   const s = latestScale();
   const sub = document.getElementById("scale-sub");
@@ -253,116 +203,6 @@ function renderProfileStrip() {
   const el = document.getElementById("profile-strip");
   if (!el || !p) return;
   el.textContent = `Polar profile · ${p.height_in}" · ${p.profile_weight_lbs} lb · Max HR ${p.max_hr} · Resting HR ${p.resting_hr} · Sleep goal ${p.sleep_goal_h}h`;
-}
-
-function renderTrainingLoad() {
-  if (typeof SEED_TRAINING === "undefined") return;
-  const t = SEED_TRAINING;
-  document.getElementById("training-note").textContent = t.conclusion;
-  document.getElementById("training-structure").textContent = "→ " + t.target_structure;
-  const colorFor = s => s >= 3 ? "#f87171" : s >= 2.5 ? "#fbbf24" : s >= 2 ? "#facc15" : "#34d399";
-  charts.training?.destroy();
-  charts.training = new Chart(document.getElementById("chart-training-load"), {
-    type: "bar",
-    data: {
-      labels: t.pattern.map(d => d.day),
-      datasets: [{ label: "Load", data: t.pattern.map(d => d.score), backgroundColor: t.pattern.map(d => colorFor(d.score)) }],
-    },
-    options: {
-      ...baseChartOpts,
-      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => t.pattern[ctx.dataIndex].load } } },
-      scales: { x: baseChartOpts.scales.x, y: { ...baseChartOpts.scales.y, min: 0, max: 3, ticks: { color: "#9ca3af", stepSize: 1 } } },
-    },
-  });
-}
-
-function renderRecovery() {
-  if (typeof SEED_RECOVERY === "undefined") return;
-  const r = SEED_RECOVERY;
-  const card = (title, d, cls) => `
-    <div class="rounded-lg p-3 border border-line">
-      <div class="text-sm font-medium ${cls} mb-2">${title}</div>
-      <div class="text-xs text-muted space-y-1">
-        <div>ANS charge: <span class="text-slate-200">${d.ans_charge}</span></div>
-        <div>HRV: <span class="text-slate-200">${d.hrv}</span></div>
-        <div>HR: <span class="text-slate-200">${d.hr}</span></div>
-      </div>
-    </div>`;
-  document.getElementById("recovery-states").innerHTML =
-    card("Good recovery day", r.good_day, "text-good") + card("Compromised day", r.compromised_day, "text-bad");
-  document.getElementById("recovery-causes").textContent = "Compromised days driven by: " + r.causes.join(", ") + ".";
-}
-
-function renderActivity() {
-  if (typeof SEED_ACTIVITY === "undefined") return;
-  const a = SEED_ACTIVITY;
-  const cards = [
-    { label: "Steps / day",     value: a.steps_per_day.toLocaleString() },
-    { label: "Miles / week",    value: a.miles_per_week },
-    { label: "Activity goal",   value: a.activity_completion_pct + "%" },
-    { label: "Active-day burn", value: a.active_day_burn_kcal.join("–") },
-    { label: "Est. TDEE",       value: a.tdee_kcal.join("–") },
-  ];
-  document.getElementById("activity-grid").innerHTML = cards.map(c => `
-    <div>
-      <div class="text-xs uppercase tracking-wider text-muted">${c.label}</div>
-      <div class="text-xl font-semibold stat-num mt-1">${c.value}</div>
-    </div>`).join("");
-
-  const hrMaxEl = document.getElementById("hr-max");
-  if (hrMaxEl) hrMaxEl.textContent = (typeof SEED_PROFILE !== "undefined" ? SEED_PROFILE.max_hr : "—");
-  if (typeof HR_ZONES !== "undefined") {
-    document.getElementById("hr-zones").innerHTML = HR_ZONES.map(z => `
-      <div class="rounded-lg p-2 border border-line">
-        <div class="text-xs font-medium">${z.zone}</div>
-        <div class="text-xs text-muted">${z.pct}</div>
-        <div class="text-sm stat-num text-accent">${z.lo}–${z.hi}</div>
-      </div>`).join("");
-  }
-}
-
-function renderNutrition() {
-  if (typeof SEED_NUTRITION === "undefined") return;
-  const n = SEED_NUTRITION;
-  const block = (title, d, cls) => `
-    <div>
-      <div class="text-sm font-medium ${cls} mb-1">${title}</div>
-      <div class="text-xs text-muted">${d.kcal} kcal · P ${d.protein_g}g · C ${d.carbs_g} · F ${d.fat_g}</div>
-    </div>`;
-  document.getElementById("nutrition-targets").innerHTML =
-    block("Training days", n.training_day, "text-accent") + block("Recovery days", n.recovery_day, "text-good");
-
-  if (typeof SEED_MEALPREP !== "undefined") {
-    document.getElementById("mealprep-table").innerHTML = SEED_MEALPREP.map(m => `
-      <tr class="border-b border-line/50">
-        <td class="py-2 pr-4">${m.name}</td>
-        <td class="py-2 pr-4 text-right stat-num">${m.kcal}</td>
-        <td class="py-2 pr-4 text-right stat-num">${m.protein_g}g</td>
-        <td class="py-2 pr-4 text-right stat-num">${m.fat_g}g</td>
-        <td class="py-2 text-right stat-num">${m.carbs_g}g</td>
-      </tr>`).join("");
-  }
-
-  document.getElementById("nutrition-advice").innerHTML = `
-    <div>
-      <div class="text-xs uppercase tracking-wider text-good mb-1">Keep</div>
-      <ul class="text-xs text-muted list-disc list-inside space-y-1">${n.keep.map(x => `<li>${x}</li>`).join("")}</ul>
-    </div>
-    <div>
-      <div class="text-xs uppercase tracking-wider text-warn mb-1">Reduce</div>
-      <ul class="text-xs text-muted list-disc list-inside space-y-1">${n.reduce.map(x => `<li>${x}</li>`).join("")}</ul>
-    </div>`;
-  document.getElementById("nutrition-note").textContent = n.note;
-}
-
-function renderProjection() {
-  const el = document.getElementById("projection-grid");
-  if (!el || typeof PHYSIQUE_PROJECTION === "undefined") return;
-  el.innerHTML = PHYSIQUE_PROJECTION.map(p => `
-    <div class="rounded-lg p-3 border border-line">
-      <div class="text-sm font-medium text-accent">${p.window}</div>
-      <div class="text-xs text-muted mt-1">${p.outcome}</div>
-    </div>`).join("");
 }
 
 // ---------- Polar live data (Training & Recovery) ----------
@@ -520,18 +360,11 @@ function renderAll() {
   renderHeader();
   renderProfileStrip();
   renderKPIs();
-  renderHealthMarkers();
-  renderGoals();
   renderScale();
   renderHistory();
   renderBfChart();
   renderRegionalChart();
   renderBalanceChart();
-  renderTrainingLoad();
-  renderRecovery();
-  renderActivity();
-  renderNutrition();
-  renderProjection();
   renderPolar(); // async, live Polar Loop data
 }
 
@@ -623,33 +456,6 @@ document.getElementById("btn-add-scan").onclick = () => {
     weight = weight.filter(w => w.date !== f.date.value);
     weight.push({ date: f.date.value, weight_lbs: parseFloat(f.weight.value), note: "DEXA scan day" });
     save(KEY_WEIGHT, weight);
-    closeModal();
-    renderAll();
-  };
-};
-
-document.getElementById("btn-edit-goals").onclick = () => {
-  openModal("Edit goals", `
-    <form id="goals-form" class="space-y-4">
-      <div><label class="${labelCls}">Target weight (lbs)</label><input class="${inputCls}" name="weight" type="number" step="0.1" value="${goals.target_weight_lbs}" required></div>
-      <div><label class="${labelCls}">Target body fat %</label><input class="${inputCls}" name="bf" type="number" step="0.1" value="${goals.target_body_fat_pct}" required></div>
-      <div><label class="${labelCls}">Target date</label><input class="${inputCls}" name="date" type="date" value="${goals.target_date}" required></div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button type="button" id="cancel-goals" class="px-4 py-2 text-sm text-muted">Cancel</button>
-        <button class="bg-accent text-ink font-medium px-4 py-2 rounded-lg text-sm">Save</button>
-      </div>
-    </form>
-  `);
-  document.getElementById("cancel-goals").onclick = closeModal;
-  document.getElementById("goals-form").onsubmit = (e) => {
-    e.preventDefault();
-    const f = e.target;
-    goals = {
-      target_weight_lbs: parseFloat(f.weight.value),
-      target_body_fat_pct: parseFloat(f.bf.value),
-      target_date: f.date.value,
-    };
-    save(KEY_GOALS, goals);
     closeModal();
     renderAll();
   };
