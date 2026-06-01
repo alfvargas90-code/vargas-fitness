@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.alfredo.vesync-sync</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Volumes/Alfie&amp;Co2/alfredo.v/04_Projects/fitness-dashboard/vesync/.venv/bin/python3</string>
+        <string>/Volumes/Alfie&amp;Co2/alfredo.v/04_Projects/fitness-dashboard/vesync/sync.py</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Volumes/Alfie&amp;Co2/alfredo.v/04_Projects/fitness-dashboard</string>
+
+    <!-- Hourly. Scale readings only update when Alfie steps on it, so there is
+         no value polling more often than once an hour. -->
+    <key>StartInterval</key>
+    <integer>3600</integer>
+
+    <key>KeepAlive</key>
+    <false/>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/Users/alfredovargas/.local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/Users/alfredovargas/Library/Logs/vesync-sync.out.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/alfredovargas/Library/Logs/vesync-sync.err.log</string>
+</dict>
+</plist>

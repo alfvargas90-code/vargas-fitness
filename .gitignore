@@ -24,3 +24,9 @@ dashboard_preview.png
 nutrition/.env
 nutrition/.env.*
 nutrition/com.alfredo.nutrition-sync.plist
+
+# --- vesync secrets (VeSync account creds) ---
+vesync/.env
+vesync/.env.*
+!vesync/.env.example
+vesync/.venv/
