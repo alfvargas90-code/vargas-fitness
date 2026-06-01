@@ -71,6 +71,16 @@
       </div>
     </header>
 
+    <!-- Today's read — AI health summary (polar/summary.py, 4x/day) -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="todays-read">
+      <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+        <h2 class="font-semibold">Today's read <span class="text-xs text-muted font-normal">· AI</span></h2>
+        <span class="text-xs text-muted" id="read-ts"></span>
+      </div>
+      <p class="text-base leading-relaxed text-slate-100" id="read-body" style="font-size:16px;">First read drops at 8:30 AM</p>
+      <p class="text-xs text-muted mt-3" id="read-basis"></p>
+    </section>
+
     <!-- Top stat row -->
     <section class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
       <div class="bg-card rounded-xl p-4 border border-line">

@@ -296,7 +296,35 @@ function sparkline(vals) {
   return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="24" preserveAspectRatio="none" fill="none"><polyline points="${pts}" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 }
 
+async function renderTodaysRead() {
+  const ts = document.getElementById("read-ts");
+  const body = document.getElementById("read-body");
+  const basis = document.getElementById("read-basis");
+  if (!body) return;
+  try {
+    const s = await fetchJSON("polar/summary.json");
+    body.textContent = s.summary || "First read drops at 8:30 AM";
+    if (ts && s.generated_at) {
+      const t = new Date(s.generated_at);
+      ts.textContent = "updated " + t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    }
+    if (basis) {
+      const b = s.data_basis || {};
+      const parts = [];
+      if (b.recharge_today != null) parts.push(`recharge ${b.recharge_today}/6`);
+      if (b.sleep_hours != null) parts.push(`sleep ${b.sleep_hours}h`);
+      if (b.hrv_today != null) parts.push(`HRV ${b.hrv_today} ms`);
+      basis.textContent = parts.length ? "Based on: " + parts.join(", ") : "";
+    }
+  } catch (e) {
+    body.textContent = "First read drops at 8:30 AM";   // file missing / file://
+    if (ts) ts.textContent = "";
+    if (basis) basis.textContent = "";
+  }
+}
+
 function renderAll() {
+  renderTodaysRead(); // async, AI health summary
   renderHeader();
   renderProfileStrip();
   renderKPIs();
