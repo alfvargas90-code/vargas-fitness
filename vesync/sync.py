@@ -41,10 +41,12 @@ GIT_PUSH_PATHS = (
 API_BASE = "https://smartapi.vesync.com"
 DEVICES_EP = "/cloud/v1/deviceManaged/devices"
 USERINFO_EP = "/cloud/v1/user/getUserInfo"
-# The fatScale/getWeighData history endpoint exists but rejected every body
-# shape we tried (code -11000079) on the live ESF-551 BLE account — VeSync
-# stores the body-comp snapshot on the *user profile* instead, so we read
-# getUserInfo (weight + body-fat-rate). See RECON_NOTES "Open items".
+# The fatScale/getWeighData (v1) + getWeighingDataV2 (v2) history endpoints
+# DO work now (RECON_NOTES 2026-06-01 cracked the shape: appVersion 3.0.20 +
+# lowercase app headers; -11000079 just meant "illegal argument"). But this
+# ESF-551 is Bluetooth-only (cid=null) — its readings live in the phone app,
+# not the cloud, so weightDatas comes back empty. VeSync keeps only a profile
+# snapshot (weightG + initialBfr) via getUserInfo, which is what we read.
 # Substrings that flag a body-fat scale. "esf"/"fatscale" are body-comp; we
 # must NOT match the food/NutritionScale (deviceType ESN…, also named "scale").
 SCALE_HINTS = ("esf", "fatscale")
