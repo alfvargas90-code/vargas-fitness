@@ -137,33 +137,6 @@ const baseChartOpts = {
   },
 };
 
-function renderBfChart() {
-  const sorted = [...scans].sort(byDate);
-  charts.bf?.destroy();
-  charts.bf = new Chart(document.getElementById("chart-bf"), {
-    type: "line",
-    data: {
-      labels: sorted.map(s => s.date),
-      datasets: [{
-        label: "Body fat %",
-        data: sorted.map(s => s.body_fat_pct),
-        borderColor: "#fbbf24",
-        backgroundColor: "rgba(251,191,36,0.15)",
-        tension: 0.3,
-        fill: true,
-        pointRadius: 5,
-      }, goals.target_body_fat_pct && {
-        label: `Target (${goals.target_body_fat_pct}%)`,
-        data: sorted.map(() => goals.target_body_fat_pct),
-        borderColor: "#34d399",
-        borderDash: [5, 5],
-        pointRadius: 0,
-      }].filter(Boolean),
-    },
-    options: baseChartOpts,
-  });
-}
-
 function renderRegionalChart() {
   const s = latestScan();
   if (!s) return;
@@ -362,7 +335,6 @@ function renderAll() {
   renderKPIs();
   renderScale();
   renderHistory();
-  renderBfChart();
   renderRegionalChart();
   renderBalanceChart();
   renderPolar(); // async, live Polar Loop data
