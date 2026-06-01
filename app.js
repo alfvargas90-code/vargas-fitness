@@ -79,16 +79,16 @@ function ageOn(dateStr) {
 }
 
 function renderKPIs() {
+  // KPI tiles show ONLY the latest DEXA scan — current values, units only,
+  // no historical deltas, percentile bands, or cross-source weight.
   const s = latestScan();
   if (!s) return;
   document.getElementById("kpi-bf").textContent      = fmt(s.body_fat_pct, 1) + "%";
-  document.getElementById("kpi-bf-sub").textContent  = bfPercentileBand(ageOn(s.date), s.body_fat_pct);
+  document.getElementById("kpi-bf-sub").textContent  = "%";
   document.getElementById("kpi-lean").textContent    = fmt(s.lean_mass_lbs, 1);
   document.getElementById("kpi-fat").textContent     = fmt(s.fat_mass_lbs, 1);
-
-  const latestWeight = [...weight].sort(byDate).at(-1);
-  document.getElementById("kpi-weight").textContent  = fmt(latestWeight?.weight_lbs ?? s.weight_lbs, 1);
-  document.getElementById("kpi-weight-sub").textContent = latestWeight ? `lbs · logged ${latestWeight.date}` : "lbs";
+  document.getElementById("kpi-weight").textContent  = fmt(s.weight_lbs, 1);
+  document.getElementById("kpi-weight-sub").textContent = "lbs";
   document.getElementById("kpi-rmr").textContent     = fmt(s.rmr_cal, 0);
 }
 
@@ -479,12 +479,61 @@ async function renderNutrition() {
   }
 }
 
+// ---------- Latest scale snapshot (VeSync ESF-551 screenshot OCR via Penny) ----------
+// Reads vesync/snapshot.json — manually OCR'd from a screenshot since the BT-only
+// ESF-551 has no body-comp cloud API. Missing file or all-null values → empty state.
+function formatSnapshotTS(iso) {
+  // Format the captured timestamp WITHOUT timezone math (it's already Central):
+  // "2026-06-01T12:30:00-05:00" → "2026-06-01 ~12:30 PM".
+  const m = /^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2})/.exec(iso || "");
+  if (!m) return iso || "";
+  const [, date, hhStr, mm] = m;
+  let hh = parseInt(hhStr, 10);
+  const ampm = hh >= 12 ? "PM" : "AM";
+  hh = hh % 12 || 12;
+  return `${date} ~${hh}:${mm} ${ampm}`;
+}
+
+async function renderScaleSnapshot() {
+  const empty = document.getElementById("snapshot-empty");
+  const content = document.getElementById("snapshot-content");
+  const sub = document.getElementById("snapshot-sub");
+  if (!empty || !content) return;
+  const showEmpty = () => {
+    empty.classList.remove("hidden"); content.classList.add("hidden");
+    if (sub) sub.textContent = "";
+  };
+  try {
+    const s = await fetchJSON("vesync/snapshot.json");
+    const tiles = [
+      { label: "Weight",       value: s.weight_lb,           unit: " lbs", d: 1 },
+      { label: "Body fat",     value: s.body_fat_pct,        unit: "%",    d: 1 },
+      { label: "Muscle",       value: s.muscle_mass_lb,      unit: " lbs", d: 1 },
+      { label: "Body water",   value: s.body_water_pct,      unit: "%",    d: 1 },
+      { label: "BMR",          value: s.bmr_cal,             unit: " cal", d: 0 },
+      { label: "Visceral fat", value: s.visceral_fat_rating, unit: "",     d: 0 },
+    ];
+    if (!tiles.some(t => t.value != null)) return showEmpty(); // nothing parsed yet
+    content.innerHTML = tiles.map(t => `
+      <div class="bg-bg rounded-lg p-3 border border-line">
+        <div class="text-xs uppercase tracking-wider text-muted">${t.label}</div>
+        <div class="text-xl font-semibold stat-num mt-1">${t.value != null ? fmt(t.value, t.d) + t.unit : "—"}</div>
+      </div>`).join("");
+    empty.classList.add("hidden");
+    content.classList.remove("hidden");
+    if (sub) sub.textContent = s.captured_at ? "Last update: " + formatSnapshotTS(s.captured_at) : "";
+  } catch (e) {
+    showEmpty(); // file missing / file://
+  }
+}
+
 function renderAll() {
   renderTodaysRead(); // async, AI health summary
   renderNutrition(); // async, today's macros from Calories Club
   renderHeader();
   renderProfileStrip();
   renderKPIs();
+  renderScaleSnapshot(); // async, VeSync screenshot OCR snapshot (manual via Penny)
   renderScale();
   renderEnergy(); // async, modeled energy-throughout-day from overnight Polar recovery
   renderPolar(); // async, live Polar Loop data

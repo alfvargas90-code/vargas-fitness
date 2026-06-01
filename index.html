@@ -122,6 +122,20 @@
       </div>
     </section>
 
+    <!-- Latest scale snapshot — VeSync ESF-551 screenshot OCR (manual via Penny) -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="snapshot-panel">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <h2 class="font-semibold">Latest scale snapshot <span class="text-xs text-muted font-normal">· VeSync</span></h2>
+        <span class="text-xs text-muted" id="snapshot-sub"></span>
+      </div>
+      <div id="snapshot-empty" class="text-sm text-muted">
+        Drop your VeSync app screenshot into the Dispatch chat with Penny.<br>
+        She'll OCR the values + push the update here within ~2 min.
+        <span class="block text-xs mt-1 text-muted/80">Workaround for the BT-only ESF-551 (cloud doesn't have body comp via API).</span>
+      </div>
+      <div id="snapshot-content" class="hidden grid grid-cols-3 md:grid-cols-6 gap-4"></div>
+    </section>
+
     <!-- Energy throughout day — modeled decay from overnight Polar recovery -->
     <section class="bg-card rounded-xl p-5 border border-line mb-8" id="energy-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
