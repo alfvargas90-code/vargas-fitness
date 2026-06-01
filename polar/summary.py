@@ -20,8 +20,9 @@ def log(msg):
 
 
 def slot_for(now):
-    """morning / midday / afternoon / evening from minutes-of-day."""
+    """overnight / morning / midday / afternoon / evening from minutes-of-day."""
     m = now.hour * 60 + now.minute
+    if 2 * 60 <= m <= 5 * 60 + 59:   return "overnight"  # 02:00–05:59 (4:15 fire)
     if m <= 10 * 60 + 30:   return "morning"      # …–10:30
     if m <= 14 * 60 + 30:   return "midday"       # 10:31–14:30
     if m <= 18 * 60:        return "afternoon"    # 14:31–18:00
@@ -177,19 +178,36 @@ def main():
     nutrition = nutrition_line()
 
     nutrition_bullet = f"- Today's nutrition so far: {nutrition}\n" if nutrition else ""
-    prompt = (
-        "You are a recovery coach reading wearable data for an athlete. "
-        "Here are the current numbers (Polar Nightly Recharge is a 1-6 scale, 6 best):\n"
-        f"- Nightly Recharge today: {rec_today}/6 (7-day avg {rec_7d})\n"
-        f"- HRV today: {hrv_today} ms (7-day avg {hrv_7d})\n"
-        f"- Sleep last night: {slp_hours} hours (7-day avg {slp_7d})\n"
-        f"- Body composition: {body}\n"
-        f"{nutrition_bullet}\n"
-        "Write 3 to 5 sentences, plain English, no preamble, no markdown, no bullet points. "
-        "First say what the data SAYS (1-2 sentences of fact). "
-        "Then say what it SUGGESTS for today (1-2 sentences of action: train hard, "
-        "train moderate, rest, or a specific recovery move). Be direct and concrete."
-    )
+    if slot == "overnight":
+        prompt = (
+            "You are a sleep and recovery coach reading last night's wearable data. "
+            "Here are the numbers (Polar Nightly Recharge is a 1-6 scale, 6 best):\n"
+            f"- Sleep last night: {slp_hours} hours (7-day avg {slp_7d})\n"
+            f"- Nightly Recharge today: {rec_today}/6 (7-day avg {rec_7d})\n"
+            f"- HRV today: {hrv_today} ms (7-day avg {hrv_7d})\n"
+            f"{nutrition_bullet}\n"
+            "Focus specifically on SLEEP and overnight recovery. "
+            "Say what last night's sleep looked like (hours, sleep score / stages if present), "
+            "then what nightly recharge, HRV, and resting HR say about how well he recovered from it "
+            "and his readiness for the day ahead. You may note lightly that his natal architecture "
+            "(Moon in Capricorn = recovery sensitivity, Uranus-Moon = sleep variability) fits this "
+            "pattern — one clause at most, don't overrun it. "
+            "Write 3 to 5 sentences, plain English, no preamble, no markdown, no bullet points. Be direct and concrete."
+        )
+    else:
+        prompt = (
+            "You are a recovery coach reading wearable data for an athlete. "
+            "Here are the current numbers (Polar Nightly Recharge is a 1-6 scale, 6 best):\n"
+            f"- Nightly Recharge today: {rec_today}/6 (7-day avg {rec_7d})\n"
+            f"- HRV today: {hrv_today} ms (7-day avg {hrv_7d})\n"
+            f"- Sleep last night: {slp_hours} hours (7-day avg {slp_7d})\n"
+            f"- Body composition: {body}\n"
+            f"{nutrition_bullet}\n"
+            "Write 3 to 5 sentences, plain English, no preamble, no markdown, no bullet points. "
+            "First say what the data SAYS (1-2 sentences of fact). "
+            "Then say what it SUGGESTS for today (1-2 sentences of action: train hard, "
+            "train moderate, rest, or a specific recovery move). Be direct and concrete."
+        )
 
     log(f"slot={slot} recharge={rec_today} hrv={hrv_today} sleep={slp_hours}")
     summary = clean(call_claude(prompt))
