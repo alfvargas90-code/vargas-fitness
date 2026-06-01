@@ -5,7 +5,8 @@ Reads the latest Polar recharge/sleep data + body-comp seed, asks `claude -p`
 (rides Alfie's Claude Max plan — no API key, no marginal cost) for a 3-5 sentence
 plain-English read, writes polar/summary.json, and pushes so the live URL updates.
 
-Run by the com.alfredo.polar-summary LaunchAgent 4x/day (8:30, 12:30, 16:45, 20:00 CST).
+Run by the com.alfredo.polar-summary LaunchAgent 5x/day (4:15, 9:05, 12:30, 16:45, 20:00 CST).
+(9:05, not 9:00, so it fires off the :00/:30 boundary the 30-min polar-sync timer hits — avoids the same-minute sync race that left "Today's Read" stale.)
 """
 import json, os, re, shutil, subprocess, sys
 from datetime import datetime, date
