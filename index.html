@@ -93,8 +93,8 @@
       <p class="text-xs text-muted mt-3" id="read-basis"></p>
     </section>
 
-    <!-- Top stat row -->
-    <section class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+    <!-- Top stat row — latest VeSync reading (rewired from DEXA seed 2026-06-01) -->
+    <section class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-2">
       <div class="bg-card rounded-xl p-4 border border-line">
         <div class="text-xs uppercase tracking-wider text-muted">Body fat</div>
         <div class="text-2xl font-semibold stat-num mt-1" id="kpi-bf">—</div>
@@ -120,6 +120,82 @@
         <div class="text-2xl font-semibold stat-num mt-1" id="kpi-rmr">—</div>
         <div class="text-xs text-muted mt-1">cal/day at rest</div>
       </div>
+    </section>
+    <p class="text-xs text-muted mb-8" id="kpi-asof"></p>
+
+    <!-- Energy throughout day — modeled decay from overnight Polar recovery -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="energy-panel">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <h2 class="font-semibold">Energy throughout day <span class="text-xs text-muted font-normal">· modeled</span></h2>
+        <span class="text-xs text-muted" id="energy-sub"></span>
+      </div>
+      <div id="energy-empty" class="text-sm text-muted hidden">
+        Wear the watch overnight for energy modeling.
+      </div>
+      <div id="energy-content" class="hidden">
+        <div class="flex items-end gap-4 flex-wrap">
+          <div class="text-4xl font-semibold stat-num leading-none" id="energy-num">—</div>
+          <div class="flex-1 min-w-[140px]">
+            <div class="h-3 bg-line rounded-full overflow-hidden">
+              <div class="h-full rounded-full transition-all" id="energy-bar" style="width:0%"></div>
+            </div>
+            <div class="mt-2 text-accent" id="energy-spark"></div>
+          </div>
+        </div>
+        <p class="text-xs text-muted mt-3" id="energy-detail"></p>
+        <p class="text-xs text-muted/80 mt-1">Modeled — Loop Gen 2 doesn't track continuous daytime HR. Based on overnight recovery + elapsed hours.</p>
+      </div>
+    </section>
+
+    <!-- Training & Recovery (live Polar Loop data via polar/sync.py) -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="polar-panel">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <h2 class="font-semibold">Training &amp; Recovery <span class="text-xs text-muted font-normal">· Polar Loop</span></h2>
+        <span class="text-xs text-muted" id="polar-sub"></span>
+      </div>
+      <div id="polar-empty" class="text-sm text-muted">
+        No Polar data yet — run <code class="text-accent">polar/sync.py</code> to populate Nightly Recharge, sleep &amp; activity.
+        <span class="block text-xs mt-1 text-muted/80">(Serve this dashboard over http, not file://, for it to read the synced JSON.)</span>
+      </div>
+      <div id="polar-content" class="hidden">
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Block A — last 10 nights WITH DATA (empty nights skipped, newest on top) -->
+          <div>
+            <h3 class="text-sm font-medium text-muted mb-3" id="polar-recharge-title">Nightly Recharge</h3>
+            <div class="space-y-1" id="polar-recharge-stack"></div>
+            <div class="text-xs text-muted mt-3" id="polar-recharge-trend"></div>
+            <div class="text-xs text-muted/80 mt-1" id="polar-recharge-note"></div>
+          </div>
+
+          <!-- Right column: Block B (sleep) + Block C (HRV) -->
+          <div class="space-y-6">
+            <!-- Block B — Sleep stage bar (unchanged pattern) -->
+            <div id="polar-sleep-wrap"></div>
+
+            <!-- Block C — HRV big number + 7-day SVG sparkline -->
+            <div>
+              <h3 class="text-sm font-medium text-muted mb-2">Heart-rate variability</h3>
+              <div class="flex items-end gap-3">
+                <div class="text-3xl font-semibold stat-num leading-none" id="polar-hrv-num">—</div>
+                <div class="text-accent flex-1 min-w-0" id="polar-hrv-spark"></div>
+              </div>
+              <div class="text-xs text-muted mt-2" id="polar-hrv-sub"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Nutrition — today's macros from Calories Club (nutrition/sync.py) -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="nutrition-panel">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-semibold">Nutrition · today</h2>
+        <span class="text-xs text-muted" id="nutrition-sub"></span>
+      </div>
+      <div id="nutrition-empty" class="text-sm text-muted">
+        No nutrition data yet — run <code class="text-accent">nutrition/sync.py</code> to pull today's macros from Calories Club.
+      </div>
+      <div id="nutrition-content" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4"></div>
     </section>
 
     <!-- Latest scale snapshot — VeSync ESF-551 screenshot OCR (manual via Penny) -->
@@ -163,107 +239,9 @@
       <p class="text-xs text-muted mt-4" id="scale-history-caption"></p>
     </section>
 
-    <!-- Energy throughout day — modeled decay from overnight Polar recovery -->
-    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="energy-panel">
-      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h2 class="font-semibold">Energy throughout day <span class="text-xs text-muted font-normal">· modeled</span></h2>
-        <span class="text-xs text-muted" id="energy-sub"></span>
-      </div>
-      <div id="energy-empty" class="text-sm text-muted hidden">
-        Wear the watch overnight for energy modeling.
-      </div>
-      <div id="energy-content" class="hidden">
-        <div class="flex items-end gap-4 flex-wrap">
-          <div class="text-4xl font-semibold stat-num leading-none" id="energy-num">—</div>
-          <div class="flex-1 min-w-[140px]">
-            <div class="h-3 bg-line rounded-full overflow-hidden">
-              <div class="h-full rounded-full transition-all" id="energy-bar" style="width:0%"></div>
-            </div>
-            <div class="mt-2 text-accent" id="energy-spark"></div>
-          </div>
-        </div>
-        <p class="text-xs text-muted mt-3" id="energy-detail"></p>
-        <p class="text-xs text-muted/80 mt-1">Modeled — Loop Gen 2 doesn't track continuous daytime HR. Based on overnight recovery + elapsed hours.</p>
-      </div>
-    </section>
-
-    <!-- Training & Recovery (live Polar Loop data via polar/sync.py) -->
-    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="polar-panel">
-      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h2 class="font-semibold">Training &amp; Recovery <span class="text-xs text-muted font-normal">· Polar Loop</span></h2>
-        <span class="text-xs text-muted" id="polar-sub"></span>
-      </div>
-      <div id="polar-empty" class="text-sm text-muted">
-        No Polar data yet — run <code class="text-accent">polar/sync.py</code> to populate Nightly Recharge, sleep &amp; activity.
-        <span class="block text-xs mt-1 text-muted/80">(Serve this dashboard over http, not file://, for it to read the synced JSON.)</span>
-      </div>
-      <div id="polar-content" class="hidden">
-        <div class="grid md:grid-cols-2 gap-6">
-          <!-- Block A — 14-day Nightly Recharge stack (newest on top) -->
-          <div>
-            <h3 class="text-sm font-medium text-muted mb-3">Nightly Recharge · last 14 days</h3>
-            <div class="space-y-1" id="polar-recharge-stack"></div>
-            <div class="text-xs text-muted mt-3" id="polar-recharge-trend"></div>
-          </div>
-
-          <!-- Right column: Block B (sleep) + Block C (HRV) -->
-          <div class="space-y-6">
-            <!-- Block B — Sleep stage bar (unchanged pattern) -->
-            <div id="polar-sleep-wrap"></div>
-
-            <!-- Block C — HRV big number + 7-day SVG sparkline -->
-            <div>
-              <h3 class="text-sm font-medium text-muted mb-2">Heart-rate variability</h3>
-              <div class="flex items-end gap-3">
-                <div class="text-3xl font-semibold stat-num leading-none" id="polar-hrv-num">—</div>
-                <div class="text-accent flex-1 min-w-0" id="polar-hrv-spark"></div>
-              </div>
-              <div class="text-xs text-muted mt-2" id="polar-hrv-sub"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Nutrition — today's macros from Calories Club (nutrition/sync.py) -->
-    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="nutrition-panel">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="font-semibold">Nutrition · today</h2>
-        <span class="text-xs text-muted" id="nutrition-sub"></span>
-      </div>
-      <div id="nutrition-empty" class="text-sm text-muted">
-        No nutrition data yet — run <code class="text-accent">nutrition/sync.py</code> to pull today's macros from Calories Club.
-      </div>
-      <div id="nutrition-content" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4"></div>
-    </section>
-
-    <!-- Latest scale reading (bioimpedance — kept separate from DEXA) -->
-    <section class="bg-card rounded-xl p-5 border border-line mb-8">
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <h2 class="font-semibold">Latest scale reading</h2>
-          <span class="text-xs text-muted" id="scale-sub">—</span>
-        </div>
-        <button id="btn-add-scale" class="bg-card hover:bg-line px-4 py-2 rounded-lg text-sm border border-line">+ Log scale reading</button>
-      </div>
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="scale-grid"></div>
-      <p class="text-xs text-muted mt-4">Bioimpedance values (body-fat %, lean mass, visceral-fat rating) are not directly comparable to DEXA — tracked here as a separate reference.</p>
-    </section>
-
     <footer class="text-xs text-muted text-center py-4">
       Data stored locally in your browser (localStorage). Click "Reset" in the console to wipe: <code class="text-accent">localStorage.clear()</code>
     </footer>
-  </div>
-
-  <!-- Modal -->
-  <div id="modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50">
-    <div class="bg-panel border border-line rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-      <div class="p-5 border-b border-line flex items-center justify-between">
-        <h3 id="modal-title" class="font-semibold"></h3>
-        <button id="modal-close" class="text-muted hover:text-white">✕</button>
-      </div>
-      <div id="modal-body" class="p-5"></div>
-    </div>
   </div>
 
   <script src="data.js"></script>

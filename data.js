@@ -1,32 +1,6 @@
-// Seeded baseline from BodySpec DEXA scan (10/20/2023)
-const SEED_DEXA = [
-  {
-    date: "2023-10-20",
-    source: "BodySpec",
-    height_in: 67.0,
-    weight_lbs: 166.0,
-    body_fat_pct: 19.1,
-    fat_mass_lbs: 31.7,
-    lean_mass_lbs: 127.0,
-    bmc_lbs: 7.3,
-    rmr_cal: 1613,
-    vat_lbs: 0.00,
-    ag_ratio: 1.01,
-    bone_t_score: 1.9,
-    bone_z_score: 1.9,
-    regions: {
-      arms:    { fat_pct: 17.8, total_lbs: 22.9, fat_lbs: 4.1,  lean_lbs: 17.7, bmc: 1.1 },
-      legs:    { fat_pct: 18.6, total_lbs: 54.6, fat_lbs: 10.2, lean_lbs: 41.9, bmc: 2.6 },
-      trunk:   { fat_pct: 19.9, total_lbs: 77.1, fat_lbs: 15.3, lean_lbs: 59.5, bmc: 2.3 },
-      android: { fat_pct: 19.0, total_lbs: 11.5, fat_lbs: 2.1,  lean_lbs: 9.2,  bmc: 0.1 },
-      gynoid:  { fat_pct: 18.8, total_lbs: 26.2, fat_lbs: 4.8,  lean_lbs: 20.7, bmc: 0.7 },
-    },
-    balance: {
-      right_arm_lbs: 11.4, left_arm_lbs: 11.5,
-      right_leg_lbs: 27.1, left_leg_lbs: 27.5,
-    },
-  },
-];
+// NOTE: SEED_DEXA (BodySpec 2023-10-20) removed 2026-06-01 — KPI tiles now read
+// the latest VeSync reading (vesync/snapshot.json + history.json), not the stale
+// DEXA seed. The DEXA scan lives in the handoff/spec docs if ever needed again.
 
 // Seeded weight log: just the DEXA-day weight to start
 const SEED_WEIGHT = [
