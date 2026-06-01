@@ -1,0 +1,61 @@
+{
+  "date": "2026-06-01",
+  "synced_at": "2026-06-01T14:01:38+00:00",
+  "source_tool": "get_day_summary",
+  "goals": {
+    "calories": 3306.0,
+    "protein_g": 372.0,
+    "carbs_g": 372.0,
+    "fat_g": 92.0
+  },
+  "totals": {
+    "calories": 850.0,
+    "protein_g": 55.0,
+    "carbs_g": 55.0,
+    "fat_g": 52.0
+  },
+  "meal_count": 1,
+  "raw": {
+    "date": "2026-06-01",
+    "meals": [
+      {
+        "title": "High Protein Breakfast",
+        "time": "08:34",
+        "calories": 850,
+        "protein": 55,
+        "fat": 52,
+        "carbs": 55,
+        "emoji": "\u00f0\u009f\u008d\u00b3"
+      }
+    ],
+    "totals": {
+      "calories": 850,
+      "protein": 55,
+      "fat": 52,
+      "carbs": 55
+    },
+    "targets": {
+      "calories": 3306,
+      "protein": 372,
+      "fat": 92,
+      "carbs": 372
+    },
+    "remaining": {
+      "calories": 2456,
+      "is_over": false
+    },
+    "meal_count": 1,
+    "labels": {
+      "header": "Today",
+      "calories_remaining": "2456 kcal remaining today",
+      "meals_logged": "1 meals logged",
+      "no_meals": "No meals logged yet",
+      "protein": "Protein",
+      "fat": "Fat",
+      "carbs": "Carbs",
+      "view_in_app": "View in app"
+    },
+    "view_in_app_url": "https://api.recordo.app/calories/day/2026-06-01",
+    "app_icon_url": "https://api.recordo.app/app-assets/calories/icon.png"
+  }
+}
