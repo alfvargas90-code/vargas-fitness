@@ -1,29 +1,36 @@
 {
-  "generated_at": "2026-06-01T14:23:36-05:00",
-  "slot": "midday",
-  "summary": "Physical Themes: No body area is showing measured fitness stress today, so the Saturn/Capricorn knee-joint-tendon watch and the Mars-in-Taurus neck/shoulder watch stay as background monitoring only \u2014 nothing in the numbers is flagging them right now.\n\nRecovery Themes: Recovery is firing well above your baseline \u2014 Nightly Recharge 5/6 vs a 3.7 average and HRV 72ms vs 64.4 \u2014 so the Moon-in-Capricorn recovery-quality signature is in a strong window; the one soft spot is absolute sleep at 6.1h, which is on-trend for you but still short, the lever most worth protecting given your Uranus-Moon sleep-variability tendency.\n\nPerformance Themes: Elevated HRV plus a high Recharge score is a genuine green light \u2014 today's call is train hard, and it's a good day to push the Mars-in-Taurus pulling/pressing and progressive-overload work you're naturally strong at. Just don't let \"feeling recovered\" mask the short sleep \u2014 keep load high but technique tight.\n\nCorrelation Notes: There are no relevant transits today, so this is purely a data + natal-architecture read with nothing to override. The measured recovery numbers and your Moon/Saturn-in-Capricorn recovery architecture point the same direction \u2014 capacity is high \u2014 and importantly nothing in the data is stressing the joint or neck areas your natal chart flags, so those remain watch-only, not active.\n\nEnd-of-Day Synthesis: You're in a strong recovery window \u2014 HRV and Recharge both well above baseline \u2014 which earns a hard-training day that plays to your endurance-and-overload strengths, with body composition holding steady at 168.2 lbs / 14.7%. The clear gap is fuel and sleep: you're at 126g of a 372g protein goal with the day partly gone and fat already over target, so prioritize protein on your remaining meals to back the hard session, and treat the 6.1h sleep as the metric to defend tonight so this good recovery streak doesn't quietly erode.",
+  "generated_at": "2026-06-01T15:04:58-05:00",
+  "slot": "afternoon",
+  "summary": "Recovery: Good\n\nPhysical Themes: Nothing right now points to extra strain on your knees, joints, tendons, shoulders, or neck. Your usual watch areas are quiet today, so there's no reason to baby anything \u2014 just keep your form honest if you go heavy.\n\nAstrology Correlation: You're built to recover through steadiness, structure, and routine rather than wild swings, and that's exactly what today looks like \u2014 your body bounced back well and your system is calm and ready. The pattern and the numbers are in agreement.\n\nPerformance Outlook: Push hard. You came in well above your normal recovery and your system is running cleaner than usual, so today is a green light to go after it as long as technique stays clean.\n\nTransit Impact: none",
   "sections": [
     {
+      "label": "Recovery",
+      "text": "Good"
+    },
+    {
       "label": "Physical Themes",
-      "text": "No body area is showing measured fitness stress today, so the Saturn/Capricorn knee-joint-tendon watch and the Mars-in-Taurus neck/shoulder watch stay as background monitoring only \u2014 nothing in the numbers is flagging them right now."
+      "text": "Nothing right now points to extra strain on your knees, joints, tendons, shoulders, or neck. Your usual watch areas are quiet today, so there's no reason to baby anything \u2014 just keep your form honest if you go heavy."
     },
     {
-      "label": "Recovery Themes",
-      "text": "Recovery is firing well above your baseline \u2014 Nightly Recharge 5/6 vs a 3.7 average and HRV 72ms vs 64.4 \u2014 so the Moon-in-Capricorn recovery-quality signature is in a strong window; the one soft spot is absolute sleep at 6.1h, which is on-trend for you but still short, the lever most worth protecting given your Uranus-Moon sleep-variability tendency."
+      "label": "Astrology Correlation",
+      "text": "You're built to recover through steadiness, structure, and routine rather than wild swings, and that's exactly what today looks like \u2014 your body bounced back well and your system is calm and ready. The pattern and the numbers are in agreement."
     },
     {
-      "label": "Performance Themes",
-      "text": "Elevated HRV plus a high Recharge score is a genuine green light \u2014 today's call is train hard, and it's a good day to push the Mars-in-Taurus pulling/pressing and progressive-overload work you're naturally strong at. Just don't let \"feeling recovered\" mask the short sleep \u2014 keep load high but technique tight."
+      "label": "Performance Outlook",
+      "text": "Push hard. You came in well above your normal recovery and your system is running cleaner than usual, so today is a green light to go after it as long as technique stays clean."
     },
     {
-      "label": "Correlation Notes",
-      "text": "There are no relevant transits today, so this is purely a data + natal-architecture read with nothing to override. The measured recovery numbers and your Moon/Saturn-in-Capricorn recovery architecture point the same direction \u2014 capacity is high \u2014 and importantly nothing in the data is stressing the joint or neck areas your natal chart flags, so those remain watch-only, not active."
-    },
-    {
-      "label": "End-of-Day Synthesis",
-      "text": "You're in a strong recovery window \u2014 HRV and Recharge both well above baseline \u2014 which earns a hard-training day that plays to your endurance-and-overload strengths, with body composition holding steady at 168.2 lbs / 14.7%. The clear gap is fuel and sleep: you're at 126g of a 372g protein goal with the day partly gone and fat already over target, so prioritize protein on your remaining meals to back the hard session, and treat the 6.1h sleep as the metric to defend tonight so this good recovery streak doesn't quietly erode."
+      "label": "Transit Impact",
+      "text": "none"
     }
   ],
+  "simple": {
+    "recovery": "Good",
+    "physical_themes": "Nothing right now points to extra strain on your knees, joints, tendons, shoulders, or neck. Your usual watch areas are quiet today, so there's no reason to baby anything \u2014 just keep your form honest if you go heavy.",
+    "astrology_correlation": "You're built to recover through steadiness, structure, and routine rather than wild swings, and that's exactly what today looks like \u2014 your body bounced back well and your system is calm and ready. The pattern and the numbers are in agreement.",
+    "performance_outlook": "Push hard. You came in well above your normal recovery and your system is running cleaner than usual, so today is a green light to go after it as long as technique stays clean.",
+    "transit_impact": null
+  },
   "transits": [],
   "data_basis": {
     "recharge_today": 5,

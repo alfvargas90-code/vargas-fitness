@@ -75,48 +75,6 @@ function ageOn(dateStr) {
   return a;
 }
 
-async function renderKPIs() {
-  // KPI tiles read the LATEST VeSync reading (no longer the stale DEXA seed).
-  // snapshot.json is the canonical headline; lean mass = fat_free_body_weight_lb
-  // (only carried in history.json), and fat mass is COMPUTED client-side
-  // (weight − lean) so it always tracks the snapshot.
-  try {
-    const snap = await fetchJSON("vesync/snapshot.json");
-    // Lean mass comes from the matching (newest) history row.
-    let lean = null;
-    try {
-      const hist = await fetchJSON("vesync/history.json");
-      if (Array.isArray(hist) && hist.length) {
-        const latest = [...hist].sort((a, b) => (a.date < b.date ? 1 : -1))[0];
-        lean = latest.fat_free_body_weight_lb ?? null;
-      }
-    } catch {}
-    const weightLb = snap.weight_lb;
-    const fatMass = (weightLb != null && lean != null) ? +(weightLb - lean).toFixed(1) : null;
-
-    document.getElementById("kpi-bf").textContent         = fmt(snap.body_fat_pct, 1) + "%";
-    document.getElementById("kpi-bf-sub").textContent     = "%";
-    document.getElementById("kpi-lean").textContent       = fmt(lean, 1);
-    document.getElementById("kpi-fat").textContent        = fmt(fatMass, 1);
-    document.getElementById("kpi-weight").textContent     = fmt(weightLb, 1);
-    document.getElementById("kpi-weight-sub").textContent = "lbs";
-    document.getElementById("kpi-rmr").textContent        = fmt(snap.bmr_cal, 0);
-
-    const asofEl = document.getElementById("kpi-asof");
-    if (asofEl) {
-      const asOf = snap.as_of || (snap.captured_at || "").slice(0, 10);
-      if (asOf) {
-        const [y, m, d] = asOf.split("-");
-        asofEl.textContent = `as of ${+m}/${+d}/${y.slice(2)} · VeSync`;
-      } else {
-        asofEl.textContent = "· VeSync";
-      }
-    }
-  } catch (e) {
-    // file:// or missing snapshot — leave the placeholder dashes in place.
-  }
-}
-
 // ---------- Charts ----------
 const charts = {};
 const baseChartOpts = {
@@ -378,59 +336,124 @@ function sparkline(vals) {
   return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="24" preserveAspectRatio="none" fill="none"><polyline points="${pts}" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 }
 
+// Plain-English Today's read — renders the `simple` block from summary.py.
+// No raw numbers, units, biometric labels, or astrology jargon (enforced in the
+// prompt). Recovery is a color-coded single word; Transit Impact only shows when
+// a real transit is hitting.
+const RECOVERY_COLORS = {
+  poor: "text-bad",       // red
+  average: "text-warn",   // amber
+  good: "text-accent",    // cyan
+  excellent: "text-good", // green
+};
+const PERF_VERDICTS = ["Push hard", "Train normally", "Moderate effort", "Prioritize recovery"];
+
+// Short paragraph block with a small uppercase subtitle.
+function readBlock(subtitle, text) {
+  const sec = document.createElement("div");
+  if (subtitle) {
+    const h = document.createElement("div");
+    h.className = "text-xs uppercase tracking-wider text-muted mb-1";
+    h.textContent = subtitle;
+    sec.appendChild(h);
+  }
+  const p = document.createElement("p");
+  p.className = "text-base leading-relaxed text-slate-200";
+  p.style.fontSize = "15px";
+  p.textContent = text;
+  sec.appendChild(p);
+  return sec;
+}
+
 async function renderTodaysRead() {
   const ts = document.getElementById("read-ts");
   const body = document.getElementById("read-body");
   const basis = document.getElementById("read-basis");
   if (!body) return;
+  const clearWrap = () => { const p = document.getElementById("read-sections"); if (p) p.remove(); };
   try {
     const s = await fetchJSON("polar/summary.json");
-    // Clear any accordion from a previous render.
-    const prev = document.getElementById("read-sections");
-    if (prev) prev.remove();
-    if (Array.isArray(s.sections) && s.sections.length) {
-      // Section 12 five-section shape — render as collapsible accordions.
-      // <details> can't live inside the <p>, so build a sibling container.
+    clearWrap();
+    const simple = s.simple || null;
+    const hasSimple = simple && (simple.recovery || simple.physical_themes
+      || simple.astrology_correlation || simple.performance_outlook);
+    if (hasSimple) {
       body.textContent = "";
       body.style.display = "none";
       const wrap = document.createElement("div");
       wrap.id = "read-sections";
-      s.sections.forEach((sec, i) => {
-        const d = document.createElement("details");
-        d.className = "read-section";
-        if (i === 0) d.open = true;            // first section expanded
-        const sum = document.createElement("summary");
-        sum.textContent = sec.label;
+      wrap.className = "space-y-4";
+
+      // Recovery — color-coded single word at top.
+      if (simple.recovery) {
+        const word = String(simple.recovery).trim();
+        const colorCls = RECOVERY_COLORS[word.toLowerCase()] || "text-slate-200";
+        const badge = document.createElement("div");
+        badge.className = "flex items-center gap-2";
+        const lbl = document.createElement("span");
+        lbl.className = "text-xs uppercase tracking-wider text-muted";
+        lbl.textContent = "Recovery";
+        const val = document.createElement("span");
+        val.className = `text-2xl font-semibold ${colorCls}`;
+        val.textContent = word;
+        badge.appendChild(lbl);
+        badge.appendChild(val);
+        wrap.appendChild(badge);
+      }
+
+      if (simple.physical_themes)
+        wrap.appendChild(readBlock("Physical", simple.physical_themes));
+      if (simple.astrology_correlation)
+        wrap.appendChild(readBlock("Astrology", simple.astrology_correlation));
+
+      // Performance Outlook — bold the leading verdict phrase.
+      if (simple.performance_outlook) {
+        const sec = document.createElement("div");
+        const h = document.createElement("div");
+        h.className = "text-xs uppercase tracking-wider text-muted mb-1";
+        h.textContent = "Performance";
+        sec.appendChild(h);
         const p = document.createElement("p");
-        p.textContent = sec.text;
-        d.appendChild(sum);
-        d.appendChild(p);
-        wrap.appendChild(d);
-      });
+        p.className = "text-base leading-relaxed text-slate-200";
+        p.style.fontSize = "15px";
+        const t = String(simple.performance_outlook).trim();
+        const v = PERF_VERDICTS.find(v => t.toLowerCase().startsWith(v.toLowerCase()));
+        if (v) {
+          const strong = document.createElement("strong");
+          strong.className = "text-slate-100";
+          strong.textContent = t.slice(0, v.length);
+          p.appendChild(strong);
+          p.appendChild(document.createTextNode(t.slice(v.length)));
+        } else {
+          p.textContent = t;
+        }
+        sec.appendChild(p);
+        wrap.appendChild(sec);
+      }
+
+      // Transit Impact — only when a real transit is hitting (non-null/non-empty).
+      if (simple.transit_impact && String(simple.transit_impact).trim())
+        wrap.appendChild(readBlock("Transit", simple.transit_impact));
+
       body.parentNode.insertBefore(wrap, body.nextSibling);
     } else {
+      // No `simple` block (legacy summary.json) — fall back to the flat read.
       body.style.display = "";
-      body.textContent = s.summary || "First read drops at 8:30 AM";
+      body.textContent = s.summary || "First read drops at 9:05 AM";
     }
     if (ts && s.generated_at) {
       const t = new Date(s.generated_at);
       ts.textContent = "updated " + t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
     }
     if (basis) {
-      const b = s.data_basis || {};
-      const parts = [];
-      if (b.recharge_today != null) parts.push(`recharge ${b.recharge_today}/6`);
-      if (b.sleep_hours != null) parts.push(`sleep ${b.sleep_hours}h`);
-      if (b.hrv_today != null) parts.push(`HRV ${b.hrv_today} ms`);
+      // Trimmed footer: just freshness ("Today · YYYY-MM-DD"), no raw metrics.
       const dataDate = (s.generated_at || "").slice(0, 10);
-      const fresh = dataDate ? " · " + freshnessHTML(dataDate, "wear the watch") : "";
-      basis.innerHTML = (parts.length ? "Based on: " + parts.join(", ") : "") + fresh;
+      basis.innerHTML = dataDate ? freshnessHTML(dataDate, "wear the watch") : "";
     }
   } catch (e) {
-    const prev = document.getElementById("read-sections");
-    if (prev) prev.remove();
+    clearWrap();
     body.style.display = "";
-    body.textContent = "First read drops at 8:30 AM";   // file missing / file://
+    body.textContent = "First read drops at 9:05 AM";   // file missing / file://
     if (ts) ts.textContent = "";
     if (basis) basis.textContent = "";
   }
@@ -579,7 +602,6 @@ function renderAll() {
   renderNutrition(); // async, today's macros from Calories Club
   renderHeader();
   renderProfileStrip();
-  renderKPIs();
   renderScaleSnapshot(); // async, VeSync screenshot OCR snapshot (manual via Penny)
   renderScaleHistory(); // async, VeSync scale history table (manual via Penny)
   renderEnergy(); // async, modeled energy-throughout-day from overnight Polar recovery

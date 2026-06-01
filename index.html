@@ -83,46 +83,6 @@
       </div>
     </header>
 
-    <!-- Today's read — AI health summary (polar/summary.py, 4x/day) -->
-    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="todays-read">
-      <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-        <h2 class="font-semibold">Today's read <span class="text-xs text-muted font-normal">· AI</span></h2>
-        <span class="text-xs text-muted" id="read-ts"></span>
-      </div>
-      <p class="text-base leading-relaxed text-slate-100" id="read-body" style="font-size:16px;">First read drops at 8:30 AM</p>
-      <p class="text-xs text-muted mt-3" id="read-basis"></p>
-    </section>
-
-    <!-- Top stat row — latest VeSync reading (rewired from DEXA seed 2026-06-01) -->
-    <section class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-2">
-      <div class="bg-card rounded-xl p-4 border border-line">
-        <div class="text-xs uppercase tracking-wider text-muted">Body fat</div>
-        <div class="text-2xl font-semibold stat-num mt-1" id="kpi-bf">—</div>
-        <div class="text-xs text-muted mt-1" id="kpi-bf-sub">—</div>
-      </div>
-      <div class="bg-card rounded-xl p-4 border border-line">
-        <div class="text-xs uppercase tracking-wider text-muted">Lean mass</div>
-        <div class="text-2xl font-semibold stat-num mt-1" id="kpi-lean">—</div>
-        <div class="text-xs text-muted mt-1">lbs</div>
-      </div>
-      <div class="bg-card rounded-xl p-4 border border-line">
-        <div class="text-xs uppercase tracking-wider text-muted">Fat mass</div>
-        <div class="text-2xl font-semibold stat-num mt-1" id="kpi-fat">—</div>
-        <div class="text-xs text-muted mt-1">lbs</div>
-      </div>
-      <div class="bg-card rounded-xl p-4 border border-line">
-        <div class="text-xs uppercase tracking-wider text-muted">Weight</div>
-        <div class="text-2xl font-semibold stat-num mt-1" id="kpi-weight">—</div>
-        <div class="text-xs text-muted mt-1" id="kpi-weight-sub">lbs</div>
-      </div>
-      <div class="bg-card rounded-xl p-4 border border-line">
-        <div class="text-xs uppercase tracking-wider text-muted">RMR</div>
-        <div class="text-2xl font-semibold stat-num mt-1" id="kpi-rmr">—</div>
-        <div class="text-xs text-muted mt-1">cal/day at rest</div>
-      </div>
-    </section>
-    <p class="text-xs text-muted mb-8" id="kpi-asof"></p>
-
     <!-- Energy throughout day — modeled decay from overnight Polar recovery -->
     <section class="bg-card rounded-xl p-5 border border-line mb-8" id="energy-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
@@ -145,6 +105,42 @@
         <p class="text-xs text-muted mt-3" id="energy-detail"></p>
         <p class="text-xs text-muted/80 mt-1">Modeled — Loop Gen 2 doesn't track continuous daytime HR. Based on overnight recovery + elapsed hours.</p>
       </div>
+    </section>
+
+    <!-- Today's read — AI health summary (polar/summary.py, 5x/day) -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="todays-read">
+      <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+        <h2 class="font-semibold">Today's read <span class="text-xs text-muted font-normal">· AI</span></h2>
+        <span class="text-xs text-muted" id="read-ts"></span>
+      </div>
+      <p class="text-base leading-relaxed text-slate-100" id="read-body" style="font-size:16px;">First read drops at 9:05 AM</p>
+      <p class="text-xs text-muted mt-3" id="read-basis"></p>
+    </section>
+
+    <!-- Nutrition — today's macros from Calories Club (nutrition/sync.py) -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="nutrition-panel">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-semibold">Nutrition · today</h2>
+        <span class="text-xs text-muted" id="nutrition-sub"></span>
+      </div>
+      <div id="nutrition-empty" class="text-sm text-muted">
+        No nutrition data yet — run <code class="text-accent">nutrition/sync.py</code> to pull today's macros from Calories Club.
+      </div>
+      <div id="nutrition-content" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+    </section>
+
+    <!-- Latest scale snapshot — VeSync ESF-551 screenshot OCR (manual via Penny) -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="snapshot-panel">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <h2 class="font-semibold">Latest scale snapshot <span class="text-xs text-muted font-normal">· VeSync</span></h2>
+        <span class="text-xs text-muted" id="snapshot-sub"></span>
+      </div>
+      <div id="snapshot-empty" class="text-sm text-muted">
+        No fresh scale reading yet.<br>
+        To update: send a screenshot of your VeSync app to Penny in your Dispatch chat. She'll OCR + push the update within ~2 min. The dashboard refreshes on its own.
+        <span class="block text-xs mt-1 text-muted/80">(BT-only ESF-551 doesn't expose body comp via API — this is the manual fallback.)</span>
+      </div>
+      <div id="snapshot-content" class="hidden grid grid-cols-3 md:grid-cols-6 gap-4"></div>
     </section>
 
     <!-- Training & Recovery (live Polar Loop data via polar/sync.py) -->
@@ -184,32 +180,6 @@
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- Nutrition — today's macros from Calories Club (nutrition/sync.py) -->
-    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="nutrition-panel">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="font-semibold">Nutrition · today</h2>
-        <span class="text-xs text-muted" id="nutrition-sub"></span>
-      </div>
-      <div id="nutrition-empty" class="text-sm text-muted">
-        No nutrition data yet — run <code class="text-accent">nutrition/sync.py</code> to pull today's macros from Calories Club.
-      </div>
-      <div id="nutrition-content" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4"></div>
-    </section>
-
-    <!-- Latest scale snapshot — VeSync ESF-551 screenshot OCR (manual via Penny) -->
-    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="snapshot-panel">
-      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h2 class="font-semibold">Latest scale snapshot <span class="text-xs text-muted font-normal">· VeSync</span></h2>
-        <span class="text-xs text-muted" id="snapshot-sub"></span>
-      </div>
-      <div id="snapshot-empty" class="text-sm text-muted">
-        No fresh scale reading yet.<br>
-        To update: send a screenshot of your VeSync app to Penny in your Dispatch chat. She'll OCR + push the update within ~2 min. The dashboard refreshes on its own.
-        <span class="block text-xs mt-1 text-muted/80">(BT-only ESF-551 doesn't expose body comp via API — this is the manual fallback.)</span>
-      </div>
-      <div id="snapshot-content" class="hidden grid grid-cols-3 md:grid-cols-6 gap-4"></div>
     </section>
 
     <!-- Scale history — VeSync ESF-551 manual screenshot readings (vesync/history.json) -->

@@ -2,8 +2,11 @@
 """Generate an AI health read for the fitness dashboard.
 
 Reads the latest Polar recharge/sleep data + body-comp seed, asks `claude -p`
-(rides Alfie's Claude Max plan — no API key, no marginal cost) for a 3-5 sentence
-plain-English read, writes polar/summary.json, and pushes so the live URL updates.
+(rides Alfie's Claude Max plan — no API key, no marginal cost) for a plain-English
+read in five sections (Recovery / Physical Themes / Astrology Correlation /
+Performance Outlook / Transit Impact), writes polar/summary.json with a `simple`
+block the dashboard card renders, and pushes so the live URL updates. The biometrics
+inform the read but never appear in it — no raw numbers, units, or jargon.
 
 Run by the com.alfredo.polar-summary LaunchAgent 5x/day (4:15, 9:05, 12:30, 16:45, 20:00 CST).
 (9:05, not 9:00, so it fires off the :00/:30 boundary the 30-min polar-sync timer hits — avoids the same-minute sync race that left "Today's Read" stale.)
@@ -63,12 +66,24 @@ _ASPECTS = ("conjunct", "opposite", "opposition", "square", "trine",
 _SIGNS = "|".join(BODY_MAPPING)
 
 OUTPUT_SECTIONS = [
+    "Recovery",
     "Physical Themes",
-    "Recovery Themes",
-    "Performance Themes",
-    "Correlation Notes",
-    "End-of-Day Synthesis",
+    "Astrology Correlation",
+    "Performance Outlook",
+    "Transit Impact",
 ]
+
+# Section label -> key in the plain-English `simple` block the dashboard card reads.
+LABEL_TO_KEY = {
+    "Recovery": "recovery",
+    "Physical Themes": "physical_themes",
+    "Astrology Correlation": "astrology_correlation",
+    "Performance Outlook": "performance_outlook",
+    "Transit Impact": "transit_impact",
+}
+RECOVERY_WORDS = ["Excellent", "Good", "Average", "Poor"]
+SIMPLE_KEYS = ["recovery", "physical_themes", "astrology_correlation",
+               "performance_outlook", "transit_impact"]
 
 
 def log(msg):
@@ -324,36 +339,51 @@ def main():
     }.get(slot, "MORNING OUTLOOK lens.")
 
     prompt = (
-        "You are an astrology-aware fitness intelligence engine producing a contextual recovery "
-        "and performance read for an athlete (Alfie).\n\n"
-        "HIERARCHY RULE — follow this order, NEVER reverse it:\n"
-        "1) Measured fitness data  2) Recovery metrics  3) Natal fitness architecture  4) Current transits.\n"
-        "Measured fitness/recovery data is the primary source of truth. Natal architecture and transits "
-        "are CONTEXT ONLY — they help with body-area monitoring and pattern recognition, they NEVER "
-        "override or contradict the measured numbers. The goal is awareness and correlation, not prediction. "
-        "If a transit theme conflicts with the data, the data wins and you say so.\n\n"
+        "You are a recovery and performance coach writing a short daily read for an athlete (Alfie). "
+        "He knows his own body and his own birth chart well. He does NOT want technical jargon — not "
+        "biometric labels, not astrology terminology. Write like a sharp human coach talking to him "
+        "in plain English.\n\n"
+        "HARD OUTPUT RULES (these are absolute):\n"
+        "- NEVER write raw numbers, percentages, or units. No \"72ms\", no \"5/6\", no \"6.1h\", no \"%\".\n"
+        "- NEVER write biometric jargon: HRV, Recharge, Nightly Recharge, BPM, ANS, Sleep Score.\n"
+        "- NEVER write astrology jargon: no \"Moon-in-Capricorn\", no \"Uranus-Moon\", no \"Saturn square\", "
+        "no aspect names (square / trine / conjunct / opposition / sextile) unless translated into plain "
+        "words, no \"natal\", \"Placidus\", or \"transit chart\". The everyday words chart, transit, moon, "
+        "and mars are fine when used conversationally and lowercase.\n"
+        "- The data below INFORMS your assessment. It must NOT appear in the output. Translate everything "
+        "into plain language. The data sets the conclusion; the conclusion is what you write.\n\n"
+        "HIERARCHY — measured recovery/fitness data is the source of truth. Natal context and transits are "
+        "background for body-area awareness and pattern recognition only; they NEVER override the data. "
+        "If a chart theme conflicts with the data, the data wins.\n\n"
         f"{lens}\n\n"
-        "=== LAYER 1 — MEASURED FITNESS DATA (highest priority) ===\n"
+        "=== RECOVERY & FITNESS DATA (informs you — never quote it) ===\n"
         "(Polar Nightly Recharge is a 1-6 scale, 6 best.)\n"
-        f"- Nightly Recharge today: {rec_today}/6 (7-day avg {rec_7d})\n"
-        f"- HRV today: {hrv_today} ms (7-day avg {hrv_7d})\n"
+        f"- Recovery status today: {rec_today}/6 (7-day avg {rec_7d})\n"
+        f"- Heart-rate variability today: {hrv_today} ms (7-day avg {hrv_7d})\n"
         f"- Sleep last night: {slp_hours} hours (7-day avg {slp_7d})\n"
         f"- Body composition: {body}\n"
         f"{nutrition_bullet}"
-        "\n=== LAYER 2 — NATAL FITNESS ARCHITECTURE (static context) ===\n"
+        "\n=== NATAL CONTEXT (static, body-area awareness only) ===\n"
         f"{NATAL_ARCHITECTURE}\n"
-        "\n=== LAYER 3 — TODAY'S RELEVANT TRANSITS (tier 1-4, context only) ===\n"
+        "\n=== TODAY'S RELEVANT TRANSITS (context only) ===\n"
         f"{transit_block}\n\n"
-        "Produce EXACTLY these five sections, each on its own line, labeled EXACTLY as shown, "
-        "followed by a colon and 1-2 plain-English sentences. No markdown, no bullets, no preamble.\n"
-        "Physical Themes: body areas getting BOTH fitness stress AND astrological emphasis.\n"
-        "Recovery Themes: sleep, HRV, fatigue, nervous system.\n"
-        "Performance Themes: strength, endurance, explosiveness, training quality — and today's call "
-        "(train hard / moderate / rest).\n"
-        "Correlation Notes: where measured data + natal architecture + current transits overlap "
-        "(say explicitly when they do NOT overlap or when data overrides a transit theme).\n"
-        "End-of-Day Synthesis: one integrated read across training, recovery, nutrition, body weight, "
-        "sleep, transits, and natal architecture.\n"
+        "Produce EXACTLY these five sections, each starting on its own line with the exact label shown "
+        "followed by a colon. No markdown, no bullets, no preamble, no closing remarks.\n\n"
+        "Recovery: ONE word only — Poor, Average, Good, or Excellent. Nothing else on this line.\n"
+        "Physical Themes: one or two short sentences about any body areas that deserve attention today "
+        "(joints, tendons, shoulders, neck, lower body). If nothing is flagged, say so plainly. "
+        "Example: \"Nothing currently suggests increased stress on joints, tendons, shoulders, or neck.\"\n"
+        "Astrology Correlation: translate today's chart themes into plain English about how he tends to "
+        "recover and perform, and whether today's data fits that pattern. "
+        "Example: \"You generally recover best through consistency, structure, and routine, and today's "
+        "data supports that pattern.\"\n"
+        "Performance Outlook: start with EXACTLY one of these verdicts — Push hard / Train normally / "
+        "Moderate effort / Prioritize recovery — then one short sentence of why. "
+        "Example: \"Push hard. Recovery is excellent and training should be above average — push if "
+        "technique stays solid.\"\n"
+        "Transit Impact: only if a meaningful planetary transit is actually affecting today; plain "
+        "English, one short sentence (e.g. \"Mars is amplifying your drive — channel it into work, not "
+        "friction.\"). If nothing meaningful is hitting today, write exactly: none\n"
     )
 
     log(f"slot={slot} recharge={rec_today} hrv={hrv_today} sleep={slp_hours} transits={len(transits)}")
@@ -368,11 +398,30 @@ def main():
     if not summary:
         raise RuntimeError("claude returned empty output")
 
+    # Plain-English block the dashboard card reads. Maps each labeled section to
+    # its key; normalizes Recovery to a single word; nulls Transit Impact when no
+    # real transit is hitting (so the card skips that section entirely).
+    simple = {k: None for k in SIMPLE_KEYS}
+    for s in sections:
+        key = LABEL_TO_KEY.get(s["label"])
+        if key:
+            simple[key] = s["text"]
+    if simple["recovery"]:
+        word = next((w for w in RECOVERY_WORDS
+                     if re.search(rf"\b{w}\b", simple["recovery"], re.I)), None)
+        if word:
+            simple["recovery"] = word
+    ti = simple.get("transit_impact")
+    if not transits or not ti or ti.strip().lower() == "none" \
+            or re.search(r"\bno (significant|relevant|meaningful)\b", ti, re.I):
+        simple["transit_impact"] = None
+
     payload = {
         "generated_at": now.replace(microsecond=0).isoformat(),
         "slot": slot,
         "summary": summary,
         "sections": sections,
+        "simple": simple,
         "transits": transits,
         "data_basis": {
             "recharge_today": rec_today,
