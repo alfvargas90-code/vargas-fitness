@@ -26,6 +26,26 @@ const latestScan = () => [...scans].sort(byDate).at(-1);
 const earliestScan = () => [...scans].sort(byDate).at(0);
 const latestScale = () => [...scale].sort(byDate).at(-1);
 
+// ---------- Data freshness ----------
+// Whole-day delta between a YYYY-MM-DD string and today (local time).
+function daysSinceDate(dateStr) {
+  if (!dateStr) return null;
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const then = new Date(y, m - 1, d);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.round((today - then) / 86400000);
+}
+// Visible freshness badge. 0d → "Today" (normal), 1–2d → "X days ago" (normal),
+// 3+d → amber "⚠️ X days stale — <nudge>". `nudge` is the per-source action.
+function freshnessHTML(dateStr, nudge) {
+  const n = daysSinceDate(dateStr);
+  if (n == null) return `<span class="text-muted">—</span>`;
+  if (n <= 0) return `<span class="text-slate-300">Today · ${dateStr}</span>`;
+  if (n <= 2) return `<span class="text-slate-300">${n} day${n === 1 ? "" : "s"} ago · ${dateStr}</span>`;
+  return `<span class="text-warn font-medium">⚠️ ${n} days stale — ${nudge}</span>`;
+}
+
 function bfPercentileBand(age, bf) {
   const row = BF_PERCENTILES_MEN.find(r => {
     if (r.age === ">60") return age > 60;
@@ -81,7 +101,7 @@ function renderScale() {
   const change = s.weight_change_lbs;
   const changeStr = change == null ? "" :
     ` · ${change > 0 ? "▲" : change < 0 ? "▼" : ""} ${fmt(Math.abs(change), 1)} lbs since prior`;
-  sub.textContent = `${s.source} · ${s.date}${changeStr}`;
+  sub.innerHTML = `${s.source} · ` + freshnessHTML(s.date, "step on scale") + changeStr;
 
   const ratingColor = { Excellent: "text-good", Fitness: "text-good", Standard: "text-slate-100", High: "text-warn", Low: "text-warn" };
   const r = s.ratings || {};
@@ -192,7 +212,8 @@ async function renderPolar() {
     renderPolarSleep(sleepMap[sleepDates.at(-1)]);   // Block B — most recent date with sleep data
     renderHRV(recDates, recMap);
 
-    document.getElementById("polar-sub").textContent = "Latest: " + (recDates.at(-1) || sleepDates.at(-1) || "—");
+    const polarLatest = [recDates.at(-1), sleepDates.at(-1)].filter(Boolean).sort().at(-1) || null;
+    document.getElementById("polar-sub").innerHTML = freshnessHTML(polarLatest, "wear the watch");
     empty.classList.add("hidden");
     content.classList.remove("hidden");
   } catch (e) {
@@ -340,7 +361,9 @@ async function renderTodaysRead() {
       if (b.recharge_today != null) parts.push(`recharge ${b.recharge_today}/6`);
       if (b.sleep_hours != null) parts.push(`sleep ${b.sleep_hours}h`);
       if (b.hrv_today != null) parts.push(`HRV ${b.hrv_today} ms`);
-      basis.textContent = parts.length ? "Based on: " + parts.join(", ") : "";
+      const dataDate = (s.generated_at || "").slice(0, 10);
+      const fresh = dataDate ? " · " + freshnessHTML(dataDate, "wear the watch") : "";
+      basis.innerHTML = (parts.length ? "Based on: " + parts.join(", ") : "") + fresh;
     }
   } catch (e) {
     const prev = document.getElementById("read-sections");
@@ -357,9 +380,13 @@ async function renderNutrition() {
   const empty = document.getElementById("nutrition-empty");
   const content = document.getElementById("nutrition-content");
   if (!content) return;
-  const today = new Date().toISOString().slice(0, 10);
+  // No nutrition manifest — probe today back 7 days for the most recent logged day.
+  let n = null;
+  for (const day of lastN(8).slice().reverse()) {
+    try { n = await fetchJSON(`nutrition/daily/${day}.json`); if (!n.date) n.date = day; break; } catch {}
+  }
   try {
-    const n = await fetchJSON(`nutrition/daily/${today}.json`);
+    if (!n) throw new Error("no nutrition days");
     const t = n.totals || {};
     const g = n.goals || {};
     const macros = [
@@ -385,9 +412,7 @@ async function renderNutrition() {
     empty.classList.add("hidden");
     content.classList.remove("hidden");
     const sub = document.getElementById("nutrition-sub");
-    if (sub && n.synced_at) {
-      sub.textContent = "synced " + new Date(n.synced_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
-    }
+    if (sub) sub.innerHTML = freshnessHTML(n.date, "log meals");
   } catch (e) {
     empty.classList.remove("hidden");
     content.classList.add("hidden");
