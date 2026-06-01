@@ -1,0 +1,14 @@
+{
+  "date": "2026-03-11",
+  "raw_timestamp": 1773250901,
+  "weight_kg": 79.062,
+  "weight_lb": 174.3,
+  "body_fat_pct": 15.5,
+  "bmi": 27.4,
+  "height_cm": 170.0,
+  "muscle_mass_kg": null,
+  "body_water_pct": null,
+  "bmr": null,
+  "visceral_fat": null,
+  "source": "vesync:getUserInfo"
+}

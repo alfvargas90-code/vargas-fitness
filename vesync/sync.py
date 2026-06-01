@@ -40,9 +40,15 @@ GIT_PUSH_PATHS = (
 # --- VeSync API (constants mirror pyvesync.helpers) -----------------------
 API_BASE = "https://smartapi.vesync.com"
 DEVICES_EP = "/cloud/v1/deviceManaged/devices"
-FATSCALE_EP = "/cloud/v1/deviceManaged/fatScale/getWeighData"
-# Substrings that flag a device as a scale in the raw device list.
-SCALE_HINTS = ("scale", "esf", "fatscale", "weigh")
+USERINFO_EP = "/cloud/v1/user/getUserInfo"
+# The fatScale/getWeighData history endpoint exists but rejected every body
+# shape we tried (code -11000079) on the live ESF-551 BLE account — VeSync
+# stores the body-comp snapshot on the *user profile* instead, so we read
+# getUserInfo (weight + body-fat-rate). See RECON_NOTES "Open items".
+# Substrings that flag a body-fat scale. "esf"/"fatscale" are body-comp; we
+# must NOT match the food/NutritionScale (deviceType ESN…, also named "scale").
+SCALE_HINTS = ("esf", "fatscale")
+SCALE_EXCLUDE = ("nutrition", "esn")
 
 
 def log(msg):
@@ -76,117 +82,119 @@ def authenticate(email, password, tz):
 
 
 def _base_body(manager):
-    """req_body_base + req_body_auth, the universal envelope for cloud calls."""
-    return {
-        "timeZone": manager.time_zone,
-        "acceptLanguage": "en",
-        "accountID": manager.account_id,
-        "token": manager.token,
-    }
+    """Universal envelope for cloud calls: base + auth + details.
 
-
-def _headers(manager):
-    return {
-        "accept-language": "en",
-        "accountId": manager.account_id,
-        "appVersion": "2.8.6",
-        "content-type": "application/json",
-        "tk": manager.token,
-        "tz": manager.time_zone,
-    }
+    The device-list and getUserInfo endpoints reject a body missing the
+    "details" keys (appVersion/phoneBrand/phoneOS/traceId) with
+    "illegal argument" — pyvesync's own Helpers build the exact set, so we
+    borrow them rather than hardcode constants that drift across versions.
+    """
+    from pyvesync.helpers import Helpers
+    body = Helpers.req_body_base(manager)
+    body |= Helpers.req_body_auth(manager)
+    body |= Helpers.req_body_details()
+    return body
 
 
 # --- device discovery (raw list — get_devices() hides the scale) ---------
-def find_scale(manager, pinned_cid=""):
-    """POST the raw device list, return the scale device dict (or None)."""
+def find_scale(manager, pinned_id=""):
+    """POST the raw device list, return the body-fat scale dict (or None).
+
+    ESF-551 BLE scales report cid=None, so VESYNC_DEVICE_ID pins by uuid.
+    The account may also hold a NutritionScale (food scale, also named
+    "…scale") — SCALE_EXCLUDE keeps us off it.
+    """
     body = _base_body(manager)
     body |= {"method": "devices", "pageNo": "1", "pageSize": "100"}
-    r = requests.post(API_BASE + DEVICES_EP, json=body,
-                      headers=_headers(manager), timeout=30)
+    r = requests.post(API_BASE + DEVICES_EP, json=body, timeout=30)
     r.raise_for_status()
     devices = (r.json().get("result") or {}).get("list") or []
     log(f"  devices: {len(devices)} found in account.")
-    if pinned_cid:
+    if pinned_id:
         for d in devices:
-            if d.get("cid") == pinned_cid:
+            if pinned_id in (d.get("uuid"), d.get("cid")):
                 return d
-        log(f"  WARN: pinned VESYNC_DEVICE_ID {pinned_cid} not in account.")
+        log(f"  WARN: pinned VESYNC_DEVICE_ID {pinned_id} not in account.")
     for d in devices:
         hay = f"{d.get('deviceType','')} {d.get('configModule','')} {d.get('deviceName','')}".lower()
+        if any(x in hay for x in SCALE_EXCLUDE):
+            continue
         if any(h in hay for h in SCALE_HINTS):
             return d
     return None
 
 
-# --- fat-scale reading ---------------------------------------------------
-def fetch_weigh_data(manager, scale):
-    """POST the fat-scale endpoint, return the latest reading parsed.
+# --- body-comp reading (from the user profile) ---------------------------
+def fetch_reading(manager):
+    """Pull the body-comp snapshot from getUserInfo.
 
-    VERIFY (first real run): the body field names and the response shape below
-    are best-guesses from community captures — adjust against the logged raw
-    response. See RECON_NOTES.md "Open items".
+    The ESF-551 syncs over Bluetooth and VeSync stamps the latest weigh-in
+    onto the user profile (weightG + initialBfr). The per-reading history
+    endpoint (fatScale/getWeighData) rejected every body we tried on this
+    account, so getUserInfo is the working source. It carries weight + body
+    fat only — BMI is derived from height; muscle/water/BMR/visceral are not
+    exposed here and stay null until/unless the history endpoint is cracked.
     """
     body = _base_body(manager)
-    body |= {
-        "method": "getWeighData",
-        "page": 1,
-        "pageSize": 100,
-        "uuid": scale.get("uuid"),
-        "configModule": scale.get("configModule"),
-        "configModel": scale.get("configModule"),
-        "cid": scale.get("cid"),
-        # "subUserID": ...,  # TODO: some accounts require the profile/sub-user id
-    }
-    r = requests.post(API_BASE + FATSCALE_EP, json=body,
-                      headers=_headers(manager), timeout=30)
+    body |= {"method": "getUserInfo"}
+    r = requests.post(API_BASE + USERINFO_EP, json=body, timeout=30)
     r.raise_for_status()
     payload = r.json()
-    log(f"  fatScale: raw response code={payload.get('code')} msg={payload.get('msg')}")
-
-    # VERIFY: result container + reading list key names.
-    result = payload.get("result") or {}
-    readings = (result.get("weighDataList") or result.get("list")
-                or result.get("weightDataList") or [])
-    if not readings:
-        log("  fatScale: no readings returned (step on the scale, then re-run).")
-        log(f"  fatScale: full payload for mapping → {json.dumps(payload)[:600]}")
+    log(f"  userInfo: code={payload.get('code')} msg={payload.get('msg')}")
+    res = payload.get("result") or {}
+    if payload.get("code") not in (0, None) or not res:
+        log(f"  userInfo: unexpected payload → {json.dumps(payload)[:400]}")
         return None
-
-    latest = readings[0]  # VERIFY: confirm ordering (newest first vs last)
-    return parse_reading(latest)
+    return parse_reading(res)
 
 
-def parse_reading(r):
-    """Map a raw reading to the dashboard's body-comp fields.
+def parse_reading(res):
+    """Map a getUserInfo result to the dashboard's body-comp fields.
 
-    VERIFY: key names + units (VeSync is metric: kg). Returns None-safe floats.
+    Weight is metric grams (weightG); body fat is a rate %. real_weight_* is
+    the live BLE value (0 until a fresh step-on); weightG holds the last
+    stored weigh-in, so we prefer real_weight when present and fall back to
+    weightG. Returns None-safe floats.
     """
-    def g(*keys):
+    def num(*keys):
         for k in keys:
-            if k in r and r[k] is not None:
-                return r[k]
+            v = res.get(k)
+            if v not in (None, "", 0, 0.0):
+                try:
+                    return float(v)
+                except (ValueError, TypeError):
+                    pass
         return None
 
-    ts = g("weighTimestamp", "timestamp", "weightTime", "createTime")
-    day = None
+    weight_kg = num("real_weight_kg") or (
+        (num("weightG") / 1000.0) if num("weightG") else None)
+    body_fat = num("currentBfr", "bfr", "initialBfr")
+    height_cm = num("heightCm")
+    bmi = round(weight_kg / (height_cm / 100.0) ** 2, 1) if (weight_kg and height_cm) else None
+
+    ts = res.get("statusUpdateTimestamp") or res.get("initialTimestamp")
+    day = date.today().isoformat()
     if ts:
         try:
-            # epoch seconds or ms
-            sec = int(ts) / (1000 if int(ts) > 10**12 else 1)
+            sec = int(ts) / (1000 if int(ts) > 10 ** 12 else 1)
             day = datetime.utcfromtimestamp(sec).date().isoformat()
         except (ValueError, TypeError):
-            day = str(ts)[:10]
+            pass
+
     return {
-        "date": day or date.today().isoformat(),
+        "date": day,
         "raw_timestamp": ts,
-        "weight_kg": g("weight", "weightG", "bodyWeight"),
-        "body_fat_pct": g("bodyFat", "bodyFatRate", "fat"),
-        "bmi": g("bmi", "BMI"),
-        "muscle_mass_kg": g("muscleMass", "muscle"),
-        "body_water_pct": g("waterRate", "bodyWater", "water"),
-        "bmr": g("bmr", "BMR", "basalMetabolism"),
-        "visceral_fat": g("visceralFat", "visceralFatLevel", "visceral"),
-        "_raw": r,  # keep raw so we can refine the mapping later
+        "weight_kg": round(weight_kg, 3) if weight_kg else None,
+        "weight_lb": round(weight_kg * 2.2046226, 1) if weight_kg else None,
+        "body_fat_pct": body_fat,
+        "bmi": bmi,
+        "height_cm": height_cm,
+        # Not exposed by getUserInfo for this scale — need the history endpoint.
+        "muscle_mass_kg": None,
+        "body_water_pct": None,
+        "bmr": None,
+        "visceral_fat": None,
+        "source": "vesync:getUserInfo",
     }
 
 
@@ -259,17 +267,19 @@ def main():
     manager, _, _ = authenticate(email, password, tz)
 
     scale = find_scale(manager, pinned)
-    if not scale:
-        log("  ERROR: no scale found in account. Devices may use an unexpected "
-            "type string — re-run with the device list logged and update "
-            "SCALE_HINTS, or pin VESYNC_DEVICE_ID.")
-        sys.exit(3)
-    log(f"  scale: {scale.get('deviceName')} "
-        f"(cid={scale.get('cid')}, type={scale.get('deviceType')})")
+    if scale:
+        log(f"  scale: {scale.get('deviceName')} "
+            f"(type={scale.get('deviceType')}, uuid={scale.get('uuid')})")
+    else:
+        log("  WARN: no body-fat scale matched in the device list — reading "
+            "from the user profile anyway (it is account-level, not per-device).")
 
-    reading = fetch_weigh_data(manager, scale)
-    if reading:
+    reading = fetch_reading(manager)
+    if reading and (reading.get("weight_kg") or reading.get("body_fat_pct")):
         save_reading(reading)
+    else:
+        log("  ERROR: no usable weight/body-fat in the profile snapshot.")
+        sys.exit(3)
     rebuild_manifest()
     git_push()  # best-effort deploy; never fatal
     sys.exit(0)
