@@ -303,7 +303,33 @@ async function renderTodaysRead() {
   if (!body) return;
   try {
     const s = await fetchJSON("polar/summary.json");
-    body.textContent = s.summary || "First read drops at 8:30 AM";
+    // Clear any accordion from a previous render.
+    const prev = document.getElementById("read-sections");
+    if (prev) prev.remove();
+    if (Array.isArray(s.sections) && s.sections.length) {
+      // Section 12 five-section shape — render as collapsible accordions.
+      // <details> can't live inside the <p>, so build a sibling container.
+      body.textContent = "";
+      body.style.display = "none";
+      const wrap = document.createElement("div");
+      wrap.id = "read-sections";
+      s.sections.forEach((sec, i) => {
+        const d = document.createElement("details");
+        d.className = "read-section";
+        if (i === 0) d.open = true;            // first section expanded
+        const sum = document.createElement("summary");
+        sum.textContent = sec.label;
+        const p = document.createElement("p");
+        p.textContent = sec.text;
+        d.appendChild(sum);
+        d.appendChild(p);
+        wrap.appendChild(d);
+      });
+      body.parentNode.insertBefore(wrap, body.nextSibling);
+    } else {
+      body.style.display = "";
+      body.textContent = s.summary || "First read drops at 8:30 AM";
+    }
     if (ts && s.generated_at) {
       const t = new Date(s.generated_at);
       ts.textContent = "updated " + t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
@@ -317,6 +343,9 @@ async function renderTodaysRead() {
       basis.textContent = parts.length ? "Based on: " + parts.join(", ") : "";
     }
   } catch (e) {
+    const prev = document.getElementById("read-sections");
+    if (prev) prev.remove();
+    body.style.display = "";
     body.textContent = "First read drops at 8:30 AM";   // file missing / file://
     if (ts) ts.textContent = "";
     if (basis) basis.textContent = "";

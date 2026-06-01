@@ -54,6 +54,22 @@
   }
   /* Polar sleep-stage bar */
   .stage-bar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; }
+  /* Section 12 — Today's read collapsible sections */
+  #read-sections { margin-top: 4px; }
+  .read-section { border-top: 1px solid rgba(148,163,184,0.18); padding: 8px 0; }
+  .read-section:first-child { border-top: none; padding-top: 0; }
+  .read-section > summary {
+    cursor: pointer; list-style: none; font-weight: 600; font-size: 14px;
+    color: #e2e8f0; display: flex; align-items: center; gap: 6px;
+  }
+  .read-section > summary::-webkit-details-marker { display: none; }
+  .read-section > summary::before {
+    content: "▸"; color: #64748b; font-size: 12px; transition: transform 0.15s;
+  }
+  .read-section[open] > summary::before { transform: rotate(90deg); }
+  .read-section > p {
+    margin: 6px 0 0; font-size: 15px; line-height: 1.55; color: #cbd5e1;
+  }
 </style>
 </head>
 <body class="bg-ink text-slate-100 min-h-screen">

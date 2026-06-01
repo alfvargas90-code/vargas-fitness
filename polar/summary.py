@@ -8,11 +8,66 @@ plain-English read, writes polar/summary.json, and pushes so the live URL update
 Run by the com.alfredo.polar-summary LaunchAgent 4x/day (8:30, 12:30, 16:45, 20:00 CST).
 """
 import json, os, re, shutil, subprocess, sys
-from datetime import datetime
+from datetime import datetime, date
 from statistics import mean
 
 HERE = os.path.dirname(os.path.abspath(__file__))        # .../fitness-dashboard/polar
 ROOT = os.path.dirname(HERE)                              # .../fitness-dashboard
+
+# Daily transit snapshot folder (scheduled task) — files named <date>-transit-snapshot.md
+TRANSIT_DIR = os.path.expanduser(
+    "~/Documents/Claude/Scheduled/daily-transit-snapshot")
+
+# ---- Section 12: Astrology-aware fitness intelligence (spec Section 12, Layer 2) ----
+
+# Static natal architecture. Lifted tight from spec Section 12, Layer 2.
+NATAL_ARCHITECTURE = (
+    "Alfie's natal fitness architecture (static): Capricorn Ascendant, Saturn chart ruler, "
+    "Moon in Capricorn, Saturn in Capricorn, Mars in Taurus, Uranus in Capricorn, Neptune in Capricorn.\n"
+    "- Saturn/Capricorn dominance -> knees, joints, bones, connective tissue, structural alignment, "
+    "long-term recovery, endurance. Watch knee soreness, joint stress, tendon recovery, overuse "
+    "accumulation, recovery debt.\n"
+    "- Moon in Capricorn -> recovery quality, sleep quality, stress load, adaptation capacity. "
+    "Watch sleep scores, HRV, fatigue markers, recovery consistency.\n"
+    "- Mars in Taurus -> neck, upper traps, shoulders, strength output, mechanical force production. "
+    "Watch pulling/pressing performance, neck tension, strength progression.\n"
+    "- Uranus-Moon signature -> nervous system, recovery variability, sleep disruption, sudden energy "
+    "swings. Watch HRV volatility, sleep inconsistency.\n"
+    "- Tendencies: strong at endurance, consistency, discipline, progressive overload; weak at "
+    "overworking through fatigue, ignoring recovery signals, joint accumulation stress, delayed burnout recognition."
+)
+
+# Universal zodiac body mapping (spec Section 12).
+BODY_MAPPING = {
+    "Aries": "Head",
+    "Taurus": "Neck / Throat",
+    "Gemini": "Lungs / Nervous System",
+    "Cancer": "Stomach / Digestion",
+    "Leo": "Heart / Vitality",
+    "Virgo": "Gut / Nutrition",
+    "Libra": "Balance / Mobility",
+    "Scorpio": "Deep Recovery / Regeneration",
+    "Sagittarius": "Hips / Mobility",
+    "Capricorn": "Knees / Bones / Joints",
+    "Aquarius": "Circulation / Nervous System",
+    "Pisces": "Feet / Restoration",
+}
+
+# Transiting planets we care about -> tier (per spec Layer 3).
+_TRANSIT_TIER = {"Moon": 1, "Saturn": 2, "Mars": 3, "Jupiter": 4}
+# Natal points a relevant transit must hit (Ascendant aliased as ASC).
+_NATAL_TARGETS = {"Moon", "Saturn", "Mars", "Ascendant", "ASC"}
+_ASPECTS = ("conjunct", "opposite", "opposition", "square", "trine",
+            "sextile", "quincunx", "semisextile", "sesquiquadrate")
+_SIGNS = "|".join(BODY_MAPPING)
+
+OUTPUT_SECTIONS = [
+    "Physical Themes",
+    "Recovery Themes",
+    "Performance Themes",
+    "Correlation Notes",
+    "End-of-Day Synthesis",
+]
 
 
 def log(msg):
@@ -123,6 +178,82 @@ def nutrition_line():
         return None
 
 
+def _transit_path(d):
+    """Today's snapshot path. Filename pattern: <date>-transit-snapshot.md."""
+    return os.path.join(TRANSIT_DIR, f"{d.isoformat()}-transit-snapshot.md")
+
+
+def load_today_transits():
+    """Read today's transit snapshot and return a compact list of tier 1-4
+    health-relevant strings. Filters to transiting Moon/Saturn/Mars/Jupiter
+    hitting natal Moon/Saturn/Mars/Ascendant; drops everything else
+    (relationships, Vertex, asteroids, non-health). Never raises."""
+    path = _transit_path(date.today())
+    if not os.path.exists(path):
+        log(f"no transit snapshot for today ({path}) — proceeding without transits")
+        return []
+    try:
+        with open(path) as f:
+            text = f.read()
+    except Exception as e:
+        log(f"transit read failed (non-fatal): {e}")
+        return []
+
+    out = []
+
+    # Tier 1 also covers Moon SIGN (ingress), if the snapshot states it.
+    msign = re.search(rf"Moon\s+(?:transiting|in|enters?|ingress(?:es)?(?:\s+into)?)\s+({_SIGNS})", text)
+    if msign:
+        sign = msign.group(1)
+        out.append(f"Tier 1 — Moon transiting {sign} (body focus: {BODY_MAPPING[sign]})")
+
+    # Aspect lines: "Transit <Planet> <aspect> natal <Target>".
+    pat = re.compile(
+        rf"Transit\s+(\w+)(?:\s+Rx)?\s+({'|'.join(_ASPECTS)})\s+natal\s+([A-Za-z]+)",
+        re.IGNORECASE)
+    seen = set()
+    for m in pat.finditer(text):
+        planet, aspect, target = m.group(1), m.group(2).lower(), m.group(3)
+        planet = planet.capitalize()
+        # Normalize natal target token (ASC -> Ascendant).
+        tnorm = "Ascendant" if target.upper() == "ASC" else target.capitalize()
+        if planet not in _TRANSIT_TIER:
+            continue
+        if tnorm not in {"Moon", "Saturn", "Mars", "Ascendant"}:
+            continue
+        if aspect == "opposition":
+            aspect = "opposite"
+        tier = _TRANSIT_TIER[planet]
+        key = (planet, aspect, tnorm)
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(f"Tier {tier} — transiting {planet} {aspect} natal {tnorm}")
+
+    out.sort(key=lambda s: s[5] if len(s) > 5 else "9")  # rough tier order
+    log(f"transits: {len(out)} relevant aspect(s) after filtering")
+    return out
+
+
+def parse_sections(text):
+    """Split Claude output into the five labeled sections. Returns a list of
+    {label, text}. Tolerant of markdown (**Label:**, ## Label, Label —/-/:)."""
+    # Strip leading markdown markers per line so labels are easy to match.
+    label_alt = "|".join(re.escape(l) for l in OUTPUT_SECTIONS)
+    # Find each label and capture text up to the next label (or end).
+    pat = re.compile(
+        rf"(?im)^[\s#*_>-]*({label_alt})\s*[:\-–—]*\s*(.*?)(?=^[\s#*_>-]*(?:{label_alt})\s*[:\-–—]|\Z)",
+        re.S)
+    sections = []
+    for m in pat.finditer(text):
+        label = m.group(1).strip()
+        body = re.sub(r"[*_`#>]", "", m.group(2))
+        body = re.sub(r"\s+", " ", body).strip()
+        if body:
+            sections.append({"label": label, "text": body})
+    return sections
+
+
 def call_claude(prompt):
     claude = shutil.which("claude") or "/Users/alfredovargas/.local/bin/claude"
     out = subprocess.run(
@@ -178,39 +309,61 @@ def main():
     nutrition = nutrition_line()
 
     nutrition_bullet = f"- Today's nutrition so far: {nutrition}\n" if nutrition else ""
-    if slot == "overnight":
-        prompt = (
-            "You are a sleep and recovery coach reading last night's wearable data. "
-            "Here are the numbers (Polar Nightly Recharge is a 1-6 scale, 6 best):\n"
-            f"- Sleep last night: {slp_hours} hours (7-day avg {slp_7d})\n"
-            f"- Nightly Recharge today: {rec_today}/6 (7-day avg {rec_7d})\n"
-            f"- HRV today: {hrv_today} ms (7-day avg {hrv_7d})\n"
-            f"{nutrition_bullet}\n"
-            "Focus specifically on SLEEP and overnight recovery. "
-            "Say what last night's sleep looked like (hours, sleep score / stages if present), "
-            "then what nightly recharge, HRV, and resting HR say about how well he recovered from it "
-            "and his readiness for the day ahead. You may note lightly that his natal architecture "
-            "(Moon in Capricorn = recovery sensitivity, Uranus-Moon = sleep variability) fits this "
-            "pattern — one clause at most, don't overrun it. "
-            "Write 3 to 5 sentences, plain English, no preamble, no markdown, no bullet points. Be direct and concrete."
-        )
-    else:
-        prompt = (
-            "You are a recovery coach reading wearable data for an athlete. "
-            "Here are the current numbers (Polar Nightly Recharge is a 1-6 scale, 6 best):\n"
-            f"- Nightly Recharge today: {rec_today}/6 (7-day avg {rec_7d})\n"
-            f"- HRV today: {hrv_today} ms (7-day avg {hrv_7d})\n"
-            f"- Sleep last night: {slp_hours} hours (7-day avg {slp_7d})\n"
-            f"- Body composition: {body}\n"
-            f"{nutrition_bullet}\n"
-            "Write 3 to 5 sentences, plain English, no preamble, no markdown, no bullet points. "
-            "First say what the data SAYS (1-2 sentences of fact). "
-            "Then say what it SUGGESTS for today (1-2 sentences of action: train hard, "
-            "train moderate, rest, or a specific recovery move). Be direct and concrete."
-        )
+    transits = load_today_transits()
+    transit_block = ("\n".join(f"- {t}" for t in transits)
+                     if transits else "- No relevant transit data available today.")
 
-    log(f"slot={slot} recharge={rec_today} hrv={hrv_today} sleep={slp_hours}")
-    summary = clean(call_claude(prompt))
+    # Temporal lens per slot (spec Section 12: Morning Outlook / Midday Status / Evening Review).
+    lens = {
+        "overnight": "EVENING REVIEW lens: assess how the day's recovery actually resolved overnight.",
+        "morning": "MORNING OUTLOOK lens: identify likely stress/recovery themes before training.",
+        "midday": "MIDDAY STATUS lens: compare the morning's expected themes against observed metrics.",
+        "afternoon": "MIDDAY STATUS lens: compare expected themes against observed metrics.",
+        "evening": "EVENING REVIEW lens: assess what the actual correlations turned out to be.",
+    }.get(slot, "MORNING OUTLOOK lens.")
+
+    prompt = (
+        "You are an astrology-aware fitness intelligence engine producing a contextual recovery "
+        "and performance read for an athlete (Alfie).\n\n"
+        "HIERARCHY RULE — follow this order, NEVER reverse it:\n"
+        "1) Measured fitness data  2) Recovery metrics  3) Natal fitness architecture  4) Current transits.\n"
+        "Measured fitness/recovery data is the primary source of truth. Natal architecture and transits "
+        "are CONTEXT ONLY — they help with body-area monitoring and pattern recognition, they NEVER "
+        "override or contradict the measured numbers. The goal is awareness and correlation, not prediction. "
+        "If a transit theme conflicts with the data, the data wins and you say so.\n\n"
+        f"{lens}\n\n"
+        "=== LAYER 1 — MEASURED FITNESS DATA (highest priority) ===\n"
+        "(Polar Nightly Recharge is a 1-6 scale, 6 best.)\n"
+        f"- Nightly Recharge today: {rec_today}/6 (7-day avg {rec_7d})\n"
+        f"- HRV today: {hrv_today} ms (7-day avg {hrv_7d})\n"
+        f"- Sleep last night: {slp_hours} hours (7-day avg {slp_7d})\n"
+        f"- Body composition: {body}\n"
+        f"{nutrition_bullet}"
+        "\n=== LAYER 2 — NATAL FITNESS ARCHITECTURE (static context) ===\n"
+        f"{NATAL_ARCHITECTURE}\n"
+        "\n=== LAYER 3 — TODAY'S RELEVANT TRANSITS (tier 1-4, context only) ===\n"
+        f"{transit_block}\n\n"
+        "Produce EXACTLY these five sections, each on its own line, labeled EXACTLY as shown, "
+        "followed by a colon and 1-2 plain-English sentences. No markdown, no bullets, no preamble.\n"
+        "Physical Themes: body areas getting BOTH fitness stress AND astrological emphasis.\n"
+        "Recovery Themes: sleep, HRV, fatigue, nervous system.\n"
+        "Performance Themes: strength, endurance, explosiveness, training quality — and today's call "
+        "(train hard / moderate / rest).\n"
+        "Correlation Notes: where measured data + natal architecture + current transits overlap "
+        "(say explicitly when they do NOT overlap or when data overrides a transit theme).\n"
+        "End-of-Day Synthesis: one integrated read across training, recovery, nutrition, body weight, "
+        "sleep, transits, and natal architecture.\n"
+    )
+
+    log(f"slot={slot} recharge={rec_today} hrv={hrv_today} sleep={slp_hours} transits={len(transits)}")
+    raw = call_claude(prompt)
+    sections = parse_sections(raw)
+    if sections:
+        summary = "\n\n".join(f"{s['label']}: {s['text']}" for s in sections)
+    else:
+        # Parser found no labeled sections — fall back to a flat cleaned read.
+        log("section parse found nothing — falling back to flat summary")
+        summary = clean(raw)
     if not summary:
         raise RuntimeError("claude returned empty output")
 
@@ -218,6 +371,8 @@ def main():
         "generated_at": now.replace(microsecond=0).isoformat(),
         "slot": slot,
         "summary": summary,
+        "sections": sections,
+        "transits": transits,
         "data_basis": {
             "recharge_today": rec_today,
             "sleep_hours": slp_hours,
