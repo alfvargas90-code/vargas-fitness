@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Fitness & Body Composition Dashboard</title>
+<title>Vitals</title>
 <!-- PWA / Add to Home Screen -->
 <link rel="manifest" href="manifest.json" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
@@ -77,13 +77,9 @@
     <!-- Header -->
     <header class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-8">
       <div>
-        <h1 class="text-3xl font-semibold tracking-tight">Fitness Dashboard</h1>
+        <h1 class="text-3xl font-semibold tracking-tight">Vitals</h1>
         <p class="text-muted mt-1" id="header-sub">Loading…</p>
         <p class="text-xs text-muted mt-1" id="profile-strip"></p>
-      </div>
-      <div class="flex gap-2">
-        <button id="btn-add-weight" class="flex-1 sm:flex-none bg-card hover:bg-line px-4 py-2 rounded-lg text-sm border border-line">+ Log weight</button>
-        <button id="btn-add-scan"   class="flex-1 sm:flex-none bg-accent hover:bg-cyan-400 text-ink font-medium px-4 py-2 rounded-lg text-sm">+ Add DEXA scan</button>
       </div>
     </header>
 
@@ -123,6 +119,30 @@
         <div class="text-xs uppercase tracking-wider text-muted">RMR</div>
         <div class="text-2xl font-semibold stat-num mt-1" id="kpi-rmr">—</div>
         <div class="text-xs text-muted mt-1">cal/day at rest</div>
+      </div>
+    </section>
+
+    <!-- Energy throughout day — modeled decay from overnight Polar recovery -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="energy-panel">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <h2 class="font-semibold">Energy throughout day <span class="text-xs text-muted font-normal">· modeled</span></h2>
+        <span class="text-xs text-muted" id="energy-sub"></span>
+      </div>
+      <div id="energy-empty" class="text-sm text-muted hidden">
+        Wear the watch overnight for energy modeling.
+      </div>
+      <div id="energy-content" class="hidden">
+        <div class="flex items-end gap-4 flex-wrap">
+          <div class="text-4xl font-semibold stat-num leading-none" id="energy-num">—</div>
+          <div class="flex-1 min-w-[140px]">
+            <div class="h-3 bg-line rounded-full overflow-hidden">
+              <div class="h-full rounded-full transition-all" id="energy-bar" style="width:0%"></div>
+            </div>
+            <div class="mt-2 text-accent" id="energy-spark"></div>
+          </div>
+        </div>
+        <p class="text-xs text-muted mt-3" id="energy-detail"></p>
+        <p class="text-xs text-muted/80 mt-1">Modeled — Loop Gen 2 doesn't track continuous daytime HR. Based on overnight recovery + elapsed hours.</p>
       </div>
     </section>
 
@@ -187,27 +207,6 @@
       </div>
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="scale-grid"></div>
       <p class="text-xs text-muted mt-4">Bioimpedance values (body-fat %, lean mass, visceral-fat rating) are not directly comparable to DEXA — tracked here as a separate reference.</p>
-    </section>
-
-    <!-- Scan history table -->
-    <section class="bg-card rounded-xl p-5 border border-line mb-8">
-      <h2 class="font-semibold mb-3">Scan history</h2>
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead class="text-muted text-xs uppercase tracking-wider border-b border-line">
-            <tr>
-              <th class="text-left py-2 pr-4">Date</th>
-              <th class="text-right py-2 pr-4">Weight</th>
-              <th class="text-right py-2 pr-4">BF %</th>
-              <th class="text-right py-2 pr-4">Fat</th>
-              <th class="text-right py-2 pr-4">Lean</th>
-              <th class="text-right py-2 pr-4">VAT</th>
-              <th class="text-right py-2">Source</th>
-            </tr>
-          </thead>
-          <tbody id="scan-history"></tbody>
-        </table>
-      </div>
     </section>
 
     <footer class="text-xs text-muted text-center py-4">

@@ -130,21 +130,6 @@ function renderScale() {
   `).join("");
 }
 
-function renderHistory() {
-  const sorted = [...scans].sort(byDate).reverse();
-  document.getElementById("scan-history").innerHTML = sorted.map(s => `
-    <tr class="border-b border-line/50">
-      <td class="py-2 pr-4">${s.date}</td>
-      <td class="py-2 pr-4 text-right stat-num">${fmt(s.weight_lbs,1)}</td>
-      <td class="py-2 pr-4 text-right stat-num">${fmt(s.body_fat_pct,1)}%</td>
-      <td class="py-2 pr-4 text-right stat-num">${fmt(s.fat_mass_lbs,1)}</td>
-      <td class="py-2 pr-4 text-right stat-num">${fmt(s.lean_mass_lbs,1)}</td>
-      <td class="py-2 pr-4 text-right stat-num">${fmt(s.vat_lbs,2)}</td>
-      <td class="py-2 text-right text-muted">${s.source}</td>
-    </tr>
-  `).join("") || `<tr><td class="py-3 text-muted" colspan="7">No scans yet.</td></tr>`;
-}
-
 // ---------- Charts ----------
 const charts = {};
 const baseChartOpts = {
@@ -214,6 +199,81 @@ async function renderPolar() {
 
     const polarLatest = [recDates.at(-1), sleepDates.at(-1)].filter(Boolean).sort().at(-1) || null;
     document.getElementById("polar-sub").innerHTML = freshnessHTML(polarLatest, "wear the watch");
+    empty.classList.add("hidden");
+    content.classList.remove("hidden");
+  } catch (e) {
+    showEmpty(); // file:// or no sync yet
+  }
+}
+
+// ---------- Energy throughout day (modeled) ----------
+// Loop Gen 2 has no continuous daytime HR via AccessLink — so this is an HONEST
+// model: starting energy at wake is derived from last night's recovery metrics,
+// then decayed linearly across waking hours to viewing time.
+const WAKE_HOUR = 6.5;          // 6:30 AM CST — Alfie's typical morning
+const ENERGY_DECAY_FRAC = 0.06; // ~6% of starting energy lost per waking hour
+
+function energyColor(v) {
+  return v >= 70 ? "#34d399" : v >= 40 ? "#fbbf24" : "#f87171";
+}
+
+async function renderEnergy() {
+  const empty = document.getElementById("energy-empty");
+  const content = document.getElementById("energy-content");
+  if (!empty || !content) return;
+  const showEmpty = () => { empty.classList.remove("hidden"); content.classList.add("hidden"); };
+  try {
+    const manifest = await fetchJSON("polar/manifest.json");
+    const cats = manifest.categories || {};
+    const recDates = (cats.recharge || []).slice().sort();
+    const sleepDates = (cats.sleep || []).slice().sort();
+    const latestDate = [recDates.at(-1), sleepDates.at(-1)].filter(Boolean).sort().at(-1);
+    // Stale (>1 day old) or no data → empty state.
+    const age = daysSinceDate(latestDate);
+    if (latestDate == null || age == null || age > 1) return showEmpty();
+
+    const rec = await fetchJSON(`polar/recharge/${recDates.at(-1)}.json`).catch(() => null);
+    const sleep = await fetchJSON(`polar/sleep/${sleepDates.at(-1)}.json`).catch(() => null);
+
+    // HRV baseline = mean of available overnight HRV readings (adaptive, honest).
+    const hrvs = (await Promise.all(recDates.map(d => fetchJSON(`polar/recharge/${d}.json`).catch(() => null))))
+      .map(r => r?.heart_rate_variability_avg).filter(v => v != null);
+    const hrvBaseline = hrvs.length ? hrvs.reduce((a, b) => a + b, 0) / hrvs.length : null;
+
+    // Starting energy at wake from last night's recovery (each piece falls back if missing).
+    const rechargePart = rec?.ans_charge_status != null ? (rec.ans_charge_status / 6) * 50 : 25;
+    const sleepPart    = sleep?.sleep_score != null ? (sleep.sleep_score / 100) * 30 : 15;
+    const hrvPart      = (rec?.heart_rate_variability_avg != null && hrvBaseline)
+      ? Math.min(rec.heart_rate_variability_avg / hrvBaseline, 1) * 20 : 10;
+    let start = Math.min(rechargePart + sleepPart + hrvPart, 100);
+
+    // Decay across waking hours to now (local clock; Alfie is Central).
+    const now = new Date();
+    const nowHour = now.getHours() + now.getMinutes() / 60;
+    const hoursSinceWake = Math.max(nowHour - WAKE_HOUR, 0);
+    const ratePerHour = start * ENERGY_DECAY_FRAC;
+    const current = Math.max(start - hoursSinceWake * ratePerHour, 10);
+
+    // Curve from wake → now for the sparkline.
+    const curve = [];
+    for (let h = 0; h <= hoursSinceWake + 0.001; h += 1)
+      curve.push(Math.max(start - h * ratePerHour, 10));
+    curve.push(current);
+
+    const col = energyColor(current);
+    const numEl = document.getElementById("energy-num");
+    numEl.textContent = `${Math.round(current)}%`;
+    numEl.style.color = col;
+    const bar = document.getElementById("energy-bar");
+    bar.style.width = `${Math.round(current)}%`;
+    bar.style.background = col;
+    const spark = document.getElementById("energy-spark");
+    spark.style.color = col;
+    spark.innerHTML = curve.length >= 2 ? sparkline(curve) : "";
+    document.getElementById("energy-detail").textContent =
+      `Started: ${Math.round(start)} · Decayed to ${Math.round(current)} over ${hoursSinceWake.toFixed(1)}h`;
+    document.getElementById("energy-sub").innerHTML = freshnessHTML(latestDate, "wear the watch");
+
     empty.classList.add("hidden");
     content.classList.remove("hidden");
   } catch (e) {
@@ -426,7 +486,7 @@ function renderAll() {
   renderProfileStrip();
   renderKPIs();
   renderScale();
-  renderHistory();
+  renderEnergy(); // async, modeled energy-throughout-day from overnight Polar recovery
   renderPolar(); // async, live Polar Loop data
 }
 
@@ -447,81 +507,6 @@ modal.onclick = (e) => { if (e.target === modal) closeModal(); };
 const inputCls = "w-full bg-card border border-line rounded-md px-3 py-2 text-sm focus:outline-none focus:border-accent";
 const labelCls = "block text-xs uppercase tracking-wider text-muted mb-1";
 const today = () => new Date().toISOString().slice(0, 10);
-
-document.getElementById("btn-add-weight").onclick = () => {
-  openModal("Log a weight", `
-    <form id="weight-form" class="space-y-4">
-      <div><label class="${labelCls}">Date</label><input class="${inputCls}" name="date" type="date" value="${today()}" required></div>
-      <div><label class="${labelCls}">Weight (lbs)</label><input class="${inputCls}" name="weight" type="number" step="0.1" min="50" max="500" required></div>
-      <div><label class="${labelCls}">Note (optional)</label><input class="${inputCls}" name="note" type="text"></div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button type="button" id="cancel-weight" class="px-4 py-2 text-sm text-muted">Cancel</button>
-        <button class="bg-accent text-ink font-medium px-4 py-2 rounded-lg text-sm">Save</button>
-      </div>
-    </form>
-  `);
-  document.getElementById("cancel-weight").onclick = closeModal;
-  document.getElementById("weight-form").onsubmit = (e) => {
-    e.preventDefault();
-    const f = e.target;
-    weight = weight.filter(w => w.date !== f.date.value);
-    weight.push({ date: f.date.value, weight_lbs: parseFloat(f.weight.value), note: f.note.value });
-    save(KEY_WEIGHT, weight);
-    closeModal();
-    renderAll();
-  };
-};
-
-document.getElementById("btn-add-scan").onclick = () => {
-  openModal("Add DEXA scan", `
-    <form id="scan-form" class="space-y-4">
-      <div class="grid grid-cols-2 gap-3">
-        <div><label class="${labelCls}">Date</label><input class="${inputCls}" name="date" type="date" value="${today()}" required></div>
-        <div><label class="${labelCls}">Source</label><input class="${inputCls}" name="source" type="text" value="BodySpec"></div>
-        <div><label class="${labelCls}">Weight (lbs)</label><input class="${inputCls}" name="weight" type="number" step="0.1" required></div>
-        <div><label class="${labelCls}">Body fat %</label><input class="${inputCls}" name="bf" type="number" step="0.1" required></div>
-        <div><label class="${labelCls}">Fat mass (lbs)</label><input class="${inputCls}" name="fat" type="number" step="0.1" required></div>
-        <div><label class="${labelCls}">Lean mass (lbs)</label><input class="${inputCls}" name="lean" type="number" step="0.1" required></div>
-        <div><label class="${labelCls}">VAT (lbs)</label><input class="${inputCls}" name="vat" type="number" step="0.01" value="0"></div>
-        <div><label class="${labelCls}">RMR (cal)</label><input class="${inputCls}" name="rmr" type="number"></div>
-      </div>
-      <p class="text-xs text-muted">Regional/balance data carries over from your previous scan; you can edit per-scan later by editing localStorage if needed.</p>
-      <div class="flex justify-end gap-2 pt-2">
-        <button type="button" id="cancel-scan" class="px-4 py-2 text-sm text-muted">Cancel</button>
-        <button class="bg-accent text-ink font-medium px-4 py-2 rounded-lg text-sm">Save scan</button>
-      </div>
-    </form>
-  `);
-  document.getElementById("cancel-scan").onclick = closeModal;
-  document.getElementById("scan-form").onsubmit = (e) => {
-    e.preventDefault();
-    const f = e.target;
-    const prev = latestScan() || {};
-    scans.push({
-      date: f.date.value,
-      source: f.source.value || "Manual",
-      height_in: prev.height_in ?? 67.0,
-      weight_lbs: parseFloat(f.weight.value),
-      body_fat_pct: parseFloat(f.bf.value),
-      fat_mass_lbs: parseFloat(f.fat.value),
-      lean_mass_lbs: parseFloat(f.lean.value),
-      bmc_lbs: prev.bmc_lbs ?? 7.3,
-      rmr_cal: parseInt(f.rmr.value || prev.rmr_cal || 1600, 10),
-      vat_lbs: parseFloat(f.vat.value || 0),
-      ag_ratio: prev.ag_ratio ?? 1.0,
-      bone_t_score: prev.bone_t_score ?? 0,
-      bone_z_score: prev.bone_z_score ?? 0,
-      regions: prev.regions ?? SEED_DEXA[0].regions,
-      balance: prev.balance ?? SEED_DEXA[0].balance,
-    });
-    save(KEY_SCANS, scans);
-    weight = weight.filter(w => w.date !== f.date.value);
-    weight.push({ date: f.date.value, weight_lbs: parseFloat(f.weight.value), note: "DEXA scan day" });
-    save(KEY_WEIGHT, weight);
-    closeModal();
-    renderAll();
-  };
-};
 
 // ---------- Scale entry form ----------
 const RATING_OPTS = ["", "Excellent", "Fitness", "Standard", "High", "Low"];
