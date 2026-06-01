@@ -1,6 +1,6 @@
 {
   "date": "2026-06-01",
-  "synced_at": "2026-06-01T14:01:38+00:00",
+  "synced_at": "2026-06-01T19:07:33+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 3306.0,
@@ -9,12 +9,12 @@
     "fat_g": 92.0
   },
   "totals": {
-    "calories": 850.0,
-    "protein_g": 55.0,
-    "carbs_g": 55.0,
-    "fat_g": 52.0
+    "calories": 2210.0,
+    "protein_g": 126.0,
+    "carbs_g": 211.0,
+    "fat_g": 105.0
   },
-  "meal_count": 1,
+  "meal_count": 3,
   "raw": {
     "date": "2026-06-01",
     "meals": [
@@ -26,13 +26,31 @@
         "fat": 52,
         "carbs": 55,
         "emoji": "\u00f0\u009f\u008d\u00b3"
+      },
+      {
+        "title": "Chicken Fillets Lunch",
+        "time": "12:47",
+        "calories": 1050,
+        "protein": 65,
+        "fat": 52,
+        "carbs": 85,
+        "emoji": "\u00f0\u009f\u008d\u0097"
+      },
+      {
+        "title": "White Rice",
+        "time": "14:07",
+        "calories": 310,
+        "protein": 6,
+        "fat": 1,
+        "carbs": 71,
+        "emoji": "\u00f0\u009f\u008d\u009a"
       }
     ],
     "totals": {
-      "calories": 850,
-      "protein": 55,
-      "fat": 52,
-      "carbs": 55
+      "calories": 2210,
+      "protein": 126,
+      "fat": 105,
+      "carbs": 211
     },
     "targets": {
       "calories": 3306,
@@ -41,14 +59,14 @@
       "carbs": 372
     },
     "remaining": {
-      "calories": 2456,
+      "calories": 1096,
       "is_over": false
     },
-    "meal_count": 1,
+    "meal_count": 3,
     "labels": {
       "header": "Today",
-      "calories_remaining": "2456 kcal remaining today",
-      "meals_logged": "1 meals logged",
+      "calories_remaining": "1096 kcal remaining today",
+      "meals_logged": "3 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
