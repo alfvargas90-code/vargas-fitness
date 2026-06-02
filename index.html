@@ -146,6 +146,22 @@
       <div id="snapshot-content" class="hidden grid grid-cols-3 md:grid-cols-6 gap-4"></div>
     </section>
 
+    <!-- Activity · today (Polar Loop Gen 2 daily activity via polar/sync.py) -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="activity">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <h2 class="font-semibold">Activity · today <span class="text-xs text-muted font-normal">· Polar Loop</span></h2>
+        <span class="text-xs text-muted" id="activity-sub"></span>
+      </div>
+      <div id="activity-empty" class="text-sm text-muted">
+        No activity data yet — run <code class="text-accent">polar/sync.py</code> to pull today's steps, active time &amp; calories from Polar Loop.
+        <span class="block text-xs mt-1 text-muted/80">(Serve over http, not file://, for it to read the synced JSON.)</span>
+      </div>
+      <div id="activity-content" class="hidden">
+        <div class="grid grid-cols-3 gap-3" id="activity-tiles"></div>
+        <p class="text-xs text-muted mt-4" id="activity-footer"></p>
+      </div>
+    </section>
+
     <!-- Training & Recovery (live Polar Loop data via polar/sync.py) -->
     <section class="bg-card rounded-xl p-5 border border-line mb-8" id="polar-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">

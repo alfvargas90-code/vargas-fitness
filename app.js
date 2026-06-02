@@ -596,6 +596,98 @@ async function renderScaleHistory() {
   }
 }
 
+// ---------- Activity · today (Polar Loop Gen 2 daily activity via polar/sync.py) ----------
+// Reads the daily_activity dates from polar/manifest.json + the latest per-day JSON
+// written by sync.py. The AccessLink daily-activity *summary* payload exposes step
+// count, active time (ISO8601 duration), active + total calories — but NOT a goal %
+// or activity-zone breakdown. So the 3 tiles render from verified real fields, and
+// the goal/zone footer renders only if a payload ever carries them (graceful);
+// otherwise it shows active calories + an honest note that zones aren't in the feed.
+function isoDurationToHM(iso) {
+  // "PT2H16M" -> "2h 16m", "PT2M" -> "2m", "PT45S"/"PT0S" -> "0m"
+  if (!iso || typeof iso !== "string") return null;
+  const m = /^P(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?$/.exec(iso);
+  if (!m) return null;
+  const h = +(m[1] || 0), min = +(m[2] || 0);
+  if (h && min) return `${h}h ${min}m`;
+  if (h) return `${h}h`;
+  return `${min}m`;
+}
+
+async function renderActivity() {
+  const empty = document.getElementById("activity-empty");
+  const content = document.getElementById("activity-content");
+  const sub = document.getElementById("activity-sub");
+  if (!empty || !content) return;
+  const showEmpty = () => {
+    empty.classList.remove("hidden"); content.classList.add("hidden");
+    if (sub) sub.textContent = "";
+  };
+  try {
+    const manifest = await fetchJSON("polar/manifest.json");
+    const dates = ((manifest.categories || {}).daily_activity || []).slice().sort();
+    if (!dates.length) return showEmpty();                       // no synced activity → empty
+    const latest = dates.at(-1);
+    const a = await fetchJSON(`polar/daily_activity/${latest}.json`).catch(() => null);
+    if (!a) return showEmpty();                                   // file missing / file:// → empty
+    const day = (a.date || latest).slice(0, 10);
+
+    // --- 3 tiles: steps / active time / calories (fields verified from a real JSON) ---
+    const steps = a["active-steps"] ?? a.step_count ?? null;
+    const activeHM = isoDurationToHM(a.duration) || isoDurationToHM(a["active-time"]);
+    const cal = a.calories ?? null;                               // total daily calories
+    const tiles = [
+      { label: "steps",       value: steps != null ? Number(steps).toLocaleString() : "—" },
+      { label: "active time", value: activeHM || "—" },
+      { label: "calories",    value: cal != null ? Number(cal).toLocaleString() : "—" },
+    ];
+    document.getElementById("activity-tiles").innerHTML = tiles.map(t => `
+      <div class="bg-bg rounded-lg p-3 border border-line min-w-0">
+        <div class="text-2xl font-semibold stat-num leading-tight truncate">${t.value}</div>
+        <div class="text-xs text-muted mt-1">${t.label}</div>
+      </div>`).join("");
+
+    // --- footer: goal % + intensity-zone breakdown — only if the payload carries them ---
+    const goal = a["daily-activity-goal-completion-percentage"]
+      ?? a["activity-goal-completion"] ?? a["goal_percentage"] ?? a["goal-percentage"] ?? null;
+    const z = {
+      light:    a["light_activity_seconds"]    ?? a["light-activity-seconds"]    ?? null,
+      moderate: a["moderate_activity_seconds"] ?? a["moderate-activity-seconds"] ?? null,
+      vigorous: a["vigorous_activity_seconds"] ?? a["vigorous-activity-seconds"] ?? null,
+    };
+    const bits = [];
+    if (goal != null) bits.push(`Goal: ${Math.round(goal)}%`);
+    const compactHM = s => { const h = Math.floor(s / 3600), m = Math.round((s % 3600) / 60); return h ? `${h}h ${m}m` : `${m}m`; };
+    const zoneTxt = ["light", "moderate", "vigorous"]
+      .filter(k => z[k] != null)
+      .map(k => `${k[0].toUpperCase()}${k.slice(1)} ${compactHM(z[k])}`).join(" · ");
+    if (zoneTxt) bits.push(zoneTxt);
+    if (!bits.length) {
+      // Honest fallback — Loop Gen 2's daily-activity summary has no goal %/zones.
+      const activeCal = a["active-calories"];
+      if (activeCal != null) bits.push(`${Number(activeCal).toLocaleString()} active cal`);
+      bits.push("goal % &amp; intensity zones aren't in the Loop Gen 2 daily-activity feed");
+    }
+    document.getElementById("activity-footer").innerHTML = bits.join("&nbsp;&nbsp;·&nbsp;&nbsp;");
+
+    // --- subtitle: "Mon · Jun 1" when fresh, amber stale warning when >1 day old ---
+    const dObj = new Date(day + "T00:00:00");
+    const wd = dObj.toLocaleDateString("en-US", { weekday: "short" });
+    const md = dObj.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const age = daysSinceDate(day);
+    if (sub) {
+      sub.innerHTML = (age != null && age > 1)
+        ? `<span class="text-warn font-medium">⚠️ ${age} days stale · ${wd} · ${md}</span>`
+        : `<span class="text-slate-300">${wd} · ${md}</span>`;
+    }
+
+    empty.classList.add("hidden");
+    content.classList.remove("hidden");
+  } catch (e) {
+    showEmpty(); // file:// or no sync yet
+  }
+}
+
 function renderAll() {
   renderTodaysRead(); // async, AI health summary
   renderNutrition(); // async, today's macros from Calories Club
@@ -604,6 +696,7 @@ function renderAll() {
   renderScaleSnapshot(); // async, VeSync screenshot OCR snapshot (manual via Penny)
   renderScaleHistory(); // async, VeSync scale history table (manual via Penny)
   renderEnergy(); // async, modeled energy-throughout-day from overnight Polar recovery
+  renderActivity(); // async, Polar Loop Gen 2 daily activity (steps / active time / calories)
   renderPolar(); // async, live Polar Loop data
 }
 
