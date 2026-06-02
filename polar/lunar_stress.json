@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-02T15:46:17-05:00",
+  "generated_at": "2026-06-02T16:16:28-05:00",
   "score": 15,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -9,7 +9,7 @@
     "sleep_score": 48
   },
   "workout_intensity": "rest",
-  "recommendation": "Hold the load steady today and push resistance work to near-failure\u2014the system can take real weight. Anchor protein at every meal before anything else.",
+  "recommendation": "Channel today's charge into resistance work\u2014load the heavy sets hard and anchor the day's protein early. Initiate the calls and decisions that need making, but calibrate each against the data before you commit.",
   "bars": {
     "transit": {
       "filled": 2,
@@ -25,7 +25,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 279.62,
+    "moon_longitude": 279.87,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
