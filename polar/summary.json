@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-02T12:30:03-05:00",
-  "slot": "midday",
-  "summary": "Recovery: Good\n\nReading: Nothing's flagging today \u2014 your knees, joints, shoulders, neck, all your usual watch spots are quiet, so there's no reason to baby anything. You're wired to make progress through steady, repeatable effort rather than dramatic days, and this morning fits you well: you slept a little longer than usual and came back calm and even, which is exactly how your body likes to rebuild.\n\nPerformance: Train normally. You came in a touch above your usual line, so it's a solid day to do real work \u2014 and with the day only half done, make it resistance work, not just more walking.\n\nTransit: none",
+  "generated_at": "2026-06-02T16:45:03-05:00",
+  "slot": "afternoon",
+  "summary": "Recovery: Good\n\nReading: Nothing's flagging today \u2014 your knees and joints, your shoulders and neck, the lower body, all quiet, no soreness lining up to slow you down. You're someone who recovers by stacking steady days rather than chasing big swings, and last night fit that mold cleanly: you slept enough, your system settled, and you came into today calm and ready.\n\nPerformance: Train normally. You're rested and your reserves are full, but you've only put in a light effort so far, so there's a real session left in you \u2014 make it resistance work, not just more steps, and that's where today actually pays off. One nudge: you're close on protein with a little gap to close, and you've left a big chunk of the day's food on the table, so don't let the deficit run away from you tonight \u2014 eat enough to protect the muscle you're trying to build.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -9,11 +9,11 @@
     },
     {
       "label": "Reading",
-      "text": "Nothing's flagging today \u2014 your knees, joints, shoulders, neck, all your usual watch spots are quiet, so there's no reason to baby anything. You're wired to make progress through steady, repeatable effort rather than dramatic days, and this morning fits you well: you slept a little longer than usual and came back calm and even, which is exactly how your body likes to rebuild."
+      "text": "Nothing's flagging today \u2014 your knees and joints, your shoulders and neck, the lower body, all quiet, no soreness lining up to slow you down. You're someone who recovers by stacking steady days rather than chasing big swings, and last night fit that mold cleanly: you slept enough, your system settled, and you came into today calm and ready."
     },
     {
       "label": "Performance",
-      "text": "Train normally. You came in a touch above your usual line, so it's a solid day to do real work \u2014 and with the day only half done, make it resistance work, not just more walking."
+      "text": "Train normally. You're rested and your reserves are full, but you've only put in a light effort so far, so there's a real session left in you \u2014 make it resistance work, not just more steps, and that's where today actually pays off. One nudge: you're close on protein with a little gap to close, and you've left a big chunk of the day's food on the table, so don't let the deficit run away from you tonight \u2014 eat enough to protect the muscle you're trying to build."
     },
     {
       "label": "Transit",
@@ -22,19 +22,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "Nothing's flagging today \u2014 your knees, joints, shoulders, neck, all your usual watch spots are quiet, so there's no reason to baby anything. You're wired to make progress through steady, repeatable effort rather than dramatic days, and this morning fits you well: you slept a little longer than usual and came back calm and even, which is exactly how your body likes to rebuild.",
-    "performance": "Train normally. You came in a touch above your usual line, so it's a solid day to do real work \u2014 and with the day only half done, make it resistance work, not just more walking.",
+    "reading": "Nothing's flagging today \u2014 your knees and joints, your shoulders and neck, the lower body, all quiet, no soreness lining up to slow you down. You're someone who recovers by stacking steady days rather than chasing big swings, and last night fit that mold cleanly: you slept enough, your system settled, and you came into today calm and ready.",
+    "performance": "Train normally. You're rested and your reserves are full, but you've only put in a light effort so far, so there's a real session left in you \u2014 make it resistance work, not just more steps, and that's where today actually pays off. One nudge: you're close on protein with a little gap to close, and you've left a big chunk of the day's food on the table, so don't let the deficit run away from you tonight \u2014 eat enough to protect the muscle you're trying to build.",
     "transit": null
   },
-  "nutrition_nudge": "Add carbs at lunch \u2014 aim for 60g of slow carbs like rice or oats to dodge the afternoon crash.",
+  "nutrition_nudge": "On pace across the board \u2014 keep your meal cadence steady and let dinner carry the last 18g of protein.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
     "sleep_hours": 6.8,
     "hrv_today": 66,
     "hrv_7d_avg": 61.9,
-    "nutrition": "calories 596 of 2574 goal, protein 46g of 138g goal, carbs 44g of 290g goal, fat 35g of 72g goal",
-    "nutrition_detail": "calories 596 of 2574 goal -> 1978 left; protein 46g of 138g goal -> 92g gap; carbs 44g of 290g goal; fat 35g of 72g goal",
+    "nutrition": "calories 996 of 2574 goal, protein 120g of 138g goal, carbs 115g of 290g goal, fat 39g of 72g goal",
+    "nutrition_detail": "calories 996 of 2574 goal -> 1578 left; protein 120g of 138g goal -> 18g gap; carbs 115g of 290g goal; fat 39g of 72g goal",
     "activity_today": "2,118 steps so far, 51m active, 808 calories burned, Light training load"
   }
 }
