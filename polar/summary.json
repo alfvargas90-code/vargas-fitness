@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-01T15:27:49-05:00",
-  "slot": "afternoon",
-  "summary": "Recovery: Excellent\n\nReading: Nothing right now is flagging strain in your usual trouble spots \u2014 knees, joints, tendons, neck, or shoulders all look clear, so there's no area you need to baby today. You're someone who builds back through steadiness and discipline rather than dramatic swings, and today fits that perfectly \u2014 your body came back clean and your system feels calm and well-settled.\n\nPerformance: Push hard. You came in well above your normal recovery with steady sleep behind you, so today's a green light to go after it \u2014 just keep your protein climbing, you're running well short of where you want it.\n\nTransit: none",
+  "generated_at": "2026-06-01T20:16:23-05:00",
+  "slot": "evening",
+  "summary": "Recovery: Excellent\n\nReading: Nothing's flagging today \u2014 your knees, joints, shoulders, and neck are all quiet, none of your usual watch areas asking for attention. You're someone who earns recovery through steadiness and consistency rather than dramatic swings, and today is that pattern paying off: you came back clean, rested enough, and your system feels genuinely calm and ready.\n\nPerformance: Push hard. You came in well above your normal recovery and your body's clearly recharged, so this is a green light to go after it \u2014 just keep your form honest if you load up heavy.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -9,11 +9,11 @@
     },
     {
       "label": "Reading",
-      "text": "Nothing right now is flagging strain in your usual trouble spots \u2014 knees, joints, tendons, neck, or shoulders all look clear, so there's no area you need to baby today. You're someone who builds back through steadiness and discipline rather than dramatic swings, and today fits that perfectly \u2014 your body came back clean and your system feels calm and well-settled."
+      "text": "Nothing's flagging today \u2014 your knees, joints, shoulders, and neck are all quiet, none of your usual watch areas asking for attention. You're someone who earns recovery through steadiness and consistency rather than dramatic swings, and today is that pattern paying off: you came back clean, rested enough, and your system feels genuinely calm and ready."
     },
     {
       "label": "Performance",
-      "text": "Push hard. You came in well above your normal recovery with steady sleep behind you, so today's a green light to go after it \u2014 just keep your protein climbing, you're running well short of where you want it."
+      "text": "Push hard. You came in well above your normal recovery and your body's clearly recharged, so this is a green light to go after it \u2014 just keep your form honest if you load up heavy."
     },
     {
       "label": "Transit",
@@ -22,8 +22,8 @@
   ],
   "simple": {
     "recovery": "Excellent",
-    "reading": "Nothing right now is flagging strain in your usual trouble spots \u2014 knees, joints, tendons, neck, or shoulders all look clear, so there's no area you need to baby today. You're someone who builds back through steadiness and discipline rather than dramatic swings, and today fits that perfectly \u2014 your body came back clean and your system feels calm and well-settled.",
-    "performance": "Push hard. You came in well above your normal recovery with steady sleep behind you, so today's a green light to go after it \u2014 just keep your protein climbing, you're running well short of where you want it.",
+    "reading": "Nothing's flagging today \u2014 your knees, joints, shoulders, and neck are all quiet, none of your usual watch areas asking for attention. You're someone who earns recovery through steadiness and consistency rather than dramatic swings, and today is that pattern paying off: you came back clean, rested enough, and your system feels genuinely calm and ready.",
+    "performance": "Push hard. You came in well above your normal recovery and your body's clearly recharged, so this is a green light to go after it \u2014 just keep your form honest if you load up heavy.",
     "transit": null
   },
   "transits": [],
