@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-06-02T07:17:27-05:00",
-  "score": 45,
-  "band": "Mild Compression",
+  "generated_at": "2026-06-02T07:42:38-05:00",
+  "score": 50,
+  "band": "Moderate Compression",
   "trigger": "Moon conjunct natal Moon",
   "physiology": {
-    "hrv_pct_baseline": 12,
-    "rhr_delta_bpm": -3,
-    "sleep_score": 62
+    "hrv_pct_baseline": 7,
+    "rhr_delta_bpm": -2,
+    "sleep_score": 48
   },
   "workout_intensity": "rest",
   "irritability": 1,
-  "recommendation": "Channel the day into structured output\u2014batch your work into discrete blocks with clear deliverables and ship each before starting the next. Hold heavy interpersonal conversations until tomorrow.",
+  "recommendation": "Channel it into structured, pre-defined work; delay any confrontation or hard conversation until tomorrow.",
   "transit_detail": {
-    "moon_longitude": 275.42,
+    "moon_longitude": 275.63,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 12,
@@ -20,22 +20,21 @@
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 45,
+    "raw_score": 50,
     "transit_points": 45,
-    "physiology_points": 0,
+    "physiology_points": 5,
     "breakdown": [
       "+30 Moon conjunct natal Moon (Uranus collapsed)",
       "+10 Moon in Capricorn",
       "+5 Moon transiting natal 12th house",
-      "-5 HRV 12% above baseline",
-      "-5 RHR -3 bpm vs baseline",
-      "+10 Sleep score 62 (<70)"
+      "-5 HRV 7% above baseline",
+      "+10 Sleep score 48 (<70)"
     ],
     "baselines": {
-      "hrv_7d": 64.4,
-      "rhr_7d": 55.1
+      "hrv_7d": 61.9,
+      "rhr_7d": 54.7
     },
-    "active_calories": 34,
+    "active_calories": 142,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
