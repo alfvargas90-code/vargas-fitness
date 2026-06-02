@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-02T05:32:43-05:00",
+  "generated_at": "2026-06-02T06:02:59-05:00",
   "score": 45,
   "band": "Mild Compression",
   "trigger": "Moon conjunct natal Moon",
@@ -12,11 +12,11 @@
   "irritability": 1,
   "recommendation": "Keep the day structured and move work forward; no need to back off.",
   "transit_detail": {
-    "moon_longitude": 274.56,
+    "moon_longitude": 274.81,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 12,
-    "aspect_to_natal_moon": "conjunction (1.0\u00b0 applying)",
+    "aspect_to_natal_moon": "conjunction (0.7\u00b0 applying)",
     "is_full_moon": false
   },
   "scoring_detail": {
@@ -35,7 +35,7 @@
       "hrv_7d": 64.4,
       "rhr_7d": 55.1
     },
-    "active_calories": 14,
+    "active_calories": 16,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
