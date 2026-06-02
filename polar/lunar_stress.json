@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-02T00:00:09-05:00",
+  "generated_at": "2026-06-02T00:30:22-05:00",
   "score": 15,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -10,9 +10,9 @@
   },
   "workout_intensity": "rest",
   "irritability": 1,
-  "recommendation": "Channel the day into your single hardest deliverable and ship it before noon; stack the heavy lifts back-to-back and refuse low-value busywork.",
+  "recommendation": "Channel the surplus into your single hardest deliverable today\u2014stack the heavy lifting, training, and the conversation you've been deferring into one block while the system holds. Strip the easy busywork; spend the capacity on what actually moves the needle.",
   "transit_detail": {
-    "moon_longitude": 271.82,
+    "moon_longitude": 272.07,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 12,
@@ -34,7 +34,7 @@
       "hrv_7d": 64.4,
       "rhr_7d": 55.1
     },
-    "active_calories": null,
+    "active_calories": 0,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
