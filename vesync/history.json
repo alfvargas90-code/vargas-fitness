@@ -1,5 +1,28 @@
 [
   {
+    "date": "2026-06-02",
+    "time_local": "06:46",
+    "weight_lb": 169.3,
+    "delta_lb": -0.6,
+    "bmi": 26.6,
+    "bmi_band": "High",
+    "metabolic_age": 36,
+    "metabolic_age_band": "High",
+    "body_fat_pct": 14.8,
+    "body_fat_band": "Fitness",
+    "fat_free_body_weight_lb": 144.2,
+    "subcutaneous_fat_pct": 12.3,
+    "visceral_fat_rating": 9,
+    "body_water_pct": 61.4,
+    "skeletal_muscle_pct": 54.9,
+    "bone_mass_lb": 7.2,
+    "bmr_cal": 1759,
+    "muscle_mass_lb": 136.8,
+    "protein_pct": 19.4,
+    "source": "vesync_app_screenshot",
+    "captured_via": "penny_ocr_2026-06-02"
+  },
+  {
     "date": "2026-05-23",
     "time_local": "17:03",
     "weight_lb": 169.9,
