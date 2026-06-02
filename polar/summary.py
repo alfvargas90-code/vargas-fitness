@@ -146,6 +146,31 @@ def load_json(path):
         return json.load(f)
 
 
+def goal_framing():
+    """Read polar/goal_config.json and build the active-goal framing block injected
+    into every prose prompt. This is the source of truth for the goal lens — the AI
+    layer assesses the day through it (protein hits/misses matter, modest deficits
+    preserve muscle, resistance work > steps). Never raises; returns "" if no config
+    so the prompts degrade to goal-agnostic prose."""
+    try:
+        cfg = load_json(os.path.join(HERE, "goal_config.json"))
+        framing = cfg.get("framing", "").strip()
+        if not framing:
+            return ""
+        return (
+            "=== ACTIVE GOAL: body recomp (frame everything through this lens) ===\n"
+            f"{framing}\n"
+            "Assess his day through this lens: protein hits and misses matter, a "
+            "deficit over ~800 calories is a muscle-loss risk worth flagging, and "
+            "resistance work is valued more than step count. Weave this into the prose "
+            "naturally — a protein nag, deficit context, muscle protection — never as a "
+            "checklist or bullet list, and never name it as a \"goal\" or \"recomp\" label.\n\n"
+        )
+    except Exception as e:
+        log(f"goal_config parse failed (non-fatal): {e}")
+        return ""
+
+
 def recharge_score(rec):   # Nightly Recharge status, 1-6
     return rec.get("ans_charge_status")
 
@@ -460,6 +485,7 @@ def build_day_review_prose(stats, verdict):
         "- NO astrology, no chart talk.\n"
         "- End with ONE forward-looking nudge for tomorrow (e.g. \"Push protein hard "
         "tomorrow\" or \"Take it easier — you're due a lighter day\").\n\n"
+        f"{goal_framing()}"
         f"Today was {VERDICT_FLAVOR.get(verdict, 'a normal day')}. The facts:\n"
         f"- Took about {s['steps']:,} steps\n"
         f"- Was active for {s['active_time_display']}\n"
@@ -728,7 +754,8 @@ def main():
         f"- Sleep last night: {slp_hours} hours (7-day avg {slp_7d})\n"
         f"- Body composition: {body}\n"
         f"{today_block}"
-        "\n=== NATAL CONTEXT (static, body-area awareness only) ===\n"
+        f"\n{goal_framing()}"
+        "=== NATAL CONTEXT (static, body-area awareness only) ===\n"
         f"{NATAL_ARCHITECTURE}\n"
         "\n=== TODAY'S RELEVANT TRANSITS (context only) ===\n"
         f"{transit_block}\n\n"

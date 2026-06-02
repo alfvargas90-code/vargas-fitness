@@ -71,6 +71,30 @@ def load_json(path):
         return json.load(f)
 
 
+def goal_framing():
+    """Soft secondary input for the LSI directive. The recommendation stays primarily
+    about nervous-system compression — but when the system is regulated enough to
+    train, this nudges the charge toward resistance work / protein rather than generic
+    'do something'. Reads polar/goal_config.json; never raises; returns "" if absent."""
+    try:
+        cfg = load_json(os.path.join(HERE, "goal_config.json"))
+        framing = cfg.get("framing", "").strip()
+        if not framing:
+            return ""
+        return (
+            "SECONDARY CONTEXT (soft — nervous-system regulation stays primary): his "
+            "active goal is body recomp — build muscle while losing fat; protein is the "
+            "load-bearing variable and resistance work matters more than cardio churn. "
+            "If the state is regulated enough to train, you MAY point the charge toward "
+            "resistance work or protein-loading rather than a generic 'produce'. If the "
+            "state is compressed, ignore this entirely — regulation wins. Never name it "
+            "as a 'goal' or 'recomp'; keep it a one-clause nudge, not a lecture.\n\n"
+        )
+    except Exception as e:
+        log(f"  goal_config parse failed (non-fatal): {e}")
+        return ""
+
+
 # --- astronomy helpers ---------------------------------------------------
 def jd_now(now_utc):
     return swe.julday(now_utc.year, now_utc.month, now_utc.day,
@@ -373,6 +397,7 @@ def build_recommendation(score, band, trigger, physiology, intensity):
         "- PREFER calibrated phrasing: 'respond only if necessary', 'initiate selectively', "
         "'calibrate before deciding', 'if the call must be made'. Gate action on judgment, "
         "not a blanket ban.\n\n"
+        f"{goal_framing()}"
         f"Internal context (do not echo): state is '{band}' — {guidance} "
         f"Trigger: {trigger}. HRV {physiology['hrv_pct_baseline']}% vs baseline, "
         f"RHR {rhr_d:+d} bpm, sleep {physiology['sleep_score']}, "
