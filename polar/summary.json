@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-02T12:21:47-05:00",
+  "generated_at": "2026-06-02T12:30:03-05:00",
   "slot": "midday",
-  "summary": "Recovery: Good\n\nReading: Nothing's flagging on the usual watch areas today \u2014 knees, joints, shoulders, neck all feel quiet, so there's no reason to baby anything if you train. You're built to recover through steadiness and repetition rather than big peaks and crashes, and today fits that mold cleanly \u2014 you slept a little longer than you've been getting and your system came in calm and ready, no jagged edges.\n\nPerformance: Train normally. You came in a touch above your usual recovery, so it's a solid day to put real work in \u2014 make it resistance work if you can, since that's what actually moves the needle for you, and don't be shy about going heavier than steps.\n\nTransit: none",
+  "summary": "Recovery: Good\n\nReading: Nothing's flagging today \u2014 your knees, joints, shoulders, neck, all your usual watch spots are quiet, so there's no reason to baby anything. You're wired to make progress through steady, repeatable effort rather than dramatic days, and this morning fits you well: you slept a little longer than usual and came back calm and even, which is exactly how your body likes to rebuild.\n\nPerformance: Train normally. You came in a touch above your usual line, so it's a solid day to do real work \u2014 and with the day only half done, make it resistance work, not just more walking.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -9,11 +9,11 @@
     },
     {
       "label": "Reading",
-      "text": "Nothing's flagging on the usual watch areas today \u2014 knees, joints, shoulders, neck all feel quiet, so there's no reason to baby anything if you train. You're built to recover through steadiness and repetition rather than big peaks and crashes, and today fits that mold cleanly \u2014 you slept a little longer than you've been getting and your system came in calm and ready, no jagged edges."
+      "text": "Nothing's flagging today \u2014 your knees, joints, shoulders, neck, all your usual watch spots are quiet, so there's no reason to baby anything. You're wired to make progress through steady, repeatable effort rather than dramatic days, and this morning fits you well: you slept a little longer than usual and came back calm and even, which is exactly how your body likes to rebuild."
     },
     {
       "label": "Performance",
-      "text": "Train normally. You came in a touch above your usual recovery, so it's a solid day to put real work in \u2014 make it resistance work if you can, since that's what actually moves the needle for you, and don't be shy about going heavier than steps."
+      "text": "Train normally. You came in a touch above your usual line, so it's a solid day to do real work \u2014 and with the day only half done, make it resistance work, not just more walking."
     },
     {
       "label": "Transit",
@@ -22,11 +22,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "Nothing's flagging on the usual watch areas today \u2014 knees, joints, shoulders, neck all feel quiet, so there's no reason to baby anything if you train. You're built to recover through steadiness and repetition rather than big peaks and crashes, and today fits that mold cleanly \u2014 you slept a little longer than you've been getting and your system came in calm and ready, no jagged edges.",
-    "performance": "Train normally. You came in a touch above your usual recovery, so it's a solid day to put real work in \u2014 make it resistance work if you can, since that's what actually moves the needle for you, and don't be shy about going heavier than steps.",
+    "reading": "Nothing's flagging today \u2014 your knees, joints, shoulders, neck, all your usual watch spots are quiet, so there's no reason to baby anything. You're wired to make progress through steady, repeatable effort rather than dramatic days, and this morning fits you well: you slept a little longer than usual and came back calm and even, which is exactly how your body likes to rebuild.",
+    "performance": "Train normally. You came in a touch above your usual line, so it's a solid day to do real work \u2014 and with the day only half done, make it resistance work, not just more walking.",
     "transit": null
   },
-  "nutrition_nudge": "Add carbs at lunch \u2014 aim for a solid serving of rice, oats, or fruit to steady your energy.",
+  "nutrition_nudge": "Add carbs at lunch \u2014 aim for 60g of slow carbs like rice or oats to dodge the afternoon crash.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
