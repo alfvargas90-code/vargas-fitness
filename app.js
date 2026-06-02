@@ -336,7 +336,9 @@ const RECOVERY_COLORS = {
   good: "text-accent",    // cyan
   excellent: "text-good", // green
 };
-const PERF_VERDICTS = ["Push hard", "Train normally", "Moderate effort", "Prioritize recovery"];
+// "Wind down" is the evening-only verdict (sleep prep / day's-done framing); the
+// other four are daytime training calls. All are bolded by renderTodaysRead().
+const PERF_VERDICTS = ["Push hard", "Train normally", "Moderate effort", "Prioritize recovery", "Wind down"];
 
 // Short paragraph block with a small uppercase subtitle.
 function readBlock(subtitle, text) {

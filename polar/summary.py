@@ -84,6 +84,48 @@ LABEL_TO_KEY = {
 RECOVERY_WORDS = ["Excellent", "Good", "Average", "Poor"]
 SIMPLE_KEYS = ["recovery", "reading", "performance", "transit"]
 
+# Per-slot framing for the Reading prose. The Recovery WORD is always from overnight
+# data (it doesn't change through the day), but the prose around it should move with
+# the clock — fresh capacity in the morning, progress-checks midday/afternoon, and a
+# present-moment wind-down in the evening that leaves the day's stat recap to the
+# 9:45 PM Day-in-Review card.
+SLOT_FRAMING = {
+    "overnight": (
+        "SLOT — OVERNIGHT (~4 AM, Alfie just woke up). The Reading is a first read of what the "
+        "night's recovery left him with — the body's report card from sleep. Tone: \"You came back "
+        "strong\" / \"Sleep ran a bit short, the system needs catch-up.\" No day-ahead planning yet, "
+        "no activity or food talk — just where he's starting from."
+    ),
+    "morning": (
+        "SLOT — MORNING (~9 AM, the day is open in front of him). The Reading frames fresh capacity "
+        "and the day ahead. Tone: \"You've got plenty to spend today\" / \"Day's wide open.\" If a "
+        "little activity or food is already logged, touch it lightly as a starting point, but keep "
+        "the focus forward — on what the day can hold, not what's behind him."
+    ),
+    "midday": (
+        "SLOT — MIDDAY (~12:30 PM, half the day done). The Reading is about how the day is tracking "
+        "so far. Reference the steps already put down and the pace of food/protein. Tone: \"You've "
+        "already put down a good chunk of steps\" / \"Protein needs to climb at lunch.\" Weave the "
+        "numbers in as lived context, never a stat list."
+    ),
+    "afternoon": (
+        "SLOT — AFTERNOON (~4:45 PM, day mostly behind him, evening to go). The Reading is a "
+        "progress check plus what's left. Tone: \"Solid day shaping up\" / \"You're well along on "
+        "steps with a little left to push if you want it.\" Reference the accumulated activity and "
+        "food naturally as part of the read."
+    ),
+    "evening": (
+        "SLOT — EVENING (~8 PM, winding toward night). This is a PRESENT-MOMENT read, NOT a recap. "
+        "Do NOT mention steps, calories, protein, active time, or any of the day's accumulated "
+        "stats — a separate nightly card owns the day's wrap-up. Focus only on right-now state: how "
+        "the system feels heading into the night, sleep prep, and tomorrow as the next platform. "
+        "Tone: \"System feels calm and settled\" / \"Energy is low — head toward rest.\""
+    ),
+}
+# Slots whose prompt gets today's accumulated activity + nutrition fed in. Overnight is
+# too early to have any; evening deliberately omits it (present-moment, no recap).
+TODAY_DATA_SLOTS = {"morning", "midday", "afternoon"}
+
 
 def log(msg):
     print(f"[{datetime.now().isoformat(timespec='seconds')}] {msg}", flush=True)
@@ -106,6 +148,23 @@ def load_json(path):
 
 def recharge_score(rec):   # Nightly Recharge status, 1-6
     return rec.get("ans_charge_status")
+
+
+def recovery_word(rec_score, hrv_today=None, hrv_7d=None):
+    """Deterministic Recovery word from overnight data. Computed in Python (not left
+    to the LLM) so the word is identical across every slot the same day — the overnight
+    recovery doesn't change as the day goes on, so the word shouldn't flicker between
+    fires. Maps the Polar Nightly Recharge status (1-6), then lets a clearly
+    above-average HRV bump a strong night up to Excellent."""
+    if rec_score is None:
+        return None
+    word = ("Excellent" if rec_score >= 6 else
+            "Good" if rec_score >= 4 else
+            "Average" if rec_score >= 3 else "Poor")
+    if (word == "Good" and rec_score >= 5 and hrv_today and hrv_7d
+            and hrv_today >= hrv_7d * 1.08):
+        word = "Excellent"
+    return word
 
 
 def hrv_of(rec):
@@ -190,6 +249,67 @@ def nutrition_line():
         return ", ".join(parts) if parts else None
     except Exception as e:
         log(f"nutrition parse failed (non-fatal): {e}")
+        return None
+
+
+def activity_today_line(today):
+    """Today's accumulated activity (steps / active time / calories burned / active
+    calories) from daily_activity/<today>.json, if present. Used to make the daytime
+    read evolve as the day fills in. Never raises; returns None if no file yet."""
+    try:
+        path = os.path.join(HERE, "daily_activity", f"{today}.json")
+        if not os.path.exists(path):
+            return None
+        act = load_json(path)
+        steps = act.get("active-steps") or act.get("step_count")
+        active_min = iso_duration_to_min(act.get("duration") or act.get("active-time"))
+        cal = act.get("calories")
+        active_cal = act.get("active-calories")
+        bits = []
+        if steps is not None:
+            bits.append(f"{int(steps):,} steps so far")
+        if active_min is not None:
+            bits.append(f"{min_to_hm(active_min)} active")
+        if cal is not None:
+            bits.append(f"{round(cal):,} calories burned")
+        if active_cal is not None:
+            bits.append(f"{round(active_cal):,} of those active")
+        return ", ".join(bits) if bits else None
+    except Exception as e:
+        log(f"activity parse failed (non-fatal): {e}")
+        return None
+
+
+def nutrition_gap_line():
+    """Today's macros WITH the delta vs target spelled out (e.g.
+    'protein 126g of 372g goal -> 246g gap'). Richer than nutrition_line(); used in
+    the prompt so the model can frame how far ahead/behind the day is. Never raises."""
+    try:
+        from datetime import date as _date
+        path = os.path.join(ROOT, "nutrition", "daily", f"{_date.today().isoformat()}.json")
+        if not os.path.exists(path):
+            return None
+        n = load_json(path)
+        t = n.get("totals", {}) or {}
+        g = n.get("goals", {}) or {}
+        bits = []
+        cal, cal_goal = t.get("calories"), g.get("calories")
+        if cal is not None and cal_goal:
+            gap = round(cal_goal - cal)
+            tail = f"{gap} left" if gap > 0 else (f"{abs(gap)} over" if gap < 0 else "right on target")
+            bits.append(f"calories {round(cal)} of {round(cal_goal)} goal -> {tail}")
+        prot, prot_goal = t.get("protein_g"), g.get("protein_g")
+        if prot is not None and prot_goal:
+            gap = round(prot_goal - prot)
+            tail = f"{gap}g gap" if gap > 0 else ("target hit" if gap == 0 else f"{abs(gap)}g over")
+            bits.append(f"protein {round(prot)}g of {round(prot_goal)}g goal -> {tail}")
+        for label, vk, gk in (("carbs", "carbs_g", "carbs_g"), ("fat", "fat_g", "fat_g")):
+            v, gl = t.get(vk), g.get(gk)
+            if v is not None and gl:
+                bits.append(f"{label} {round(v)}g of {round(gl)}g goal")
+        return "; ".join(bits) if bits else None
+    except Exception as e:
+        log(f"nutrition-gap parse failed (non-fatal): {e}")
         return None
 
 
@@ -477,13 +597,28 @@ def git_push(slot, date):
         log(f"git push failed (non-fatal): {e}")        # likely no change or offline
 
 
+def _arg_value(flag):
+    """Return the value following `flag` in argv, or None."""
+    if flag in sys.argv:
+        i = sys.argv.index(flag)
+        if i + 1 < len(sys.argv):
+            return sys.argv[i + 1]
+    return None
+
+
 def main():
     now = datetime.now().astimezone()
-    slot = slot_for(now)
+    # Manual-test overrides: `--slot NAME` forces a slot (and bypasses the nightly
+    # day-review branch so you can regenerate any slot at any time); `--out PATH`
+    # writes to an alternate file and skips the git push.
+    slot_override = _arg_value("--slot")
+    out_path = _arg_value("--out")
+    slot = slot_override or slot_for(now)
 
     # Nightly Day-in-Review slot (21:45 fire) — or forced via `--day-review`.
-    # Generates day_review.json INSTEAD OF the regular summary.json.
-    if "--day-review" in sys.argv or is_night_review(now):
+    # Generates day_review.json INSTEAD OF the regular summary.json. A `--slot`
+    # override skips this so a forced slot always produces a regular summary.
+    if not slot_override and ("--day-review" in sys.argv or is_night_review(now)):
         return generate_day_review(now)
 
     manifest = load_json(os.path.join(HERE, "manifest.json"))
@@ -505,21 +640,63 @@ def main():
     hrv_7d = rolling_mean(rec_dates, "recharge", hrv_of)
     slp_7d = rolling_mean(slp_dates, "sleep", sleep_hours)
     body = body_comp_line()
-    nutrition = nutrition_line()
+    nutrition = nutrition_line()              # plain "X of Y goal" — kept for data_basis
+    today_iso = now.date().isoformat()
+    activity = activity_today_line(today_iso)  # today's accumulated steps / active / burn
+    nutrition_detail = nutrition_gap_line()    # macros + delta vs target, for the prompt
 
-    nutrition_bullet = f"- Today's nutrition so far: {nutrition}\n" if nutrition else ""
+    # Feed today's accumulated activity + nutrition only into the daytime slots. Overnight
+    # is too early to have any; evening is a present-moment read that deliberately leaves
+    # the day's stat recap to the 9:45 PM Day-in-Review card.
+    show_today_data = slot in TODAY_DATA_SLOTS
+    today_block = ""
+    if show_today_data:
+        if activity:
+            today_block += f"- Today's activity so far: {activity}\n"
+        if nutrition_detail:
+            today_block += f"- Today's nutrition so far: {nutrition_detail}\n"
+        elif nutrition:
+            today_block += f"- Today's nutrition so far: {nutrition}\n"
+
     transits = load_today_transits()
     transit_block = ("\n".join(f"- {t}" for t in transits)
                      if transits else "- No relevant transit data available today.")
 
-    # Temporal lens per slot (spec Section 12: Morning Outlook / Midday Status / Evening Review).
-    lens = {
-        "overnight": "EVENING REVIEW lens: assess how the day's recovery actually resolved overnight.",
-        "morning": "MORNING OUTLOOK lens: identify likely stress/recovery themes before training.",
-        "midday": "MIDDAY STATUS lens: compare the morning's expected themes against observed metrics.",
-        "afternoon": "MIDDAY STATUS lens: compare expected themes against observed metrics.",
-        "evening": "EVENING REVIEW lens: assess what the actual correlations turned out to be.",
-    }.get(slot, "MORNING OUTLOOK lens.")
+    framing = SLOT_FRAMING.get(slot, SLOT_FRAMING["morning"])
+
+    # Performance verdict set is slot-aware: evening gets the wind-down call, every
+    # other slot gets the four daytime training verdicts.
+    if slot == "evening":
+        perf_instr = (
+            "Performance: start with EXACTLY this verdict — Wind down — then one short sentence of "
+            "wind-down / sleep-prep reasoning (the day's work is logged; tomorrow is the next "
+            "platform). Do NOT use Push hard / Train normally / Moderate effort / Prioritize "
+            "recovery at this slot. "
+            "Example: \"Wind down. The day's logged — sleep prep is the move now, and tomorrow gives "
+            "you a fresh platform to build on.\"\n"
+        )
+    else:
+        perf_instr = (
+            "Performance: start with EXACTLY one of these verdicts — Push hard / Train normally / "
+            "Moderate effort / Prioritize recovery — then one short sentence of why. "
+            "Example: \"Push hard. You came in well above your normal recovery, so today's a green "
+            "light to go after it — just keep technique honest if you go heavy.\"\n"
+        )
+
+    # Whether the Reading may reference today's rounded activity/food numbers.
+    if slot == "evening":
+        numbers_rule = (
+            "- This is the EVENING slot: write NO numbers at all — no steps, no calories, no protein, "
+            "no times. The nightly card recaps the day's stats; your job is the present moment.\n"
+        )
+    elif show_today_data:
+        numbers_rule = (
+            "- You MAY reference today's activity and food as rounded, everyday numbers in natural "
+            "speech (e.g. \"about 3,000 steps down already\", \"protein's barely halfway\") — but only "
+            "woven into the read as lived context, never as a stat list, and never with units/decimals.\n"
+        )
+    else:
+        numbers_rule = "- Do not write numbers; there's no accumulated activity to reference yet.\n"
 
     prompt = (
         "You are a recovery and performance coach writing a short daily read for an athlete (Alfie). "
@@ -527,55 +704,72 @@ def main():
         "biometric labels, not astrology terminology. Write like a sharp human coach talking to him "
         "in plain English.\n\n"
         "HARD OUTPUT RULES (these are absolute):\n"
-        "- NEVER write raw numbers, percentages, or units. No \"72ms\", no \"5/6\", no \"6.1h\", no \"%\".\n"
+        "- NEVER quote the recovery, heart-rate-variability, or sleep figures, and NEVER write "
+        "percentages, decimals, or units. No \"72ms\", no \"5/6\", no \"6.1h\", no \"%\".\n"
         "- NEVER write biometric jargon: HRV, Recharge, Nightly Recharge, BPM, ANS, Sleep Score.\n"
+        f"{numbers_rule}"
         "- NEVER write astrology jargon: no \"Moon-in-Capricorn\", no \"Uranus-Moon\", no \"Saturn square\", "
         "no aspect names (square / trine / conjunct / opposition / sextile) unless translated into plain "
         "words, no \"natal\", \"Placidus\", or \"transit chart\". The everyday words chart, transit, moon, "
         "and mars are fine when used conversationally and lowercase.\n"
-        "- The data below INFORMS your assessment. It must NOT appear in the output. Translate everything "
-        "into plain language. The data sets the conclusion; the conclusion is what you write.\n\n"
+        "- The recovery/sleep data below INFORMS your assessment but must NOT appear in the output. "
+        "Translate everything into plain language. The data sets the conclusion; the conclusion is what you write.\n\n"
         "HIERARCHY — measured recovery/fitness data is the source of truth. Natal context and transits are "
         "background for body-area awareness and pattern recognition only; they NEVER override the data. "
         "If a chart theme conflicts with the data, the data wins.\n\n"
-        f"{lens}\n\n"
+        "=== WHERE ALFIE IS IN HIS DAY (sets the tone of the Reading) ===\n"
+        f"{framing}\n"
+        "The Recovery WORD comes only from the overnight recovery data and stays constant through the "
+        "day; it is the PROSE that must move with the slot above.\n\n"
         "=== RECOVERY & FITNESS DATA (informs you — never quote it) ===\n"
         "(Polar Nightly Recharge is a 1-6 scale, 6 best.)\n"
         f"- Recovery status today: {rec_today}/6 (7-day avg {rec_7d})\n"
         f"- Heart-rate variability today: {hrv_today} ms (7-day avg {hrv_7d})\n"
         f"- Sleep last night: {slp_hours} hours (7-day avg {slp_7d})\n"
         f"- Body composition: {body}\n"
-        f"{nutrition_bullet}"
+        f"{today_block}"
         "\n=== NATAL CONTEXT (static, body-area awareness only) ===\n"
         f"{NATAL_ARCHITECTURE}\n"
         "\n=== TODAY'S RELEVANT TRANSITS (context only) ===\n"
         f"{transit_block}\n\n"
         "Produce EXACTLY these four sections, each starting on its own line with the exact label shown "
         "followed by a colon. No markdown, no bullets, no preamble, no closing remarks.\n\n"
-        "Recovery: ONE word only — Poor, Average, Good, or Excellent. Nothing else on this line.\n"
-        "Reading: ONE paragraph, two or three sentences, flowing prose. Blend two things so they read as "
-        "a single thought: (1) any body areas that deserve attention today (joints, tendons, shoulders, "
-        "neck, lower body) — if nothing is flagged, say so plainly; and (2) how he tends to recover and "
-        "perform, woven in as character rather than a separate topic. Make the trait feel like something "
-        "you simply know about him as a person, e.g. \"You're built to recover through steadiness and "
-        "consistency rather than big swings, and today fits that pattern.\" NEVER label, name, or hint that "
-        "this is astrology — no \"your chart\", no \"the stars\", no \"astrologically\", no planet or sign "
-        "names. No sub-headings inside the paragraph; one smooth read. "
+        "Recovery: ONE word only — Poor, Average, Good, or Excellent. Nothing else on this line. "
+        "Base it ONLY on the overnight recovery/sleep data, never on the time of day.\n"
+        "Reading: ONE paragraph, two or three sentences, flowing prose, written in the tone of the slot "
+        "framing above. Blend two things so they read as a single thought: (1) any body areas that deserve "
+        "attention today (joints, tendons, shoulders, neck, lower body) — if nothing is flagged, say so "
+        "plainly; and (2) how he tends to recover and perform, woven in as character rather than a separate "
+        "topic. Make the trait feel like something you simply know about him as a person, e.g. \"You're built "
+        "to recover through steadiness and consistency rather than big swings, and today fits that pattern.\" "
+        "NEVER label, name, or hint that this is astrology — no \"your chart\", no \"the stars\", no "
+        "\"astrologically\", no planet or sign names. No sub-headings inside the paragraph; one smooth read. "
         "Example: \"Nothing right now points to extra strain on your knees, shoulders, neck, or any of your "
         "usual watch areas. You're built to recover through steadiness and consistency rather than big "
         "swings, and today fits that pattern — your body bounced back cleanly and your system feels calm.\"\n"
-        "Performance: start with EXACTLY one of these verdicts — Push hard / Train normally / "
-        "Moderate effort / Prioritize recovery — then one short sentence of why. "
-        "Example: \"Push hard. You came in well above your normal recovery, so today's a green light to go "
-        "after it — just keep technique honest if you go heavy.\"\n"
+        f"{perf_instr}"
         "Transit: only if a meaningful planetary transit is actually affecting today; plain "
         "English, one short sentence (e.g. \"Mars is amplifying your drive — channel it into work, not "
         "friction.\"). If nothing meaningful is hitting today, write exactly: none\n"
     )
 
-    log(f"slot={slot} recharge={rec_today} hrv={hrv_today} sleep={slp_hours} transits={len(transits)}")
+    log(f"slot={slot} recharge={rec_today} hrv={hrv_today} sleep={slp_hours} "
+        f"activity={'y' if (show_today_data and activity) else 'n'} transits={len(transits)}")
     raw = call_claude(prompt)
     sections = parse_sections(raw)
+
+    # Force the Recovery word to the deterministic overnight-derived value so it can't
+    # drift between slots on the same day's data (the LLM otherwise re-judges 5/6 → it
+    # flickered Good/Excellent across fires). Overwrite the parsed Recovery section so
+    # summary + sections + simple all agree.
+    rec_word = recovery_word(rec_today, hrv_today, hrv_7d)
+    if rec_word:
+        rec_sec = next((s for s in sections if s["label"] == "Recovery"), None)
+        if rec_sec:
+            rec_sec["text"] = rec_word
+        else:
+            sections.insert(0, {"label": "Recovery", "text": rec_word})
+
     if sections:
         summary = "\n\n".join(f"{s['label']}: {s['text']}" for s in sections)
     else:
@@ -616,13 +810,18 @@ def main():
             "hrv_today": hrv_today,
             "hrv_7d_avg": hrv_7d,
             "nutrition": nutrition,
+            "nutrition_detail": nutrition_detail,
+            "activity_today": activity if show_today_data else None,
         },
     }
-    with open(os.path.join(HERE, "summary.json"), "w") as f:
+    target = out_path or os.path.join(HERE, "summary.json")
+    with open(target, "w") as f:
         json.dump(payload, f, indent=2)
-    log("wrote summary.json")
+    log(f"wrote {target}")
 
-    git_push(slot, now.date().isoformat())
+    # Manual test runs (`--out`) don't touch git; only the real summary.json is pushed.
+    if not out_path:
+        git_push(slot, now.date().isoformat())
     return 0
 
 
