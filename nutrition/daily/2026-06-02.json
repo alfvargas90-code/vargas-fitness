@@ -1,6 +1,6 @@
 {
   "date": "2026-06-02",
-  "synced_at": "2026-06-02T15:48:05+00:00",
+  "synced_at": "2026-06-02T16:18:10+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 3005.0,
@@ -9,12 +9,12 @@
     "fat_g": 83.0
   },
   "totals": {
-    "calories": 455.0,
-    "protein_g": 44.0,
-    "carbs_g": 8.0,
-    "fat_g": 34.0
+    "calories": 596.0,
+    "protein_g": 46.0,
+    "carbs_g": 44.0,
+    "fat_g": 35.0
   },
-  "meal_count": 1,
+  "meal_count": 2,
   "raw": {
     "date": "2026-06-02",
     "meals": [
@@ -26,13 +26,22 @@
         "fat": 34,
         "carbs": 8,
         "emoji": "\u00f0\u009f\u008d\u00b3"
+      },
+      {
+        "title": "Fresh Mandarin Snack",
+        "time": "10:48",
+        "calories": 141,
+        "protein": 2,
+        "fat": 1,
+        "carbs": 36,
+        "emoji": "\u00f0\u009f\u008d\u008a"
       }
     ],
     "totals": {
-      "calories": 455,
-      "protein": 44,
-      "fat": 34,
-      "carbs": 8
+      "calories": 596,
+      "protein": 46,
+      "fat": 35,
+      "carbs": 44
     },
     "targets": {
       "calories": 3005,
@@ -41,14 +50,14 @@
       "carbs": 338
     },
     "remaining": {
-      "calories": 2550,
+      "calories": 2409,
       "is_over": false
     },
-    "meal_count": 1,
+    "meal_count": 2,
     "labels": {
       "header": "Today",
-      "calories_remaining": "2550 kcal remaining today",
-      "meals_logged": "1 meals logged",
+      "calories_remaining": "2409 kcal remaining today",
+      "meals_logged": "2 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
