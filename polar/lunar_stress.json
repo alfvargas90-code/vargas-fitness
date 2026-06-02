@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-01T23:56:45-05:00",
-  "score": 18,
+  "generated_at": "2026-06-02T00:00:09-05:00",
+  "score": 15,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
   "physiology": {
@@ -8,11 +8,11 @@
     "rhr_delta_bpm": -3,
     "sleep_score": 62
   },
-  "workout_intensity": "high",
+  "workout_intensity": "rest",
   "irritability": 1,
-  "recommendation": "Hold the day to a single hard objective and execute it start to finish before touching anything else; train heavy, eat on schedule, ship one thing that matters.",
+  "recommendation": "Channel the day into your single hardest deliverable and ship it before noon; stack the heavy lifts back-to-back and refuse low-value busywork.",
   "transit_detail": {
-    "moon_longitude": 271.79,
+    "moon_longitude": 271.82,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 12,
@@ -20,22 +20,21 @@
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 18,
+    "raw_score": 15,
     "transit_points": 15,
-    "physiology_points": 3,
+    "physiology_points": 0,
     "breakdown": [
       "+10 Moon in Capricorn",
       "+5 Moon transiting natal 12th house",
       "-5 HRV 12% above baseline",
       "-5 RHR -3 bpm vs baseline",
-      "+10 Sleep score 62 (<70)",
-      "+3 High-intensity day, HRV normal"
+      "+10 Sleep score 62 (<70)"
     ],
     "baselines": {
       "hrv_7d": 64.4,
       "rhr_7d": 55.1
     },
-    "active_calories": 1266,
+    "active_calories": null,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
