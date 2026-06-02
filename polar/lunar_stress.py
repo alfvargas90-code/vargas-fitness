@@ -190,6 +190,25 @@ def band_for(score):
     return "Stable Control"
 
 
+# Micro-bar normalization: relative weight of each contribution to the band.
+# Realistic upper bounds, not theoretical maxima.
+TRANSIT_MAX = 55   # Moon conj natal Moon (+30) + Cap (+10) + Full Moon (+10) + 12th house (+5)
+BODY_MAX = 40      # HRV +10, RHR +10, Sleep +10, Workout +10
+
+
+def compute_bars(transit_pts, body_pts):
+    """10-segment fill for each contribution. Negative net points clamp to 0
+    (a regulating overlay reads as 'unloaded', not negative-length)."""
+    def seg(pts, mx):
+        return max(0, min(10, round(pts / mx * 10)))
+    return {
+        "transit": {"filled": seg(transit_pts, TRANSIT_MAX), "total": 10,
+                    "points": transit_pts, "max": TRANSIT_MAX},
+        "body": {"filled": seg(body_pts, BODY_MAX), "total": 10,
+                 "points": body_pts, "max": BODY_MAX},
+    }
+
+
 # --- scoring -------------------------------------------------------------
 def score_transits(moon_lon, sun_lon, natal_moon, natal_uranus, house, jd):
     """Part A — lunar transit activation. Returns (points, breakdown list, trigger,
@@ -315,12 +334,22 @@ def clean(text):
     return re.sub(r"\s+", " ", text).strip()
 
 
+# Absolute-avoidance phrasing the recommendation must never contain — calibration,
+# not avoidance programming. If claude emits any of these, we drop to the fallback.
+BANNED_ABSOLUTES = re.compile(
+    r"\b(delay every|always|never|skip all|postpone all|avoid \w+ today)\b", re.I)
+
+
+def has_absolutes(text):
+    return bool(BANNED_ABSOLUTES.search(text or ""))
+
+
 BAND_GUIDANCE = {
     "Stable Control": "system is regulated — green light to load up and produce hard.",
     "Mild Compression": "slight load building — proceed, just keep output structured.",
-    "Moderate Compression": "real compression — channel it into structured work, delay any confrontation.",
-    "Elevated Reactivity": "reactivity is up — hold the line, no big decisions or escalations today.",
-    "High Nervous Load": "system is overloaded — de-escalate hard, strip the day to essentials, no confrontation.",
+    "Moderate Compression": "real compression — route it into structured work; initiate confrontation selectively, respond only if necessary.",
+    "Elevated Reactivity": "reactivity is up — calibrate before big decisions; if a call must be made, make it deliberately rather than on impulse.",
+    "High Nervous Load": "system is overloaded — strip the day to essentials; weigh any escalation against the data before acting.",
 }
 
 
@@ -331,12 +360,19 @@ def build_recommendation(score, band, trigger, physiology, intensity):
         "Write a nervous-system regulation directive for a high-output, performance-based "
         "man. He PRODUCES; he does not process feelings.\n\n"
         "OUTPUT: exactly 1-2 short sentences. Start with an action verb (Load, Hold, "
-        "Channel, Delay, De-escalate, Strip...). Output ONLY the directive — nothing else.\n\n"
+        "Channel, Route, Calibrate, Strip...). Output ONLY the directive — nothing else.\n\n"
+        "TONE: ENGINEER, not therapist. He calibrates instinct against data; he does NOT "
+        "need protection from his own impulses. This is calibration, not avoidance programming.\n\n"
         "HARD RULES:\n"
         "- Do NOT restate the score, band, or numbers. Do NOT preface with 'Directive:' or similar.\n"
         "- No feelings-talk ('be gentle with yourself', 'honor your emotions', 'recharge emotionally').\n"
         "- No symbolic/astrological/outcome language ('the moon', 'energy', 'the universe', predictions).\n"
-        "- No hype, no soft phrasing. Behavioral instruction only — what to DO with the day.\n\n"
+        "- No hype, no soft phrasing. Behavioral instruction only — what to DO with the day.\n"
+        "- NO ABSOLUTE AVOIDANCE LANGUAGE. Never write 'delay every', 'always', 'never', "
+        "'skip all', 'postpone all', or 'avoid X today'. These program avoidance, not calibration.\n"
+        "- PREFER calibrated phrasing: 'respond only if necessary', 'initiate selectively', "
+        "'calibrate before deciding', 'if the call must be made'. Gate action on judgment, "
+        "not a blanket ban.\n\n"
         f"Internal context (do not echo): state is '{band}' — {guidance} "
         f"Trigger: {trigger}. HRV {physiology['hrv_pct_baseline']}% vs baseline, "
         f"RHR {rhr_d:+d} bpm, sleep {physiology['sleep_score']}, "
@@ -344,6 +380,9 @@ def build_recommendation(score, band, trigger, physiology, intensity):
     )
     try:
         rec = clean(call_claude(prompt))
+        if rec and has_absolutes(rec):
+            log("  claude recommendation used absolute language — dropping to calibrated fallback")
+            rec = ""
         # Guard against a runaway response — keep it tight (drop any echoed score).
         if rec and len(rec) <= 280:
             return rec
@@ -355,10 +394,10 @@ def build_recommendation(score, band, trigger, physiology, intensity):
     return {
         "Stable Control": "System's regulated. Load up and push output hard today.",
         "Mild Compression": "Keep the day structured and move work forward; no need to back off.",
-        "Moderate Compression": "Avoid escalation. Channel energy into structured output and delay any strategic confrontation.",
-        "Elevated Reactivity": "Hold the line. No big decisions or confrontations today — route the charge into routine execution.",
-        "High Nervous Load": "De-escalate and strip the day to essentials. No confrontation, no major decisions — protect output and reset tonight.",
-    }.get(band, "Keep the day structured and avoid escalation.")
+        "Moderate Compression": "Channel it into structured, pre-planned work — let the day's hardest task absorb the load. Initiate confrontation selectively; respond only if necessary.",
+        "Elevated Reactivity": "Route the charge into routine execution. Calibrate before any big decision; if the call must be made, make it deliberately.",
+        "High Nervous Load": "Strip the day to essentials and protect output. Weigh any escalation against the data before acting, and reset tonight.",
+    }.get(band, "Keep the day structured and calibrate before escalating.")
 
 
 # --- main ----------------------------------------------------------------
@@ -418,6 +457,7 @@ def compute(now=None):
         "physiology": physiology,
         "workout_intensity": intensity,
         "recommendation": recommendation,
+        "bars": compute_bars(a_pts, b_pts),
         "transit_detail": {
             "moon_longitude": round(moon_lon, 2),
             "moon_sign": sign_of(moon_lon),

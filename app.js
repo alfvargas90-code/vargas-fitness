@@ -477,15 +477,30 @@ async function renderLunarStress() {
   if (empty) empty.classList.add("hidden");
   content.classList.remove("hidden");
 
+  // Band is the headline; the numeric score stays in lunar_stress.json (other
+  // systems read it) but is no longer rendered on the card.
   const band = lsiBand(d.score);
-  const num = document.getElementById("lsi-score");
-  num.textContent = d.score;
-  num.className = `text-5xl font-semibold stat-num leading-none ${band.num}`;
-
   document.getElementById("lsi-band").textContent = d.band || band.name;
   document.getElementById("lsi-band-chip").className =
     `inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-sm font-medium ${band.chip}`;
   document.getElementById("lsi-band-dot").className = `w-2 h-2 rounded-full ${band.dot}`;
+
+  // Contribution bars — relative weight of transit vs body, precomputed in the
+  // JSON (filled/total). Monospace + unicode blocks so the segments line up.
+  const barsEl = document.getElementById("lsi-bars");
+  if (barsEl) {
+    const row = (label, b) => {
+      if (!b || b.filled == null) return "";
+      const filled = "█".repeat(Math.max(0, b.filled));
+      const empty = "░".repeat(Math.max(0, (b.total || 10) - b.filled));
+      return `<div class="flex items-center gap-2">` +
+        `<span class="w-16 shrink-0 font-sans text-xs uppercase tracking-wide text-muted">${label}</span>` +
+        `<span class="tracking-tight"><span class="${band.num}">${filled}</span><span class="text-line">${empty}</span></span>` +
+        `</div>`;
+    };
+    const b = d.bars || {};
+    barsEl.innerHTML = row("Transit", b.transit) + row("Body", b.body);
+  }
 
   // Trigger + transit texture (sign · phase · house).
   const td = d.transit_detail || {};

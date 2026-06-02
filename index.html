@@ -122,16 +122,15 @@
         First read computes on the next Polar sync.
       </div>
       <div id="lsi-content" class="hidden">
-        <!-- Score + band -->
-        <div class="flex items-center gap-4">
-          <div class="text-5xl font-semibold stat-num leading-none" id="lsi-score">—</div>
-          <div>
-            <span class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-sm font-medium" id="lsi-band-chip">
-              <span class="w-2 h-2 rounded-full" id="lsi-band-dot"></span>
-              <span id="lsi-band">—</span>
-            </span>
-          </div>
+        <!-- Band (headline — score lives in lunar_stress.json, not rendered) -->
+        <div>
+          <span class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-sm font-medium" id="lsi-band-chip">
+            <span class="w-2 h-2 rounded-full" id="lsi-band-dot"></span>
+            <span id="lsi-band">—</span>
+          </span>
         </div>
+        <!-- Contribution bars (transit vs body) — why the band reads where it does -->
+        <div class="mt-3 font-mono text-sm leading-snug" id="lsi-bars"></div>
         <!-- Trigger + transit detail -->
         <p class="text-sm text-slate-300 mt-3" id="lsi-trigger"></p>
         <!-- Physiology / workout rows -->

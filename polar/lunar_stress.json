@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-02T08:43:06-05:00",
+  "generated_at": "2026-06-02T09:08:43-05:00",
   "score": 50,
   "band": "Moderate Compression",
   "trigger": "Moon conjunct natal Moon",
@@ -9,13 +9,27 @@
     "sleep_score": 48
   },
   "workout_intensity": "rest",
-  "recommendation": "Channel it into structured, single-thread work today \u2014 clear the backlog you've been putting off. Delay any confrontation or hard conversation until tomorrow.",
+  "recommendation": "Channel today's compression into structured, pre-planned work where the output is concrete; initiate confrontation only where it advances something specific, and respond to incoming friction only if the call genuinely must be made.",
+  "bars": {
+    "transit": {
+      "filled": 8,
+      "total": 10,
+      "points": 45,
+      "max": 55
+    },
+    "body": {
+      "filled": 1,
+      "total": 10,
+      "points": 5,
+      "max": 40
+    }
+  },
   "transit_detail": {
-    "moon_longitude": 276.13,
+    "moon_longitude": 276.34,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 12,
-    "aspect_to_natal_moon": "conjunction (0.6\u00b0 separating)",
+    "aspect_to_natal_moon": "conjunction (0.8\u00b0 separating)",
     "is_full_moon": false
   },
   "scoring_detail": {
