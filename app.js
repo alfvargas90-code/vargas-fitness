@@ -365,7 +365,7 @@ function renderPolarSleep(sleep) {
   if (!total) { wrap.innerHTML = ""; return; }
   const pct = s => (s / total * 100).toFixed(1) + "%";
   wrap.innerHTML = `
-    <h3 class="text-sm font-medium text-muted mb-2">Sleep stages · ${labelMD(sleep.date)}</h3>
+    <h3 class="text-sm font-medium text-purple-300/80 mb-2">Sleep stages · ${labelMD(sleep.date)}</h3>
     <div class="stage-bar">
       <div style="width:${pct(deep)};background:#22d3ee" title="Deep ${secsToHM(deep)}"></div>
       <div style="width:${pct(light)};background:#60a5fa" title="Light ${secsToHM(light)}"></div>
