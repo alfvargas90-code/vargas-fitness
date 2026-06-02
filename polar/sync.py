@@ -205,11 +205,17 @@ def _headers(token):
 
 
 def _save_day(category, day, payload):
-    """Write polar/<category>/<day>.json. Skip if it already exists."""
+    """Write polar/<category>/<day>.json.
+
+    Past data is immutable, so skip if the file already exists — EXCEPT today's
+    daily_activity, which accumulates throughout the day and must be refreshed on
+    every sync. recharge/ and sleep/ are finalized overnight and stay locked.
+    """
     folder = os.path.join(HERE, category)
     os.makedirs(folder, exist_ok=True)
     path = os.path.join(folder, f"{day}.json")
-    if os.path.exists(path):
+    is_today_activity = category == "daily_activity" and day == date.today().isoformat()
+    if os.path.exists(path) and not is_today_activity:
         return False
     with open(path, "w") as fh:
         json.dump(payload, fh, indent=2)
