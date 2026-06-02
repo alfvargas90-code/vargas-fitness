@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-02T11:44:26-05:00",
+  "generated_at": "2026-06-02T12:14:43-05:00",
   "score": 20,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -9,7 +9,7 @@
     "sleep_score": 48
   },
   "workout_intensity": "rest",
-  "recommendation": "Hold the line at calibrated effort: load the bar before the inbox, and let protein lead the day's intake. Initiate outbound only where the call genuinely must be made.",
+  "recommendation": "Channel the charge into resistance work and hit your protein target early; initiate the hard external calls selectively, calibrating each against what actually needs to move today.",
   "bars": {
     "transit": {
       "filled": 3,
@@ -25,7 +25,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 277.63,
+    "moon_longitude": 277.88,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 12,
