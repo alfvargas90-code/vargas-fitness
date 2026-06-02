@@ -95,6 +95,18 @@ def goal_framing():
         return ""
 
 
+def is_rest_day_today():
+    """True if today is in polar/rest_days.json (Penny writes it from Alfie's chat).
+    Never raises; returns False if the file is missing or unparseable."""
+    from datetime import date as _date
+    try:
+        cfg = load_json(os.path.join(HERE, "rest_days.json"))
+        return _date.today().isoformat() in (cfg.get("rest_days") or [])
+    except Exception as e:
+        log(f"  rest_days parse failed (non-fatal): {e}")
+        return False
+
+
 # --- astronomy helpers ---------------------------------------------------
 def jd_now(now_utc):
     return swe.julday(now_utc.year, now_utc.month, now_utc.day,
@@ -377,9 +389,16 @@ BAND_GUIDANCE = {
 }
 
 
-def build_recommendation(score, band, trigger, physiology, intensity):
+def build_recommendation(score, band, trigger, physiology, intensity, rest_day=False):
     guidance = BAND_GUIDANCE.get(band, "")
     rhr_d = physiology["rhr_delta_bpm"]
+    rest_block = (
+        "REST DAY (overrides the training nudge): today is an explicit rest day the "
+        "user declared. Point the charge toward protein-loading and structured recovery "
+        "work (mobility, hydration, an early night) — NOT 'lift heavy' or hard output. "
+        "Still calibration, not avoidance: recover deliberately, don't collapse.\n\n"
+        if rest_day else ""
+    )
     prompt = (
         "Write a nervous-system regulation directive for a high-output, performance-based "
         "man. He PRODUCES; he does not process feelings.\n\n"
@@ -398,6 +417,7 @@ def build_recommendation(score, band, trigger, physiology, intensity):
         "'calibrate before deciding', 'if the call must be made'. Gate action on judgment, "
         "not a blanket ban.\n\n"
         f"{goal_framing()}"
+        f"{rest_block}"
         f"Internal context (do not echo): state is '{band}' — {guidance} "
         f"Trigger: {trigger}. HRV {physiology['hrv_pct_baseline']}% vs baseline, "
         f"RHR {rhr_d:+d} bpm, sleep {physiology['sleep_score']}, "
@@ -415,7 +435,11 @@ def build_recommendation(score, band, trigger, physiology, intensity):
             return rec[:280].rsplit(".", 1)[0] + "."
     except Exception as e:
         log(f"  claude recommendation failed (non-fatal): {e}")
-    # Deterministic fallback in the same register.
+    # Deterministic fallback in the same register. On a rest day, recovery-frame it
+    # regardless of band so the fallback never says "push output hard".
+    if rest_day:
+        return ("Rest day: load protein and run structured recovery — hydration, easy "
+                "mobility, an early night. Recover deliberately, don't collapse.")
     return {
         "Stable Control": "System's regulated. Load up and push output hard today.",
         "Mild Compression": "Keep the day structured and move work forward; no need to back off.",
@@ -457,6 +481,14 @@ def compute(now=None):
     hrv_base = rolling_mean(rec_dates, "recharge", "heart_rate_variability_avg")
     rhr_base = rolling_mean(rec_dates, "recharge", "heart_rate_avg")
     intensity, active_cal = workout_intensity_today()
+    rest_today = is_rest_day_today()
+    if rest_today and intensity != "rest":
+        # Explicit rest day: high active-calories are accumulated daily movement, not
+        # training load. Force 'rest' so it neither adds nervous-system load points nor
+        # reads as a workout in the directive.
+        log(f"  rest day declared — forcing workout_intensity rest (was {intensity}, "
+            f"active-cal {active_cal})")
+        intensity = "rest"
 
     b_pts, b_break, hrv_pct, rhr_delta = score_physiology(
         hrv, hrv_base, rhr, rhr_base, sleep_score, intensity)
@@ -472,7 +504,7 @@ def compute(now=None):
     }
 
     recommendation = build_recommendation(
-        score, band, trigger, physiology, intensity)
+        score, band, trigger, physiology, intensity, rest_day=rest_today)
 
     return {
         "generated_at": now.isoformat(timespec="seconds"),

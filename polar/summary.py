@@ -171,6 +171,34 @@ def goal_framing():
         return ""
 
 
+def is_rest_day(date_iso):
+    """True if `date_iso` (YYYY-MM-DD) is in polar/rest_days.json. Penny writes
+    that file when Alfie declares a rest day in chat. Never raises; returns False
+    if the file is missing or unparseable so the prompts degrade to normal."""
+    try:
+        cfg = load_json(os.path.join(HERE, "rest_days.json"))
+        return date_iso in (cfg.get("rest_days") or [])
+    except Exception as e:
+        log(f"rest_days parse failed (non-fatal): {e}")
+        return False
+
+
+def rest_day_framing(date_iso):
+    """Injection block for an explicit rest day. Empty string on a normal day, so
+    current (training-aware) behavior is unchanged unless the date is flagged."""
+    if not is_rest_day(date_iso):
+        return ""
+    return (
+        "=== REST DAY (overrides training framing) ===\n"
+        "Today is an explicit rest day declared by the user. Frame the day's prose "
+        "around recovery, protein, hydration, and sleep prep — NOT around training "
+        "intensity or pushing output. The Performance verdict should NOT be 'Push hard' "
+        "or 'Train normally' — instead use 'Rest day' / 'Recover' / 'Protein focus' "
+        "framing. If activity-calorie data looks 'high,' interpret that as accumulated "
+        "daily movement, not training.\n\n"
+    )
+
+
 def recharge_score(rec):   # Nightly Recharge status, 1-6
     return rec.get("ans_charge_status")
 
@@ -460,11 +488,16 @@ VERDICT_FLAVOR = {
 }
 
 
-def build_day_review_prose(stats, verdict):
+def build_day_review_prose(stats, verdict, date_iso=None):
     """Ask claude -p for a 2–3 sentence plain-English wrap-up of the day, same
     voice as the Today's Read prose. Mixes activity + nutrition, ends with a
-    forward-looking nudge for tomorrow. No jargon, no percentages, no biometrics."""
+    forward-looking nudge for tomorrow. No jargon, no percentages, no biometrics.
+    On an explicit rest day the wrap-up reframes around recovery, not output."""
     s = stats
+    rest = is_rest_day(date_iso) if date_iso else False
+    # On a rest day, don't narrate "a big day — high output" off accumulated movement.
+    flavor = ("a deliberate rest day — recovery, not output" if rest
+              else VERDICT_FLAVOR.get(verdict, "a normal day"))
     deficit = s["net_deficit"]
     eat_line = (f"ran a calorie deficit of about {deficit}" if deficit and deficit > 0
                 else (f"ate about {abs(deficit)} over what he burned" if deficit and deficit < 0
@@ -486,7 +519,8 @@ def build_day_review_prose(stats, verdict):
         "- End with ONE forward-looking nudge for tomorrow (e.g. \"Push protein hard "
         "tomorrow\" or \"Take it easier — you're due a lighter day\").\n\n"
         f"{goal_framing()}"
-        f"Today was {VERDICT_FLAVOR.get(verdict, 'a normal day')}. The facts:\n"
+        f"{rest_day_framing(date_iso) if date_iso else ''}"
+        f"Today was {flavor}. The facts:\n"
         f"- Took about {s['steps']:,} steps\n"
         f"- Was active for {s['active_time_display']}\n"
         f"- Burned about {s['calories_burned']:,} calories\n"
@@ -547,7 +581,7 @@ def generate_day_review(now):
         f"protein_gap={stats['protein_gap_g']}")
 
     try:
-        prose = build_day_review_prose(stats, verdict)
+        prose = build_day_review_prose(stats, verdict, today)
     except Exception as e:
         log(f"day-review prose failed (non-fatal): {e}")
         prose = ""
@@ -690,8 +724,12 @@ def main():
 
     framing = SLOT_FRAMING.get(slot, SLOT_FRAMING["morning"])
 
+    rest_today = is_rest_day(today_iso)
+
     # Performance verdict set is slot-aware: evening gets the wind-down call, every
-    # other slot gets the four daytime training verdicts.
+    # other slot gets the four daytime training verdicts. An explicit rest day swaps
+    # the daytime training verdicts for recovery framing (evening's wind-down already
+    # reads as recovery, so it's left alone).
     if slot == "evening":
         perf_instr = (
             "Performance: start with EXACTLY this verdict — Wind down — then one short sentence of "
@@ -700,6 +738,14 @@ def main():
             "recovery at this slot. "
             "Example: \"Wind down. The day's logged — sleep prep is the move now, and tomorrow gives "
             "you a fresh platform to build on.\"\n"
+        )
+    elif rest_today:
+        perf_instr = (
+            "Performance: start with EXACTLY one of these verdicts — Rest day / Recover / Protein focus "
+            "— then one short sentence framing today as deliberate recovery (protein, hydration, sleep, "
+            "easy mobility), NOT training output. Do NOT use Push hard / Train normally / Moderate effort. "
+            "Example: \"Rest day. You called it, so today's about protein, water, and an early night — "
+            "let the work you've banked settle in.\"\n"
         )
     else:
         perf_instr = (
@@ -755,6 +801,7 @@ def main():
         f"- Body composition: {body}\n"
         f"{today_block}"
         f"\n{goal_framing()}"
+        f"{rest_day_framing(today_iso)}"
         "=== NATAL CONTEXT (static, body-area awareness only) ===\n"
         f"{NATAL_ARCHITECTURE}\n"
         "\n=== TODAY'S RELEVANT TRANSITS (context only) ===\n"

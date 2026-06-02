@@ -1,0 +1,5 @@
+{
+  "rest_days": [],
+  "updated_at": "2026-06-02T09:51:34-05:00",
+  "notes": "Penny manages this file based on Alfie telling her 'rest day' in chat. Day-of or retroactive both fine. Simple flat list of ISO dates (YYYY-MM-DD). All three AI prompts (summary regular + day-review, lunar_stress) read it; a date here flips that day's prose and LSI directive to recovery framing. Edit via polar/mark_rest_day.py."
+}
