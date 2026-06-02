@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-02T18:17:21-05:00",
+  "generated_at": "2026-06-02T18:47:34-05:00",
   "score": 18,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -9,7 +9,7 @@
     "sleep_score": 48
   },
   "workout_intensity": "moderate",
-  "recommendation": "Channel the charge into resistance work today\u2014load the hard sets while the system can absorb them, and anchor the day's intake around protein.",
+  "recommendation": "Load the charge into resistance work today\u2014heavy compound sets, protein anchored at every meal. Initiate the hard conversations and decisions selectively, but if the call is clean, make it now rather than queuing it.",
   "bars": {
     "transit": {
       "filled": 2,
@@ -25,7 +25,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 280.87,
+    "moon_longitude": 281.12,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
@@ -46,7 +46,7 @@
       "hrv_7d": 61.9,
       "rhr_7d": 54.7
     },
-    "active_calories": 743,
+    "active_calories": 776,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
