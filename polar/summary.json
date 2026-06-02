@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-02T09:05:03-05:00",
+  "generated_at": "2026-06-02T09:40:31-05:00",
   "slot": "morning",
-  "summary": "Recovery: Good\n\nReading: Nothing's flagging right now \u2014 your knees, lower body, shoulders, neck, all your usual watch areas feel quiet and ready. You're built to come back through steady, consistent rest rather than big dramatic swings, and last night did exactly that \u2014 you settled in deep and your body feels calm and topped up this morning.\n\nPerformance: Train normally. You came in a little above your usual baseline across the board, so the day's a green light \u2014 settle into your normal work and lean harder if it's flowing, just keep your form clean. With nothing logged yet and the tank full, you've got plenty to spend today.\n\nTransit: none",
+  "summary": "Recovery: Good\n\nReading: Nothing's flagging right now \u2014 your knees, joints, shoulders, neck, none of your usual watch spots are asking for attention this morning. You're someone who recovers by stacking steady, unspectacular nights rather than swinging high and crashing, and today fits that mold cleanly \u2014 you came out of sleep settled and ready. Day's wide open in front of you.\n\nPerformance: Push hard. You're sitting above your normal line this morning, so it's a green light to load up \u2014 keep your protein climbing alongside it, because going hard on an empty tank is how you burn muscle instead of building it.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -9,11 +9,11 @@
     },
     {
       "label": "Reading",
-      "text": "Nothing's flagging right now \u2014 your knees, lower body, shoulders, neck, all your usual watch areas feel quiet and ready. You're built to come back through steady, consistent rest rather than big dramatic swings, and last night did exactly that \u2014 you settled in deep and your body feels calm and topped up this morning."
+      "text": "Nothing's flagging right now \u2014 your knees, joints, shoulders, neck, none of your usual watch spots are asking for attention this morning. You're someone who recovers by stacking steady, unspectacular nights rather than swinging high and crashing, and today fits that mold cleanly \u2014 you came out of sleep settled and ready. Day's wide open in front of you."
     },
     {
       "label": "Performance",
-      "text": "Train normally. You came in a little above your usual baseline across the board, so the day's a green light \u2014 settle into your normal work and lean harder if it's flowing, just keep your form clean. With nothing logged yet and the tank full, you've got plenty to spend today."
+      "text": "Push hard. You're sitting above your normal line this morning, so it's a green light to load up \u2014 keep your protein climbing alongside it, because going hard on an empty tank is how you burn muscle instead of building it."
     },
     {
       "label": "Transit",
@@ -22,8 +22,8 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "Nothing's flagging right now \u2014 your knees, lower body, shoulders, neck, all your usual watch areas feel quiet and ready. You're built to come back through steady, consistent rest rather than big dramatic swings, and last night did exactly that \u2014 you settled in deep and your body feels calm and topped up this morning.",
-    "performance": "Train normally. You came in a little above your usual baseline across the board, so the day's a green light \u2014 settle into your normal work and lean harder if it's flowing, just keep your form clean. With nothing logged yet and the tank full, you've got plenty to spend today.",
+    "reading": "Nothing's flagging right now \u2014 your knees, joints, shoulders, neck, none of your usual watch spots are asking for attention this morning. You're someone who recovers by stacking steady, unspectacular nights rather than swinging high and crashing, and today fits that mold cleanly \u2014 you came out of sleep settled and ready. Day's wide open in front of you.",
+    "performance": "Push hard. You're sitting above your normal line this morning, so it's a green light to load up \u2014 keep your protein climbing alongside it, because going hard on an empty tank is how you burn muscle instead of building it.",
     "transit": null
   },
   "transits": [],
