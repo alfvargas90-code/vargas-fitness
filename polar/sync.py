@@ -42,6 +42,7 @@ GIT_PUSH_PATHS = (
     "manifest.json", "apple-touch-icon.png", "icon-192.png", "icon-512.png",
     "polar/sync.py", "polar/requirements.txt",
     "polar/manifest.json", "polar/daily_activity", "polar/sleep", "polar/recharge",
+    "polar/lunar_stress.py", "polar/lunar_stress.json", "polar/irritability.json",
 )
 
 # --- Polar endpoints -----------------------------------------------------
@@ -330,6 +331,28 @@ def git_push():
         log(f"  git: error (non-fatal) — {str(e)[:160]}")
 
 
+# --- Lunar Stress Index refresh ------------------------------------------
+def refresh_lunar_stress():
+    """Recompute polar/lunar_stress.json off the current Moon position + latest
+    Polar physiology. Best-effort: any failure (missing pyswisseph, claude -p
+    hiccup) logs a warning and never blocks the sync or its git push. Runs under
+    the same venv python, which has swisseph installed."""
+    script = os.path.join(HERE, "lunar_stress.py")
+    if not os.path.exists(script):
+        return
+    try:
+        out = subprocess.run(
+            [sys.executable, script],
+            capture_output=True, text=True, timeout=200, cwd=REPO_ROOT,
+        )
+        if out.returncode == 0:
+            log("  lunar_stress: " + (out.stdout.strip().splitlines() or ["refreshed"])[-1])
+        else:
+            log(f"  lunar_stress: failed (non-fatal) — {(out.stderr or out.stdout).strip()[:160]}")
+    except Exception as e:
+        log(f"  lunar_stress: error (non-fatal) — {str(e)[:160]}")
+
+
 # --- main ----------------------------------------------------------------
 def main():
     env = load_env()
@@ -367,6 +390,7 @@ def main():
 
     rebuild_manifest()
     log(f"Done. {new_total} new day-files written.")
+    refresh_lunar_stress()  # piggy-back the Lunar Stress Index on this 30-min cadence
     git_push()  # best-effort deploy to GitHub Pages; never fatal
     sys.exit(0)
 

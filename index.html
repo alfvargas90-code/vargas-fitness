@@ -112,6 +112,43 @@
       <p class="text-xs text-muted mt-3" id="read-basis"></p>
     </section>
 
+    <!-- Lunar Stress Index — nervous-system compression model (polar/lunar_stress.py) -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="lunar-stress">
+      <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+        <h2 class="font-semibold">Lunar Stress Index <span class="text-xs text-muted font-normal">· Nervous-system compression</span></h2>
+        <span class="text-xs text-muted" id="lsi-ts"></span>
+      </div>
+      <div id="lsi-empty" class="text-sm text-muted">
+        First read computes on the next Polar sync.
+      </div>
+      <div id="lsi-content" class="hidden">
+        <!-- Score + band -->
+        <div class="flex items-center gap-4">
+          <div class="text-5xl font-semibold stat-num leading-none" id="lsi-score">—</div>
+          <div>
+            <span class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-sm font-medium" id="lsi-band-chip">
+              <span class="w-2 h-2 rounded-full" id="lsi-band-dot"></span>
+              <span id="lsi-band">—</span>
+            </span>
+          </div>
+        </div>
+        <!-- Trigger + transit detail -->
+        <p class="text-sm text-slate-300 mt-3" id="lsi-trigger"></p>
+        <!-- Physiology / workout rows -->
+        <div class="mt-4 space-y-1 text-sm">
+          <div class="flex gap-2"><span class="text-muted w-24 shrink-0">Physiology</span><span id="lsi-physiology" class="text-slate-200"></span></div>
+          <div class="flex gap-2"><span class="text-muted w-24 shrink-0">Workout</span><span id="lsi-workout" class="text-slate-200"></span></div>
+          <div class="flex gap-2 items-center"><span class="text-muted w-24 shrink-0">Irritability</span>
+            <span id="lsi-irritability-row" class="flex items-center gap-1.5"></span>
+          </div>
+        </div>
+        <p class="text-xs text-muted mt-1 ml-[6.5rem]" id="lsi-irritability-hint"></p>
+        <!-- Recommendation -->
+        <p class="text-base leading-relaxed text-slate-100 mt-4" id="lsi-recommendation" style="font-size:15px;"></p>
+        <p class="text-xs text-muted mt-3" id="lsi-basis"></p>
+      </div>
+    </section>
+
     <!-- Nutrition — today's macros from Calories Club (nutrition/sync.py) -->
     <section class="bg-card rounded-xl p-5 border border-line mb-8" id="nutrition-panel">
       <div class="flex items-center justify-between mb-4">

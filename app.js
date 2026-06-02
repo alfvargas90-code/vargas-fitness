@@ -450,6 +450,125 @@ async function renderTodaysRead() {
   }
 }
 
+// ---------- Lunar Stress Index (polar/lunar_stress.py) ----------
+// Band -> color classes (score number text, chip bg/text, dot bg). Mirrors the
+// spec bands: emerald / cyan / amber / orange / red.
+const LSI_BANDS = [
+  { max: 25,  name: "Stable Control",     num: "text-good",    chip: "bg-good/15 text-good",       dot: "bg-good" },
+  { max: 45,  name: "Mild Compression",   num: "text-accent",  chip: "bg-accent/15 text-accent",   dot: "bg-accent" },
+  { max: 65,  name: "Moderate Compression", num: "text-warn",  chip: "bg-warn/15 text-warn",       dot: "bg-warn" },
+  { max: 85,  name: "Elevated Reactivity", num: "text-orange-400", chip: "bg-orange-400/15 text-orange-400", dot: "bg-orange-400" },
+  { max: 100, name: "High Nervous Load",  num: "text-bad",     chip: "bg-bad/15 text-bad",         dot: "bg-bad" },
+];
+const lsiBand = score => LSI_BANDS.find(b => score <= b.max) || LSI_BANDS[LSI_BANDS.length - 1];
+const KEY_IRRITABILITY = "fd.irritability.v1";
+
+async function renderLunarStress() {
+  const empty = document.getElementById("lsi-empty");
+  const content = document.getElementById("lsi-content");
+  if (!content) return;
+  let d;
+  try {
+    d = await fetchJSON("polar/lunar_stress.json");
+  } catch (e) {
+    if (empty) empty.classList.remove("hidden");
+    content.classList.add("hidden");
+    return;
+  }
+  if (empty) empty.classList.add("hidden");
+  content.classList.remove("hidden");
+
+  const band = lsiBand(d.score);
+  const num = document.getElementById("lsi-score");
+  num.textContent = d.score;
+  num.className = `text-5xl font-semibold stat-num leading-none ${band.num}`;
+
+  document.getElementById("lsi-band").textContent = d.band || band.name;
+  document.getElementById("lsi-band-chip").className =
+    `inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-sm font-medium ${band.chip}`;
+  document.getElementById("lsi-band-dot").className = `w-2 h-2 rounded-full ${band.dot}`;
+
+  // Trigger + transit texture (sign · phase · house).
+  const td = d.transit_detail || {};
+  const bits = [];
+  // Skip the "<Sign> Moon" texture when the trigger already names that sign.
+  if (td.moon_sign && !(d.trigger || "").includes(td.moon_sign)) bits.push(`${td.moon_sign} Moon`);
+  if (td.moon_phase) bits.push(td.moon_phase);
+  if (td.moon_house_natal) bits.push(`natal ${ordinal(td.moon_house_natal)} house`);
+  document.getElementById("lsi-trigger").innerHTML =
+    `<span class="text-slate-100 font-medium">${d.trigger || "—"}</span>` +
+    (bits.length ? ` · <span class="text-muted">${bits.join(" · ")}</span>` : "");
+
+  // Physiology line.
+  const p = d.physiology || {};
+  const phys = [];
+  if (p.hrv_pct_baseline != null) phys.push(`HRV ${p.hrv_pct_baseline > 0 ? "+" : ""}${p.hrv_pct_baseline}%`);
+  if (p.rhr_delta_bpm != null) phys.push(`RHR ${p.rhr_delta_bpm > 0 ? "+" : ""}${p.rhr_delta_bpm} bpm`);
+  if (p.sleep_score != null) phys.push(`Sleep ${p.sleep_score}`);
+  document.getElementById("lsi-physiology").textContent = phys.length ? phys.join("  ·  ") : "—";
+
+  // Workout line.
+  const wk = d.workout_intensity === "high" ? "High intensity" : "Rest / low";
+  document.getElementById("lsi-workout").textContent = wk;
+
+  // Irritability tappable row (1-5). Static site can't write the file, so a tap
+  // updates localStorage + shows a copy line for Penny; the score uses the value
+  // in lunar_stress.json (written by Penny) on the next sync.
+  renderIrritabilityRow(d.irritability);
+
+  // Recommendation.
+  document.getElementById("lsi-recommendation").textContent = d.recommendation || "";
+
+  // Timestamp + stale warning (lunar position drifts; flag >2h old).
+  const ts = document.getElementById("lsi-ts");
+  const basis = document.getElementById("lsi-basis");
+  if (d.generated_at) {
+    const t = new Date(d.generated_at);
+    const ageH = (Date.now() - t.getTime()) / 3600000;
+    if (ts) ts.textContent = "updated " + t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    if (basis) {
+      basis.innerHTML = ageH > 2
+        ? `<span class="text-warn font-medium">⚠️ ${Math.round(ageH)}h old — Moon position may have drifted; refreshes on next Polar sync.</span>`
+        : `<span class="text-muted">Behavioral calibration, not prediction · transit + Polar physiology + irritability.</span>`;
+    }
+  }
+}
+
+function ordinal(n) {
+  const s = ["th", "st", "nd", "rd"], v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+function renderIrritabilityRow(currentVal) {
+  const row = document.getElementById("lsi-irritability-row");
+  const hint = document.getElementById("lsi-irritability-hint");
+  if (!row) return;
+  // Local optimistic value wins for highlighting if newer than the file's value.
+  let stored = null;
+  try { stored = JSON.parse(localStorage.getItem(KEY_IRRITABILITY) || "null"); } catch {}
+  const shown = (stored && stored.value) || currentVal || 1;
+  row.innerHTML = "";
+  for (let i = 1; i <= 5; i++) {
+    const b = document.createElement("button");
+    b.textContent = i;
+    b.className = "w-7 h-7 rounded-full text-xs font-medium border transition " +
+      (i === shown
+        ? "bg-accent text-ink border-accent"
+        : "bg-transparent text-muted border-line hover:border-accent");
+    b.style.minHeight = "28px";
+    b.onclick = () => {
+      const stamp = new Date();
+      save(KEY_IRRITABILITY, { value: i, ts: stamp.toISOString() });
+      renderIrritabilityRow(i);
+      const hhmm = stamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
+      hint.textContent = `Saved locally. To apply it to the score, tell Penny: “irritability ${i} at ${hhmm}”.`;
+    };
+    row.appendChild(b);
+  }
+  if (hint && !hint.textContent)
+    hint.textContent = "Tap your reactivity 1–5. Penny writes it to the score on your next message.";
+}
+
 // ---------- Nutrition (Calories Club macros via nutrition/sync.py) ----------
 async function renderNutrition() {
   const empty = document.getElementById("nutrition-empty");
@@ -774,6 +893,7 @@ async function renderActivity() {
 
 function renderAll() {
   renderTodaysRead(); // async, AI health summary
+  renderLunarStress(); // async, Lunar Stress Index (polar/lunar_stress.py)
   renderNutrition(); // async, today's macros from Calories Club
   renderHeader();
   renderProfileStrip();

@@ -2,3 +2,6 @@
 # OAuth callback uses the stdlib http.server, so no Flask is needed.
 requests==2.32.5
 python-dotenv==1.2.1
+# Lunar Stress Index ephemeris (lunar_stress.py). On this x86_64 python.org venv,
+# build with: TMPDIR=<big-volume> ARCHFLAGS="-arch x86_64" pip install --no-cache-dir pyswisseph
+pyswisseph==2.10.3.2
