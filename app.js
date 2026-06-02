@@ -24,8 +24,8 @@ const latestScale = () => [...scale].sort(byDate).at(-1);
 
 // ---------- Today's load bands (SINGLE SOURCE OF TRUTH) ----------
 // Interprets today's accumulated Polar active-calories into one load band. The
-// Recovery tile's "Spent so far" line AND the Activity card's load chip BOTH call
-// loadBandFor() — change a threshold here and every section follows, so they can
+// Recovery tile's Reserve bar and the Activity card's load chip share the same
+// 800-cal Heavy threshold — change it here and every section follows, so they can
 // never contradict. The Python side (polar/lunar_stress.py LOAD_BANDS,
 // polar/summary.py) mirrors these exact bands for the LSI + AI prompts.
 const LOAD_BANDS = [
@@ -196,6 +196,42 @@ function recoveryTagline(v) {
        :           "Prioritize rest today.";
 }
 
+// ---------- Reserve bar (depletes through the day with REAL activity) ----------
+// The morning recovery number is the baseline (last night's overnight charge).
+// The Reserve bar shows how much of that charge today's accumulated active-calories
+// have spent — grounded in actual Polar data, NOT a fake time-decay. 800 active cal
+// fully depletes it, tying to the LOAD_BANDS thresholds (Heavy = 800+ = empty).
+//   0 cal → 100% · 400 cal → 50% · 800+ cal → 0% (capped)
+const RESERVE_DEPLETION_CAL = 800;
+// Color shifts as the reserve drains (independent of the recovery-score chip color).
+function reserveColor(pct) {
+  return pct >= 80 ? "#34d399"   // emerald — full
+       : pct >= 60 ? "#22d3ee"   // cyan
+       : pct >= 40 ? "#fbbf24"   // amber
+       :             "#f87171";  // red — spent
+}
+// Build the 10-segment monospace bar HTML (mirrors the LSI contribution bars).
+// opts: { restDay, stale } toggle the locked / fallback states.
+function renderReserveBar(activeCal, opts = {}) {
+  const SEG = 10;
+  if (opts.restDay) {
+    const full = "█".repeat(SEG);
+    return `Reserve: <span class="tracking-tight" style="color:#34d399">[${full}]</span> Locked · Rest`;
+  }
+  if (opts.stale) {
+    return `Reserve: <span class="text-muted">— (no fresh activity)</span>`;
+  }
+  const c = (activeCal == null || isNaN(activeCal)) ? 0 : Number(activeCal);
+  const pct = Math.max(0, Math.round(100 - (c / RESERVE_DEPLETION_CAL) * 100));
+  const filledSeg = Math.round(pct / 10);
+  const filled = "█".repeat(Math.max(0, filledSeg));
+  const empty = "░".repeat(Math.max(0, SEG - filledSeg));
+  const col = reserveColor(pct);
+  return `Reserve: <span class="tracking-tight">[` +
+         `<span style="color:${col}">${filled}</span><span class="text-line">${empty}</span>` +
+         `]</span> ${pct}%`;
+}
+
 async function renderEnergy() {
   const empty = document.getElementById("energy-empty");
   const content = document.getElementById("energy-content");
@@ -236,22 +272,31 @@ async function renderEnergy() {
     document.getElementById("energy-tagline").textContent = recoveryTagline(start);
     document.getElementById("energy-sub").innerHTML = freshnessHTML(latestDate, "wear the watch");
 
-    // "Spent so far" — how much of the morning reserve today's movement has used.
-    // Reads the SAME daily_activity file (and the SAME loadBandFor helper) as the
-    // Activity card, so the band shown here can never contradict it.
-    const spentEl = document.getElementById("energy-spent");
-    if (spentEl) {
-      let activeCal = 0;
+    // Reserve bar — how much of the morning charge today's movement has spent.
+    // Reads the SAME daily_activity file as the Activity card; depletion is keyed
+    // to the SAME 800-cal Heavy threshold (LOAD_BANDS), so it can never contradict.
+    const reserveEl = document.getElementById("energy-reserve");
+    if (reserveEl) {
+      let activeCal = 0, activityDate = null;
       try {
         const am = await fetchJSON("polar/manifest.json");
         const adates = ((am.categories || {}).daily_activity || []).slice().sort();
         if (adates.length) {
-          const a = await fetchJSON(`polar/daily_activity/${adates.at(-1)}.json`).catch(() => null);
+          activityDate = adates.at(-1);
+          const a = await fetchJSON(`polar/daily_activity/${activityDate}.json`).catch(() => null);
           if (a && a["active-calories"] != null) activeCal = Number(a["active-calories"]);
         }
-      } catch { /* no activity synced yet → band "—" */ }
-      const band = loadBandFor(activeCal);
-      spentEl.innerHTML = `Spent so far: ${loadBandChipHTML(band)}`;
+      } catch { /* no activity synced yet → full reserve */ }
+      // Rest day flagged → locked, no depletion (Penny manages polar/rest_days.json).
+      let restDay = false;
+      try {
+        const rd = await fetchJSON("polar/rest_days.json");
+        restDay = activityDate ? (rd?.rest_days || []).includes(activityDate) : false;
+      } catch { /* no rest-day file → not a rest day */ }
+      // Stale activity (>1 day old) → can't trust depletion; show fallback.
+      const actAge = daysSinceDate(activityDate);
+      const stale = activityDate != null && actAge != null && actAge > 1;
+      reserveEl.innerHTML = renderReserveBar(activeCal, { restDay, stale });
     }
 
     empty.classList.add("hidden");
@@ -563,7 +608,7 @@ async function renderLunarStress() {
 
   // Workout row removed from the LSI card: it read as a recommendation but is
   // actually a load measurement, contradicting the Today's Read verdict. The
-  // Recovery tile's "Spent so far" line owns today's-load display. The
+  // Recovery tile's Reserve bar owns today's-load display. The
   // workout_intensity field stays in lunar_stress.json — the scoring engine
   // still uses it for the +0/+3/+10 modifier.
 
