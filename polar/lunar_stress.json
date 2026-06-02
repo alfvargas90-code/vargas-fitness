@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-02T09:08:43-05:00",
+  "generated_at": "2026-06-02T09:13:17-05:00",
   "score": 50,
   "band": "Moderate Compression",
   "trigger": "Moon conjunct natal Moon",
@@ -9,7 +9,7 @@
     "sleep_score": 48
   },
   "workout_intensity": "rest",
-  "recommendation": "Channel today's compression into structured, pre-planned work where the output is concrete; initiate confrontation only where it advances something specific, and respond to incoming friction only if the call genuinely must be made.",
+  "recommendation": "Channel today's compression into structured, pre-defined work where the load has somewhere to go; initiate confrontation selectively and respond to incoming demands only if the situation genuinely requires it.",
   "bars": {
     "transit": {
       "filled": 8,
@@ -25,7 +25,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 276.34,
+    "moon_longitude": 276.38,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 12,
