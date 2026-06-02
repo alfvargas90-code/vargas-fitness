@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-02T04:32:16-05:00",
+  "generated_at": "2026-06-02T05:02:30-05:00",
   "score": 15,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -10,9 +10,9 @@
   },
   "workout_intensity": "rest",
   "irritability": 1,
-  "recommendation": "Hold the line you're already holding and stack the day with your hardest, highest-stakes work. Take the heaviest item first and drive it to done before anything smaller touches your desk.",
+  "recommendation": "System's regulated. Load up and push output hard today.",
   "transit_detail": {
-    "moon_longitude": 274.06,
+    "moon_longitude": 274.31,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 12,
@@ -34,7 +34,7 @@
       "hrv_7d": 64.4,
       "rhr_7d": 55.1
     },
-    "active_calories": 9,
+    "active_calories": 12,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
