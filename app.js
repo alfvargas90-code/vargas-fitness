@@ -183,132 +183,123 @@ async function renderPolar() {
   }
 }
 
-// ---------- Today's recovery (overnight, static) ----------
-// Loop Gen 2 has no continuous daytime HR via AccessLink — so there's no honest
-// way to model intraday decay. We compute one starting recovery score from last
-// night's metrics and show it, unchanged, all day.
-function energyColor(v) {
+// ---------- Glance rings (Whoop-style — Sleep / Recovery / Strain) ----------
+// Three SVG rings at the top: last night's sleep score, the overnight recovery
+// score (lifted from the old Recovery tile), and today's strain (the inverse of
+// the old Reserve bar — % of the 800-cal Heavy threshold spent). Each ring taps
+// through to the detail card that owns its context.
+
+// Strain fills against the same 800-cal Heavy threshold the LOAD_BANDS use, so
+// the Strain ring and the Activity load chip can never contradict.
+const RESERVE_DEPLETION_CAL = 800;
+
+// State-color bands per ring. emerald / cyan / amber / red.
+function sleepColor(v) {
+  return v >= 90 ? "#34d399"   // emerald — elite
+       : v >= 70 ? "#22d3ee"   // cyan — good
+       : v >= 50 ? "#fbbf24"   // amber — fair
+       :           "#f87171";  // red — poor
+}
+function energyColor(v) {              // Recovery bands (unchanged from the old tile)
   return v >= 80 ? "#34d399"   // green — strong
        : v >= 60 ? "#22d3ee"   // cyan — decent
        : v >= 40 ? "#fbbf24"   // amber — light
        :           "#f87171";  // red — rest
 }
-
-function recoveryTagline(v) {
-  return v >= 80 ? "Strong — bounced back well."
-       : v >= 60 ? "Decent recovery."
-       : v >= 40 ? "Light recovery — take it easier."
-       :           "Prioritize rest today.";
+function strainColor(pct) {            // fills opposite of Reserve — more load → hotter
+  return pct < 20 ? "#34d399"   // emerald — low load
+       : pct < 50 ? "#22d3ee"   // cyan
+       : pct < 80 ? "#fbbf24"   // amber
+       :            "#f87171";  // red — heavy load
 }
 
-// ---------- Reserve bar (depletes through the day with REAL activity) ----------
-// The morning recovery number is the baseline (last night's overnight charge).
-// The Reserve bar shows how much of that charge today's accumulated active-calories
-// have spent — grounded in actual Polar data, NOT a fake time-decay. 800 active cal
-// fully depletes it, tying to the LOAD_BANDS thresholds (Heavy = 800+ = empty).
-//   0 cal → 100% · 400 cal → 50% · 800+ cal → 0% (capped)
-const RESERVE_DEPLETION_CAL = 800;
-// Color shifts as the reserve drains (independent of the recovery-score chip color).
-function reserveColor(pct) {
-  return pct >= 80 ? "#34d399"   // emerald — full
-       : pct >= 60 ? "#22d3ee"   // cyan
-       : pct >= 40 ? "#fbbf24"   // amber
-       :             "#f87171";  // red — spent
-}
-// Build the 10-segment monospace bar HTML (mirrors the LSI contribution bars).
-// opts: { restDay, stale } toggle the locked / fallback states.
-function renderReserveBar(activeCal, opts = {}) {
-  const SEG = 10;
-  if (opts.restDay) {
-    const full = "█".repeat(SEG);
-    return `Reserve: <span class="tracking-tight" style="color:#34d399">[${full}]</span> Locked · Rest`;
-  }
-  if (opts.stale) {
-    return `Reserve: <span class="text-muted">— (no fresh activity)</span>`;
-  }
-  const c = (activeCal == null || isNaN(activeCal)) ? 0 : Number(activeCal);
-  const pct = Math.max(0, Math.round(100 - (c / RESERVE_DEPLETION_CAL) * 100));
-  const filledSeg = Math.round(pct / 10);
-  const filled = "█".repeat(Math.max(0, filledSeg));
-  const empty = "░".repeat(Math.max(0, SEG - filledSeg));
-  const col = reserveColor(pct);
-  return `Reserve: <span class="tracking-tight">[` +
-         `<span style="color:${col}">${filled}</span><span class="text-line">${empty}</span>` +
-         `]</span> ${pct}%`;
+// Overnight recovery score — combines recharge + sleep + HRV vs an adaptive HRV
+// baseline. Lifted verbatim from the deleted renderRecoveryTile so the Recovery
+// ring stays data-honest. Each part falls back if its metric is missing.
+function computeRecoveryScore(rec, sleep, hrvBaseline) {
+  const rechargePart = rec?.ans_charge_status != null ? (rec.ans_charge_status / 6) * 50 : 25;
+  const sleepPart    = sleep?.sleep_score != null ? (sleep.sleep_score / 100) * 30 : 15;
+  const hrvPart      = (rec?.heart_rate_variability_avg != null && hrvBaseline)
+    ? Math.min(rec.heart_rate_variability_avg / hrvBaseline, 1) * 20 : 10;
+  return Math.round(Math.min(rechargePart + sleepPart + hrvPart, 100));
 }
 
-async function renderEnergy() {
-  const empty = document.getElementById("energy-empty");
-  const content = document.getElementById("energy-content");
-  if (!empty || !content) return;
-  const showEmpty = () => { empty.classList.remove("hidden"); content.classList.add("hidden"); };
+// Build one ring SVG. pct fills clockwise from 12 o'clock; `text` is the center
+// label; `color` is the fill stroke. Track is near-black; center text neutral-200.
+function ringSVG(pct, text, color) {
+  const r = 42, C = 2 * Math.PI * r;
+  const p = Math.max(0, Math.min(100, pct || 0));
+  const filled = (p / 100) * C;
+  return `<svg viewBox="0 0 100 100" width="100%" height="100%" class="block">
+    <circle cx="50" cy="50" r="${r}" fill="none" stroke="rgb(28,28,28)" stroke-width="9"/>
+    <circle cx="50" cy="50" r="${r}" fill="none" stroke="${color}" stroke-width="9"
+            stroke-linecap="round" stroke-dasharray="${filled.toFixed(2)} ${C.toFixed(2)}"
+            transform="rotate(-90 50 50)"/>
+    <text x="50" y="50" text-anchor="middle" dominant-baseline="central"
+          fill="#e5e5e5" font-size="26" font-weight="600"
+          font-family="-apple-system, system-ui, sans-serif" class="stat-num">${text}</text>
+  </svg>`;
+}
+
+async function renderRings() {
+  const sleepEl = document.getElementById("ring-sleep-svg");
+  const recEl   = document.getElementById("ring-recovery-svg");
+  const strainEl = document.getElementById("ring-strain-svg");
+  if (!sleepEl || !recEl || !strainEl) return;
+
+  // Default empty rings (0%, "—") so something renders even on file:// / no sync.
+  sleepEl.innerHTML  = ringSVG(0, "—", "rgb(28,28,28)");
+  recEl.innerHTML    = ringSVG(0, "—", "rgb(28,28,28)");
+  strainEl.innerHTML = ringSVG(0, "—", "rgb(28,28,28)");
+
   try {
-    const manifest = await fetchJSON("polar/manifest.json");
-    const cats = manifest.categories || {};
-    const recDates = (cats.recharge || []).slice().sort();
+    const cats = (await fetchJSON("polar/manifest.json")).categories || {};
+    const recDates   = (cats.recharge || []).slice().sort();
     const sleepDates = (cats.sleep || []).slice().sort();
-    const latestDate = [recDates.at(-1), sleepDates.at(-1)].filter(Boolean).sort().at(-1);
-    // Stale (>1 day old) or no data → empty state.
-    const age = daysSinceDate(latestDate);
-    if (latestDate == null || age == null || age > 1) return showEmpty();
+    const actDates   = (cats.daily_activity || []).slice().sort();
 
-    const rec = await fetchJSON(`polar/recharge/${recDates.at(-1)}.json`).catch(() => null);
-    const sleep = await fetchJSON(`polar/sleep/${sleepDates.at(-1)}.json`).catch(() => null);
-
-    // HRV baseline = mean of available overnight HRV readings (adaptive, honest).
-    const hrvs = (await Promise.all(recDates.map(d => fetchJSON(`polar/recharge/${d}.json`).catch(() => null))))
-      .map(r => r?.heart_rate_variability_avg).filter(v => v != null);
-    const hrvBaseline = hrvs.length ? hrvs.reduce((a, b) => a + b, 0) / hrvs.length : null;
-
-    // Starting energy at wake from last night's recovery (each piece falls back if missing).
-    const rechargePart = rec?.ans_charge_status != null ? (rec.ans_charge_status / 6) * 50 : 25;
-    const sleepPart    = sleep?.sleep_score != null ? (sleep.sleep_score / 100) * 30 : 15;
-    const hrvPart      = (rec?.heart_rate_variability_avg != null && hrvBaseline)
-      ? Math.min(rec.heart_rate_variability_avg / hrvBaseline, 1) * 20 : 10;
-    const start = Math.round(Math.min(rechargePart + sleepPart + hrvPart, 100));
-
-    // No decay model — this is the morning number, shown unchanged all day.
-    const col = energyColor(start);
-    const numEl = document.getElementById("energy-num");
-    numEl.textContent = `${start}`;
-    numEl.style.color = col;
-    const chip = document.getElementById("energy-chip");
-    if (chip) chip.style.background = col;
-    document.getElementById("energy-tagline").textContent = recoveryTagline(start);
-    document.getElementById("energy-sub").innerHTML = freshnessHTML(latestDate, "wear the watch");
-
-    // Reserve bar — how much of the morning charge today's movement has spent.
-    // Reads the SAME daily_activity file as the Activity card; depletion is keyed
-    // to the SAME 800-cal Heavy threshold (LOAD_BANDS), so it can never contradict.
-    const reserveEl = document.getElementById("energy-reserve");
-    if (reserveEl) {
-      let activeCal = 0, activityDate = null;
-      try {
-        const am = await fetchJSON("polar/manifest.json");
-        const adates = ((am.categories || {}).daily_activity || []).slice().sort();
-        if (adates.length) {
-          activityDate = adates.at(-1);
-          const a = await fetchJSON(`polar/daily_activity/${activityDate}.json`).catch(() => null);
-          if (a && a["active-calories"] != null) activeCal = Number(a["active-calories"]);
-        }
-      } catch { /* no activity synced yet → full reserve */ }
-      // Rest day flagged → locked, no depletion (Penny manages polar/rest_days.json).
-      let restDay = false;
-      try {
-        const rd = await fetchJSON("polar/rest_days.json");
-        restDay = activityDate ? (rd?.rest_days || []).includes(activityDate) : false;
-      } catch { /* no rest-day file → not a rest day */ }
-      // Stale activity (>1 day old) → can't trust depletion; show fallback.
-      const actAge = daysSinceDate(activityDate);
-      const stale = activityDate != null && actAge != null && actAge > 1;
-      reserveEl.innerHTML = renderReserveBar(activeCal, { restDay, stale });
+    // --- SLEEP ring — most recent sleep_score, only if fresh (≤1 day old) ---
+    const sleepDate = sleepDates.at(-1) || null;
+    const sleepFresh = sleepDate && (daysSinceDate(sleepDate) ?? 99) <= 1;
+    const sleep = sleepDate ? await fetchJSON(`polar/sleep/${sleepDate}.json`).catch(() => null) : null;
+    if (sleepFresh && sleep?.sleep_score != null) {
+      const s = Math.round(sleep.sleep_score);
+      sleepEl.innerHTML = ringSVG(s, `${s}`, sleepColor(s));
     }
 
-    empty.classList.add("hidden");
-    content.classList.remove("hidden");
-  } catch (e) {
-    showEmpty(); // file:// or no sync yet
-  }
+    // --- RECOVERY ring — lifted overnight recovery score ---
+    const recDate = recDates.at(-1) || null;
+    const latestRecovDate = [recDate, sleepDate].filter(Boolean).sort().at(-1);
+    const recovFresh = latestRecovDate && (daysSinceDate(latestRecovDate) ?? 99) <= 1;
+    if (recovFresh) {
+      const rec = recDate ? await fetchJSON(`polar/recharge/${recDate}.json`).catch(() => null) : null;
+      const hrvs = (await Promise.all(recDates.map(d => fetchJSON(`polar/recharge/${d}.json`).catch(() => null))))
+        .map(r => r?.heart_rate_variability_avg).filter(v => v != null);
+      const hrvBaseline = hrvs.length ? hrvs.reduce((a, b) => a + b, 0) / hrvs.length : null;
+      const score = computeRecoveryScore(rec, sleep, hrvBaseline);
+      recEl.innerHTML = ringSVG(score, `${score}`, energyColor(score));
+    }
+
+    // --- STRAIN ring — inverse of the old Reserve bar (depletion % of 800 cal) ---
+    const actDate = actDates.at(-1) || null;
+    const actFresh = actDate && (daysSinceDate(actDate) ?? 99) <= 1;
+    const act = actDate ? await fetchJSON(`polar/daily_activity/${actDate}.json`).catch(() => null) : null;
+    if (actFresh && act && act["active-calories"] != null) {
+      const pct = Math.min(100, (Number(act["active-calories"]) / RESERVE_DEPLETION_CAL) * 100);
+      const r = Math.round(pct);
+      strainEl.innerHTML = ringSVG(pct, `${r}%`, strainColor(pct));
+    }
+  } catch (e) { /* file:// or no sync yet → rings stay empty */ }
+}
+
+// Tap-through: each ring button scrolls to its detail card.
+function wireRings() {
+  document.querySelectorAll("#glance-rings button[data-target]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const t = document.getElementById(btn.dataset.target);
+      if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
 }
 
 // Block A — vertical stack of 6-dot Nightly Recharge rows (newest on top).
@@ -1000,7 +991,8 @@ function renderAll() {
   renderProfileStrip();
   renderScaleSnapshot(); // async, VeSync screenshot OCR snapshot (manual via Penny)
   renderScaleHistory(); // async, VeSync scale history table (manual via Penny)
-  renderEnergy(); // async, static morning recovery score from overnight Polar metrics
+  renderRings(); // async, Whoop-style Sleep / Recovery / Strain glance rings
+  wireRings();   // tap-through scroll on each ring
   renderActivity(); // async, Polar Loop Gen 2 daily activity (steps / active time / calories)
   renderPolar(); // async, live Polar Loop data
   renderDayReview(); // async, nightly Day-in-Review freeze (polar/day_review.json)

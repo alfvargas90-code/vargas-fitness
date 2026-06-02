@@ -82,23 +82,24 @@
       </div>
     </header>
 
-    <!-- Today's recovery — static overnight score from Polar recovery metrics -->
-    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="energy-panel">
-      <div class="flex items-center justify-between mb-1 flex-wrap gap-2">
-        <h2 class="font-semibold text-fuchsia-300">Today's recovery <span class="text-xs text-purple-300/70 font-normal">· overnight</span></h2>
-        <span class="text-xs text-purple-300/70" id="energy-sub"></span>
-      </div>
-      <p class="text-xs text-muted/80 mb-4">Based on last night's recharge, sleep, and HRV.</p>
-      <div id="energy-empty" class="text-sm text-muted hidden">
-        Wear the watch overnight for a recovery score.
-      </div>
-      <div id="energy-content" class="hidden">
-        <div class="flex items-center gap-3">
-          <span class="w-2.5 h-2.5 rounded-full" id="energy-chip"></span>
-          <div class="text-4xl font-semibold stat-num leading-none" id="energy-num">—</div>
-        </div>
-        <p class="text-sm mt-2" id="energy-tagline"></p>
-        <p class="text-sm mt-2 text-muted" id="energy-reserve"></p>
+    <!-- Glance rings — Sleep / Recovery / Strain (Whoop-style, SVG, no library) -->
+    <section class="mb-8" id="glance-rings" aria-label="Daily glance">
+      <div class="grid grid-cols-3 gap-2 sm:gap-6 max-w-md mx-auto sm:mx-0">
+        <button type="button" data-target="polar-panel"
+                class="flex flex-col items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 rounded-lg py-1">
+          <div class="w-20 h-20 sm:w-24 sm:h-24 aspect-square" id="ring-sleep-svg"></div>
+          <span class="text-[10px] sm:text-xs uppercase tracking-wider text-purple-300">Sleep</span>
+        </button>
+        <button type="button" data-target="lunar-stress"
+                class="flex flex-col items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 rounded-lg py-1">
+          <div class="w-20 h-20 sm:w-24 sm:h-24 aspect-square" id="ring-recovery-svg"></div>
+          <span class="text-[10px] sm:text-xs uppercase tracking-wider text-purple-300">Recovery</span>
+        </button>
+        <button type="button" data-target="activity"
+                class="flex flex-col items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 rounded-lg py-1">
+          <div class="w-20 h-20 sm:w-24 sm:h-24 aspect-square" id="ring-strain-svg"></div>
+          <span class="text-[10px] sm:text-xs uppercase tracking-wider text-purple-300">Strain</span>
+        </button>
       </div>
     </section>
 
