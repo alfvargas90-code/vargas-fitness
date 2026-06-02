@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-01T20:16:23-05:00",
+  "generated_at": "2026-06-01T21:48:49-05:00",
   "slot": "evening",
-  "summary": "Recovery: Excellent\n\nReading: Nothing's flagging today \u2014 your knees, joints, shoulders, and neck are all quiet, none of your usual watch areas asking for attention. You're someone who earns recovery through steadiness and consistency rather than dramatic swings, and today is that pattern paying off: you came back clean, rested enough, and your system feels genuinely calm and ready.\n\nPerformance: Push hard. You came in well above your normal recovery and your body's clearly recharged, so this is a green light to go after it \u2014 just keep your form honest if you load up heavy.\n\nTransit: none",
+  "summary": "Recovery: Excellent\n\nReading: Nothing right now is flagging your knees, joints, shoulders, or neck \u2014 your usual watch areas are quiet and the system feels settled heading into the night. You're built to recover through steadiness rather than big swings, and tonight fits that pattern cleanly; the calm you're feeling is real, not borrowed.\n\nPerformance: Wind down. The day's already logged, so easing toward sleep is the only move now \u2014 tomorrow gives you a fresh platform to build on.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -9,11 +9,11 @@
     },
     {
       "label": "Reading",
-      "text": "Nothing's flagging today \u2014 your knees, joints, shoulders, and neck are all quiet, none of your usual watch areas asking for attention. You're someone who earns recovery through steadiness and consistency rather than dramatic swings, and today is that pattern paying off: you came back clean, rested enough, and your system feels genuinely calm and ready."
+      "text": "Nothing right now is flagging your knees, joints, shoulders, or neck \u2014 your usual watch areas are quiet and the system feels settled heading into the night. You're built to recover through steadiness rather than big swings, and tonight fits that pattern cleanly; the calm you're feeling is real, not borrowed."
     },
     {
       "label": "Performance",
-      "text": "Push hard. You came in well above your normal recovery and your body's clearly recharged, so this is a green light to go after it \u2014 just keep your form honest if you load up heavy."
+      "text": "Wind down. The day's already logged, so easing toward sleep is the only move now \u2014 tomorrow gives you a fresh platform to build on."
     },
     {
       "label": "Transit",
@@ -22,8 +22,8 @@
   ],
   "simple": {
     "recovery": "Excellent",
-    "reading": "Nothing's flagging today \u2014 your knees, joints, shoulders, and neck are all quiet, none of your usual watch areas asking for attention. You're someone who earns recovery through steadiness and consistency rather than dramatic swings, and today is that pattern paying off: you came back clean, rested enough, and your system feels genuinely calm and ready.",
-    "performance": "Push hard. You came in well above your normal recovery and your body's clearly recharged, so this is a green light to go after it \u2014 just keep your form honest if you load up heavy.",
+    "reading": "Nothing right now is flagging your knees, joints, shoulders, or neck \u2014 your usual watch areas are quiet and the system feels settled heading into the night. You're built to recover through steadiness rather than big swings, and tonight fits that pattern cleanly; the calm you're feeling is real, not borrowed.",
+    "performance": "Wind down. The day's already logged, so easing toward sleep is the only move now \u2014 tomorrow gives you a fresh platform to build on.",
     "transit": null
   },
   "transits": [],
@@ -32,6 +32,8 @@
     "sleep_hours": 6.1,
     "hrv_today": 72,
     "hrv_7d_avg": 64.4,
-    "nutrition": "calories 2210 of 3306 goal, protein 126g of 372g goal, carbs 211g of 372g goal, fat 105g of 92g goal"
+    "nutrition": "calories 2210 of 3306 goal, protein 126g of 372g goal, carbs 211g of 372g goal, fat 105g of 92g goal",
+    "nutrition_detail": "calories 2210 of 3306 goal -> 1096 left; protein 126g of 372g goal -> 246g gap; carbs 211g of 372g goal; fat 105g of 92g goal",
+    "activity_today": null
   }
 }
