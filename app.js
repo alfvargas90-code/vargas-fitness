@@ -22,6 +22,28 @@ const fmt = (n, d = 1) => (n == null || isNaN(n) ? "—" : Number(n).toFixed(d))
 const byDate = (a, b) => a.date.localeCompare(b.date);
 const latestScale = () => [...scale].sort(byDate).at(-1);
 
+// ---------- Today's load bands (SINGLE SOURCE OF TRUTH) ----------
+// Interprets today's accumulated Polar active-calories into one load band. The
+// Recovery tile's "Spent so far" line AND the Activity card's load chip BOTH call
+// loadBandFor() — change a threshold here and every section follows, so they can
+// never contradict. The Python side (polar/lunar_stress.py LOAD_BANDS,
+// polar/summary.py) mirrors these exact bands for the LSI + AI prompts.
+const LOAD_BANDS = [
+  { name: "—",        min: 0,   max: 49,       dot: "#64748b" }, // slate-500 (faint — no real activity yet)
+  { name: "Light",    min: 50,  max: 399,      dot: "#cbd5e1" }, // slate-300
+  { name: "Moderate", min: 400, max: 799,      dot: "#22d3ee" }, // cyan-400
+  { name: "Heavy",    min: 800, max: Infinity, dot: "#fbbf24" }, // amber-400
+];
+function loadBandFor(activeCal) {
+  const c = (activeCal == null || isNaN(activeCal)) ? 0 : Number(activeCal);
+  return LOAD_BANDS.find(b => c >= b.min && c <= b.max) || LOAD_BANDS[0];
+}
+// "● Light" style chip: colored dot + band name. Used by Recovery + Activity.
+function loadBandChipHTML(band) {
+  return `<span class="inline-block w-2.5 h-2.5 rounded-full align-middle" style="background:${band.dot}"></span>`
+       + `<span class="align-middle"> ${band.name}</span>`;
+}
+
 // ---------- Data freshness ----------
 // Whole-day delta between a YYYY-MM-DD string and today (local time).
 function daysSinceDate(dateStr) {
