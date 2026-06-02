@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-02T01:30:50-05:00",
+  "generated_at": "2026-06-02T02:01:04-05:00",
   "score": 15,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -10,9 +10,9 @@
   },
   "workout_intensity": "rest",
   "irritability": 1,
-  "recommendation": "Hold the throttle wide open and front-load the day's heaviest, hardest output before noon. Attack the work that demands the most precision while the system can carry it.",
+  "recommendation": "Channel the surplus into your single hardest task before noon and finish it\u2014stack the rest of the day's load behind that win, no warmups.",
   "transit_detail": {
-    "moon_longitude": 272.57,
+    "moon_longitude": 272.82,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 12,
@@ -34,7 +34,7 @@
       "hrv_7d": 64.4,
       "rhr_7d": 55.1
     },
-    "active_calories": 2,
+    "active_calories": 3,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
