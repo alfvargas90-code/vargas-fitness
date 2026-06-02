@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-02T12:14:43-05:00",
+  "generated_at": "2026-06-02T12:44:57-05:00",
   "score": 20,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -9,7 +9,7 @@
     "sleep_score": 48
   },
   "workout_intensity": "rest",
-  "recommendation": "Channel the charge into resistance work and hit your protein target early; initiate the hard external calls selectively, calibrating each against what actually needs to move today.",
+  "recommendation": "Load up and produce hard today; the system is regulated, so put the charge under a barbell and front-load protein while the drive is high.",
   "bars": {
     "transit": {
       "filled": 3,
@@ -25,7 +25,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 277.88,
+    "moon_longitude": 278.13,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 12,
