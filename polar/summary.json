@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-02T16:45:03-05:00",
-  "slot": "afternoon",
-  "summary": "Recovery: Good\n\nReading: Nothing's flagging today \u2014 your knees and joints, your shoulders and neck, the lower body, all quiet, no soreness lining up to slow you down. You're someone who recovers by stacking steady days rather than chasing big swings, and last night fit that mold cleanly: you slept enough, your system settled, and you came into today calm and ready.\n\nPerformance: Train normally. You're rested and your reserves are full, but you've only put in a light effort so far, so there's a real session left in you \u2014 make it resistance work, not just more steps, and that's where today actually pays off. One nudge: you're close on protein with a little gap to close, and you've left a big chunk of the day's food on the table, so don't let the deficit run away from you tonight \u2014 eat enough to protect the muscle you're trying to build.\n\nTransit: none",
+  "generated_at": "2026-06-02T18:58:28-05:00",
+  "slot": "evening",
+  "summary": "Recovery: Good\n\nReading: Day's settled now, and the system feels genuinely ready to let go \u2014 your engine's been running a little cleaner than usual, so tonight's the easy part if you let it be. Nothing's barking for attention; you tend to bank your gains through quiet, repeatable nights rather than dramatic rebounds, so the move is to actually protect the sleep instead of stealing from it with a late screen or a skipped wind-down. Tomorrow's where the real lifting happens \u2014 guard the muscle you're building by feeding it well and keeping the burn honest, not brutal.\n\nPerformance: Wind down. The work's logged \u2014 ease off, let recovery do its job tonight, and tomorrow opens fresh ground to build on.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -9,11 +9,11 @@
     },
     {
       "label": "Reading",
-      "text": "Nothing's flagging today \u2014 your knees and joints, your shoulders and neck, the lower body, all quiet, no soreness lining up to slow you down. You're someone who recovers by stacking steady days rather than chasing big swings, and last night fit that mold cleanly: you slept enough, your system settled, and you came into today calm and ready."
+      "text": "Day's settled now, and the system feels genuinely ready to let go \u2014 your engine's been running a little cleaner than usual, so tonight's the easy part if you let it be. Nothing's barking for attention; you tend to bank your gains through quiet, repeatable nights rather than dramatic rebounds, so the move is to actually protect the sleep instead of stealing from it with a late screen or a skipped wind-down. Tomorrow's where the real lifting happens \u2014 guard the muscle you're building by feeding it well and keeping the burn honest, not brutal."
     },
     {
       "label": "Performance",
-      "text": "Train normally. You're rested and your reserves are full, but you've only put in a light effort so far, so there's a real session left in you \u2014 make it resistance work, not just more steps, and that's where today actually pays off. One nudge: you're close on protein with a little gap to close, and you've left a big chunk of the day's food on the table, so don't let the deficit run away from you tonight \u2014 eat enough to protect the muscle you're trying to build."
+      "text": "Wind down. The work's logged \u2014 ease off, let recovery do its job tonight, and tomorrow opens fresh ground to build on."
     },
     {
       "label": "Transit",
@@ -22,11 +22,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "Nothing's flagging today \u2014 your knees and joints, your shoulders and neck, the lower body, all quiet, no soreness lining up to slow you down. You're someone who recovers by stacking steady days rather than chasing big swings, and last night fit that mold cleanly: you slept enough, your system settled, and you came into today calm and ready.",
-    "performance": "Train normally. You're rested and your reserves are full, but you've only put in a light effort so far, so there's a real session left in you \u2014 make it resistance work, not just more steps, and that's where today actually pays off. One nudge: you're close on protein with a little gap to close, and you've left a big chunk of the day's food on the table, so don't let the deficit run away from you tonight \u2014 eat enough to protect the muscle you're trying to build.",
+    "reading": "Day's settled now, and the system feels genuinely ready to let go \u2014 your engine's been running a little cleaner than usual, so tonight's the easy part if you let it be. Nothing's barking for attention; you tend to bank your gains through quiet, repeatable nights rather than dramatic rebounds, so the move is to actually protect the sleep instead of stealing from it with a late screen or a skipped wind-down. Tomorrow's where the real lifting happens \u2014 guard the muscle you're building by feeding it well and keeping the burn honest, not brutal.",
+    "performance": "Wind down. The work's logged \u2014 ease off, let recovery do its job tonight, and tomorrow opens fresh ground to build on.",
     "transit": null
   },
-  "nutrition_nudge": "On pace across the board \u2014 keep your meal cadence steady and let dinner carry the last 18g of protein.",
+  "nutrition_nudge": "Eat a real meal now anchored on chicken or beef for 40g protein \u2014 empty calories this late risk muscle.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
@@ -35,6 +35,6 @@
     "hrv_7d_avg": 61.9,
     "nutrition": "calories 996 of 2574 goal, protein 120g of 138g goal, carbs 115g of 290g goal, fat 39g of 72g goal",
     "nutrition_detail": "calories 996 of 2574 goal -> 1578 left; protein 120g of 138g goal -> 18g gap; carbs 115g of 290g goal; fat 39g of 72g goal",
-    "activity_today": "2,118 steps so far, 51m active, 808 calories burned, Light training load"
+    "activity_today": null
   }
 }
