@@ -156,15 +156,22 @@ async function renderPolar() {
   }
 }
 
-// ---------- Recovery curve (modeled, NOT measured) ----------
-// Loop Gen 2 has no continuous daytime HR via AccessLink — so this is an HONEST
-// model: starting energy at wake is derived from last night's recovery metrics,
-// then decayed linearly across waking hours to viewing time.
-const WAKE_HOUR = 6.5;          // 6:30 AM CST — Alfie's typical morning
-const ENERGY_DECAY_FRAC = 0.06; // ~6% of starting energy lost per waking hour
-
+// ---------- Today's recovery (overnight, static) ----------
+// Loop Gen 2 has no continuous daytime HR via AccessLink — so there's no honest
+// way to model intraday decay. We compute one starting recovery score from last
+// night's metrics and show it, unchanged, all day.
 function energyColor(v) {
-  return v >= 70 ? "#34d399" : v >= 40 ? "#fbbf24" : "#f87171";
+  return v >= 80 ? "#34d399"   // green — strong
+       : v >= 60 ? "#22d3ee"   // cyan — decent
+       : v >= 40 ? "#fbbf24"   // amber — light
+       :           "#f87171";  // red — rest
+}
+
+function recoveryTagline(v) {
+  return v >= 80 ? "Strong — bounced back well."
+       : v >= 60 ? "Decent recovery."
+       : v >= 40 ? "Light recovery — take it easier."
+       :           "Prioritize rest today.";
 }
 
 async function renderEnergy() {
@@ -195,33 +202,16 @@ async function renderEnergy() {
     const sleepPart    = sleep?.sleep_score != null ? (sleep.sleep_score / 100) * 30 : 15;
     const hrvPart      = (rec?.heart_rate_variability_avg != null && hrvBaseline)
       ? Math.min(rec.heart_rate_variability_avg / hrvBaseline, 1) * 20 : 10;
-    let start = Math.min(rechargePart + sleepPart + hrvPart, 100);
+    const start = Math.round(Math.min(rechargePart + sleepPart + hrvPart, 100));
 
-    // Decay across waking hours to now (local clock; Alfie is Central).
-    const now = new Date();
-    const nowHour = now.getHours() + now.getMinutes() / 60;
-    const hoursSinceWake = Math.max(nowHour - WAKE_HOUR, 0);
-    const ratePerHour = start * ENERGY_DECAY_FRAC;
-    const current = Math.max(start - hoursSinceWake * ratePerHour, 10);
-
-    // Curve from wake → now for the sparkline.
-    const curve = [];
-    for (let h = 0; h <= hoursSinceWake + 0.001; h += 1)
-      curve.push(Math.max(start - h * ratePerHour, 10));
-    curve.push(current);
-
-    const col = energyColor(current);
+    // No decay model — this is the morning number, shown unchanged all day.
+    const col = energyColor(start);
     const numEl = document.getElementById("energy-num");
-    numEl.textContent = `~${Math.round(current)}`;
+    numEl.textContent = `${start}`;
     numEl.style.color = col;
-    const bar = document.getElementById("energy-bar");
-    bar.style.width = `${Math.round(current)}%`;
-    bar.style.background = col;
-    const spark = document.getElementById("energy-spark");
-    spark.style.color = col;
-    spark.innerHTML = curve.length >= 2 ? sparkline(curve) : "";
-    document.getElementById("energy-detail").textContent =
-      `Started: ${Math.round(start)} · Decayed to ${Math.round(current)} over ${hoursSinceWake.toFixed(1)}h`;
+    const chip = document.getElementById("energy-chip");
+    if (chip) chip.style.background = col;
+    document.getElementById("energy-tagline").textContent = recoveryTagline(start);
     document.getElementById("energy-sub").innerHTML = freshnessHTML(latestDate, "wear the watch");
 
     empty.classList.add("hidden");
@@ -787,7 +777,7 @@ function renderAll() {
   renderProfileStrip();
   renderScaleSnapshot(); // async, VeSync screenshot OCR snapshot (manual via Penny)
   renderScaleHistory(); // async, VeSync scale history table (manual via Penny)
-  renderEnergy(); // async, modeled energy-throughout-day from overnight Polar recovery
+  renderEnergy(); // async, static morning recovery score from overnight Polar metrics
   renderActivity(); // async, Polar Loop Gen 2 daily activity (steps / active time / calories)
   renderPolar(); // async, live Polar Loop data
   renderDayReview(); // async, nightly Day-in-Review freeze (polar/day_review.json)

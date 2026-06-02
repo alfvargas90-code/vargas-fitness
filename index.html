@@ -83,30 +83,22 @@
       </div>
     </header>
 
-    <!-- Recovery curve — modeled decay from overnight Polar recovery (NOT measured) -->
+    <!-- Today's recovery — static overnight score from Polar recovery metrics -->
     <section class="bg-card rounded-xl p-5 border border-line mb-8" id="energy-panel">
       <div class="flex items-center justify-between mb-1 flex-wrap gap-2">
-        <h2 class="font-semibold">Recovery curve <span class="text-xs text-muted font-normal">· modeled</span></h2>
+        <h2 class="font-semibold">Today's recovery <span class="text-xs text-muted font-normal">· overnight</span></h2>
         <span class="text-xs text-muted" id="energy-sub"></span>
       </div>
-      <p class="text-xs text-muted/80 mb-4">Modeled estimate — not measured. Loop Gen 2 doesn't capture continuous HR, so this is starting recovery × elapsed waking hours, not real-time strain.</p>
+      <p class="text-xs text-muted/80 mb-4">Based on last night's recharge, sleep, and HRV.</p>
       <div id="energy-empty" class="text-sm text-muted hidden">
-        Wear the watch overnight for recovery modeling.
+        Wear the watch overnight for a recovery score.
       </div>
       <div id="energy-content" class="hidden">
-        <div class="flex items-end gap-4 flex-wrap">
-          <div class="flex items-baseline gap-1.5 leading-none">
-            <div class="text-4xl font-semibold stat-num leading-none" id="energy-num">—</div>
-            <span class="text-xs text-muted font-normal">modeled</span>
-          </div>
-          <div class="flex-1 min-w-[140px]">
-            <div class="h-3 bg-line rounded-full overflow-hidden">
-              <div class="h-full rounded-full transition-all" id="energy-bar" style="width:0%"></div>
-            </div>
-            <div class="mt-2 text-accent" id="energy-spark"></div>
-          </div>
+        <div class="flex items-center gap-3">
+          <span class="w-2.5 h-2.5 rounded-full" id="energy-chip"></span>
+          <div class="text-4xl font-semibold stat-num leading-none" id="energy-num">—</div>
         </div>
-        <p class="text-xs text-muted mt-3" id="energy-detail"></p>
+        <p class="text-sm mt-2" id="energy-tagline"></p>
       </div>
     </section>
 
