@@ -1,6 +1,6 @@
 {
   "date": "2026-06-02",
-  "synced_at": "2026-06-02T17:48:27+00:00",
+  "synced_at": "2026-06-02T18:18:31+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 596.0,
-    "protein_g": 46.0,
-    "carbs_g": 44.0,
-    "fat_g": 35.0
+    "calories": 996.0,
+    "protein_g": 120.0,
+    "carbs_g": 115.0,
+    "fat_g": 39.0
   },
-  "meal_count": 2,
+  "meal_count": 3,
   "raw": {
     "date": "2026-06-02",
     "meals": [
@@ -35,13 +35,22 @@
         "fat": 1,
         "carbs": 36,
         "emoji": "\u00f0\u009f\u008d\u008a"
+      },
+      {
+        "title": "Chicken Rice Lunch",
+        "time": "12:59",
+        "calories": 400,
+        "protein": 74,
+        "fat": 4,
+        "carbs": 71,
+        "emoji": "\u00f0\u009f\u008d\u00b1"
       }
     ],
     "totals": {
-      "calories": 596,
-      "protein": 46,
-      "fat": 35,
-      "carbs": 44
+      "calories": 996,
+      "protein": 120,
+      "fat": 39,
+      "carbs": 115
     },
     "targets": {
       "calories": 2574,
@@ -50,14 +59,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 1978,
+      "calories": 1578,
       "is_over": false
     },
-    "meal_count": 2,
+    "meal_count": 3,
     "labels": {
       "header": "Today",
-      "calories_remaining": "1978 kcal remaining today",
-      "meals_logged": "2 meals logged",
+      "calories_remaining": "1578 kcal remaining today",
+      "meals_logged": "3 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
