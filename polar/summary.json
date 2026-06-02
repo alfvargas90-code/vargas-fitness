@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-02T09:40:31-05:00",
-  "slot": "morning",
-  "summary": "Recovery: Good\n\nReading: Nothing's flagging right now \u2014 your knees, joints, shoulders, neck, none of your usual watch spots are asking for attention this morning. You're someone who recovers by stacking steady, unspectacular nights rather than swinging high and crashing, and today fits that mold cleanly \u2014 you came out of sleep settled and ready. Day's wide open in front of you.\n\nPerformance: Push hard. You're sitting above your normal line this morning, so it's a green light to load up \u2014 keep your protein climbing alongside it, because going hard on an empty tank is how you burn muscle instead of building it.\n\nTransit: none",
+  "generated_at": "2026-06-02T12:21:47-05:00",
+  "slot": "midday",
+  "summary": "Recovery: Good\n\nReading: Nothing's flagging on the usual watch areas today \u2014 knees, joints, shoulders, neck all feel quiet, so there's no reason to baby anything if you train. You're built to recover through steadiness and repetition rather than big peaks and crashes, and today fits that mold cleanly \u2014 you slept a little longer than you've been getting and your system came in calm and ready, no jagged edges.\n\nPerformance: Train normally. You came in a touch above your usual recovery, so it's a solid day to put real work in \u2014 make it resistance work if you can, since that's what actually moves the needle for you, and don't be shy about going heavier than steps.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -9,11 +9,11 @@
     },
     {
       "label": "Reading",
-      "text": "Nothing's flagging right now \u2014 your knees, joints, shoulders, neck, none of your usual watch spots are asking for attention this morning. You're someone who recovers by stacking steady, unspectacular nights rather than swinging high and crashing, and today fits that mold cleanly \u2014 you came out of sleep settled and ready. Day's wide open in front of you."
+      "text": "Nothing's flagging on the usual watch areas today \u2014 knees, joints, shoulders, neck all feel quiet, so there's no reason to baby anything if you train. You're built to recover through steadiness and repetition rather than big peaks and crashes, and today fits that mold cleanly \u2014 you slept a little longer than you've been getting and your system came in calm and ready, no jagged edges."
     },
     {
       "label": "Performance",
-      "text": "Push hard. You're sitting above your normal line this morning, so it's a green light to load up \u2014 keep your protein climbing alongside it, because going hard on an empty tank is how you burn muscle instead of building it."
+      "text": "Train normally. You came in a touch above your usual recovery, so it's a solid day to put real work in \u2014 make it resistance work if you can, since that's what actually moves the needle for you, and don't be shy about going heavier than steps."
     },
     {
       "label": "Transit",
@@ -22,18 +22,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "Nothing's flagging right now \u2014 your knees, joints, shoulders, neck, none of your usual watch spots are asking for attention this morning. You're someone who recovers by stacking steady, unspectacular nights rather than swinging high and crashing, and today fits that mold cleanly \u2014 you came out of sleep settled and ready. Day's wide open in front of you.",
-    "performance": "Push hard. You're sitting above your normal line this morning, so it's a green light to load up \u2014 keep your protein climbing alongside it, because going hard on an empty tank is how you burn muscle instead of building it.",
+    "reading": "Nothing's flagging on the usual watch areas today \u2014 knees, joints, shoulders, neck all feel quiet, so there's no reason to baby anything if you train. You're built to recover through steadiness and repetition rather than big peaks and crashes, and today fits that mold cleanly \u2014 you slept a little longer than you've been getting and your system came in calm and ready, no jagged edges.",
+    "performance": "Train normally. You came in a touch above your usual recovery, so it's a solid day to put real work in \u2014 make it resistance work if you can, since that's what actually moves the needle for you, and don't be shy about going heavier than steps.",
     "transit": null
   },
+  "nutrition_nudge": "Add carbs at lunch \u2014 aim for a solid serving of rice, oats, or fruit to steady your energy.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
     "sleep_hours": 6.8,
     "hrv_today": 66,
     "hrv_7d_avg": 61.9,
-    "nutrition": "calories 0 of 3306 goal, protein 0g of 372g goal, carbs 0g of 372g goal, fat 0g of 92g goal",
-    "nutrition_detail": "calories 0 of 3306 goal -> 3306 left; protein 0g of 372g goal -> 372g gap; carbs 0g of 372g goal; fat 0g of 92g goal",
-    "activity_today": "2,118 steps so far, 51m active, 808 calories burned, 198 of those active"
+    "nutrition": "calories 596 of 2574 goal, protein 46g of 138g goal, carbs 44g of 290g goal, fat 35g of 72g goal",
+    "nutrition_detail": "calories 596 of 2574 goal -> 1978 left; protein 46g of 138g goal -> 92g gap; carbs 44g of 290g goal; fat 35g of 72g goal",
+    "activity_today": "2,118 steps so far, 51m active, 808 calories burned, Light training load"
   }
 }
