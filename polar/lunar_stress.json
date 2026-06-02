@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-02T09:40:48-05:00",
+  "generated_at": "2026-06-02T09:43:30-05:00",
   "score": 35,
   "band": "Mild Compression",
   "trigger": "Moon conjunct natal Uranus",
@@ -9,7 +9,7 @@
     "sleep_score": 48
   },
   "workout_intensity": "rest",
-  "recommendation": "Channel the charge into resistance work and front-load protein; keep the day's output structured and ship in defined blocks. Initiate outbound calls selectively\u2014calibrate against the data before deciding, not against the static.",
+  "recommendation": "Channel today's charge into structured output and a resistance session rather than scattered reactive work; load protein early so the training has something to build on.",
   "bars": {
     "transit": {
       "filled": 5,
@@ -25,7 +25,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 276.61,
+    "moon_longitude": 276.63,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 12,
