@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-02T13:15:09-05:00",
+  "generated_at": "2026-06-02T13:45:22-05:00",
   "score": 15,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -9,7 +9,7 @@
     "sleep_score": 48
   },
   "workout_intensity": "rest",
-  "recommendation": "Load protein first \u2014 anchor the day around resistance work and hit your intake target before the easy carbs. Initiate the hard calls and high-stakes pushes deliberately; the system is steady enough to carry weight, so act on judgment, not hesitation.",
+  "recommendation": "Channel the charge into resistance work and front-load protein at each meal; initiate hard on the highest-leverage task and let the rest queue behind it.",
   "bars": {
     "transit": {
       "filled": 2,
@@ -25,7 +25,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 278.37,
+    "moon_longitude": 278.62,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
