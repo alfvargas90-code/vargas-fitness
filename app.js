@@ -561,12 +561,11 @@ async function renderLunarStress() {
   if (p.sleep_score != null) phys.push(`Sleep ${p.sleep_score}`);
   document.getElementById("lsi-physiology").textContent = phys.length ? phys.join("  ·  ") : "—";
 
-  // Workout line — maps the band-derived intensity (same LOAD_BANDS as the Recovery
-  // tile + Activity card): heavy→high, moderate→moderate, light/none→rest.
-  const wk = d.workout_intensity === "high" ? "High intensity"
-           : d.workout_intensity === "moderate" ? "Moderate intensity"
-           : "Rest / low";
-  document.getElementById("lsi-workout").textContent = wk;
+  // Workout row removed from the LSI card: it read as a recommendation but is
+  // actually a load measurement, contradicting the Today's Read verdict. The
+  // Recovery tile's "Spent so far" line owns today's-load display. The
+  // workout_intensity field stays in lunar_stress.json — the scoring engine
+  // still uses it for the +0/+3/+10 modifier.
 
   // Recommendation.
   document.getElementById("lsi-recommendation").textContent = d.recommendation || "";
