@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-06-02T04:15:00-05:00",
-  "slot": "overnight",
-  "summary": "Recovery: Excellent\n\nReading: Nothing's flagging this morning \u2014 your knees, joints, shoulders, neck, none of your usual sore spots are sending up a signal, so you're starting from clean ground. You're someone who rebuilds through steadiness and discipline rather than dramatic swings, and last night did exactly that for you \u2014 short on hours, but the system put that time to good use and came back calm and well ahead of where it usually sits.\n\nPerformance: Push hard. You woke up well above your normal baseline, so the engine's ready \u2014 just respect that sleep ran a touch short and keep your form clean if you reach for weight.\n\nTransit: none",
+  "generated_at": "2026-06-02T07:43:07-05:00",
+  "slot": "morning",
+  "summary": "Recovery: Good\n\nReading: Nothing's flagging right now \u2014 your knees, joints, shoulders, neck, all the spots you tend to watch are quiet and ready. You're the kind of guy who builds back through steady, repeatable effort rather than dramatic highs and lows, and this morning lines up with that perfectly: you slept clean, you woke up settled, and the tank's got real room in it. Day's wide open with plenty to spend.\n\nPerformance: Train normally. You came in a notch above your usual and your system feels calm, so it's a solid green light \u2014 go after the work without forcing anything.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
-      "text": "Excellent"
+      "text": "Good"
     },
     {
       "label": "Reading",
-      "text": "Nothing's flagging this morning \u2014 your knees, joints, shoulders, neck, none of your usual sore spots are sending up a signal, so you're starting from clean ground. You're someone who rebuilds through steadiness and discipline rather than dramatic swings, and last night did exactly that for you \u2014 short on hours, but the system put that time to good use and came back calm and well ahead of where it usually sits."
+      "text": "Nothing's flagging right now \u2014 your knees, joints, shoulders, neck, all the spots you tend to watch are quiet and ready. You're the kind of guy who builds back through steady, repeatable effort rather than dramatic highs and lows, and this morning lines up with that perfectly: you slept clean, you woke up settled, and the tank's got real room in it. Day's wide open with plenty to spend."
     },
     {
       "label": "Performance",
-      "text": "Push hard. You woke up well above your normal baseline, so the engine's ready \u2014 just respect that sleep ran a touch short and keep your form clean if you reach for weight."
+      "text": "Train normally. You came in a notch above your usual and your system feels calm, so it's a solid green light \u2014 go after the work without forcing anything."
     },
     {
       "label": "Transit",
@@ -21,19 +21,19 @@
     }
   ],
   "simple": {
-    "recovery": "Excellent",
-    "reading": "Nothing's flagging this morning \u2014 your knees, joints, shoulders, neck, none of your usual sore spots are sending up a signal, so you're starting from clean ground. You're someone who rebuilds through steadiness and discipline rather than dramatic swings, and last night did exactly that for you \u2014 short on hours, but the system put that time to good use and came back calm and well ahead of where it usually sits.",
-    "performance": "Push hard. You woke up well above your normal baseline, so the engine's ready \u2014 just respect that sleep ran a touch short and keep your form clean if you reach for weight.",
+    "recovery": "Good",
+    "reading": "Nothing's flagging right now \u2014 your knees, joints, shoulders, neck, all the spots you tend to watch are quiet and ready. You're the kind of guy who builds back through steady, repeatable effort rather than dramatic highs and lows, and this morning lines up with that perfectly: you slept clean, you woke up settled, and the tank's got real room in it. Day's wide open with plenty to spend.",
+    "performance": "Train normally. You came in a notch above your usual and your system feels calm, so it's a solid green light \u2014 go after the work without forcing anything.",
     "transit": null
   },
   "transits": [],
   "data_basis": {
-    "recharge_today": 5,
-    "sleep_hours": 6.1,
-    "hrv_today": 72,
-    "hrv_7d_avg": 64.4,
+    "recharge_today": 4,
+    "sleep_hours": 6.8,
+    "hrv_today": 66,
+    "hrv_7d_avg": 61.9,
     "nutrition": "calories 0 of 3306 goal, protein 0g of 372g goal, carbs 0g of 372g goal, fat 0g of 92g goal",
     "nutrition_detail": "calories 0 of 3306 goal -> 3306 left; protein 0g of 372g goal -> 372g gap; carbs 0g of 372g goal; fat 0g of 92g goal",
-    "activity_today": null
+    "activity_today": "1,632 steps so far, 37m active, 672 calories burned, 142 of those active"
   }
 }
