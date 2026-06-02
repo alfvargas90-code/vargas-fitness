@@ -1,12 +1,12 @@
 {
   "date": "2026-06-02",
-  "synced_at": "2026-06-02T14:47:53+00:00",
+  "synced_at": "2026-06-02T15:17:59+00:00",
   "source_tool": "get_day_summary",
   "goals": {
-    "calories": 3306.0,
-    "protein_g": 372.0,
-    "carbs_g": 372.0,
-    "fat_g": 92.0
+    "calories": 3005.0,
+    "protein_g": 304.0,
+    "carbs_g": 338.0,
+    "fat_g": 83.0
   },
   "totals": {
     "calories": 455.0,
@@ -35,19 +35,19 @@
       "carbs": 8
     },
     "targets": {
-      "calories": 3306,
-      "protein": 372,
-      "fat": 92,
-      "carbs": 372
+      "calories": 3005,
+      "protein": 304,
+      "fat": 83,
+      "carbs": 338
     },
     "remaining": {
-      "calories": 2851,
+      "calories": 2550,
       "is_over": false
     },
     "meal_count": 1,
     "labels": {
       "header": "Today",
-      "calories_remaining": "2851 kcal remaining today",
+      "calories_remaining": "2550 kcal remaining today",
       "meals_logged": "1 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
