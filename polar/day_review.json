@@ -1,19 +1,19 @@
 {
   "date": "2026-06-01",
-  "generated_at": "2026-06-01T21:12:17-05:00",
-  "verdict": "Solid",
+  "generated_at": "2026-06-01T21:45:00-05:00",
+  "verdict": "Big",
   "stats": {
-    "steps": 6536,
-    "active_minutes": 287,
-    "active_time_display": "4h 47m",
-    "calories_burned": 2475,
-    "active_calories": 937,
+    "steps": 6886,
+    "active_minutes": 309,
+    "active_time_display": "5h 9m",
+    "calories_burned": 2581,
+    "active_calories": 998,
     "calories_eaten": 2210,
-    "net_deficit": 265,
+    "net_deficit": 371,
     "calorie_target": 3306,
     "protein_g": 126,
     "protein_target_g": 372,
     "protein_gap_g": 246
   },
-  "prose": "Solid day, Alfie \u2014 about 6,500 steps, nearly five hours on your feet, and you ate about 2,210 against 2,475 burned, so you closed with a 265-calorie deficit. The one gap was protein: 126g is well short of where you want to be for someone training as hard as you. Make protein the priority tomorrow \u2014 front-load it at breakfast so you're not playing catch-up by dinner."
+  "prose": "Big day, Alfie \u2014 you logged over five hours on your feet, moved close to 6,900 steps, and torched around 2,581 calories while keeping your food to about 2,210, so you finished roughly 371 in the hole. The one gap was protein: at 126g you landed well short of where you want to be, and on a high-burn day like this that's the difference between recovering strong and feeling flat. Hit protein hard first thing tomorrow \u2014 front-load it at breakfast and don't let it slip."
 }
