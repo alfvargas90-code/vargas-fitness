@@ -82,9 +82,14 @@ function bfPercentileBand(age, bf) {
 function renderHeader() {
   const sub = document.getElementById("header-sub");
   if (!sub) return;
-  sub.textContent = new Date().toLocaleDateString("en-US", {
+  const now = new Date();
+  const date = now.toLocaleDateString("en-US", {
     weekday: "long", year: "numeric", month: "long", day: "numeric",
   });
+  const time = now.toLocaleTimeString("en-US", {
+    hour: "numeric", minute: "2-digit",
+  });
+  sub.textContent = `${date} · ${time}`;
 }
 
 function ageOn(dateStr) {
@@ -435,7 +440,7 @@ function readBlock(subtitle, text) {
     sec.appendChild(h);
   }
   const p = document.createElement("p");
-  p.className = "text-base leading-relaxed text-slate-200";
+  p.className = "text-base leading-relaxed text-neutral-200";
   p.style.fontSize = "15px";
   p.textContent = text;
   sec.appendChild(p);
@@ -486,17 +491,17 @@ async function renderTodaysRead() {
       if (simple.performance) {
         const sec = document.createElement("div");
         const p = document.createElement("p");
-        p.className = "text-base leading-relaxed text-slate-200";
+        p.className = "text-base leading-relaxed text-neutral-200";
         p.style.fontSize = "15px";
         const lead = document.createElement("strong");
-        lead.className = "text-slate-100";
+        lead.className = "text-neutral-200";
         lead.textContent = "Performance: ";
         p.appendChild(lead);
         const t = String(simple.performance).trim();
         const v = PERF_VERDICTS.find(v => t.toLowerCase().startsWith(v.toLowerCase()));
         if (v) {
           const strong = document.createElement("strong");
-          strong.className = "text-slate-100";
+          strong.className = "text-neutral-200";
           strong.textContent = t.slice(0, v.length);
           p.appendChild(strong);
           p.appendChild(document.createTextNode(t.slice(v.length)));
@@ -595,7 +600,7 @@ async function renderLunarStress() {
   if (td.moon_phase) bits.push(td.moon_phase);
   if (td.moon_house_natal) bits.push(`natal ${ordinal(td.moon_house_natal)} house`);
   document.getElementById("lsi-trigger").innerHTML =
-    `<span class="text-slate-100 font-medium">${d.trigger || "—"}</span>` +
+    `<span class="text-neutral-200 font-medium">${d.trigger || "—"}</span>` +
     (bits.length ? ` · <span class="text-muted">${bits.join(" · ")}</span>` : "");
 
   // Physiology line.
@@ -870,7 +875,7 @@ async function renderScaleHistory() {
     const sorted = [...hist].sort((a, b) => (a.date < b.date ? 1 : -1)); // newest first
     rows.innerHTML = sorted.map(r => `
       <tr class="border-b border-line/50">
-        <td class="py-2 pr-2 text-slate-200">${r.date}</td>
+        <td class="py-2 pr-2 text-neutral-200">${r.date}</td>
         <td class="py-2 px-2 text-right">${fmt(r.weight_lb, 1)}</td>
         <td class="py-2 px-2 text-right">${fmtDelta(r.delta_lb)}</td>
         <td class="py-2 px-2 text-right">${r.body_fat_pct != null ? fmt(r.body_fat_pct, 1) + "%" : "—"}</td>
