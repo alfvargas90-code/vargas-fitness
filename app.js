@@ -550,6 +550,98 @@ async function renderScaleSnapshot() {
   }
 }
 
+// ---------- Day in review (nightly freeze via polar/summary.py 9:45 PM fire) ----------
+// Reads polar/day_review.json — frozen once nightly: the day's stats + a single
+// color-coded verdict + an AI plain-English wrap-up. Read next morning until the
+// next night's fire overwrites it. Empty state before the first fire; amber stale
+// warning if the frozen date is from more than a day ago.
+const DAY_REVIEW_BADGES = {
+  easy:  { label: "Easy day",  cls: "text-slate-300 bg-slate-800" },
+  solid: { label: "Solid day", cls: "text-cyan-300 bg-cyan-900/40" },
+  great: { label: "Great day", cls: "text-emerald-300 bg-emerald-900/40" },
+  big:   { label: "Big day",   cls: "text-amber-300 bg-amber-900/40" },
+};
+
+async function renderDayReview() {
+  const empty = document.getElementById("day-review-empty");
+  const content = document.getElementById("day-review-content");
+  if (!empty || !content) return;
+  const showEmpty = () => {
+    empty.classList.remove("hidden"); content.classList.add("hidden");
+    const sub = document.getElementById("day-review-sub"); if (sub) sub.textContent = "";
+    const dl = document.getElementById("day-review-date"); if (dl) dl.textContent = "";
+  };
+  try {
+    const r = await fetchJSON("polar/day_review.json");
+    const s = r.stats || {};
+
+    // Header date — "· Mon, Jun 1" from the frozen date.
+    const dl = document.getElementById("day-review-date");
+    if (dl && r.date) {
+      const dObj = new Date(r.date + "T00:00:00");
+      dl.textContent = "· " + dObj.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+    }
+
+    // Verdict badge — single color-coded label.
+    const v = String(r.verdict || "").trim().toLowerCase();
+    const badge = DAY_REVIEW_BADGES[v] || { label: r.verdict || "—", cls: "text-slate-300 bg-slate-800" };
+    document.getElementById("day-review-badge").innerHTML =
+      `<span class="inline-block text-sm font-semibold px-3 py-1 rounded-full ${badge.cls}">${badge.label}</span>`;
+
+    // Stats line — plain numbers, no jargon. Each piece only if present.
+    const nf = n => Number(n).toLocaleString();
+    const lines = [];
+    const l1 = [];
+    if (s.steps != null) l1.push(`${nf(s.steps)} steps`);
+    if (s.active_time_display && s.active_time_display !== "—") l1.push(`${s.active_time_display} active`);
+    if (s.calories_burned != null) l1.push(`${nf(s.calories_burned)} cal burned`);
+    if (l1.length) lines.push(l1.join(" · "));
+    if (s.calories_eaten != null) {
+      let l2 = `Ate ${nf(s.calories_eaten)}`;
+      if (s.net_deficit != null) {
+        l2 += s.net_deficit > 0 ? ` · net deficit of ${nf(s.net_deficit)}`
+            : s.net_deficit < 0 ? ` · net surplus of ${nf(Math.abs(s.net_deficit))}`
+            : ` · even with what you burned`;
+      }
+      lines.push(l2);
+    }
+    if (s.protein_g != null) {
+      let l3 = `Protein ${nf(s.protein_g)}g`;
+      if (s.protein_gap_g != null && s.protein_target_g != null) {
+        l3 += s.protein_gap_g > 0
+          ? ` (${nf(s.protein_gap_g)}g short of ${nf(s.protein_target_g)}g target)`
+          : ` (hit ${nf(s.protein_target_g)}g target)`;
+      }
+      lines.push(l3);
+    }
+    document.getElementById("day-review-stats").innerHTML = lines.join("<br>");
+
+    // AI prose.
+    const proseEl = document.getElementById("day-review-prose");
+    proseEl.textContent = r.prose || "";
+    proseEl.style.display = r.prose ? "" : "none";
+
+    // Subtitle — frozen time + stale warning if the date is >1 day old.
+    const sub = document.getElementById("day-review-sub");
+    const age = daysSinceDate(r.date);
+    if (sub) {
+      if (age != null && age > 1) {
+        sub.innerHTML = `<span class="text-warn font-medium">⚠️ ${age} days old — last frozen ${r.date}</span>`;
+      } else if (r.generated_at) {
+        const t = new Date(r.generated_at);
+        sub.textContent = "frozen " + t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+      } else {
+        sub.textContent = "";
+      }
+    }
+
+    empty.classList.add("hidden");
+    content.classList.remove("hidden");
+  } catch (e) {
+    showEmpty(); // file missing (before first 9:45 PM fire) / file://
+  }
+}
+
 // ---------- Scale history (VeSync ESF-551 manual screenshot readings) ----------
 // Reads vesync/history.json — array of readings, newest first. Compact table,
 // no charts (per dashboard convention). Missing file / file:// → empty state.
@@ -698,6 +790,7 @@ function renderAll() {
   renderEnergy(); // async, modeled energy-throughout-day from overnight Polar recovery
   renderActivity(); // async, Polar Loop Gen 2 daily activity (steps / active time / calories)
   renderPolar(); // async, live Polar Loop data
+  renderDayReview(); // async, nightly Day-in-Review freeze (polar/day_review.json)
 }
 
 renderAll();

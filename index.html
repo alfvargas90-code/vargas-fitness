@@ -201,6 +201,22 @@
       </div>
     </section>
 
+    <!-- Day in review — nightly freeze (polar/day_review.json, fires 9:45 PM CST) -->
+    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="day-review">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <h2 class="font-semibold">Day in review <span class="text-xs text-muted font-normal" id="day-review-date"></span></h2>
+        <span class="text-xs text-muted" id="day-review-sub"></span>
+      </div>
+      <div id="day-review-empty" class="text-sm text-muted">
+        Tonight's wrap-up drops at 9:45 PM — steps, deficit, protein &amp; an AI read on how the day went.
+      </div>
+      <div id="day-review-content" class="hidden">
+        <div id="day-review-badge" class="mb-4"></div>
+        <p class="text-base leading-relaxed text-slate-100 mb-1" id="day-review-stats" style="font-size:15px;"></p>
+        <p class="text-base leading-relaxed text-slate-200 mt-4" id="day-review-prose" style="font-size:15px;"></p>
+      </div>
+    </section>
+
     <!-- Scale history — VeSync ESF-551 manual screenshot readings (vesync/history.json) -->
     <section class="bg-card rounded-xl p-5 border border-line mb-8" id="scale-history-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">

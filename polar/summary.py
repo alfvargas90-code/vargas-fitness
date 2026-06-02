@@ -9,8 +9,9 @@ the live URL updates. The `Reading` section fuses physical body-area notes with 
 natal recovery trait into ONE flowing paragraph — astrology is texture, never named.
 The biometrics inform the read but never appear in it — no raw numbers, units, or jargon.
 
-Run by the com.alfredo.polar-summary LaunchAgent 5x/day (4:15, 9:05, 12:30, 16:45, 20:00 CST).
+Run by the com.alfredo.polar-summary LaunchAgent 6x/day (4:15, 9:05, 12:30, 16:45, 20:00, 21:45 CST).
 (9:05, not 9:00, so it fires off the :00/:30 boundary the 30-min polar-sync timer hits — avoids the same-minute sync race that left "Today's Read" stale.)
+The 21:45 fire is the nightly Day-in-Review slot: it freezes the day's stats + verdict + prose into day_review.json INSTEAD OF the regular summary.json.
 """
 import json, os, re, shutil, subprocess, sys
 from datetime import datetime, date
@@ -249,6 +250,185 @@ def load_today_transits():
     return out
 
 
+# ============================================================================
+# Day in Review — nightly freeze (fires 21:45 CST via the polar-summary plist)
+# At the night slot we generate day_review.json INSTEAD OF the regular summary:
+# it freezes the day's activity + nutrition + an AI verdict + plain-English prose.
+# The dashboard reads it next morning until the next night's fire overwrites it.
+# ============================================================================
+
+def is_night_review(now):
+    """True if the fire time is in the 21:30–22:00 nightly-review window."""
+    m = now.hour * 60 + now.minute
+    return 21 * 60 + 30 <= m <= 22 * 60
+
+
+def iso_duration_to_min(iso):
+    """'PT4H47M' -> 287 (minutes). Tolerant; returns None on junk."""
+    if not iso or not isinstance(iso, str):
+        return None
+    m = re.match(r"^P(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?$", iso)
+    if not m:
+        return None
+    h, mn, s = int(m.group(1) or 0), int(m.group(2) or 0), int(m.group(3) or 0)
+    return h * 60 + mn + round(s / 60)
+
+
+def min_to_hm(total_min):
+    """287 -> '4h 47m', 45 -> '45m', 120 -> '2h'."""
+    if total_min is None:
+        return "—"
+    h, mn = divmod(int(total_min), 60)
+    if h and mn:
+        return f"{h}h {mn}m"
+    if h:
+        return f"{h}h"
+    return f"{mn}m"
+
+
+def compute_verdict(steps, active_min, deficit, protein_gap):
+    """Single label from simple thresholds, tuned for Alfie (avg 3–7k steps/day).
+    Order matters: Big (high output) → Great (targets hit) → Easy (restful) → Solid.
+      Big:   10,000+ steps OR 5h+ active OR deficit > 700
+      Great: 8,000+ steps AND protein within 50g AND deficit 200–500
+      Easy:  < 5,000 steps AND < 1h active AND no real deficit (< 200)
+      Solid: everything in between (the default day)
+    """
+    steps = steps or 0
+    active_min = active_min or 0
+    deficit = deficit or 0
+    if steps >= 10000 or active_min >= 300 or deficit > 700:
+        return "Big"
+    if (steps >= 8000 and protein_gap is not None and protein_gap <= 50
+            and 200 <= deficit <= 500):
+        return "Great"
+    if steps < 5000 and active_min < 60 and deficit < 200:
+        return "Easy"
+    return "Solid"
+
+
+VERDICT_FLAVOR = {
+    "Easy":  "an easy, restful day — low movement",
+    "Solid": "a solid, balanced day",
+    "Great": "a great day — steps and protein on target with a clean deficit",
+    "Big":   "a big day — high output, real burn",
+}
+
+
+def build_day_review_prose(stats, verdict):
+    """Ask claude -p for a 2–3 sentence plain-English wrap-up of the day, same
+    voice as the Today's Read prose. Mixes activity + nutrition, ends with a
+    forward-looking nudge for tomorrow. No jargon, no percentages, no biometrics."""
+    s = stats
+    deficit = s["net_deficit"]
+    eat_line = (f"ran a calorie deficit of about {deficit}" if deficit and deficit > 0
+                else (f"ate about {abs(deficit)} over what he burned" if deficit and deficit < 0
+                      else "ate right around what he burned"))
+    protein_line = (f"hit his protein target" if s["protein_gap_g"] is not None and s["protein_gap_g"] <= 0
+                    else f"came up about {s['protein_gap_g']}g short on protein"
+                    if s["protein_gap_g"] is not None else "logged some protein")
+    prompt = (
+        "You are a sharp, plain-spoken fitness coach writing a one-paragraph wrap-up of "
+        "Alfie's day for his dashboard. He reads it the next morning. Talk like a human "
+        "coach, not a report.\n\n"
+        "HARD RULES (absolute):\n"
+        "- 2 to 3 sentences. One short paragraph. No headings, no bullets, no preamble.\n"
+        "- NO percentages, NO decimals, NO units-with-jargon. Round, everyday numbers only "
+        "(you may say things like \"about 6,500 steps\" or \"a 265-calorie deficit\").\n"
+        "- NO biometric jargon: no HRV, no Recharge, no BPM, no \"net deficit\" as a label, "
+        "no \"macros\". Plain English.\n"
+        "- NO astrology, no chart talk.\n"
+        "- End with ONE forward-looking nudge for tomorrow (e.g. \"Push protein hard "
+        "tomorrow\" or \"Take it easier — you're due a lighter day\").\n\n"
+        f"Today was {VERDICT_FLAVOR.get(verdict, 'a normal day')}. The facts:\n"
+        f"- Took about {s['steps']:,} steps\n"
+        f"- Was active for {s['active_time_display']}\n"
+        f"- Burned about {s['calories_burned']:,} calories\n"
+        f"- Ate about {s['calories_eaten']:,} calories, so he {eat_line}\n"
+        f"- On protein he {protein_line} (ate {s['protein_g']}g)\n\n"
+        "Write the paragraph now — nothing else."
+    )
+    raw = call_claude(prompt)
+    return clean(raw)
+
+
+def generate_day_review(now):
+    """Freeze today's stats + verdict + prose into polar/day_review.json, then push."""
+    today = now.date().isoformat()
+
+    # --- activity (steps / active time / calories burned) ---
+    act_path = os.path.join(HERE, "daily_activity", f"{today}.json")
+    act = load_json(act_path) if os.path.exists(act_path) else {}
+    steps = act.get("active-steps") or act.get("step_count")
+    active_min = iso_duration_to_min(act.get("duration") or act.get("active-time"))
+    calories_burned = act.get("calories")
+    active_calories = act.get("active-calories")
+
+    # --- nutrition (calories eaten / protein) ---
+    nut_path = os.path.join(ROOT, "nutrition", "daily", f"{today}.json")
+    nut = load_json(nut_path) if os.path.exists(nut_path) else {}
+    totals = nut.get("totals", {}) or {}
+    goals = nut.get("goals", {}) or {}
+    calories_eaten = totals.get("calories")
+    calorie_target = goals.get("calories")
+    protein_g = totals.get("protein_g")
+    protein_target_g = goals.get("protein_g")
+
+    # --- derived ---
+    net_deficit = (round(calories_burned - calories_eaten)
+                   if calories_burned is not None and calories_eaten is not None else None)
+    protein_gap_g = (round(protein_target_g - protein_g)
+                     if protein_target_g is not None and protein_g is not None else None)
+
+    stats = {
+        "steps": int(steps) if steps is not None else None,
+        "active_minutes": active_min,
+        "active_time_display": min_to_hm(active_min),
+        "calories_burned": round(calories_burned) if calories_burned is not None else None,
+        "active_calories": round(active_calories) if active_calories is not None else None,
+        "calories_eaten": round(calories_eaten) if calories_eaten is not None else None,
+        "net_deficit": net_deficit,
+        "calorie_target": round(calorie_target) if calorie_target is not None else None,
+        "protein_g": round(protein_g) if protein_g is not None else None,
+        "protein_target_g": round(protein_target_g) if protein_target_g is not None else None,
+        "protein_gap_g": protein_gap_g,
+    }
+
+    verdict = compute_verdict(stats["steps"], stats["active_minutes"],
+                              stats["net_deficit"], stats["protein_gap_g"])
+    log(f"day-review {today}: verdict={verdict} steps={stats['steps']} "
+        f"active={stats['active_time_display']} deficit={stats['net_deficit']} "
+        f"protein_gap={stats['protein_gap_g']}")
+
+    try:
+        prose = build_day_review_prose(stats, verdict)
+    except Exception as e:
+        log(f"day-review prose failed (non-fatal): {e}")
+        prose = ""
+
+    payload = {
+        "date": today,
+        "generated_at": now.replace(microsecond=0).isoformat(),
+        "verdict": verdict,
+        "stats": stats,
+        "prose": prose,
+    }
+    with open(os.path.join(HERE, "day_review.json"), "w") as f:
+        json.dump(payload, f, indent=2)
+    log("wrote day_review.json")
+
+    try:
+        subprocess.run(["git", "add", "polar/day_review.json"], cwd=ROOT, check=True)
+        subprocess.run(["git", "commit", "-m", f"chore: day review {today}"],
+                       cwd=ROOT, check=True)
+        subprocess.run(["git", "push", "origin", "main"], cwd=ROOT, check=True,
+                       capture_output=True, text=True)
+        log("pushed day_review.json")
+    except subprocess.CalledProcessError as e:
+        log(f"git push failed (non-fatal): {e}")
+    return 0
+
+
 def parse_sections(text):
     """Split Claude output into the five labeled sections. Returns a list of
     {label, text}. Tolerant of markdown (**Label:**, ## Label, Label —/-/:)."""
@@ -300,6 +480,11 @@ def git_push(slot, date):
 def main():
     now = datetime.now().astimezone()
     slot = slot_for(now)
+
+    # Nightly Day-in-Review slot (21:45 fire) — or forced via `--day-review`.
+    # Generates day_review.json INSTEAD OF the regular summary.json.
+    if "--day-review" in sys.argv or is_night_review(now):
+        return generate_day_review(now)
 
     manifest = load_json(os.path.join(HERE, "manifest.json"))
     cats = manifest.get("categories", {})
