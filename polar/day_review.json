@@ -1,0 +1,19 @@
+{
+  "date": "2026-06-01",
+  "generated_at": "2026-06-01T21:12:17-05:00",
+  "verdict": "Solid",
+  "stats": {
+    "steps": 6536,
+    "active_minutes": 287,
+    "active_time_display": "4h 47m",
+    "calories_burned": 2475,
+    "active_calories": 937,
+    "calories_eaten": 2210,
+    "net_deficit": 265,
+    "calorie_target": 3306,
+    "protein_g": 126,
+    "protein_target_g": 372,
+    "protein_gap_g": 246
+  },
+  "prose": "Solid day, Alfie \u2014 about 6,500 steps, nearly five hours on your feet, and you ate about 2,210 against 2,475 burned, so you closed with a 265-calorie deficit. The one gap was protein: 126g is well short of where you want to be for someone training as hard as you. Make protein the priority tomorrow \u2014 front-load it at breakfast so you're not playing catch-up by dinner."
+}
