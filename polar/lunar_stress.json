@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-02T09:13:17-05:00",
-  "score": 50,
-  "band": "Moderate Compression",
-  "trigger": "Moon conjunct natal Moon",
+  "generated_at": "2026-06-02T09:40:48-05:00",
+  "score": 35,
+  "band": "Mild Compression",
+  "trigger": "Moon conjunct natal Uranus",
   "physiology": {
     "hrv_pct_baseline": 7,
     "rhr_delta_bpm": -2,
     "sleep_score": 48
   },
   "workout_intensity": "rest",
-  "recommendation": "Channel today's compression into structured, pre-defined work where the load has somewhere to go; initiate confrontation selectively and respond to incoming demands only if the situation genuinely requires it.",
+  "recommendation": "Channel the charge into resistance work and front-load protein; keep the day's output structured and ship in defined blocks. Initiate outbound calls selectively\u2014calibrate against the data before deciding, not against the static.",
   "bars": {
     "transit": {
-      "filled": 8,
+      "filled": 5,
       "total": 10,
-      "points": 45,
+      "points": 30,
       "max": 55
     },
     "body": {
@@ -25,19 +25,19 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 276.38,
+    "moon_longitude": 276.61,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 12,
-    "aspect_to_natal_moon": "conjunction (0.8\u00b0 separating)",
+    "aspect_to_natal_moon": null,
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 50,
-    "transit_points": 45,
+    "raw_score": 35,
+    "transit_points": 30,
     "physiology_points": 5,
     "breakdown": [
-      "+30 Moon conjunct natal Moon (Uranus collapsed)",
+      "+15 Moon conjunct natal Uranus",
       "+10 Moon in Capricorn",
       "+5 Moon transiting natal 12th house",
       "-5 HRV 7% above baseline",
