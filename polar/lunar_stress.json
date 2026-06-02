@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-02T12:44:57-05:00",
-  "score": 20,
+  "generated_at": "2026-06-02T13:15:09-05:00",
+  "score": 15,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
   "physiology": {
@@ -9,12 +9,12 @@
     "sleep_score": 48
   },
   "workout_intensity": "rest",
-  "recommendation": "Load up and produce hard today; the system is regulated, so put the charge under a barbell and front-load protein while the drive is high.",
+  "recommendation": "Load protein first \u2014 anchor the day around resistance work and hit your intake target before the easy carbs. Initiate the hard calls and high-stakes pushes deliberately; the system is steady enough to carry weight, so act on judgment, not hesitation.",
   "bars": {
     "transit": {
-      "filled": 3,
+      "filled": 2,
       "total": 10,
-      "points": 15,
+      "points": 10,
       "max": 55
     },
     "body": {
@@ -25,20 +25,19 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 278.13,
+    "moon_longitude": 278.37,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
-    "moon_house_natal": 12,
+    "moon_house_natal": 1,
     "aspect_to_natal_moon": null,
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 20,
-    "transit_points": 15,
+    "raw_score": 15,
+    "transit_points": 10,
     "physiology_points": 5,
     "breakdown": [
       "+10 Moon in Capricorn",
-      "+5 Moon transiting natal 12th house",
       "-5 HRV 7% above baseline",
       "+10 Sleep score 48 (<70)"
     ],
