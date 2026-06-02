@@ -5,7 +5,6 @@ Lunar Stress Index (LSI) — nervous-system compression / stress model.
 A behavioral-calibration score (0-100, NOT a prediction). It fuses:
   - lunar transit activation against Alfie's natal chart (Swiss Ephemeris)
   - physiological strain from Polar (HRV / RHR / sleep / workout vs 7-day baseline)
-  - self-reported irritability (polar/irritability.json, 1-5)
 into a single score + band, then asks `claude -p` for a 1-2 sentence behavioral
 directive in a performance-based-male register (action, not feelings).
 
@@ -27,7 +26,7 @@ import re
 import shutil
 import subprocess
 import sys
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from statistics import mean
 
 import swisseph as swe
@@ -36,7 +35,6 @@ import swisseph as swe
 HERE = os.path.dirname(os.path.abspath(__file__))      # .../fitness-dashboard/polar
 ROOT = os.path.dirname(HERE)                            # .../fitness-dashboard
 OUT_PATH = os.path.join(HERE, "lunar_stress.json")
-IRRITABILITY_PATH = os.path.join(HERE, "irritability.json")
 
 # --- natal chart (computed once per run from birth constants) ------------
 # Birth in UT: 16:22 CDT (UTC-5) -> 21:22 UT on 1990-08-30.
@@ -185,25 +183,6 @@ def workout_intensity_today():
         return "rest", None
 
 
-def load_irritability(now):
-    """1-5 self-report from polar/irritability.json. Defaults to 1 (no penalty)
-    if the file is missing or its timestamp is stale (>24h)."""
-    try:
-        d = load_json(IRRITABILITY_PATH)
-        val = int(d.get("value", 1))
-        ts = d.get("updated_at")
-        if ts:
-            stamp = datetime.fromisoformat(ts)
-            if stamp.tzinfo is None:
-                stamp = stamp.replace(tzinfo=now.tzinfo)
-            if now - stamp > timedelta(hours=24):
-                log("  irritability: stale (>24h) — defaulting to 1")
-                return 1
-        return max(1, min(5, val))
-    except Exception:
-        return 1
-
-
 def band_for(score):
     for lo, hi, name in BANDS:
         if lo <= score <= hi:
@@ -277,7 +256,7 @@ def score_transits(moon_lon, sun_lon, natal_moon, natal_uranus, house, jd):
     return pts, breakdown, trigger, aspect_to_natal_moon, is_full
 
 
-def score_physiology(hrv, hrv_base, rhr, rhr_base, sleep_score, intensity, irritability):
+def score_physiology(hrv, hrv_base, rhr, rhr_base, sleep_score, intensity):
     """Part B — physiological overlay. Returns (points, breakdown, hrv_pct, rhr_delta)."""
     pts = 0
     breakdown = []
@@ -318,10 +297,6 @@ def score_physiology(hrv, hrv_base, rhr, rhr_base, sleep_score, intensity, irrit
         else:
             pts += 3; breakdown.append(("+3", "High-intensity day, HRV normal"))
 
-    irr_pts = {1: 0, 2: 5, 3: 10, 4: 15, 5: 20}[irritability]
-    if irr_pts:
-        pts += irr_pts; breakdown.append((f"+{irr_pts}", f"Irritability {irritability}/5"))
-
     return pts, breakdown, hrv_pct, rhr_delta
 
 
@@ -349,7 +324,7 @@ BAND_GUIDANCE = {
 }
 
 
-def build_recommendation(score, band, trigger, physiology, intensity, irritability):
+def build_recommendation(score, band, trigger, physiology, intensity):
     guidance = BAND_GUIDANCE.get(band, "")
     rhr_d = physiology["rhr_delta_bpm"]
     prompt = (
@@ -365,7 +340,7 @@ def build_recommendation(score, band, trigger, physiology, intensity, irritabili
         f"Internal context (do not echo): state is '{band}' — {guidance} "
         f"Trigger: {trigger}. HRV {physiology['hrv_pct_baseline']}% vs baseline, "
         f"RHR {rhr_d:+d} bpm, sleep {physiology['sleep_score']}, "
-        f"workout {intensity}, irritability {irritability}/5.\n"
+        f"workout {intensity}.\n"
     )
     try:
         rec = clean(call_claude(prompt))
@@ -418,10 +393,9 @@ def compute(now=None):
     hrv_base = rolling_mean(rec_dates, "recharge", "heart_rate_variability_avg")
     rhr_base = rolling_mean(rec_dates, "recharge", "heart_rate_avg")
     intensity, active_cal = workout_intensity_today()
-    irritability = load_irritability(now)
 
     b_pts, b_break, hrv_pct, rhr_delta = score_physiology(
-        hrv, hrv_base, rhr, rhr_base, sleep_score, intensity, irritability)
+        hrv, hrv_base, rhr, rhr_base, sleep_score, intensity)
 
     raw = a_pts + b_pts
     score = max(0, min(100, raw))
@@ -434,7 +408,7 @@ def compute(now=None):
     }
 
     recommendation = build_recommendation(
-        score, band, trigger, physiology, intensity, irritability)
+        score, band, trigger, physiology, intensity)
 
     return {
         "generated_at": now.isoformat(timespec="seconds"),
@@ -443,7 +417,6 @@ def compute(now=None):
         "trigger": trigger,
         "physiology": physiology,
         "workout_intensity": intensity,
-        "irritability": irritability,
         "recommendation": recommendation,
         "transit_detail": {
             "moon_longitude": round(moon_lon, 2),

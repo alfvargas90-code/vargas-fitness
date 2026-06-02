@@ -461,7 +461,6 @@ const LSI_BANDS = [
   { max: 100, name: "High Nervous Load",  num: "text-bad",     chip: "bg-bad/15 text-bad",         dot: "bg-bad" },
 ];
 const lsiBand = score => LSI_BANDS.find(b => score <= b.max) || LSI_BANDS[LSI_BANDS.length - 1];
-const KEY_IRRITABILITY = "fd.irritability.v1";
 
 async function renderLunarStress() {
   const empty = document.getElementById("lsi-empty");
@@ -511,11 +510,6 @@ async function renderLunarStress() {
   const wk = d.workout_intensity === "high" ? "High intensity" : "Rest / low";
   document.getElementById("lsi-workout").textContent = wk;
 
-  // Irritability tappable row (1-5). Static site can't write the file, so a tap
-  // updates localStorage + shows a copy line for Penny; the score uses the value
-  // in lunar_stress.json (written by Penny) on the next sync.
-  renderIrritabilityRow(d.irritability);
-
   // Recommendation.
   document.getElementById("lsi-recommendation").textContent = d.recommendation || "";
 
@@ -529,7 +523,7 @@ async function renderLunarStress() {
     if (basis) {
       basis.innerHTML = ageH > 2
         ? `<span class="text-warn font-medium">⚠️ ${Math.round(ageH)}h old — Moon position may have drifted; refreshes on next Polar sync.</span>`
-        : `<span class="text-muted">Behavioral calibration, not prediction · transit + Polar physiology + irritability.</span>`;
+        : `<span class="text-muted">Behavioral calibration, not prediction · transit + Polar physiology.</span>`;
     }
   }
 }
@@ -537,36 +531,6 @@ async function renderLunarStress() {
 function ordinal(n) {
   const s = ["th", "st", "nd", "rd"], v = n % 100;
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
-}
-
-function renderIrritabilityRow(currentVal) {
-  const row = document.getElementById("lsi-irritability-row");
-  const hint = document.getElementById("lsi-irritability-hint");
-  if (!row) return;
-  // Local optimistic value wins for highlighting if newer than the file's value.
-  let stored = null;
-  try { stored = JSON.parse(localStorage.getItem(KEY_IRRITABILITY) || "null"); } catch {}
-  const shown = (stored && stored.value) || currentVal || 1;
-  row.innerHTML = "";
-  for (let i = 1; i <= 5; i++) {
-    const b = document.createElement("button");
-    b.textContent = i;
-    b.className = "w-7 h-7 rounded-full text-xs font-medium border transition " +
-      (i === shown
-        ? "bg-accent text-ink border-accent"
-        : "bg-transparent text-muted border-line hover:border-accent");
-    b.style.minHeight = "28px";
-    b.onclick = () => {
-      const stamp = new Date();
-      save(KEY_IRRITABILITY, { value: i, ts: stamp.toISOString() });
-      renderIrritabilityRow(i);
-      const hhmm = stamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
-      hint.textContent = `Saved locally. To apply it to the score, tell Penny: “irritability ${i} at ${hhmm}”.`;
-    };
-    row.appendChild(b);
-  }
-  if (hint && !hint.textContent)
-    hint.textContent = "Tap your reactivity 1–5. Penny writes it to the score on your next message.";
 }
 
 // ---------- Nutrition (Calories Club macros via nutrition/sync.py) ----------
