@@ -1,6 +1,6 @@
 {
   "date": "2026-06-02",
-  "synced_at": "2026-06-02T14:17:47+00:00",
+  "synced_at": "2026-06-02T14:47:53+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 3306.0,
@@ -9,20 +9,30 @@
     "fat_g": 92.0
   },
   "totals": {
-    "calories": 0.0,
-    "protein_g": 0.0,
-    "carbs_g": 0.0,
-    "fat_g": 0.0
+    "calories": 455.0,
+    "protein_g": 44.0,
+    "carbs_g": 8.0,
+    "fat_g": 34.0
   },
-  "meal_count": 0,
+  "meal_count": 1,
   "raw": {
     "date": "2026-06-02",
-    "meals": [],
+    "meals": [
+      {
+        "title": "High-Protein Breakfast",
+        "time": "09:30",
+        "calories": 455,
+        "protein": 44,
+        "fat": 34,
+        "carbs": 8,
+        "emoji": "\u00f0\u009f\u008d\u00b3"
+      }
+    ],
     "totals": {
-      "calories": 0,
-      "protein": 0,
-      "fat": 0,
-      "carbs": 0
+      "calories": 455,
+      "protein": 44,
+      "fat": 34,
+      "carbs": 8
     },
     "targets": {
       "calories": 3306,
@@ -31,14 +41,14 @@
       "carbs": 372
     },
     "remaining": {
-      "calories": 3306,
+      "calories": 2851,
       "is_over": false
     },
-    "meal_count": 0,
+    "meal_count": 1,
     "labels": {
       "header": "Today",
-      "calories_remaining": "3306 kcal remaining today",
-      "meals_logged": "0 meals logged",
+      "calories_remaining": "2851 kcal remaining today",
+      "meals_logged": "1 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
