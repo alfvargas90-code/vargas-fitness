@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-02T17:16:52-05:00",
+  "generated_at": "2026-06-02T17:47:07-05:00",
   "score": 18,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -9,7 +9,7 @@
     "sleep_score": 48
   },
   "workout_intensity": "moderate",
-  "recommendation": "Hold the line you're already on\u2014load resistance work hard and anchor it with deliberate protein, treating instinct as your read and only adjusting if the data shifts under you.",
+  "recommendation": "Hold the charge\u2014load the day hard, and steer the heavier set toward resistance work with protein staged first. Initiate calls and decisions selectively, but the green is real; calibrate against the data, not against hesitation.",
   "bars": {
     "transit": {
       "filled": 2,
@@ -25,7 +25,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 280.37,
+    "moon_longitude": 280.62,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
