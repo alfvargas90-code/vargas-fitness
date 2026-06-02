@@ -43,9 +43,29 @@ BIRTH_LAT, BIRTH_LON = 41.85, -87.65
 ORB = 1.0                       # strict aspect orb, degrees
 FULL_MOON_ORB = 1.0             # Sun-Moon opposition orb for the +10 Full Moon point
 
-# Workout intensity is derived from Polar daily active-calories (no training-session
-# data is synced). Active calories at/above this are treated as a "high" day.
-WORKOUT_HIGH_ACTIVE_CAL = 600
+# Load bands — SINGLE SOURCE OF TRUTH for the Python side, mirrored exactly from the
+# dashboard's app.js LOAD_BANDS. Interpret today's accumulated Polar active-calories
+# (no training-session data is synced) into one band, so the Recovery tile, Activity
+# card, LSI, and AI prompts (summary.py imports these) never contradict each other.
+#   —/Light  -> "rest"      (no workout points)
+#   Moderate -> "moderate"  (+3 points)
+#   Heavy    -> "high"      (+10 on suppressed HRV, else +3)
+LOAD_BANDS = [
+    ("—",        0,   49),
+    ("Light",    50,  399),
+    ("Moderate", 400, 799),
+    ("Heavy",    800, 10 ** 9),
+]
+BAND_INTENSITY = {"—": "rest", "Light": "rest", "Moderate": "moderate", "Heavy": "high"}
+
+
+def load_band_for(active_cal):
+    """Map active-calories -> band name (—/Light/Moderate/Heavy). None/non-numeric -> '—'."""
+    c = active_cal if isinstance(active_cal, (int, float)) else 0
+    for name, lo, hi in LOAD_BANDS:
+        if lo <= c <= hi:
+            return name
+    return "—"
 
 SIGNS = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
          "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
@@ -205,16 +225,14 @@ def load_latest(folder, dates):
 
 
 def workout_intensity_today():
-    """'high' or 'rest', derived from today's Polar active-calories (proxy — no
-    training-session data is synced). Returns 'rest' if no file."""
+    """'high' / 'moderate' / 'rest', derived from today's Polar active-calories band
+    (proxy — no training-session data is synced). Returns ('rest', None) if no file."""
     from datetime import date as _date
     path = os.path.join(HERE, "daily_activity", f"{_date.today().isoformat()}.json")
     try:
         act = load_json(path)
         ac = act.get("active-calories")
-        if ac is not None and ac >= WORKOUT_HIGH_ACTIVE_CAL:
-            return "high", ac
-        return "rest", ac
+        return BAND_INTENSITY[load_band_for(ac)], ac
     except Exception:
         return "rest", None
 
@@ -344,13 +362,16 @@ def score_physiology(hrv, hrv_base, rhr, rhr_base, sleep_score, intensity):
         elif sleep_score > 90:
             pts -= 5; breakdown.append(("-5", f"Sleep score {sleep_score} (>90)"))
 
-    # Workout: high + low HRV -> +10; high + normal HRV -> +3; rest -> 0.
+    # Workout (band-derived): high + low HRV -> +10; high + normal HRV -> +3;
+    # moderate -> +3; rest (—/Light) -> 0.
     hrv_low = hrv_pct is not None and hrv_pct <= -5
     if intensity == "high":
         if hrv_low:
             pts += 10; breakdown.append(("+10", "High-intensity day on suppressed HRV"))
         else:
             pts += 3; breakdown.append(("+3", "High-intensity day, HRV normal"))
+    elif intensity == "moderate":
+        pts += 3; breakdown.append(("+3", "Moderate-intensity day"))
 
     return pts, breakdown, hrv_pct, rhr_delta
 

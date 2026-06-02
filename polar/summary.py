@@ -20,6 +20,21 @@ from statistics import mean
 HERE = os.path.dirname(os.path.abspath(__file__))        # .../fitness-dashboard/polar
 ROOT = os.path.dirname(HERE)                              # .../fitness-dashboard
 
+# Load bands: import the ONE Python definition from lunar_stress.py (which mirrors the
+# dashboard's app.js LOAD_BANDS) so the AI prompt's "load so far" framing reads the
+# exact same thresholds as the Recovery tile, Activity card, and LSI. Resilient fallback
+# keeps summary generation working even if that import ever fails.
+try:
+    from lunar_stress import load_band_for
+except Exception:
+    _LOAD_BANDS = [("—", 0, 49), ("Light", 50, 399), ("Moderate", 400, 799), ("Heavy", 800, 10 ** 9)]
+    def load_band_for(active_cal):
+        c = active_cal if isinstance(active_cal, (int, float)) else 0
+        for name, lo, hi in _LOAD_BANDS:
+            if lo <= c <= hi:
+                return name
+        return "—"
+
 # Daily transit snapshot folder (scheduled task) — files named <date>-transit-snapshot.md
 TRANSIT_DIR = os.path.expanduser(
     "~/Documents/Claude/Scheduled/daily-transit-snapshot")
@@ -305,6 +320,18 @@ def nutrition_line():
         return None
 
 
+def _today_active_cal(today):
+    """Today's accumulated active-calories (or None) — fed to load_band_for() for the
+    shared load-band framing. Never raises."""
+    try:
+        path = os.path.join(HERE, "daily_activity", f"{today}.json")
+        if not os.path.exists(path):
+            return None
+        return load_json(path).get("active-calories")
+    except Exception:
+        return None
+
+
 def activity_today_line(today):
     """Today's accumulated activity (steps / active time / calories burned / active
     calories) from daily_activity/<today>.json, if present. Used to make the daytime
@@ -325,8 +352,10 @@ def activity_today_line(today):
             bits.append(f"{min_to_hm(active_min)} active")
         if cal is not None:
             bits.append(f"{round(cal):,} calories burned")
+        # Express today's exertion as the shared load BAND, not a raw active-calorie
+        # number — same thresholds the Recovery tile / Activity card / LSI use.
         if active_cal is not None:
-            bits.append(f"{round(active_cal):,} of those active")
+            bits.append(f"{load_band_for(active_cal)} training load")
         return ", ".join(bits) if bits else None
     except Exception as e:
         log(f"activity parse failed (non-fatal): {e}")
@@ -713,6 +742,13 @@ def main():
     if show_today_data:
         if activity:
             today_block += f"- Today's activity so far: {activity}\n"
+        # Frame today's exertion as how much of the morning recovery reserve he's
+        # spent, using the shared load band (—/Light/Moderate/Heavy) — never a raw
+        # active-calorie figure. Mirrors the Recovery tile's "Spent so far" line.
+        load_band = load_band_for(_today_active_cal(today_iso))
+        if load_band != "—":
+            today_block += (f"- Today's load so far: he's spent {load_band} of his recovery reserve "
+                            f"(frame as Light/Moderate/Heavy effort, never as a calorie number).\n")
         if nutrition_detail:
             today_block += f"- Today's nutrition so far: {nutrition_detail}\n"
         elif nutrition:

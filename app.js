@@ -236,6 +236,24 @@ async function renderEnergy() {
     document.getElementById("energy-tagline").textContent = recoveryTagline(start);
     document.getElementById("energy-sub").innerHTML = freshnessHTML(latestDate, "wear the watch");
 
+    // "Spent so far" — how much of the morning reserve today's movement has used.
+    // Reads the SAME daily_activity file (and the SAME loadBandFor helper) as the
+    // Activity card, so the band shown here can never contradict it.
+    const spentEl = document.getElementById("energy-spent");
+    if (spentEl) {
+      let activeCal = 0;
+      try {
+        const am = await fetchJSON("polar/manifest.json");
+        const adates = ((am.categories || {}).daily_activity || []).slice().sort();
+        if (adates.length) {
+          const a = await fetchJSON(`polar/daily_activity/${adates.at(-1)}.json`).catch(() => null);
+          if (a && a["active-calories"] != null) activeCal = Number(a["active-calories"]);
+        }
+      } catch { /* no activity synced yet → band "—" */ }
+      const band = loadBandFor(activeCal);
+      spentEl.innerHTML = `Spent so far: ${loadBandChipHTML(band)}`;
+    }
+
     empty.classList.add("hidden");
     content.classList.remove("hidden");
   } catch (e) {
@@ -543,8 +561,11 @@ async function renderLunarStress() {
   if (p.sleep_score != null) phys.push(`Sleep ${p.sleep_score}`);
   document.getElementById("lsi-physiology").textContent = phys.length ? phys.join("  ·  ") : "—";
 
-  // Workout line.
-  const wk = d.workout_intensity === "high" ? "High intensity" : "Rest / low";
+  // Workout line — maps the band-derived intensity (same LOAD_BANDS as the Recovery
+  // tile + Activity card): heavy→high, moderate→moderate, light/none→rest.
+  const wk = d.workout_intensity === "high" ? "High intensity"
+           : d.workout_intensity === "moderate" ? "Moderate intensity"
+           : "Rest / low";
   document.getElementById("lsi-workout").textContent = wk;
 
   // Recommendation.
@@ -872,7 +893,14 @@ async function renderActivity() {
       if (activeCal != null) bits.push(`${Number(activeCal).toLocaleString()} active cal`);
       bits.push("goal % &amp; intensity zones aren't in the Loop Gen 2 daily-activity feed");
     }
-    document.getElementById("activity-footer").innerHTML = bits.join("&nbsp;&nbsp;·&nbsp;&nbsp;");
+    // Load band chip — the SAME loadBandFor() the Recovery tile's "Spent" line uses,
+    // on the SAME active-calories value. The chip is the interpretation; "X active
+    // cal" above is the raw figure. They are guaranteed consistent.
+    const band = loadBandFor(a["active-calories"]);
+    const bandChip = `<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-card border border-line">`
+      + `<span class="inline-block w-2 h-2 rounded-full" style="background:${band.dot}"></span>Load: ${band.name}</span>`;
+    document.getElementById("activity-footer").innerHTML =
+      bandChip + "&nbsp;&nbsp;·&nbsp;&nbsp;" + bits.join("&nbsp;&nbsp;·&nbsp;&nbsp;");
 
     // --- subtitle: "Mon · Jun 1" when fresh, amber stale warning when >1 day old ---
     const dObj = new Date(day + "T00:00:00");
