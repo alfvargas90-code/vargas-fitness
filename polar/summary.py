@@ -395,6 +395,164 @@ def nutrition_gap_line():
         return None
 
 
+# ============================================================================
+# Nutrition nudge — single-line, time-aware "what to eat next" call.
+# Generated each fire alongside the prose, written to summary.json.nutrition_nudge.
+# Deterministic priority rules pick WHICH issue fires (so it can't drift or alarm
+# off-clock); claude -p only phrases the chosen call in Alfie's voice.
+# ============================================================================
+
+# Expected fraction of the daily macro target eaten by each hour (CDT clock).
+# Linearly interpolated between points. A nudge only fires when actual is
+# meaningfully off this pace (the priority rules below bake the thresholds in).
+NUDGE_CURVE = [(6, 0.0), (10, 0.25), (13, 0.50), (18, 0.80), (21, 1.0)]
+
+# The stale-data message (point 5 of the spec): nutrition syncs every 30 min, so
+# if the file hasn't refreshed in 4+ waking hours the nudge can't be trusted.
+NUDGE_STALE_MSG = "Log a meal to refresh the nudge."
+
+# rule key -> the situation handed to claude. The model phrases ONE action line.
+NUDGE_RULES = {
+    "protein_critical": "Protein is critically behind for this point in the day. Tell him to front-load protein into the very next meal to catch the gap.",
+    "calories_low":     "Calories are dangerously low for the evening — on a recomp that risks burning muscle. Tell him to eat a real, protein-anchored meal now.",
+    "calories_over":    "Calories are already past the day's target and it isn't evening yet — he'll overshoot. Tell him to keep the remaining meals light.",
+    "fat_over":         "Fat is over budget for the day. Tell him to pull back oils and fats at the remaining meals.",
+    "carbs_low":        "Carbs are critically low for midday — energy crash risk. Tell him to add carbs at the next meal.",
+    "on_pace":          "Everything is tracking on pace. Give a short, calm on-pace confirmation — keep meal pacing steady.",
+}
+
+
+def expected_fraction(now):
+    """Interpolate NUDGE_CURVE -> expected % (0-1) of daily target by this hour."""
+    h = now.hour + now.minute / 60.0
+    pts = NUDGE_CURVE
+    if h <= pts[0][0]:
+        return 0.0
+    if h >= pts[-1][0]:
+        return 1.0
+    for (h0, f0), (h1, f1) in zip(pts, pts[1:]):
+        if h0 <= h <= h1:
+            return f0 + (f1 - f0) * (h - h0) / (h1 - h0)
+    return 1.0
+
+
+def nutrition_decision(totals, goals, now):
+    """Pick the single highest-priority nudge rule (or 'on_pace') from intake vs
+    target and the time of day. Pure/deterministic so it's unit-testable and never
+    alarms off-clock (e.g. low intake at 11 AM doesn't fire — expected pace is low).
+    Returns a NUDGE_RULES key."""
+    h = now.hour + now.minute / 60.0
+
+    def frac(v, g):
+        return (v / g) if (v not in (None, "") and g) else None
+
+    cal = frac(totals.get("calories"), goals.get("calories"))
+    pro = frac(totals.get("protein_g"), goals.get("protein_g"))
+    carb = frac(totals.get("carbs_g"), goals.get("carbs_g"))
+    fat = frac(totals.get("fat_g"), goals.get("fat_g"))
+
+    # 1 — protein gap critical: <30% by midday, OR <70% by 8 PM
+    if pro is not None and ((h >= 12 and pro < 0.30) or (h >= 20 and pro < 0.70)):
+        return "protein_critical"
+    # 2 — calories dangerously low by 6 PM (muscle-loss risk on a recomp)
+    if cal is not None and h >= 18 and cal < 0.40:
+        return "calories_low"
+    # 3 — calories already over before 6 PM (will overshoot the day)
+    if cal is not None and h < 18 and cal > 1.0:
+        return "calories_over"
+    # 4 — fat over budget (any time of day)
+    if fat is not None and fat > 1.0:
+        return "fat_over"
+    # 5 — carbs critically low by midday
+    if carb is not None and h >= 12 and carb < 0.30:
+        return "carbs_low"
+    # 6 — everything on pace
+    return "on_pace"
+
+
+def _nutrition_synced_age_hours(n, now):
+    """Hours since the nutrition file last synced, or None if unknown."""
+    ts = n.get("synced_at")
+    if not ts:
+        return None
+    try:
+        synced = datetime.fromisoformat(ts)
+        if synced.tzinfo is None:
+            synced = synced.astimezone()
+        return (now - synced).total_seconds() / 3600.0
+    except Exception:
+        return None
+
+
+def _clean_nudge(text):
+    """Single clean line: strip markdown, leading arrows/bullets, stray percentages."""
+    t = clean(text)                          # markdown strip + whitespace collapse
+    t = t.lstrip("→-•* ").strip()
+    t = re.sub(r"\s*\d+\s*%", "", t)          # belt-and-suspenders: kill any percentage
+    # keep only the first sentence if the model rambled into a second
+    parts = re.split(r"(?<=[.!])\s+", t)
+    return parts[0].strip() if parts else t
+
+
+def build_nutrition_nudge(now):
+    """One-line, time-aware nutrition nudge for the dashboard card. Reads today's
+    intake + targets, applies the deterministic priority rules, and has claude -p
+    phrase the chosen action in Alfie's voice. Returns "" (card hides) when there's
+    no data or it's pre-waking; the stale message when the sync has gone quiet."""
+    try:
+        today = now.date().isoformat()
+        path = os.path.join(ROOT, "nutrition", "daily", f"{today}.json")
+        if not os.path.exists(path):
+            return ""
+        n = load_json(path)
+        totals = n.get("totals", {}) or {}
+        goals = n.get("goals", {}) or {}
+        if not goals:
+            return ""
+
+        h = now.hour + now.minute / 60.0
+        waking = 7 <= h <= 22
+        if not waking:
+            return ""   # pre-dawn / overnight: nothing to nudge yet
+
+        # Stale-data guard: syncs run every 30 min, so 4+ waking hours quiet = trust lost.
+        age = _nutrition_synced_age_hours(n, now)
+        if age is not None and age >= 4:
+            return NUDGE_STALE_MSG
+
+        rule = nutrition_decision(totals, goals, now)
+        facts = nutrition_gap_line() or "no meals logged yet"
+        prompt = (
+            "You write ONE short nutrition nudge line for Alfie's fitness dashboard. "
+            "It tells him the single most important food action to take right now.\n\n"
+            "HARD RULES (absolute):\n"
+            "- EXACTLY one sentence, 20 words or fewer.\n"
+            "- Actionable — say WHAT to do, not just that he's short.\n"
+            "- Calibration, not alarm. Confident, plain, direct.\n"
+            "- Gram amounts are fine (e.g. \"50g\"). NO percentages, NO decimals, NO "
+            "biometric jargon (no HRV, ms, BPM), NO \"macros\" label.\n"
+            "- Do NOT use the words \"should\" or \"please\". No soft hedging.\n"
+            "- No preamble, no quotes, no arrow, no label — output ONLY the sentence.\n\n"
+            f"{goal_framing()}"
+            f"Time now: {now.strftime('%I:%M %p').lstrip('0')}.\n"
+            f"Today so far: {facts}\n\n"
+            f"THE SITUATION: {NUDGE_RULES[rule]}\n\n"
+            "Examples of the voice (do not copy):\n"
+            "- Front-load protein at lunch — make it carry 50g.\n"
+            "- Calories on pace, but protein's trailing — load dinner.\n"
+            "- Fat budget gone — pull back oils at dinner.\n"
+            "- On pace across all macros — keep meal pacing steady.\n\n"
+            "Write the one-line nudge now — nothing else."
+        )
+        raw = call_claude(prompt)
+        nudge = _clean_nudge(raw)
+        log(f"nutrition nudge: rule={rule} -> {nudge!r}")
+        return nudge
+    except Exception as e:
+        log(f"nutrition nudge failed (non-fatal): {e}")
+        return ""
+
+
 def _transit_path(d):
     """Today's snapshot path. Filename pattern: <date>-transit-snapshot.md."""
     return os.path.join(TRANSIT_DIR, f"{d.isoformat()}-transit-snapshot.md")
@@ -907,12 +1065,15 @@ def main():
             or re.search(r"\bno (significant|relevant|meaningful)\b", ti, re.I):
         simple["transit"] = None
 
+    nutrition_nudge = build_nutrition_nudge(now)
+
     payload = {
         "generated_at": now.replace(microsecond=0).isoformat(),
         "slot": slot,
         "summary": summary,
         "sections": sections,
         "simple": simple,
+        "nutrition_nudge": nutrition_nudge,
         "transits": transits,
         "data_basis": {
             "recharge_today": rec_today,

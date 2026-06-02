@@ -635,6 +635,28 @@ async function renderNutrition() {
   }
 }
 
+// ---------- Nutrition nudge (single-line, time-aware; polar/summary.py) ----------
+// Sits directly under the Nutrition card. Reads summary.json.nutrition_nudge —
+// shows the line with an arrow cue, or hides itself when empty (off-clock / no data).
+async function renderNutritionNudge() {
+  const el = document.getElementById("nutrition-nudge");
+  if (!el) return;
+  try {
+    const s = await fetchJSON("polar/summary.json");
+    const nudge = (s.nutrition_nudge || "").trim();
+    if (nudge) {
+      el.textContent = "→ " + nudge;
+      el.classList.remove("hidden");
+    } else {
+      el.textContent = "";
+      el.classList.add("hidden");
+    }
+  } catch (e) {
+    el.textContent = "";
+    el.classList.add("hidden");
+  }
+}
+
 // ---------- Latest scale snapshot (VeSync ESF-551 screenshot OCR via Penny) ----------
 // Reads vesync/snapshot.json — manually OCR'd from a screenshot since the BT-only
 // ESF-551 has no body-comp cloud API. Missing file or all-null values → empty state.
@@ -924,6 +946,7 @@ function renderAll() {
   renderTodaysRead(); // async, AI health summary
   renderLunarStress(); // async, Lunar Stress Index (polar/lunar_stress.py)
   renderNutrition(); // async, today's macros from Calories Club
+  renderNutritionNudge(); // async, single-line time-aware nutrition nudge (summary.json)
   renderHeader();
   renderProfileStrip();
   renderScaleSnapshot(); // async, VeSync screenshot OCR snapshot (manual via Penny)
