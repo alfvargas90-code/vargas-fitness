@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-03T05:52:14-05:00",
+  "generated_at": "2026-06-03T06:22:24-05:00",
   "score": 15,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -25,7 +25,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 286.61,
+    "moon_longitude": 286.86,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
@@ -45,7 +45,7 @@
       "hrv_7d": 61.9,
       "rhr_7d": 54.7
     },
-    "active_calories": 16,
+    "active_calories": 17,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
