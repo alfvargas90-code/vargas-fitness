@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-03T08:15:09-05:00",
-  "slot": "overnight",
-  "summary": "Recovery: Good\n\nReading: You came back cleaner than the short night earned — the sleep ran thin on hours, but your body still settled into it and pulled real recovery out of the dark. There's steadiness under you this morning, the regulated kind you tend to rebuild through rather than big swings. Knees and joints are quiet, nothing flagging — you're starting the day from a position of strength, not depletion.\n\nPerformance: Push hard. You're regulated and sitting a touch above your normal baseline despite the short sleep, so today's a green light to load up and go after real output — just keep your form honest if you reach for heavy.\n\nTransit: none",
+  "generated_at": "2026-06-03T09:13:27-05:00",
+  "slot": "morning",
+  "summary": "Recovery: Good\n\nReading: The day's wide open in front of you, and you're walking into it carrying more than the short night should've left you — your system bounced back above its usual line and it's holding steady. You've got a light start already banked, about a thousand steps and two meals down, so the engine's warm without anything really spent. After yesterday's big push, the smart move is to feed the work — keep your plates protein-heavy so the output you're stacking doesn't go hungry.\n\nPerformance: Push hard. You're sitting above your normal recovery line even off a thin night, so take the green light and go after real output today — just match the effort with food, especially protein.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -9,11 +9,11 @@
     },
     {
       "label": "Reading",
-      "text": "You came back cleaner than the short night earned — the sleep ran thin on hours, but your body still settled into it and pulled real recovery out of the dark. There's steadiness under you this morning, the regulated kind you tend to rebuild through rather than big swings. Knees and joints are quiet, nothing flagging — you're starting the day from a position of strength, not depletion."
+      "text": "The day's wide open in front of you, and you're walking into it carrying more than the short night should've left you — your system bounced back above its usual line and it's holding steady. You've got a light start already banked, about a thousand steps and two meals down, so the engine's warm without anything really spent. After yesterday's big push, the smart move is to feed the work — keep your plates protein-heavy so the output you're stacking doesn't go hungry."
     },
     {
       "label": "Performance",
-      "text": "Push hard. You're regulated and sitting a touch above your normal baseline despite the short sleep, so today's a green light to load up and go after real output — just keep your form honest if you reach for heavy."
+      "text": "Push hard. You're sitting above your normal recovery line even off a thin night, so take the green light and go after real output today — just match the effort with food, especially protein."
     },
     {
       "label": "Transit",
@@ -22,19 +22,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "You came back cleaner than the short night earned — the sleep ran thin on hours, but your body still settled into it and pulled real recovery out of the dark. There's steadiness under you this morning, the regulated kind you tend to rebuild through rather than big swings. Knees and joints are quiet, nothing flagging — you're starting the day from a position of strength, not depletion.",
-    "performance": "Push hard. You're regulated and sitting a touch above your normal baseline despite the short sleep, so today's a green light to load up and go after real output — just keep your form honest if you reach for heavy.",
+    "reading": "The day's wide open in front of you, and you're walking into it carrying more than the short night should've left you — your system bounced back above its usual line and it's holding steady. You've got a light start already banked, about a thousand steps and two meals down, so the engine's warm without anything really spent. After yesterday's big push, the smart move is to feed the work — keep your plates protein-heavy so the output you're stacking doesn't go hungry.",
+    "performance": "Push hard. You're sitting above your normal recovery line even off a thin night, so take the green light and go after real output today — just match the effort with food, especially protein.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Two meals down and pacing fine — anchor lunch around 40g of protein to stay ahead.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
     "sleep_hours": 6.8,
     "hrv_today": 66,
     "hrv_7d_avg": 61.9,
-    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
-    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "nutrition": "calories 710 of 2574 goal, protein 31g of 138g goal, carbs 67g of 290g goal, fat 32g of 72g goal",
+    "nutrition_detail": "calories 710 of 2574 goal -> 1864 left; protein 31g of 138g goal -> 107g gap; carbs 67g of 290g goal; fat 32g of 72g goal",
+    "activity_today": "970 steps so far, 47m active, 697 calories burned, Light training load"
   }
 }
