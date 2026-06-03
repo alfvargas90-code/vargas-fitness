@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-02T18:58:28-05:00",
+  "generated_at": "2026-06-02T20:00:00-05:00",
   "slot": "evening",
-  "summary": "Recovery: Good\n\nReading: Day's settled now, and the system feels genuinely ready to let go \u2014 your engine's been running a little cleaner than usual, so tonight's the easy part if you let it be. Nothing's barking for attention; you tend to bank your gains through quiet, repeatable nights rather than dramatic rebounds, so the move is to actually protect the sleep instead of stealing from it with a late screen or a skipped wind-down. Tomorrow's where the real lifting happens \u2014 guard the muscle you're building by feeding it well and keeping the burn honest, not brutal.\n\nPerformance: Wind down. The work's logged \u2014 ease off, let recovery do its job tonight, and tomorrow opens fresh ground to build on.\n\nTransit: none",
+  "summary": "Recovery: Good\n\nReading: Day's settled now, and the system's easing down into a softer gear \u2014 the kind of evening where the body's ready to drop into deeper rest if you let it. You tend to recover best when the night's left clean and uninterrupted, so give it that. Make sure the last meal carried enough protein to feed the muscle you're building overnight \u2014 that's the quiet work that happens while you sleep, and shorting it is the easiest way to leak progress.\n\nPerformance: Wind down. The day's logged \u2014 let the system power down and rest hard tonight, because tomorrow's a fresh platform to load.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -9,11 +9,11 @@
     },
     {
       "label": "Reading",
-      "text": "Day's settled now, and the system feels genuinely ready to let go \u2014 your engine's been running a little cleaner than usual, so tonight's the easy part if you let it be. Nothing's barking for attention; you tend to bank your gains through quiet, repeatable nights rather than dramatic rebounds, so the move is to actually protect the sleep instead of stealing from it with a late screen or a skipped wind-down. Tomorrow's where the real lifting happens \u2014 guard the muscle you're building by feeding it well and keeping the burn honest, not brutal."
+      "text": "Day's settled now, and the system's easing down into a softer gear \u2014 the kind of evening where the body's ready to drop into deeper rest if you let it. You tend to recover best when the night's left clean and uninterrupted, so give it that. Make sure the last meal carried enough protein to feed the muscle you're building overnight \u2014 that's the quiet work that happens while you sleep, and shorting it is the easiest way to leak progress."
     },
     {
       "label": "Performance",
-      "text": "Wind down. The work's logged \u2014 ease off, let recovery do its job tonight, and tomorrow opens fresh ground to build on."
+      "text": "Wind down. The day's logged \u2014 let the system power down and rest hard tonight, because tomorrow's a fresh platform to load."
     },
     {
       "label": "Transit",
@@ -22,19 +22,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "Day's settled now, and the system feels genuinely ready to let go \u2014 your engine's been running a little cleaner than usual, so tonight's the easy part if you let it be. Nothing's barking for attention; you tend to bank your gains through quiet, repeatable nights rather than dramatic rebounds, so the move is to actually protect the sleep instead of stealing from it with a late screen or a skipped wind-down. Tomorrow's where the real lifting happens \u2014 guard the muscle you're building by feeding it well and keeping the burn honest, not brutal.",
-    "performance": "Wind down. The work's logged \u2014 ease off, let recovery do its job tonight, and tomorrow opens fresh ground to build on.",
+    "reading": "Day's settled now, and the system's easing down into a softer gear \u2014 the kind of evening where the body's ready to drop into deeper rest if you let it. You tend to recover best when the night's left clean and uninterrupted, so give it that. Make sure the last meal carried enough protein to feed the muscle you're building overnight \u2014 that's the quiet work that happens while you sleep, and shorting it is the easiest way to leak progress.",
+    "performance": "Wind down. The day's logged \u2014 let the system power down and rest hard tonight, because tomorrow's a fresh platform to load.",
     "transit": null
   },
-  "nutrition_nudge": "Eat a real meal now anchored on chicken or beef for 40g protein \u2014 empty calories this late risk muscle.",
+  "nutrition_nudge": "On pace across all macros \u2014 keep dinner protein-forward and pacing steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
     "sleep_hours": 6.8,
     "hrv_today": 66,
     "hrv_7d_avg": 61.9,
-    "nutrition": "calories 996 of 2574 goal, protein 120g of 138g goal, carbs 115g of 290g goal, fat 39g of 72g goal",
-    "nutrition_detail": "calories 996 of 2574 goal -> 1578 left; protein 120g of 138g goal -> 18g gap; carbs 115g of 290g goal; fat 39g of 72g goal",
+    "nutrition": "calories 1596 of 2574 goal, protein 196g of 138g goal, carbs 142g of 290g goal, fat 58g of 72g goal",
+    "nutrition_detail": "calories 1596 of 2574 goal -> 978 left; protein 196g of 138g goal -> 58g over; carbs 142g of 290g goal; fat 58g of 72g goal",
     "activity_today": null
   }
 }
