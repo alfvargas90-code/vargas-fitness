@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-06-03T09:13:27-05:00",
-  "slot": "morning",
-  "summary": "Recovery: Good\n\nReading: The day's wide open in front of you, and you're walking into it carrying more than the short night should've left you — your system bounced back above its usual line and it's holding steady. You've got a light start already banked, about a thousand steps and two meals down, so the engine's warm without anything really spent. After yesterday's big push, the smart move is to feed the work — keep your plates protein-heavy so the output you're stacking doesn't go hungry.\n\nPerformance: Push hard. You're sitting above your normal recovery line even off a thin night, so take the green light and go after real output today — just match the effort with food, especially protein.\n\nTransit: none",
+  "generated_at": "2026-06-03T12:38:05-05:00",
+  "slot": "midday",
+  "summary": "Recovery: Excellent\n\nReading: Halfway through the day and the morning call is holding — your overnight numbers actually firmed up on the re-sync, with your system reading clearly above its weekly line even off a genuinely short night. You've banked about 3,100 steps and over two hours on your feet, all of it light effort, so the reserve is still nearly full and the real output window is wide open this afternoon. Three meals are down including lunch, but protein is the lagging number — you're at 66 grams with 72 still to go, and fat's already at target, so the rest of the day needs to be lean and protein-first.\n\nPerformance: Push hard. The green light from this morning still stands and you've barely spent any of it — take the afternoon for real output, and back it with protein-dense food since that gap is the only thing off pace.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
-      "text": "Good"
+      "text": "Excellent"
     },
     {
       "label": "Reading",
-      "text": "The day's wide open in front of you, and you're walking into it carrying more than the short night should've left you — your system bounced back above its usual line and it's holding steady. You've got a light start already banked, about a thousand steps and two meals down, so the engine's warm without anything really spent. After yesterday's big push, the smart move is to feed the work — keep your plates protein-heavy so the output you're stacking doesn't go hungry."
+      "text": "Halfway through the day and the morning call is holding — your overnight numbers actually firmed up on the re-sync, with your system reading clearly above its weekly line even off a genuinely short night. You've banked about 3,100 steps and over two hours on your feet, all of it light effort, so the reserve is still nearly full and the real output window is wide open this afternoon. Three meals are down including lunch, but protein is the lagging number — you're at 66 grams with 72 still to go, and fat's already at target, so the rest of the day needs to be lean and protein-first."
     },
     {
       "label": "Performance",
-      "text": "Push hard. You're sitting above your normal recovery line even off a thin night, so take the green light and go after real output today — just match the effort with food, especially protein."
+      "text": "Push hard. The green light from this morning still stands and you've barely spent any of it — take the afternoon for real output, and back it with protein-dense food since that gap is the only thing off pace."
     },
     {
       "label": "Transit",
@@ -21,20 +21,20 @@
     }
   ],
   "simple": {
-    "recovery": "Good",
-    "reading": "The day's wide open in front of you, and you're walking into it carrying more than the short night should've left you — your system bounced back above its usual line and it's holding steady. You've got a light start already banked, about a thousand steps and two meals down, so the engine's warm without anything really spent. After yesterday's big push, the smart move is to feed the work — keep your plates protein-heavy so the output you're stacking doesn't go hungry.",
-    "performance": "Push hard. You're sitting above your normal recovery line even off a thin night, so take the green light and go after real output today — just match the effort with food, especially protein.",
+    "recovery": "Excellent",
+    "reading": "Halfway through the day and the morning call is holding — your overnight numbers actually firmed up on the re-sync, with your system reading clearly above its weekly line even off a genuinely short night. You've banked about 3,100 steps and over two hours on your feet, all of it light effort, so the reserve is still nearly full and the real output window is wide open this afternoon. Three meals are down including lunch, but protein is the lagging number — you're at 66 grams with 72 still to go, and fat's already at target, so the rest of the day needs to be lean and protein-first.",
+    "performance": "Push hard. The green light from this morning still stands and you've barely spent any of it — take the afternoon for real output, and back it with protein-dense food since that gap is the only thing off pace.",
     "transit": null
   },
-  "nutrition_nudge": "Two meals down and pacing fine — anchor lunch around 40g of protein to stay ahead.",
+  "nutrition_nudge": "Protein's the lag — 66g of 138g with fat already at target, so make the next two meals lean and 35g-plus each.",
   "transits": [],
   "data_basis": {
-    "recharge_today": 4,
-    "sleep_hours": 6.8,
-    "hrv_today": 66,
-    "hrv_7d_avg": 61.9,
-    "nutrition": "calories 710 of 2574 goal, protein 31g of 138g goal, carbs 67g of 290g goal, fat 32g of 72g goal",
-    "nutrition_detail": "calories 710 of 2574 goal -> 1864 left; protein 31g of 138g goal -> 107g gap; carbs 67g of 290g goal; fat 32g of 72g goal",
-    "activity_today": "970 steps so far, 47m active, 697 calories burned, Light training load"
+    "recharge_today": 5,
+    "sleep_hours": 4.1,
+    "hrv_today": 70,
+    "hrv_7d_avg": 64.1,
+    "nutrition": "calories 1460 of 2574 goal, protein 66g of 138g goal, carbs 117g of 290g goal, fat 77g of 72g goal",
+    "nutrition_detail": "calories 1460 of 2574 goal -> 1114 left; protein 66g of 138g goal -> 72g gap; carbs 117g of 290g goal; fat 77g of 72g goal",
+    "activity_today": "3,105 steps so far, 2h 14m active, 1,238 calories burned, Light training load"
   }
 }
