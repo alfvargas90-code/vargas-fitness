@@ -1,6 +1,6 @@
 {
   "date": "2026-06-02",
-  "synced_at": "2026-06-03T00:19:34+00:00",
+  "synced_at": "2026-06-03T00:49:40+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 996.0,
-    "protein_g": 120.0,
-    "carbs_g": 115.0,
-    "fat_g": 39.0
+    "calories": 1596.0,
+    "protein_g": 196.0,
+    "carbs_g": 142.0,
+    "fat_g": 58.0
   },
-  "meal_count": 3,
+  "meal_count": 5,
   "raw": {
     "date": "2026-06-02",
     "meals": [
@@ -44,13 +44,31 @@
         "fat": 4,
         "carbs": 71,
         "emoji": "\u00f0\u009f\u008d\u00b1"
+      },
+      {
+        "title": "Kirkland Milk",
+        "time": "19:43",
+        "calories": 480,
+        "protein": 52,
+        "fat": 18,
+        "carbs": 24,
+        "emoji": "\u00f0\u009f\u00a5\u009b"
+      },
+      {
+        "title": "Whey Protein Scoop",
+        "time": "19:44",
+        "calories": 120,
+        "protein": 24,
+        "fat": 2,
+        "carbs": 3,
+        "emoji": "\u00f0\u009f\u00a5\u00a4"
       }
     ],
     "totals": {
-      "calories": 996,
-      "protein": 120,
-      "fat": 39,
-      "carbs": 115
+      "calories": 1596,
+      "protein": 196,
+      "fat": 58,
+      "carbs": 142
     },
     "targets": {
       "calories": 2574,
@@ -59,14 +77,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 1578,
+      "calories": 978,
       "is_over": false
     },
-    "meal_count": 3,
+    "meal_count": 5,
     "labels": {
       "header": "Today",
-      "calories_remaining": "1578 kcal remaining today",
-      "meals_logged": "3 meals logged",
+      "calories_remaining": "978 kcal remaining today",
+      "meals_logged": "5 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
