@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-02T20:00:00-05:00",
-  "slot": "evening",
-  "summary": "Recovery: Good\n\nReading: Day's settled now, and the system's easing down into a softer gear \u2014 the kind of evening where the body's ready to drop into deeper rest if you let it. You tend to recover best when the night's left clean and uninterrupted, so give it that. Make sure the last meal carried enough protein to feed the muscle you're building overnight \u2014 that's the quiet work that happens while you sleep, and shorting it is the easiest way to leak progress.\n\nPerformance: Wind down. The day's logged \u2014 let the system power down and rest hard tonight, because tomorrow's a fresh platform to load.\n\nTransit: none",
+  "generated_at": "2026-06-03T08:15:09-05:00",
+  "slot": "overnight",
+  "summary": "Recovery: Good\n\nReading: You came back cleaner than the short night earned — the sleep ran thin on hours, but your body still settled into it and pulled real recovery out of the dark. There's steadiness under you this morning, the regulated kind you tend to rebuild through rather than big swings. Knees and joints are quiet, nothing flagging — you're starting the day from a position of strength, not depletion.\n\nPerformance: Push hard. You're regulated and sitting a touch above your normal baseline despite the short sleep, so today's a green light to load up and go after real output — just keep your form honest if you reach for heavy.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -9,11 +9,11 @@
     },
     {
       "label": "Reading",
-      "text": "Day's settled now, and the system's easing down into a softer gear \u2014 the kind of evening where the body's ready to drop into deeper rest if you let it. You tend to recover best when the night's left clean and uninterrupted, so give it that. Make sure the last meal carried enough protein to feed the muscle you're building overnight \u2014 that's the quiet work that happens while you sleep, and shorting it is the easiest way to leak progress."
+      "text": "You came back cleaner than the short night earned — the sleep ran thin on hours, but your body still settled into it and pulled real recovery out of the dark. There's steadiness under you this morning, the regulated kind you tend to rebuild through rather than big swings. Knees and joints are quiet, nothing flagging — you're starting the day from a position of strength, not depletion."
     },
     {
       "label": "Performance",
-      "text": "Wind down. The day's logged \u2014 let the system power down and rest hard tonight, because tomorrow's a fresh platform to load."
+      "text": "Push hard. You're regulated and sitting a touch above your normal baseline despite the short sleep, so today's a green light to load up and go after real output — just keep your form honest if you reach for heavy."
     },
     {
       "label": "Transit",
@@ -22,19 +22,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "Day's settled now, and the system's easing down into a softer gear \u2014 the kind of evening where the body's ready to drop into deeper rest if you let it. You tend to recover best when the night's left clean and uninterrupted, so give it that. Make sure the last meal carried enough protein to feed the muscle you're building overnight \u2014 that's the quiet work that happens while you sleep, and shorting it is the easiest way to leak progress.",
-    "performance": "Wind down. The day's logged \u2014 let the system power down and rest hard tonight, because tomorrow's a fresh platform to load.",
+    "reading": "You came back cleaner than the short night earned — the sleep ran thin on hours, but your body still settled into it and pulled real recovery out of the dark. There's steadiness under you this morning, the regulated kind you tend to rebuild through rather than big swings. Knees and joints are quiet, nothing flagging — you're starting the day from a position of strength, not depletion.",
+    "performance": "Push hard. You're regulated and sitting a touch above your normal baseline despite the short sleep, so today's a green light to load up and go after real output — just keep your form honest if you reach for heavy.",
     "transit": null
   },
-  "nutrition_nudge": "On pace across all macros \u2014 keep dinner protein-forward and pacing steady.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
     "sleep_hours": 6.8,
     "hrv_today": 66,
     "hrv_7d_avg": 61.9,
-    "nutrition": "calories 1596 of 2574 goal, protein 196g of 138g goal, carbs 142g of 290g goal, fat 58g of 72g goal",
-    "nutrition_detail": "calories 1596 of 2574 goal -> 978 left; protein 196g of 138g goal -> 58g over; carbs 142g of 290g goal; fat 58g of 72g goal",
+    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
+    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
     "activity_today": null
   }
 }
