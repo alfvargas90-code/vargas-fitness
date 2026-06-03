@@ -310,7 +310,7 @@ function renderRechargeStack(days, recMap) {
   const rows = days.slice().reverse().map(d => {
     const st = recMap[d]?.ans_charge_status ?? 0;
     const cells = Array.from({ length: 6 }, (_, i) => i < st
-      ? `<span class="inline-block w-3 h-3 rounded-full" style="background:#22d3ee"></span>`
+      ? `<span class="inline-block w-3 h-3 rounded-full" style="background:#c084fc"></span>`
       : `<span class="inline-block w-3 h-3 rounded-full bg-card border border-line"></span>`).join("");
     return `<div class="flex items-center gap-2">
       <span class="text-xs text-muted w-12 shrink-0">${labelMD(d)}</span>
@@ -576,7 +576,7 @@ async function renderLunarStress() {
       const empty = "░".repeat(Math.max(0, (b.total || 10) - b.filled));
       return `<div class="flex items-center gap-2">` +
         `<span class="w-16 shrink-0 font-sans text-xs uppercase tracking-wide text-muted">${label}</span>` +
-        `<span class="tracking-tight"><span class="${band.num}">${filled}</span><span class="text-line">${empty}</span></span>` +
+        `<span class="tracking-tight"><span class="text-purple-300">${filled}</span><span class="text-line">${empty}</span></span>` +
         `</div>`;
     };
     const b = d.bars || {};
@@ -657,7 +657,7 @@ async function renderNutrition() {
       const goalTxt = m.goal != null ? `/ ${Math.round(m.goal)}${m.unit} goal` : "";
       const pct = (val != null && m.goal) ? Math.min(100, Math.round((val / m.goal) * 100)) : null;
       const bar = pct != null
-        ? `<div class="h-1.5 bg-line rounded-full mt-2 overflow-hidden"><div class="h-full bg-accent" style="width:${pct}%"></div></div>`
+        ? `<div class="h-1.5 bg-line rounded-full mt-2 overflow-hidden"><div class="h-full bg-purple-400/70" style="width:${pct}%"></div></div>`
         : "";
       return `<div class="bg-bg rounded-lg p-3 border border-line">
         <div class="text-xs text-muted">${m.label}</div>

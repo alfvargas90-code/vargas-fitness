@@ -21,6 +21,7 @@
           panel: "#0a0a0a",
           card:  "#141414",
           line:  "rgba(168,85,247,0.18)",
+          linesoft: "rgba(168,85,247,0.09)",
           muted: "#9ca3af",
           accent:"#22d3ee",
           good:  "#34d399",
@@ -77,7 +78,7 @@
     <!-- Header -->
     <header class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-8">
       <div>
-        <p class="text-2xl font-semibold tracking-tight text-fuchsia-300" id="header-sub">Loading…</p>
+        <p class="text-sm font-normal tracking-tight text-neutral-400" id="header-sub">Loading…</p>
         <p class="text-xs text-purple-300/70 mt-1" id="profile-strip"></p>
       </div>
     </header>
@@ -88,17 +89,17 @@
         <button type="button" data-target="polar-panel"
                 class="flex flex-col items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 rounded-lg py-1">
           <div class="w-20 h-20 sm:w-24 sm:h-24 aspect-square" id="ring-sleep-svg"></div>
-          <span class="text-[10px] sm:text-xs uppercase tracking-wider text-purple-300">Sleep</span>
+          <span class="text-xs uppercase tracking-wider text-purple-300">Sleep</span>
         </button>
         <button type="button" data-target="lunar-stress"
                 class="flex flex-col items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 rounded-lg py-1">
           <div class="w-20 h-20 sm:w-24 sm:h-24 aspect-square" id="ring-recovery-svg"></div>
-          <span class="text-[10px] sm:text-xs uppercase tracking-wider text-purple-300">Recovery</span>
+          <span class="text-xs uppercase tracking-wider text-purple-300">Recovery</span>
         </button>
         <button type="button" data-target="activity"
                 class="flex flex-col items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 rounded-lg py-1">
           <div class="w-20 h-20 sm:w-24 sm:h-24 aspect-square" id="ring-strain-svg"></div>
-          <span class="text-[10px] sm:text-xs uppercase tracking-wider text-purple-300">Strain</span>
+          <span class="text-xs uppercase tracking-wider text-purple-300">Strain</span>
         </button>
       </div>
     </section>
@@ -145,9 +146,9 @@
     </section>
 
     <!-- Nutrition — today's macros from Calories Club (nutrition/sync.py) -->
-    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="nutrition-panel">
+    <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="nutrition-panel">
       <div class="flex items-center justify-between mb-4">
-        <h2 class="font-semibold text-fuchsia-300">Nutrition · today</h2>
+        <h2 class="font-semibold text-neutral-300">Nutrition · today</h2>
         <span class="text-xs text-purple-300/70" id="nutrition-sub"></span>
       </div>
       <div id="nutrition-empty" class="text-sm text-muted">
@@ -160,9 +161,9 @@
     <div id="nutrition-nudge" class="hidden -mt-6 mb-8 px-1 text-sm italic text-purple-300/80"></div>
 
     <!-- Latest scale snapshot — VeSync ESF-551 screenshot OCR (manual via Penny) -->
-    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="snapshot-panel">
+    <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="snapshot-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h2 class="font-semibold text-fuchsia-300">Latest scale snapshot <span class="text-xs text-purple-300/70 font-normal">· VeSync</span></h2>
+        <h2 class="font-semibold text-neutral-300">Latest scale snapshot <span class="text-xs text-purple-300/70 font-normal">· VeSync</span></h2>
         <span class="text-xs text-purple-300/70" id="snapshot-sub"></span>
       </div>
       <div id="snapshot-empty" class="text-sm text-muted">
@@ -174,9 +175,9 @@
     </section>
 
     <!-- Activity · today (Polar Loop Gen 2 daily activity via polar/sync.py) -->
-    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="activity">
+    <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="activity">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h2 class="font-semibold text-fuchsia-300">Activity · today <span class="text-xs text-purple-300/70 font-normal">· Polar Loop</span></h2>
+        <h2 class="font-semibold text-neutral-300">Activity · today <span class="text-xs text-purple-300/70 font-normal">· Polar Loop</span></h2>
         <span class="text-xs text-purple-300/70" id="activity-sub"></span>
       </div>
       <div id="activity-empty" class="text-sm text-muted">
@@ -190,9 +191,9 @@
     </section>
 
     <!-- Training & Recovery (live Polar Loop data via polar/sync.py) -->
-    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="polar-panel">
+    <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="polar-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h2 class="font-semibold text-fuchsia-300">Training &amp; Recovery <span class="text-xs text-purple-300/70 font-normal">· Polar Loop</span></h2>
+        <h2 class="font-semibold text-neutral-300">Training &amp; Recovery <span class="text-xs text-purple-300/70 font-normal">· Polar Loop</span></h2>
         <span class="text-xs text-purple-300/70" id="polar-sub"></span>
       </div>
       <div id="polar-empty" class="text-sm text-muted">
@@ -219,7 +220,7 @@
               <h3 class="text-sm font-medium text-purple-300/80 mb-2">Heart-rate variability</h3>
               <div class="flex items-end gap-3">
                 <div class="text-3xl font-semibold stat-num leading-none" id="polar-hrv-num">—</div>
-                <div class="text-accent flex-1 min-w-0" id="polar-hrv-spark"></div>
+                <div class="text-neutral-400 flex-1 min-w-0" id="polar-hrv-spark"></div>
               </div>
               <div class="text-xs text-muted mt-2" id="polar-hrv-sub"></div>
             </div>
@@ -229,9 +230,9 @@
     </section>
 
     <!-- Day in review — nightly freeze (polar/day_review.json, fires 9:45 PM CST) -->
-    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="day-review">
+    <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="day-review">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h2 class="font-semibold text-fuchsia-300">Day in review <span class="text-xs text-purple-300/70 font-normal" id="day-review-date"></span></h2>
+        <h2 class="font-semibold text-neutral-300">Day in review <span class="text-xs text-purple-300/70 font-normal" id="day-review-date"></span></h2>
         <span class="text-xs text-purple-300/70" id="day-review-sub"></span>
       </div>
       <div id="day-review-empty" class="text-sm text-muted">
@@ -245,9 +246,9 @@
     </section>
 
     <!-- Scale history — VeSync ESF-551 manual screenshot readings (vesync/history.json) -->
-    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="scale-history-panel">
+    <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="scale-history-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h2 class="font-semibold text-fuchsia-300">Scale history <span class="text-xs text-purple-300/70 font-normal">· VeSync</span></h2>
+        <h2 class="font-semibold text-neutral-300">Scale history <span class="text-xs text-purple-300/70 font-normal">· VeSync</span></h2>
         <span class="text-xs text-purple-300/70" id="scale-history-sub"></span>
       </div>
       <div id="scale-history-empty" class="text-sm text-muted hidden">
