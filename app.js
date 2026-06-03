@@ -193,24 +193,25 @@ async function renderPolar() {
 // the Strain ring and the Activity load chip can never contradict.
 const RESERVE_DEPLETION_CAL = 800;
 
-// State-color bands per ring. emerald / cyan / amber / red.
+// State-color bands per ring — semantic, not decorative.
+// green = performance/peak · cyan = recovery/readiness · amber = caution · red = risk.
 function sleepColor(v) {
-  return v >= 90 ? "#34d399"   // emerald — elite
-       : v >= 70 ? "#22d3ee"   // cyan — good
-       : v >= 50 ? "#fbbf24"   // amber — fair
-       :           "#f87171";  // red — poor
+  return v >= 90 ? "#34d399"   // green — performance-level sleep
+       : v >= 50 ? "#22d3ee"   // cyan — good recovery (70-89 + 50-69)
+       : v >= 30 ? "#fbbf24"   // amber — caution (sub-50 isn't critical unless chronic)
+       :           "#f87171";  // red — <30 (chronic-low territory)
 }
-function energyColor(v) {              // Recovery bands (unchanged from the old tile)
-  return v >= 80 ? "#34d399"   // green — strong
-       : v >= 60 ? "#22d3ee"   // cyan — decent
-       : v >= 40 ? "#fbbf24"   // amber — light
-       :           "#f87171";  // red — rest
+function energyColor(v) {              // Recovery bands
+  return v >= 90 ? "#34d399"   // green — peak performance
+       : v >= 50 ? "#22d3ee"   // cyan — recovery / readiness (good + decent)
+       : v >= 30 ? "#fbbf24"   // amber — caution (low, <50)
+       :           "#f87171";  // red — critical (<30)
 }
 function strainColor(pct) {            // fills opposite of Reserve — more load → hotter
-  return pct < 20 ? "#34d399"   // emerald — low load
-       : pct < 50 ? "#22d3ee"   // cyan
-       : pct < 80 ? "#fbbf24"   // amber
-       :            "#f87171";  // red — heavy load
+  return pct < 15 ? "#9ca3af"   // gray — nothing meaningful yet
+       : pct < 50 ? "#22d3ee"   // cyan — engagement, recovery still supports
+       : pct < 80 ? "#fbbf24"   // amber — real load, caution
+       :            "#f87171";  // red — high strain, true risk
 }
 
 // Overnight recovery score — combines recharge + sleep + HRV vs an adaptive HRV
@@ -310,7 +311,7 @@ function renderRechargeStack(days, recMap) {
   const rows = days.slice().reverse().map(d => {
     const st = recMap[d]?.ans_charge_status ?? 0;
     const cells = Array.from({ length: 6 }, (_, i) => i < st
-      ? `<span class="inline-block w-3 h-3 rounded-full" style="background:#c084fc"></span>`
+      ? `<span class="inline-block w-3 h-3 rounded-full" style="background:#22d3ee"></span>`
       : `<span class="inline-block w-3 h-3 rounded-full bg-card border border-line"></span>`).join("");
     return `<div class="flex items-center gap-2">
       <span class="text-xs text-muted w-12 shrink-0">${labelMD(d)}</span>
@@ -417,9 +418,20 @@ const RECOVERY_COLORS = {
   good: "text-accent",    // cyan
   excellent: "text-good", // green
 };
-// "Wind down" is the evening-only verdict (sleep prep / day's-done framing); the
-// other four are daytime training calls. All are bolded by renderTodaysRead().
-const PERF_VERDICTS = ["Push hard", "Train normally", "Moderate effort", "Prioritize recovery", "Wind down"];
+// "Wind down" / "Rest day" are evening / off verdicts (sleep prep / day's-done
+// framing — metadata, not a performance state); the others are daytime training
+// calls. All are bolded by renderTodaysRead(), and the verdict word itself is
+// colored by meaning: green = push/improve, cyan = recovery-is-good, amber =
+// caution, gray = neutral non-state. Longer phrases first so startsWith() wins.
+const PERF_VERDICTS = ["Push hard", "Train normally", "Moderate effort", "Prioritize recovery", "Wind down", "Rest day"];
+const PERF_VERDICT_COLORS = {
+  "Push hard":          "text-perf",    // green — performance / improvement
+  "Train normally":     "text-accent",  // cyan — recovery is good
+  "Moderate effort":    "text-warn",    // amber — caution
+  "Prioritize recovery":"text-warn",    // amber — caution, not risk
+  "Wind down":          "text-muted",   // gray — metadata, not a performance state
+  "Rest day":           "text-muted",   // gray — metadata
+};
 
 // Short paragraph block with a small uppercase subtitle.
 function readBlock(subtitle, text) {
@@ -492,7 +504,7 @@ async function renderTodaysRead() {
         const v = PERF_VERDICTS.find(v => t.toLowerCase().startsWith(v.toLowerCase()));
         if (v) {
           const strong = document.createElement("strong");
-          strong.className = "text-neutral-200";
+          strong.className = PERF_VERDICT_COLORS[v] || "text-neutral-200";
           strong.textContent = t.slice(0, v.length);
           p.appendChild(strong);
           p.appendChild(document.createTextNode(t.slice(v.length)));
@@ -534,11 +546,12 @@ async function renderTodaysRead() {
 // ---------- Lunar Stress Index (polar/lunar_stress.py) ----------
 // Band -> color classes (score number text, chip bg/text, dot bg). Mirrors the
 // spec bands: emerald / cyan / amber / orange / red.
+// cyan = good recovery state · amber = caution/heavy load · red = true risk.
 const LSI_BANDS = [
-  { max: 25,  name: "Stable Control",     num: "text-good",    chip: "bg-good/15 text-good",       dot: "bg-good" },
+  { max: 25,  name: "Stable Control",     num: "text-accent",  chip: "bg-accent/15 text-accent",   dot: "bg-accent" },
   { max: 45,  name: "Mild Compression",   num: "text-accent",  chip: "bg-accent/15 text-accent",   dot: "bg-accent" },
   { max: 65,  name: "Moderate Compression", num: "text-warn",  chip: "bg-warn/15 text-warn",       dot: "bg-warn" },
-  { max: 85,  name: "Elevated Reactivity", num: "text-orange-400", chip: "bg-orange-400/15 text-orange-400", dot: "bg-orange-400" },
+  { max: 85,  name: "Elevated Reactivity", num: "text-warn",   chip: "bg-warn/15 text-warn",       dot: "bg-warn" },
   { max: 100, name: "High Nervous Load",  num: "text-bad",     chip: "bg-bad/15 text-bad",         dot: "bg-bad" },
 ];
 const lsiBand = score => LSI_BANDS.find(b => score <= b.max) || LSI_BANDS[LSI_BANDS.length - 1];
@@ -657,7 +670,7 @@ async function renderNutrition() {
       const goalTxt = m.goal != null ? `/ ${Math.round(m.goal)}${m.unit} goal` : "";
       const pct = (val != null && m.goal) ? Math.min(100, Math.round((val / m.goal) * 100)) : null;
       const bar = pct != null
-        ? `<div class="h-1.5 bg-line rounded-full mt-2 overflow-hidden"><div class="h-full bg-purple-400/70" style="width:${pct}%"></div></div>`
+        ? `<div class="h-1.5 bg-neutral-800 rounded-full mt-2 overflow-hidden"><div class="h-full bg-accent/80" style="width:${pct}%"></div></div>`
         : "";
       return `<div class="bg-bg rounded-lg p-3 border border-line">
         <div class="text-xs text-muted">${m.label}</div>
@@ -751,10 +764,10 @@ async function renderScaleSnapshot() {
 // next night's fire overwrites it. Empty state before the first fire; amber stale
 // warning if the frozen date is from more than a day ago.
 const DAY_REVIEW_BADGES = {
-  easy:  { label: "Easy day",  cls: "text-slate-300 bg-slate-800" },
-  solid: { label: "Solid day", cls: "text-cyan-300 bg-cyan-900/40" },
-  great: { label: "Great day", cls: "text-emerald-300 bg-emerald-900/40" },
-  big:   { label: "Big day",   cls: "text-amber-300 bg-amber-900/40" },
+  easy:  { label: "Easy day",  cls: "text-cyan-300 bg-cyan-900/40" },     // cyan — good/recovered
+  solid: { label: "Solid day", cls: "text-cyan-300 bg-cyan-900/40" },     // cyan — good
+  great: { label: "Great day", cls: "text-emerald-300 bg-emerald-900/40" },// green — performance/improvement
+  big:   { label: "Big day",   cls: "text-amber-300 bg-amber-900/40" },   // amber — heavy load
 };
 
 async function renderDayReview() {

@@ -25,6 +25,7 @@
           muted: "#9ca3af",
           accent:"#22d3ee",
           good:  "#34d399",
+          perf:  "#34d399",
           warn:  "#fbbf24",
           bad:   "#f87171",
         },
@@ -79,7 +80,7 @@
     <header class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-8">
       <div>
         <p class="text-sm font-normal tracking-tight text-neutral-400" id="header-sub">Loading…</p>
-        <p class="text-xs text-purple-300/70 mt-1" id="profile-strip"></p>
+        <p class="text-xs text-neutral-400 mt-1" id="profile-strip"></p>
       </div>
     </header>
 
@@ -107,8 +108,8 @@
     <!-- Today's read — AI health summary (polar/summary.py, 5x/day) -->
     <section class="bg-card rounded-xl p-5 border border-line mb-8" id="todays-read">
       <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-        <h2 class="font-semibold text-fuchsia-300">Today's read <span class="text-xs text-purple-300/70 font-normal">· AI</span></h2>
-        <span class="text-xs text-purple-300/70" id="read-ts"></span>
+        <h2 class="font-semibold text-fuchsia-300">Today's read <span class="text-xs text-neutral-400 font-normal">· AI</span></h2>
+        <span class="text-xs text-neutral-400" id="read-ts"></span>
       </div>
       <p class="text-base leading-relaxed text-neutral-200" id="read-body" style="font-size:16px;">First read drops at 9:05 AM</p>
       <p class="text-xs text-muted mt-3" id="read-basis"></p>
@@ -117,8 +118,8 @@
     <!-- Lunar Stress Index — nervous-system compression model (polar/lunar_stress.py) -->
     <section class="bg-card rounded-xl p-5 border border-line mb-8" id="lunar-stress">
       <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-        <h2 class="font-semibold text-fuchsia-300">Lunar Stress Index <span class="text-xs text-purple-300/70 font-normal">· Nervous-system compression</span></h2>
-        <span class="text-xs text-purple-300/70" id="lsi-ts"></span>
+        <h2 class="font-semibold text-fuchsia-300">Lunar Stress Index <span class="text-xs text-neutral-400 font-normal">· Nervous-system compression</span></h2>
+        <span class="text-xs text-neutral-400" id="lsi-ts"></span>
       </div>
       <div id="lsi-empty" class="text-sm text-muted">
         First read computes on the next Polar sync.
@@ -149,7 +150,7 @@
     <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="nutrition-panel">
       <div class="flex items-center justify-between mb-4">
         <h2 class="font-semibold text-neutral-300">Nutrition · today</h2>
-        <span class="text-xs text-purple-300/70" id="nutrition-sub"></span>
+        <span class="text-xs text-neutral-400" id="nutrition-sub"></span>
       </div>
       <div id="nutrition-empty" class="text-sm text-muted">
         No nutrition data yet — run <code class="text-fuchsia-400">nutrition/sync.py</code> to pull today's macros from Calories Club.
@@ -163,8 +164,8 @@
     <!-- Latest scale snapshot — VeSync ESF-551 screenshot OCR (manual via Penny) -->
     <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="snapshot-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h2 class="font-semibold text-neutral-300">Latest scale snapshot <span class="text-xs text-purple-300/70 font-normal">· VeSync</span></h2>
-        <span class="text-xs text-purple-300/70" id="snapshot-sub"></span>
+        <h2 class="font-semibold text-neutral-300">Latest scale snapshot <span class="text-xs text-neutral-400 font-normal">· VeSync</span></h2>
+        <span class="text-xs text-neutral-400" id="snapshot-sub"></span>
       </div>
       <div id="snapshot-empty" class="text-sm text-muted">
         No fresh scale reading yet.<br>
@@ -177,8 +178,8 @@
     <!-- Activity · today (Polar Loop Gen 2 daily activity via polar/sync.py) -->
     <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="activity">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h2 class="font-semibold text-neutral-300">Activity · today <span class="text-xs text-purple-300/70 font-normal">· Polar Loop</span></h2>
-        <span class="text-xs text-purple-300/70" id="activity-sub"></span>
+        <h2 class="font-semibold text-neutral-300">Activity · today <span class="text-xs text-neutral-400 font-normal">· Polar Loop</span></h2>
+        <span class="text-xs text-neutral-400" id="activity-sub"></span>
       </div>
       <div id="activity-empty" class="text-sm text-muted">
         No activity data yet — run <code class="text-fuchsia-400">polar/sync.py</code> to pull today's steps, active time &amp; calories from Polar Loop.
@@ -193,8 +194,8 @@
     <!-- Training & Recovery (live Polar Loop data via polar/sync.py) -->
     <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="polar-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h2 class="font-semibold text-neutral-300">Training &amp; Recovery <span class="text-xs text-purple-300/70 font-normal">· Polar Loop</span></h2>
-        <span class="text-xs text-purple-300/70" id="polar-sub"></span>
+        <h2 class="font-semibold text-neutral-300">Training &amp; Recovery <span class="text-xs text-neutral-400 font-normal">· Polar Loop</span></h2>
+        <span class="text-xs text-neutral-400" id="polar-sub"></span>
       </div>
       <div id="polar-empty" class="text-sm text-muted">
         No Polar data yet — run <code class="text-fuchsia-400">polar/sync.py</code> to populate Nightly Recharge, sleep &amp; activity.
@@ -232,8 +233,8 @@
     <!-- Day in review — nightly freeze (polar/day_review.json, fires 9:45 PM CST) -->
     <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="day-review">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h2 class="font-semibold text-neutral-300">Day in review <span class="text-xs text-purple-300/70 font-normal" id="day-review-date"></span></h2>
-        <span class="text-xs text-purple-300/70" id="day-review-sub"></span>
+        <h2 class="font-semibold text-neutral-300">Day in review <span class="text-xs text-neutral-400 font-normal" id="day-review-date"></span></h2>
+        <span class="text-xs text-neutral-400" id="day-review-sub"></span>
       </div>
       <div id="day-review-empty" class="text-sm text-muted">
         Tonight's wrap-up drops at 9:45 PM — steps, deficit, protein &amp; an AI read on how the day went.
@@ -248,8 +249,8 @@
     <!-- Scale history — VeSync ESF-551 manual screenshot readings (vesync/history.json) -->
     <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="scale-history-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h2 class="font-semibold text-neutral-300">Scale history <span class="text-xs text-purple-300/70 font-normal">· VeSync</span></h2>
-        <span class="text-xs text-purple-300/70" id="scale-history-sub"></span>
+        <h2 class="font-semibold text-neutral-300">Scale history <span class="text-xs text-neutral-400 font-normal">· VeSync</span></h2>
+        <span class="text-xs text-neutral-400" id="scale-history-sub"></span>
       </div>
       <div id="scale-history-empty" class="text-sm text-muted hidden">
         No scale history yet — send VeSync screenshots to Penny to backfill.
