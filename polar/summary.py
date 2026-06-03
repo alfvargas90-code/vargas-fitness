@@ -9,8 +9,14 @@ the live URL updates. The `Reading` section fuses physical body-area notes with 
 natal recovery trait into ONE flowing paragraph — astrology is texture, never named.
 The biometrics inform the read but never appear in it — no raw numbers, units, or jargon.
 
-Run by the com.alfredo.polar-summary LaunchAgent 6x/day (4:15, 9:05, 12:30, 16:45, 20:00, 21:45 CST).
-(9:05, not 9:00, so it fires off the :00/:30 boundary the 30-min polar-sync timer hits — avoids the same-minute sync race that left "Today's Read" stale.)
+Run by the com.alfredo.polar-summary LaunchAgent 7x/day (CDT), one fire per slot:
+  04:00 sleep · 07:00 recovery · 11:30 fuel-1 · 15:00 fuel-2 · 17:30 train-1 ·
+  20:00 train-2 · 21:45 day-review.
+NOTE: several of these fire times land ON the :00/:30 boundary the 30-min polar-sync
+timer also hits. The old 9:05 fire used a :05 offset specifically to dodge that
+same-minute sync race (which once left "Today's Read" stale). The 7-fire schedule
+above is locked by Alfie; if a stale-read race resurfaces, nudge the offending fire
+a few minutes off the boundary rather than reverting the schedule.
 The 21:45 fire is the nightly Day-in-Review slot: it freezes the day's stats + verdict + prose into day_review.json INSTEAD OF the regular summary.json.
 """
 import json, os, re, shutil, subprocess, sys
@@ -101,63 +107,84 @@ SIMPLE_KEYS = ["recovery", "reading", "performance", "transit"]
 
 # Per-slot framing for the Reading prose. The Recovery WORD is always from overnight
 # data (it doesn't change through the day), but the prose around it should move with
-# the clock — fresh capacity in the morning, progress-checks midday/afternoon, and a
-# present-moment wind-down in the evening that leaves the day's stat recap to the
-# 9:45 PM Day-in-Review card.
+# the clock — sleep-in-progress at 4 AM, a wake-up read at 7, fueling/energy checks
+# mid-day, the workout window opening and closing in the evening — and the day's stat
+# recap stays owned by the 9:45 PM Day-in-Review card.
 SLOT_FRAMING = {
-    "overnight": (
-        "SLOT — OVERNIGHT (~4 AM, Alfie just woke up). The Reading is a first read of what the "
-        "night's recovery left him with — the body's report card from sleep.\n"
-        "LEAD WITH: the sleep / recharge state — what the body PRODUCED overnight. The very first "
-        "sentence must be about the night's recovery, not body areas.\n"
-        "Opener examples (do not copy verbatim): \"You came back clean from last night…\" / "
-        "\"Last night gave you steady sleep but…\" / \"Recovery landed strong overnight…\"\n"
-        "No day-ahead planning yet, no activity or food talk — just where he's starting from."
+    "sleep": (
+        "SLOT — SLEEP-IN-PROGRESS (~4 AM, Alfie is still asleep / barely stirring). The Reading is "
+        "a first read of what the night's recovery is producing — the body's report card while the "
+        "night is still running.\n"
+        "LEAD WITH: the sleep / recharge state — what the body has PRODUCED overnight and what it's "
+        "setting up for tomorrow. The very first sentence must be about the night's recovery, not "
+        "body areas.\n"
+        "Opener examples (do not copy verbatim): \"The night's giving you a clean recharge…\" / "
+        "\"Sleep's banking steady recovery so far…\" / \"Recovery's landing strong as the night runs…\"\n"
+        "No day-ahead planning yet, no activity or food talk — just what the night is setting up."
     ),
-    "morning": (
-        "SLOT — MORNING (~9 AM, the day is open in front of him). The Reading frames fresh capacity "
-        "and the day ahead.\n"
-        "LEAD WITH: the day-ahead frame — his capacity to SPEND today. The first sentence looks "
-        "forward, not back.\n"
-        "Opener examples (do not copy verbatim): \"Day's wide open in front of you…\" / "
-        "\"You're walking into today with…\" / \"The morning's clear and the tank's full…\"\n"
+    "recovery": (
+        "SLOT — RECOVERY / WAKE-UP READ (~7 AM, Alfie just woke up, day is open in front of him). "
+        "The Reading is the full recovery score now that the night is done — what kind of day the "
+        "body is set up for.\n"
+        "LEAD WITH: the wake-up read — the recovery he's starting the day on and his capacity to "
+        "SPEND today. The first sentence frames what kind of day this is.\n"
+        "Opener examples (do not copy verbatim): \"You woke up with real capacity today…\" / "
+        "\"The night left you a solid base to work from…\" / \"Today's a recover-and-hold kind of day…\"\n"
         "If a little activity or food is already logged, touch it lightly as a starting point, but "
-        "keep the focus forward — on what the day can hold, not what's behind him."
+        "keep the focus on what kind of day the recovery sets up."
     ),
-    "midday": (
-        "SLOT — MIDDAY (~12:30 PM, half the day done). The Reading is about how the day is tracking "
-        "so far.\n"
-        "LEAD WITH: what's ALREADY ACCUMULATED today — a current pace check. The first sentence "
-        "names where the day stands right now (steps put down, food/protein pace).\n"
-        "Opener examples (do not copy verbatim): \"You've already put down 3,000 steps and…\" / "
-        "\"Half the day's logged…\" / \"Morning's behind you with…\"\n"
-        "Weave the numbers in as lived context, never a stat list."
+    "fuel-1": (
+        "SLOT — FUEL #1 (~11:30 AM, late morning, first fueling + energy check). The Reading is "
+        "about how energy and fueling are tracking so far.\n"
+        "LEAD WITH: the fueling / energy state — is the tank holding or dropping, is food keeping "
+        "pace with the day. The first sentence names where energy and fuel stand right now "
+        "(protein/calorie pace, steps put down).\n"
+        "Opener examples (do not copy verbatim): \"Energy's holding but the fuel's lagging…\" / "
+        "\"You're past mid-morning and protein's barely moving…\" / \"The tank's steady; food's "
+        "keeping up so far…\"\n"
+        "Weave the numbers in as lived context, never a stat list. The day's training call still "
+        "applies — fueling supports it, it doesn't replace it."
     ),
-    "afternoon": (
-        "SLOT — AFTERNOON (~4:45 PM, day mostly behind him, evening to go). The Reading is a "
-        "progress check plus what's left.\n"
-        "LEAD WITH: what's LEFT in the day — what to do with the remaining hours. The first "
-        "sentence is about the hours still in front of him, not a recap.\n"
-        "Opener examples (do not copy verbatim): \"Plenty of day still in you…\" / \"The session "
-        "you've been holding off is right there…\" / \"Afternoon's the turn point — you've moved a "
-        "little, you've got…\"\n"
-        "Reference the accumulated activity and food naturally as part of the read."
+    "fuel-2": (
+        "SLOT — FUEL #2 (~3 PM, mid-afternoon, second fueling + energy check). The Reading is a "
+        "fueling/energy progress check plus what's left to top off.\n"
+        "LEAD WITH: where energy and fueling stand now and what's LEFT to fix before the evening — "
+        "is he fueled for the workout window, or running a deficit into it. The first sentence is "
+        "about the fuel/energy state heading into the back half of the day.\n"
+        "Opener examples (do not copy verbatim): \"You've got the afternoon to close the protein "
+        "gap…\" / \"Energy's dipping and the fuel's behind…\" / \"Fueled up well — that sets the "
+        "evening up right…\"\n"
+        "Reference the accumulated food and activity naturally as part of the read."
     ),
-    "evening": (
-        "SLOT — EVENING (~8 PM, winding toward night). This is a PRESENT-MOMENT read, NOT a recap. "
-        "Do NOT mention steps, calories, protein, active time, or any of the day's accumulated "
-        "stats — a separate nightly card owns the day's wrap-up.\n"
-        "LEAD WITH: present-moment / sleep-prep state — how the system feels heading into night. "
-        "The first sentence is about right now and winding down.\n"
-        "Opener examples (do not copy verbatim): \"Day's settled now…\" / \"Heading into night…\" / "
-        "\"The work's done; the system feels…\"\n"
-        "Focus only on right-now state: how the system feels heading into the night, sleep prep, "
-        "and tomorrow as the next platform."
+    "train-1": (
+        "SLOT — TRAIN OPEN (~5:30 PM, the workout window is opening). The Reading is the prep read "
+        "for the session — is he going to train, and what's the call.\n"
+        "LEAD WITH: the workout window opening — what today's session should look like given his "
+        "recovery and how much he's already spent. The first sentence is about the training "
+        "decision in front of him right now.\n"
+        "Opener examples (do not copy verbatim): \"The window's open and you've got room to push…\" / "
+        "\"Session's right there — recovery says go…\" / \"You've spent a fair bit already; keep "
+        "tonight's work honest…\"\n"
+        "Reference the accumulated activity and fueling naturally as part of the read."
+    ),
+    "train-2": (
+        "SLOT — TRAIN CLOSE (~8 PM, the workout window is closing). The Reading is the landing read "
+        "— did he train, and how did it land. Look at today's activity/load to judge.\n"
+        "LEAD WITH: how the workout window closed — if he trained, how the session landed and what "
+        "to do with the rest of the night; if he didn't, the present-moment wind-down into sleep. "
+        "The first sentence is about where the day's training ended up and winding toward night.\n"
+        "Opener examples (do not copy verbatim): \"You got the work in — now let it settle…\" / "
+        "\"The window's closing and the session's logged…\" / \"No training today; the system's "
+        "ready to wind down…\"\n"
+        "Focus on the close: how the session landed (or that the window passed), sleep prep, and "
+        "tomorrow as the next platform."
     ),
 }
-# Slots whose prompt gets today's accumulated activity + nutrition fed in. Overnight is
-# too early to have any; evening deliberately omits it (present-moment, no recap).
-TODAY_DATA_SLOTS = {"morning", "midday", "afternoon"}
+# Slots whose prompt gets today's accumulated activity + nutrition fed in. The 4 AM sleep
+# slot is too early to have any. The fuel slots are literally fueling/energy checks and
+# the train slots need today's load to judge the session, so all four get the data — and
+# train-2 (unlike the old hardcoded evening wind-down) needs it to read whether he trained.
+TODAY_DATA_SLOTS = {"recovery", "fuel-1", "fuel-2", "train-1", "train-2"}
 
 
 def log(msg):
@@ -165,13 +192,21 @@ def log(msg):
 
 
 def slot_for(now):
-    """overnight / morning / midday / afternoon / evening from minutes-of-day."""
-    m = now.hour * 60 + now.minute
-    if 2 * 60 <= m <= 5 * 60 + 59:   return "overnight"  # 02:00–05:59 (4:15 fire)
-    if m <= 10 * 60 + 30:   return "morning"      # …–10:30
-    if m <= 14 * 60 + 30:   return "midday"       # 10:31–14:30
-    if m <= 18 * 60:        return "afternoon"    # 14:31–18:00
-    return "evening"                              # 18:01–…
+    """sleep / recovery / fuel-1 / fuel-2 / train-1 / train-2 / day-review from
+    minutes-of-day. Boundaries are cut so each scheduled fire lands cleanly inside
+    its own slot's window with margin on either side (7-fire schedule, CDT):
+      04:00 sleep · 07:00 recovery · 11:30 fuel-1 · 15:00 fuel-2 ·
+      17:30 train-1 · 20:00 train-2 · 21:45 day-review.
+    The 21:45 day-review fire is actually dispatched by is_night_review() upstream,
+    so the trailing "day-review" return is a late-evening fallback, not the live path."""
+    t = now.hour * 60 + now.minute
+    if 3 * 60 <= t < 6 * 60:            return "sleep"      # covers 04:00 fire
+    if 6 * 60 <= t < 9 * 60:            return "recovery"   # covers 07:00 fire
+    if 9 * 60 <= t < 13 * 60 + 15:      return "fuel-1"     # covers 11:30 fire
+    if 13 * 60 + 15 <= t < 16 * 60 + 15: return "fuel-2"    # covers 15:00 fire
+    if 16 * 60 + 15 <= t < 18 * 60 + 45: return "train-1"   # covers 17:30 fire
+    if 18 * 60 + 45 <= t < 21 * 60 + 15: return "train-2"   # covers 20:00 fire
+    return "day-review"                                     # covers 21:45 fire + late fallback
 
 
 def load_json(path):
@@ -910,9 +945,9 @@ def main():
     activity = activity_today_line(today_iso)  # today's accumulated steps / active / burn
     nutrition_detail = nutrition_gap_line()    # macros + delta vs target, for the prompt
 
-    # Feed today's accumulated activity + nutrition only into the daytime slots. Overnight
-    # is too early to have any; evening is a present-moment read that deliberately leaves
-    # the day's stat recap to the 9:45 PM Day-in-Review card.
+    # Feed today's accumulated activity + nutrition into the data-bearing slots (recovery,
+    # both fuel checks, both train windows). The 4 AM sleep slot is too early to have any.
+    # The day's stat recap stays owned by the 9:45 PM Day-in-Review card.
     show_today_data = slot in TODAY_DATA_SLOTS
     today_block = ""
     if show_today_data:
@@ -934,22 +969,30 @@ def main():
     transit_block = ("\n".join(f"- {t}" for t in transits)
                      if transits else "- No relevant transit data available today.")
 
-    framing = SLOT_FRAMING.get(slot, SLOT_FRAMING["morning"])
+    framing = SLOT_FRAMING.get(slot, SLOT_FRAMING["recovery"])
 
     rest_today = is_rest_day(today_iso)
 
-    # Performance verdict set is slot-aware: evening gets the wind-down call, every
-    # other slot gets the four daytime training verdicts. An explicit rest day swaps
-    # the daytime training verdicts for recovery framing (evening's wind-down already
-    # reads as recovery, so it's left alone).
-    if slot == "evening":
+    # Performance verdict set is slot-aware. train-2 is the workout-window CLOSE: if he
+    # trained it reads as a training-quality call (the daytime verdicts), if he didn't it
+    # lands on Wind down — the same word the old hardcoded evening slot used. Every other
+    # slot gets the four daytime training verdicts. An explicit rest day swaps the daytime
+    # verdicts for recovery framing (train-2's "didn't train → Wind down" already covers
+    # the rest-day case, so it's handled before the rest-day branch). No NEW verdict words
+    # are introduced — fuel/train slots still draw from the ratified vocabulary only.
+    if slot == "train-2":
         perf_instr = (
-            "Performance: start with EXACTLY this verdict — Wind down — then one short sentence of "
-            "wind-down / sleep-prep reasoning (the day's work is logged; tomorrow is the next "
-            "platform). Do NOT use Push hard / Train normally / Moderate effort / Prioritize "
-            "recovery at this slot. "
-            "Example: \"Wind down. The day's logged — sleep prep is the move now, and tomorrow gives "
-            "you a fresh platform to build on.\"\n"
+            "Performance: this is the workout-window CLOSE — judge from today's activity/load. "
+            "If he trained today, start with EXACTLY one of — Push hard / Train normally / Moderate "
+            "effort / Prioritize recovery — chosen to fit how the session actually landed, then one "
+            "short sentence on how it went and the night ahead. If he did NOT train today, start "
+            "with EXACTLY this verdict — Wind down — then one short sentence of wind-down / sleep-prep "
+            "reasoning (the window's closed; tomorrow is the next platform). Use ONLY these verdict "
+            "words; do not invent new ones. "
+            "Example (trained): \"Train normally. You got a solid session in — now protein and sleep "
+            "lock it in, and tomorrow builds on it.\" "
+            "Example (didn't): \"Wind down. The window's closed — sleep prep is the move now, and "
+            "tomorrow gives you a fresh platform to build on.\"\n"
         )
     elif rest_today:
         perf_instr = (
@@ -967,13 +1010,11 @@ def main():
             "light to go after it — just keep technique honest if you go heavy.\"\n"
         )
 
-    # Whether the Reading may reference today's rounded activity/food numbers.
-    if slot == "evening":
-        numbers_rule = (
-            "- This is the EVENING slot: write NO numbers at all — no steps, no calories, no protein, "
-            "no times. The nightly card recaps the day's stats; your job is the present moment.\n"
-        )
-    elif show_today_data:
+    # Whether the Reading may reference today's rounded activity/food numbers. Every
+    # data-bearing slot may; the early slots (sleep, recovery before anything's logged)
+    # fall through to the no-numbers default. train-2 now reads today's load to judge the
+    # session, so it gets numbers too — unlike the old evening slot which suppressed them.
+    if show_today_data:
         numbers_rule = (
             "- You MAY reference today's activity and food as rounded, everyday numbers in natural "
             "speech (e.g. \"about 3,000 steps down already\", \"protein's barely halfway\") — but only "
@@ -1024,8 +1065,10 @@ def main():
         "Base it ONLY on the overnight recovery/sleep data, never on the time of day.\n"
         "Reading: ONE paragraph, two or three sentences, flowing prose, written in the tone of the slot "
         "framing above. The FIRST sentence MUST open with the slot's LEAD framing (see the slot block "
-        "above) — overnight leads with the night's recovery, morning with the day ahead, midday with "
-        "what's accumulated, afternoon with what's left, evening with the present wind-down. Then, in the "
+        "above) — sleep leads with the night's recovery in progress, recovery with what kind of day "
+        "the wake-up read sets up, the fuel slots with how energy/fueling is tracking, train-1 with the "
+        "workout window opening, train-2 with how the session landed (or the wind-down if he didn't "
+        "train). Then, in the "
         "MIDDLE of the paragraph, you may blend in: (1) any body areas that actually deserve attention "
         "today (joints, tendons, shoulders, neck, lower body) — mention ONLY when there's a real signal "
         "worth noting; if nothing's flagged, you may skip body areas entirely rather than opening with "
@@ -1045,7 +1088,7 @@ def main():
         "- Crutch phrases — \"stacking steady days\", \"the tank's full\", \"Nothing's flagging\", \"your "
         "usual watch areas\" — are overused. Use AT MOST ONE of these per prose; find fresh wording for "
         "everything else.\n"
-        "Example (afternoon, note it leads with what's LEFT, body areas only mid-prose): \"Plenty of day "
+        "Example (fuel-2, note it leads with what's LEFT, body areas only mid-prose): \"Plenty of day "
         "still in you, and that walk you've been putting off is right there for the taking. Knees and "
         "shoulders are quiet, nothing pulling for attention — you recover best by stacking steady days, "
         "and a light evening push keeps that streak honest.\"\n"
