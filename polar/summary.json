@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-03T12:38:05-05:00",
-  "slot": "midday",
-  "summary": "Recovery: Excellent\n\nReading: Halfway through the day and the morning call is holding — your overnight numbers actually firmed up on the re-sync, with your system reading clearly above its weekly line even off a genuinely short night. You've banked about 3,100 steps and over two hours on your feet, all of it light effort, so the reserve is still nearly full and the real output window is wide open this afternoon. Three meals are down including lunch, but protein is the lagging number — you're at 66 grams with 72 still to go, and fat's already at target, so the rest of the day needs to be lean and protein-first.\n\nPerformance: Push hard. The green light from this morning still stands and you've barely spent any of it — take the afternoon for real output, and back it with protein-dense food since that gap is the only thing off pace.\n\nTransit: none",
+  "generated_at": "2026-06-03T16:20:37-05:00",
+  "slot": "train-1",
+  "summary": "Recovery: Excellent\n\nReading: The window's open and you've made the call — rest day, and that's the right read to trust even with this morning's green light still on the table. You decided to bank the capacity instead of spending it, and choosing recovery off a strong night is its own kind of discipline, not a day off the wagon. You've already put down a fair bit of background movement, so this isn't a sit-still day — the job now is to protect what you've built: protein's still barely halfway, so make the rest of the evening lean and protein-first, then water and an early night to let it all settle.\n\nPerformance: Rest day. You called it, so today's about protein, hydration, and an early night — let the work you've banked settle in instead of spending the green light.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -9,11 +9,11 @@
     },
     {
       "label": "Reading",
-      "text": "Halfway through the day and the morning call is holding — your overnight numbers actually firmed up on the re-sync, with your system reading clearly above its weekly line even off a genuinely short night. You've banked about 3,100 steps and over two hours on your feet, all of it light effort, so the reserve is still nearly full and the real output window is wide open this afternoon. Three meals are down including lunch, but protein is the lagging number — you're at 66 grams with 72 still to go, and fat's already at target, so the rest of the day needs to be lean and protein-first."
+      "text": "The window's open and you've made the call — rest day, and that's the right read to trust even with this morning's green light still on the table. You decided to bank the capacity instead of spending it, and choosing recovery off a strong night is its own kind of discipline, not a day off the wagon. You've already put down a fair bit of background movement, so this isn't a sit-still day — the job now is to protect what you've built: protein's still barely halfway, so make the rest of the evening lean and protein-first, then water and an early night to let it all settle."
     },
     {
       "label": "Performance",
-      "text": "Push hard. The green light from this morning still stands and you've barely spent any of it — take the afternoon for real output, and back it with protein-dense food since that gap is the only thing off pace."
+      "text": "Rest day. You called it, so today's about protein, hydration, and an early night — let the work you've banked settle in instead of spending the green light."
     },
     {
       "label": "Transit",
@@ -22,8 +22,8 @@
   ],
   "simple": {
     "recovery": "Excellent",
-    "reading": "Halfway through the day and the morning call is holding — your overnight numbers actually firmed up on the re-sync, with your system reading clearly above its weekly line even off a genuinely short night. You've banked about 3,100 steps and over two hours on your feet, all of it light effort, so the reserve is still nearly full and the real output window is wide open this afternoon. Three meals are down including lunch, but protein is the lagging number — you're at 66 grams with 72 still to go, and fat's already at target, so the rest of the day needs to be lean and protein-first.",
-    "performance": "Push hard. The green light from this morning still stands and you've barely spent any of it — take the afternoon for real output, and back it with protein-dense food since that gap is the only thing off pace.",
+    "reading": "The window's open and you've made the call — rest day, and that's the right read to trust even with this morning's green light still on the table. You decided to bank the capacity instead of spending it, and choosing recovery off a strong night is its own kind of discipline, not a day off the wagon. You've already put down a fair bit of background movement, so this isn't a sit-still day — the job now is to protect what you've built: protein's still barely halfway, so make the rest of the evening lean and protein-first, then water and an early night to let it all settle.",
+    "performance": "Rest day. You called it, so today's about protein, hydration, and an early night — let the work you've banked settle in instead of spending the green light.",
     "transit": null
   },
   "nutrition_nudge": "Protein's the lag — 66g of 138g with fat already at target, so make the next two meals lean and 35g-plus each.",
