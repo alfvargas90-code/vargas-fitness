@@ -177,8 +177,11 @@
 
     <!-- Activity · today (Polar Loop Gen 2 daily activity via polar/sync.py) -->
     <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="activity">
-      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h2 class="font-semibold text-neutral-300">Activity · today <span class="text-xs text-neutral-400 font-normal">· Polar Loop</span></h2>
+      <div class="flex items-start justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <h2 class="font-semibold text-neutral-300">Activity · today <span class="text-xs text-neutral-400 font-normal">· Polar Loop</span></h2>
+          <span class="text-xs text-muted" id="activity-updated"></span>
+        </div>
         <span class="text-xs text-neutral-400" id="activity-sub"></span>
       </div>
       <div id="activity-empty" class="text-sm text-muted">

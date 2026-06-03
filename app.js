@@ -914,6 +914,21 @@ function isoDurationToHM(iso) {
   return `${min}m`;
 }
 
+// Relative "last synced" stamp for the Activity card, tied to polar/sync.py's
+// 30-min cadence (manifest.synced_at). Gray (metadata) when fresh; flips amber
+// (caution) past the 2-hour drift threshold — a soft "sync may be dead" signal
+// complementary to the dashboard-wide staleness banner (WHEN_HOME #9).
+function activitySyncStamp(syncedAtISO) {
+  if (!syncedAtISO) return null;                 // old manifest, no timestamp yet
+  const t = new Date(syncedAtISO).getTime();
+  if (!isFinite(t)) return null;
+  const mins = Math.max(0, Math.floor((Date.now() - t) / 60000)); // clamp clock skew
+  if (mins >= 120) return { text: "Updated 2h+ ago", stale: true };
+  if (mins >= 60)  return { text: `Updated ${Math.floor(mins / 60)} hr ago`, stale: false };
+  if (mins >= 1)   return { text: `Updated ${mins} min ago`, stale: false };
+  return { text: "Updated just now", stale: false };
+}
+
 async function renderActivity() {
   const empty = document.getElementById("activity-empty");
   const content = document.getElementById("activity-content");
@@ -925,6 +940,16 @@ async function renderActivity() {
   };
   try {
     const manifest = await fetchJSON("polar/manifest.json");
+
+    // "Updated N min ago" stamp from polar/sync.py's per-run manifest timestamp.
+    const upd = document.getElementById("activity-updated");
+    if (upd) {
+      const stamp = activitySyncStamp(manifest.synced_at);
+      upd.textContent = stamp ? stamp.text : "";
+      upd.classList.toggle("text-warn", !!stamp && stamp.stale);   // amber past 2h drift
+      upd.classList.toggle("text-muted", !stamp || !stamp.stale);  // gray when fresh
+    }
+
     const dates = ((manifest.categories || {}).daily_activity || []).slice().sort();
     if (!dates.length) return showEmpty();                       // no synced activity → empty
     const latest = dates.at(-1);

@@ -23,7 +23,7 @@ import sys
 import threading
 import urllib.parse
 import webbrowser
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 import requests
@@ -278,8 +278,17 @@ def pull_daily_activity(token, user_id):
 
 
 def rebuild_manifest():
-    """Index available dates per category so the dashboard can load them."""
-    manifest = {"generated": date.today().isoformat(), "categories": {}}
+    """Index available dates per category so the dashboard can load them.
+
+    `synced_at` is a full UTC ISO-8601 timestamp rewritten on every run (this
+    function is called unconditionally each sync), so the dashboard's Activity
+    card can show a live "Updated N min ago" stamp tied to the 30-min cadence.
+    """
+    manifest = {
+        "generated": date.today().isoformat(),
+        "synced_at": datetime.now(timezone.utc).isoformat(),
+        "categories": {},
+    }
     for cat in CATEGORIES:
         folder = os.path.join(HERE, cat)
         dates = []
