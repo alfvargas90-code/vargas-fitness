@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-03T16:20:37-05:00",
-  "slot": "train-1",
-  "summary": "Recovery: Excellent\n\nReading: The window's open and you've made the call — rest day, and that's the right read to trust even with this morning's green light still on the table. You decided to bank the capacity instead of spending it, and choosing recovery off a strong night is its own kind of discipline, not a day off the wagon. You've already put down a fair bit of background movement, so this isn't a sit-still day — the job now is to protect what you've built: protein's still barely halfway, so make the rest of the evening lean and protein-first, then water and an early night to let it all settle.\n\nPerformance: Rest day. You called it, so today's about protein, hydration, and an early night — let the work you've banked settle in instead of spending the green light.\n\nTransit: none",
+  "generated_at": "2026-06-03T16:45:00-05:00",
+  "slot": "afternoon",
+  "summary": "Recovery: Excellent\n\nReading: Afternoon check-in, and the rest day you called this morning is holding exactly the way it should — about 4,200 steps and three hours of light movement, nothing that touches the reserve you banked overnight. Yesterday's big push earned this, and recovering on purpose after a heavy day is how you actually keep the streak compounding instead of grinding it down. The one thing still open is the plate: protein's sitting at 66 of 138 with fat already past its line, so the rest of today is lean protein, water, and an early night — especially off four hours of sleep.\n\nPerformance: Rest day. You made the call and the numbers back it — light load, capacity banked. Close the protein gap tonight and let yesterday's work settle in.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -9,11 +9,11 @@
     },
     {
       "label": "Reading",
-      "text": "The window's open and you've made the call — rest day, and that's the right read to trust even with this morning's green light still on the table. You decided to bank the capacity instead of spending it, and choosing recovery off a strong night is its own kind of discipline, not a day off the wagon. You've already put down a fair bit of background movement, so this isn't a sit-still day — the job now is to protect what you've built: protein's still barely halfway, so make the rest of the evening lean and protein-first, then water and an early night to let it all settle."
+      "text": "Afternoon check-in, and the rest day you called this morning is holding exactly the way it should — about 4,200 steps and three hours of light movement, nothing that touches the reserve you banked overnight. Yesterday's big push earned this, and recovering on purpose after a heavy day is how you actually keep the streak compounding instead of grinding it down. The one thing still open is the plate: protein's sitting at 66 of 138 with fat already past its line, so the rest of today is lean protein, water, and an early night — especially off four hours of sleep."
     },
     {
       "label": "Performance",
-      "text": "Rest day. You called it, so today's about protein, hydration, and an early night — let the work you've banked settle in instead of spending the green light."
+      "text": "Rest day. You made the call and the numbers back it — light load, capacity banked. Close the protein gap tonight and let yesterday's work settle in."
     },
     {
       "label": "Transit",
@@ -22,11 +22,11 @@
   ],
   "simple": {
     "recovery": "Excellent",
-    "reading": "The window's open and you've made the call — rest day, and that's the right read to trust even with this morning's green light still on the table. You decided to bank the capacity instead of spending it, and choosing recovery off a strong night is its own kind of discipline, not a day off the wagon. You've already put down a fair bit of background movement, so this isn't a sit-still day — the job now is to protect what you've built: protein's still barely halfway, so make the rest of the evening lean and protein-first, then water and an early night to let it all settle.",
-    "performance": "Rest day. You called it, so today's about protein, hydration, and an early night — let the work you've banked settle in instead of spending the green light.",
+    "reading": "Afternoon check-in, and the rest day you called this morning is holding exactly the way it should — about 4,200 steps and three hours of light movement, nothing that touches the reserve you banked overnight. Yesterday's big push earned this, and recovering on purpose after a heavy day is how you actually keep the streak compounding instead of grinding it down. The one thing still open is the plate: protein's sitting at 66 of 138 with fat already past its line, so the rest of today is lean protein, water, and an early night — especially off four hours of sleep.",
+    "performance": "Rest day. You made the call and the numbers back it — light load, capacity banked. Close the protein gap tonight and let yesterday's work settle in.",
     "transit": null
   },
-  "nutrition_nudge": "Protein's the lag — 66g of 138g with fat already at target, so make the next two meals lean and 35g-plus each.",
+  "nutrition_nudge": "Fat budget's gone — keep the next two meals lean, 35g protein each, no oils.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
@@ -35,6 +35,6 @@
     "hrv_7d_avg": 64.1,
     "nutrition": "calories 1460 of 2574 goal, protein 66g of 138g goal, carbs 117g of 290g goal, fat 77g of 72g goal",
     "nutrition_detail": "calories 1460 of 2574 goal -> 1114 left; protein 66g of 138g goal -> 72g gap; carbs 117g of 290g goal; fat 77g of 72g goal",
-    "activity_today": "3,105 steps so far, 2h 14m active, 1,238 calories burned, Light training load"
+    "activity_today": "4,201 steps so far, 3h 13m active, 1,699 calories burned, Light training load"
   }
 }
