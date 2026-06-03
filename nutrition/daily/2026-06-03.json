@@ -1,6 +1,6 @@
 {
   "date": "2026-06-03",
-  "synced_at": "2026-06-03T16:22:57+00:00",
+  "synced_at": "2026-06-03T16:53:06+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 710.0,
-    "protein_g": 31.0,
-    "carbs_g": 67.0,
-    "fat_g": 32.0
+    "calories": 1460.0,
+    "protein_g": 66.0,
+    "carbs_g": 117.0,
+    "fat_g": 77.0
   },
-  "meal_count": 2,
+  "meal_count": 3,
   "raw": {
     "date": "2026-06-03",
     "meals": [
@@ -35,13 +35,22 @@
         "fat": 14,
         "carbs": 37,
         "emoji": "\u00f0\u009f\u008d\u00ab"
+      },
+      {
+        "title": "Burger and Fruit Cup",
+        "time": "11:44",
+        "calories": 750,
+        "protein": 35,
+        "fat": 45,
+        "carbs": 50,
+        "emoji": "\u00f0\u009f\u008d\u0094"
       }
     ],
     "totals": {
-      "calories": 710,
-      "protein": 31,
-      "fat": 32,
-      "carbs": 67
+      "calories": 1460,
+      "protein": 66,
+      "fat": 77,
+      "carbs": 117
     },
     "targets": {
       "calories": 2574,
@@ -50,14 +59,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 1864,
+      "calories": 1114,
       "is_over": false
     },
-    "meal_count": 2,
+    "meal_count": 3,
     "labels": {
       "header": "Today",
-      "calories_remaining": "1864 kcal remaining today",
-      "meals_logged": "2 meals logged",
+      "calories_remaining": "1114 kcal remaining today",
+      "meals_logged": "3 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
