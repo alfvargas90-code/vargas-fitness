@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-06-03T07:52:56-05:00",
-  "score": 15,
+  "generated_at": "2026-06-03T08:23:08-05:00",
+  "score": 10,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
   "physiology": {
-    "hrv_pct_baseline": 7,
+    "hrv_pct_baseline": 9,
     "rhr_delta_bpm": -2,
-    "sleep_score": 48
+    "sleep_score": 58
   },
   "workout_intensity": "rest",
   "recommendation": "System's regulated. Load up and push output hard today.",
@@ -18,14 +18,14 @@
       "max": 55
     },
     "body": {
-      "filled": 1,
+      "filled": 0,
       "total": 10,
-      "points": 5,
+      "points": 0,
       "max": 40
     }
   },
   "transit_detail": {
-    "moon_longitude": 287.61,
+    "moon_longitude": 287.86,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
@@ -33,19 +33,20 @@
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 15,
+    "raw_score": 10,
     "transit_points": 10,
-    "physiology_points": 5,
+    "physiology_points": 0,
     "breakdown": [
       "+10 Moon in Capricorn",
-      "-5 HRV 7% above baseline",
-      "+10 Sleep score 48 (<70)"
+      "-5 HRV 9% above baseline",
+      "-5 RHR -2 bpm vs baseline",
+      "+10 Sleep score 58 (<70)"
     ],
     "baselines": {
-      "hrv_7d": 61.9,
-      "rhr_7d": 54.7
+      "hrv_7d": 64.1,
+      "rhr_7d": 54.1
     },
-    "active_calories": 83,
+    "active_calories": 120,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
