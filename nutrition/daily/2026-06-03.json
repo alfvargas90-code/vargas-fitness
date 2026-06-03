@@ -1,6 +1,6 @@
 {
   "date": "2026-06-03",
-  "synced_at": "2026-06-03T13:22:21+00:00",
+  "synced_at": "2026-06-03T13:52:30+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,20 +9,39 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 0.0,
-    "protein_g": 0.0,
-    "carbs_g": 0.0,
-    "fat_g": 0.0
+    "calories": 710.0,
+    "protein_g": 31.0,
+    "carbs_g": 67.0,
+    "fat_g": 32.0
   },
-  "meal_count": 0,
+  "meal_count": 2,
   "raw": {
     "date": "2026-06-03",
-    "meals": [],
+    "meals": [
+      {
+        "title": "Breakfast burrito",
+        "time": "08:33",
+        "calories": 350,
+        "protein": 15,
+        "fat": 18,
+        "carbs": 30,
+        "emoji": "\u00f0\u009f\u008c\u00af"
+      },
+      {
+        "title": "Perfect Bar Snack",
+        "time": "08:40",
+        "calories": 360,
+        "protein": 16,
+        "fat": 14,
+        "carbs": 37,
+        "emoji": "\u00f0\u009f\u008d\u00ab"
+      }
+    ],
     "totals": {
-      "calories": 0,
-      "protein": 0,
-      "fat": 0,
-      "carbs": 0
+      "calories": 710,
+      "protein": 31,
+      "fat": 32,
+      "carbs": 67
     },
     "targets": {
       "calories": 2574,
@@ -31,14 +50,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 2574,
+      "calories": 1864,
       "is_over": false
     },
-    "meal_count": 0,
+    "meal_count": 2,
     "labels": {
       "header": "Today",
-      "calories_remaining": "2574 kcal remaining today",
-      "meals_logged": "0 meals logged",
+      "calories_remaining": "1864 kcal remaining today",
+      "meals_logged": "2 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
