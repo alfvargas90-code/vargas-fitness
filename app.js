@@ -292,10 +292,10 @@ function orbitGroup(r, pct, gradId, glowColor, solidColor) {
   const stroke = solidColor || `url(#${gradId})`;
   const glow = solidColor || glowColor;
   const prog = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${stroke}"
-      stroke-width="${ORBIT.arcW}" stroke-linecap="round"
+      stroke-width="${ORBIT.arcW}" stroke-linecap="round" stroke-opacity="${ORBIT.arcOpacity}"
       stroke-dasharray="${arc.toFixed(2)} ${(c - arc).toFixed(2)}"
       transform="rotate(-90 130 130)"
-      style="filter:drop-shadow(0 0 5px ${glow})"/>`;
+      style="filter:drop-shadow(0 0 4px ${glow})"/>`;
   return track + prog;
 }
 
@@ -314,34 +314,17 @@ function phaseToIllum(phase) {
   return { illum: 0.5, waning: true };
 }
 
-// Realistic phase-accurate moon. Same near-side face every render (the Moon is
-// tidally locked, so maria + craters sit at FIXED positions — north up); only the
-// phase shadow advances. Coordinates below are fractions of the moon radius.
-//   - maria  : large dark basalt seas (soft, blurred)
-//   - dark   : small pit craters for surface texture
-//   - bright : ray craters (Tycho, Copernicus, Kepler) — bright dot + faint halo
-const MOON_MARIA = [               // x, y, rx, ry (fractions of r), opacity
-  { x: -0.34, y: -0.40, rx: 0.34, ry: 0.27, o: 0.34 }, // Mare Imbrium (upper-left)
-  { x:  0.06, y: -0.44, rx: 0.19, ry: 0.17, o: 0.32 }, // Mare Serenitatis (upper-center)
-  { x:  0.40, y: -0.16, rx: 0.22, ry: 0.21, o: 0.34 }, // Mare Tranquillitatis (right of center)
-  { x:  0.64, y: -0.30, rx: 0.11, ry: 0.09, o: 0.32 }, // Mare Crisium (near right limb)
-  { x:  0.44, y:  0.26, rx: 0.15, ry: 0.18, o: 0.28 }, // Nectaris / Fecunditatis
-  { x: -0.22, y:  0.42, rx: 0.23, ry: 0.16, o: 0.28 }, // Mare Nubium (lower-left)
-  { x: -0.56, y:  0.06, rx: 0.20, ry: 0.40, o: 0.20 }, // Oceanus Procellarum (diffuse west)
-  { x: -0.46, y:  0.48, rx: 0.10, ry: 0.10, o: 0.24 }, // Mare Humorum
-];
-const MOON_CRATERS_DARK = [        // x, y, r (fractions of r)
-  { x:  0.20, y:  0.30, r: 0.030 }, { x:  0.10, y: -0.10, r: 0.024 },
-  { x: -0.30, y: -0.18, r: 0.030 }, { x:  0.30, y:  0.52, r: 0.024 },
-  { x:  0.52, y:  0.06, r: 0.022 }, { x: -0.12, y:  0.30, r: 0.028 },
-  { x:  0.26, y: -0.34, r: 0.022 },
-];
-const MOON_CRATERS_BRIGHT = [      // ray craters — x, y, r (fractions of r)
-  { x: -0.05, y:  0.55, r: 0.050 }, // Tycho (lower-center, slightly south)
-  { x: -0.18, y:  0.02, r: 0.044 }, // Copernicus
-  { x: -0.40, y:  0.06, r: 0.034 }, // Kepler
-];
-
+// Photographic moon (2026-06-04). The body is a real NASA Lunar Reconnaissance
+// Orbiter WAC near-side mosaic (PUBLIC DOMAIN — NASA/GSFC/Arizona State Univ.),
+// processed to a clean 440px circular asset in assets/moon-lro.webp. The near
+// side is tidally locked, so the mosaic's fixed maria + craters are physically
+// correct every render; only the phase shadow advances over it.
+//
+// Layered for the "floating object" depth read:
+//   1. cast shadow on the orbital plane (subtle dark ellipse below the moon)
+//   2. atmospheric halo (bluish-white bloom — behind moon, in front of rings)
+//   3. the photographic disk (clipped) + soft limb darkening + phase terminator
+//   4. a faint rim to seat the disk against the halo
 function moonSVG(r, illum, waning) {
   const rxT = +(r * Math.abs(1 - 2 * illum)).toFixed(2); // terminator semi-axis
   const limbSweep = waning ? 1 : 0;                       // outer semicircle on the shadow side
@@ -349,40 +332,38 @@ function moonSVG(r, illum, waning) {
   const shadow = `M 0 ${-r} A ${r} ${r} 0 0 ${limbSweep} 0 ${r} A ${rxT} ${r} 0 0 ${termSweep} 0 ${-r} Z`;
   const dim = illum > 0.99; // full moon → no shadow path
   const f = (n) => +(n * r).toFixed(2);
+  const haloR = f(1.65);
 
-  const maria = MOON_MARIA.map((m) =>
-    `<ellipse cx="${f(m.x)}" cy="${f(m.y)}" rx="${f(m.rx)}" ry="${f(m.ry)}" fill="#6c6c75" opacity="${m.o}"/>`
-  ).join("");
-  const darkC = MOON_CRATERS_DARK.map((c) =>
-    `<circle cx="${f(c.x)}" cy="${f(c.y)}" r="${f(c.r)}" fill="#5b5b63" opacity="0.5"/>`
-  ).join("");
-  const brightC = MOON_CRATERS_BRIGHT.map((c) =>
-    `<circle cx="${f(c.x)}" cy="${f(c.y)}" r="${f(c.r * 1.9)}" fill="#f1f1f3" opacity="0.16"/>` +
-    `<circle cx="${f(c.x)}" cy="${f(c.y)}" r="${f(c.r)}" fill="#eaeaed" opacity="0.55"/>`
-  ).join("");
-
-  // Light from upper-left (gradient center offset) + limb darkening toward the
-  // edge → a spherical, photographic body rather than a flat disk.
   return `<defs>
-      <radialGradient id="moonBody" cx="40%" cy="36%" r="68%">
-        <stop offset="0%"  stop-color="#ededf0"/>
-        <stop offset="48%" stop-color="#d4d4d8"/>
-        <stop offset="78%" stop-color="#b1b1b8"/>
-        <stop offset="100%" stop-color="#83838b"/>
-      </radialGradient>
       <clipPath id="moonClip"><circle cx="0" cy="0" r="${r}"/></clipPath>
-      <filter id="moonTex" x="-30%" y="-30%" width="160%" height="160%">
-        <feGaussianBlur stdDev="${f(0.022)}"/></filter>
-      <filter id="moonTerm" x="-40%" y="-40%" width="180%" height="180%">
-        <feGaussianBlur stdDev="${f(0.05)}"/></filter>
+      <radialGradient id="moonHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stop-color="#DCE6FF" stop-opacity="0.20"/>
+        <stop offset="42%"  stop-color="#C8D8FF" stop-opacity="0.13"/>
+        <stop offset="70%"  stop-color="#AAC3F0" stop-opacity="0.055"/>
+        <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="moonLimb" cx="42%" cy="38%" r="62%">
+        <stop offset="0%"   stop-color="#FFFCF4" stop-opacity="0.10"/>
+        <stop offset="55%"  stop-color="#FFFFFF" stop-opacity="0"/>
+        <stop offset="82%"  stop-color="#000000" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#08080E" stop-opacity="0.50"/>
+      </radialGradient>
+      <filter id="moonHaloBlur" x="-90%" y="-90%" width="280%" height="280%">
+        <feGaussianBlur stdDev="${f(0.18)}"/></filter>
+      <filter id="moonTerm" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDev="${f(0.07)}"/></filter>
+      <filter id="moonCast" x="-140%" y="-140%" width="380%" height="380%">
+        <feGaussianBlur stdDev="${f(0.16)}"/></filter>
     </defs>
+    <ellipse cx="0" cy="${f(0.32)}" rx="${f(1.05)}" ry="${f(0.42)}" fill="#02030A" opacity="0.55" filter="url(#moonCast)"/>
+    <circle cx="0" cy="0" r="${haloR}" fill="url(#moonHalo)" filter="url(#moonHaloBlur)"/>
     <g clip-path="url(#moonClip)">
-      <circle cx="0" cy="0" r="${r}" fill="url(#moonBody)"/>
-      <g filter="url(#moonTex)">${maria}${darkC}</g>
-      ${brightC}
-      ${dim ? "" : `<path d="${shadow}" fill="#141419" opacity="0.92" filter="url(#moonTerm)"/>`}
+      <image href="assets/moon-lro.webp" x="${-r}" y="${-r}" width="${2 * r}" height="${2 * r}"
+             preserveAspectRatio="xMidYMid slice"/>
+      <circle cx="0" cy="0" r="${r}" fill="url(#moonLimb)"/>
+      ${dim ? "" : `<path d="${shadow}" fill="#05060C" opacity="0.93" filter="url(#moonTerm)"/>`}
     </g>
-    <circle cx="0" cy="0" r="${r}" fill="none" stroke="#3c3c44" stroke-width="1"/>`;
+    <circle cx="0" cy="0" r="${r}" fill="none" stroke="#7A8AA0" stroke-opacity="0.32" stroke-width="0.8"/>`;
 }
 
 // Assemble the composite SVG and inject; null pct → empty orbit (faint only).

@@ -97,7 +97,8 @@
     background-position: 0 0, 19px 13px;
     -webkit-mask-image: radial-gradient(150% 70% at 50% 38%, #000 0%, transparent 60%);
     mask-image: radial-gradient(150% 70% at 50% 38%, #000 0%, transparent 60%);
-    opacity: .10;
+    /* Receded to .07 so the background plane sits clearly behind moon + rings. */
+    opacity: .07;
   }
   @media (prefers-reduced-motion: reduce) { #bg-waves { animation: none; } }
 
