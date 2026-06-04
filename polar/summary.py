@@ -1110,7 +1110,11 @@ def call_claude(prompt):
         capture_output=True, text=True, timeout=180, cwd=ROOT,
     )
     if out.returncode != 0:
-        raise RuntimeError(f"claude exited {out.returncode}: {out.stderr.strip()[:300]}")
+        # `claude -p` writes auth/401 failures to STDOUT, not stderr — fold both
+        # in so the silent-401 notifier (_notify_dark_fire) can tell auth from
+        # rate from other. stderr first (real errors), else the stdout body.
+        detail = (out.stderr.strip() or out.stdout.strip())[:300]
+        raise RuntimeError(f"claude exited {out.returncode}: {detail}")
     return out.stdout
 
 
@@ -1139,6 +1143,54 @@ def _arg_value(flag):
         if i + 1 < len(sys.argv):
             return sys.argv[i + 1]
     return None
+
+
+def _notify_dark_fire(exc):
+    """Silent-401 notifier (WHEN_HOME.md #9). When an AI-prose fire dies — most
+    often an expired/revoked Anthropic OAuth token (`claude -p` exits 1, 401 to
+    stdout) — the outer handler used to sys.exit(0) with NO trace: no summary, no
+    log alert, dashboard pinned to the last good slot until someone noticed by
+    accident. This leaves a breadcrumb so the dashboard never goes dark silently.
+    Appends one line to WHEN_HOME.md (timestamp · slot · claude exit · theory ·
+    excerpt) and fires a best-effort osascript banner (no-op without a GUI login,
+    e.g. under launchd). Never raises into the caller — failures are swallowed."""
+    now = datetime.now().astimezone()
+    slot = _arg_value("--slot") or slot_for(now)
+    msg = re.sub(r"\s+", " ", str(exc)).strip()
+    low = msg.lower()
+    if any(k in low for k in ("401", "oauth", "unauthor", "expired", "invalid api", "auth")):
+        theory = "auth — re-auth: run `claude`, then backfill the slot"
+    elif any(k in low for k in ("429", "rate", "overloaded", "quota", "credit")):
+        theory = "rate/quota/credit"
+    elif "exited" in low or "timeout" in low or "timed out" in low:
+        theory = "other (claude nonzero exit / timeout)"
+    else:
+        theory = "other"
+    m = re.search(r"claude exited (-?\d+)", msg)
+    code = m.group(1) if m else "?"
+    stamp = now.strftime("%Y-%m-%d %H:%M %Z")
+    line = (f"- ⚠️ **{stamp}** — AI-prose fire went DARK · slot=`{slot}` · "
+            f"claude_exit=`{code}` · theory: {theory} · excerpt: `{msg[:200]}`\n")
+    path = os.environ.get("WHEN_HOME_PATH") or os.path.join(ROOT, "WHEN_HOME.md")
+    try:
+        with open(path, "a", encoding="utf-8") as f:
+            f.write(line)
+        log(f"silent-fire alert appended to {os.path.basename(path)} "
+            f"(slot={slot}, claude_exit={code}, theory={theory.split(' —')[0]})")
+    except Exception as e:
+        log(f"silent-fire alert write failed (non-fatal): {e}")
+    # Best-effort graphical banner — harmless no-op when no aqua session is
+    # attached (launchd). Swallow everything; the on-disk breadcrumb is the
+    # real channel, the banner is a bonus when Alfie is logged in.
+    try:
+        subprocess.run(
+            ["osascript", "-e",
+             ('display notification "AI-prose fire failed (slot ' + slot + ', '
+              + theory.split(" —")[0] + '). Dashboard may be stale — re-auth claude." '
+              'with title "Fitness dashboard went dark"')],
+            capture_output=True, timeout=10)
+    except Exception:
+        pass
 
 
 def main():
@@ -1355,4 +1407,5 @@ if __name__ == "__main__":
         sys.exit(main())
     except Exception as e:
         log(f"FATAL: {e}")
+        _notify_dark_fire(e)   # WHEN_HOME.md #9 — leave a breadcrumb, don't go dark silent
         sys.exit(0)   # never let launchd mark a hard failure / spin
