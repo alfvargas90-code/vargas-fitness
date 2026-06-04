@@ -161,13 +161,13 @@ async function renderPolar() {
     sleepDates.forEach((d, i) => { if (sleepArr[i]) sleepMap[d] = sleepArr[i]; });
 
     // Nightly Recharge: walk backwards and keep only nights that actually have a
-    // recharge value (band worn), within the last 90 days — then take the 10 most
+    // recharge value (band worn), within the last 90 days — then take the 7 most
     // recent. No empty placeholder rows for nights the band wasn't worn.
     const cutoff90 = lastN(90)[0];
     const rechargeDays = recDates.filter(d => d >= cutoff90 && recMap[d]?.ans_charge_status != null);
-    const window10 = rechargeDays.slice(-10);
-    renderRechargeStack(window10, recMap);
-    renderRechargeTrend(window10, recMap, rechargeDays.length);
+    const window7 = rechargeDays.slice(-7);
+    renderRechargeStack(window7, recMap);
+    renderRechargeTrend(window7, recMap, rechargeDays.length);
     renderPolarSleep(sleepMap[sleepDates.at(-1)]);   // Block B — most recent date with sleep data
     renderHRV(recDates, recMap);
 
