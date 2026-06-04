@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-04T18:53:50-05:00",
+  "generated_at": "2026-06-04T18:58:21-05:00",
   "slot": "train-2",
-  "summary": "Recovery: Average\n\nReading: State\nRecovery 62 \u00b7 Average \u00b7 HRV -6%\nStrain 84% \u00b7 Heavy \u00b7 671 cal spent\nSleep 6h 10m \u00b7 Fair \u00b7 Above baseline\n\nRead\nYour reserve is running a touch thin today and you've already burned through a solid day's worth of effort \u2014 tonight's for refilling.\n\nShould you work out?\nDone well \u2014 moderate effort matched a lighter-reserve day; no need to chase more.\n\nShould you eat?\nYes \u2014 ~50g protein and real food before bed; you're sitting too deep in the hole today.\n\nShould you rest?\nBank it \u2014 thin reserve tonight, so protect sleep and skip anything that costs you.\n\nPerformance: Done well \u2014 moderate effort matched a lighter-reserve day; no need to chase more.\n\nTransit: none",
+  "summary": "Recovery: Average\n\nReading: State\nRecovery 62 \u00b7 Average \u00b7 HRV -6%\nStrain 84% \u00b7 Heavy \u00b7 671 cal spent\nSleep 6h 10m \u00b7 Fair \u00b7 Above baseline\n\nRead\nYou slept better than your recent norm, but you're carrying a thinner reserve today and already logged a full, busy day on your feet.\n\nShould you work out?\nWind down \u2014 window's closed; tomorrow's resistance session is where muscle gets built.\n\nShould you eat?\nYes \u2014 ~50g protein plus a light carb before 9 PM; you're well under for the day.\n\nShould you rest?\nBank it \u2014 prioritize sleep tonight; your reserve needs the recovery more than output.\n\nPerformance: Wind down \u2014 window's closed; tomorrow's resistance session is where muscle gets built.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -9,11 +9,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nRecovery 62 \u00b7 Average \u00b7 HRV -6%\nStrain 84% \u00b7 Heavy \u00b7 671 cal spent\nSleep 6h 10m \u00b7 Fair \u00b7 Above baseline\n\nRead\nYour reserve is running a touch thin today and you've already burned through a solid day's worth of effort \u2014 tonight's for refilling.\n\nShould you work out?\nDone well \u2014 moderate effort matched a lighter-reserve day; no need to chase more.\n\nShould you eat?\nYes \u2014 ~50g protein and real food before bed; you're sitting too deep in the hole today.\n\nShould you rest?\nBank it \u2014 thin reserve tonight, so protect sleep and skip anything that costs you."
+      "text": "State\nRecovery 62 \u00b7 Average \u00b7 HRV -6%\nStrain 84% \u00b7 Heavy \u00b7 671 cal spent\nSleep 6h 10m \u00b7 Fair \u00b7 Above baseline\n\nRead\nYou slept better than your recent norm, but you're carrying a thinner reserve today and already logged a full, busy day on your feet.\n\nShould you work out?\nWind down \u2014 window's closed; tomorrow's resistance session is where muscle gets built.\n\nShould you eat?\nYes \u2014 ~50g protein plus a light carb before 9 PM; you're well under for the day.\n\nShould you rest?\nBank it \u2014 prioritize sleep tonight; your reserve needs the recovery more than output."
     },
     {
       "label": "Performance",
-      "text": "Done well \u2014 moderate effort matched a lighter-reserve day; no need to chase more."
+      "text": "Wind down \u2014 window's closed; tomorrow's resistance session is where muscle gets built."
     },
     {
       "label": "Transit",
@@ -22,11 +22,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nRecovery 62 \u00b7 Average \u00b7 HRV -6%\nStrain 84% \u00b7 Heavy \u00b7 671 cal spent\nSleep 6h 10m \u00b7 Fair \u00b7 Above baseline\n\nRead\nYour reserve is running a touch thin today and you've already burned through a solid day's worth of effort \u2014 tonight's for refilling.\n\nShould you work out?\nDone well \u2014 moderate effort matched a lighter-reserve day; no need to chase more.\n\nShould you eat?\nYes \u2014 ~50g protein and real food before bed; you're sitting too deep in the hole today.\n\nShould you rest?\nBank it \u2014 thin reserve tonight, so protect sleep and skip anything that costs you.",
-    "performance": "Done well \u2014 moderate effort matched a lighter-reserve day; no need to chase more.",
+    "reading": "State\nRecovery 62 \u00b7 Average \u00b7 HRV -6%\nStrain 84% \u00b7 Heavy \u00b7 671 cal spent\nSleep 6h 10m \u00b7 Fair \u00b7 Above baseline\n\nRead\nYou slept better than your recent norm, but you're carrying a thinner reserve today and already logged a full, busy day on your feet.\n\nShould you work out?\nWind down \u2014 window's closed; tomorrow's resistance session is where muscle gets built.\n\nShould you eat?\nYes \u2014 ~50g protein plus a light carb before 9 PM; you're well under for the day.\n\nShould you rest?\nBank it \u2014 prioritize sleep tonight; your reserve needs the recovery more than output.",
+    "performance": "Wind down \u2014 window's closed; tomorrow's resistance session is where muscle gets built.",
     "transit": null
   },
-  "nutrition_nudge": "Fat budget gone \u2014 pull back oils and butter at dinner, lean on protein.",
+  "nutrition_nudge": "Fat budget gone \u2014 pull back oils at dinner and lean on protein to close the gap.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
