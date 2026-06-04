@@ -17,17 +17,30 @@
     theme: {
       extend: {
         colors: {
-          ink:   "#000000",
-          panel: "#0a0a0a",
-          card:  "#141414",
-          line:  "rgba(168,85,247,0.18)",
-          linesoft: "rgba(168,85,247,0.09)",
-          muted: "#9ca3af",
-          accent:"#22d3ee",
-          good:  "#34d399",
-          perf:  "#34d399",
-          warn:  "#fbbf24",
-          bad:   "#f87171",
+          // ── Concept 03 — "Performance Intelligence" ──────────────────────
+          // State reads on a COOL→WARM axis: cool = calm/restored/recovery,
+          // warm = output/effort/strain. Anchors: electric #080EE6, cobalt
+          // #0008BF, coral #FF6260, gold #FFBA00, maroon #4E0010. Blues +
+          // maroon are luminance-lifted from the pure anchors so they stay
+          // legible as text/arcs on OLED black; the pure anchors live in the
+          // brand gradient, card gradient borders, and glow shadows below.
+          ink:   "#000000",          // true black (OLED)
+          panel: "#08080c",          // near-black, faintly cool
+          card:  "#0d0d14",          // card fill — true-ish black, cool tint
+          line:  "rgba(80,104,230,0.20)",   // cool blue hairline
+          linesoft: "rgba(80,104,230,0.10)",
+          muted: "#7d84a8",          // muted blue-gray (≈30%-sat cobalt) — metadata
+          accent:"#3b5bff",          // electric blue — cool "good / train normally"
+          good:  "#4f74ff",          // bright cobalt — cool "excellent"
+          perf:  "#ff6260",          // coral — warm output / "push hard"
+          warn:  "#ffba00",          // gold — warm energy / caution
+          bad:   "#ff5350",          // saturated coral — strain max / risk
+          // Concept 03 named anchors (legible-lifted for text use)
+          electric: "#3b5bff",
+          cobalt:   "#4f74ff",
+          coral:    "#ff6260",
+          gold:     "#ffba00",
+          maroon:   "#9c4a55",
         },
       },
     },
@@ -62,15 +75,40 @@
   .read-section:first-child { border-top: none; padding-top: 0; }
   .read-section > summary {
     cursor: pointer; list-style: none; font-weight: 600; font-size: 14px;
-    color: #f0abfc; display: flex; align-items: center; gap: 6px;
+    color: #8fa3ff; display: flex; align-items: center; gap: 6px;
   }
   .read-section > summary::-webkit-details-marker { display: none; }
   .read-section > summary::before {
-    content: "▸"; color: #c084fc; font-size: 12px; transition: transform 0.15s;
+    content: "▸"; color: #5b6fd6; font-size: 12px; transition: transform 0.15s;
   }
   .read-section[open] > summary::before { transform: rotate(90deg); }
   .read-section > p {
-    margin: 6px 0 0; font-size: 15px; line-height: 1.55; color: #cbd5e1;
+    margin: 6px 0 0; font-size: 15px; line-height: 1.55; color: #e8eaf6;
+  }
+
+  /* ── Concept 03 — soft glows (DEPTH pillar) ─────────────────────────────
+     Additive light on OLED black: a same-hue text-shadow makes verdict words
+     and ring percentages glow without a separate bright fill. */
+  .glow-coral    { text-shadow: 0 0 8px rgba(255,98,96,0.55); }
+  .glow-electric { text-shadow: 0 0 8px rgba(59,91,255,0.60); }
+  .glow-cobalt   { text-shadow: 0 0 9px rgba(79,116,255,0.60); }
+  .glow-gold     { text-shadow: 0 0 8px rgba(255,186,0,0.50); }
+  .glow-maroon   { text-shadow: 0 0 7px rgba(156,74,85,0.55); }
+
+  /* Brand wordmark — cool→warm gradient text */
+  .brand-mark {
+    background: linear-gradient(100deg, #4f74ff 0%, #ff6260 62%, #ffba00 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+  }
+
+  /* Card gradient border — top-left cobalt → bottom-right coral at low opacity.
+     DEPTH without distraction; dial the alphas down if it ever reads busy. */
+  .gradient-card {
+    background:
+      linear-gradient(#0d0d14, #0d0d14) padding-box,
+      linear-gradient(135deg, rgba(0,8,191,0.45) 0%, rgba(13,13,20,0) 48%, rgba(255,98,96,0.28) 100%) border-box;
+    border: 1px solid transparent !important;
   }
 </style>
 </head>
@@ -84,6 +122,13 @@
       </div>
     </header>
 
+    <!-- Brand — Performance Intelligence (Concept 03). Above the rings, below
+         the date stamp. Lightweight tracked caps + cool→warm gradient wordmark. -->
+    <div class="mb-8" id="brand">
+      <h1 class="brand-mark font-thin uppercase tracking-[0.3em] text-2xl sm:text-4xl leading-tight">Performance Intelligence</h1>
+      <p class="text-[11px] uppercase tracking-[0.28em] text-muted mt-2">Sleek · Immersive · Focused</p>
+    </div>
+
     <!-- Glance rings — Design C: planetary orbit. ONE composite SVG = phase-accurate
          moon at center + 3 tilted orbital rings (Recovery inner → Sleep mid → Strain
          outer). Percent labels float at fixed corners (anchored, update live). Tilt is
@@ -96,27 +141,27 @@
         <div class="absolute inset-0" id="rings-orbit-svg"></div>
         <!-- Floating corner labels — anchored, not traveling with the data -->
         <button type="button" data-target="lunar-stress"
-                class="absolute top-0 left-0 flex flex-col items-start leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 rounded-lg p-1">
-          <span class="text-[10px] uppercase tracking-wider text-purple-300">Recovery</span>
+                class="absolute top-0 left-0 flex flex-col items-start leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-electric rounded-lg p-1">
+          <span class="text-[10px] uppercase tracking-wider text-muted">Recovery</span>
           <span class="text-xl font-semibold stat-num" id="lbl-recovery-val" style="color:#9ca3af">—</span>
         </button>
         <button type="button" data-target="polar-panel"
-                class="absolute top-0 right-0 flex flex-col items-end leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 rounded-lg p-1">
-          <span class="text-[10px] uppercase tracking-wider text-purple-300">Sleep</span>
+                class="absolute top-0 right-0 flex flex-col items-end leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-electric rounded-lg p-1">
+          <span class="text-[10px] uppercase tracking-wider text-muted">Sleep</span>
           <span class="text-xl font-semibold stat-num" id="lbl-sleep-val" style="color:#9ca3af">—</span>
         </button>
         <button type="button" data-target="activity"
-                class="absolute bottom-0 right-0 flex flex-col items-end leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 rounded-lg p-1">
-          <span class="text-[10px] uppercase tracking-wider text-purple-300">Strain</span>
+                class="absolute bottom-0 right-0 flex flex-col items-end leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-electric rounded-lg p-1">
+          <span class="text-[10px] uppercase tracking-wider text-muted">Strain</span>
           <span class="text-xl font-semibold stat-num" id="lbl-strain-val" style="color:#9ca3af">—</span>
         </button>
       </div>
     </section>
 
     <!-- Today's read — AI health summary (polar/summary.py, 5x/day) -->
-    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="todays-read">
+    <section class="bg-card gradient-card rounded-xl p-5 border border-line mb-8" id="todays-read">
       <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-        <h2 class="font-semibold text-fuchsia-300">Today's read <span class="text-xs text-neutral-400 font-normal">· AI</span></h2>
+        <h2 class="font-semibold text-electric">Today's read <span class="text-xs text-neutral-400 font-normal">· AI</span></h2>
         <span class="text-xs text-neutral-400" id="read-ts"></span>
       </div>
       <p class="text-base leading-relaxed text-neutral-200" id="read-body" style="font-size:16px;">First read drops at 9:05 AM</p>
@@ -124,9 +169,9 @@
     </section>
 
     <!-- Lunar Stress Index — nervous-system compression model (polar/lunar_stress.py) -->
-    <section class="bg-card rounded-xl p-5 border border-line mb-8" id="lunar-stress">
+    <section class="bg-card gradient-card rounded-xl p-5 border border-line mb-8" id="lunar-stress">
       <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-        <h2 class="font-semibold text-fuchsia-300">Lunar Stress Index <span class="text-xs text-neutral-400 font-normal">· Nervous-system compression</span></h2>
+        <h2 class="font-semibold text-electric">Lunar Stress Index <span class="text-xs text-neutral-400 font-normal">· Nervous-system compression</span></h2>
         <span class="text-xs text-neutral-400" id="lsi-ts"></span>
       </div>
       <div id="lsi-empty" class="text-sm text-muted">
@@ -155,22 +200,22 @@
     </section>
 
     <!-- Nutrition — today's macros from Calories Club (nutrition/sync.py) -->
-    <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="nutrition-panel">
+    <section class="bg-card gradient-card rounded-xl p-4 border border-linesoft mb-6" id="nutrition-panel">
       <div class="flex items-center justify-between mb-4">
         <h2 class="font-semibold text-neutral-300">Nutrition · today</h2>
         <span class="text-xs text-neutral-400" id="nutrition-sub"></span>
       </div>
       <div id="nutrition-empty" class="text-sm text-muted">
-        No nutrition data yet — run <code class="text-fuchsia-400">nutrition/sync.py</code> to pull today's macros from Calories Club.
+        No nutrition data yet — run <code class="text-electric">nutrition/sync.py</code> to pull today's macros from Calories Club.
       </div>
       <div id="nutrition-content" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4"></div>
     </section>
 
     <!-- Nutrition nudge — single-line, time-aware "what to eat next" (polar/summary.py) -->
-    <div id="nutrition-nudge" class="hidden -mt-6 mb-8 px-1 text-sm italic text-purple-300/80"></div>
+    <div id="nutrition-nudge" class="hidden -mt-6 mb-8 px-1 text-sm italic text-cobalt/80"></div>
 
     <!-- Latest scale snapshot — VeSync ESF-551 screenshot OCR (manual via Penny) -->
-    <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="snapshot-panel">
+    <section class="bg-card gradient-card rounded-xl p-4 border border-linesoft mb-6" id="snapshot-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
         <h2 class="font-semibold text-neutral-300">Latest scale snapshot <span class="text-xs text-neutral-400 font-normal">· VeSync</span></h2>
         <span class="text-xs text-neutral-400" id="snapshot-sub"></span>
@@ -184,7 +229,7 @@
     </section>
 
     <!-- Activity · today (Polar Loop Gen 2 daily activity via polar/sync.py) -->
-    <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="activity">
+    <section class="bg-card gradient-card rounded-xl p-4 border border-linesoft mb-6" id="activity">
       <div class="flex items-start justify-between mb-4 flex-wrap gap-2">
         <div>
           <h2 class="font-semibold text-neutral-300">Activity · today <span class="text-xs text-neutral-400 font-normal">· Polar Loop</span></h2>
@@ -193,7 +238,7 @@
         <span class="text-xs text-neutral-400" id="activity-sub"></span>
       </div>
       <div id="activity-empty" class="text-sm text-muted">
-        No activity data yet — run <code class="text-fuchsia-400">polar/sync.py</code> to pull today's steps, active time &amp; calories from Polar Loop.
+        No activity data yet — run <code class="text-electric">polar/sync.py</code> to pull today's steps, active time &amp; calories from Polar Loop.
         <span class="block text-xs mt-1 text-muted/80">(Serve over http, not file://, for it to read the synced JSON.)</span>
       </div>
       <div id="activity-content" class="hidden">
@@ -203,20 +248,20 @@
     </section>
 
     <!-- Training & Recovery (live Polar Loop data via polar/sync.py) -->
-    <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="polar-panel">
+    <section class="bg-card gradient-card rounded-xl p-4 border border-linesoft mb-6" id="polar-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
         <h2 class="font-semibold text-neutral-300">Training &amp; Recovery <span class="text-xs text-neutral-400 font-normal">· Polar Loop</span></h2>
         <span class="text-xs text-neutral-400" id="polar-sub"></span>
       </div>
       <div id="polar-empty" class="text-sm text-muted">
-        No Polar data yet — run <code class="text-fuchsia-400">polar/sync.py</code> to populate Nightly Recharge, sleep &amp; activity.
+        No Polar data yet — run <code class="text-electric">polar/sync.py</code> to populate Nightly Recharge, sleep &amp; activity.
         <span class="block text-xs mt-1 text-muted/80">(Serve this dashboard over http, not file://, for it to read the synced JSON.)</span>
       </div>
       <div id="polar-content" class="hidden">
         <div class="grid md:grid-cols-2 gap-6">
           <!-- Block A — last 10 nights WITH DATA (empty nights skipped, newest on top) -->
           <div>
-            <h3 class="text-sm font-medium text-purple-300/80 mb-3" id="polar-recharge-title">Nightly Recharge</h3>
+            <h3 class="text-sm font-medium text-cobalt/80 mb-3" id="polar-recharge-title">Nightly Recharge</h3>
             <div class="space-y-1" id="polar-recharge-stack"></div>
             <div class="text-xs text-muted mt-3" id="polar-recharge-trend"></div>
             <div class="text-xs text-muted/80 mt-1" id="polar-recharge-note"></div>
@@ -229,7 +274,7 @@
 
             <!-- Block C — HRV big number + 7-day SVG sparkline -->
             <div>
-              <h3 class="text-sm font-medium text-purple-300/80 mb-2">Heart-rate variability</h3>
+              <h3 class="text-sm font-medium text-cobalt/80 mb-2">Heart-rate variability</h3>
               <div class="flex items-end gap-3">
                 <div class="text-3xl font-semibold stat-num leading-none" id="polar-hrv-num">—</div>
                 <div class="text-neutral-400 flex-1 min-w-0" id="polar-hrv-spark"></div>
@@ -242,7 +287,7 @@
     </section>
 
     <!-- Day in review — nightly freeze (polar/day_review.json, fires 9:45 PM CST) -->
-    <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="day-review">
+    <section class="bg-card gradient-card rounded-xl p-4 border border-linesoft mb-6" id="day-review">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
         <h2 class="font-semibold text-neutral-300">Day in review <span class="text-xs text-neutral-400 font-normal" id="day-review-date"></span></h2>
         <span class="text-xs text-neutral-400" id="day-review-sub"></span>
@@ -258,7 +303,7 @@
     </section>
 
     <!-- Scale history — VeSync ESF-551 manual screenshot readings (vesync/history.json) -->
-    <section class="bg-card rounded-xl p-4 border border-linesoft mb-6" id="scale-history-panel">
+    <section class="bg-card gradient-card rounded-xl p-4 border border-linesoft mb-6" id="scale-history-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
         <h2 class="font-semibold text-neutral-300">Scale history <span class="text-xs text-neutral-400 font-normal">· VeSync</span></h2>
         <span class="text-xs text-neutral-400" id="scale-history-sub"></span>
@@ -285,7 +330,7 @@
     </section>
 
     <footer class="text-xs text-muted text-center py-4">
-      Data stored locally in your browser (localStorage). Click "Reset" in the console to wipe: <code class="text-fuchsia-400">localStorage.clear()</code>
+      Data stored locally in your browser (localStorage). Click "Reset" in the console to wipe: <code class="text-electric">localStorage.clear()</code>
     </footer>
   </div>
 

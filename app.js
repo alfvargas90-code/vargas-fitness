@@ -31,8 +31,8 @@ const latestScale = () => [...scale].sort(byDate).at(-1);
 const LOAD_BANDS = [
   { name: "—",        min: 0,   max: 49,       dot: "#64748b" }, // slate-500 (faint — no real activity yet)
   { name: "Light",    min: 50,  max: 399,      dot: "#cbd5e1" }, // slate-300
-  { name: "Moderate", min: 400, max: 799,      dot: "#22d3ee" }, // cyan-400
-  { name: "Heavy",    min: 800, max: Infinity, dot: "#fbbf24" }, // amber-400
+  { name: "Moderate", min: 400, max: 799,      dot: "#3b5bff" }, // electric — engaged
+  { name: "Heavy",    min: 800, max: Infinity, dot: "#ffba00" }, // gold — real load
 ];
 function loadBandFor(activeCal) {
   const c = (activeCal == null || isNaN(activeCal)) ? 0 : Number(activeCal);
@@ -193,25 +193,29 @@ async function renderPolar() {
 // the Strain ring and the Activity load chip can never contradict.
 const RESERVE_DEPLETION_CAL = 800;
 
-// State-color bands per ring — semantic, not decorative.
-// green = performance/peak · cyan = recovery/readiness · amber = caution · red = risk.
-function sleepColor(v) {
-  return v >= 90 ? "#34d399"   // green — performance-level sleep
-       : v >= 50 ? "#22d3ee"   // cyan — good recovery (70-89 + 50-69)
-       : v >= 30 ? "#fbbf24"   // amber — caution (sub-50 isn't critical unless chronic)
-       :           "#f87171";  // red — <30 (chronic-low territory)
+// Concept 03 state-color bands — read on a COOL→WARM axis, not separate
+// semantic hues. Cool (electric/cobalt) = calm/restored/recovery; warm
+// (gold/coral) = output/effort/strain; maroon = depleted/off. Values are
+// luminance-lifted from the pure anchors so they stay legible (and glow well)
+// as arcs on OLED black. The soft glow is applied uniformly in orbitGroup().
+function sleepColor(v) {              // Sleep — cool when restful, maroon when starved
+  return v >= 90 ? "#3b5bff"   // electric — good/performance-level sleep
+       : v >= 50 ? "#5b6fd6"   // muted cobalt — mid
+       : v >= 30 ? "#9c4a55"   // lifted maroon — low
+       :           "#7a2f3a";  // deep maroon — chronic-low
 }
-function energyColor(v) {              // Recovery bands
-  return v >= 90 ? "#34d399"   // green — peak performance
-       : v >= 50 ? "#22d3ee"   // cyan — recovery / readiness (good + decent)
-       : v >= 30 ? "#fbbf24"   // amber — caution (low, <50)
-       :           "#f87171";  // red — critical (<30)
+function energyColor(v) {             // Recovery — cobalt bright down to coral
+  return v >= 90 ? "#4f74ff"   // cobalt bright — excellent
+       : v >= 50 ? "#3b5bff"   // electric — good
+       : v >= 30 ? "#d9706e"   // desaturated coral — low
+       :           "#ff6260";  // coral — poor
 }
-function strainColor(pct) {            // fills opposite of Reserve — more load → hotter
-  return pct < 15 ? "#9ca3af"   // gray — nothing meaningful yet
-       : pct < 50 ? "#22d3ee"   // cyan — engagement, recovery still supports
-       : pct < 80 ? "#fbbf24"   // amber — real load, caution
-       :            "#f87171";  // red — high strain, true risk
+function strainColor(pct) {           // Strain — warm axis, more load → hotter
+  return pct < 15 ? "#7d84a8"   // muted blue-gray — nothing meaningful yet (calm)
+       : pct < 50 ? "#cda33f"   // desaturated gold — light load
+       : pct < 80 ? "#ffba00"   // gold — real load
+       : pct < 95 ? "#ff6260"   // coral — heavy
+       :            "#ff5350";  // saturated coral — max / red zone
 }
 
 // Overnight recovery score — combines recharge + sleep + HRV vs an adaptive HRV
@@ -265,10 +269,13 @@ function orbitGroup(rx, pct, color) {
   const ry = +(rx * ORBIT.flatten).toFixed(2);
   const perim = ellipsePerimeter(rx, ry);
   const arc = (Math.max(0, Math.min(100, pct || 0)) / 100) * perim;
+  // Soft glow on the bright arc only (Concept 03 DEPTH pillar) — additive light
+  // on OLED black. Skipped for the faint default (base gray, ~0-length arc).
+  const glow = color !== ORBIT.base ? ` filter="drop-shadow(0 0 6px ${color})"` : "";
   return `<g transform="rotate(${ORBIT.tilt})">
     <ellipse cx="0" cy="0" rx="${rx}" ry="${ry}" fill="none" stroke="${ORBIT.base}" stroke-width="${ORBIT.baseW}"/>
     <path d="${orbitPath(rx, ry)}" fill="none" stroke="${color}" stroke-width="${ORBIT.arcW}"
-          stroke-linecap="round" stroke-dasharray="${arc.toFixed(2)} ${perim.toFixed(2)}"/>
+          stroke-linecap="round" stroke-dasharray="${arc.toFixed(2)} ${perim.toFixed(2)}"${glow}/>
   </g>`;
 }
 
@@ -330,6 +337,9 @@ function setRingLabel(id, text, color) {
   if (!el) return;
   el.textContent = text;
   el.style.color = color;
+  // Same-hue glow at the card-corner anchor when a live value is present;
+  // cleared for the faint default so "—" stays calm.
+  el.style.textShadow = color && color !== ORBIT.base ? `0 0 8px ${color}` : "none";
 }
 
 async function renderRings() {
@@ -408,7 +418,7 @@ function renderRechargeStack(days, recMap) {
   const rows = days.slice().reverse().map(d => {
     const st = recMap[d]?.ans_charge_status ?? 0;
     const cells = Array.from({ length: 6 }, (_, i) => i < st
-      ? `<span class="inline-block w-3 h-3 rounded-full" style="background:#22d3ee"></span>`
+      ? `<span class="inline-block w-3 h-3 rounded-full" style="background:#3b5bff"></span>`
       : `<span class="inline-block w-3 h-3 rounded-full bg-card border border-line"></span>`).join("");
     return `<div class="flex items-center gap-2">
       <span class="text-xs text-muted w-12 shrink-0">${labelMD(d)}</span>
@@ -459,16 +469,16 @@ function renderPolarSleep(sleep) {
   if (!total) { wrap.innerHTML = ""; return; }
   const pct = s => (s / total * 100).toFixed(1) + "%";
   wrap.innerHTML = `
-    <h3 class="text-sm font-medium text-purple-300/80 mb-2">Sleep stages · ${labelMD(sleep.date)}</h3>
+    <h3 class="text-sm font-medium text-cobalt/80 mb-2">Sleep stages · ${labelMD(sleep.date)}</h3>
     <div class="stage-bar">
-      <div style="width:${pct(deep)};background:#22d3ee" title="Deep ${secsToHM(deep)}"></div>
-      <div style="width:${pct(light)};background:#60a5fa" title="Light ${secsToHM(light)}"></div>
-      <div style="width:${pct(rem)};background:#a78bfa" title="REM ${secsToHM(rem)}"></div>
+      <div style="width:${pct(deep)};background:#4f74ff" title="Deep ${secsToHM(deep)}"></div>
+      <div style="width:${pct(light)};background:#3b5bff" title="Light ${secsToHM(light)}"></div>
+      <div style="width:${pct(rem)};background:#8fa3ff" title="REM ${secsToHM(rem)}"></div>
     </div>
     <div class="flex flex-wrap gap-4 text-xs text-muted mt-2">
-      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#22d3ee"></span> Deep ${secsToHM(deep)}</span>
-      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#60a5fa"></span> Light ${secsToHM(light)}</span>
-      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#a78bfa"></span> REM ${secsToHM(rem)}</span>
+      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#4f74ff"></span> Deep ${secsToHM(deep)}</span>
+      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#3b5bff"></span> Light ${secsToHM(light)}</span>
+      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#8fa3ff"></span> REM ${secsToHM(rem)}</span>
     </div>`;
 }
 
@@ -509,11 +519,12 @@ function sparkline(vals) {
 // No raw numbers, units, biometric labels, or astrology jargon (enforced in the
 // prompt). Recovery is a color-coded single word; Transit Impact only shows when
 // a real transit is hitting.
+// Concept 03 cool→warm mapping + same-hue glow.
 const RECOVERY_COLORS = {
-  poor: "text-bad",       // red
-  average: "text-warn",   // amber
-  good: "text-accent",    // cyan
-  excellent: "text-good", // green
+  poor: "text-coral glow-coral",       // coral — depleted
+  average: "text-gold glow-gold",      // gold — caution
+  good: "text-electric glow-electric", // electric — restored
+  excellent: "text-cobalt glow-cobalt",// cobalt bright — peak recovery
 };
 // "Wind down" / "Rest day" are evening / off verdicts (sleep prep / day's-done
 // framing — metadata, not a performance state); the others are daytime training
@@ -521,13 +532,15 @@ const RECOVERY_COLORS = {
 // colored by meaning: green = push/improve, cyan = recovery-is-good, amber =
 // caution, gray = neutral non-state. Longer phrases first so startsWith() wins.
 const PERF_VERDICTS = ["Push hard", "Train normally", "Moderate effort", "Prioritize recovery", "Wind down", "Rest day"];
+// Concept 03 cool→warm verdict palette (warm = push for output, cool = recover,
+// maroon = off). Each carries a same-hue glow.
 const PERF_VERDICT_COLORS = {
-  "Push hard":          "text-perf",    // green — performance / improvement
-  "Train normally":     "text-accent",  // cyan — recovery is good
-  "Moderate effort":    "text-warn",    // amber — caution
-  "Prioritize recovery":"text-warn",    // amber — caution, not risk
-  "Wind down":          "text-muted",   // gray — metadata, not a performance state
-  "Rest day":           "text-muted",   // gray — metadata
+  "Push hard":          "text-coral glow-coral",       // coral — peak output
+  "Train normally":     "text-electric glow-electric", // electric — recovery is good
+  "Moderate effort":    "text-gold glow-gold",         // gold — caution
+  "Prioritize recovery":"text-muted",                  // muted blue-gray — ease off
+  "Wind down":          "text-muted",                  // muted blue-gray — evening
+  "Rest day":           "text-maroon glow-maroon",     // deep maroon — day's done
 };
 
 // Short paragraph block with a small uppercase subtitle.
@@ -679,7 +692,7 @@ async function renderLunarStress() {
     ? `Moon in ${L.sign}${L.degree ? ` · <span class="text-muted font-normal">${L.degree}</span>` : ""}`
     : "—";
 
-  let html = `<div class="text-lg font-semibold text-fuchsia-200 mb-3">${head}</div>`;
+  let html = `<div class="text-lg font-semibold text-cobalt mb-3">${head}</div>`;
   html += `<div class="space-y-1.5">`;
   html += row("Phase", L.phase);
   html += row("Next sign", L.next_sign_change && L.next_sign_change.display);
@@ -825,10 +838,10 @@ async function renderScaleSnapshot() {
 // next night's fire overwrites it. Empty state before the first fire; amber stale
 // warning if the frozen date is from more than a day ago.
 const DAY_REVIEW_BADGES = {
-  easy:  { label: "Easy day",  cls: "text-cyan-300 bg-cyan-900/40" },     // cyan — good/recovered
-  solid: { label: "Solid day", cls: "text-cyan-300 bg-cyan-900/40" },     // cyan — good
-  great: { label: "Great day", cls: "text-emerald-300 bg-emerald-900/40" },// green — performance/improvement
-  big:   { label: "Big day",   cls: "text-amber-300 bg-amber-900/40" },   // amber — heavy load
+  easy:  { label: "Easy day",  cls: "text-electric bg-electric/15" },  // electric — recovered
+  solid: { label: "Solid day", cls: "text-electric bg-electric/15" },  // electric — good
+  great: { label: "Great day", cls: "text-coral bg-coral/15" },        // coral — peak output
+  big:   { label: "Big day",   cls: "text-gold bg-gold/15" },          // gold — heavy load
 };
 
 async function renderDayReview() {
@@ -1007,8 +1020,8 @@ async function renderActivity() {
     if (upd) {
       const stamp = activitySyncStamp(manifest.synced_at);
       upd.textContent = stamp ? stamp.text : "";
-      upd.classList.toggle("text-warn", !!stamp && stamp.stale);   // amber past 2h drift
-      upd.classList.toggle("text-muted", !stamp || !stamp.stale);  // gray when fresh
+      upd.classList.toggle("text-coral", !!stamp && stamp.stale);  // coral past 2h drift
+      upd.classList.toggle("text-muted", !stamp || !stamp.stale);  // muted blue-gray when fresh
     }
 
     const dates = ((manifest.categories || {}).daily_activity || []).slice().sort();
