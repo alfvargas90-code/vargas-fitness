@@ -642,7 +642,10 @@ async function renderPhysiology() {
     heart: '<path d="M19 5.5a4 4 0 0 0-7-2 4 4 0 0 0-7 2c0 4 7 8.5 7 8.5s7-4.5 7-8.5z"/>',
     lungs: '<path d="M12 3v8M8 21c-2 0-3-1.5-3-4 0-3 1-5 2.5-6.5C9 9 9.5 10 9.5 12V18c0 2-.5 3-1.5 3zM16 21c2 0 3-1.5 3-4 0-3-1-5-2.5-6.5C15 9 14.5 10 14.5 12V18c0 2 .5 3 1.5 3z"/>',
   };
-  const row = (icon, iconColor, label, value, unit, delta, deltaSuffix, goodIsUp) => {
+  // `meaning` is a one-line, always-visible plain-language gloss rendered under
+  // the value column (muted/secondary) so each number reads as "what it says +
+  // how to use it" without a tap-to-expand. Clamps to one line at 390px.
+  const row = (icon, iconColor, label, value, unit, delta, deltaSuffix, goodIsUp, meaning) => {
     let deltaHTML = "";
     if (delta != null && delta !== 0) {
       const up = delta > 0;
@@ -654,17 +657,23 @@ async function renderPhysiology() {
       ? `<span class="text-[14px] font-bold stat-num text-white">${value}</span><span class="text-[9px] text-muted">${unit}</span>`
       : `<span class="text-[13px] font-semibold stat-num text-muted">—</span>`;
     return `<div class="phys-row">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="${iconColor}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">${ICONS[icon]}</svg>
-      <span class="text-[9px] uppercase tracking-wide text-muted font-semibold flex-1 min-w-0">${label}</span>
-      <span class="flex items-baseline gap-0.5 shrink-0">${valHTML}</span>
-      <span class="w-7 text-right shrink-0">${deltaHTML}</span>
+      <div class="phys-top">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="${iconColor}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">${ICONS[icon]}</svg>
+        <span class="text-[9px] uppercase tracking-wide text-muted font-semibold flex-1 min-w-0">${label}</span>
+        <span class="flex items-baseline gap-0.5 shrink-0">${valHTML}</span>
+        <span class="w-7 text-right shrink-0">${deltaHTML}</span>
+      </div>
+      <div class="phys-sub">${meaning}</div>
     </div>`;
   };
 
   grid.innerHTML =
-    row("heart",  "#FF5E62", "HRV",   hrv,  "", hrvDelta, "%",   true) +
-    row("heart",  "#FF5E62", "RHR",   rhr,  "", rhrDelta, "",    false) +
-    row("lungs",  "#00C8FF", "Resp",  resp, "", null,     "",    false);
+    row("heart",  "#FF5E62", "HRV",   hrv,  "", hrvDelta, "%",   true,
+        "Autonomic balance. Higher = recovered; below = stress.") +
+    row("heart",  "#FF5E62", "RHR",   rhr,  "", rhrDelta, "",    false,
+        "Resting heart rate. Lower trends with fitness; above = working.") +
+    row("lungs",  "#00C8FF", "Resp",  resp, "", null,     "",    false,
+        "Breaths per minute. Stable = good; elevated = stress or illness.");
 }
 
 // ---------- Supporting summary cards (Nutrition / Scale / Activity) ----------

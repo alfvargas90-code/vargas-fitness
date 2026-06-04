@@ -158,7 +158,12 @@
   @media (max-width: 768px) { input, select { min-height: 44px; } }
 
   /* Physiology rows (Today's read right column) */
-  .phys-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; }
+  .phys-row { display: flex; flex-direction: column; gap: 1px; padding: 4px 0; }
+  .phys-top { display: flex; align-items: center; gap: 8px; }
+  /* Plain-language meaning under each metric — indented past the icon (12px + 8px
+     gap), muted/secondary, clamped to one line so it never wraps at 390px. */
+  .phys-sub { margin-left: 20px; font-size: 10.5px; line-height: 1.25; color: rgba(255,255,255,0.38);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .phys-row + .phys-row { border-top: 1px solid rgba(255,255,255,0.05); }
 </style>
 </head>
