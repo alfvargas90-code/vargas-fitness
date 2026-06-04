@@ -1,14 +1,19 @@
 #!/usr/bin/env python3
 """Generate an AI health read for the fitness dashboard.
 
-Reads the latest Polar recharge/sleep data + body-comp seed, asks `claude -p`
-(rides Alfie's Claude Max plan — no API key, no marginal cost) for a plain-English
-read in four sections (Recovery / Reading / Performance / Transit), writes
-polar/summary.json with a `simple` block the dashboard card renders, and pushes so
-the live URL updates. The `Reading` section is pure physiology + action: recent
-recovery/sleep state and today's actuals, ending on a direct, actionable directive —
-no astrology coloring, no natal/lunar texture. The biometrics inform the read but never
-appear in it — no raw numbers, units, or jargon.
+Reads the latest Polar recharge/sleep data + body-comp seed and writes
+polar/summary.json with a `simple` block the dashboard Currents card renders, then
+pushes so the live URL updates. The headline product is the TACTICAL BRIEF in
+`simple.reading`: a multiline read that answers, in order — what's the state, what
+does it mean, should I work out, should I eat, should I rest?
+
+The brief has two layers. The STATE block (3 lines: Recovery / Strain / Sleep) is
+computed deterministically in Python and mirrors the dashboard's Recovery/Strain/Sleep
+rings exactly — real numbers, no LLM. The READ line plus the decision verdicts
+(workout / eat / rest, each a fixed-vocabulary verdict + one tight qualifier) are the
+only `claude -p` (Alfie's Claude Max plan — no API key, no marginal cost) authored
+parts. The Read never quotes biometric numbers; the Eat qualifier may use gram amounts
+and clock times. No astrology, no natal/lunar texture.
 
 Run by the com.alfredo.polar-summary LaunchAgent 7x/day (CDT), one fire per slot:
   04:00 sleep · 07:00 recovery · 11:30 fuel-1 · 15:00 fuel-2 · 17:30 train-1 ·
@@ -109,56 +114,146 @@ LABEL_TO_KEY = {
 RECOVERY_WORDS = ["Excellent", "Good", "Average", "Poor"]
 SIMPLE_KEYS = ["recovery", "reading", "performance", "transit"]
 
-# Per-slot framing for the Reading prose. The Recovery WORD is always from overnight
-# data (it doesn't change through the day), but the prose around it should move with
-# the clock — sleep-in-progress at 4 AM, a wake-up read at 7, fueling/energy checks
-# mid-day, the workout window opening and closing in the evening — and the day's stat
-# recap stays owned by the 9:45 PM Day-in-Review card.
-# Each entry sets WHAT the three Reading lines (Observation / Impact / Action) are
-# ABOUT for that slot — not flowing-prose direction. The 4-line shape itself
-# (Recovery word / Observation / Impact / Action) is enforced by the main prompt's
-# Reading instruction; these just point each line at the right subject for the clock.
+# Per-slot framing for the tactical brief. Each entry sets WHERE Alfie is in his day
+# (`when` — sets the tone), what the AI Read line should focus on (`read`), and which
+# decision blocks fire (`blocks`). The STATE block is deterministic Python; the Read +
+# decision verdicts are the only LLM-authored parts, each verdict drawn from a fixed
+# vocabulary. The clock matters: the 4 AM sleep slot has no workout/eat call (he's
+# asleep) — it answers "Setup for today?" instead; the 8 PM train-2 slot answers the
+# workout question RETROSPECTIVELY and weights the rest/sleep-prep call. The day's stat
+# recap stays owned by the 9:45 PM Day-in-Review card (untouched).
 SLOT_FRAMING = {
-    "sleep": (
-        "SLOT — SLEEP (~4 AM, Alfie is still asleep). Read the night's recovery in progress.\n"
-        "Observation: what the night's sleep/recovery is producing.\n"
-        "Impact: how that's setting up tomorrow.\n"
-        "Line 4 is a STATUS projection, NOT an action — he's asleep, nothing to do. Format the "
-        "three lines as: Observation / Impact / Status: {one-line read of how the night is setting up}."
-    ),
-    "recovery": (
-        "SLOT — WAKE-UP (~7 AM, the day is open ahead of him).\n"
-        "Observation: the recovery state he woke up on.\n"
-        "Impact: what kind of day that capacity sets up.\n"
-        "Action: the single move that fits today's capacity."
-    ),
-    "fuel-1": (
-        "SLOT — FUEL #1 (~11:30 AM, first fueling/energy check).\n"
-        "Observation: where energy and fueling stand right now.\n"
-        "Impact: what that means heading into the afternoon.\n"
-        "Action: what to eat next.\n"
-        "The recent meals are listed below — let them sharpen the Observation, but keep each line tight."
-    ),
-    "fuel-2": (
-        "SLOT — FUEL #2 (~3 PM, second fueling/energy check).\n"
-        "Observation: the fuel/energy state heading into the evening.\n"
-        "Impact: whether he's fueled for the workout window or running a deficit into it.\n"
-        "Action: what to fix before evening.\n"
-        "The recent meals are listed below — let them sharpen the Observation, but keep each line tight."
-    ),
-    "train-1": (
-        "SLOT — TRAIN OPEN (~5:30 PM, the workout window is opening).\n"
-        "Observation: his recovery against how much he's already spent.\n"
-        "Impact: what today's session should be.\n"
-        "Action: the training call."
-    ),
-    "train-2": (
-        "SLOT — TRAIN CLOSE (~8 PM, the workout window is closing).\n"
-        "Observation: how the session landed (or that the window passed).\n"
-        "Impact: what the rest of the night needs.\n"
-        "Action: the wind-down / sleep-prep move."
-    ),
+    "sleep": {
+        "when": "SLOT — SLEEP (~4 AM, Alfie is asleep). The State block shows last night's sleep and the recovery he's waking into.",
+        "read": "what last night's recovery means for the day ahead — the reserve he's working with",
+        "blocks": ["Read", "Setup"],
+    },
+    "recovery": {
+        "when": "SLOT — WAKE-UP (~7 AM, the day is open ahead of him).",
+        "read": "the recovery state he woke up on and what kind of day that capacity sets up",
+        "blocks": ["Read", "Workout", "Eat", "Rest"],
+    },
+    "fuel-1": {
+        "when": "SLOT — FUEL #1 (~11:30 AM, first fueling/energy check). The eating call carries the most weight.",
+        "read": "where fueling and energy stand heading into the afternoon",
+        "blocks": ["Read", "Workout", "Eat", "Rest"],
+    },
+    "fuel-2": {
+        "when": "SLOT — FUEL #2 (~3 PM, second fueling/energy check). The eating call carries the most weight — is he fueled for the evening window or running a deficit into it?",
+        "read": "the fuel/energy state heading into the evening and the workout window",
+        "blocks": ["Read", "Workout", "Eat", "Rest"],
+    },
+    "train-1": {
+        "when": "SLOT — TRAIN OPEN (~5:30 PM, the workout window is opening). The workout call carries the most weight.",
+        "read": "his recovery against how much he's already spent today",
+        "blocks": ["Read", "Workout", "Eat", "Rest"],
+    },
+    "train-2": {
+        "when": "SLOT — TRAIN CLOSE (~8 PM, the workout window is closing). The rest/sleep-prep call carries the most weight; the workout question is RETROSPECTIVE.",
+        "read": "how the session landed (or that the window passed) and what the night needs",
+        "blocks": ["Read", "Workout", "Eat", "Rest"],
+    },
 }
+
+
+# --- Tactical-brief instruction builders -----------------------------------------
+# Each returns the one-line instruction that tells claude -p how to write that block.
+# Decision blocks lock the verdict to a fixed vocabulary (verdict word first, then a
+# <=15-word qualifier); the Read line is the only free interpretation, capped at 30
+# words and barred from quoting numbers (the State block already shows them).
+
+def read_instruction():
+    return (
+        "Read: 1 to 2 sentences, 30 words MAX, plain language. Interpret the State holistically — "
+        "what does the COMBINATION mean? Do NOT repeat raw numbers; the State block already showed "
+        "them. No jargon, no astrology. "
+        "Example shape (do not copy): \"Body's on a thinner reserve than usual and you've already "
+        "spent a typical day's load.\""
+    )
+
+
+def workout_instruction(slot, rest_today):
+    if slot == "train-2":
+        return (
+            "Workout: RETROSPECTIVE — the window has closed. If today's load shows he trained, start "
+            "with EXACTLY one of: Done well / Done too hard / Done light — then <=15 words on how it "
+            "landed. If he did NOT train, start with EXACTLY: Wind down — then <=15 words (window's "
+            "closed, tomorrow's the platform). Use ONLY these verdicts."
+        )
+    if rest_today:
+        return (
+            "Workout: start with EXACTLY: Rest day — then <=15 words framing today as deliberate "
+            "recovery, not training output."
+        )
+    return (
+        "Workout: start with EXACTLY one of: Yes / Light only / Skip / Rest day — then <=15 words on "
+        "duration, intensity, or what to skip (or why rest). Use ONLY these verdicts."
+    )
+
+
+def eat_instruction():
+    return (
+        "Eat: start with EXACTLY one of: Yes / Not yet / Hold / Wind down — then <=15 words on WHAT "
+        "to eat and BY WHEN, anchored to the clock. Gram amounts and time windows ARE allowed here "
+        "(e.g. \"50g protein in the next 90 min\"). Lean on the nutrition data — calories left, "
+        "protein gap, time since the last meal. Use ONLY these verdicts."
+    )
+
+
+def rest_instruction():
+    return (
+        "Rest: start with EXACTLY one of: Yes / Light only / Push / Bank it — then <=15 words on the "
+        "move: banking sleep, maintaining output, or pushing. Use ONLY these verdicts."
+    )
+
+
+def setup_instruction():
+    return (
+        "Setup: ONE directional line, 20 words MAX — what kind of day this recovery sets up "
+        "(capacity, ceiling, where to spend or protect). He's asleep, so NO imperative."
+    )
+
+
+BLOCK_INSTR = {
+    "Read": lambda slot, rest: read_instruction(),
+    "Workout": lambda slot, rest: workout_instruction(slot, rest),
+    "Eat": lambda slot, rest: eat_instruction(),
+    "Rest": lambda slot, rest: rest_instruction(),
+    "Setup": lambda slot, rest: setup_instruction(),
+}
+
+
+def block_header(label, slot):
+    """Human-facing question header for each block in the rendered brief."""
+    if label == "Workout":
+        # train-2 is retrospective ("Should you work out?" — did you?); every other
+        # slot is forward-looking ("Eligible to work out?").
+        return "Should you work out?" if slot == "train-2" else "Eligible to work out?"
+    return {
+        "Read": "Read",
+        "Eat": "Should you eat?",
+        "Rest": "Should you rest?",
+        "Setup": "Setup for today?",
+    }.get(label, label)
+
+
+def parse_brief_blocks(text, labels):
+    """Pull the labeled lines (Read:/Workout:/Eat:/Rest:/Setup:) out of claude -p's
+    output. Tolerant of markdown bullets/emphasis. Returns {label: text}; first hit
+    per label wins."""
+    out = {}
+    alt = "|".join(re.escape(l) for l in labels)
+    pat = re.compile(
+        rf"(?im)^[\s#*_>-]*({alt})\s*[:\-–—]+\s*(.*?)(?=^[\s#*_>-]*(?:{alt})\s*[:\-–—]|\Z)",
+        re.S)
+    for m in pat.finditer(text):
+        label = m.group(1).strip()
+        label = next((l for l in labels if l.lower() == label.lower()), label)
+        body = re.sub(r"[*_`#>]", "", m.group(2))
+        body = re.sub(r"\s+", " ", body).strip()
+        if body and label not in out:
+            out[label] = body
+    return out
 # Slots whose prompt gets today's accumulated activity + nutrition fed in. The 4 AM sleep
 # slot is too early to have any. The fuel slots are literally fueling/energy checks and
 # the train slots need today's load to judge the session, so all four get the data — and
@@ -265,6 +360,116 @@ def recovery_word(rec_score, hrv_today=None, hrv_7d=None):
             and hrv_today >= hrv_7d * 1.08):
         word = "Excellent"
     return word
+
+
+# ---- Tactical-brief State block (deterministic; mirrors the dashboard rings) ----
+# The 3 State lines are computed in Python, never by the LLM — they must read the SAME
+# numbers the Recovery / Strain / Sleep rings show. recovery_score_100 is a verbatim
+# port of app.js computeRecoveryScore; strain mirrors the 800-cal reserve depletion;
+# the sleep word is sleepLabel collapsed to the spec's 4-word vocabulary.
+RESERVE_DEPLETION_CAL = 800   # mirrors app.js RESERVE_DEPLETION_CAL
+
+
+def recovery_score_100(rec, slp, hrv_all_mean):
+    """0–100 composite recovery score — verbatim port of app.js computeRecoveryScore
+    so the State line's number equals the Recovery ring's number."""
+    rs = rec.get("ans_charge_status") if rec else None
+    recharge_part = (rs / 6) * 50 if rs is not None else 25
+    ss = slp.get("sleep_score") if slp else None
+    sleep_part = (ss / 100) * 30 if ss is not None else 15
+    hv = rec.get("heart_rate_variability_avg") if rec else None
+    hrv_part = min(hv / hrv_all_mean, 1) * 20 if (hv is not None and hrv_all_mean) else 10
+    return round(min(recharge_part + sleep_part + hrv_part, 100))
+
+
+def strain_pct_label(active_cal):
+    """(pct, word) from today's active-calories vs the 800-cal reserve. Word vocab is
+    the spec's Minimal/Light/Moderate/Heavy/Max on the dashboard's strainLabel cuts."""
+    if active_cal is None:
+        return None, None
+    pct = min(100, round(active_cal / RESERVE_DEPLETION_CAL * 100))
+    word = ("Max" if pct >= 95 else "Heavy" if pct >= 80 else
+            "Moderate" if pct >= 50 else "Light" if pct >= 15 else "Minimal")
+    return pct, word
+
+
+def sleep_word_4(score):
+    """Sleep word collapsed to the spec's 4-word set (Excellent/Good/Fair/Poor)."""
+    if score is None:
+        return None
+    return ("Excellent" if score >= 85 else "Good" if score >= 70 else
+            "Fair" if score >= 55 else "Poor")
+
+
+def sleep_span_hm(slp):
+    """Last night's sleep as 'Xh Ym' from the start→end span (matches the Polar app
+    and the Sleep ring), falling back to summed stages."""
+    try:
+        s = datetime.fromisoformat(slp["sleep_start_time"])
+        e = datetime.fromisoformat(slp["sleep_end_time"])
+        secs = (e - s).total_seconds()
+        if secs > 0:
+            return min_to_hm(round(secs / 60))
+    except Exception:
+        pass
+    secs = sum(slp.get(k, 0) or 0 for k in ("light_sleep", "deep_sleep", "rem_sleep"))
+    return min_to_hm(round(secs / 60)) if secs else None
+
+
+def hrv_delta_pct(hrv_today, hrv_7d):
+    """HRV today vs the 7-day mean, as a signed %. None when either is missing."""
+    if hrv_today is None or not hrv_7d:
+        return None
+    return round((hrv_today / hrv_7d - 1) * 100)
+
+
+def lunar_hrv_pct():
+    """The HRV-vs-baseline % the Recovery ring corner shows (lunar_stress.json
+    physiology.hrv_pct_baseline), so the State line matches it. None if unavailable."""
+    try:
+        d = load_json(os.path.join(HERE, "lunar_stress.json"))
+        v = (d.get("physiology") or {}).get("hrv_pct_baseline")
+        return round(v) if v is not None else None
+    except Exception:
+        return None
+
+
+def build_state_block(slot, rec, slp, rec_word, hrv_all_mean, hrv_today, hrv_7d,
+                      slp_hours, slp_7d, active_cal):
+    """The deterministic 3-line State block. All real values; no LLM involvement.
+      Recovery {N} · {word} · HRV {±X%}
+      Strain {N}% · {word} · {N} cal spent
+      Sleep {Xh Ym} · {word} · {On|Above|Below} baseline"""
+    # Recovery line — N mirrors the ring; word is the constant overnight recovery word;
+    # the HRV % prefers the same baseline the ring corner uses.
+    n = recovery_score_100(rec, slp, hrv_all_mean)
+    hd = lunar_hrv_pct()
+    if hd is None:
+        hd = hrv_delta_pct(hrv_today, hrv_7d)
+    hrv_str = f"HRV {'+' if hd >= 0 else ''}{hd}%" if hd is not None else "HRV —"
+    rec_line = f"Recovery {n} · {rec_word or '—'} · {hrv_str}"
+
+    # Strain line — % of the 800-cal reserve spent, with the cal figure as the detail.
+    pct, word = strain_pct_label(active_cal)
+    if pct is not None:
+        strain_line = f"Strain {pct}% · {word} · {round(active_cal)} cal spent"
+    elif slot == "sleep":
+        strain_line = "Strain — · Resting · nothing logged overnight"
+    else:
+        strain_line = "Strain — · Minimal · no load logged yet"
+
+    # Sleep line — start→end span, 4-word quality, baseline comparison (±0.3h band).
+    span = sleep_span_hm(slp) if slp else None
+    sword = sleep_word_4(slp.get("sleep_score") if slp else None)
+    if slp_hours is not None and slp_7d is not None:
+        delta = slp_hours - slp_7d
+        base = ("On baseline" if abs(delta) <= 0.3 else
+                "Above baseline" if delta > 0.3 else "Below baseline")
+    else:
+        base = "—"
+    sleep_line = f"Sleep {span or '—'} · {sword or '—'} · {base}"
+
+    return f"{rec_line}\n{strain_line}\n{sleep_line}"
 
 
 def hrv_of(rec):
@@ -1016,84 +1221,34 @@ def main():
             fuel_block = ("- No meals logged in the last ~4 hours — name the gap and say what to "
                           "eat next.\n")
 
-    framing = SLOT_FRAMING.get(slot, SLOT_FRAMING["recovery"])
-
+    slot_cfg = SLOT_FRAMING.get(slot, SLOT_FRAMING["recovery"])
+    blocks = slot_cfg["blocks"]
     rest_today = is_rest_day(today_iso)
 
-    # Performance verdict set is slot-aware. train-2 is the workout-window CLOSE: if he
-    # trained it reads as a training-quality call (the daytime verdicts), if he didn't it
-    # lands on Wind down — the same word the old hardcoded evening slot used. Every other
-    # slot gets the four daytime training verdicts. An explicit rest day swaps the daytime
-    # verdicts for recovery framing (train-2's "didn't train → Wind down" already covers
-    # the rest-day case, so it's handled before the rest-day branch). No NEW verdict words
-    # are introduced — fuel/train slots still draw from the ratified vocabulary only.
-    if slot == "train-2":
-        perf_instr = (
-            "Performance: this is the workout-window CLOSE — judge from today's activity/load. "
-            "If he trained today, start with EXACTLY one of — Push hard / Train normally / Moderate "
-            "effort / Prioritize recovery — chosen to fit how the session actually landed, then one "
-            "short sentence on how it went and the night ahead. If he did NOT train today, start "
-            "with EXACTLY this verdict — Wind down — then one short sentence of wind-down / sleep-prep "
-            "reasoning (the window's closed; tomorrow is the next platform). Use ONLY these verdict "
-            "words; do not invent new ones. "
-            "Example (trained): \"Train normally. You got a solid session in — now protein and sleep "
-            "lock it in, and tomorrow builds on it.\" "
-            "Example (didn't): \"Wind down. The window's closed — sleep prep is the move now, and "
-            "tomorrow gives you a fresh platform to build on.\"\n"
-        )
-    elif rest_today:
-        perf_instr = (
-            "Performance: start with EXACTLY one of these verdicts — Rest day / Recover / Protein focus "
-            "— then one short sentence framing today as deliberate recovery (protein, hydration, sleep, "
-            "easy mobility), NOT training output. Do NOT use Push hard / Train normally / Moderate effort. "
-            "Example: \"Rest day. You called it, so today's about protein, water, and an early night — "
-            "let the work you've banked settle in.\"\n"
-        )
-    else:
-        perf_instr = (
-            "Performance: start with EXACTLY one of these verdicts — Push hard / Train normally / "
-            "Moderate effort / Prioritize recovery — then one short sentence of why. "
-            "Example: \"Push hard. You came in well above your normal recovery, so today's a green "
-            "light to go after it — just keep technique honest if you go heavy.\"\n"
-        )
-
-    # The clipped Observation/Impact/Action format keeps each line ~6-10 words, so the
-    # Reading never quotes numbers — the data below INFORMS the read, but the lines stay
-    # plain words. (The nutrition nudge card carries any specific "front-load 50g" call.)
-    numbers_rule = (
-        "- Do NOT quote numbers, even rounded ones — the data below informs the read, but the "
-        "three lines stay plain words.\n"
-    )
-
-    # Line-4 label: the sleep slot is a forward STATUS projection (he's asleep); every
-    # other slot lands on an imperative Action.
-    if slot == "sleep":
-        action_label = "Status"
-        action_desc = ("a one-line projection of how the night is setting up tomorrow — NOT an "
-                       "imperative, since he's asleep")
-    else:
-        action_label = "Action"
-        action_desc = "ONE specific imperative — what to do right now"
+    # Per-block instructions (Read + the decision verdicts the slot calls for) and the
+    # bare output skeleton claude -p fills in line by line.
+    block_instrs = "\n".join(BLOCK_INSTR[b](slot, rest_today) for b in blocks)
+    output_skeleton = "\n".join(f"{b}: ..." for b in blocks)
 
     prompt = (
-        "You are a recovery and performance coach writing a short daily read for an athlete (Alfie). "
-        "He knows his own body well and does NOT want technical jargon. Write like a sharp human coach "
-        "talking to him in plain English: recent physiology, where he stands, and what to do.\n\n"
+        "You are a recovery and performance coach writing a tactical daily brief for an athlete "
+        "(Alfie). He knows his own body and does NOT want jargon. In plain English, answer: what does "
+        "his state MEAN, and — should he work out, eat, rest?\n\n"
         "HARD OUTPUT RULES (these are absolute):\n"
-        "- NEVER quote the recovery, heart-rate-variability, or sleep figures, and NEVER write "
-        "percentages, decimals, or units. No \"72ms\", no \"5/6\", no \"6.1h\", no \"%\".\n"
+        "- NEVER quote recovery, heart-rate-variability, or sleep figures, and NEVER write "
+        "percentages, decimals, or biometric units in the Read line. No \"72ms\", \"5/6\", \"6.1h\", "
+        "\"%\". (The Eat line MAY use gram amounts and clock times — that is the one exception.)\n"
         "- NEVER write biometric jargon: HRV, Recharge, Nightly Recharge, BPM, ANS, Sleep Score.\n"
-        f"{numbers_rule}"
-        "- NO ASTROLOGY, AT ALL. This read is pure body + action. Never mention the moon, planets, "
-        "signs, houses, aspects, transits, a chart, anything natal/lunar/cosmic, or any astrological "
-        "idea — not named, not as subtle 'texture', not woven into character framing. If a thought only "
+        "- NO ASTROLOGY, AT ALL. Never mention the moon, planets, signs, houses, aspects, transits, a "
+        "chart, anything natal/lunar/cosmic — not named, not as subtle 'texture'. If a thought only "
         "makes sense through astrology, drop it.\n"
-        "- The recovery/sleep data below INFORMS your assessment but must NOT appear in the output. "
-        "Translate everything into plain language. The data sets the conclusion; the conclusion is what you write.\n\n"
-        "=== WHERE ALFIE IS IN HIS DAY (sets the tone of the Reading) ===\n"
-        f"{framing}\n"
-        "The Recovery WORD comes only from the overnight recovery data and stays constant through the "
-        "day; it is the PROSE that must move with the slot above.\n\n"
+        "- The data below INFORMS you but must NOT be quoted back. Translate it into plain language; "
+        "the data sets the conclusion, the conclusion is what you write.\n"
+        "- Every decision line MUST start with one of its allowed verdict words, then ONE tight "
+        "qualifier (15 words max). No preamble, no markdown, no closing remarks.\n\n"
+        "=== WHERE ALFIE IS IN HIS DAY (sets the tone) ===\n"
+        f"{slot_cfg['when']}\n"
+        f"The Read line should focus on: {slot_cfg['read']}.\n\n"
         "=== RECOVERY & FITNESS DATA (informs you — never quote it) ===\n"
         "(Polar Nightly Recharge is a 1-6 scale, 6 best.)\n"
         f"- Recovery status today: {rec_today}/6 (7-day avg {rec_7d})\n"
@@ -1104,72 +1259,65 @@ def main():
         f"{fuel_block}"
         f"\n{goal_framing()}"
         f"{rest_day_framing(today_iso)}"
-        "Produce EXACTLY these four sections, each starting on its own line with the exact label shown "
-        "followed by a colon. No markdown, no bullets, no preamble, no closing remarks.\n\n"
-        "Recovery: ONE word only — Poor, Average, Good, or Excellent. Nothing else on this line. "
-        "Base it ONLY on the overnight recovery/sleep data, never on the time of day.\n"
-        "Reading: output EXACTLY THREE short lines, each on its OWN line, no blank line between them, "
-        "no paragraph and no flowing prose, in this exact order:\n"
-        "  Line 1 (Observation): ONE plain-English physiological observation — about 6 to 10 words, a "
-        "clipped statement with no narrator. No numbers, no jargon.\n"
-        "  Line 2 (Impact): ONE plain-English consequence for today — about 6 to 10 words.\n"
-        f"  Line 3 ({action_label}): start with '{action_label}:' then {action_desc} — about 6 to 10 words.\n"
-        "The slot framing above sets WHAT each of the three lines is about. NO narrative voice — never "
-        "open with \"You're a couple hours in…\" / \"The day's setting up…\". NO filler — cut every word "
-        "that doesn't carry weight. Line 1 may name a body area (knees, shoulders, neck) ONLY when there's "
-        "a real signal worth noting; otherwise keep it on the recovery/energy read.\n"
-        "Example shape (do NOT copy the words, match the SHAPE):\n"
-        "Recovery is sitting below your usual.\n"
-        "Capacity's there, but the ceiling is lower today.\n"
-        "Action: Keep it controlled — no PR-chasing on tired legs.\n"
-        f"{perf_instr}"
-        "Transit: write exactly the single word: none. (This section is retired in the direct-data "
-        "reframe — always output none, never astrology.)\n"
+        "=== WRITE THESE LABELED LINES, IN THIS ORDER, AND NOTHING ELSE ===\n"
+        "Each line starts with its label and a colon. No extra lines, no headers, no markdown.\n\n"
+        f"{block_instrs}\n\n"
+        "Output skeleton (replace each ... with your line):\n"
+        f"{output_skeleton}\n"
     )
 
     log(f"slot={slot} recharge={rec_today} hrv={hrv_today} sleep={slp_hours} "
-        f"activity={'y' if (show_today_data and activity) else 'n'} transits={len(transits)}")
+        f"activity={'y' if (show_today_data and activity) else 'n'} blocks={','.join(blocks)}")
     raw = call_claude(prompt)
-    sections = parse_sections(raw)
+    parsed = parse_brief_blocks(raw, blocks)
 
-    # Force the Recovery word to the deterministic overnight-derived value so it can't
-    # drift between slots on the same day's data (the LLM otherwise re-judges 5/6 → it
-    # flickered Good/Excellent across fires). Overwrite the parsed Recovery section so
-    # summary + sections + simple all agree.
+    # Deterministic Recovery word (overnight-derived; constant across the day's fires).
     rec_word = recovery_word(rec_today, hrv_today, hrv_7d)
-    if rec_word:
-        rec_sec = next((s for s in sections if s["label"] == "Recovery"), None)
-        if rec_sec:
-            rec_sec["text"] = rec_word
-        else:
-            sections.insert(0, {"label": "Recovery", "text": rec_word})
 
-    if sections:
-        summary = "\n\n".join(f"{s['label']}: {s['text']}" for s in sections)
-    else:
-        # Parser found no labeled sections — fall back to a flat cleaned read.
-        log("section parse found nothing — falling back to flat summary")
-        summary = clean(raw)
-    if not summary:
-        raise RuntimeError("claude returned empty output")
+    # Deterministic State block — mirrors the Recovery / Strain / Sleep rings exactly.
+    # hrv_all_mean is the mean of every recharge HRV (the same baseline app.js feeds
+    # computeRecoveryScore) so the State Recovery number equals the ring number.
+    hrv_vals = []
+    for d in rec_dates:
+        try:
+            v = load_json(os.path.join(HERE, "recharge", f"{d}.json")).get("heart_rate_variability_avg")
+            if v is not None:
+                hrv_vals.append(v)
+        except Exception:
+            pass
+    hrv_all_mean = mean(hrv_vals) if hrv_vals else None
+    active_cal = _today_active_cal(today_iso)
+    state_block = build_state_block(slot, rec, slp, rec_word, hrv_all_mean,
+                                    hrv_today, hrv_7d, slp_hours, slp_7d, active_cal)
 
-    # Plain-English block the dashboard card reads. Maps each labeled section to
-    # its key; normalizes Recovery to a single word; nulls Transit Impact when no
-    # real transit is hitting (so the card skips that section entirely).
-    simple = {k: None for k in SIMPLE_KEYS}
-    for s in sections:
-        key = LABEL_TO_KEY.get(s["label"])
-        if key:
-            simple[key] = s["text"]
-    if simple["recovery"]:
-        word = next((w for w in RECOVERY_WORDS
-                     if re.search(rf"\b{w}\b", simple["recovery"], re.I)), None)
-        if word:
-            simple["recovery"] = word
-    ti = simple.get("transit")
-    if not transits or not ti or ti.strip().lower() == "none" \
-            or re.search(r"\bno (significant|relevant|meaningful)\b", ti, re.I):
-        simple["transit"] = None
+    # Assemble the multiline tactical brief: deterministic State, then the LLM Read +
+    # decision verdicts under their human-facing question headers. Newlines are load-
+    # bearing — the render layer splits on blank lines and preserves them.
+    parts = [f"State\n{state_block}"]
+    for b in blocks:
+        txt = parsed.get(b) or "—"
+        parts.append(f"{block_header(b, slot)}\n{txt}")
+    reading = "\n\n".join(parts)
+    if not reading.strip():
+        raise RuntimeError("empty tactical brief")
+
+    # Keep the stored schema shape stable (summary + sections + simple) so nothing
+    # downstream breaks; the card reads simple.reading. `performance` keeps the workout
+    # (or sleep-slot setup) verdict as a backward-compat fallback for the renderer.
+    perf_text = parsed.get("Workout") or parsed.get("Setup") or ""
+    sections = [
+        {"label": "Recovery", "text": rec_word or ""},
+        {"label": "Reading", "text": reading},
+        {"label": "Performance", "text": perf_text},
+        {"label": "Transit", "text": "none"},
+    ]
+    summary = "\n\n".join(f"{s['label']}: {s['text']}" for s in sections if s["text"])
+    simple = {
+        "recovery": rec_word,
+        "reading": reading,
+        "performance": perf_text or None,
+        "transit": None,
+    }
 
     nutrition_nudge = build_nutrition_nudge(now)
 

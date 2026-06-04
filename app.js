@@ -988,6 +988,53 @@ function readBlock(subtitle, text) {
   return sec;
 }
 
+// Render the Currents tactical brief. The new prose (summary.py v2) is multiline:
+//   State\n{3 metric lines}\n\nRead\n{...}\n\nEligible to work out?\n{...}\n\n...
+// Split on blank lines; when a block's first line is a known section header, render
+// that header muted/uppercase with the body beneath it (white-space:pre-line keeps the
+// 3 State metric lines on separate rows). Old single-paragraph summaries (no known
+// header) fall through to one styled paragraph, so an existing summary.json still
+// renders cleanly. Section blocks get a small vertical gap.
+const BRIEF_HEADERS = ["State", "Read", "Eligible to work out?", "Should you work out?",
+                       "Should you eat?", "Should you rest?", "Setup for today?"];
+function renderBrief(host, text) {
+  host.innerHTML = "";
+  const blocks = String(text).split(/\n\s*\n/).map(b => b.replace(/\s+$/, "")).filter(b => b.trim());
+  const structured = blocks.some(b => BRIEF_HEADERS.includes(b.split("\n")[0].trim()));
+  if (!structured) {
+    const p = document.createElement("p");
+    p.className = "text-[12.5px] leading-snug text-neutral-300";
+    p.textContent = text;
+    host.appendChild(p);
+    return;
+  }
+  blocks.forEach((b, i) => {
+    const lines = b.split("\n");
+    const header = lines[0].trim();
+    const wrap = document.createElement("div");
+    if (i > 0) wrap.style.marginTop = "7px";
+    if (BRIEF_HEADERS.includes(header)) {
+      const h = document.createElement("div");
+      h.className = "text-[10px] uppercase tracking-wider font-semibold text-muted";
+      h.textContent = header;
+      wrap.appendChild(h);
+      const p = document.createElement("p");
+      p.className = "text-[12.5px] leading-snug text-neutral-200";
+      p.style.whiteSpace = "pre-line";
+      p.style.marginTop = "1px";
+      p.textContent = lines.slice(1).join("\n").trim();
+      wrap.appendChild(p);
+    } else {
+      const p = document.createElement("p");
+      p.className = "text-[12.5px] leading-snug text-neutral-200";
+      p.style.whiteSpace = "pre-line";
+      p.textContent = b;
+      wrap.appendChild(p);
+    }
+    host.appendChild(wrap);
+  });
+}
+
 // LPI v1 replica — compact Today's read: a color-coded Recovery word + a
 // full-length summary paragraph (Currents IS the full analysis), with an
 // "Updated HH:MM" timestamp in the header. Mirrors the source mockup.
@@ -1009,9 +1056,9 @@ async function renderTodaysRead() {
       word.style.color = c;
       word.style.textShadow = w ? `0 0 12px ${c}` : "none";
     }
-    // Summary paragraph — full length, no clamp. Currents IS the full analysis.
+    // Tactical brief (multiline) — full length, no clamp. Currents IS the full analysis.
     const read = (simple && (simple.reading || simple.performance)) || s.summary || "First read drops at 9:05 AM";
-    body.textContent = read;
+    renderBrief(body, read);
     if (ts && s.generated_at) {
       const t = new Date(s.generated_at);
       ts.textContent = "Updated " + t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
