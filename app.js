@@ -731,7 +731,7 @@ async function renderSupportCards() {
   } catch (e) {}
 }
 
-// Tap-through: hero metric corners + bottom-nav anchors scroll to their section.
+// Tap-through: hero metric corners scroll to their section.
 function scrollToId(id) {
   const t = document.getElementById(id);
   if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -740,23 +740,6 @@ function wireRings() {
   // Any element with data-target scrolls to that section (hero corners + card links).
   document.querySelectorAll("[data-target]").forEach(btn => {
     btn.addEventListener("click", () => scrollToId(btn.dataset.target));
-  });
-  // Bottom nav. Dashboard/History/Insights scroll to anchors; Add + Settings are
-  // visual placeholders for v1 (no-op) — flagged in LPI v1 Known Risks.
-  const navTargets = { dashboard: "lpi-hero", history: "scale-history-panel", insights: "lunar-stress" };
-  document.querySelectorAll("#lpi-bottom-nav button[data-nav]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      // Active-state glow follows the tapped tab (skip the center + button).
-      if (btn.dataset.nav !== "add") {
-        document.querySelectorAll("#lpi-bottom-nav .nav-item").forEach(n => {
-          n.classList.remove("active"); n.classList.add("text-muted");
-        });
-        btn.classList.add("active"); btn.classList.remove("text-muted");
-      }
-      const t = navTargets[btn.dataset.nav];
-      if (t === "lpi-hero") window.scrollTo({ top: 0, behavior: "smooth" });
-      else if (t) scrollToId(t);
-    });
   });
 }
 
@@ -1488,7 +1471,7 @@ function renderAll() {
   renderRings(); // async, LPI hero: moon + 3 orbital rings + metric corners + recovery window
   renderPhysiology(); // async, Today's Read physiology grid (HRV/RHR/Resp + em-dash Skin Temp/SpO2)
   renderSupportCards(); // async, Nutrition / Scale / Activity summary cards
-  wireRings();   // tap-through scroll on metric corners + bottom nav
+  wireRings();   // tap-through scroll on metric corners + card links
   renderActivity(); // async, Polar Loop Gen 2 daily activity (steps / active time / calories)
   renderPolar(); // async, live Polar Loop data
   renderDayReview(); // async, nightly Day-in-Review freeze (polar/day_review.json)
