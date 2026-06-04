@@ -543,19 +543,13 @@ async function renderTodaysRead() {
   }
 }
 
-// ---------- Lunar Stress Index (polar/lunar_stress.py) ----------
-// Band -> color classes (score number text, chip bg/text, dot bg). Mirrors the
-// spec bands: emerald / cyan / amber / orange / red.
-// cyan = good recovery state · amber = caution/heavy load · red = true risk.
-const LSI_BANDS = [
-  { max: 25,  name: "Stable Control",     num: "text-accent",  chip: "bg-accent/15 text-accent",   dot: "bg-accent" },
-  { max: 45,  name: "Mild Compression",   num: "text-accent",  chip: "bg-accent/15 text-accent",   dot: "bg-accent" },
-  { max: 65,  name: "Moderate Compression", num: "text-warn",  chip: "bg-warn/15 text-warn",       dot: "bg-warn" },
-  { max: 85,  name: "Elevated Reactivity", num: "text-warn",   chip: "bg-warn/15 text-warn",       dot: "bg-warn" },
-  { max: 100, name: "High Nervous Load",  num: "text-bad",     chip: "bg-bad/15 text-bad",         dot: "bg-bad" },
-];
-const lsiBand = score => LSI_BANDS.find(b => score <= b.max) || LSI_BANDS[LSI_BANDS.length - 1];
-
+// ---------- Lunar tracker (polar/lunar_stress.py `lunar` block) ----------
+// Direct-data reframe (2026-06-03): the card is now a pure lunar readout — moon
+// sign + degree, phase, next sign change, void-of-course window, active major
+// transits. No band labels, no score, no contribution bars, no behavioral
+// directive (those still compute inside lunar_stress.json for trend math + the
+// daily pattern log, but they are no longer the surface). Color tokens: gray for
+// metadata, amber (text-warn) when void-of-course is active or Mercury is retro.
 async function renderLunarStress() {
   const empty = document.getElementById("lsi-empty");
   const content = document.getElementById("lsi-content");
@@ -571,77 +565,47 @@ async function renderLunarStress() {
   if (empty) empty.classList.add("hidden");
   content.classList.remove("hidden");
 
-  // Band is the headline; the numeric score stays in lunar_stress.json (other
-  // systems read it) but is no longer rendered on the card.
-  const band = lsiBand(d.score);
-  document.getElementById("lsi-band").textContent = d.band || band.name;
-  document.getElementById("lsi-band-chip").className =
-    `inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-sm font-medium ${band.chip}`;
-  document.getElementById("lsi-band-dot").className = `w-2 h-2 rounded-full ${band.dot}`;
+  const L = d.lunar || {};
+  const voc = L.void_of_course;
+  const transits = L.active_transits || [];
+  const isRetro = t => /mercury\s+retrograde/i.test(t);
 
-  // Contribution bars — relative weight of transit vs body, precomputed in the
-  // JSON (filled/total). Monospace + unicode blocks so the segments line up.
-  const barsEl = document.getElementById("lsi-bars");
-  if (barsEl) {
-    const row = (label, b) => {
-      if (!b || b.filled == null) return "";
-      const filled = "█".repeat(Math.max(0, b.filled));
-      const empty = "░".repeat(Math.max(0, (b.total || 10) - b.filled));
-      return `<div class="flex items-center gap-2">` +
-        `<span class="w-16 shrink-0 font-sans text-xs uppercase tracking-wide text-muted">${label}</span>` +
-        `<span class="tracking-tight"><span class="text-purple-300">${filled}</span><span class="text-line">${empty}</span></span>` +
-        `</div>`;
-    };
-    const b = d.bars || {};
-    barsEl.innerHTML = row("Transit", b.transit) + row("Body", b.body);
+  const row = (label, value, amber) => {
+    if (!value) return "";
+    return `<div class="flex gap-2 text-sm leading-relaxed">` +
+      `<span class="text-muted w-28 shrink-0">${label}</span>` +
+      `<span class="${amber ? "text-warn font-medium" : "text-neutral-200"}">${value}</span></div>`;
+  };
+
+  // Headline: Moon sign + degree (e.g. "Moon in Capricorn · 23° Cap 36'").
+  const head = L.sign
+    ? `Moon in ${L.sign}${L.degree ? ` · <span class="text-muted font-normal">${L.degree}</span>` : ""}`
+    : "—";
+
+  let html = `<div class="text-lg font-semibold text-fuchsia-200 mb-3">${head}</div>`;
+  html += `<div class="space-y-1.5">`;
+  html += row("Phase", L.phase);
+  html += row("Next sign", L.next_sign_change && L.next_sign_change.display);
+  if (voc && voc.active) {
+    html += row("Void of Course", `now through ${voc.until_display || "next ingress"}`, true);
   }
+  if (transits.length) {
+    html += transits.map((t, i) => row(i === 0 ? "Transits" : "", t, isRetro(t))).join("");
+  } else {
+    html += row("Transits", "none active");
+  }
+  html += `</div>`;
+  content.innerHTML = html;
 
-  // Trigger + transit texture (sign · phase · house).
-  const td = d.transit_detail || {};
-  const bits = [];
-  // Skip the "<Sign> Moon" texture when the trigger already names that sign.
-  if (td.moon_sign && !(d.trigger || "").includes(td.moon_sign)) bits.push(`${td.moon_sign} Moon`);
-  if (td.moon_phase) bits.push(td.moon_phase);
-  if (td.moon_house_natal) bits.push(`natal ${ordinal(td.moon_house_natal)} house`);
-  document.getElementById("lsi-trigger").innerHTML =
-    `<span class="text-neutral-200 font-medium">${d.trigger || "—"}</span>` +
-    (bits.length ? ` · <span class="text-muted">${bits.join(" · ")}</span>` : "");
-
-  // Physiology line.
-  const p = d.physiology || {};
-  const phys = [];
-  if (p.hrv_pct_baseline != null) phys.push(`HRV ${p.hrv_pct_baseline > 0 ? "+" : ""}${p.hrv_pct_baseline}%`);
-  if (p.rhr_delta_bpm != null) phys.push(`RHR ${p.rhr_delta_bpm > 0 ? "+" : ""}${p.rhr_delta_bpm} bpm`);
-  if (p.sleep_score != null) phys.push(`Sleep ${p.sleep_score}`);
-  document.getElementById("lsi-physiology").textContent = phys.length ? phys.join("  ·  ") : "—";
-
-  // Workout row removed from the LSI card: it read as a recommendation but is
-  // actually a load measurement, contradicting the Today's Read verdict. The
-  // Recovery tile's Reserve bar owns today's-load display. The
-  // workout_intensity field stays in lunar_stress.json — the scoring engine
-  // still uses it for the +0/+3/+10 modifier.
-
-  // Recommendation.
-  document.getElementById("lsi-recommendation").textContent = d.recommendation || "";
-
-  // Timestamp + stale warning (lunar position drifts; flag >2h old).
+  // Timestamp + freshness (lunar position drifts; flag >2h old, amber stamp).
   const ts = document.getElementById("lsi-ts");
-  const basis = document.getElementById("lsi-basis");
-  if (d.generated_at) {
+  if (ts && d.generated_at) {
     const t = new Date(d.generated_at);
     const ageH = (Date.now() - t.getTime()) / 3600000;
-    if (ts) ts.textContent = "updated " + t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
-    if (basis) {
-      basis.innerHTML = ageH > 2
-        ? `<span class="text-warn font-medium">⚠️ ${Math.round(ageH)}h old — Moon position may have drifted; refreshes on next Polar sync.</span>`
-        : `<span class="text-muted">Behavioral calibration, not prediction · transit + Polar physiology.</span>`;
-    }
+    ts.textContent = (ageH > 2 ? "⚠️ " : "") + "updated " +
+      t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    ts.className = ageH > 2 ? "text-xs text-warn font-medium" : "text-xs text-neutral-400";
   }
-}
-
-function ordinal(n) {
-  const s = ["th", "st", "nd", "rd"], v = n % 100;
-  return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
 
 // ---------- Nutrition (Calories Club macros via nutrition/sync.py) ----------

@@ -8,9 +8,16 @@ A behavioral-calibration score (0-100, NOT a prediction). It fuses:
 into a single score + band, then asks `claude -p` for a 1-2 sentence behavioral
 directive in a performance-based-male register (action, not feelings).
 
+DIRECT-DATA REFRAME (2026-06-03): the score + band still compute internally (kept in
+the JSON for trend math + Layer 3 daily logging), but they are NO LONGER the dashboard
+surface. The card now renders a data-forward lunar readout: moon sign + degree, phase,
+next sign change, void-of-course window (when active), and active major transits
+(Mercury Rx, Saturn/Jupiter aspects to natal). See compute()'s `lunar` block.
+
 Runs piggy-backed on the polar-sync 30-min cadence (sync.py calls this after a
-successful pull). Writes polar/lunar_stress.json; the dashboard renders it under
-"Today's Read". The git push is handled by sync.py's allowlisted git_push().
+successful pull). Writes polar/lunar_stress.json + a per-day archive
+(polar/lunar_daily/<date>.json) for the future monthly pattern roll-up. The git push
+is handled by sync.py's allowlisted git_push().
 
 Deps (in polar/.venv): pyswisseph. No network at runtime.
 
@@ -26,7 +33,7 @@ import re
 import shutil
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from statistics import mean
 
 import swisseph as swe
@@ -195,6 +202,136 @@ def applying_or_separating(jd, body, natal_lon, exact_angle):
     off0 = abs(angular_sep(lon_of(jd, body), natal_lon) - exact_angle)
     off1 = abs(angular_sep(lon_of(jd + 0.02, body), natal_lon) - exact_angle)
     return "applying" if off1 < off0 else "separating"
+
+
+# --- data-forward lunar readout (Layer 2) --------------------------------
+SIGN_ABBR = {"Aries": "Ari", "Taurus": "Tau", "Gemini": "Gem", "Cancer": "Can",
+             "Leo": "Leo", "Virgo": "Vir", "Libra": "Lib", "Scorpio": "Sco",
+             "Sagittarius": "Sag", "Capricorn": "Cap", "Aquarius": "Aqu", "Pisces": "Pis"}
+
+# Bodies + aspects used for void-of-course (Moon makes no further aspect before ingress).
+VOC_BODIES = [swe.SUN, swe.MERCURY, swe.VENUS, swe.MARS, swe.JUPITER,
+              swe.SATURN, swe.URANUS, swe.NEPTUNE, swe.PLUTO]
+VOC_ASPECTS = [0, 60, 90, 120, 180]
+TRANSIT_ORB = 1.5   # orb for slow-planet (Saturn/Jupiter) aspects to natal points
+
+
+def format_moon_degree(moon_lon):
+    """'23° Cap 36'' — whole degree + arcminute WITHIN the current sign."""
+    pos = moon_lon % 30
+    d = int(pos)
+    m = int(round((pos - d) * 60))
+    if m == 60:
+        d, m = d + 1, 0
+    return f"{d}° {SIGN_ABBR[sign_of(moon_lon)]} {m:02d}'"
+
+
+def fmt_time(dt):
+    """6:45 PM — local 12-hour clock, no leading zero, no platform strftime flags."""
+    h = dt.hour % 12 or 12
+    return f"{h}:{dt.minute:02d} {'AM' if dt.hour < 12 else 'PM'}"
+
+
+def jd_to_local(jd):
+    """Julian Day (UT) -> timezone-aware local datetime."""
+    y, mo, d, ut = swe.revjul(jd)
+    base = datetime(y, mo, d, tzinfo=timezone.utc) + timedelta(hours=ut)
+    return base.astimezone()
+
+
+def next_sign_change(jd, moon_lon):
+    """When the Moon crosses into the next sign. Bisects the sign-index change over the
+    next 3 days (Moon changes sign at most ~every 2.3 days). Returns
+    (next_sign_name, local_datetime, ingress_jd)."""
+    cur = int(moon_lon // 30) % 12
+    nxt = (cur + 1) % 12
+    lo, hi = jd, jd + 3.0
+    for _ in range(60):
+        mid = (lo + hi) / 2
+        if int(lon_of(mid, swe.MOON) // 30) % 12 == cur:
+            lo = mid
+        else:
+            hi = mid
+    return SIGNS[nxt], jd_to_local(hi), hi
+
+
+def _aspect_signature(jd):
+    """Snapshot of (sep - aspect_angle) for every Moon↔planet aspect pair at `jd`."""
+    ml = lon_of(jd, swe.MOON)
+    sig = {}
+    for body in VOC_BODIES:
+        try:
+            sep = angular_sep(ml, lon_of(jd, body))
+        except Exception:
+            continue
+        for asp in VOC_ASPECTS:
+            sig[(body, asp)] = sep - asp
+    return sig
+
+
+def has_upcoming_aspect(jd_start, jd_end):
+    """True if the Moon perfects any major aspect to a planet between start and end —
+    detected as a zero-crossing of (sep - aspect_angle) on a ~28-min step grid."""
+    steps = max(8, int((jd_end - jd_start) / 0.02))
+    prev = None
+    for i in range(steps + 1):
+        j = jd_start + (jd_end - jd_start) * i / steps
+        cur = _aspect_signature(j)
+        if prev is not None:
+            for k, v in cur.items():
+                pv = prev.get(k)
+                if pv is None:
+                    continue
+                if pv == 0 or (pv < 0) != (v < 0):
+                    return True
+        prev = cur
+    return False
+
+
+def compute_voc(jd, ingress_jd, ingress_dt):
+    """Moon is void-of-course when it makes NO further major aspect before the next
+    ingress. Returns a dict when active now, else None."""
+    if has_upcoming_aspect(jd, ingress_jd):
+        return None
+    return {"active": True, "until": ingress_dt.isoformat(timespec="minutes"),
+            "until_display": f"{ingress_dt.month}/{ingress_dt.day} at {fmt_time(ingress_dt)}"}
+
+
+def mercury_retrograde(jd):
+    """'Mercury retrograde (until M/D)' if Mercury is currently Rx (negative longitude
+    speed), else None. Forward-scans daily up to 45 days for the direct station."""
+    try:
+        if swe.calc_ut(jd, swe.MERCURY)[0][3] >= 0:
+            return None
+    except Exception:
+        return None
+    for day in range(1, 46):
+        try:
+            if swe.calc_ut(jd + day, swe.MERCURY)[0][3] >= 0:
+                end = jd_to_local(jd + day)
+                return f"Mercury retrograde (until {end.month}/{end.day})"
+        except Exception:
+            break
+    return "Mercury retrograde"
+
+
+def outer_aspects_to_natal(jd, natal_moon, natal_uranus):
+    """Saturn/Jupiter major aspects to natal Moon/Uranus within TRANSIT_ORB. Plain
+    strings like 'Saturn square natal Moon'. The slow-mover transits worth surfacing."""
+    out = []
+    targets = [(natal_moon, "Moon"), (natal_uranus, "Uranus")]
+    for body, pname in ((swe.SATURN, "Saturn"), (swe.JUPITER, "Jupiter")):
+        try:
+            bl = lon_of(jd, body)
+        except Exception:
+            continue
+        for nat_lon, nat_name in targets:
+            sep = angular_sep(bl, nat_lon)
+            for aname, exact in ASPECTS.items():
+                if abs(sep - exact) <= TRANSIT_ORB:
+                    out.append(f"{pname} {aname} natal {nat_name}")
+                    break
+    return out
 
 
 # --- physiology helpers --------------------------------------------------
@@ -527,6 +664,27 @@ def compute(now=None):
     recommendation = build_recommendation(
         score, band, trigger, physiology, intensity, rest_day=rest_today)
 
+    # --- Layer 2: data-forward lunar readout (the new dashboard surface) ---
+    next_sign, next_dt, ingress_jd = next_sign_change(jd, moon_lon)
+    voc = compute_voc(jd, ingress_jd, next_dt)
+    active_transits = []
+    merc = mercury_retrograde(jd)
+    if merc:
+        active_transits.append(merc)
+    active_transits += outer_aspects_to_natal(jd, natal_moon, natal_uranus)
+    lunar = {
+        "sign": sign_of(moon_lon),
+        "degree": format_moon_degree(moon_lon),
+        "phase": moon_phase(elongation),
+        "next_sign_change": {
+            "sign": next_sign,
+            "at": next_dt.isoformat(timespec="minutes"),
+            "display": f"Enters {next_sign} {next_dt.month}/{next_dt.day} at {fmt_time(next_dt)}",
+        },
+        "void_of_course": voc,
+        "active_transits": active_transits,
+    }
+
     return {
         "generated_at": now.isoformat(timespec="seconds"),
         "score": score,
@@ -535,6 +693,7 @@ def compute(now=None):
         "physiology": physiology,
         "workout_intensity": intensity,
         "recommendation": recommendation,
+        "lunar": lunar,
         "bars": compute_bars(a_pts, b_pts),
         "transit_detail": {
             "moon_longitude": round(moon_lon, 2),
@@ -559,15 +718,45 @@ def compute(now=None):
     }
 
 
+def write_daily_log(data):
+    """Layer 3: append today's lunar state to polar/lunar_daily/<date>.json so the
+    monthly pattern roll-up (WHEN_HOME #10) can correlate moon phase/sign/transits
+    against daily physiology later. Overwrites only TODAY's file each run (latest
+    state); past days are immutable, so the directory accumulates a daily history.
+    Never raises."""
+    try:
+        from datetime import date as _date
+        lunar = data.get("lunar", {}) or {}
+        today = _date.today().isoformat()
+        rec = {
+            "date": today,
+            "moon_sign": lunar.get("sign"),
+            "moon_degree": lunar.get("degree"),
+            "moon_phase": lunar.get("phase"),
+            "active_major_transits": lunar.get("active_transits", []),
+            "score": data.get("score"),
+        }
+        folder = os.path.join(HERE, "lunar_daily")
+        os.makedirs(folder, exist_ok=True)
+        with open(os.path.join(folder, f"{today}.json"), "w") as f:
+            json.dump(rec, f, indent=2)
+    except Exception as e:
+        log(f"  lunar_daily log failed (non-fatal): {e}")
+
+
 def main():
     out_path = OUT_PATH
-    if "--out" in sys.argv:
+    testing = "--out" in sys.argv
+    if testing:
         i = sys.argv.index("--out")
         if i + 1 < len(sys.argv):
             out_path = sys.argv[i + 1]
     data = compute()
     with open(out_path, "w") as f:
         json.dump(data, f, indent=2)
+    # Daily pattern log only on the real run (skip during --out manual tests).
+    if not testing:
+        write_daily_log(data)
     log(f"LSI {data['score']} ({data['band']}) — {data['trigger']} -> {out_path}")
     return 0
 

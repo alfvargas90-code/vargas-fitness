@@ -5,9 +5,10 @@ Reads the latest Polar recharge/sleep data + body-comp seed, asks `claude -p`
 (rides Alfie's Claude Max plan — no API key, no marginal cost) for a plain-English
 read in four sections (Recovery / Reading / Performance / Transit), writes
 polar/summary.json with a `simple` block the dashboard card renders, and pushes so
-the live URL updates. The `Reading` section fuses physical body-area notes with the
-natal recovery trait into ONE flowing paragraph — astrology is texture, never named.
-The biometrics inform the read but never appear in it — no raw numbers, units, or jargon.
+the live URL updates. The `Reading` section is pure physiology + action: recent
+recovery/sleep state and today's actuals, ending on a direct, actionable directive —
+no astrology coloring, no natal/lunar texture. The biometrics inform the read but never
+appear in it — no raw numbers, units, or jargon.
 
 Run by the com.alfredo.polar-summary LaunchAgent 7x/day (CDT), one fire per slot:
   04:00 sleep · 07:00 recovery · 11:30 fuel-1 · 15:00 fuel-2 · 17:30 train-1 ·
@@ -46,6 +47,9 @@ TRANSIT_DIR = os.path.expanduser(
     "~/Documents/Claude/Scheduled/daily-transit-snapshot")
 
 # ---- Section 12: Astrology-aware fitness intelligence (spec Section 12, Layer 2) ----
+# NOTE (2026-06-03 direct-data reframe): the structures below stay DEFINED for other
+# code (load_today_transits still uses BODY_MAPPING), but they are NO LONGER injected
+# into the prose prompt. The Reading is pure physiology + action now — Layer 1.
 
 # Static natal architecture. Lifted tight from spec Section 12, Layer 2.
 NATAL_ARCHITECTURE = (
@@ -142,6 +146,12 @@ SLOT_FRAMING = {
         "Opener examples (do not copy verbatim): \"Energy's holding but the fuel's lagging…\" / "
         "\"You're past mid-morning and protein's barely moving…\" / \"The tank's steady; food's "
         "keeping up so far…\"\n"
+        "READ THE RECENT FUELING: the meals logged in the last ~4 hours are listed below (which "
+        "meal, its macros, and the clock time). Look at today's activity/energy output since the "
+        "FIRST meal in that window, and comment in plain terms on whether what he actually ate is "
+        "matching the energy he's spending — then say what to eat next. Reference a specific meal by "
+        "name when it makes the point land (e.g. \"that burger at noon set you up, but protein's still "
+        "thin — anchor the next meal on it\").\n"
         "Weave the numbers in as lived context, never a stat list. The day's training call still "
         "applies — fueling supports it, it doesn't replace it."
     ),
@@ -154,6 +164,12 @@ SLOT_FRAMING = {
         "Opener examples (do not copy verbatim): \"You've got the afternoon to close the protein "
         "gap…\" / \"Energy's dipping and the fuel's behind…\" / \"Fueled up well — that sets the "
         "evening up right…\"\n"
+        "READ THE RECENT FUELING: the meals logged in the last ~4 hours are listed below (which "
+        "meal, its macros, and the clock time). Look at today's activity/energy output since the "
+        "FIRST meal in that window, and comment in plain terms on whether what he actually ate is "
+        "matching the energy he's spending — then say what to do next before the evening. Reference a "
+        "specific meal by name when it sharpens the call (e.g. \"that hydration drink wasn't food — "
+        "you're running on the burger from noon, so the next plate has to carry real protein\").\n"
         "Reference the accumulated food and activity naturally as part of the read."
     ),
     "train-1": (
@@ -446,6 +462,57 @@ def nutrition_gap_line():
     except Exception as e:
         log(f"nutrition-gap parse failed (non-fatal): {e}")
         return None
+
+
+def meals_in_window(now, hours=4):
+    """Layer 4 (fuel slots): today's meals logged within the last `hours`, oldest
+    first, as a compact timeline string carrying macros + clock time — e.g.
+    "Burger and Fruit Cup at 11:44am (35g protein, 750 cal); Cheetos at 7:44pm
+    (6g protein, 470 cal)". Reads nutrition/daily/<today>.json raw.meals (each meal
+    has title/time/calories/protein/...). Returns (timeline_str, first_clock_str) or
+    (None, None) when nothing's in the window. Never raises."""
+    try:
+        today = now.date().isoformat()
+        path = os.path.join(ROOT, "nutrition", "daily", f"{today}.json")
+        if not os.path.exists(path):
+            return None, None
+        meals = ((load_json(path).get("raw") or {}).get("meals")) or []
+        cutoff = now.hour * 60 + now.minute - hours * 60
+        picked = []
+        for m in meals:
+            t = m.get("time")
+            if not t or ":" not in t:
+                continue
+            try:
+                hh, mm = t.split(":")[:2]
+                tod = int(hh) * 60 + int(mm)
+            except Exception:
+                continue
+            if tod >= cutoff:
+                picked.append((tod, m))
+        if not picked:
+            return None, None
+        picked.sort(key=lambda x: x[0])
+
+        def clock(tod):
+            h, mn = divmod(tod, 60)
+            ap = "am" if h < 12 else "pm"
+            return f"{h % 12 or 12}:{mn:02d}{ap}"
+
+        parts = []
+        for tod, m in picked:
+            title = (m.get("title") or "meal").strip()
+            macros = []
+            if m.get("protein") is not None:
+                macros.append(f"{round(m['protein'])}g protein")
+            if m.get("calories") is not None:
+                macros.append(f"{round(m['calories'])} cal")
+            mac = f" ({', '.join(macros)})" if macros else ""
+            parts.append(f"{title} at {clock(tod)}{mac}")
+        return "; ".join(parts), clock(picked[0][0])
+    except Exception as e:
+        log(f"meals-window parse failed (non-fatal): {e}")
+        return None, None
 
 
 # ============================================================================
@@ -965,9 +1032,26 @@ def main():
         elif nutrition:
             today_block += f"- Today's nutrition so far: {nutrition}\n"
 
-    transits = load_today_transits()
-    transit_block = ("\n".join(f"- {t}" for t in transits)
-                     if transits else "- No relevant transit data available today.")
+    # Direct-data reframe (Layer 1): astrology context (natal architecture + transits)
+    # is no longer injected into the prose. load_today_transits stays defined for any
+    # other consumer, but the prompt and the rendered Reading are pure physiology now.
+    transits = []
+
+    # Layer 4 — fuel slots read the recent meal log + the energy response since the
+    # first meal in the window, and comment on whether fueling matches output.
+    fuel_block = ""
+    if slot in ("fuel-1", "fuel-2"):
+        timeline, first_t = meals_in_window(now, hours=4)
+        if timeline:
+            fuel_block = (
+                f"- Meals logged in the last ~4 hours (oldest first): {timeline}\n"
+                f"- First meal in that window was at {first_t}; read today's activity/load curve "
+                f"since then as the energy response, and judge whether what he ate is matching the "
+                f"output.\n"
+            )
+        else:
+            fuel_block = ("- No meals logged in the last ~4 hours — name the gap and say what to "
+                          "eat next.\n")
 
     framing = SLOT_FRAMING.get(slot, SLOT_FRAMING["recovery"])
 
@@ -1025,23 +1109,19 @@ def main():
 
     prompt = (
         "You are a recovery and performance coach writing a short daily read for an athlete (Alfie). "
-        "He knows his own body and his own birth chart well. He does NOT want technical jargon — not "
-        "biometric labels, not astrology terminology. Write like a sharp human coach talking to him "
-        "in plain English.\n\n"
+        "He knows his own body well and does NOT want technical jargon. Write like a sharp human coach "
+        "talking to him in plain English: recent physiology, where he stands, and what to do.\n\n"
         "HARD OUTPUT RULES (these are absolute):\n"
         "- NEVER quote the recovery, heart-rate-variability, or sleep figures, and NEVER write "
         "percentages, decimals, or units. No \"72ms\", no \"5/6\", no \"6.1h\", no \"%\".\n"
         "- NEVER write biometric jargon: HRV, Recharge, Nightly Recharge, BPM, ANS, Sleep Score.\n"
         f"{numbers_rule}"
-        "- NEVER write astrology jargon: no \"Moon-in-Capricorn\", no \"Uranus-Moon\", no \"Saturn square\", "
-        "no aspect names (square / trine / conjunct / opposition / sextile) unless translated into plain "
-        "words, no \"natal\", \"Placidus\", or \"transit chart\". The everyday words chart, transit, moon, "
-        "and mars are fine when used conversationally and lowercase.\n"
+        "- NO ASTROLOGY, AT ALL. This read is pure body + action. Never mention the moon, planets, "
+        "signs, houses, aspects, transits, a chart, anything natal/lunar/cosmic, or any astrological "
+        "idea — not named, not as subtle 'texture', not woven into character framing. If a thought only "
+        "makes sense through astrology, drop it.\n"
         "- The recovery/sleep data below INFORMS your assessment but must NOT appear in the output. "
         "Translate everything into plain language. The data sets the conclusion; the conclusion is what you write.\n\n"
-        "HIERARCHY — measured recovery/fitness data is the source of truth. Natal context and transits are "
-        "background for body-area awareness and pattern recognition only; they NEVER override the data. "
-        "If a chart theme conflicts with the data, the data wins.\n\n"
         "=== WHERE ALFIE IS IN HIS DAY (sets the tone of the Reading) ===\n"
         f"{framing}\n"
         "The Recovery WORD comes only from the overnight recovery data and stays constant through the "
@@ -1053,29 +1133,22 @@ def main():
         f"- Sleep last night: {slp_hours} hours (7-day avg {slp_7d})\n"
         f"- Body composition: {body}\n"
         f"{today_block}"
+        f"{fuel_block}"
         f"\n{goal_framing()}"
         f"{rest_day_framing(today_iso)}"
-        "=== NATAL CONTEXT (static, body-area awareness only) ===\n"
-        f"{NATAL_ARCHITECTURE}\n"
-        "\n=== TODAY'S RELEVANT TRANSITS (context only) ===\n"
-        f"{transit_block}\n\n"
         "Produce EXACTLY these four sections, each starting on its own line with the exact label shown "
         "followed by a colon. No markdown, no bullets, no preamble, no closing remarks.\n\n"
         "Recovery: ONE word only — Poor, Average, Good, or Excellent. Nothing else on this line. "
         "Base it ONLY on the overnight recovery/sleep data, never on the time of day.\n"
         "Reading: ONE paragraph, two or three sentences, flowing prose, written in the tone of the slot "
-        "framing above. The FIRST sentence MUST open with the slot's LEAD framing (see the slot block "
-        "above) — sleep leads with the night's recovery in progress, recovery with what kind of day "
-        "the wake-up read sets up, the fuel slots with how energy/fueling is tracking, train-1 with the "
-        "workout window opening, train-2 with how the session landed (or the wind-down if he didn't "
-        "train). Then, in the "
-        "MIDDLE of the paragraph, you may blend in: (1) any body areas that actually deserve attention "
-        "today (joints, tendons, shoulders, neck, lower body) — mention ONLY when there's a real signal "
-        "worth noting; if nothing's flagged, you may skip body areas entirely rather than opening with "
-        "them; and (2) how he tends to recover and perform, woven in as character rather than a separate "
-        "topic, e.g. \"you're built to recover through steadiness rather than big swings.\" "
-        "NEVER label, name, or hint that this is astrology — no \"your chart\", no \"the stars\", no "
-        "\"astrologically\", no planet or sign names. No sub-headings inside the paragraph; one smooth read.\n"
+        "framing above. Shape it physiology -> state -> action: open with the slot's LEAD framing (see "
+        "the slot block above) — sleep leads with the night's recovery in progress, recovery with what "
+        "kind of day the wake-up read sets up, the fuel slots with how energy/fueling is tracking, "
+        "train-1 with the workout window opening, train-2 with how the session landed (or the wind-down "
+        "if he didn't train) — then land on a direct, actionable directive. In the MIDDLE you may note "
+        "any body area that actually deserves attention today (joints, tendons, shoulders, neck, lower "
+        "body) — ONLY when there's a real physical signal worth noting; if nothing's flagged, skip body "
+        "areas entirely rather than opening with them. No sub-headings inside the paragraph; one smooth read.\n"
         "HARD VARIATION RULES (absolute):\n"
         "- Each slot must OPEN with the slot-specific LEAD framing above. Do NOT start the prose with "
         "\"Nothing's flagging\" or any line about watch areas / body areas — those can appear mid-prose "
@@ -1083,19 +1156,16 @@ def main():
         "- Do not reuse the same opening sentence STRUCTURE across slots; vary the sentence type.\n"
         "- Body areas (knees, joints, shoulders, neck) are optional context — mention only when there's "
         "an actual signal worth noting, not as a recurring opener.\n"
-        "- The \"you recover by stacking steady days\" type character framing may appear AT MOST ONCE, in "
-        "the middle of the paragraph — never as a verbatim repeat.\n"
         "- Crutch phrases — \"stacking steady days\", \"the tank's full\", \"Nothing's flagging\", \"your "
         "usual watch areas\" — are overused. Use AT MOST ONE of these per prose; find fresh wording for "
         "everything else.\n"
-        "Example (fuel-2, note it leads with what's LEFT, body areas only mid-prose): \"Plenty of day "
-        "still in you, and that walk you've been putting off is right there for the taking. Knees and "
-        "shoulders are quiet, nothing pulling for attention — you recover best by stacking steady days, "
-        "and a light evening push keeps that streak honest.\"\n"
+        "Example (fuel-2, leads with what's LEFT, body areas only mid-prose, ends on an action): "
+        "\"Plenty of day still in you, but protein's been coasting since lunch and the tank's going to "
+        "feel it by evening. Knees and shoulders are quiet, nothing pulling for attention — anchor the "
+        "next meal on real protein and get a short walk in before the window closes.\"\n"
         f"{perf_instr}"
-        "Transit: only if a meaningful planetary transit is actually affecting today; plain "
-        "English, one short sentence (e.g. \"Mars is amplifying your drive — channel it into work, not "
-        "friction.\"). If nothing meaningful is hitting today, write exactly: none\n"
+        "Transit: write exactly the single word: none. (This section is retired in the direct-data "
+        "reframe — always output none, never astrology.)\n"
     )
 
     log(f"slot={slot} recharge={rec_today} hrv={hrv_today} sleep={slp_hours} "

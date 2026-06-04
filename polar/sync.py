@@ -43,6 +43,7 @@ GIT_PUSH_PATHS = (
     "polar/sync.py", "polar/requirements.txt",
     "polar/manifest.json", "polar/daily_activity", "polar/sleep", "polar/recharge",
     "polar/lunar_stress.py", "polar/lunar_stress.json", "polar/irritability.json",
+    "polar/lunar_daily",
 )
 
 # --- Polar endpoints -----------------------------------------------------
