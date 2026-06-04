@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Vitals</title>
 <!-- PWA / Add to Home Screen -->
 <link rel="manifest" href="manifest.json" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-<meta name="theme-color" content="#050816" />
+<meta name="theme-color" content="#03050F" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Fitness" />
@@ -17,355 +17,381 @@
     theme: {
       extend: {
         colors: {
-          // ── LPI v1 — "Lunar Performance Intelligence" palette ──────────────
-          // Deep OLED black foundation; every accent carries a fixed function.
-          ink:    "#050816",                 // base — deep OLED black
-          ink2:   "#0A0F23",                 // lifted surface
-          panel:  "#0A0F23",                 // secondary surface
-          surface:"#10183A",                 // card depth
-          card:   "rgba(10,15,35,0.75)",     // glass card base (LPI spec)
-          bg:     "rgba(255,255,255,0.03)",  // faint inner-tile fill on glass
-          line:   "rgba(255,255,255,0.06)",  // glass hairline (LPI spec)
+          // ── LPI v1 — "Lunar Performance Intelligence" replica palette ──────
+          ink:    "#03050F",                 // base — deep OLED black
+          ink2:   "#080B1C",
+          panel:  "#080B1C",
+          surface:"#10183A",
+          card:   "rgba(12,16,38,0.66)",     // glass card base (sampled from mockup)
+          bg:     "rgba(255,255,255,0.035)",  // faint inner-tile fill on glass
+          line:   "rgba(255,255,255,0.07)",  // glass hairline
           linesoft: "rgba(255,255,255,0.05)",
-          muted:  "#9CA3AF",                 // labels (LPI spec)
-          // ── LPI semantic functions (spec color table) ──
-          recov:  "#00C8FF",                 // Recovery
-          sleepc: "#9B5CFF",                 // Sleep
-          strainc:"#FF5E62",                 // Strain
-          activ:  "#FF8A3D",                 // Activity
-          nutri:  "#39D98A",                 // Nutrition
+          muted:  "#8A90A6",                 // labels
+          // ── LPI semantic functions ──
+          recov:  "#00C8FF",                 // Recovery (cyan)
+          sleepc: "#8A5CFF",                 // Sleep (purple)
+          strainc:"#FF5E62",                 // Strain (coral/red)
+          activ:  "#FF8A3D",                 // Activity (orange)
+          nutri:  "#39D98A",                 // Nutrition (green)
           ctx:    "#8A5CFF",                 // Context (Lunar)
-          // ── Legacy aliases, repointed to LPI semantics so existing class
-          //    references stay live without touching every call site ──
-          purple: "#9B5CFF",
-          violet: "#9B5CFF",
-          cyan:   "#00C8FF",
-          coral:  "#FF5E62",
-          green:  "#39D98A",
-          amber:  "#FF8A3D",
-          accent:   "#9B5CFF",
-          electric: "#9B5CFF",   // AI/Lunar headings → sleep/context purple
-          cobalt:   "#00C8FF",   // recovery-family sub-headings → recovery cyan
-          good:     "#39D98A",
-          perf:     "#39D98A",
-          warn:     "#FF8A3D",
-          bad:      "#FF5E62",
-          gold:     "#FF8A3D",
-          maroon:   "#64748B",
+          // ── Legacy aliases repointed so old refs stay live ──
+          purple: "#8A5CFF", violet: "#8A5CFF", cyan: "#00C8FF",
+          coral:  "#FF5E62", green: "#39D98A", amber: "#FF8A3D",
+          accent: "#8A5CFF", electric: "#8A5CFF", cobalt: "#00C8FF",
+          good: "#39D98A", perf: "#39D98A", warn: "#FF8A3D", bad: "#FF5E62",
+          gold: "#FF8A3D", maroon: "#64748B",
         },
       },
     },
   };
 </script>
 <style>
-  /* ── LPI v1 — Layer 1: deep OLED black base + corner-anchored color wash ──
-     Base is #050816. Cyan (recovery) anchored lower-left, coral (strain) lower-
-     right, purple (sleep) + orange (activity) bloom toward center-bottom. Fixed
-     so it covers the full scroll without repeating. */
+  /* ── LPI v1 replica — Layer 1: deep OLED black base ─────────────────────────
+     Sampled base ≈ #03050F near top, lifting to ≈ #04091F lower. Corner blooms
+     are intentionally subtle — the wave SVG (Layer 2) carries the color. */
   body {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
-    color: #F5F7FA;
+    color: #F2F5FA;
     min-height: 100vh;
     background:
-      radial-gradient(circle at 8% 92%, rgba(0,200,255,.18), transparent 38%),
-      radial-gradient(circle at 92% 92%, rgba(255,94,98,.16), transparent 38%),
-      radial-gradient(circle at 50% 78%, rgba(138,92,255,.16), transparent 42%),
-      radial-gradient(circle at 50% 96%, rgba(255,138,61,.10), transparent 36%),
-      linear-gradient(180deg, #050816 0%, #050714 55%, #04050F 100%);
+      radial-gradient(120% 60% at 50% 30%, rgba(20,16,54,.55), transparent 60%),
+      radial-gradient(circle at 6% 40%, rgba(0,200,255,.10), transparent 40%),
+      radial-gradient(circle at 95% 46%, rgba(255,94,98,.10), transparent 40%),
+      linear-gradient(180deg, #03050F 0%, #04061a 50%, #03040E 100%);
     background-attachment: fixed;
   }
   .stat-num { font-variant-numeric: tabular-nums; }
-  /* Prevent horizontal overflow (Safari was shrinking the whole viewport to fit) */
   html, body { overflow-x: hidden; max-width: 100%; }
 
-  /* ── LPI v1 — Layers 2 & 3: wave system (flow toward center) + particles ──
-     Fixed, full-screen, behind all content (z-index:-1), non-interactive, low
-     opacity. NO image files. Two wave fans originate at the lower-LEFT and
-     lower-RIGHT and sweep UP toward the center; the particle ::after is a faint
-     star-dot field across the lower hero band. Neither intercepts input. */
-  .bg-fx {
-    position: fixed; inset: 0; z-index: -1;
-    pointer-events: none; overflow: hidden;
-  }
+  /* ── Layer 2: wave system — gradient ribbons converging on the moon center ──
+     viewBox is 390×844 (the 1× design frame), so path coords are CSS pixels and
+     line up with the moon at (197,188). Ribbons sweep up toward the moon and out
+     to the lower corners — cyan/purple on the left, coral/orange on the right.
+     Heavy blur + screen blend = additive light on OLED black. */
+  .bg-fx { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
   .bg-fx svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-  #bg-waves { animation: waveDrift 30s ease-in-out infinite alternate; opacity: .85; }
+  #bg-waves { opacity: .92; mix-blend-mode: screen; animation: waveDrift 26s ease-in-out infinite alternate; }
   @keyframes waveDrift {
-    from { transform: translate3d(0,0,0) scale(1); }
-    to   { transform: translate3d(0,-1.5%,0) scale(1.03); }
+    from { transform: translate3d(0,0,0); }
+    to   { transform: translate3d(0,-1.2%,0); }
   }
-  /* Layer 3 — star/particle field, concentrated across the lower-center hero band. */
+  /* Layer 3 — faint star/particle field across the hero band. */
   .bg-fx::after {
     content: ""; position: absolute; inset: 0;
     background-image:
-      radial-gradient(rgba(255,255,255,.9) 0.7px, transparent 1.0px),
-      radial-gradient(rgba(0,200,255,.8) 0.6px, transparent 0.9px);
-    background-size: 34px 34px, 53px 53px;
-    background-position: 0 0, 17px 11px;
-    -webkit-mask-image: radial-gradient(140% 80% at 50% 70%, #000 0%, transparent 62%);
-    mask-image: radial-gradient(140% 80% at 50% 70%, #000 0%, transparent 62%);
-    opacity: .07;
+      radial-gradient(rgba(255,255,255,.9) 0.6px, transparent 1.0px),
+      radial-gradient(rgba(0,200,255,.8) 0.5px, transparent 0.9px);
+    background-size: 38px 38px, 57px 57px;
+    background-position: 0 0, 19px 13px;
+    -webkit-mask-image: radial-gradient(150% 70% at 50% 38%, #000 0%, transparent 60%);
+    mask-image: radial-gradient(150% 70% at 50% 38%, #000 0%, transparent 60%);
+    opacity: .06;
   }
-  @media (prefers-reduced-motion: reduce) {
-    #bg-waves { animation: none; }
+  @media (prefers-reduced-motion: reduce) { #bg-waves { animation: none; } }
+
+  /* ── Faux iOS status bar (cosmetic — matches the mockup chrome) ───────────── */
+  .statusbar {
+    height: 30px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 18px 0 22px; font-size: 14px; font-weight: 600; color: #EAEDF4;
+    letter-spacing: .2px;
   }
-  canvas { max-width: 100% !important; height: auto !important; }
-  table { table-layout: fixed; word-wrap: break-word; }
-  pre, code { white-space: pre-wrap; word-break: break-word; }
-  @media (max-width: 768px) {
-    button { min-height: 44px; }
-    input, select { min-height: 44px; }
-    canvas { max-width: 100%; }
+  .statusbar .sb-icons { display: flex; align-items: center; gap: 6px; }
+
+  /* ── Hero metric corners ────────────────────────────────────────────────── */
+  .metric-corner { display: flex; flex-direction: column; line-height: 1.02; }
+  .metric-cap   { font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; }
+  .metric-num   { font-size: 34px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
+  .metric-word  { font-size: 13px; font-weight: 700; margin-top: 2px; }
+  .metric-detail{ font-size: 11px; color: #8A90A6; margin-top: 2px; font-weight: 600; }
+
+  /* ── Soft semantic glows ─────────────────────────────────────────────────── */
+  .glow-recov  { text-shadow: 0 0 14px rgba(0,200,255,0.65); }
+  .glow-sleep  { text-shadow: 0 0 14px rgba(138,92,255,0.65); }
+  .glow-strain { text-shadow: 0 0 14px rgba(255,94,98,0.70); }
+  .glow-activ  { text-shadow: 0 0 11px rgba(255,138,61,0.55); }
+  .glow-nutri  { text-shadow: 0 0 11px rgba(57,217,138,0.55); }
+  .glow-ctx    { text-shadow: 0 0 12px rgba(138,92,255,0.60); }
+  .glow-purple, .glow-violet, .glow-electric { text-shadow: 0 0 14px rgba(138,92,255,0.65); }
+  .glow-cyan, .glow-cobalt   { text-shadow: 0 0 14px rgba(0,200,255,0.65); }
+  .glow-coral, .glow-bad     { text-shadow: 0 0 14px rgba(255,94,98,0.70); }
+  .glow-green, .glow-good     { text-shadow: 0 0 11px rgba(57,217,138,0.55); }
+  .glow-amber, .glow-gold, .glow-warn   { text-shadow: 0 0 11px rgba(255,138,61,0.55); }
+  .glow-maroon   { text-shadow: 0 0 7px rgba(100,116,139,0.50); }
+
+  /* ── Glass card system (sampled from mockup) ─────────────────────────────── */
+  .gradient-card, .lpi-card {
+    background: rgba(12,16,38,0.62);
+    border: 1px solid rgba(255,255,255,0.07);
+    -webkit-backdrop-filter: blur(18px) saturate(1.1);
+    backdrop-filter: blur(18px) saturate(1.1);
+    border-radius: 22px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 20px 46px rgba(0,0,0,.5);
   }
-  @media (max-width: 640px) {
-    .max-w-7xl { padding-left: 12px; padding-right: 12px; }
-    h1 { font-size: 1.5rem; }
-    h2 { font-size: 1.125rem; }
-    .text-2xl { font-size: 1.5rem; }
-    .text-3xl { font-size: 1.75rem; }
+  @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+    .gradient-card, .lpi-card { background: rgba(9,12,28,0.94); }
   }
-  /* Bottom-nav tap targets are intentionally compact — opt them out of the 44px
-     min so the bar stays slim while still being comfortably tappable. */
-  #lpi-bottom-nav button { min-height: 0; }
   .stage-bar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; }
   #read-sections { margin-top: 4px; }
   .read-section { border-top: 1px solid rgba(148,163,184,0.18); padding: 8px 0; }
   .read-section:first-child { border-top: none; padding-top: 0; }
+  @media (max-width: 768px) { input, select { min-height: 44px; } }
+  #lpi-bottom-nav button { min-height: 0; }
 
-  /* ── LPI v1 — hero metric corners ───────────────────────────────────────── */
-  .metric-corner { display: flex; flex-direction: column; line-height: 1.05; }
-  .metric-num   { font-size: 2.25rem; font-weight: 700; font-variant-numeric: tabular-nums; }
-  .metric-label { font-size: .8rem; font-weight: 600; margin-top: 2px; }
-  .metric-detail{ font-size: .7rem; color: #9CA3AF; margin-top: 2px; }
-  @media (max-width: 420px) {
-    .metric-num   { font-size: 1.85rem; }
-    .metric-label { font-size: .72rem; }
-    .metric-detail{ font-size: .64rem; }
-  }
+  /* Physiology rows (Today's read right column) */
+  .phys-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; }
+  .phys-row + .phys-row { border-top: 1px solid rgba(255,255,255,0.05); }
 
-  /* ── LPI v1 — soft semantic glows ─────────────────────────────────────── */
-  .glow-recov  { text-shadow: 0 0 10px rgba(0,200,255,0.55); }
-  .glow-sleep  { text-shadow: 0 0 10px rgba(155,92,255,0.55); }
-  .glow-strain { text-shadow: 0 0 10px rgba(255,94,98,0.55); }
-  .glow-activ  { text-shadow: 0 0 9px rgba(255,138,61,0.50); }
-  .glow-nutri  { text-shadow: 0 0 9px rgba(57,217,138,0.50); }
-  .glow-ctx    { text-shadow: 0 0 9px rgba(138,92,255,0.55); }
-  /* Legacy glow aliases repointed to LPI hues (kept so un-rewritten refs resolve) */
-  .glow-purple, .glow-violet, .glow-electric { text-shadow: 0 0 10px rgba(155,92,255,0.55); }
-  .glow-cyan, .glow-cobalt   { text-shadow: 0 0 10px rgba(0,200,255,0.55); }
-  .glow-coral    { text-shadow: 0 0 10px rgba(255,94,98,0.55); }
-  .glow-green, .glow-nutri   { text-shadow: 0 0 9px rgba(57,217,138,0.50); }
-  .glow-amber, .glow-gold    { text-shadow: 0 0 9px rgba(255,138,61,0.50); }
-  .glow-maroon   { text-shadow: 0 0 7px rgba(100,116,139,0.50); }
-
-  /* ── LPI v1 — glass card system (spec values) ─────────────────────────── */
-  .gradient-card {
-    background: rgba(10,15,35,0.75);
-    border: 1px solid rgba(255,255,255,0.06) !important;
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
-    border-radius: 22px !important;
-    box-shadow: 0 0 0 1px rgba(255,255,255,.02), 0 18px 44px rgba(0,0,0,.45);
-  }
-  @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
-    .gradient-card { background: rgba(8,12,28,0.95); }
+  /* Bottom-nav active glow */
+  .nav-item { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+  .nav-item .nav-label { font-size: 10.5px; font-weight: 600; }
+  .nav-item.active { color: #9A6BFF; }
+  .nav-item.active::before {
+    content: ""; position: absolute; top: -7px; width: 46px; height: 34px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(138,92,255,.42), transparent 70%);
+    filter: blur(5px); z-index: -1;
   }
 </style>
 </head>
-<body class="text-neutral-200 min-h-screen">
-  <!-- LPI v1 background — Layer 2 (wave fans flowing toward center) + Layer 3
-       (star particles via .bg-fx::after). Fixed, behind all content. Two fans:
-       one rooted lower-LEFT (cyan→purple), one lower-RIGHT (coral→orange), both
-       sweeping up toward the center. SVG only — no image files. -->
+<body class="min-h-screen">
+  <!-- Layer 2/3 background — gradient ribbons converging on the moon + stars -->
   <div class="bg-fx" aria-hidden="true">
-    <svg id="bg-waves" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" fill="none">
+    <svg id="bg-waves" viewBox="0 0 390 844" preserveAspectRatio="xMidYMin slice" fill="none">
       <defs>
-        <!-- Lower-left fan → cyan into purple, climbing toward center -->
-        <linearGradient id="wvL1" x1="0" y1="1" x2="0.75" y2="0.25">
-          <stop offset="0" stop-color="#00C8FF" stop-opacity="0.30"/>
-          <stop offset="0.6" stop-color="#8A5CFF" stop-opacity="0.16"/>
-          <stop offset="1" stop-color="#8A5CFF" stop-opacity="0"/>
+        <linearGradient id="wvCyan" x1="0" y1="0.5" x2="1" y2="0.7">
+          <stop offset="0" stop-color="#00C8FF" stop-opacity="0"/>
+          <stop offset="0.45" stop-color="#00C8FF" stop-opacity="0.85"/>
+          <stop offset="1" stop-color="#8A5CFF" stop-opacity="0.05"/>
         </linearGradient>
-        <linearGradient id="wvL2" x1="0" y1="1" x2="0.8" y2="0.35">
-          <stop offset="0" stop-color="#9B5CFF" stop-opacity="0.22"/>
-          <stop offset="1" stop-color="#00C8FF" stop-opacity="0"/>
+        <linearGradient id="wvPurple" x1="0" y1="0.5" x2="1" y2="0.7">
+          <stop offset="0" stop-color="#8A5CFF" stop-opacity="0"/>
+          <stop offset="0.5" stop-color="#8A5CFF" stop-opacity="0.8"/>
+          <stop offset="1" stop-color="#00C8FF" stop-opacity="0.05"/>
         </linearGradient>
-        <!-- Lower-right fan → coral into orange, climbing toward center -->
-        <linearGradient id="wvR1" x1="1" y1="1" x2="0.25" y2="0.25">
-          <stop offset="0" stop-color="#FF5E62" stop-opacity="0.28"/>
-          <stop offset="0.6" stop-color="#FF8A3D" stop-opacity="0.15"/>
-          <stop offset="1" stop-color="#FF8A3D" stop-opacity="0"/>
+        <linearGradient id="wvCoral" x1="1" y1="0.5" x2="0" y2="0.7">
+          <stop offset="0" stop-color="#FF5E62" stop-opacity="0"/>
+          <stop offset="0.45" stop-color="#FF5E62" stop-opacity="0.9"/>
+          <stop offset="1" stop-color="#8A5CFF" stop-opacity="0.05"/>
         </linearGradient>
-        <linearGradient id="wvR2" x1="1" y1="1" x2="0.2" y2="0.35">
-          <stop offset="0" stop-color="#FF8A3D" stop-opacity="0.20"/>
-          <stop offset="1" stop-color="#FF5E62" stop-opacity="0"/>
+        <linearGradient id="wvOrange" x1="1" y1="0.5" x2="0" y2="0.7">
+          <stop offset="0" stop-color="#FF8A3D" stop-opacity="0"/>
+          <stop offset="0.5" stop-color="#FF8A3D" stop-opacity="0.85"/>
+          <stop offset="1" stop-color="#FF5E62" stop-opacity="0.05"/>
         </linearGradient>
-        <filter id="wvblur" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="34"/>
+        <filter id="wvblur" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="7"/>
         </filter>
       </defs>
-      <g filter="url(#wvblur)">
-        <!-- left fan blades: root at (-60,960) lower-left, sweep up to center -->
-        <path fill="url(#wvL1)" d="M-60 960 C 200 720, 520 640, 760 470 C 900 370, 980 300, 1020 180 L 1180 320 C 1020 520, 820 660, 620 760 C 420 860, 200 920, -60 960 Z"/>
-        <path fill="url(#wvL2)" d="M-60 960 C 240 800, 560 720, 720 560 C 840 440, 900 360, 920 260 L 1040 380 C 900 560, 700 700, 480 800 C 300 880, 120 930, -60 960 Z"/>
-        <!-- right fan blades: root at (1500,960) lower-right, sweep up to center -->
-        <path fill="url(#wvR1)" d="M1500 960 C 1240 720, 920 640, 680 470 C 540 370, 460 300, 420 180 L 260 320 C 420 520, 620 660, 820 760 C 1020 860, 1240 920, 1500 960 Z"/>
-        <path fill="url(#wvR2)" d="M1500 960 C 1200 800, 880 720, 720 560 C 600 440, 540 360, 520 260 L 400 380 C 540 560, 740 700, 960 800 C 1140 880, 1320 930, 1500 960 Z"/>
+      <!-- All ribbons aim their bright end at the moon center (197,188), fanning
+           out to the lower-left (cyan/purple) and lower-right (coral/orange). -->
+      <g filter="url(#wvblur)" fill="none" stroke-linecap="round">
+        <!-- LEFT fan: cyan + purple, converging toward the moon from lower-left -->
+        <path d="M -40 470 C 70 430, 150 360, 197 250" stroke="url(#wvCyan)" stroke-width="6"/>
+        <path d="M -40 540 C 80 520, 160 430, 205 300" stroke="url(#wvPurple)" stroke-width="9"/>
+        <path d="M -30 610 C 100 600, 175 470, 210 320" stroke="url(#wvCyan)" stroke-width="5"/>
+        <path d="M -20 360 C 80 340, 150 300, 197 235" stroke="url(#wvPurple)" stroke-width="4"/>
+        <!-- RIGHT fan: coral + orange, converging toward the moon from lower-right -->
+        <path d="M 430 470 C 320 430, 240 360, 197 250" stroke="url(#wvCoral)" stroke-width="6"/>
+        <path d="M 430 540 C 310 520, 235 430, 192 300" stroke="url(#wvOrange)" stroke-width="9"/>
+        <path d="M 420 610 C 290 600, 220 470, 188 320" stroke="url(#wvCoral)" stroke-width="5"/>
+        <path d="M 410 360 C 310 340, 245 300, 197 235" stroke="url(#wvOrange)" stroke-width="4"/>
       </g>
     </svg>
   </div>
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-24">
-    <!-- Header -->
-    <header class="flex flex-col gap-1 mb-2">
-      <p class="text-sm font-normal tracking-tight text-neutral-400" id="header-sub">Loading…</p>
-      <p class="text-xs text-neutral-400" id="profile-strip"></p>
+  <!-- Faux iOS status bar (cosmetic chrome to match the mockup frame) -->
+  <div class="statusbar" aria-hidden="true">
+    <span id="sb-time">9:41</span>
+    <span class="sb-icons">
+      <svg width="17" height="11" viewBox="0 0 17 11" fill="#EAEDF4"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg>
+      <svg width="16" height="11" viewBox="0 0 16 11" fill="#EAEDF4"><path d="M8 2.2c2 0 3.9.8 5.3 2.1l1.2-1.3C12.8 1.2 10.5.3 8 .3S3.2 1.2 1.5 3l1.2 1.3C4.1 3 6 2.2 8 2.2zm0 3.2c1.1 0 2.1.4 2.9 1.2l1.2-1.3C10.9 4.1 9.5 3.5 8 3.5s-2.9.6-4.1 1.8l1.2 1.3C5.9 5.8 6.9 5.4 8 5.4zM8 8.6 9.7 6.9C9.2 6.4 8.6 6.2 8 6.2s-1.2.2-1.7.7L8 8.6z"/></svg>
+      <svg width="26" height="12" viewBox="0 0 26 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="3" stroke="#EAEDF4" stroke-opacity="0.5"/><rect x="2" y="2" width="18" height="8" rx="1.5" fill="#EAEDF4"/><rect x="24" y="3.5" width="1.5" height="5" rx="0.75" fill="#EAEDF4" fill-opacity="0.6"/></svg>
+    </span>
+  </div>
+
+  <div class="mx-auto w-full max-w-[440px] px-3.5 pb-24" style="padding-top:2px">
+    <!-- Date header -->
+    <header class="flex items-center justify-between mb-1.5 px-1">
+      <p class="text-[13px] font-semibold tracking-tight" style="color:#B9BDC9" id="header-sub">Loading…</p>
+      <span class="text-muted" id="profile-strip">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+      </span>
     </header>
 
-    <!-- ════════════════ HERO — Lunar Performance Intelligence ════════════════
-         Full-screen hero (620–700px). Moon at the center, three concentric
-         orbital rings (Sleep inner · Recovery middle · Strain outer), the phase
-         readout directly under the moon, and three floating metric corners
-         (Recovery left-center · Sleep top-right · Strain bottom-right). -->
-    <section id="lpi-hero"
-             class="relative w-full mx-auto min-h-[620px] sm:min-h-[700px] flex flex-col items-center justify-center mb-8"
-             aria-label="Lunar performance hero">
-
-      <!-- Recovery — left, vertical center -->
+    <!-- ════════════════ HERO — moon + 3 orbital rings + metric corners ═══════ -->
+    <section id="lpi-hero" class="relative w-full" style="height:252px" aria-label="Lunar performance hero">
+      <!-- Recovery — top left -->
       <button type="button" data-target="todays-read"
-              class="ring-corner metric-corner items-start text-left absolute left-1 sm:left-3 top-1/2 -translate-y-1/2 z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-recov rounded-lg p-1">
-        <span class="metric-num glow-recov" id="m-recovery-val" style="color:#00C8FF">—</span>
-        <span class="metric-label" id="m-recovery-label" style="color:#00C8FF"></span>
-        <span class="metric-detail" id="m-recovery-detail"></span>
-        <span class="text-[10px] uppercase tracking-wider text-muted mt-0.5">Recovery</span>
+              class="ring-corner metric-corner items-start text-left absolute left-1 top-1 z-10 focus:outline-none">
+        <span class="metric-cap" style="color:#00C8FF">Recovery</span>
+        <span class="metric-num glow-recov" id="m-recovery-val" style="color:#E9F7FF">—</span>
+        <span class="metric-word" id="m-recovery-label" style="color:#00C8FF"></span>
+        <span class="metric-detail" id="m-recovery-detail" style="color:#00C8FF"></span>
       </button>
 
       <!-- Sleep — top right -->
       <button type="button" data-target="polar-panel"
-              class="ring-corner metric-corner items-end text-right absolute right-1 sm:right-3 top-2 z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-sleepc rounded-lg p-1">
-        <span class="text-[10px] uppercase tracking-wider text-muted mb-0.5">Sleep</span>
-        <span class="metric-num glow-sleep" id="m-sleep-val" style="color:#9B5CFF">—</span>
-        <span class="metric-label" id="m-sleep-label" style="color:#9B5CFF"></span>
+              class="ring-corner metric-corner items-end text-right absolute right-1 top-1 z-10 focus:outline-none">
+        <span class="metric-cap" style="color:#8A5CFF">Sleep</span>
+        <span class="metric-num glow-sleep" id="m-sleep-val" style="color:#9A6BFF">—</span>
+        <span class="metric-word" id="m-sleep-label" style="color:#8A5CFF"></span>
         <span class="metric-detail" id="m-sleep-detail"></span>
       </button>
 
-      <!-- Strain — bottom right -->
+      <!-- Strain — right, lower -->
       <button type="button" data-target="activity"
-              class="ring-corner metric-corner items-end text-right absolute right-1 sm:right-3 bottom-2 z-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-strainc rounded-lg p-1">
+              class="ring-corner metric-corner items-end text-right absolute right-1 z-10 focus:outline-none" style="top:104px">
         <span class="metric-num glow-strain" id="m-strain-val" style="color:#FF5E62">—</span>
-        <span class="metric-label" id="m-strain-label" style="color:#FF5E62"></span>
+        <span class="metric-word" id="m-strain-label" style="color:#FF5E62"></span>
+        <span class="metric-detail" id="m-strain-spark"></span>
         <span class="metric-detail" id="m-strain-detail"></span>
-        <span class="text-[10px] uppercase tracking-wider text-muted mt-0.5">Strain</span>
+        <span class="metric-cap mt-0.5" style="color:#FF5E62;opacity:.85">Strain</span>
       </button>
 
-      <!-- Center: moon + orbital rings (single composite SVG, scales to box) -->
-      <div class="relative w-full max-w-[300px] sm:max-w-[400px] aspect-square mx-auto overflow-visible">
-        <div class="absolute inset-0" id="rings-orbit-svg"></div>
+      <!-- Center: moon + orbital rings (composite SVG) -->
+      <div class="absolute left-1/2 -translate-x-1/2" style="top:4px;width:260px;height:260px" id="rings-wrap">
+        <div class="w-full h-full" id="rings-orbit-svg"></div>
       </div>
 
       <!-- Phase readout under the moon -->
-      <div class="text-center mt-4 px-6" id="moon-readout">
-        <div class="text-base font-medium text-neutral-100" id="moon-readout-main">—</div>
-        <div class="text-xs text-muted mt-1" id="moon-readout-sub"></div>
+      <div class="absolute left-1/2 -translate-x-1/2 text-center w-[280px]" style="top:174px" id="moon-readout">
+        <div class="text-[12px] font-semibold glow-sleep" style="color:#9A6BFF" id="moon-readout-phase"></div>
+        <div class="text-[17px] font-semibold text-white leading-tight mt-0.5" id="moon-readout-main">—</div>
+        <div class="text-[11px] text-muted mt-1 leading-tight" id="moon-readout-sub"></div>
       </div>
     </section>
 
-    <!-- ════════════════ TODAY'S READ — glass, prose + physiology grid ═══════ -->
-    <section class="gradient-card p-5 mb-6" id="todays-read">
-      <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-        <h2 class="font-semibold text-electric">Today's read <span class="text-xs text-neutral-400 font-normal">· AI</span></h2>
-        <span class="text-xs text-neutral-400" id="read-ts"></span>
+    <!-- ════════════════ TODAY'S READ — glass, prose + physiology rows ═══════ -->
+    <section class="gradient-card p-3.5 mb-2.5" id="todays-read">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="font-bold text-[15px] flex items-center gap-1.5" style="color:#9A6BFF">Today's read
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#9A6BFF"><path d="M12 1.5c.3 3.6 1.9 5.2 5.5 5.5-3.6.3-5.2 1.9-5.5 5.5-.3-3.6-1.9-5.2-5.5-5.5 3.6-.3 5.2-1.9 5.5-5.5z"/><path d="M18.5 13c.16 1.9 1 2.74 2.9 2.9-1.9.16-2.74 1-2.9 2.9-.16-1.9-1-2.74-2.9-2.9 1.9-.16 2.74-1 2.9-2.9z"/></svg>
+          <span class="text-[11px] text-muted font-semibold">AI</span>
+        </h2>
+        <span class="text-[12px] text-muted" id="read-ts"></span>
       </div>
-      <div class="grid md:grid-cols-5 gap-5">
+      <div class="grid grid-cols-2 gap-4">
         <!-- Left: interpretation prose -->
-        <div class="md:col-span-3 min-w-0">
-          <p class="text-base leading-relaxed text-neutral-200" id="read-body" style="font-size:16px;">First read drops at 9:05 AM</p>
-          <p class="text-xs text-muted mt-3" id="read-basis"></p>
+        <div class="min-w-0" id="read-left">
+          <div class="text-[11px] uppercase tracking-wider text-muted font-semibold">Recovery</div>
+          <div class="text-[21px] font-bold leading-none mt-0.5 glow-green" id="read-recovery-word" style="color:#39D98A"></div>
+          <p class="text-[12.5px] leading-snug text-neutral-300 mt-1.5" id="read-body">First read drops at 9:05 AM</p>
+          <button type="button" data-target="day-review" class="text-[12px] font-semibold mt-1.5 flex items-center gap-1" style="color:#9A6BFF">View full analysis
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <p class="text-[10px] text-muted mt-2" id="read-basis"></p>
         </div>
-        <!-- Right: physiology metrics grid -->
-        <div class="md:col-span-2 md:border-l md:border-line md:pl-5">
-          <div class="text-xs uppercase tracking-wider text-muted mb-3">Physiology · last night</div>
-          <div class="grid grid-cols-2 gap-3" id="physiology-grid">
-            <!-- filled by renderPhysiology() -->
-          </div>
-        </div>
+        <!-- Right: physiology rows -->
+        <div class="min-w-0 border-l border-line pl-4" id="physiology-grid"></div>
       </div>
     </section>
 
     <!-- ════════════════ SUPPORTING CARDS — Nutrition / Scale / Activity ═════ -->
-    <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6" id="support-cards" aria-label="Supporting metrics">
+    <section class="grid grid-cols-3 gap-2.5 mb-2.5" id="support-cards" aria-label="Supporting metrics">
       <!-- Nutrition -->
-      <button type="button" data-target="nutrition-panel"
-              class="gradient-card p-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-nutri">
-        <div class="text-xs uppercase tracking-wider" style="color:#39D98A">Nutrition</div>
-        <div class="text-2xl font-semibold stat-num mt-2 text-neutral-100" id="sc-nutrition-val">—</div>
-        <div class="text-xs text-muted mt-1" id="sc-nutrition-detail"></div>
-        <div class="text-xs mt-3" style="color:#39D98A">View details →</div>
+      <button type="button" data-target="nutrition-panel" class="lpi-card p-2.5 text-left focus:outline-none">
+        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#39D98A">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v7a3 3 0 006 0V3M7 3v18M17 3c-1.5 0-2.5 2-2.5 5s1 4 2.5 4 2.5-1 2.5-4-1-5-2.5-5zM17 16v5"/></svg>
+          Nutrition
+        </div>
+        <div class="flex items-center justify-between mt-1.5 gap-1">
+          <div class="min-w-0">
+            <div class="text-[20px] font-bold stat-num leading-none text-white" id="sc-nutrition-val">—</div>
+            <div class="text-[10px] text-muted mt-0.5" id="sc-nutrition-unit">cal left</div>
+          </div>
+          <div id="sc-nutrition-ring" class="shrink-0"></div>
+        </div>
+        <div class="text-[9px] text-muted mt-2 leading-tight whitespace-nowrap" id="sc-nutrition-macros"></div>
+        <div class="text-[10px] font-semibold mt-2 flex items-center gap-0.5 whitespace-nowrap" style="color:#39D98A">View details
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
       </button>
       <!-- Scale -->
-      <button type="button" data-target="snapshot-panel"
-              class="gradient-card p-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-sleepc">
-        <div class="text-xs uppercase tracking-wider" style="color:#9B5CFF">Scale</div>
-        <div class="text-2xl font-semibold stat-num mt-2 text-neutral-100" id="sc-scale-val">—</div>
-        <div class="text-xs text-muted mt-1" id="sc-scale-detail"></div>
-        <div class="text-xs mt-3" style="color:#9B5CFF">View progress →</div>
+      <button type="button" data-target="snapshot-panel" class="lpi-card p-2.5 text-left focus:outline-none">
+        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#8A5CFF">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M5 21V9l7-3 7 3v12M5 13h14"/></svg>
+          Scale
+        </div>
+        <div class="text-[20px] font-bold stat-num leading-none mt-1.5 text-white" id="sc-scale-val">—</div>
+        <div class="text-[10px] text-muted mt-0.5">lbs</div>
+        <div id="sc-scale-spark" class="mt-2 h-6" style="color:#8A5CFF"></div>
+        <div class="text-[9px] mt-1" id="sc-scale-detail"></div>
+        <div class="text-[10px] font-semibold mt-1.5 flex items-center gap-0.5 whitespace-nowrap" style="color:#8A5CFF">View progress
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
       </button>
       <!-- Activity -->
-      <button type="button" data-target="activity"
-              class="gradient-card p-4 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-activ">
-        <div class="text-xs uppercase tracking-wider" style="color:#FF8A3D">Activity</div>
-        <div class="text-2xl font-semibold stat-num mt-2 text-neutral-100" id="sc-activity-val">—</div>
-        <div class="text-xs text-muted mt-1" id="sc-activity-detail"></div>
-        <div class="text-xs mt-3" style="color:#FF8A3D">View activity →</div>
+      <button type="button" data-target="activity" class="lpi-card p-2.5 text-left focus:outline-none">
+        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#FF8A3D">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13H11l-1 9 8.5-11H12z"/></svg>
+          Activity
+        </div>
+        <div class="flex items-center justify-between mt-1.5 gap-1">
+          <div class="min-w-0">
+            <div class="text-[20px] font-bold stat-num leading-none text-white" id="sc-activity-val">—</div>
+            <div class="text-[10px] text-muted mt-0.5">steps</div>
+          </div>
+          <div id="sc-activity-ring" class="shrink-0"></div>
+        </div>
+        <div class="flex justify-between text-[9px] mt-2 gap-1" id="sc-activity-stats"></div>
+        <div class="text-[10px] font-semibold mt-2 flex items-center gap-0.5 whitespace-nowrap" style="color:#FF8A3D">View activity
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
       </button>
     </section>
 
-    <!-- ════════════════ RECOVERY WINDOW — derived status + bar ══════════════ -->
-    <section class="gradient-card p-5 mb-6" id="recovery-window">
-      <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-        <h2 class="font-semibold" style="color:#00C8FF">Recovery Window</h2>
-        <span class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-sm font-semibold"
-              id="rw-status-chip">
-          <span class="w-2 h-2 rounded-full" id="rw-status-dot"></span>
-          <span id="rw-status">—</span>
-        </span>
-      </div>
-      <div class="h-2.5 rounded-full overflow-hidden" style="background:rgba(255,255,255,0.06)">
-        <div class="h-full rounded-full transition-all" id="rw-bar" style="width:0%;background:#00C8FF"></div>
-      </div>
-      <div class="flex justify-between text-[11px] text-muted mt-1.5">
-        <span id="rw-bar-left"></span>
-        <span id="rw-bar-right"></span>
-      </div>
-      <p class="text-sm leading-relaxed text-neutral-300 mt-3" id="rw-note"></p>
-    </section>
-
-    <!-- ════════════════ LUNAR STRESS INDEX — score-framed (LPI v1) ══════════ -->
-    <section class="gradient-card p-5 mb-6" id="lunar-stress">
-      <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-        <h2 class="font-semibold" style="color:#8A5CFF">Lunar Stress Index <span class="text-xs text-neutral-400 font-normal">· Context</span></h2>
-        <span class="text-xs text-neutral-400" id="lsi-ts"></span>
-      </div>
-      <div id="lsi-empty" class="text-sm text-muted">
-        First read computes on the next Polar sync.
-      </div>
-      <div id="lsi-content" class="hidden">
-        <!-- Score header: band + X/10 -->
-        <div class="flex items-baseline gap-3 flex-wrap">
-          <span class="text-3xl font-bold stat-num" id="lsi-score" style="color:#8A5CFF">—</span>
-          <span class="text-lg font-semibold text-neutral-200" id="lsi-band">—</span>
+    <!-- ════════════════ RECOVERY WINDOW + LUNAR STRESS (2-up) ═══════════════ -->
+    <section class="grid grid-cols-2 gap-2.5 mb-3">
+      <!-- Recovery Window -->
+      <div class="lpi-card p-3" id="recovery-window">
+        <div class="flex items-center gap-1.5 text-[10px] uppercase tracking-wide font-bold mb-1.5" style="color:#39D98A">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          Recovery Window
         </div>
-        <p class="text-sm text-neutral-300 mt-2" id="lsi-trigger"></p>
-        <!-- Moon details (kept accessible per spec) -->
-        <div class="mt-4 space-y-1.5" id="lsi-detail-rows"></div>
-        <p class="text-base leading-relaxed text-neutral-200 mt-4" id="lsi-recommendation" style="font-size:15px;"></p>
-        <p class="text-xs text-muted mt-3" id="lsi-basis"></p>
+        <div class="flex items-baseline gap-2">
+          <span class="text-[18px] font-bold glow-nutri" id="rw-status" style="color:#39D98A">—</span>
+          <span class="text-[12px] text-muted font-medium" id="rw-now"></span>
+        </div>
+        <div class="relative mt-2.5 mb-1 h-2 rounded-full overflow-visible" style="background:rgba(255,255,255,0.08)">
+          <div class="h-full rounded-full" id="rw-bar" style="width:0%;background:linear-gradient(90deg,#1f8f5f,#39D98A)"></div>
+          <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full border-2 border-white" id="rw-dot" style="left:0%;background:#39D98A;box-shadow:0 0 8px rgba(57,217,138,.8)"></div>
+        </div>
+        <div class="flex justify-between text-[10px] text-muted stat-num">
+          <span id="rw-bar-left"></span><span id="rw-bar-right"></span>
+        </div>
+        <p class="text-[11px] leading-snug text-neutral-300 mt-2" id="rw-note"></p>
+        <!-- legacy refs kept so app.js never throws -->
+        <span class="hidden" id="rw-status-dot"></span><span class="hidden" id="rw-status-chip"></span>
+      </div>
+
+      <!-- Lunar Stress Index -->
+      <div class="lpi-card p-3" id="lunar-stress">
+        <div class="flex items-center gap-1.5 text-[10px] uppercase tracking-wide font-bold mb-1.5" style="color:#8A5CFF">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          Lunar Stress Index
+        </div>
+        <div id="lsi-empty" class="text-[12px] text-muted">First read computes on the next Polar sync.</div>
+        <div id="lsi-content" class="hidden">
+          <div class="text-[18px] font-bold glow-sleep leading-tight" id="lsi-band" style="color:#9A6BFF">—</div>
+          <div class="text-[15px] font-bold stat-num text-neutral-200 mt-0.5" id="lsi-score">—</div>
+          <div id="lsi-spark" class="mt-1 h-6" style="color:#8A5CFF"></div>
+          <p class="text-[10.5px] text-muted mt-1 leading-tight" id="lsi-trigger"></p>
+          <button type="button" data-target="lsi-detail" class="text-[11px] font-semibold mt-1.5 flex items-center gap-1" style="color:#8A5CFF">View details
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <span class="hidden" id="lsi-ts"></span>
+        </div>
       </div>
     </section>
 
-    <!-- ═══════════ DETAIL MODULES (linked from supporting cards above) ═══════ -->
+    <!-- ═══════════ DETAIL MODULES (linked from cards above; below the fold) ═══════ -->
+    <div id="lsi-detail">
+    <section class="gradient-card p-4 mb-4 mt-2" id="lsi-detail-card">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-semibold text-electric">Lunar detail <span class="text-xs text-neutral-400 font-normal">· Context</span></h2>
+      </div>
+      <p class="text-sm text-neutral-300" id="lsi-recommendation"></p>
+      <div class="mt-3 space-y-1.5" id="lsi-detail-rows"></div>
+      <p class="text-xs text-muted mt-3" id="lsi-basis"></p>
+    </section>
+    </div>
 
-    <!-- Nutrition — today's macros from Calories Club (nutrition/sync.py) -->
-    <section class="gradient-card p-4 mb-6" id="nutrition-panel">
+    <!-- Nutrition detail -->
+    <section class="gradient-card p-4 mb-4" id="nutrition-panel">
       <div class="flex items-center justify-between mb-4">
         <h2 class="font-semibold text-neutral-300">Nutrition · today</h2>
         <span class="text-xs text-neutral-400" id="nutrition-sub"></span>
@@ -375,26 +401,24 @@
       </div>
       <div id="nutrition-content" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4"></div>
     </section>
+    <div id="nutrition-nudge" class="hidden -mt-2 mb-4 px-1 text-sm italic text-cobalt/80"></div>
 
-    <!-- Nutrition nudge — single-line, time-aware "what to eat next" (polar/summary.py) -->
-    <div id="nutrition-nudge" class="hidden -mt-4 mb-6 px-1 text-sm italic text-cobalt/80"></div>
-
-    <!-- Latest scale snapshot — VeSync ESF-551 screenshot OCR (manual via Penny) -->
-    <section class="gradient-card p-4 mb-6" id="snapshot-panel">
+    <!-- Scale snapshot detail -->
+    <section class="gradient-card p-4 mb-4" id="snapshot-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
         <h2 class="font-semibold text-neutral-300">Latest scale snapshot <span class="text-xs text-neutral-400 font-normal">· VeSync</span></h2>
         <span class="text-xs text-neutral-400" id="snapshot-sub"></span>
       </div>
       <div id="snapshot-empty" class="text-sm text-muted">
         No fresh scale reading yet.<br>
-        To update: send a screenshot of your VeSync app to Penny in your Dispatch chat. She'll OCR + push the update within ~2 min. The dashboard refreshes on its own.
-        <span class="block text-xs mt-1 text-muted/80">(BT-only ESF-551 doesn't expose body comp via API — this is the manual fallback.)</span>
+        To update: send a screenshot of your VeSync app to Penny in your Dispatch chat. She'll OCR + push the update within ~2 min.
+        <span class="block text-xs mt-1 text-muted/80">(BT-only ESF-551 doesn't expose body comp via API — manual fallback.)</span>
       </div>
       <div id="snapshot-content" class="hidden grid grid-cols-3 md:grid-cols-6 gap-4"></div>
     </section>
 
-    <!-- Activity · today (Polar Loop Gen 2 daily activity via polar/sync.py) -->
-    <section class="gradient-card p-4 mb-6" id="activity">
+    <!-- Activity detail -->
+    <section class="gradient-card p-4 mb-4" id="activity">
       <div class="flex items-start justify-between mb-4 flex-wrap gap-2">
         <div>
           <h2 class="font-semibold text-neutral-300">Activity · today <span class="text-xs text-neutral-400 font-normal">· Polar Loop</span></h2>
@@ -403,8 +427,7 @@
         <span class="text-xs text-neutral-400" id="activity-sub"></span>
       </div>
       <div id="activity-empty" class="text-sm text-muted">
-        No activity data yet — run <code class="text-electric">polar/sync.py</code> to pull today's steps, active time &amp; calories from Polar Loop.
-        <span class="block text-xs mt-1 text-muted/80">(Serve over http, not file://, for it to read the synced JSON.)</span>
+        No activity data yet — run <code class="text-electric">polar/sync.py</code> to pull today's steps, active time &amp; calories.
       </div>
       <div id="activity-content" class="hidden">
         <div class="grid grid-cols-3 gap-3" id="activity-tiles"></div>
@@ -412,32 +435,25 @@
       </div>
     </section>
 
-    <!-- Training & Recovery (live Polar Loop data via polar/sync.py) -->
-    <section class="gradient-card p-4 mb-6" id="polar-panel">
+    <!-- Training & Recovery detail -->
+    <section class="gradient-card p-4 mb-4" id="polar-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
         <h2 class="font-semibold text-neutral-300">Training &amp; Recovery <span class="text-xs text-neutral-400 font-normal">· Polar Loop</span></h2>
         <span class="text-xs text-neutral-400" id="polar-sub"></span>
       </div>
       <div id="polar-empty" class="text-sm text-muted">
         No Polar data yet — run <code class="text-electric">polar/sync.py</code> to populate Nightly Recharge, sleep &amp; activity.
-        <span class="block text-xs mt-1 text-muted/80">(Serve this dashboard over http, not file://, for it to read the synced JSON.)</span>
       </div>
       <div id="polar-content" class="hidden">
         <div class="grid md:grid-cols-2 gap-6">
-          <!-- Block A — last 10 nights WITH DATA (empty nights skipped, newest on top) -->
           <div>
             <h3 class="text-sm font-medium text-cobalt/80 mb-3" id="polar-recharge-title">Nightly Recharge</h3>
             <div class="space-y-1" id="polar-recharge-stack"></div>
             <div class="text-xs text-muted mt-3" id="polar-recharge-trend"></div>
             <div class="text-xs text-muted/80 mt-1" id="polar-recharge-note"></div>
           </div>
-
-          <!-- Right column: Block B (sleep) + Block C (HRV) -->
           <div class="space-y-6">
-            <!-- Block B — Sleep stage bar (unchanged pattern) -->
             <div id="polar-sleep-wrap"></div>
-
-            <!-- Block C — HRV big number + 7-day SVG sparkline -->
             <div>
               <h3 class="text-sm font-medium text-cobalt/80 mb-2">Heart-rate variability</h3>
               <div class="flex items-end gap-3">
@@ -451,8 +467,8 @@
       </div>
     </section>
 
-    <!-- Day in review — nightly freeze (polar/day_review.json, fires 9:45 PM CST) -->
-    <section class="gradient-card p-4 mb-6" id="day-review">
+    <!-- Day in review detail -->
+    <section class="gradient-card p-4 mb-4" id="day-review">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
         <h2 class="font-semibold text-neutral-300">Day in review <span class="text-xs text-neutral-400 font-normal" id="day-review-date"></span></h2>
         <span class="text-xs text-neutral-400" id="day-review-sub"></span>
@@ -467,8 +483,8 @@
       </div>
     </section>
 
-    <!-- Scale history — VeSync ESF-551 manual screenshot readings (vesync/history.json) -->
-    <section class="gradient-card p-4 mb-6" id="scale-history-panel">
+    <!-- Scale history detail -->
+    <section class="gradient-card p-4 mb-4" id="scale-history-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
         <h2 class="font-semibold text-neutral-300">Scale history <span class="text-xs text-neutral-400 font-normal">· VeSync</span></h2>
         <span class="text-xs text-neutral-400" id="scale-history-sub"></span>
@@ -495,39 +511,34 @@
     </section>
 
     <footer class="text-xs text-muted text-center py-4">
-      Data stored locally in your browser (localStorage). Click "Reset" in the console to wipe: <code class="text-electric">localStorage.clear()</code>
+      Data stored locally in your browser (localStorage). <code class="text-electric">localStorage.clear()</code> to reset.
     </footer>
   </div>
 
-  <!-- ════════════════ BOTTOM NAV — icons only (LPI v1) ════════════════════
-       Dashboard + History + Insights scroll to anchors; "+" and Settings are
-       visual placeholders for v1 (no-op) — flagged in the LPI v1 Known Risks. -->
-  <nav id="lpi-bottom-nav"
-       class="fixed bottom-0 inset-x-0 z-30 border-t border-line"
-       style="background:rgba(5,8,22,0.85);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);padding-bottom:env(safe-area-inset-bottom)">
-    <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-      <button type="button" data-nav="dashboard" aria-label="Dashboard"
-              class="flex-1 flex justify-center text-neutral-200 hover:text-recov transition-colors">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+  <!-- ════════════════ BOTTOM NAV ════════════════════════════════════════════ -->
+  <nav id="lpi-bottom-nav" class="fixed bottom-0 inset-x-0 z-30 border-t border-line"
+       style="background:rgba(5,7,18,0.88);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);padding-bottom:env(safe-area-inset-bottom)">
+    <div class="mx-auto max-w-[440px] px-5 h-[62px] flex items-center justify-between">
+      <button type="button" data-nav="dashboard" aria-label="Dashboard" class="nav-item active">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+        <span class="nav-label">Dashboard</span>
       </button>
-      <button type="button" data-nav="history" aria-label="History"
-              class="flex-1 flex justify-center text-muted hover:text-recov transition-colors">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>
+      <button type="button" data-nav="history" aria-label="History" class="nav-item text-muted">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>
+        <span class="nav-label">History</span>
       </button>
-      <button type="button" data-nav="add" aria-label="Add"
-              class="flex-1 flex justify-center">
-        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full"
-              style="background:linear-gradient(135deg,#9B5CFF,#00C8FF)">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#050816" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      <button type="button" data-nav="add" aria-label="Add" class="flex-1 flex justify-center">
+        <span class="inline-flex items-center justify-center w-12 h-12 rounded-full border-2" style="border-color:#8A5CFF;background:rgba(138,92,255,0.10)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9A6BFF" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
         </span>
       </button>
-      <button type="button" data-nav="insights" aria-label="Insights"
-              class="flex-1 flex justify-center text-muted hover:text-ctx transition-colors">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>
+      <button type="button" data-nav="insights" aria-label="Insights" class="nav-item text-muted">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 6.3L21 9.2l-5 4.3 1.6 6.8L12 16.9 6.4 20.3 8 13.5l-5-4.3 6.6-.9z"/></svg>
+        <span class="nav-label">Insights</span>
       </button>
-      <button type="button" data-nav="settings" aria-label="Settings"
-              class="flex-1 flex justify-center text-muted hover:text-recov transition-colors">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+      <button type="button" data-nav="settings" aria-label="Settings" class="nav-item text-muted">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+        <span class="nav-label">Settings</span>
       </button>
     </div>
   </nav>

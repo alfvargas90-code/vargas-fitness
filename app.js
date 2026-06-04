@@ -86,10 +86,10 @@ function renderHeader() {
   const date = now.toLocaleDateString("en-US", {
     weekday: "long", year: "numeric", month: "long", day: "numeric",
   });
-  const time = now.toLocaleTimeString("en-US", {
-    hour: "numeric", minute: "2-digit",
-  });
-  sub.textContent = `${date} · ${time}`;
+  sub.textContent = date;
+  // Faux status-bar clock (cosmetic chrome) — H:MM, no AM/PM, like iOS.
+  const sb = document.getElementById("sb-time");
+  if (sb) sb.textContent = now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }).replace(/\s?[AP]M$/i, "");
 }
 
 function ageOn(dateStr) {
@@ -249,48 +249,49 @@ const LPI = {
   context:  "#8A5CFF",  // Context (Lunar)
 };
 
+// LPI v1 replica — FLAT concentric gradient rings (matching the source mockup).
+// viewBox is 0 0 260 260, center (130,130). Sleep innermost (purple), Recovery
+// middle (cyan→blue), Strain outer (orange→red) + highest visual weight. Each
+// ring = faint full track + bright gradient progress arc swept clockwise from
+// 12 o'clock, with a same-hue glow. Measured from the mockup: moon r≈40, rings
+// at r≈63/84/100, stroke ≈6px.
 const ORBIT = {
-  cx: 150, cy: 150,          // viewBox center (viewBox is 0 0 300 300)
-  tilt: 35, flatten: 0.55,   // 35° disk; ry = rx * 0.55
-  moonR: 30,                 // inner orbit clears the moon by ~14px at its narrowest
-  // LPI v1 ring assignment (SWAP from Concept 02): Sleep is now innermost,
-  // Recovery middle, Strain outer + highest visual weight.
+  cx: 130, cy: 130,
+  moonR: 40,
   rings: {                   // inside → out
-    sleep:    { rx: 80 },
-    recovery: { rx: 104 },
-    strain:   { rx: 128 },
+    sleep:    { r: 63,  grad: "gSleep",  glow: "#8A5CFF" },
+    recovery: { r: 84,  grad: "gRecov",  glow: "#00C8FF" },
+    strain:   { r: 100, grad: "gStrain", glow: "#FF5E62" },
   },
-  base: "#241B3A",           // faint orbit track (muted violet — metadata)
-  arcW: 5, baseW: 2,         // thinner active stroke than Concept 02 (was 6)
+  arcW: 5, baseW: 4,
+  base: "rgba(255,255,255,0.05)",
 };
 
-// Ramanujan ellipse-perimeter approximation — used as the dash period so the
-// color arc length maps linearly to percent.
-function ellipsePerimeter(rx, ry) {
-  const h = ((rx - ry) ** 2) / ((rx + ry) ** 2);
-  return Math.PI * (rx + ry) * (1 + (3 * h) / (10 + Math.sqrt(4 - 3 * h)));
-}
+// SVG <defs> — per-ring linear gradients tuned to the mockup's ring hues.
+const ORBIT_DEFS = `<defs>
+  <linearGradient id="gSleep" x1="0.15" y1="0" x2="0.85" y2="1">
+    <stop offset="0" stop-color="#6E3FD6"/><stop offset="1" stop-color="#B58CFF"/>
+  </linearGradient>
+  <linearGradient id="gRecov" x1="0" y1="0.2" x2="1" y2="0.9">
+    <stop offset="0" stop-color="#00E0FF"/><stop offset="0.6" stop-color="#00A6FF"/><stop offset="1" stop-color="#3F66FF"/>
+  </linearGradient>
+  <linearGradient id="gStrain" x1="0.1" y1="0" x2="0.95" y2="1">
+    <stop offset="0" stop-color="#FF9A3D"/><stop offset="0.55" stop-color="#FF5E62"/><stop offset="1" stop-color="#FF2E55"/>
+  </linearGradient>
+</defs>`;
 
-// Full-ellipse path starting at the top (0,-ry) and sweeping CLOCKWISE, so a
-// dash of length (pct/100 · perimeter) from the start renders the 12-o'clock→
-// percentage arc. Drawn inside the rotated group, so "top" is the disk's top.
-function orbitPath(rx, ry) {
-  return `M 0 ${-ry} A ${rx} ${ry} 0 0 1 0 ${ry} A ${rx} ${ry} 0 0 1 0 ${-ry}`;
-}
-
-// One hybrid orbit: faint full ellipse + bright semantic arc, both tilted 35°.
-function orbitGroup(rx, pct, color) {
-  const ry = +(rx * ORBIT.flatten).toFixed(2);
-  const perim = ellipsePerimeter(rx, ry);
-  const arc = (Math.max(0, Math.min(100, pct || 0)) / 100) * perim;
-  // Soft glow on the bright arc only (Concept 03 DEPTH pillar) — additive light
-  // on OLED black. Skipped for the faint default (base gray, ~0-length arc).
-  const glow = color !== ORBIT.base ? ` filter="drop-shadow(0 0 6px ${color})"` : "";
-  return `<g transform="rotate(${ORBIT.tilt})">
-    <ellipse cx="0" cy="0" rx="${rx}" ry="${ry}" fill="none" stroke="${ORBIT.base}" stroke-width="${ORBIT.baseW}"/>
-    <path d="${orbitPath(rx, ry)}" fill="none" stroke="${color}" stroke-width="${ORBIT.arcW}"
-          stroke-linecap="round" stroke-dasharray="${arc.toFixed(2)} ${perim.toFixed(2)}"${glow}/>
-  </g>`;
+// One flat ring: faint full track + bright gradient arc (clockwise from top).
+function orbitGroup(r, pct, gradId, glowColor) {
+  const c = 2 * Math.PI * r;
+  const arc = (Math.max(0, Math.min(100, pct || 0)) / 100) * c;
+  const track = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${ORBIT.base}" stroke-width="${ORBIT.baseW}"/>`;
+  if (!(pct > 0)) return track;
+  const prog = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="url(#${gradId})"
+      stroke-width="${ORBIT.arcW}" stroke-linecap="round"
+      stroke-dasharray="${arc.toFixed(2)} ${(c - arc).toFixed(2)}"
+      transform="rotate(-90 130 130)"
+      style="filter:drop-shadow(0 0 5px ${glowColor})"/>`;
+  return track + prog;
 }
 
 // Phase name → {illum 0-1, waning}. lunar_stress.json carries no
@@ -383,16 +384,15 @@ function moonSVG(r, illum, waning) {
 function renderOrbit({ recovery, sleep, strain, moon }) {
   const host = document.getElementById("rings-orbit-svg");
   if (!host) return;
-  const { cx, cy, moonR } = ORBIT;
+  const { cx, cy, moonR, rings } = ORBIT;
   const m = moon || { illum: 0.5, waning: true };
-  host.innerHTML = `<svg viewBox="0 0 300 300" width="100%" height="100%" class="block"
-       preserveAspectRatio="xMidYMid meet" aria-label="Orbit rings around moon">
-    <g transform="translate(${cx} ${cy})">
-      ${orbitGroup(ORBIT.rings.strain.rx,   strain?.pct,   strain?.color   || ORBIT.base)}
-      ${orbitGroup(ORBIT.rings.sleep.rx,    sleep?.pct,    sleep?.color    || ORBIT.base)}
-      ${orbitGroup(ORBIT.rings.recovery.rx, recovery?.pct, recovery?.color || ORBIT.base)}
-      ${moonSVG(moonR, m.illum, m.waning)}
-    </g>
+  host.innerHTML = `<svg viewBox="0 0 260 260" width="100%" height="100%" class="block"
+       preserveAspectRatio="xMidYMid meet" style="overflow:visible" aria-label="Orbit rings around moon">
+    ${ORBIT_DEFS}
+    ${orbitGroup(rings.strain.r,   strain?.pct,   rings.strain.grad,   rings.strain.glow)}
+    ${orbitGroup(rings.recovery.r, recovery?.pct, rings.recovery.grad, rings.recovery.glow)}
+    ${orbitGroup(rings.sleep.r,    sleep?.pct,    rings.sleep.grad,    rings.sleep.glow)}
+    <g transform="translate(${cx} ${cy})">${moonSVG(moonR, m.illum, m.waning)}</g>
   </svg>`;
 }
 
@@ -414,16 +414,16 @@ function strainLabel(pct) {
 
 // Set one hero metric corner: big number + qualitative label + small detail.
 // `color` tints number+label; null metric → em-dash + muted, glow cleared.
-function setMetricCorner(key, val, label, detail, color) {
+function setMetricCorner(key, val, label, detail, color, numColor) {
   const numEl = document.getElementById(`m-${key}-val`);
   const lblEl = document.getElementById(`m-${key}-label`);
   const detEl = document.getElementById(`m-${key}-detail`);
   if (numEl) {
     numEl.textContent = val ?? "—";
-    numEl.style.color = color || ORBIT.base;
-    numEl.style.textShadow = (val != null && color) ? `0 0 10px ${color}` : "none";
+    numEl.style.color = val != null ? (numColor || color || "#8A90A6") : "#5A607A";
+    numEl.style.textShadow = (val != null) ? `0 0 14px ${color}` : "none";
   }
-  if (lblEl) { lblEl.textContent = label || ""; lblEl.style.color = color || "#9CA3AF"; }
+  if (lblEl) { lblEl.textContent = label || ""; lblEl.style.color = color || "#8A90A6"; }
   if (detEl) detEl.textContent = detail || "";
 }
 
@@ -431,21 +431,25 @@ function setMetricCorner(key, val, label, detail, color) {
 // next-sign-change line (uses lunar_stress.json's own ENTERS/LEAVES verb — the
 // `display` string is authoritative, so the verb is whatever the data says).
 function renderMoonReadout(lunar) {
-  const main = document.getElementById("moon-readout-main");
-  const sub  = document.getElementById("moon-readout-sub");
+  const phase = document.getElementById("moon-readout-phase");
+  const main  = document.getElementById("moon-readout-main");
+  const sub   = document.getElementById("moon-readout-sub");
   if (!main) return;
   const L = lunar?.lunar;
-  if (!L || !L.sign) { main.textContent = "—"; if (sub) sub.textContent = ""; return; }
-  const parts = [];
-  if (L.phase) parts.push(L.phase);
-  parts.push(`Moon in ${L.sign}`);
-  main.textContent = parts.join(" · ");
+  if (!L || !L.sign) { main.textContent = "—"; if (phase) phase.textContent = ""; if (sub) sub.textContent = ""; return; }
+  if (phase) phase.textContent = L.phase || "";
+  main.textContent = `Moon in ${L.sign}`;
   if (sub) {
+    // Mockup shows the ingress on its own line + the time underneath. Split the
+    // data's `display` ("Enters Aquarius 6/4 at 8:45 AM") into label + time.
     const bits = [];
-    if (L.next_sign_change && L.next_sign_change.display) bits.push(L.next_sign_change.display);
-    if (L.void_of_course && L.void_of_course.active)
-      bits.push(`Void of Course until ${L.void_of_course.until_display || "next ingress"}`);
-    sub.textContent = bits.join("  ·  ");
+    const disp = L.next_sign_change && L.next_sign_change.display;
+    if (disp) {
+      const mt = disp.match(/at\s+(.+)$/i);
+      if (mt) bits.push(disp.replace(/\s+at\s+.+$/i, "") + "<br>" + mt[1]);
+      else bits.push(disp);
+    }
+    sub.innerHTML = bits.join("  ·  ");
   }
 }
 
@@ -512,27 +516,36 @@ async function renderRings() {
       strainCal = Math.round(Number(act["active-calories"]));
       strainPct = Math.min(100, (strainCal / RESERVE_DEPLETION_CAL) * 100);
       strain = { pct: strainPct, color: LPI.strain };
+      // Strain mini-spark — last up-to-7 days of active-calories (the "Load" trend).
+      const recent = actDates.slice(-7);
+      const cals = (await Promise.all(recent.map(d => fetchJSON(`polar/daily_activity/${d}.json`).catch(() => null))))
+        .map(a => a && a["active-calories"] != null ? Number(a["active-calories"]) : null).filter(v => v != null);
+      const sp = document.getElementById("m-strain-spark");
+      if (sp) sp.innerHTML = cals.length >= 2
+        ? `<span style="display:inline-block;width:54px;color:#FF5E62">${sparkline(cals)}</span>` : "";
     }
   } catch (e) { /* file:// or no sync yet → orbits stay faint, corners "—" */ }
 
   renderOrbit({ recovery, sleep, strain, moon });
 
   // Hero metric corners (big number + label + detail), all from real data.
+  // Recovery number reads near-white (cyan glow); Sleep/Strain numbers carry
+  // their own hue — matching the source mockup.
   setMetricCorner("recovery",
     recoveryScore != null ? `${recoveryScore}` : null,
     recoveryScore != null ? recoveryLabel(recoveryScore) : "",
     hrvDeltaPct != null ? `HRV ${hrvDeltaPct >= 0 ? "+" : ""}${hrvDeltaPct}%` : "",
-    LPI.recovery);
+    LPI.recovery, "#E9F7FF");
   setMetricCorner("sleep",
     sleepScore != null ? `${sleepScore}` : null,
     sleepScore != null ? sleepLabel(sleepScore) : "",
     sleepDur || "",
-    LPI.sleep);
+    LPI.sleep, "#9A6BFF");
   setMetricCorner("strain",
     strainPct != null ? `${Math.round(strainPct)}%` : null,
     strainPct != null ? strainLabel(strainPct) : "",
     strainCal != null ? `Load ${strainCal}` : "",
-    LPI.strain);
+    LPI.strain, "#FF5E62");
 
   // Recovery Window derives from the same recovery/sleep/strain state — render
   // it here so it can never disagree with the corners (no second fetch pass).
@@ -546,9 +559,9 @@ async function renderRings() {
 // the bar is the charge level, not a literal timer (flagged in LPI v1 risks).
 function renderRecoveryWindow(s) {
   const statusEl = document.getElementById("rw-status");
-  const dotEl = document.getElementById("rw-status-dot");
-  const chipEl = document.getElementById("rw-status-chip");
+  const nowEl = document.getElementById("rw-now");
   const bar = document.getElementById("rw-bar");
+  const dot = document.getElementById("rw-dot");
   const left = document.getElementById("rw-bar-left");
   const right = document.getElementById("rw-bar-right");
   const note = document.getElementById("rw-note");
@@ -556,43 +569,52 @@ function renderRecoveryWindow(s) {
 
   const rec = s.recoveryScore, slp = s.sleepScore, str = s.strainPct;
   if (rec == null) {
-    statusEl.textContent = "Awaiting sync";
-    if (dotEl) dotEl.style.background = "#64748B";
-    if (chipEl) { chipEl.style.color = "#9CA3AF"; chipEl.style.background = "rgba(255,255,255,0.05)"; }
-    if (bar) { bar.style.width = "0%"; }
+    statusEl.textContent = "Awaiting";
+    statusEl.style.color = "#8A90A6";
+    if (nowEl) nowEl.textContent = "";
+    if (bar) bar.style.width = "0%";
+    if (dot) dot.style.left = "0%";
     if (left) left.textContent = ""; if (right) right.textContent = "";
     if (note) note.textContent = "Recovery window computes on the next Polar sync.";
     return;
   }
 
-  // Derivation: recovered + light load → train window open; recovered but heavy
-  // load / short sleep → recovery window; mid recovery → build; low → rest.
-  let status, color, derived;
+  // Status: Optimal when recovery is high (≥75) — primary driver per spec. Build/
+  // Recover/Rest below that. Strain modifies the note, not the gate (no intraday
+  // strain-trend feed to test "trending down").
+  let status, color, grad, derived;
   const heavy = (str ?? 0) >= 50;
   const shortSleep = slp != null && slp < 55;
-  if (rec >= 70 && !heavy && !shortSleep) {
-    status = "Optimal Now"; color = LPI.nutrition;
-    derived = "Recovery is high and today's load is still light — this is the window to put in real work.";
-  } else if (rec >= 70) {
-    status = "Recover & Rebuild"; color = LPI.recovery;
-    derived = heavy && shortSleep
-      ? "You're recovered, but today ran heavy on short sleep — protect the rebuild: protein, hydration, an earlier night."
-      : heavy ? "Recovered, but you've already spent real load today — bank it rather than stacking more strain."
-      : "Recovered, but last night ran short — feed the rebuild and get a longer night to convert it.";
-  } else if (rec >= 50) {
-    status = "Build Phase"; color = LPI.activity;
-    derived = "Recovery is mid-range — moderate, controlled effort builds without digging a hole.";
+  if (rec >= 75) {
+    status = "Optimal"; color = LPI.nutrition; grad = "linear-gradient(90deg,#1f8f5f,#39D98A)";
+    derived = "Your body is in a good place to recover.";
+  } else if (rec >= 55) {
+    status = "Building"; color = LPI.recovery; grad = "linear-gradient(90deg,#0a6f8f,#00C8FF)";
+    derived = heavy ? "Recovered enough to build — keep effort controlled and bank the rest."
+                    : "Mid-range charge — steady, moderate effort builds without digging a hole.";
+  } else if (rec >= 40) {
+    status = "Recover"; color = LPI.activity; grad = "linear-gradient(90deg,#a85a1f,#FF8A3D)";
+    derived = "Charge is down — feed the rebuild: protein, hydration, an earlier night.";
   } else {
-    status = "Rest Now"; color = LPI.strain;
-    derived = "Recovery is low — back off and let the nervous system reset before the next hard session.";
+    status = "Rest"; color = LPI.strain; grad = "linear-gradient(90deg,#a82e3a,#FF5E62)";
+    derived = "Recovery is low — let the nervous system reset before the next hard session.";
   }
 
+  // Window = a 2-hour recovery band anchored on the current clock. The bar/dot
+  // position visualizes recovery charge within that band (no server window feed).
+  const now = new Date();
+  const end = new Date(now.getTime() + 2 * 3600000);
+  const hm = d => `${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}`;
+  const pos = Math.max(6, Math.min(96, Math.round(rec)));
+
   statusEl.textContent = status;
-  if (dotEl) dotEl.style.background = color;
-  if (chipEl) { chipEl.style.color = color; chipEl.style.background = "rgba(255,255,255,0.05)"; }
-  if (bar) { bar.style.width = `${Math.max(4, Math.round(rec))}%`; bar.style.background = color; }
-  if (left) left.textContent = "Recovery charge";
-  if (right) right.textContent = `${Math.round(rec)}%`;
+  statusEl.style.color = color;
+  statusEl.style.textShadow = `0 0 12px ${color}`;
+  if (nowEl) nowEl.textContent = "Now";
+  if (bar) { bar.style.width = `${pos}%`; bar.style.background = grad; }
+  if (dot) { dot.style.left = `${pos}%`; dot.style.background = color; dot.style.boxShadow = `0 0 8px ${color}`; }
+  if (left) left.textContent = hm(now);
+  if (right) right.textContent = hm(end);
   if (note) note.textContent = derived;
 }
 
@@ -624,82 +646,121 @@ async function renderPhysiology() {
     }
   } catch (e) { /* file:// / no sync → all em-dash */ }
 
-  const cell = (label, value, unit, delta, deltaSuffix, color, goodIsUp) => {
+  // Icon set — matches the mockup's row glyphs (heart, heart, lungs, thermo, drop).
+  const ICONS = {
+    heart: '<path d="M19 5.5a4 4 0 0 0-7-2 4 4 0 0 0-7 2c0 4 7 8.5 7 8.5s7-4.5 7-8.5z"/>',
+    lungs: '<path d="M12 3v8M8 21c-2 0-3-1.5-3-4 0-3 1-5 2.5-6.5C9 9 9.5 10 9.5 12V18c0 2-.5 3-1.5 3zM16 21c2 0 3-1.5 3-4 0-3-1-5-2.5-6.5C15 9 14.5 10 14.5 12V18c0 2 .5 3 1.5 3z"/>',
+    thermo: '<path d="M12 3a2 2 0 0 0-2 2v8.3a4 4 0 1 0 4 0V5a2 2 0 0 0-2-2z"/>',
+    drop: '<path d="M12 3s6 6.5 6 10.5a6 6 0 1 1-12 0C6 9.5 12 3 12 3z"/>',
+  };
+  const row = (icon, iconColor, label, value, unit, delta, deltaSuffix, goodIsUp) => {
     let deltaHTML = "";
     if (delta != null && delta !== 0) {
       const up = delta > 0;
       const good = goodIsUp ? up : !up;
       const dcolor = good ? "#39D98A" : "#FF8A3D";
-      deltaHTML = `<span class="text-[11px] font-medium" style="color:${dcolor}">${up ? "▲" : "▼"} ${Math.abs(delta)}${deltaSuffix}</span>`;
+      deltaHTML = `<span class="text-[10.5px] font-bold stat-num shrink-0" style="color:${dcolor}">${up ? "▲" : "▼"}${Math.abs(delta)}${deltaSuffix}</span>`;
     }
     const valHTML = value != null
-      ? `<span class="text-xl font-semibold stat-num" style="color:${color}">${value}</span><span class="text-xs text-muted">${unit}</span>`
-      : `<span class="text-xl font-semibold stat-num text-muted">—</span>`;
-    const muted = value == null ? ' <span class="text-[10px] text-muted/70">not tracked</span>' : "";
-    return `<div class="bg-bg rounded-lg p-3 border border-line">
-      <div class="text-[11px] uppercase tracking-wider text-muted">${label}${muted}</div>
-      <div class="mt-1 flex items-baseline gap-1.5 flex-wrap">${valHTML}${deltaHTML}</div>
+      ? `<span class="text-[14px] font-bold stat-num text-white">${value}</span><span class="text-[9px] text-muted">${unit}</span>`
+      : `<span class="text-[13px] font-semibold stat-num text-muted">—</span>`;
+    return `<div class="phys-row">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="${iconColor}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">${ICONS[icon]}</svg>
+      <span class="text-[9px] uppercase tracking-wide text-muted font-semibold flex-1 min-w-0">${label}</span>
+      <span class="flex items-baseline gap-0.5 shrink-0">${valHTML}</span>
+      <span class="w-7 text-right shrink-0">${deltaHTML}</span>
     </div>`;
   };
 
   grid.innerHTML =
-    cell("HRV", hrv, " ms", hrvDelta, "%", LPI.recovery, true) +
-    cell("Resting HR", rhr, " bpm", rhrDelta, " bpm", LPI.sleep, false) +
-    cell("Respiratory", resp, " /min", null, "", LPI.context, false) +
-    cell("Skin Temp", null, "", null, "", LPI.activity, false) +
-    cell("SpO₂", null, "", null, "", LPI.recovery, true);
+    row("heart",  "#FF5E62", "HRV",   hrv,  "", hrvDelta, "%",   true) +
+    row("heart",  "#FF5E62", "RHR",   rhr,  "", rhrDelta, "",    false) +
+    row("lungs",  "#00C8FF", "Resp",  resp, "", null,     "",    false) +
+    row("thermo", "#FF8A3D", "Skin",  null, "", null,     "",    false) +
+    row("drop",   "#00C8FF", "SpO₂",  null, "", null,     "",    true);
 }
 
 // ---------- Supporting summary cards (Nutrition / Scale / Activity) ----------
 // Compact glance cards that each tap through to their detail section below. Read
 // the same JSON the detail sections read — never a divergent source.
 async function renderSupportCards() {
-  // Nutrition — most recent logged day (probe back 8 days, like renderNutrition).
+  // ── Nutrition — REMAINING calories (goal − consumed) + consumed/goal donut ──
   try {
     let n = null;
     for (const day of lastN(8).slice().reverse()) {
       try { n = await fetchJSON(`nutrition/daily/${day}.json`); if (!n.date) n.date = day; break; } catch {}
     }
     const valEl = document.getElementById("sc-nutrition-val");
-    const detEl = document.getElementById("sc-nutrition-detail");
+    const unitEl = document.getElementById("sc-nutrition-unit");
+    const ringEl = document.getElementById("sc-nutrition-ring");
+    const macEl = document.getElementById("sc-nutrition-macros");
     if (n && valEl) {
       const t = n.totals || {}, g = n.goals || {};
-      valEl.textContent = t.calories != null ? `${Math.round(t.calories).toLocaleString()} cal` : "—";
-      const bits = [];
-      if (g.calories != null && t.calories != null) bits.push(`${Math.max(0, Math.round(g.calories - t.calories))} left`);
-      if (t.protein_g != null && g.protein_g != null) bits.push(`Protein ${Math.round(t.protein_g)}/${Math.round(g.protein_g)}g`);
-      if (detEl) detEl.textContent = bits.join(" · ");
+      const remain = (g.calories != null && t.calories != null) ? Math.round(g.calories - t.calories) : null;
+      valEl.textContent = remain != null ? remain.toLocaleString() : (t.calories != null ? Math.round(t.calories).toLocaleString() : "—");
+      if (unitEl) unitEl.textContent = remain != null ? "cal left" : "cal";
+      const pct = (t.calories != null && g.calories) ? (t.calories / g.calories) * 100 : 0;
+      if (ringEl) ringEl.innerHTML = donutSVG(pct, "#39D98A");
+      // macros: compact single line — "P 78  C 257  F 127" (goals live in detail).
+      const m = (lbl, v) => v == null ? "" :
+        `<span class="mr-1"><span class="text-muted">${lbl}</span> <span class="text-neutral-200 font-semibold stat-num">${Math.round(v)}g</span></span>`;
+      if (macEl) macEl.innerHTML = m("P", t.protein_g) + m("C", t.carbs_g) + m("F", t.fat_g);
     }
   } catch (e) {}
 
-  // Scale — latest VeSync snapshot.
+  // ── Scale — latest weight + 7-day delta + history sparkline ──
   try {
     const s = await fetchJSON("vesync/snapshot.json");
     const valEl = document.getElementById("sc-scale-val");
     const detEl = document.getElementById("sc-scale-detail");
-    if (valEl) valEl.textContent = s.weight_lb != null ? `${fmt(s.weight_lb, 1)} lb` : "—";
-    const bits = [];
-    if (s.body_fat_pct != null) bits.push(`BF ${fmt(s.body_fat_pct, 1)}%`);
-    if (s.muscle_mass_lb != null) bits.push(`Muscle ${fmt(s.muscle_mass_lb, 1)}`);
-    if (detEl) detEl.textContent = bits.join(" · ");
+    const sparkEl = document.getElementById("sc-scale-spark");
+    if (valEl) valEl.textContent = s.weight_lb != null ? fmt(s.weight_lb, 1) : "—";
+    // history sparkline + delta vs ~7 days prior
+    let hist = await fetchJSON("vesync/history.json").catch(() => null);
+    let delta = null;
+    if (Array.isArray(hist) && hist.length) {
+      const sorted = [...hist].filter(r => r.weight_lb != null).sort((a, b) => a.date.localeCompare(b.date));
+      const weights = sorted.map(r => r.weight_lb);
+      if (sparkEl && weights.length >= 2) sparkEl.innerHTML = sparkline(weights);
+      const latest = sorted.at(-1);
+      if (latest && latest.delta_lb != null) delta = latest.delta_lb;
+      else if (sorted.length >= 2) delta = +(latest.weight_lb - sorted.at(-2).weight_lb).toFixed(1);
+    }
+    if (detEl) {
+      if (delta != null) {
+        const c = delta < 0 ? "#39D98A" : delta > 0 ? "#FF8A3D" : "#8A90A6";
+        detEl.innerHTML = `<span style="color:${c}" class="font-semibold stat-num">${delta > 0 ? "+" : ""}${delta} lbs</span><span class="text-muted"> vs last 7d</span>`;
+      } else detEl.innerHTML = "";
+    }
   } catch (e) {}
 
-  // Activity — latest Polar daily activity.
+  // ── Activity — steps + Apple-style multi-ring (steps / active cal / active min) ──
   try {
     const manifest = await fetchJSON("polar/manifest.json");
     const dates = ((manifest.categories || {}).daily_activity || []).slice().sort();
     const latest = dates.at(-1);
     const a = latest ? await fetchJSON(`polar/daily_activity/${latest}.json`).catch(() => null) : null;
     const valEl = document.getElementById("sc-activity-val");
-    const detEl = document.getElementById("sc-activity-detail");
+    const ringEl = document.getElementById("sc-activity-ring");
+    const statsEl = document.getElementById("sc-activity-stats");
     if (a && valEl) {
       const steps = a["active-steps"] ?? a.step_count ?? null;
-      valEl.textContent = steps != null ? `${Number(steps).toLocaleString()} steps` : "—";
-      const bits = [];
-      const hm = isoDurationToHM(a.duration) || isoDurationToHM(a["active-time"]);
-      if (hm) bits.push(`${hm} active`);
-      if (a.calories != null) bits.push(`${Number(a.calories).toLocaleString()} cal`);
-      if (detEl) detEl.textContent = bits.join(" · ");
+      const activeCal = a["active-calories"] != null ? Math.round(a["active-calories"]) : null;
+      const activeMin = (() => { const m = /PT(?:(\d+)H)?(?:(\d+)M)?/.exec(a.duration || a["active-time"] || ""); return m ? (+(m[1] || 0)) * 60 + (+(m[2] || 0)) : null; })();
+      valEl.textContent = steps != null ? Number(steps).toLocaleString() : "—";
+      // Move/Exercise/Stand analogue: steps/10k (outer), active-cal/800 (mid), active-min/60 (inner)
+      if (ringEl) ringEl.innerHTML = multiRingSVG([
+        { pct: steps != null ? steps / 10000 * 100 : 0, color: "#FF8A3D" },
+        { pct: activeCal != null ? activeCal / 800 * 100 : 0, color: "#FF5E62" },
+        { pct: activeMin != null ? activeMin / 60 * 100 : 0, color: "#FFD43D" },
+      ]);
+      // Two stats under the ring (mockup: Distance / Active kcal — distance isn't in
+      // the Loop Gen 2 feed, so we surface Active min + Active kcal honestly).
+      const stat = (v, lbl) => `<div class="min-w-0"><div class="text-neutral-200 font-bold stat-num text-[11px] leading-none whitespace-nowrap">${v}</div><div class="text-muted text-[8.5px] mt-0.5">${lbl}</div></div>`;
+      const activeHM = isoDurationToHM(a.duration) || isoDurationToHM(a["active-time"]);
+      if (statsEl) statsEl.innerHTML =
+        stat(activeHM || "—", "Active") +
+        stat(activeCal != null ? activeCal.toLocaleString() : "—", "Active kcal");
     }
   } catch (e) {}
 }
@@ -710,7 +771,8 @@ function scrollToId(id) {
   if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 function wireRings() {
-  document.querySelectorAll(".ring-corner[data-target]").forEach(btn => {
+  // Any element with data-target scrolls to that section (hero corners + card links).
+  document.querySelectorAll("[data-target]").forEach(btn => {
     btn.addEventListener("click", () => scrollToId(btn.dataset.target));
   });
   // Bottom nav. Dashboard/History/Insights scroll to anchors; Add + Settings are
@@ -718,6 +780,13 @@ function wireRings() {
   const navTargets = { dashboard: "lpi-hero", history: "scale-history-panel", insights: "lunar-stress" };
   document.querySelectorAll("#lpi-bottom-nav button[data-nav]").forEach(btn => {
     btn.addEventListener("click", () => {
+      // Active-state glow follows the tapped tab (skip the center + button).
+      if (btn.dataset.nav !== "add") {
+        document.querySelectorAll("#lpi-bottom-nav .nav-item").forEach(n => {
+          n.classList.remove("active"); n.classList.add("text-muted");
+        });
+        btn.classList.add("active"); btn.classList.remove("text-muted");
+      }
       const t = navTargets[btn.dataset.nav];
       if (t === "lpi-hero") window.scrollTo({ top: 0, behavior: "smooth" });
       else if (t) scrollToId(t);
@@ -830,6 +899,33 @@ function sparkline(vals) {
   return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="24" preserveAspectRatio="none" fill="none"><polyline points="${pts}" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 }
 
+// Single donut ring (Nutrition card) — pct 0-100, gradient stroke + glow.
+function donutSVG(pct, color, size = 38) {
+  const r = 17, c = 2 * Math.PI * r, p = Math.max(0, Math.min(100, pct || 0));
+  const arc = (p / 100) * c;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 42 42" style="overflow:visible">
+    <circle cx="21" cy="21" r="${r}" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="4"/>
+    <circle cx="21" cy="21" r="${r}" fill="none" stroke="${color}" stroke-width="4" stroke-linecap="round"
+      stroke-dasharray="${arc.toFixed(1)} ${(c - arc).toFixed(1)}" transform="rotate(-90 21 21)"
+      style="filter:drop-shadow(0 0 4px ${color})"/>
+  </svg>`;
+}
+
+// Apple-Activity-style concentric multi-ring (Activity card). rings = [{pct,color}]
+// outer → inner. Faint track + bright arc + glow per ring.
+function multiRingSVG(rings, size = 40) {
+  const radii = [19, 14, 9], stroke = 3.6;
+  const body = rings.slice(0, 3).map((ring, i) => {
+    const r = radii[i], c = 2 * Math.PI * r, p = Math.max(0, Math.min(100, ring.pct || 0));
+    const arc = (p / 100) * c;
+    return `<circle cx="23" cy="23" r="${r}" fill="none" stroke="rgba(255,255,255,0.09)" stroke-width="${stroke}"/>` +
+      (p > 0 ? `<circle cx="23" cy="23" r="${r}" fill="none" stroke="${ring.color}" stroke-width="${stroke}" stroke-linecap="round"
+        stroke-dasharray="${arc.toFixed(1)} ${(c - arc).toFixed(1)}" transform="rotate(-90 23 23)"
+        style="filter:drop-shadow(0 0 3px ${ring.color})"/>` : "");
+  }).join("");
+  return `<svg width="${size}" height="${size}" viewBox="0 0 46 46" style="overflow:visible">${body}</svg>`;
+}
+
 // Plain-English Today's read — renders the `simple` block from summary.py.
 // No raw numbers, units, biometric labels, or astrology jargon (enforced in the
 // prompt). Recovery is a color-coded single word; Transit Impact only shows when
@@ -877,94 +973,42 @@ function readBlock(subtitle, text) {
   return sec;
 }
 
+// LPI v1 replica — compact Today's read: a color-coded Recovery word + a
+// clamped summary paragraph (full text lives in "View full analysis"), with an
+// "Updated HH:MM" timestamp in the header. Mirrors the source mockup.
+const READ_WORD_COLOR = { poor: "#FF5E62", average: "#FF8A3D", good: "#00C8FF", excellent: "#39D98A" };
 async function renderTodaysRead() {
   const ts = document.getElementById("read-ts");
   const body = document.getElementById("read-body");
+  const word = document.getElementById("read-recovery-word");
   const basis = document.getElementById("read-basis");
   if (!body) return;
-  const clearWrap = () => { const p = document.getElementById("read-sections"); if (p) p.remove(); };
   try {
     const s = await fetchJSON("polar/summary.json");
-    clearWrap();
     const simple = s.simple || null;
-    const hasSimple = simple && (simple.recovery || simple.reading || simple.performance);
-    if (hasSimple) {
-      body.textContent = "";
-      body.style.display = "none";
-      const wrap = document.createElement("div");
-      wrap.id = "read-sections";
-      wrap.className = "space-y-4";
-
-      // Recovery — color-coded single word at top.
-      if (simple.recovery) {
-        const word = String(simple.recovery).trim();
-        const colorCls = RECOVERY_COLORS[word.toLowerCase()] || "text-slate-200";
-        const badge = document.createElement("div");
-        badge.className = "flex items-center gap-2";
-        const lbl = document.createElement("span");
-        lbl.className = "text-xs uppercase tracking-wider text-muted";
-        lbl.textContent = "Recovery";
-        const val = document.createElement("span");
-        val.className = `text-2xl font-semibold ${colorCls}`;
-        val.textContent = word;
-        badge.appendChild(lbl);
-        badge.appendChild(val);
-        wrap.appendChild(badge);
-      }
-
-      // Reading — single flowing paragraph fusing physical + astrology texture.
-      // No section label: the Recovery badge is the only "header" element.
-      if (simple.reading)
-        wrap.appendChild(readBlock(null, simple.reading));
-
-      // Performance — inline bold "Performance:" prefix + bolded leading verdict.
-      if (simple.performance) {
-        const sec = document.createElement("div");
-        const p = document.createElement("p");
-        p.className = "text-base leading-relaxed text-neutral-200";
-        p.style.fontSize = "15px";
-        const lead = document.createElement("strong");
-        lead.className = "text-neutral-200";
-        lead.textContent = "Performance: ";
-        p.appendChild(lead);
-        const t = String(simple.performance).trim();
-        const v = PERF_VERDICTS.find(v => t.toLowerCase().startsWith(v.toLowerCase()));
-        if (v) {
-          const strong = document.createElement("strong");
-          strong.className = PERF_VERDICT_COLORS[v] || "text-neutral-200";
-          strong.textContent = t.slice(0, v.length);
-          p.appendChild(strong);
-          p.appendChild(document.createTextNode(t.slice(v.length)));
-        } else {
-          p.appendChild(document.createTextNode(t));
-        }
-        sec.appendChild(p);
-        wrap.appendChild(sec);
-      }
-
-      // Transit — only when a real transit is hitting (non-null/non-empty).
-      if (simple.transit && String(simple.transit).trim())
-        wrap.appendChild(readBlock(null, simple.transit));
-
-      body.parentNode.insertBefore(wrap, body.nextSibling);
-    } else {
-      // No `simple` block (legacy summary.json) — fall back to the flat read.
-      body.style.display = "";
-      body.textContent = s.summary || "First read drops at 9:05 AM";
+    // Recovery word (color-coded).
+    if (word) {
+      const w = simple && simple.recovery ? String(simple.recovery).trim() : "";
+      word.textContent = w;
+      const c = READ_WORD_COLOR[w.toLowerCase()] || "#E9EDF5";
+      word.style.color = c;
+      word.style.textShadow = w ? `0 0 12px ${c}` : "none";
     }
+    // Summary paragraph — clamp to keep the card compact (full read = day-review).
+    const read = (simple && (simple.reading || simple.performance)) || s.summary || "First read drops at 9:05 AM";
+    body.textContent = read;
+    body.style.display = "-webkit-box";
+    body.style.webkitBoxOrient = "vertical";
+    body.style.webkitLineClamp = "3";
+    body.style.overflow = "hidden";
     if (ts && s.generated_at) {
       const t = new Date(s.generated_at);
-      ts.textContent = "updated " + t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+      ts.textContent = "Updated " + t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
     }
-    if (basis) {
-      // Trimmed footer: just freshness ("Today · YYYY-MM-DD"), no raw metrics.
-      const dataDate = (s.generated_at || "").slice(0, 10);
-      basis.innerHTML = dataDate ? freshnessHTML(dataDate, "wear the watch") : "";
-    }
+    if (basis) basis.textContent = "";
   } catch (e) {
-    clearWrap();
-    body.style.display = "";
     body.textContent = "First read drops at 9:05 AM";   // file missing / file://
+    if (word) word.textContent = "";
     if (ts) ts.textContent = "";
     if (basis) basis.textContent = "";
   }
@@ -983,11 +1027,27 @@ async function renderTodaysRead() {
 // phase/next-change/void readout kept accessible directly underneath. The raw
 // `score` is an OPEN-ENDED points total (transit cap 55 + body cap 40 = 95), so
 // the X/10 shown is score normalized onto a 10-point scale, NOT the raw score.
-function lsiIndex10(d) {
-  const maxTotal = ((d.bars?.transit?.max) || 0) + ((d.bars?.body?.max) || 0);
-  if (!maxTotal || d.score == null) return null;
-  return Math.max(0, Math.min(10, Math.round((d.score / maxTotal) * 10)));
+// LSI band scale — mirrors polar/lunar_stress.py BANDS (score 0-100 → 5 bands).
+// The X/10 is the band's POSITION on a 10-point scale (rank×2), so the band word
+// and the number always agree: Stable Control→2, Mild→4, Moderate→6, Elevated→8,
+// High Nervous Load→10. This is the derivation that makes "Moderate" read "6/10"
+// exactly as in the source mockup (vs the old score/95 that pinned everything ≈1).
+const LSI_BANDS = [
+  { hi: 25,  rank: 1, name: "Stable Control",      short: "Stable"   },
+  { hi: 45,  rank: 2, name: "Mild Compression",    short: "Mild"     },
+  { hi: 65,  rank: 3, name: "Moderate Compression", short: "Moderate" },
+  { hi: 85,  rank: 4, name: "Elevated Reactivity", short: "Elevated" },
+  { hi: 100, rank: 5, name: "High Nervous Load",   short: "High"     },
+];
+function lsiBandFor(score) {
+  if (score == null) return null;
+  return LSI_BANDS.find(b => score <= b.hi) || LSI_BANDS[LSI_BANDS.length - 1];
 }
+function lsiIndex10(d) {
+  const b = lsiBandFor(d && d.score);
+  return b ? b.rank * 2 : null;
+}
+function scoreToIndex10(score) { const b = lsiBandFor(score); return b ? b.rank * 2 : null; }
 async function renderLunarStress() {
   const empty = document.getElementById("lsi-empty");
   const content = document.getElementById("lsi-content");
@@ -1008,14 +1068,24 @@ async function renderLunarStress() {
   const transits = L.active_transits || [];
   const isRetro = t => /mercury\s+retrograde/i.test(t);
 
-  // --- Score header: "{idx}/10" + band ---
+  // --- Band word (short, large) + "{idx} / 10" ---
+  const band = lsiBandFor(d.score);
   const idx = lsiIndex10(d);
-  const scoreEl = document.getElementById("lsi-score");
-  if (scoreEl) scoreEl.textContent = idx != null ? `${idx}/10` : (d.score != null ? `${d.score}` : "—");
   const bandEl = document.getElementById("lsi-band");
-  if (bandEl) bandEl.textContent = d.band || "";
+  if (bandEl) bandEl.textContent = band ? band.short : (d.band || "—");
+  const scoreEl = document.getElementById("lsi-score");
+  if (scoreEl) scoreEl.textContent = idx != null ? `${idx} / 10` : (d.score != null ? `${d.score}` : "—");
   const trigEl = document.getElementById("lsi-trigger");
-  if (trigEl) trigEl.textContent = d.trigger ? `Driver: ${d.trigger}` : "";
+  if (trigEl) trigEl.textContent = d.trigger || "";
+
+  // --- Mini sparkline — last 7 days of LSI score → index (polar/lunar_daily/*.json) ---
+  const sparkEl = document.getElementById("lsi-spark");
+  if (sparkEl) {
+    const days = lastN(7);
+    const arr = await Promise.all(days.map(dd => fetchJSON(`polar/lunar_daily/${dd}.json`).catch(() => null)));
+    const series = arr.map(a => a && a.score != null ? scoreToIndex10(a.score) : null).filter(v => v != null);
+    sparkEl.innerHTML = series.length >= 2 ? sparkline(series) : "";
+  }
 
   // --- Moon details (kept accessible per spec) ---
   const row = (label, value, amber) => {
