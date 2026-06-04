@@ -84,23 +84,31 @@
       </div>
     </header>
 
-    <!-- Glance rings — Sleep / Recovery / Strain (Whoop-style, SVG, no library) -->
+    <!-- Glance rings — Design C: planetary orbit. ONE composite SVG = phase-accurate
+         moon at center + 3 tilted orbital rings (Recovery inner → Sleep mid → Strain
+         outer). Percent labels float at fixed corners (anchored, update live). Tilt is
+         a uniform 35° disk. Tap-through preserved on the corner labels.
+         Container is relative + overflow-hidden so the tilted SVG never spills past the
+         card on mobile Safari (load-bearing per the overflow rules above). -->
     <section class="mb-8" id="glance-rings" aria-label="Daily glance">
-      <div class="grid grid-cols-3 gap-2 sm:gap-6 max-w-md mx-auto sm:mx-0">
-        <button type="button" data-target="polar-panel"
-                class="flex flex-col items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 rounded-lg py-1">
-          <div class="w-20 h-20 sm:w-24 sm:h-24 aspect-square" id="ring-sleep-svg"></div>
-          <span class="text-xs uppercase tracking-wider text-purple-300">Sleep</span>
-        </button>
+      <div class="relative w-full max-w-[360px] aspect-square mx-auto sm:mx-0 overflow-hidden">
+        <!-- Composite orbit SVG (moon + 3 orbits), single viewBox, scales to container -->
+        <div class="absolute inset-0" id="rings-orbit-svg"></div>
+        <!-- Floating corner labels — anchored, not traveling with the data -->
         <button type="button" data-target="lunar-stress"
-                class="flex flex-col items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 rounded-lg py-1">
-          <div class="w-20 h-20 sm:w-24 sm:h-24 aspect-square" id="ring-recovery-svg"></div>
-          <span class="text-xs uppercase tracking-wider text-purple-300">Recovery</span>
+                class="absolute top-0 left-0 flex flex-col items-start leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 rounded-lg p-1">
+          <span class="text-[10px] uppercase tracking-wider text-purple-300">Recovery</span>
+          <span class="text-xl font-semibold stat-num" id="lbl-recovery-val" style="color:#9ca3af">—</span>
+        </button>
+        <button type="button" data-target="polar-panel"
+                class="absolute top-0 right-0 flex flex-col items-end leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 rounded-lg p-1">
+          <span class="text-[10px] uppercase tracking-wider text-purple-300">Sleep</span>
+          <span class="text-xl font-semibold stat-num" id="lbl-sleep-val" style="color:#9ca3af">—</span>
         </button>
         <button type="button" data-target="activity"
-                class="flex flex-col items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 rounded-lg py-1">
-          <div class="w-20 h-20 sm:w-24 sm:h-24 aspect-square" id="ring-strain-svg"></div>
-          <span class="text-xs uppercase tracking-wider text-purple-300">Strain</span>
+                class="absolute bottom-0 right-0 flex flex-col items-end leading-none focus:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400 rounded-lg p-1">
+          <span class="text-[10px] uppercase tracking-wider text-purple-300">Strain</span>
+          <span class="text-xl font-semibold stat-num" id="lbl-strain-val" style="color:#9ca3af">—</span>
         </button>
       </div>
     </section>

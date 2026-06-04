@@ -225,50 +225,143 @@ function computeRecoveryScore(rec, sleep, hrvBaseline) {
   return Math.round(Math.min(rechargePart + sleepPart + hrvPart, 100));
 }
 
-// Build one ring SVG. pct fills clockwise from 12 o'clock; `text` is the center
-// label; `color` is the fill stroke. Track is near-black; center text neutral-200.
-function ringSVG(pct, text, color) {
-  const r = 42, C = 2 * Math.PI * r;
-  const p = Math.max(0, Math.min(100, pct || 0));
-  const filled = (p / 100) * C;
-  return `<svg viewBox="0 0 100 100" width="100%" height="100%" class="block">
-    <circle cx="50" cy="50" r="${r}" fill="none" stroke="rgb(28,28,28)" stroke-width="9"/>
-    <circle cx="50" cy="50" r="${r}" fill="none" stroke="${color}" stroke-width="9"
-            stroke-linecap="round" stroke-dasharray="${filled.toFixed(2)} ${C.toFixed(2)}"
-            transform="rotate(-90 50 50)"/>
-    <text x="50" y="50" text-anchor="middle" dominant-baseline="central"
-          fill="#e5e5e5" font-size="26" font-weight="600"
-          font-family="-apple-system, system-ui, sans-serif" class="stat-num">${text}</text>
+// ── Design C: planetary orbit ──────────────────────────────────────────────
+// ONE composite SVG: a phase-accurate moon at the center, three orbital rings
+// around it (Recovery inner → Sleep mid → Strain outer), all at a uniform 35°
+// tilt so they read as a single tilted disk. Each orbit is a HYBRID fill: a
+// faint full ellipse (the orbit) + a brighter, color-semantic arc swept
+// clockwise from the ellipse top to the data point. Percent values live in
+// floating corner labels (in index.html), not on the rings.
+
+const ORBIT = {
+  cx: 150, cy: 150,          // viewBox center (viewBox is 0 0 300 300)
+  tilt: 35, flatten: 0.55,   // 35° disk; ry = rx * 0.55
+  moonR: 30,                 // inner orbit clears the moon by ~14px at its narrowest
+  rings: {                   // inside → out
+    recovery: { rx: 80 },
+    sleep:    { rx: 104 },
+    strain:   { rx: 128 },
+  },
+  base: "#3a3a3a",           // faint orbit stroke (muted gray — metadata)
+  arcW: 6, baseW: 2,
+};
+
+// Ramanujan ellipse-perimeter approximation — used as the dash period so the
+// color arc length maps linearly to percent.
+function ellipsePerimeter(rx, ry) {
+  const h = ((rx - ry) ** 2) / ((rx + ry) ** 2);
+  return Math.PI * (rx + ry) * (1 + (3 * h) / (10 + Math.sqrt(4 - 3 * h)));
+}
+
+// Full-ellipse path starting at the top (0,-ry) and sweeping CLOCKWISE, so a
+// dash of length (pct/100 · perimeter) from the start renders the 12-o'clock→
+// percentage arc. Drawn inside the rotated group, so "top" is the disk's top.
+function orbitPath(rx, ry) {
+  return `M 0 ${-ry} A ${rx} ${ry} 0 0 1 0 ${ry} A ${rx} ${ry} 0 0 1 0 ${-ry}`;
+}
+
+// One hybrid orbit: faint full ellipse + bright semantic arc, both tilted 35°.
+function orbitGroup(rx, pct, color) {
+  const ry = +(rx * ORBIT.flatten).toFixed(2);
+  const perim = ellipsePerimeter(rx, ry);
+  const arc = (Math.max(0, Math.min(100, pct || 0)) / 100) * perim;
+  return `<g transform="rotate(${ORBIT.tilt})">
+    <ellipse cx="0" cy="0" rx="${rx}" ry="${ry}" fill="none" stroke="${ORBIT.base}" stroke-width="${ORBIT.baseW}"/>
+    <path d="${orbitPath(rx, ry)}" fill="none" stroke="${color}" stroke-width="${ORBIT.arcW}"
+          stroke-linecap="round" stroke-dasharray="${arc.toFixed(2)} ${perim.toFixed(2)}"/>
+  </g>`;
+}
+
+// Phase name → {illum 0-1, waning}. lunar_stress.json carries no
+// phase_illumination_pct, so we map from the phase name (documented fallback).
+function phaseToIllum(phase) {
+  const p = (phase || "").toLowerCase();
+  if (p.includes("new")) return { illum: 0.02, waning: false };
+  if (p.includes("full")) return { illum: 1, waning: false };
+  if (p.includes("first quarter")) return { illum: 0.5, waning: false };
+  if (p.includes("last quarter") || p.includes("third quarter")) return { illum: 0.5, waning: true };
+  if (p.includes("waning") && p.includes("gibbous")) return { illum: 0.67, waning: true };
+  if (p.includes("waning") && p.includes("crescent")) return { illum: 0.28, waning: true };
+  if (p.includes("waxing") && p.includes("gibbous")) return { illum: 0.72, waning: false };
+  if (p.includes("waxing") && p.includes("crescent")) return { illum: 0.28, waning: false };
+  return { illum: 0.5, waning: true };
+}
+
+// Monochrome phase-accurate moon: full lit disk + a shadow path. Waning = lit on
+// the left, shadow growing from the right (current state). The terminator is a
+// half-ellipse whose horizontal semi-axis = r·|1-2·illum|; its bulge direction
+// flips at the quarter so gibbous shows a thin shadow sliver and crescent a fat one.
+function moonSVG(r, illum, waning) {
+  const rxT = +(r * Math.abs(1 - 2 * illum)).toFixed(2); // terminator semi-axis
+  const limbSweep = waning ? 1 : 0;                       // outer semicircle on the shadow side
+  const termSweep = waning ? (illum >= 0.5 ? 0 : 1) : (illum >= 0.5 ? 1 : 0);
+  const shadow = `M 0 ${-r} A ${r} ${r} 0 0 ${limbSweep} 0 ${r} A ${rxT} ${r} 0 0 ${termSweep} 0 ${-r} Z`;
+  const dim = illum > 0.99; // full moon → no shadow path
+  return `<circle cx="0" cy="0" r="${r}" fill="#d4d4d4"/>
+    ${dim ? "" : `<path d="${shadow}" fill="#262626"/>`}
+    <circle cx="0" cy="0" r="${r}" fill="none" stroke="#52525b" stroke-width="1"/>`;
+}
+
+// Assemble the composite SVG and inject; null pct → empty orbit (faint only).
+function renderOrbit({ recovery, sleep, strain, moon }) {
+  const host = document.getElementById("rings-orbit-svg");
+  if (!host) return;
+  const { cx, cy, moonR } = ORBIT;
+  const m = moon || { illum: 0.5, waning: true, degree: "" };
+  const signLbl = m.degree
+    ? `<text x="0" y="${moonR + 13}" text-anchor="middle" fill="#9ca3af" font-size="9"
+             font-family="-apple-system, system-ui, sans-serif" class="stat-num">${m.degree}</text>`
+    : "";
+  host.innerHTML = `<svg viewBox="0 0 300 300" width="100%" height="100%" class="block"
+       preserveAspectRatio="xMidYMid meet" aria-label="Orbit rings around moon">
+    <g transform="translate(${cx} ${cy})">
+      ${orbitGroup(ORBIT.rings.strain.rx,   strain?.pct,   strain?.color   || ORBIT.base)}
+      ${orbitGroup(ORBIT.rings.sleep.rx,    sleep?.pct,    sleep?.color    || ORBIT.base)}
+      ${orbitGroup(ORBIT.rings.recovery.rx, recovery?.pct, recovery?.color || ORBIT.base)}
+      ${moonSVG(moonR, m.illum, m.waning)}
+      ${signLbl}
+    </g>
   </svg>`;
 }
 
-async function renderRings() {
-  const sleepEl = document.getElementById("ring-sleep-svg");
-  const recEl   = document.getElementById("ring-recovery-svg");
-  const strainEl = document.getElementById("ring-strain-svg");
-  if (!sleepEl || !recEl || !strainEl) return;
+// Update a floating corner label's value + color (index.html owns the markup).
+function setRingLabel(id, text, color) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text;
+  el.style.color = color;
+}
 
-  // Default empty rings (0%, "—") so something renders even on file:// / no sync.
-  sleepEl.innerHTML  = ringSVG(0, "—", "rgb(28,28,28)");
-  recEl.innerHTML    = ringSVG(0, "—", "rgb(28,28,28)");
-  strainEl.innerHTML = ringSVG(0, "—", "rgb(28,28,28)");
+async function renderRings() {
+  const host = document.getElementById("rings-orbit-svg");
+  if (!host) return;
+
+  // Defaults — faint orbits + a half-lit moon so something renders on file:// / no sync.
+  let recovery = null, sleep = null, strain = null;
+  let moon = { illum: 0.5, waning: true, degree: "" };
 
   try {
+    const lunar = await fetchJSON("polar/lunar_stress.json").catch(() => null);
+    if (lunar?.lunar) {
+      const { illum, waning } = phaseToIllum(lunar.lunar.phase);
+      moon = { illum, waning, degree: lunar.lunar.degree || "" };
+    }
+
     const cats = (await fetchJSON("polar/manifest.json")).categories || {};
     const recDates   = (cats.recharge || []).slice().sort();
     const sleepDates = (cats.sleep || []).slice().sort();
     const actDates   = (cats.daily_activity || []).slice().sort();
 
-    // --- SLEEP ring — most recent sleep_score, only if fresh (≤1 day old) ---
+    // --- SLEEP — most recent sleep_score, only if fresh (≤1 day old) ---
     const sleepDate = sleepDates.at(-1) || null;
     const sleepFresh = sleepDate && (daysSinceDate(sleepDate) ?? 99) <= 1;
-    const sleep = sleepDate ? await fetchJSON(`polar/sleep/${sleepDate}.json`).catch(() => null) : null;
-    if (sleepFresh && sleep?.sleep_score != null) {
-      const s = Math.round(sleep.sleep_score);
-      sleepEl.innerHTML = ringSVG(s, `${s}`, sleepColor(s));
+    const sleepData = sleepDate ? await fetchJSON(`polar/sleep/${sleepDate}.json`).catch(() => null) : null;
+    if (sleepFresh && sleepData?.sleep_score != null) {
+      const s = Math.round(sleepData.sleep_score);
+      sleep = { pct: s, label: `${s}`, color: sleepColor(s) };
     }
 
-    // --- RECOVERY ring — lifted overnight recovery score ---
+    // --- RECOVERY — lifted overnight recovery score ---
     const recDate = recDates.at(-1) || null;
     const latestRecovDate = [recDate, sleepDate].filter(Boolean).sort().at(-1);
     const recovFresh = latestRecovDate && (daysSinceDate(latestRecovDate) ?? 99) <= 1;
@@ -277,23 +370,27 @@ async function renderRings() {
       const hrvs = (await Promise.all(recDates.map(d => fetchJSON(`polar/recharge/${d}.json`).catch(() => null))))
         .map(r => r?.heart_rate_variability_avg).filter(v => v != null);
       const hrvBaseline = hrvs.length ? hrvs.reduce((a, b) => a + b, 0) / hrvs.length : null;
-      const score = computeRecoveryScore(rec, sleep, hrvBaseline);
-      recEl.innerHTML = ringSVG(score, `${score}`, energyColor(score));
+      const score = computeRecoveryScore(rec, sleepData, hrvBaseline);
+      recovery = { pct: score, label: `${score}`, color: energyColor(score) };
     }
 
-    // --- STRAIN ring — inverse of the old Reserve bar (depletion % of 800 cal) ---
+    // --- STRAIN — inverse of the old Reserve bar (depletion % of 800 cal) ---
     const actDate = actDates.at(-1) || null;
     const actFresh = actDate && (daysSinceDate(actDate) ?? 99) <= 1;
     const act = actDate ? await fetchJSON(`polar/daily_activity/${actDate}.json`).catch(() => null) : null;
     if (actFresh && act && act["active-calories"] != null) {
       const pct = Math.min(100, (Number(act["active-calories"]) / RESERVE_DEPLETION_CAL) * 100);
-      const r = Math.round(pct);
-      strainEl.innerHTML = ringSVG(pct, `${r}%`, strainColor(pct));
+      strain = { pct, label: `${Math.round(pct)}%`, color: strainColor(pct) };
     }
-  } catch (e) { /* file:// or no sync yet → rings stay empty */ }
+  } catch (e) { /* file:// or no sync yet → orbits stay faint, labels "—" */ }
+
+  renderOrbit({ recovery, sleep, strain, moon });
+  setRingLabel("lbl-recovery-val", recovery?.label ?? "—", recovery?.color ?? ORBIT.base);
+  setRingLabel("lbl-sleep-val",    sleep?.label    ?? "—", sleep?.color    ?? ORBIT.base);
+  setRingLabel("lbl-strain-val",   strain?.label   ?? "—", strain?.color   ?? ORBIT.base);
 }
 
-// Tap-through: each ring button scrolls to its detail card.
+// Tap-through: each floating corner label scrolls to its detail card.
 function wireRings() {
   document.querySelectorAll("#glance-rings button[data-target]").forEach(btn => {
     btn.addEventListener("click", () => {
