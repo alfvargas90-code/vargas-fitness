@@ -1513,6 +1513,76 @@ async function renderActivity() {
   }
 }
 
+// ---------- Pattern Engine · Lunar Phase ----------
+// Reads polar/patterns.json (built by polar/pattern_engine.py). Shows, for the
+// CURRENT moon phase, how Alfie's sleep / recovery / strain on those phase-days
+// compares to his overall average — as signed deltas. Historical card family
+// (quieter, no glow). Honest about sample size: below 3 phase-days it shows the
+// count + "Not enough data yet" and renders "—" instead of noisy deltas.
+const PE_GREEN = "#10B981", PE_CORAL = "#FF6B6B", PE_AMBER = "#FBBF24";
+const PE_MIN_SAMPLE = 3;
+
+// Sign-based color: positive → green, negative → coral, within ±neutral → gray.
+function peDeltaColor(d, neutral) {
+  if (d == null || Math.abs(d) <= neutral) return null;   // null → muted/neutral
+  return d > 0 ? PE_GREEN : PE_CORAL;
+}
+function peRow(label, valueText, color) {
+  const style = color ? ` style="color:${color}"` : "";
+  const cls = color ? "text-sm font-semibold stat-num" : "text-sm font-semibold stat-num text-muted";
+  return `<div class="flex items-center justify-between">
+    <span class="text-sm text-neutral-300">${label}</span>
+    <span class="${cls}"${style}>${valueText}</span>
+  </div>`;
+}
+
+async function renderPatternEngine() {
+  const card = document.getElementById("pattern-engine");
+  if (!card) return;
+  try {
+    const data = await fetchJSON("polar/patterns.json");
+    const phase = data.current_phase || "—";
+    const ps = (data.phase_stats || {})[phase] || null;
+    const n = ps?.sample_size ?? 0;
+
+    document.getElementById("pe-phase").textContent = phase;
+
+    const rowsEl = document.getElementById("pe-rows");
+    const sampleEl = document.getElementById("pe-sample");
+
+    if (!ps || n < PE_MIN_SAMPLE) {
+      // Too thin to claim a delta — show structure with em-dashes, honest caveat.
+      rowsEl.innerHTML = [
+        peRow("Average Sleep:", "—", null),
+        peRow("Average Recovery:", "—", null),
+        peRow("Average Strain:", "—", null),
+      ].join("");
+      sampleEl.textContent = n > 0
+        ? `Sample size: ${n} day${n === 1 ? "" : "s"} · Not enough data yet`
+        : "Building baseline · need ~30+ days of data";
+      sampleEl.className = "text-xs mt-4";
+      sampleEl.style.color = PE_AMBER;
+      card.classList.remove("hidden");
+      return;
+    }
+
+    const sd = ps.sleep_delta_h, rd = ps.recovery_delta_pct, st = ps.strain_delta_pct;
+    const fmtH = d => d == null ? "—" : `${d > 0 ? "+" : ""}${d.toFixed(1)}h`;
+    const fmtPct = d => d == null ? "—" : `${d > 0 ? "+" : ""}${d}%`;
+    rowsEl.innerHTML = [
+      peRow("Average Sleep:", fmtH(sd), peDeltaColor(sd, 0.1)),
+      peRow("Average Recovery:", fmtPct(rd), peDeltaColor(rd, 1)),
+      peRow("Average Strain:", fmtPct(st), peDeltaColor(st, 1)),
+    ].join("");
+    sampleEl.textContent = `Sample size: ${n} day${n === 1 ? "" : "s"}`;
+    sampleEl.className = "text-xs mt-4 text-muted";
+    sampleEl.style.color = "";
+    card.classList.remove("hidden");
+  } catch (e) {
+    card.classList.add("hidden");   // no patterns.json yet / file://
+  }
+}
+
 function renderAll() {
   renderTodaysRead(); // async, AI health summary
   renderLunarStress(); // async, Lunar Stress Index (polar/lunar_stress.py)
@@ -1528,6 +1598,7 @@ function renderAll() {
   wireRings();   // tap-through scroll on metric corners + card links
   renderActivity(); // async, Polar Loop Gen 2 daily activity (steps / active time / calories)
   renderPolar(); // async, live Polar Loop data
+  renderPatternEngine(); // async, lunar-phase correlations (polar/patterns.json)
   renderDayReview(); // async, nightly Day-in-Review freeze (polar/day_review.json)
 }
 

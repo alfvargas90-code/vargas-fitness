@@ -44,6 +44,7 @@ GIT_PUSH_PATHS = (
     "polar/manifest.json", "polar/daily_activity", "polar/sleep", "polar/recharge",
     "polar/lunar_stress.py", "polar/lunar_stress.json", "polar/irritability.json",
     "polar/lunar_daily",
+    "polar/pattern_engine.py", "polar/patterns.json",
 )
 
 # --- Polar endpoints -----------------------------------------------------
@@ -363,6 +364,26 @@ def refresh_lunar_stress():
         log(f"  lunar_stress: error (non-fatal) — {str(e)[:160]}")
 
 
+def refresh_pattern_engine():
+    """Recompute polar/patterns.json (Pattern Engine v1 — lunar-phase correlations)
+    off the freshly-synced sleep / recharge / activity day-files. Best-effort: any
+    failure logs a warning and never blocks the sync or its git push. Cheap, no AI."""
+    script = os.path.join(HERE, "pattern_engine.py")
+    if not os.path.exists(script):
+        return
+    try:
+        out = subprocess.run(
+            [sys.executable, script],
+            capture_output=True, text=True, timeout=60, cwd=REPO_ROOT,
+        )
+        if out.returncode == 0:
+            log("  pattern_engine: " + (out.stdout.strip().splitlines() or ["refreshed"])[-1])
+        else:
+            log(f"  pattern_engine: failed (non-fatal) — {(out.stderr or out.stdout).strip()[:160]}")
+    except Exception as e:
+        log(f"  pattern_engine: error (non-fatal) — {str(e)[:160]}")
+
+
 # --- main ----------------------------------------------------------------
 def main():
     env = load_env()
@@ -401,6 +422,7 @@ def main():
     rebuild_manifest()
     log(f"Done. {new_total} new day-files written.")
     refresh_lunar_stress()  # piggy-back the Lunar Stress Index on this 30-min cadence
+    refresh_pattern_engine()  # piggy-back the Pattern Engine (lunar-phase correlations)
     git_push()  # best-effort deploy to GitHub Pages; never fatal
     sys.exit(0)
 
