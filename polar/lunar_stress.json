@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-03T22:27:47-05:00",
+  "generated_at": "2026-06-03T22:57:59-05:00",
   "score": 10,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -9,10 +9,10 @@
     "sleep_score": 58
   },
   "workout_intensity": "rest",
-  "recommendation": "Hold today's regulated charge under load\u2014route it through hard resistance work, then anchor recovery with protein at every meal, deliberate mobility, and an early night.",
+  "recommendation": "Channel today's charge into resistance-supporting protein loading and deliberate recovery work\u2014mobility, hydration, an early night. Initiate hard output only if a specific task genuinely demands it; otherwise let the system bank the recovery you've scheduled.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "24\u00b0 Cap 52'",
+    "degree": "25\u00b0 Cap 07'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -41,7 +41,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 294.86,
+    "moon_longitude": 295.11,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
