@@ -295,19 +295,75 @@ function phaseToIllum(phase) {
   return { illum: 0.5, waning: true };
 }
 
-// Monochrome phase-accurate moon: full lit disk + a shadow path. Waning = lit on
-// the left, shadow growing from the right (current state). The terminator is a
-// half-ellipse whose horizontal semi-axis = r·|1-2·illum|; its bulge direction
-// flips at the quarter so gibbous shows a thin shadow sliver and crescent a fat one.
+// Realistic phase-accurate moon. Same near-side face every render (the Moon is
+// tidally locked, so maria + craters sit at FIXED positions — north up); only the
+// phase shadow advances. Coordinates below are fractions of the moon radius.
+//   - maria  : large dark basalt seas (soft, blurred)
+//   - dark   : small pit craters for surface texture
+//   - bright : ray craters (Tycho, Copernicus, Kepler) — bright dot + faint halo
+const MOON_MARIA = [               // x, y, rx, ry (fractions of r), opacity
+  { x: -0.34, y: -0.40, rx: 0.34, ry: 0.27, o: 0.34 }, // Mare Imbrium (upper-left)
+  { x:  0.06, y: -0.44, rx: 0.19, ry: 0.17, o: 0.32 }, // Mare Serenitatis (upper-center)
+  { x:  0.40, y: -0.16, rx: 0.22, ry: 0.21, o: 0.34 }, // Mare Tranquillitatis (right of center)
+  { x:  0.64, y: -0.30, rx: 0.11, ry: 0.09, o: 0.32 }, // Mare Crisium (near right limb)
+  { x:  0.44, y:  0.26, rx: 0.15, ry: 0.18, o: 0.28 }, // Nectaris / Fecunditatis
+  { x: -0.22, y:  0.42, rx: 0.23, ry: 0.16, o: 0.28 }, // Mare Nubium (lower-left)
+  { x: -0.56, y:  0.06, rx: 0.20, ry: 0.40, o: 0.20 }, // Oceanus Procellarum (diffuse west)
+  { x: -0.46, y:  0.48, rx: 0.10, ry: 0.10, o: 0.24 }, // Mare Humorum
+];
+const MOON_CRATERS_DARK = [        // x, y, r (fractions of r)
+  { x:  0.20, y:  0.30, r: 0.030 }, { x:  0.10, y: -0.10, r: 0.024 },
+  { x: -0.30, y: -0.18, r: 0.030 }, { x:  0.30, y:  0.52, r: 0.024 },
+  { x:  0.52, y:  0.06, r: 0.022 }, { x: -0.12, y:  0.30, r: 0.028 },
+  { x:  0.26, y: -0.34, r: 0.022 },
+];
+const MOON_CRATERS_BRIGHT = [      // ray craters — x, y, r (fractions of r)
+  { x: -0.05, y:  0.55, r: 0.050 }, // Tycho (lower-center, slightly south)
+  { x: -0.18, y:  0.02, r: 0.044 }, // Copernicus
+  { x: -0.40, y:  0.06, r: 0.034 }, // Kepler
+];
+
 function moonSVG(r, illum, waning) {
   const rxT = +(r * Math.abs(1 - 2 * illum)).toFixed(2); // terminator semi-axis
   const limbSweep = waning ? 1 : 0;                       // outer semicircle on the shadow side
   const termSweep = waning ? (illum >= 0.5 ? 0 : 1) : (illum >= 0.5 ? 1 : 0);
   const shadow = `M 0 ${-r} A ${r} ${r} 0 0 ${limbSweep} 0 ${r} A ${rxT} ${r} 0 0 ${termSweep} 0 ${-r} Z`;
   const dim = illum > 0.99; // full moon → no shadow path
-  return `<circle cx="0" cy="0" r="${r}" fill="#d4d4d4"/>
-    ${dim ? "" : `<path d="${shadow}" fill="#262626"/>`}
-    <circle cx="0" cy="0" r="${r}" fill="none" stroke="#52525b" stroke-width="1"/>`;
+  const f = (n) => +(n * r).toFixed(2);
+
+  const maria = MOON_MARIA.map((m) =>
+    `<ellipse cx="${f(m.x)}" cy="${f(m.y)}" rx="${f(m.rx)}" ry="${f(m.ry)}" fill="#6c6c75" opacity="${m.o}"/>`
+  ).join("");
+  const darkC = MOON_CRATERS_DARK.map((c) =>
+    `<circle cx="${f(c.x)}" cy="${f(c.y)}" r="${f(c.r)}" fill="#5b5b63" opacity="0.5"/>`
+  ).join("");
+  const brightC = MOON_CRATERS_BRIGHT.map((c) =>
+    `<circle cx="${f(c.x)}" cy="${f(c.y)}" r="${f(c.r * 1.9)}" fill="#f1f1f3" opacity="0.16"/>` +
+    `<circle cx="${f(c.x)}" cy="${f(c.y)}" r="${f(c.r)}" fill="#eaeaed" opacity="0.55"/>`
+  ).join("");
+
+  // Light from upper-left (gradient center offset) + limb darkening toward the
+  // edge → a spherical, photographic body rather than a flat disk.
+  return `<defs>
+      <radialGradient id="moonBody" cx="40%" cy="36%" r="68%">
+        <stop offset="0%"  stop-color="#ededf0"/>
+        <stop offset="48%" stop-color="#d4d4d8"/>
+        <stop offset="78%" stop-color="#b1b1b8"/>
+        <stop offset="100%" stop-color="#83838b"/>
+      </radialGradient>
+      <clipPath id="moonClip"><circle cx="0" cy="0" r="${r}"/></clipPath>
+      <filter id="moonTex" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDev="${f(0.022)}"/></filter>
+      <filter id="moonTerm" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDev="${f(0.05)}"/></filter>
+    </defs>
+    <g clip-path="url(#moonClip)">
+      <circle cx="0" cy="0" r="${r}" fill="url(#moonBody)"/>
+      <g filter="url(#moonTex)">${maria}${darkC}</g>
+      ${brightC}
+      ${dim ? "" : `<path d="${shadow}" fill="#141419" opacity="0.92" filter="url(#moonTerm)"/>`}
+    </g>
+    <circle cx="0" cy="0" r="${r}" fill="none" stroke="#3c3c44" stroke-width="1"/>`;
 }
 
 // Assemble the composite SVG and inject; null pct → empty orbit (faint only).
@@ -315,11 +371,7 @@ function renderOrbit({ recovery, sleep, strain, moon }) {
   const host = document.getElementById("rings-orbit-svg");
   if (!host) return;
   const { cx, cy, moonR } = ORBIT;
-  const m = moon || { illum: 0.5, waning: true, degree: "" };
-  const signLbl = m.degree
-    ? `<text x="0" y="${moonR + 13}" text-anchor="middle" fill="#9ca3af" font-size="9"
-             font-family="-apple-system, system-ui, sans-serif" class="stat-num">${m.degree}</text>`
-    : "";
+  const m = moon || { illum: 0.5, waning: true };
   host.innerHTML = `<svg viewBox="0 0 300 300" width="100%" height="100%" class="block"
        preserveAspectRatio="xMidYMid meet" aria-label="Orbit rings around moon">
     <g transform="translate(${cx} ${cy})">
@@ -327,7 +379,6 @@ function renderOrbit({ recovery, sleep, strain, moon }) {
       ${orbitGroup(ORBIT.rings.sleep.rx,    sleep?.pct,    sleep?.color    || ORBIT.base)}
       ${orbitGroup(ORBIT.rings.recovery.rx, recovery?.pct, recovery?.color || ORBIT.base)}
       ${moonSVG(moonR, m.illum, m.waning)}
-      ${signLbl}
     </g>
   </svg>`;
 }
@@ -349,13 +400,13 @@ async function renderRings() {
 
   // Defaults — faint orbits + a half-lit moon so something renders on file:// / no sync.
   let recovery = null, sleep = null, strain = null;
-  let moon = { illum: 0.5, waning: true, degree: "" };
+  let moon = { illum: 0.5, waning: true };
 
   try {
     const lunar = await fetchJSON("polar/lunar_stress.json").catch(() => null);
     if (lunar?.lunar) {
       const { illum, waning } = phaseToIllum(lunar.lunar.phase);
-      moon = { illum, waning, degree: lunar.lunar.degree || "" };
+      moon = { illum, waning };
     }
 
     const cats = (await fetchJSON("polar/manifest.json")).categories || {};
