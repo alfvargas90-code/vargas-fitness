@@ -97,10 +97,26 @@
     background-position: 0 0, 19px 13px;
     -webkit-mask-image: radial-gradient(150% 70% at 50% 38%, #000 0%, transparent 60%);
     mask-image: radial-gradient(150% 70% at 50% 38%, #000 0%, transparent 60%);
-    /* Receded to .07 so the background plane sits clearly behind moon + rings. */
-    opacity: .07;
+    /* Lifted .07 → .12 for slightly more atmospheric presence (still clearly
+       behind moon + rings). */
+    opacity: .12;
   }
   @media (prefers-reduced-motion: reduce) { #bg-waves { animation: none; } }
+
+  /* ── Hero energy zones ──────────────────────────────────────────────────────
+     Three soft atmospheric color fields seated in the hero canvas, one per
+     corner zone. Large radial halos at low alpha with a blur for very soft
+     falloff — the corners read as SOFTLY lit by their zone (ambient field, not
+     spotlight). Stack: behind the rings + corners, in front of the base wave
+     layer. pointer-events:none so the corner buttons stay clickable. */
+  .hero-zones {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(150px 150px at 13% 72%, rgba(0,200,255,0.19),  transparent 68%),
+      radial-gradient(165px 165px at 87% 19%, rgba(155,92,255,0.18), transparent 68%),
+      radial-gradient(150px 150px at 83% 80%, rgba(255,94,98,0.16),  transparent 70%);
+    filter: blur(16px);
+  }
 
   /* ── Hero metric corners ────────────────────────────────────────────────── */
   .metric-corner { display: flex; flex-direction: column; line-height: 1.02; }
@@ -162,8 +178,8 @@
           <stop offset="1" stop-color="#00C8FF" stop-opacity="0.06"/>
         </linearGradient>
         <linearGradient id="wvCoral" x1="1" y1="0.5" x2="0" y2="0.7">
-          <stop offset="0" stop-color="#FF6B6B" stop-opacity="0"/>
-          <stop offset="0.45" stop-color="#FF6B6B" stop-opacity="1"/>
+          <stop offset="0" stop-color="#FF5E62" stop-opacity="0"/>
+          <stop offset="0.45" stop-color="#FF5E62" stop-opacity="1"/>
           <stop offset="1" stop-color="#8A5CFF" stop-opacity="0.06"/>
         </linearGradient>
         <linearGradient id="wvOrange" x1="1" y1="0.5" x2="0" y2="0.7">
@@ -184,6 +200,20 @@
           <stop offset="0" stop-color="#FF5E62" stop-opacity="0.28"/>
           <stop offset="1" stop-color="#FF5E62" stop-opacity="0"/>
         </radialGradient>
+        <!-- Extra-large, extra-soft depth halos (alpha ~0.06–0.10) — atmospheric
+             depth across the background plane, never reading as "brighter". -->
+        <radialGradient id="haloCyanXL" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#00C8FF" stop-opacity="0.09"/>
+          <stop offset="1" stop-color="#00C8FF" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="haloVioletXL" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#8A5CFF" stop-opacity="0.10"/>
+          <stop offset="1" stop-color="#8A5CFF" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="haloCoralXL" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#FF5E62" stop-opacity="0.07"/>
+          <stop offset="1" stop-color="#FF5E62" stop-opacity="0"/>
+        </radialGradient>
         <filter id="wvblur" x="-40%" y="-40%" width="180%" height="180%">
           <feGaussianBlur stdDeviation="11"/>
         </filter>
@@ -202,6 +232,11 @@
         <!-- Lower blooms seated behind the Today's Read band (depth through the page) -->
         <circle cx="120" cy="660" r="240" fill="url(#haloCyan)"/>
         <circle cx="270" cy="700" r="240" fill="url(#haloViolet)"/>
+        <!-- Extra-large soft depth fields — very low alpha, very wide reach.
+             Add atmospheric depth without competing with hero content. -->
+        <circle cx="40"  cy="240" r="280" fill="url(#haloVioletXL)"/>
+        <circle cx="360" cy="500" r="260" fill="url(#haloCyanXL)"/>
+        <circle cx="200" cy="844" r="280" fill="url(#haloCoralXL)"/>
       </g>
 
       <!-- Layer B — back parallax ribbons: softer-blurred, dimmer, wider reach
@@ -256,6 +291,11 @@
 
     <!-- ════════════════ HERO — moon + 3 orbital rings + metric corners ═══════ -->
     <section id="lpi-hero" class="relative w-full" style="height:252px" aria-label="Lunar performance hero">
+      <!-- Environmental energy zones — soft ambient fields lighting each corner
+           (cyan lower-left, purple upper-right, coral lower-right). Behind rings
+           + corners, in front of the base wave layer. -->
+      <div class="hero-zones" aria-hidden="true"></div>
+
       <!-- Recovery — top left -->
       <button type="button" data-target="todays-read"
               class="ring-corner metric-corner items-start text-left absolute left-1 top-1 z-10 focus:outline-none">
@@ -390,10 +430,11 @@
 
       <!-- Lunar Context (consolidates the moon readout moved out of the hero) -->
       <div class="lpi-card p-3" id="lunar-stress">
-        <div class="flex items-center gap-1.5 text-[10px] uppercase tracking-wide font-bold mb-1.5" style="color:#8A5CFF">
+        <div class="flex items-center gap-1.5 text-[10px] uppercase tracking-wide font-bold" style="color:#8A5CFF">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-          Lunar Context
+          System Conditions
         </div>
+        <div class="text-[10px] text-muted font-medium mb-1.5 ml-[18px]">Recovery Environment</div>
         <div id="lsi-empty" class="text-[12px] text-muted">First read computes on the next Polar sync.</div>
         <div id="lsi-content" class="hidden">
           <div class="text-[18px] font-bold glow-sleep leading-tight" id="lsi-band" style="color:#9A6BFF">—</div>

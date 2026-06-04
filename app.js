@@ -264,8 +264,8 @@ const ORBIT = {
     strain:   { r: 100, grad: "gStrain", glow: "#FF5E62" },
   },
   arcW: 4, baseW: 3,         // strokes −20% so rings recede behind the moon
-  arcOpacity: 0.8,           // active-arc opacity pulled back from 1.0
-  base: "rgba(255,255,255,0.04)",
+  arcOpacity: 0.68,          // pulled back further → rings read as energy fields, not progress bars
+  base: "rgba(255,255,255,0.028)", // inactive track barely there
 };
 
 // SVG <defs> — per-ring linear gradients tuned to the mockup's ring hues.
@@ -291,12 +291,17 @@ function orbitGroup(r, pct, gradId, glowColor, solidColor) {
   if (!(pct > 0)) return track;
   const stroke = solidColor || `url(#${gradId})`;
   const glow = solidColor || glowColor;
+  const dash = `stroke-dasharray="${arc.toFixed(2)} ${(c - arc).toFixed(2)}" transform="rotate(-90 130 130)"`;
+  // Outer bloom halo — a low-alpha, wide-blur echo of the arc so the ring reads
+  // as energy emanating outward rather than a hard progress stroke.
+  const halo = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${glow}"
+      stroke-width="${ORBIT.arcW + 2}" stroke-linecap="round" stroke-opacity="0.08"
+      ${dash} style="filter:drop-shadow(0 0 12px ${glow})"/>`;
+  // Bright arc — softer, dreamier bloom (drop-shadow 4 → 7px) at lower opacity.
   const prog = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${stroke}"
       stroke-width="${ORBIT.arcW}" stroke-linecap="round" stroke-opacity="${ORBIT.arcOpacity}"
-      stroke-dasharray="${arc.toFixed(2)} ${(c - arc).toFixed(2)}"
-      transform="rotate(-90 130 130)"
-      style="filter:drop-shadow(0 0 4px ${glow})"/>`;
-  return track + prog;
+      ${dash} style="filter:drop-shadow(0 0 7px ${glow})"/>`;
+  return track + halo + prog;
 }
 
 // Phase name → {illum 0-1, waning}. lunar_stress.json carries no
