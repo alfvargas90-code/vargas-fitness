@@ -463,7 +463,16 @@ async function renderRings() {
     const sleepData = sleepDate ? await fetchJSON(`polar/sleep/${sleepDate}.json`).catch(() => null) : null;
     if (sleepFresh && sleepData?.sleep_score != null) {
       sleepScore = Math.round(sleepData.sleep_score);
-      const durSecs = (sleepData.light_sleep || 0) + (sleepData.deep_sleep || 0) + (sleepData.rem_sleep || 0);
+      // Duration = sleep_start → sleep_end SPAN (time in bed), matching the Polar
+      // app exactly. NOT the sum of light+deep+rem stages — that excludes
+      // interruptions and reads short (e.g. 5h 34m vs the real 6h 10m span).
+      const st = Date.parse(sleepData.sleep_start_time);
+      const en = Date.parse(sleepData.sleep_end_time);
+      let durSecs = (!isNaN(st) && !isNaN(en) && en > st) ? Math.round((en - st) / 1000) : null;
+      if (durSecs == null) {   // fallback only if span timestamps are missing
+        const stages = (sleepData.light_sleep || 0) + (sleepData.deep_sleep || 0) + (sleepData.rem_sleep || 0);
+        durSecs = stages || null;
+      }
       sleepDur = durSecs ? secsToHM(durSecs) : null;
       sleep = { pct: sleepScore, color: LPI.sleep };
     }
@@ -998,8 +1007,8 @@ const LSI_BANDS = [
 ];
 // Band → 2-line plain-English read of what that band means functionally. Keyed by
 // the full band name. Replaces the old recommendation prose + score on the default
-// view: band word + these two lines is the whole card by default; detail rows live
-// in the <details> disclosure.
+// view: band word + these two lines lead the card, with the detail rows (sign ·
+// degree · phase, ingress, trigger, updated stamp) rendered inline below them.
 const LSI_BAND_READ = {
   "Stable Control":       ["Low environmental friction.", "Good output conditions."],
   "Mild Compression":     ["Slight environmental friction.", "Output requires more focus."],
