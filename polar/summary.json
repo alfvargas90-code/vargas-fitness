@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-06-03T20:00:03-05:00",
-  "slot": "train-2",
-  "summary": "Recovery: Excellent\n\nReading: The training window's closing on a day you set aside to recover, and that was the right call \u2014 your body ran on short sleep last night and you've still been on your feet most of the day, so there's nothing to prove tonight. You tend to hold up best when you let recovery actually land instead of forcing output through fatigue, and right now the smart move is feeding the rebuild \u2014 your protein's barely past halfway with a real gap to close before bed, and that's the one number that decides whether today's rest protects muscle or quietly costs you. Knees and joints are quiet, nothing nagging \u2014 just get the protein in, water down, and aim for a longer night than you got.\n\nPerformance: Wind down. The window's closed and you kept it a true rest day \u2014 close the protein gap, get to bed earlier than last night, and tomorrow opens as a fresh platform to train on.\n\nTransit: none",
+  "generated_at": "2026-06-04T09:43:11-05:00",
+  "slot": "fuel-1",
+  "summary": "Recovery: Average\n\nReading: You're a couple hours in and energy's running light — that Chick-fil-A and Perfect Bar this morning got you going, but it's the only thing you've logged and the protein's barely off the floor. Last night ran short on sleep, so the move is to fuel with intent instead of coasting: you're working off an average reserve today, not a full one, and letting protein drift now is how you end up chasing a gap you can't close by evening. Nothing's nagging physically — make your next meal a real protein plate and get some water down before midday.\n\nPerformance: Moderate effort. You're on an average night and a short one at that, so train — just keep it controlled and don't chase heavy numbers on tired legs.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
-      "text": "Excellent"
+      "text": "Average"
     },
     {
       "label": "Reading",
-      "text": "The training window's closing on a day you set aside to recover, and that was the right call \u2014 your body ran on short sleep last night and you've still been on your feet most of the day, so there's nothing to prove tonight. You tend to hold up best when you let recovery actually land instead of forcing output through fatigue, and right now the smart move is feeding the rebuild \u2014 your protein's barely past halfway with a real gap to close before bed, and that's the one number that decides whether today's rest protects muscle or quietly costs you. Knees and joints are quiet, nothing nagging \u2014 just get the protein in, water down, and aim for a longer night than you got."
+      "text": "You're a couple hours in and energy's running light — that Chick-fil-A and Perfect Bar this morning got you going, but it's the only thing you've logged and the protein's barely off the floor. Last night ran short on sleep, so the move is to fuel with intent instead of coasting: you're working off an average reserve today, not a full one, and letting protein drift now is how you end up chasing a gap you can't close by evening. Nothing's nagging physically — make your next meal a real protein plate and get some water down before midday."
     },
     {
       "label": "Performance",
-      "text": "Wind down. The window's closed and you kept it a true rest day \u2014 close the protein gap, get to bed earlier than last night, and tomorrow opens as a fresh platform to train on."
+      "text": "Moderate effort. You're on an average night and a short one at that, so train — just keep it controlled and don't chase heavy numbers on tired legs."
     },
     {
       "label": "Transit",
@@ -21,20 +21,20 @@
     }
   ],
   "simple": {
-    "recovery": "Excellent",
-    "reading": "The training window's closing on a day you set aside to recover, and that was the right call \u2014 your body ran on short sleep last night and you've still been on your feet most of the day, so there's nothing to prove tonight. You tend to hold up best when you let recovery actually land instead of forcing output through fatigue, and right now the smart move is feeding the rebuild \u2014 your protein's barely past halfway with a real gap to close before bed, and that's the one number that decides whether today's rest protects muscle or quietly costs you. Knees and joints are quiet, nothing nagging \u2014 just get the protein in, water down, and aim for a longer night than you got.",
-    "performance": "Wind down. The window's closed and you kept it a true rest day \u2014 close the protein gap, get to bed earlier than last night, and tomorrow opens as a fresh platform to train on.",
+    "recovery": "Average",
+    "reading": "You're a couple hours in and energy's running light — that Chick-fil-A and Perfect Bar this morning got you going, but it's the only thing you've logged and the protein's barely off the floor. Last night ran short on sleep, so the move is to fuel with intent instead of coasting: you're working off an average reserve today, not a full one, and letting protein drift now is how you end up chasing a gap you can't close by evening. Nothing's nagging physically — make your next meal a real protein plate and get some water down before midday.",
+    "performance": "Moderate effort. You're on an average night and a short one at that, so train — just keep it controlled and don't chase heavy numbers on tired legs.",
     "transit": null
   },
-  "nutrition_nudge": "Load dinner with at least 50g protein and keep oils light to close the gap.",
+  "nutrition_nudge": "On pace across the board — keep meals steady and lead the next one with protein.",
   "transits": [],
   "data_basis": {
-    "recharge_today": 5,
-    "sleep_hours": 4.1,
-    "hrv_today": 70,
-    "hrv_7d_avg": 64.1,
-    "nutrition": "calories 2080 of 2574 goal, protein 72g of 138g goal, carbs 192g of 290g goal, fat 110g of 72g goal",
-    "nutrition_detail": "calories 2080 of 2574 goal -> 494 left; protein 72g of 138g goal -> 66g gap; carbs 192g of 290g goal; fat 110g of 72g goal",
-    "activity_today": "5,777 steps so far, 5h 27m active, 2,259 calories burned, Moderate training load"
+    "recharge_today": 3,
+    "sleep_hours": 6.2,
+    "hrv_today": 60,
+    "hrv_7d_avg": 63.6,
+    "nutrition": "calories 650 of 2574 goal, protein 35g of 138g goal, carbs 45g of 290g goal, fat 35g of 72g goal",
+    "nutrition_detail": "calories 650 of 2574 goal -> 1924 left; protein 35g of 138g goal -> 103g gap; carbs 45g of 290g goal; fat 35g of 72g goal",
+    "activity_today": "1,290 steps so far, 1h 24m active, 863 calories burned, Light training load"
   }
 }
