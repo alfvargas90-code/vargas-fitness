@@ -59,6 +59,12 @@
       radial-gradient(circle at 95% 46%, rgba(255,94,98,.10), transparent 40%),
       linear-gradient(180deg, #03050F 0%, #04061a 50%, #03040E 100%);
     background-attachment: fixed;
+    /* Solid base under the gradients. The `background:` shorthand above resets
+       background-color to transparent; without this, iOS Safari shows WHITE in the
+       overscroll/rubber-band region and the bottom safe-area strip, because its
+       `background-attachment: fixed` is broken and the gradient fails to paint there.
+       A solid deep-navy base guarantees those regions are never bare white. */
+    background-color: #03050F;
   }
   .stat-num { font-variant-numeric: tabular-nums; }
   html, body { overflow-x: hidden; max-width: 100%; }
@@ -565,6 +571,13 @@
       Data stored locally in your browser (localStorage). <code class="text-electric">localStorage.clear()</code> to reset.
     </footer>
   </div>
+
+  <!-- Safe-area filler: solid deep-navy strip pinned to the very bottom, sitting
+       behind the nav (z-20 < nav z-30). Guarantees the home-indicator safe-area is
+       painted #03050F even if the nav's translucent / backdrop-filtered background
+       samples something light on iOS. Height = the safe-area inset (0 on desktop). -->
+  <div aria-hidden="true" class="fixed bottom-0 inset-x-0 z-20"
+       style="height:env(safe-area-inset-bottom);background:#03050F"></div>
 
   <!-- ════════════════ BOTTOM NAV ════════════════════════════════════════════ -->
   <nav id="lpi-bottom-nav" class="fixed bottom-0 inset-x-0 z-30 border-t border-line"
