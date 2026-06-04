@@ -582,7 +582,7 @@ function renderRecoveryWindow(s) {
   if (note) note.textContent = derived;
 }
 
-// ---------- Physiology grid (Today's Read right column) ----------
+// ---------- Physiology grid (Recovery Window metric strip) ----------
 // HRV / RHR / Respiratory Rate are real Polar fields. Skin Temp + SpO2 are NOT
 // in Alfie's Polar device feed, so they're not shown (removed 2026-06-04).
 async function renderPhysiology() {
@@ -1045,23 +1045,8 @@ async function renderLunarStress() {
     moonCtx.innerHTML = parts.join("");
   }
 
-  // --- Moon details (kept accessible per spec) ---
-  const row = (label, value, amber) => {
-    if (!value) return "";
-    return `<div class="flex gap-2 text-sm leading-relaxed">` +
-      `<span class="text-muted w-28 shrink-0">${label}</span>` +
-      `<span class="${amber ? "text-warn font-medium" : "text-neutral-200"}">${value}</span></div>`;
-  };
-  let rows = "";
-  rows += row("Moon", L.sign ? `${L.sign}${L.degree ? ` · ${L.degree}` : ""}` : "");
-  rows += row("Phase", L.phase);
-  rows += row("Next sign", L.next_sign_change && L.next_sign_change.display);
-  if (voc && voc.active) rows += row("Void of Course", `now through ${voc.until_display || "next ingress"}`, true);
-  if (transits.length) rows += transits.map((t, i) => row(i === 0 ? "Transits" : "", t, isRetro(t))).join("");
-  const rowsEl = document.getElementById("lsi-detail-rows");
-  if (rowsEl) rowsEl.innerHTML = rows;
-
-  // --- Recommendation ---
+  // --- Recommendation (merged into System Conditions; sign/phase/next live in
+  //     lsi-moon-context above, so the old detail-rows block was removed). ---
   const recEl = document.getElementById("lsi-recommendation");
   if (recEl) recEl.textContent = d.recommendation || "";
 
@@ -1462,7 +1447,7 @@ function renderAll() {
   renderScaleSnapshot(); // async, VeSync screenshot OCR snapshot (manual via Penny)
   renderScaleHistory(); // async, VeSync scale history table (manual via Penny)
   renderRings(); // async, LPI hero: moon + 3 orbital rings + metric corners + recovery window
-  renderPhysiology(); // async, Today's Read physiology grid (HRV/RHR/Resp)
+  renderPhysiology(); // async, Recovery Window physiology strip (HRV/RHR/Resp)
   renderSupportCards(); // async, Nutrition / Scale / Activity summary cards
   wireRings();   // tap-through scroll on metric corners + card links
   renderActivity(); // async, Polar Loop Gen 2 daily activity (steps / active time / calories)

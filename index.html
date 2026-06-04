@@ -317,10 +317,10 @@
       <!-- Strain — right, lower -->
       <button type="button" data-target="activity"
               class="ring-corner metric-corner items-end text-right absolute right-1 z-10 focus:outline-none" style="bottom:6px">
+        <span class="metric-cap" id="m-strain-cap" style="color:#FF5E62">Strain</span>
         <span class="metric-num glow-strain" id="m-strain-val" style="color:#FF5E62">—</span>
         <span class="metric-word" id="m-strain-label" style="color:#FF5E62"></span>
         <span class="metric-detail" id="m-strain-detail"></span>
-        <span class="metric-cap mt-0.5" id="m-strain-cap" style="color:#FF5E62;opacity:.85">Strain</span>
       </button>
 
       <!-- Center: moon + orbital rings (composite SVG) -->
@@ -332,24 +332,20 @@
     <!-- ════════════════ TODAY'S READ — glass, prose + physiology rows ═══════ -->
     <section class="gradient-card p-3.5 mb-2.5" id="todays-read">
       <div class="flex items-center justify-between mb-2">
-        <h2 class="font-bold text-[15px] flex items-center gap-1.5" style="color:#9A6BFF">Today's read
+        <h2 class="font-bold text-[15px] flex items-center gap-1.5" style="color:#9A6BFF">Currents
           <svg width="15" height="15" viewBox="0 0 24 24" fill="#9A6BFF"><path d="M12 1.5c.3 3.6 1.9 5.2 5.5 5.5-3.6.3-5.2 1.9-5.5 5.5-.3-3.6-1.9-5.2-5.5-5.5 3.6-.3 5.2-1.9 5.5-5.5z"/><path d="M18.5 13c.16 1.9 1 2.74 2.9 2.9-1.9.16-2.74 1-2.9 2.9-.16-1.9-1-2.74-2.9-2.9 1.9-.16 2.74-1 2.9-2.9z"/></svg>
           <span class="text-[11px] text-muted font-semibold">AI</span>
         </h2>
         <span class="text-[12px] text-muted" id="read-ts"></span>
       </div>
-      <div class="grid grid-cols-2 gap-4">
-        <!-- Left: interpretation prose -->
-        <div class="min-w-0" id="read-left">
-          <div class="text-[11px] uppercase tracking-wider text-muted font-semibold">Recovery</div>
-          <div class="text-[21px] font-bold leading-none mt-0.5 glow-green" id="read-recovery-word" style="color:#39D98A"></div>
-          <p class="text-[12.5px] leading-snug text-neutral-300 mt-1.5" id="read-body">First read drops at 9:05 AM</p>
-          <button type="button" data-target="day-review" class="text-[12px] font-semibold mt-1.5 flex items-center gap-1" style="color:#9A6BFF">View full analysis
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-          <p class="text-[10px] text-muted mt-2" id="read-basis"></p>
-        </div>
-        <!-- Right: physiology rows -->
-        <div class="min-w-0 border-l border-line pl-4" id="physiology-grid"></div>
+      <!-- Interpretation prose only (physiology rows moved to Recovery Window) -->
+      <div class="min-w-0" id="read-left">
+        <div class="text-[11px] uppercase tracking-wider text-muted font-semibold">Recovery</div>
+        <div class="text-[21px] font-bold leading-none mt-0.5 glow-green" id="read-recovery-word" style="color:#39D98A"></div>
+        <p class="text-[12.5px] leading-snug text-neutral-300 mt-1.5" id="read-body">First read drops at 9:05 AM</p>
+        <button type="button" data-target="day-review" class="text-[12px] font-semibold mt-1.5 flex items-center gap-1" style="color:#9A6BFF">View full analysis
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <p class="text-[10px] text-muted mt-2" id="read-basis"></p>
       </div>
     </section>
 
@@ -424,6 +420,8 @@
           <span id="rw-bar-left"></span><span id="rw-bar-right"></span>
         </div>
         <p class="text-[11px] leading-snug text-neutral-300 mt-2" id="rw-note"></p>
+        <!-- Physiology strip — HRV / RHR / Resp (moved here from Today's Read) -->
+        <div class="mt-2.5 pt-2.5 border-t border-line" id="physiology-grid"></div>
         <!-- legacy refs kept so app.js never throws -->
         <span class="hidden" id="rw-status-dot"></span><span class="hidden" id="rw-status-chip"></span>
       </div>
@@ -440,28 +438,18 @@
           <div class="text-[18px] font-bold glow-sleep leading-tight" id="lsi-band" style="color:#9A6BFF">—</div>
           <div class="text-[15px] font-bold stat-num text-neutral-200 mt-0.5" id="lsi-score">—</div>
           <div id="lsi-spark" class="mt-1 h-6" style="color:#8A5CFF"></div>
+          <!-- Recommendation prose (merged in from the former context card) -->
+          <p class="text-[12px] leading-snug text-neutral-300 mt-1.5" id="lsi-recommendation"></p>
           <!-- Moon context — sign · degree · phase, next ingress, VoC / retro. The
-               lunar detail that used to sit under the hero moon now lives here. -->
+               moon readout that used to sit under the hero moon now lives here. -->
           <div id="lsi-moon-context" class="mt-1.5 space-y-0.5 text-[11px] leading-snug"></div>
           <p class="text-[10.5px] text-muted mt-1.5 leading-tight" id="lsi-trigger"></p>
-          <button type="button" data-target="lsi-detail" class="text-[11px] font-semibold mt-1.5 flex items-center gap-1" style="color:#8A5CFF">View details
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
           <span class="hidden" id="lsi-ts"></span>
         </div>
       </div>
     </section>
 
     <!-- ═══════════ DETAIL MODULES (linked from cards above; below the fold) ═══════ -->
-    <div id="lsi-detail">
-    <section class="gradient-card p-4 mb-4 mt-2" id="lsi-detail-card">
-      <div class="flex items-center justify-between mb-3">
-        <h2 class="font-semibold text-electric">Lunar detail <span class="text-xs text-neutral-400 font-normal">· Context</span></h2>
-      </div>
-      <p class="text-sm text-neutral-300" id="lsi-recommendation"></p>
-      <div class="mt-3 space-y-1.5" id="lsi-detail-rows"></div>
-      <p class="text-xs text-muted mt-3" id="lsi-basis"></p>
-    </section>
-    </div>
 
     <!-- Nutrition detail -->
     <section class="gradient-card p-4 mb-4" id="nutrition-panel">
