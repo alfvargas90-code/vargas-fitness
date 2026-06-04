@@ -494,7 +494,12 @@ async function renderRings() {
         .map(r => r?.heart_rate_variability_avg).filter(v => v != null);
       const hrvBaseline = hrvs.length ? hrvs.reduce((a, b) => a + b, 0) / hrvs.length : null;
       recoveryScore = computeRecoveryScore(rec, sleepData, hrvBaseline);
-      if (rec?.heart_rate_variability_avg != null && hrvBaseline)
+      // Corner HRV delta uses the SAME 7-day baseline the physiology grid + LSI
+      // use (lunar.physiology.hrv_pct_baseline), so the two never disagree. Falls
+      // back to the recovery-score baseline only if the LSI value is unavailable.
+      if (lunar?.physiology?.hrv_pct_baseline != null)
+        hrvDeltaPct = Math.round(lunar.physiology.hrv_pct_baseline);
+      else if (rec?.heart_rate_variability_avg != null && hrvBaseline)
         hrvDeltaPct = Math.round((rec.heart_rate_variability_avg / hrvBaseline - 1) * 100);
       recovery = { pct: recoveryScore, color: LPI.recovery };
     }
@@ -529,8 +534,174 @@ async function renderRings() {
     strainCal != null ? `Load ${strainCal}` : "",
     LPI.strain);
 
-  // Stash for Recovery Window derivation (avoids a second fetch pass).
-  window.__lpiState = { recoveryScore, sleepScore, strainPct, strainCal };
+  // Recovery Window derives from the same recovery/sleep/strain state — render
+  // it here so it can never disagree with the corners (no second fetch pass).
+  renderRecoveryWindow({ recoveryScore, sleepScore, strainPct, strainCal });
+}
+
+// ---------- Recovery Window (derived status card) ----------
+// Reads the recovery/sleep/strain state already computed for the rings and
+// derives a single window status. The bar visualizes "recovery charge" (the
+// recovery score) — there is no server-side future-window/countdown feed, so
+// the bar is the charge level, not a literal timer (flagged in LPI v1 risks).
+function renderRecoveryWindow(s) {
+  const statusEl = document.getElementById("rw-status");
+  const dotEl = document.getElementById("rw-status-dot");
+  const chipEl = document.getElementById("rw-status-chip");
+  const bar = document.getElementById("rw-bar");
+  const left = document.getElementById("rw-bar-left");
+  const right = document.getElementById("rw-bar-right");
+  const note = document.getElementById("rw-note");
+  if (!statusEl) return;
+
+  const rec = s.recoveryScore, slp = s.sleepScore, str = s.strainPct;
+  if (rec == null) {
+    statusEl.textContent = "Awaiting sync";
+    if (dotEl) dotEl.style.background = "#64748B";
+    if (chipEl) { chipEl.style.color = "#9CA3AF"; chipEl.style.background = "rgba(255,255,255,0.05)"; }
+    if (bar) { bar.style.width = "0%"; }
+    if (left) left.textContent = ""; if (right) right.textContent = "";
+    if (note) note.textContent = "Recovery window computes on the next Polar sync.";
+    return;
+  }
+
+  // Derivation: recovered + light load → train window open; recovered but heavy
+  // load / short sleep → recovery window; mid recovery → build; low → rest.
+  let status, color, derived;
+  const heavy = (str ?? 0) >= 50;
+  const shortSleep = slp != null && slp < 55;
+  if (rec >= 70 && !heavy && !shortSleep) {
+    status = "Optimal Now"; color = LPI.nutrition;
+    derived = "Recovery is high and today's load is still light — this is the window to put in real work.";
+  } else if (rec >= 70) {
+    status = "Recover & Rebuild"; color = LPI.recovery;
+    derived = heavy && shortSleep
+      ? "You're recovered, but today ran heavy on short sleep — protect the rebuild: protein, hydration, an earlier night."
+      : heavy ? "Recovered, but you've already spent real load today — bank it rather than stacking more strain."
+      : "Recovered, but last night ran short — feed the rebuild and get a longer night to convert it.";
+  } else if (rec >= 50) {
+    status = "Build Phase"; color = LPI.activity;
+    derived = "Recovery is mid-range — moderate, controlled effort builds without digging a hole.";
+  } else {
+    status = "Rest Now"; color = LPI.strain;
+    derived = "Recovery is low — back off and let the nervous system reset before the next hard session.";
+  }
+
+  statusEl.textContent = status;
+  if (dotEl) dotEl.style.background = color;
+  if (chipEl) { chipEl.style.color = color; chipEl.style.background = "rgba(255,255,255,0.05)"; }
+  if (bar) { bar.style.width = `${Math.max(4, Math.round(rec))}%`; bar.style.background = color; }
+  if (left) left.textContent = "Recovery charge";
+  if (right) right.textContent = `${Math.round(rec)}%`;
+  if (note) note.textContent = derived;
+}
+
+// ---------- Physiology grid (Today's Read right column) ----------
+// HRV / RHR / Respiratory Rate are real Polar fields. Skin Temp + SpO2 are NOT
+// in Alfie's Polar device feed (confirmed Step 0) — rendered as em-dash + muted
+// "not tracked", never faked (LPI v1 Known Risks).
+async function renderPhysiology() {
+  const grid = document.getElementById("physiology-grid");
+  if (!grid) return;
+  let hrv = null, hrvDelta = null, rhr = null, rhrDelta = null, resp = null;
+  try {
+    const manifest = await fetchJSON("polar/manifest.json");
+    const recDates = ((manifest.categories || {}).recharge || []).slice().sort();
+    const recDate = recDates.at(-1);
+    if (recDate && (daysSinceDate(recDate) ?? 99) <= 2) {
+      const rec = await fetchJSON(`polar/recharge/${recDate}.json`).catch(() => null);
+      if (rec) {
+        hrv = rec.heart_rate_variability_avg ?? null;
+        rhr = rec.heart_rate_avg ?? null;
+        resp = rec.breathing_rate_avg ?? null;
+      }
+    }
+    // Deltas from the LSI physiology block (HRV % vs baseline, RHR Δbpm).
+    const lunar = await fetchJSON("polar/lunar_stress.json").catch(() => null);
+    if (lunar?.physiology) {
+      if (lunar.physiology.hrv_pct_baseline != null) hrvDelta = lunar.physiology.hrv_pct_baseline;
+      if (lunar.physiology.rhr_delta_bpm != null) rhrDelta = lunar.physiology.rhr_delta_bpm;
+    }
+  } catch (e) { /* file:// / no sync → all em-dash */ }
+
+  const cell = (label, value, unit, delta, deltaSuffix, color, goodIsUp) => {
+    let deltaHTML = "";
+    if (delta != null && delta !== 0) {
+      const up = delta > 0;
+      const good = goodIsUp ? up : !up;
+      const dcolor = good ? "#39D98A" : "#FF8A3D";
+      deltaHTML = `<span class="text-[11px] font-medium" style="color:${dcolor}">${up ? "▲" : "▼"} ${Math.abs(delta)}${deltaSuffix}</span>`;
+    }
+    const valHTML = value != null
+      ? `<span class="text-xl font-semibold stat-num" style="color:${color}">${value}</span><span class="text-xs text-muted">${unit}</span>`
+      : `<span class="text-xl font-semibold stat-num text-muted">—</span>`;
+    const muted = value == null ? ' <span class="text-[10px] text-muted/70">not tracked</span>' : "";
+    return `<div class="bg-bg rounded-lg p-3 border border-line">
+      <div class="text-[11px] uppercase tracking-wider text-muted">${label}${muted}</div>
+      <div class="mt-1 flex items-baseline gap-1.5 flex-wrap">${valHTML}${deltaHTML}</div>
+    </div>`;
+  };
+
+  grid.innerHTML =
+    cell("HRV", hrv, " ms", hrvDelta, "%", LPI.recovery, true) +
+    cell("Resting HR", rhr, " bpm", rhrDelta, " bpm", LPI.sleep, false) +
+    cell("Respiratory", resp, " /min", null, "", LPI.context, false) +
+    cell("Skin Temp", null, "", null, "", LPI.activity, false) +
+    cell("SpO₂", null, "", null, "", LPI.recovery, true);
+}
+
+// ---------- Supporting summary cards (Nutrition / Scale / Activity) ----------
+// Compact glance cards that each tap through to their detail section below. Read
+// the same JSON the detail sections read — never a divergent source.
+async function renderSupportCards() {
+  // Nutrition — most recent logged day (probe back 8 days, like renderNutrition).
+  try {
+    let n = null;
+    for (const day of lastN(8).slice().reverse()) {
+      try { n = await fetchJSON(`nutrition/daily/${day}.json`); if (!n.date) n.date = day; break; } catch {}
+    }
+    const valEl = document.getElementById("sc-nutrition-val");
+    const detEl = document.getElementById("sc-nutrition-detail");
+    if (n && valEl) {
+      const t = n.totals || {}, g = n.goals || {};
+      valEl.textContent = t.calories != null ? `${Math.round(t.calories).toLocaleString()} cal` : "—";
+      const bits = [];
+      if (g.calories != null && t.calories != null) bits.push(`${Math.max(0, Math.round(g.calories - t.calories))} left`);
+      if (t.protein_g != null && g.protein_g != null) bits.push(`Protein ${Math.round(t.protein_g)}/${Math.round(g.protein_g)}g`);
+      if (detEl) detEl.textContent = bits.join(" · ");
+    }
+  } catch (e) {}
+
+  // Scale — latest VeSync snapshot.
+  try {
+    const s = await fetchJSON("vesync/snapshot.json");
+    const valEl = document.getElementById("sc-scale-val");
+    const detEl = document.getElementById("sc-scale-detail");
+    if (valEl) valEl.textContent = s.weight_lb != null ? `${fmt(s.weight_lb, 1)} lb` : "—";
+    const bits = [];
+    if (s.body_fat_pct != null) bits.push(`BF ${fmt(s.body_fat_pct, 1)}%`);
+    if (s.muscle_mass_lb != null) bits.push(`Muscle ${fmt(s.muscle_mass_lb, 1)}`);
+    if (detEl) detEl.textContent = bits.join(" · ");
+  } catch (e) {}
+
+  // Activity — latest Polar daily activity.
+  try {
+    const manifest = await fetchJSON("polar/manifest.json");
+    const dates = ((manifest.categories || {}).daily_activity || []).slice().sort();
+    const latest = dates.at(-1);
+    const a = latest ? await fetchJSON(`polar/daily_activity/${latest}.json`).catch(() => null) : null;
+    const valEl = document.getElementById("sc-activity-val");
+    const detEl = document.getElementById("sc-activity-detail");
+    if (a && valEl) {
+      const steps = a["active-steps"] ?? a.step_count ?? null;
+      valEl.textContent = steps != null ? `${Number(steps).toLocaleString()} steps` : "—";
+      const bits = [];
+      const hm = isoDurationToHM(a.duration) || isoDurationToHM(a["active-time"]);
+      if (hm) bits.push(`${hm} active`);
+      if (a.calories != null) bits.push(`${Number(a.calories).toLocaleString()} cal`);
+      if (detEl) detEl.textContent = bits.join(" · ");
+    }
+  } catch (e) {}
 }
 
 // Tap-through: hero metric corners + bottom-nav anchors scroll to their section.
@@ -806,6 +977,17 @@ async function renderTodaysRead() {
 // directive (those still compute inside lunar_stress.json for trend math + the
 // daily pattern log, but they are no longer the surface). Color tokens: gray for
 // metadata, amber (text-warn) when void-of-course is active or Mercury is retro.
+// LPI v1 (2026-06-04): the card REVERTS to score framing per Alfie's spec — the
+// internal `score` (always computed in lunar_stress.json, hidden by the 06-03
+// reframe) is resurfaced as a band + a 0–10 index, with the moon sign/degree/
+// phase/next-change/void readout kept accessible directly underneath. The raw
+// `score` is an OPEN-ENDED points total (transit cap 55 + body cap 40 = 95), so
+// the X/10 shown is score normalized onto a 10-point scale, NOT the raw score.
+function lsiIndex10(d) {
+  const maxTotal = ((d.bars?.transit?.max) || 0) + ((d.bars?.body?.max) || 0);
+  if (!maxTotal || d.score == null) return null;
+  return Math.max(0, Math.min(10, Math.round((d.score / maxTotal) * 10)));
+}
 async function renderLunarStress() {
   const empty = document.getElementById("lsi-empty");
   const content = document.getElementById("lsi-content");
@@ -826,32 +1008,34 @@ async function renderLunarStress() {
   const transits = L.active_transits || [];
   const isRetro = t => /mercury\s+retrograde/i.test(t);
 
+  // --- Score header: "{idx}/10" + band ---
+  const idx = lsiIndex10(d);
+  const scoreEl = document.getElementById("lsi-score");
+  if (scoreEl) scoreEl.textContent = idx != null ? `${idx}/10` : (d.score != null ? `${d.score}` : "—");
+  const bandEl = document.getElementById("lsi-band");
+  if (bandEl) bandEl.textContent = d.band || "";
+  const trigEl = document.getElementById("lsi-trigger");
+  if (trigEl) trigEl.textContent = d.trigger ? `Driver: ${d.trigger}` : "";
+
+  // --- Moon details (kept accessible per spec) ---
   const row = (label, value, amber) => {
     if (!value) return "";
     return `<div class="flex gap-2 text-sm leading-relaxed">` +
       `<span class="text-muted w-28 shrink-0">${label}</span>` +
       `<span class="${amber ? "text-warn font-medium" : "text-neutral-200"}">${value}</span></div>`;
   };
+  let rows = "";
+  rows += row("Moon", L.sign ? `${L.sign}${L.degree ? ` · ${L.degree}` : ""}` : "");
+  rows += row("Phase", L.phase);
+  rows += row("Next sign", L.next_sign_change && L.next_sign_change.display);
+  if (voc && voc.active) rows += row("Void of Course", `now through ${voc.until_display || "next ingress"}`, true);
+  if (transits.length) rows += transits.map((t, i) => row(i === 0 ? "Transits" : "", t, isRetro(t))).join("");
+  const rowsEl = document.getElementById("lsi-detail-rows");
+  if (rowsEl) rowsEl.innerHTML = rows;
 
-  // Headline: Moon sign + degree (e.g. "Moon in Capricorn · 23° Cap 36'").
-  const head = L.sign
-    ? `Moon in ${L.sign}${L.degree ? ` · <span class="text-muted font-normal">${L.degree}</span>` : ""}`
-    : "—";
-
-  let html = `<div class="text-lg font-semibold text-cobalt mb-3">${head}</div>`;
-  html += `<div class="space-y-1.5">`;
-  html += row("Phase", L.phase);
-  html += row("Next sign", L.next_sign_change && L.next_sign_change.display);
-  if (voc && voc.active) {
-    html += row("Void of Course", `now through ${voc.until_display || "next ingress"}`, true);
-  }
-  if (transits.length) {
-    html += transits.map((t, i) => row(i === 0 ? "Transits" : "", t, isRetro(t))).join("");
-  } else {
-    html += row("Transits", "none active");
-  }
-  html += `</div>`;
-  content.innerHTML = html;
+  // --- Recommendation ---
+  const recEl = document.getElementById("lsi-recommendation");
+  if (recEl) recEl.textContent = d.recommendation || "";
 
   // Timestamp + freshness (lunar position drifts; flag >2h old, amber stamp).
   const ts = document.getElementById("lsi-ts");
@@ -1249,8 +1433,10 @@ function renderAll() {
   renderProfileStrip();
   renderScaleSnapshot(); // async, VeSync screenshot OCR snapshot (manual via Penny)
   renderScaleHistory(); // async, VeSync scale history table (manual via Penny)
-  renderRings(); // async, Whoop-style Sleep / Recovery / Strain glance rings
-  wireRings();   // tap-through scroll on each ring
+  renderRings(); // async, LPI hero: moon + 3 orbital rings + metric corners + recovery window
+  renderPhysiology(); // async, Today's Read physiology grid (HRV/RHR/Resp + em-dash Skin Temp/SpO2)
+  renderSupportCards(); // async, Nutrition / Scale / Activity summary cards
+  wireRings();   // tap-through scroll on metric corners + bottom nav
   renderActivity(); // async, Polar Loop Gen 2 daily activity (steps / active time / calories)
   renderPolar(); // async, live Polar Loop data
   renderDayReview(); // async, nightly Day-in-Review freeze (polar/day_review.json)
