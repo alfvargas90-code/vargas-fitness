@@ -476,13 +476,6 @@ async function renderRings() {
       strainCal = Math.round(Number(act["active-calories"]));
       strainPct = Math.min(100, (strainCal / RESERVE_DEPLETION_CAL) * 100);
       strain = { pct: strainPct, color: LPI.strain };
-      // Strain mini-spark — last up-to-7 days of active-calories (the "Load" trend).
-      const recent = actDates.slice(-7);
-      const cals = (await Promise.all(recent.map(d => fetchJSON(`polar/daily_activity/${d}.json`).catch(() => null))))
-        .map(a => a && a["active-calories"] != null ? Number(a["active-calories"]) : null).filter(v => v != null);
-      const sp = document.getElementById("m-strain-spark");
-      if (sp) sp.innerHTML = cals.length >= 2
-        ? `<span style="display:inline-block;width:54px;color:${strainColor(strainPct)}">${sparkline(cals)}</span>` : "";
     }
   } catch (e) { /* file:// or no sync yet → orbits stay faint, corners "—" */ }
 
