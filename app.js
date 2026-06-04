@@ -842,8 +842,14 @@ function renderRechargeTrend(days, recMap, totalWithData) {
       // Change across the OBSERVED range — honest on a 1–6 scale. Clamp to span.
       const observed = pts.at(-1)[0] - pts[0][0];
       let change = Math.max(-5, Math.min(5, Math.round(slope * observed)));
-      const arrow = change > 0 ? "↑" : change < 0 ? "↓" : "→";
-      el.textContent = `trending: ${arrow} ${change > 0 ? "+" : ""}${change} over ${days.length} night${days.length === 1 ? "" : "s"} with data`;
+      // Plain-English net-delta read (change is already a rounded integer).
+      const x = Math.abs(change);
+      const nights = `${days.length} night${days.length === 1 ? "" : "s"}`;
+      el.textContent = x < 0.5
+        ? `Stable · ${nights}`
+        : change > 0
+          ? `Trending up · +${x} over ${nights}`
+          : `Trending down · −${x} over ${nights}`;
     }
   }
   if (note) {
@@ -1527,6 +1533,20 @@ function peDeltaColor(d, neutral) {
   if (d == null || Math.abs(d) <= neutral) return null;   // null → muted/neutral
   return d > 0 ? PE_GREEN : PE_CORAL;
 }
+// One-line plain-English read of the dominant signal. Phase name substituted in.
+// Priority order matches the spec: near-zero → recovery → sleep → strain → mixed.
+function peSummary(phase, sd, rd, st) {
+  const s = sd ?? 0, r = rd ?? 0, t = st ?? 0;
+  if (Math.abs(s) <= 0.3 && Math.abs(r) <= 5 && Math.abs(t) <= 5)
+    return "On baseline — this phase has no notable effect yet.";
+  if (r >= 10) return `Recovery runs strong this phase — system tends to favor ${phase} nights.`;
+  if (r <= -10) return `Recovery dips this phase — system runs lower in ${phase}.`;
+  if (s <= -0.5 && r > 0) return "Sleep runs short but recovery holds — efficient phase.";
+  if (s >= 0.5) return "You sleep longer this phase — more time in bed.";
+  if (t >= 10) return "Strain capacity runs higher this phase — you handle more load.";
+  if (t <= -10) return "Strain capacity dips this phase — body absorbs less load.";
+  return "Mixed pattern — early read, watch how this evolves.";
+}
 function peRow(label, valueText, color) {
   const style = color ? ` style="color:${color}"` : "";
   const cls = color ? "text-sm font-semibold stat-num" : "text-sm font-semibold stat-num text-muted";
@@ -1549,8 +1569,10 @@ async function renderPatternEngine() {
 
     const rowsEl = document.getElementById("pe-rows");
     const sampleEl = document.getElementById("pe-sample");
+    const summaryEl = document.getElementById("pe-summary");
 
     if (!ps || n < PE_MIN_SAMPLE) {
+      if (summaryEl) summaryEl.textContent = "Building baseline — need more nights this phase.";
       // Too thin to claim a delta — show structure with em-dashes, honest caveat.
       rowsEl.innerHTML = [
         peRow("Average Sleep:", "—", null),
@@ -1567,6 +1589,7 @@ async function renderPatternEngine() {
     }
 
     const sd = ps.sleep_delta_h, rd = ps.recovery_delta_pct, st = ps.strain_delta_pct;
+    if (summaryEl) summaryEl.textContent = peSummary(phase, sd, rd, st);
     const fmtH = d => d == null ? "—" : `${d > 0 ? "+" : ""}${d.toFixed(1)}h`;
     const fmtPct = d => d == null ? "—" : `${d > 0 ? "+" : ""}${d}%`;
     rowsEl.innerHTML = [
