@@ -30,9 +30,9 @@ const latestScale = () => [...scale].sort(byDate).at(-1);
 // polar/summary.py) mirrors these exact bands for the LSI + AI prompts.
 const LOAD_BANDS = [
   { name: "—",        min: 0,   max: 49,       dot: "#64748b" }, // slate-500 (faint — no real activity yet)
-  { name: "Light",    min: 50,  max: 399,      dot: "#cbd5e1" }, // slate-300
-  { name: "Moderate", min: 400, max: 799,      dot: "#3b5bff" }, // electric — engaged
-  { name: "Heavy",    min: 800, max: Infinity, dot: "#ffba00" }, // gold — real load
+  { name: "Light",    min: 50,  max: 399,      dot: "#94A3B8" }, // slate-400 — minimal
+  { name: "Moderate", min: 400, max: 799,      dot: "#06B6D4" }, // cyan — engaged
+  { name: "Heavy",    min: 800, max: Infinity, dot: "#F59E0B" }, // amber — heavy load (warning)
 ];
 function loadBandFor(activeCal) {
   const c = (activeCal == null || isNaN(activeCal)) ? 0 : Number(activeCal);
@@ -193,29 +193,30 @@ async function renderPolar() {
 // the Strain ring and the Activity load chip can never contradict.
 const RESERVE_DEPLETION_CAL = 800;
 
-// Concept 03 state-color bands — read on a COOL→WARM axis, not separate
-// semantic hues. Cool (electric/cobalt) = calm/restored/recovery; warm
-// (gold/coral) = output/effort/strain; maroon = depleted/off. Values are
-// luminance-lifted from the pure anchors so they stay legible (and glow well)
-// as arcs on OLED black. The soft glow is applied uniformly in orbitGroup().
-function sleepColor(v) {              // Sleep — cool when restful, maroon when starved
-  return v >= 90 ? "#3b5bff"   // electric — good/performance-level sleep
-       : v >= 50 ? "#5b6fd6"   // muted cobalt — mid
-       : v >= 30 ? "#9c4a55"   // lifted maroon — low
-       :           "#7a2f3a";  // deep maroon — chronic-low
+// Concept 02 semantic ring colors. Sleep + Recovery live in the CYAN recovery
+// family (bright cyan = restored, dropping toward amber/coral as readiness
+// falls); Strain lives in the CORAL/AMBER strain family (calm slate → amber
+// building → coral heavy → red max). Purple is reserved for intelligence/
+// context and never appears on these physiological rings. The soft glow is
+// applied uniformly in orbitGroup().
+function sleepColor(v) {              // Sleep — recovery family (cyan)
+  return v >= 90 ? "#22D3EE"   // bright cyan — excellent sleep
+       : v >= 50 ? "#06B6D4"   // cyan — good
+       : v >= 30 ? "#0891B2"   // dim cyan — low
+       :           "#155E75";  // deep cyan — chronic-low
 }
-function energyColor(v) {             // Recovery — cobalt bright down to coral
-  return v >= 90 ? "#4f74ff"   // cobalt bright — excellent
-       : v >= 50 ? "#3b5bff"   // electric — good
-       : v >= 30 ? "#d9706e"   // desaturated coral — low
-       :           "#ff6260";  // coral — poor
+function energyColor(v) {             // Recovery — cyan when restored, warns as it falls
+  return v >= 90 ? "#10B981"   // green — peak recovery (performance-ready)
+       : v >= 50 ? "#06B6D4"   // cyan — good recovery
+       : v >= 30 ? "#F59E0B"   // amber — low (caution)
+       :           "#FF6B6B";  // coral — poor (recovery risk)
 }
-function strainColor(pct) {           // Strain — warm axis, more load → hotter
-  return pct < 15 ? "#7d84a8"   // muted blue-gray — nothing meaningful yet (calm)
-       : pct < 50 ? "#cda33f"   // desaturated gold — light load
-       : pct < 80 ? "#ffba00"   // gold — real load
-       : pct < 95 ? "#ff6260"   // coral — heavy
-       :            "#ff5350";  // saturated coral — max / red zone
+function strainColor(pct) {           // Strain — strain family, hotter with load
+  return pct < 15 ? "#64748B"   // slate — nothing meaningful yet (calm)
+       : pct < 50 ? "#F59E0B"   // amber — light/moderate load building
+       : pct < 80 ? "#FF8A8A"   // light coral — real load
+       : pct < 95 ? "#FF6B6B"   // coral — heavy
+       :            "#EF4444";  // red — max / red zone
 }
 
 // Overnight recovery score — combines recharge + sleep + HRV vs an adaptive HRV
@@ -246,7 +247,7 @@ const ORBIT = {
     sleep:    { rx: 104 },
     strain:   { rx: 128 },
   },
-  base: "#3a3a3a",           // faint orbit stroke (muted gray — metadata)
+  base: "#2E2A45",           // faint orbit stroke (muted violet-gray — metadata)
   arcW: 6, baseW: 2,
 };
 
@@ -418,7 +419,7 @@ function renderRechargeStack(days, recMap) {
   const rows = days.slice().reverse().map(d => {
     const st = recMap[d]?.ans_charge_status ?? 0;
     const cells = Array.from({ length: 6 }, (_, i) => i < st
-      ? `<span class="inline-block w-3 h-3 rounded-full" style="background:#3b5bff"></span>`
+      ? `<span class="inline-block w-3 h-3 rounded-full" style="background:#06B6D4"></span>`
       : `<span class="inline-block w-3 h-3 rounded-full bg-card border border-line"></span>`).join("");
     return `<div class="flex items-center gap-2">
       <span class="text-xs text-muted w-12 shrink-0">${labelMD(d)}</span>
@@ -471,14 +472,14 @@ function renderPolarSleep(sleep) {
   wrap.innerHTML = `
     <h3 class="text-sm font-medium text-cobalt/80 mb-2">Sleep stages · ${labelMD(sleep.date)}</h3>
     <div class="stage-bar">
-      <div style="width:${pct(deep)};background:#4f74ff" title="Deep ${secsToHM(deep)}"></div>
-      <div style="width:${pct(light)};background:#3b5bff" title="Light ${secsToHM(light)}"></div>
-      <div style="width:${pct(rem)};background:#8fa3ff" title="REM ${secsToHM(rem)}"></div>
+      <div style="width:${pct(deep)};background:#0891B2" title="Deep ${secsToHM(deep)}"></div>
+      <div style="width:${pct(light)};background:#06B6D4" title="Light ${secsToHM(light)}"></div>
+      <div style="width:${pct(rem)};background:#67E8F9" title="REM ${secsToHM(rem)}"></div>
     </div>
     <div class="flex flex-wrap gap-4 text-xs text-muted mt-2">
-      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#4f74ff"></span> Deep ${secsToHM(deep)}</span>
-      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#3b5bff"></span> Light ${secsToHM(light)}</span>
-      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#8fa3ff"></span> REM ${secsToHM(rem)}</span>
+      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#0891B2"></span> Deep ${secsToHM(deep)}</span>
+      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#06B6D4"></span> Light ${secsToHM(light)}</span>
+      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#67E8F9"></span> REM ${secsToHM(rem)}</span>
     </div>`;
 }
 
@@ -519,12 +520,13 @@ function sparkline(vals) {
 // No raw numbers, units, biometric labels, or astrology jargon (enforced in the
 // prompt). Recovery is a color-coded single word; Transit Impact only shows when
 // a real transit is hitting.
-// Concept 03 cool→warm mapping + same-hue glow.
+// Concept 02 semantic recovery-word colors + same-hue glow. Ascending state:
+// poor(coral)→average(amber)→good(cyan)→excellent(green).
 const RECOVERY_COLORS = {
-  poor: "text-coral glow-coral",       // coral — depleted
-  average: "text-gold glow-gold",      // gold — caution
-  good: "text-electric glow-electric", // electric — restored
-  excellent: "text-cobalt glow-cobalt",// cobalt bright — peak recovery
+  poor: "text-coral glow-coral",       // coral — depleted / recovery risk
+  average: "text-amber glow-amber",    // amber — caution
+  good: "text-cyan glow-cyan",         // cyan — restored (recovery good)
+  excellent: "text-green glow-green",  // green — peak recovery / performance-ready
 };
 // "Wind down" / "Rest day" are evening / off verdicts (sleep prep / day's-done
 // framing — metadata, not a performance state); the others are daytime training
@@ -532,15 +534,16 @@ const RECOVERY_COLORS = {
 // colored by meaning: green = push/improve, cyan = recovery-is-good, amber =
 // caution, gray = neutral non-state. Longer phrases first so startsWith() wins.
 const PERF_VERDICTS = ["Push hard", "Train normally", "Moderate effort", "Prioritize recovery", "Wind down", "Rest day"];
-// Concept 03 cool→warm verdict palette (warm = push for output, cool = recover,
-// maroon = off). Each carries a same-hue glow.
+// Concept 02 semantic verdict palette — a green→cyan→amber→coral severity
+// gradient by physiological state, with neutral grays for the non-state
+// evening/off verdicts. Each carries a same-hue glow.
 const PERF_VERDICT_COLORS = {
-  "Push hard":          "text-coral glow-coral",       // coral — peak output
-  "Train normally":     "text-electric glow-electric", // electric — recovery is good
-  "Moderate effort":    "text-gold glow-gold",         // gold — caution
-  "Prioritize recovery":"text-muted",                  // muted blue-gray — ease off
-  "Wind down":          "text-muted",                  // muted blue-gray — evening
-  "Rest day":           "text-maroon glow-maroon",     // deep maroon — day's done
+  "Push hard":          "text-green glow-green",   // green — excellent state, go for output
+  "Train normally":     "text-cyan glow-cyan",     // cyan — good readiness
+  "Moderate effort":    "text-amber glow-amber",   // amber — caution / moderate
+  "Prioritize recovery":"text-coral glow-coral",   // coral — poor recovery, back off
+  "Wind down":          "text-muted",              // muted — evening, no state
+  "Rest day":           "text-muted",              // muted — day's done, no state
 };
 
 // Short paragraph block with a small uppercase subtitle.
@@ -838,10 +841,10 @@ async function renderScaleSnapshot() {
 // next night's fire overwrites it. Empty state before the first fire; amber stale
 // warning if the frozen date is from more than a day ago.
 const DAY_REVIEW_BADGES = {
-  easy:  { label: "Easy day",  cls: "text-electric bg-electric/15" },  // electric — recovered
-  solid: { label: "Solid day", cls: "text-electric bg-electric/15" },  // electric — good
-  great: { label: "Great day", cls: "text-coral bg-coral/15" },        // coral — peak output
-  big:   { label: "Big day",   cls: "text-gold bg-gold/15" },          // gold — heavy load
+  easy:  { label: "Easy day",  cls: "text-cyan bg-cyan/15" },    // cyan — recovered / low strain
+  solid: { label: "Solid day", cls: "text-green bg-green/15" },  // green — good performance
+  great: { label: "Great day", cls: "text-coral bg-coral/15" }, // coral — peak output / high effort
+  big:   { label: "Big day",   cls: "text-amber bg-amber/15" }, // amber — heavy load / big volume
 };
 
 async function renderDayReview() {

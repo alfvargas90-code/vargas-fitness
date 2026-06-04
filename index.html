@@ -7,7 +7,7 @@
 <!-- PWA / Add to Home Screen -->
 <link rel="manifest" href="manifest.json" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-<meta name="theme-color" content="#0a0a0a" />
+<meta name="theme-color" content="#0A0E1A" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Fitness" />
@@ -17,40 +17,90 @@
     theme: {
       extend: {
         colors: {
-          // ── Concept 03 — "Performance Intelligence" ──────────────────────
-          // State reads on a COOL→WARM axis: cool = calm/restored/recovery,
-          // warm = output/effort/strain. Anchors: electric #080EE6, cobalt
-          // #0008BF, coral #FF6260, gold #FFBA00, maroon #4E0010. Blues +
-          // maroon are luminance-lifted from the pure anchors so they stay
-          // legible as text/arcs on OLED black; the pure anchors live in the
-          // brand gradient, card gradient borders, and glow shadows below.
-          ink:   "#000000",          // true black (OLED)
-          panel: "#08080c",          // near-black, faintly cool
-          card:  "#0d0d14",          // card fill — true-ish black, cool tint
-          line:  "rgba(80,104,230,0.20)",   // cool blue hairline
-          linesoft: "rgba(80,104,230,0.10)",
-          muted: "#7d84a8",          // muted blue-gray (≈30%-sat cobalt) — metadata
-          accent:"#3b5bff",          // electric blue — cool "good / train normally"
-          good:  "#4f74ff",          // bright cobalt — cool "excellent"
-          perf:  "#ff6260",          // coral — warm output / "push hard"
-          warn:  "#ffba00",          // gold — warm energy / caution
-          bad:   "#ff5350",          // saturated coral — strain max / risk
-          // Concept 03 named anchors (legible-lifted for text use)
-          electric: "#3b5bff",
-          cobalt:   "#4f74ff",
-          coral:    "#ff6260",
-          gold:     "#ffba00",
-          maroon:   "#9c4a55",
+          // ── Concept 02 — "Performance Intelligence" (semantic palette) ────
+          // Every color carries meaning, not decoration. Foundation is a deep
+          // navy-black; accents are semantic: purple = intelligence/context,
+          // cyan = recovery, coral = strain, green = performance, amber =
+          // warning. Surfaces are translucent for the glass-card system below.
+          ink:    "#0A0E1A",                 // base — deep navy black (OLED)
+          panel:  "#11162a",                 // lifted navy (secondary surface)
+          surface:"#1B1338",                 // card depth (violet-navy)
+          card:   "rgba(15,18,32,0.78)",     // glass card base
+          bg:     "rgba(255,255,255,0.03)",  // faint inner-tile fill on glass
+          line:   "rgba(139,92,246,0.22)",   // purple hairline (glass border)
+          linesoft: "rgba(139,92,246,0.12)",
+          muted:  "#9CA3AF",                 // text secondary — subtitles/metadata
+          // ── Semantic accents ──
+          purple: "#6D28D9",                 // intelligence/context — solid accent
+          violet: "#8B5CF6",                 // intelligence — legible text/arc on navy
+          cyan:   "#06B6D4",                 // recovery / readiness / nervous-system
+          coral:  "#FF6B6B",                 // strain / fatigue / high effort
+          green:  "#10B981",                 // performance / improvement / momentum
+          amber:  "#F59E0B",                 // warning / caution / heavy load
+          // ── Legacy aliases, repointed to Concept 02 semantics so existing
+          //    class references stay live without touching every call site ──
+          accent:   "#8B5CF6",   // intelligence accent / focus ring → violet
+          electric: "#8B5CF6",   // AI/Lunar headings, code, focus → violet
+          cobalt:   "#06B6D4",   // recovery-family sub-headings → cyan
+          good:     "#10B981",   // positive trend → green
+          perf:     "#10B981",   // performance → green
+          warn:     "#F59E0B",   // caution → amber
+          bad:      "#EF4444",   // max strain / risk → red
+          gold:     "#F59E0B",   // → amber
+          maroon:   "#64748B",   // rest/off neutral → slate
         },
       },
     },
   };
 </script>
 <style>
-  body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif; }
+  /* ── Concept 02 — Layer 1: base radial gradient ──────────────────────────
+     Purple (intelligence) anchored upper-right, cyan (recovery) support mid-
+     right, coral (strain) faint lower-left, over a deep navy-black vertical
+     wash. Fixed so it covers the full scroll without repeating. */
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+    color: #F5F7FA;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 75% 15%, rgba(109,40,217,.28), transparent 32%),
+      radial-gradient(circle at 85% 60%, rgba(6,182,212,.16), transparent 34%),
+      radial-gradient(circle at 22% 62%, rgba(255,107,107,.12), transparent 30%),
+      linear-gradient(180deg, #0A0E1A 0%, #090B16 45%, #050713 100%);
+    background-attachment: fixed;
+  }
   .stat-num { font-variant-numeric: tabular-nums; }
   /* Prevent horizontal overflow (Safari was shrinking the whole viewport to fit) */
   html, body { overflow-x: hidden; max-width: 100%; }
+
+  /* ── Concept 02 — Layers 2 & 3: wave system + particle texture ────────────
+     Fixed, full-screen, behind all content (z-index:-1), non-interactive, low
+     opacity. NO image files. The wave is an inline SVG element (#bg-waves);
+     the particle texture is this ::after dot-grid masked to the upper-right +
+     wave band. Neither ever intercepts input or reduces text contrast. */
+  .bg-fx {
+    position: fixed; inset: 0; z-index: -1;
+    pointer-events: none; overflow: hidden;
+  }
+  .bg-fx svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  /* Subtle violet/cyan wave drift — gentle, slow, motion-reduced-safe. */
+  #bg-waves { animation: waveDrift 26s ease-in-out infinite alternate; opacity: .9; }
+  @keyframes waveDrift {
+    from { transform: translate3d(0,0,0); }
+    to   { transform: translate3d(-3%, 1.5%, 0); }
+  }
+  /* Layer 3 — particle/dot texture, concentrated upper-right + wave zone. */
+  .bg-fx::after {
+    content: ""; position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(167,139,250,.9) 0.8px, transparent 1.1px);
+    background-size: 26px 26px;
+    -webkit-mask-image: radial-gradient(120% 90% at 88% 8%, #000 0%, transparent 55%);
+    mask-image: radial-gradient(120% 90% at 88% 8%, #000 0%, transparent 55%);
+    opacity: .10;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #bg-waves { animation: none; }
+  }
   canvas { max-width: 100% !important; height: auto !important; }
   table { table-layout: fixed; word-wrap: break-word; }
   pre, code { white-space: pre-wrap; word-break: break-word; }
@@ -75,44 +125,86 @@
   .read-section:first-child { border-top: none; padding-top: 0; }
   .read-section > summary {
     cursor: pointer; list-style: none; font-weight: 600; font-size: 14px;
-    color: #8fa3ff; display: flex; align-items: center; gap: 6px;
+    color: #A78BFA; display: flex; align-items: center; gap: 6px;
   }
   .read-section > summary::-webkit-details-marker { display: none; }
   .read-section > summary::before {
-    content: "▸"; color: #5b6fd6; font-size: 12px; transition: transform 0.15s;
+    content: "▸"; color: #8B5CF6; font-size: 12px; transition: transform 0.15s;
   }
   .read-section[open] > summary::before { transform: rotate(90deg); }
   .read-section > p {
-    margin: 6px 0 0; font-size: 15px; line-height: 1.55; color: #e8eaf6;
+    margin: 6px 0 0; font-size: 15px; line-height: 1.55; color: #F5F7FA;
   }
 
-  /* ── Concept 03 — soft glows (DEPTH pillar) ─────────────────────────────
-     Additive light on OLED black: a same-hue text-shadow makes verdict words
-     and ring percentages glow without a separate bright fill. */
-  .glow-coral    { text-shadow: 0 0 8px rgba(255,98,96,0.55); }
-  .glow-electric { text-shadow: 0 0 8px rgba(59,91,255,0.60); }
-  .glow-cobalt   { text-shadow: 0 0 9px rgba(79,116,255,0.60); }
-  .glow-gold     { text-shadow: 0 0 8px rgba(255,186,0,0.50); }
-  .glow-maroon   { text-shadow: 0 0 7px rgba(156,74,85,0.55); }
+  /* ── Concept 02 — soft semantic glows (DEPTH) ───────────────────────────
+     Same-hue text-shadow makes verdict words + ring percentages glow without
+     a separate bright fill. Hues map to the semantic palette. Legacy aliases
+     (electric/cobalt/gold/maroon) kept so any un-rewritten reference still
+     resolves to the right Concept 02 hue. */
+  .glow-purple   { text-shadow: 0 0 8px rgba(139,92,246,0.60); }
+  .glow-violet   { text-shadow: 0 0 8px rgba(139,92,246,0.60); }
+  .glow-cyan     { text-shadow: 0 0 9px rgba(6,182,212,0.60); }
+  .glow-coral    { text-shadow: 0 0 8px rgba(255,107,107,0.55); }
+  .glow-green    { text-shadow: 0 0 8px rgba(16,185,129,0.55); }
+  .glow-amber    { text-shadow: 0 0 8px rgba(245,158,11,0.50); }
+  .glow-electric { text-shadow: 0 0 8px rgba(139,92,246,0.60); }  /* → violet */
+  .glow-cobalt   { text-shadow: 0 0 9px rgba(6,182,212,0.60); }   /* → cyan   */
+  .glow-gold     { text-shadow: 0 0 8px rgba(245,158,11,0.50); }  /* → amber  */
+  .glow-maroon   { text-shadow: 0 0 7px rgba(100,116,139,0.50); } /* → slate  */
 
-  /* Brand wordmark — cool→warm gradient text */
-  .brand-mark {
-    background: linear-gradient(100deg, #4f74ff 0%, #ff6260 62%, #ffba00 100%);
-    -webkit-background-clip: text; background-clip: text;
-    -webkit-text-fill-color: transparent; color: transparent;
-  }
-
-  /* Card gradient border — top-left cobalt → bottom-right coral at low opacity.
-     DEPTH without distraction; dial the alphas down if it ever reads busy. */
+  /* ── Concept 02 — glass card system ─────────────────────────────────────
+     Premium frosted glass: translucent navy fill, purple hairline, blur, 22px
+     radius, layered shadow. Applied in place over the existing .gradient-card
+     class so no markup restructuring is needed. Sets its own background so it
+     wins over the bg-card token regardless of stylesheet order. */
   .gradient-card {
-    background:
-      linear-gradient(#0d0d14, #0d0d14) padding-box,
-      linear-gradient(135deg, rgba(0,8,191,0.45) 0%, rgba(13,13,20,0) 48%, rgba(255,98,96,0.28) 100%) border-box;
-    border: 1px solid transparent !important;
+    background: rgba(15,18,32,0.78);
+    border: 1px solid rgba(139,92,246,0.22) !important;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border-radius: 22px !important;  /* beat Tailwind's rounded-xl (12px) */
+    box-shadow: 0 0 0 1px rgba(255,255,255,.02), 0 18px 40px rgba(0,0,0,.35);
+  }
+  /* Graceful fallback: if the browser can't do backdrop-filter, lift the fill
+     opacity so text never sits on a see-through panel. */
+  @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+    .gradient-card { background: rgba(13,17,30,0.95); }
   }
 </style>
 </head>
-<body class="bg-ink text-neutral-200 min-h-screen">
+<body class="text-neutral-200 min-h-screen">
+  <!-- Concept 02 background — Layer 2 (wave system) + Layer 3 (particles via
+       .bg-fx::after). Fixed, behind all content, non-interactive. Violet-
+       dominant waves with cyan support + a faint magenta highlight, flowing
+       from lower-left toward lower-right. SVG only — no image files. -->
+  <div class="bg-fx" aria-hidden="true">
+    <svg id="bg-waves" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" fill="none">
+      <defs>
+        <linearGradient id="wv1" x1="0" y1="1" x2="1" y2="0.7">
+          <stop offset="0" stop-color="#6D28D9" stop-opacity="0.34"/>
+          <stop offset="0.55" stop-color="#7C3AED" stop-opacity="0.16"/>
+          <stop offset="1" stop-color="#06B6D4" stop-opacity="0.10"/>
+        </linearGradient>
+        <linearGradient id="wv2" x1="0" y1="1" x2="1" y2="0.6">
+          <stop offset="0" stop-color="#8B5CF6" stop-opacity="0.22"/>
+          <stop offset="0.7" stop-color="#06B6D4" stop-opacity="0.14"/>
+          <stop offset="1" stop-color="#D946EF" stop-opacity="0.10"/>
+        </linearGradient>
+        <linearGradient id="wv3" x1="0" y1="1" x2="1" y2="0.8">
+          <stop offset="0" stop-color="#06B6D4" stop-opacity="0.14"/>
+          <stop offset="1" stop-color="#6D28D9" stop-opacity="0.08"/>
+        </linearGradient>
+        <filter id="wvblur" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="26"/>
+        </filter>
+      </defs>
+      <g filter="url(#wvblur)">
+        <path fill="url(#wv1)" d="M-100 720 C 250 600, 520 860, 820 700 S 1300 560, 1560 700 L 1560 960 L -100 960 Z"/>
+        <path fill="url(#wv2)" d="M-100 800 C 300 700, 600 920, 940 780 S 1340 660, 1560 800 L 1560 960 L -100 960 Z"/>
+        <path fill="url(#wv3)" d="M-100 870 C 350 800, 680 960, 1020 860 S 1380 800, 1560 870 L 1560 960 L -100 960 Z"/>
+      </g>
+    </svg>
+  </div>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
     <!-- Header -->
     <header class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-8">
@@ -121,13 +213,6 @@
         <p class="text-xs text-neutral-400 mt-1" id="profile-strip"></p>
       </div>
     </header>
-
-    <!-- Brand — Performance Intelligence (Concept 03). Above the rings, below
-         the date stamp. Lightweight tracked caps + cool→warm gradient wordmark. -->
-    <div class="mb-8" id="brand">
-      <h1 class="brand-mark font-thin uppercase tracking-[0.3em] text-2xl sm:text-4xl leading-tight">Performance Intelligence</h1>
-      <p class="text-[11px] uppercase tracking-[0.28em] text-muted mt-2">Sleek · Immersive · Focused</p>
-    </div>
 
     <!-- Glance rings — Design C: planetary orbit. ONE composite SVG = phase-accurate
          moon at center + 3 tilted orbital rings (Recovery inner → Sleep mid → Strain
