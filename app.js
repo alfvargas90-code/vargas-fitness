@@ -1562,10 +1562,12 @@ async function renderPatternEngine() {
   try {
     const data = await fetchJSON("polar/patterns.json");
     const phase = data.current_phase || "—";
+    const phaseLc = phase === "—" ? phase : phase.toLowerCase();   // lowercase throughout this card
     const ps = (data.phase_stats || {})[phase] || null;
     const n = ps?.sample_size ?? 0;
 
-    document.getElementById("pe-phase").textContent = phase;
+    // Option B framing: "When moon is {lowercase phase}".
+    document.getElementById("pe-phase").textContent = `When moon is ${phaseLc}`;
 
     const rowsEl = document.getElementById("pe-rows");
     const sampleEl = document.getElementById("pe-sample");
@@ -1575,30 +1577,30 @@ async function renderPatternEngine() {
       if (summaryEl) summaryEl.textContent = "Building baseline — need more nights this phase.";
       // Too thin to claim a delta — show structure with em-dashes, honest caveat.
       rowsEl.innerHTML = [
-        peRow("Average Sleep:", "—", null),
-        peRow("Average Recovery:", "—", null),
-        peRow("Average Strain:", "—", null),
+        peRow("Sleep:", "—", null),
+        peRow("Recovery:", "—", null),
+        peRow("Strain:", "—", null),
       ].join("");
       sampleEl.textContent = n > 0
-        ? `Sample size: ${n} day${n === 1 ? "" : "s"} · Not enough data yet`
-        : "Building baseline · need ~30+ days of data";
-      sampleEl.className = "text-xs mt-4";
+        ? `Based on ${n} night${n === 1 ? "" : "s"} · not enough data yet`
+        : "Building baseline · need ~30+ nights of data";
+      sampleEl.className = "text-xs mt-3";
       sampleEl.style.color = PE_AMBER;
       card.classList.remove("hidden");
       return;
     }
 
     const sd = ps.sleep_delta_h, rd = ps.recovery_delta_pct, st = ps.strain_delta_pct;
-    if (summaryEl) summaryEl.textContent = peSummary(phase, sd, rd, st);
+    if (summaryEl) summaryEl.textContent = peSummary(phaseLc, sd, rd, st);   // lowercase phase in summary too
     const fmtH = d => d == null ? "—" : `${d > 0 ? "+" : ""}${d.toFixed(1)}h`;
     const fmtPct = d => d == null ? "—" : `${d > 0 ? "+" : ""}${d}%`;
     rowsEl.innerHTML = [
-      peRow("Average Sleep:", fmtH(sd), peDeltaColor(sd, 0.1)),
-      peRow("Average Recovery:", fmtPct(rd), peDeltaColor(rd, 1)),
-      peRow("Average Strain:", fmtPct(st), peDeltaColor(st, 1)),
+      peRow("Sleep:", fmtH(sd), peDeltaColor(sd, 0.1)),
+      peRow("Recovery:", fmtPct(rd), peDeltaColor(rd, 1)),
+      peRow("Strain:", fmtPct(st), peDeltaColor(st, 1)),
     ].join("");
-    sampleEl.textContent = `Sample size: ${n} day${n === 1 ? "" : "s"}`;
-    sampleEl.className = "text-xs mt-4 text-muted";
+    sampleEl.textContent = `Based on ${n} night${n === 1 ? "" : "s"}`;
+    sampleEl.className = "text-xs mt-3 text-muted";
     sampleEl.style.color = "";
     card.classList.remove("hidden");
   } catch (e) {
