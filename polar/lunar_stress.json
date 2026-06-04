@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-04T07:31:19-05:00",
+  "generated_at": "2026-06-04T08:01:32-05:00",
   "score": 25,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -12,7 +12,7 @@
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "29\u00b0 Cap 23'",
+    "degree": "29\u00b0 Cap 38'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -41,7 +41,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 299.38,
+    "moon_longitude": 299.63,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
@@ -61,7 +61,7 @@
       "hrv_7d": 63.6,
       "rhr_7d": 53.3
     },
-    "active_calories": 18,
+    "active_calories": 142,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693

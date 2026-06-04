@@ -251,16 +251,21 @@ const LPI = {
 // ring = faint full track + bright gradient progress arc swept clockwise from
 // 12 o'clock, with a same-hue glow. Measured from the mockup: moon r≈40, rings
 // at r≈63/84/100, stroke ≈6px.
+// Moon as VISUAL ANCHOR (2026-06-04): moonR +15% (40→46) so the body dominates;
+// rings quieted ~20% (thinner stroke, lower arc opacity, subtler glow) so they
+// support rather than compete. Three depth planes: moon (sharp, haloed) → rings
+// (subtler) → background waves/particles (soft, receding).
 const ORBIT = {
   cx: 130, cy: 130,
-  moonR: 40,
+  moonR: 46,                 // was 40 → +15% (moon is now the anchor)
   rings: {                   // inside → out
     sleep:    { r: 63,  grad: "gSleep",  glow: "#8A5CFF" },
     recovery: { r: 84,  grad: "gRecov",  glow: "#00C8FF" },
     strain:   { r: 100, grad: "gStrain", glow: "#FF5E62" },
   },
-  arcW: 5, baseW: 4,
-  base: "rgba(255,255,255,0.05)",
+  arcW: 4, baseW: 3,         // strokes −20% so rings recede behind the moon
+  arcOpacity: 0.8,           // active-arc opacity pulled back from 1.0
+  base: "rgba(255,255,255,0.04)",
 };
 
 // SVG <defs> — per-ring linear gradients tuned to the mockup's ring hues.
