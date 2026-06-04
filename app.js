@@ -214,6 +214,15 @@ function strainColor(pct) {           // Strain — graduated; RED ONLY near max
        : pct < 80 ? "#FF6B6B"   // coral — heavy load
        :            "#FF5E62";  // red — approaching max (the only red zone)
 }
+// Visual-PRESENCE color for the Strain ring glow + corner: same graduation as
+// strainColor() except the low-load band floors to warm coral instead of cold gray,
+// so a quiet morning still reads "coral, alive" and the corner keeps parity with the
+// cyan Recovery / purple Sleep corners. Semantic logic (bands, labels) stays on
+// strainColor(); this only governs the rendered hue.
+function strainPresenceColor(pct) {
+  const c = strainColor(pct);
+  return c === "#7d84a8" ? "#FF8A7A" : c;   // floor: warm coral, not gray-zone
+}
 
 // Overnight recovery score — combines recharge + sleep + HRV vs an adaptive HRV
 // baseline. Lifted verbatim from the deleted renderRecoveryTile so the Recovery
@@ -284,7 +293,10 @@ const ORBIT_DEFS = `<defs>
 // One flat ring: faint full track + bright arc (clockwise from top). Pass a
 // `solidColor` to override the gradient with a flat stroke+glow — used by the
 // Strain ring so its hue can graduate with load (gray → gold → coral → red).
-function orbitGroup(r, pct, gradId, glowColor, solidColor) {
+// `emphasis` boosts the bloom (halo opacity +50%, halo blur +25%, arc blur 7→10px)
+// so the Strain ring reads "active, energetic, loaded" — equal visual weight to the
+// cyan Recovery glow rather than the weaker coral it had before.
+function orbitGroup(r, pct, gradId, glowColor, solidColor, emphasis) {
   const c = 2 * Math.PI * r;
   const arc = (Math.max(0, Math.min(100, pct || 0)) / 100) * c;
   const track = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${ORBIT.base}" stroke-width="${ORBIT.baseW}"/>`;
@@ -292,15 +304,18 @@ function orbitGroup(r, pct, gradId, glowColor, solidColor) {
   const stroke = solidColor || `url(#${gradId})`;
   const glow = solidColor || glowColor;
   const dash = `stroke-dasharray="${arc.toFixed(2)} ${(c - arc).toFixed(2)}" transform="rotate(-90 130 130)"`;
+  const haloOpacity = emphasis ? 0.12 : 0.08;   // +50% bloom presence on the emphasized ring
+  const haloBlur    = emphasis ? 15 : 12;        // +25% wider bloom
+  const progBlur    = emphasis ? 10 : 7;         // arc bloom 7 → 10px (~+30%)
   // Outer bloom halo — a low-alpha, wide-blur echo of the arc so the ring reads
   // as energy emanating outward rather than a hard progress stroke.
   const halo = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${glow}"
-      stroke-width="${ORBIT.arcW + 2}" stroke-linecap="round" stroke-opacity="0.08"
-      ${dash} style="filter:drop-shadow(0 0 12px ${glow})"/>`;
-  // Bright arc — softer, dreamier bloom (drop-shadow 4 → 7px) at lower opacity.
+      stroke-width="${ORBIT.arcW + 2}" stroke-linecap="round" stroke-opacity="${haloOpacity}"
+      ${dash} style="filter:drop-shadow(0 0 ${haloBlur}px ${glow})"/>`;
+  // Bright arc — softer, dreamier bloom (drop-shadow 4 → 7px, → 10px when emphasized).
   const prog = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${stroke}"
       stroke-width="${ORBIT.arcW}" stroke-linecap="round" stroke-opacity="${ORBIT.arcOpacity}"
-      ${dash} style="filter:drop-shadow(0 0 7px ${glow})"/>`;
+      ${dash} style="filter:drop-shadow(0 0 ${progBlur}px ${glow})"/>`;
   return track + halo + prog;
 }
 
@@ -381,7 +396,7 @@ function renderOrbit({ recovery, sleep, strain, moon }) {
        preserveAspectRatio="xMidYMid meet" style="overflow:visible" aria-label="Orbit rings around moon">
     ${ORBIT_DEFS}
     ${orbitGroup(rings.strain.r,   strain?.pct,   rings.strain.grad,   rings.strain.glow,
-                 strain?.pct != null ? strainColor(strain.pct) : null)}
+                 strain?.pct != null ? strainPresenceColor(strain.pct) : null, true)}
     ${orbitGroup(rings.recovery.r, recovery?.pct, rings.recovery.grad, rings.recovery.glow)}
     ${orbitGroup(rings.sleep.r,    sleep?.pct,    rings.sleep.grad,    rings.sleep.glow)}
     <g transform="translate(${cx} ${cy})">${moonSVG(moonR, m.illum, m.waning)}</g>
@@ -499,17 +514,21 @@ async function renderRings() {
     sleepScore != null ? sleepLabel(sleepScore) : "",
     sleepDur || "",
     LPI.sleep, "#9A6BFF");
-  // Strain hue graduates with load (gray → gold → coral → red) — red is the
+  // Strain hue graduates with load (coral → gold → coral → red) — red is the
   // approaching-max signal, not the default. Number, label, glow + caption all
-  // share it so a low-load morning reads muted, not alarming.
-  const strainHue = strainPct != null ? strainColor(strainPct) : LPI.strain;
+  // share the PRESENCE color so a low-load morning still reads coral and alive
+  // (floored off the cold gray-zone), with equal weight to Recovery/Sleep.
+  const strainHue = strainPct != null ? strainPresenceColor(strainPct) : LPI.strain;
   setMetricCorner("strain",
     strainPct != null ? `${Math.round(strainPct)}%` : null,
     strainPct != null ? strainLabel(strainPct) : "",
     strainCal != null ? `Load ${strainCal}` : "",
     strainHue, strainHue);
   const strainCap = document.getElementById("m-strain-cap");
-  if (strainCap) strainCap.style.color = strainHue;
+  if (strainCap) {
+    strainCap.style.color = strainHue;
+    strainCap.style.letterSpacing = "1.8px";   // slight bump → label presence on par with RECOVERY/SLEEP
+  }
 
   // Recovery Window derives from the same recovery/sleep/strain state — render
   // it here so it can never disagree with the corners (no second fetch pass).
@@ -981,6 +1000,17 @@ const LSI_BANDS = [
   { hi: 85,  rank: 4, name: "Elevated Reactivity", short: "Elevated" },
   { hi: 100, rank: 5, name: "High Nervous Load",   short: "High"     },
 ];
+// Band → 2-line plain-English read of what that band means functionally. Keyed by
+// the full band name. Replaces the old recommendation prose + score on the default
+// view: band word + these two lines is the whole card by default; detail rows live
+// in the <details> disclosure.
+const LSI_BAND_READ = {
+  "Stable Control":       ["Low environmental friction.", "Good output conditions."],
+  "Mild Compression":     ["Slight environmental friction.", "Output requires more focus."],
+  "Moderate Compression": ["Noticeable environmental friction.", "Recover more, push less."],
+  "Elevated Reactivity":  ["High environmental friction.", "Conserve effort today."],
+  "High Nervous Load":    ["Strong environmental friction.", "Rest and protect sleep."],
+};
 function lsiBandFor(score) {
   if (score == null) return null;
   return LSI_BANDS.find(b => score <= b.hi) || LSI_BANDS[LSI_BANDS.length - 1];
@@ -1010,13 +1040,17 @@ async function renderLunarStress() {
   const transits = L.active_transits || [];
   const isRetro = t => /mercury\s+retrograde/i.test(t);
 
-  // --- Band word (short, large) + "{idx} / 10" ---
+  // --- Band word (short, large) + a 2-line plain-English read of the band ---
+  // Score ("{idx} / 10") is dropped from the default view; the band word + functional
+  // read carry the signal more cleanly. The raw idx still computes for the sparkline.
   const band = lsiBandFor(d.score);
-  const idx = lsiIndex10(d);
   const bandEl = document.getElementById("lsi-band");
   if (bandEl) bandEl.textContent = band ? band.short : (d.band || "—");
-  const scoreEl = document.getElementById("lsi-score");
-  if (scoreEl) scoreEl.textContent = idx != null ? `${idx} / 10` : (d.score != null ? `${d.score}` : "—");
+  const readEl = document.getElementById("lsi-read");
+  if (readEl) {
+    const lines = (band && LSI_BAND_READ[band.name]) || [];
+    readEl.innerHTML = lines.map(l => `<div>${l}</div>`).join("");
+  }
   const trigEl = document.getElementById("lsi-trigger");
   if (trigEl) trigEl.textContent = d.trigger || "";
 
@@ -1045,10 +1079,8 @@ async function renderLunarStress() {
     moonCtx.innerHTML = parts.join("");
   }
 
-  // --- Recommendation (merged into System Conditions; sign/phase/next live in
-  //     lsi-moon-context above, so the old detail-rows block was removed). ---
-  const recEl = document.getElementById("lsi-recommendation");
-  if (recEl) recEl.textContent = d.recommendation || "";
+  // (Recommendation prose retired — the band → 2-line read in lsi-read replaces it.
+  //  d.recommendation still computes in lunar_stress.json for the daily pattern log.)
 
   // Timestamp + freshness (lunar position drifts; flag >2h old, amber stamp).
   const ts = document.getElementById("lsi-ts");

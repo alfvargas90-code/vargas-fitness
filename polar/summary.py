@@ -114,86 +114,49 @@ SIMPLE_KEYS = ["recovery", "reading", "performance", "transit"]
 # the clock — sleep-in-progress at 4 AM, a wake-up read at 7, fueling/energy checks
 # mid-day, the workout window opening and closing in the evening — and the day's stat
 # recap stays owned by the 9:45 PM Day-in-Review card.
+# Each entry sets WHAT the three Reading lines (Observation / Impact / Action) are
+# ABOUT for that slot — not flowing-prose direction. The 4-line shape itself
+# (Recovery word / Observation / Impact / Action) is enforced by the main prompt's
+# Reading instruction; these just point each line at the right subject for the clock.
 SLOT_FRAMING = {
     "sleep": (
-        "SLOT — SLEEP-IN-PROGRESS (~4 AM, Alfie is still asleep / barely stirring). The Reading is "
-        "a first read of what the night's recovery is producing — the body's report card while the "
-        "night is still running.\n"
-        "LEAD WITH: the sleep / recharge state — what the body has PRODUCED overnight and what it's "
-        "setting up for tomorrow. The very first sentence must be about the night's recovery, not "
-        "body areas.\n"
-        "Opener examples (do not copy verbatim): \"The night's giving you a clean recharge…\" / "
-        "\"Sleep's banking steady recovery so far…\" / \"Recovery's landing strong as the night runs…\"\n"
-        "No day-ahead planning yet, no activity or food talk — just what the night is setting up."
+        "SLOT — SLEEP (~4 AM, Alfie is still asleep). Read the night's recovery in progress.\n"
+        "Observation: what the night's sleep/recovery is producing.\n"
+        "Impact: how that's setting up tomorrow.\n"
+        "Line 4 is a STATUS projection, NOT an action — he's asleep, nothing to do. Format the "
+        "three lines as: Observation / Impact / Status: {one-line read of how the night is setting up}."
     ),
     "recovery": (
-        "SLOT — RECOVERY / WAKE-UP READ (~7 AM, Alfie just woke up, day is open in front of him). "
-        "The Reading is the full recovery score now that the night is done — what kind of day the "
-        "body is set up for.\n"
-        "LEAD WITH: the wake-up read — the recovery he's starting the day on and his capacity to "
-        "SPEND today. The first sentence frames what kind of day this is.\n"
-        "Opener examples (do not copy verbatim): \"You woke up with real capacity today…\" / "
-        "\"The night left you a solid base to work from…\" / \"Today's a recover-and-hold kind of day…\"\n"
-        "If a little activity or food is already logged, touch it lightly as a starting point, but "
-        "keep the focus on what kind of day the recovery sets up."
+        "SLOT — WAKE-UP (~7 AM, the day is open ahead of him).\n"
+        "Observation: the recovery state he woke up on.\n"
+        "Impact: what kind of day that capacity sets up.\n"
+        "Action: the single move that fits today's capacity."
     ),
     "fuel-1": (
-        "SLOT — FUEL #1 (~11:30 AM, late morning, first fueling + energy check). The Reading is "
-        "about how energy and fueling are tracking so far.\n"
-        "LEAD WITH: the fueling / energy state — is the tank holding or dropping, is food keeping "
-        "pace with the day. The first sentence names where energy and fuel stand right now "
-        "(protein/calorie pace, steps put down).\n"
-        "Opener examples (do not copy verbatim): \"Energy's holding but the fuel's lagging…\" / "
-        "\"You're past mid-morning and protein's barely moving…\" / \"The tank's steady; food's "
-        "keeping up so far…\"\n"
-        "READ THE RECENT FUELING: the meals logged in the last ~4 hours are listed below (which "
-        "meal, its macros, and the clock time). Look at today's activity/energy output since the "
-        "FIRST meal in that window, and comment in plain terms on whether what he actually ate is "
-        "matching the energy he's spending — then say what to eat next. Reference a specific meal by "
-        "name when it makes the point land (e.g. \"that burger at noon set you up, but protein's still "
-        "thin — anchor the next meal on it\").\n"
-        "Weave the numbers in as lived context, never a stat list. The day's training call still "
-        "applies — fueling supports it, it doesn't replace it."
+        "SLOT — FUEL #1 (~11:30 AM, first fueling/energy check).\n"
+        "Observation: where energy and fueling stand right now.\n"
+        "Impact: what that means heading into the afternoon.\n"
+        "Action: what to eat next.\n"
+        "The recent meals are listed below — let them sharpen the Observation, but keep each line tight."
     ),
     "fuel-2": (
-        "SLOT — FUEL #2 (~3 PM, mid-afternoon, second fueling + energy check). The Reading is a "
-        "fueling/energy progress check plus what's left to top off.\n"
-        "LEAD WITH: where energy and fueling stand now and what's LEFT to fix before the evening — "
-        "is he fueled for the workout window, or running a deficit into it. The first sentence is "
-        "about the fuel/energy state heading into the back half of the day.\n"
-        "Opener examples (do not copy verbatim): \"You've got the afternoon to close the protein "
-        "gap…\" / \"Energy's dipping and the fuel's behind…\" / \"Fueled up well — that sets the "
-        "evening up right…\"\n"
-        "READ THE RECENT FUELING: the meals logged in the last ~4 hours are listed below (which "
-        "meal, its macros, and the clock time). Look at today's activity/energy output since the "
-        "FIRST meal in that window, and comment in plain terms on whether what he actually ate is "
-        "matching the energy he's spending — then say what to do next before the evening. Reference a "
-        "specific meal by name when it sharpens the call (e.g. \"that hydration drink wasn't food — "
-        "you're running on the burger from noon, so the next plate has to carry real protein\").\n"
-        "Reference the accumulated food and activity naturally as part of the read."
+        "SLOT — FUEL #2 (~3 PM, second fueling/energy check).\n"
+        "Observation: the fuel/energy state heading into the evening.\n"
+        "Impact: whether he's fueled for the workout window or running a deficit into it.\n"
+        "Action: what to fix before evening.\n"
+        "The recent meals are listed below — let them sharpen the Observation, but keep each line tight."
     ),
     "train-1": (
-        "SLOT — TRAIN OPEN (~5:30 PM, the workout window is opening). The Reading is the prep read "
-        "for the session — is he going to train, and what's the call.\n"
-        "LEAD WITH: the workout window opening — what today's session should look like given his "
-        "recovery and how much he's already spent. The first sentence is about the training "
-        "decision in front of him right now.\n"
-        "Opener examples (do not copy verbatim): \"The window's open and you've got room to push…\" / "
-        "\"Session's right there — recovery says go…\" / \"You've spent a fair bit already; keep "
-        "tonight's work honest…\"\n"
-        "Reference the accumulated activity and fueling naturally as part of the read."
+        "SLOT — TRAIN OPEN (~5:30 PM, the workout window is opening).\n"
+        "Observation: his recovery against how much he's already spent.\n"
+        "Impact: what today's session should be.\n"
+        "Action: the training call."
     ),
     "train-2": (
-        "SLOT — TRAIN CLOSE (~8 PM, the workout window is closing). The Reading is the landing read "
-        "— did he train, and how did it land. Look at today's activity/load to judge.\n"
-        "LEAD WITH: how the workout window closed — if he trained, how the session landed and what "
-        "to do with the rest of the night; if he didn't, the present-moment wind-down into sleep. "
-        "The first sentence is about where the day's training ended up and winding toward night.\n"
-        "Opener examples (do not copy verbatim): \"You got the work in — now let it settle…\" / "
-        "\"The window's closing and the session's logged…\" / \"No training today; the system's "
-        "ready to wind down…\"\n"
-        "Focus on the close: how the session landed (or that the window passed), sleep prep, and "
-        "tomorrow as the next platform."
+        "SLOT — TRAIN CLOSE (~8 PM, the workout window is closing).\n"
+        "Observation: how the session landed (or that the window passed).\n"
+        "Impact: what the rest of the night needs.\n"
+        "Action: the wind-down / sleep-prep move."
     ),
 }
 # Slots whose prompt gets today's accumulated activity + nutrition fed in. The 4 AM sleep
@@ -1094,18 +1057,23 @@ def main():
             "light to go after it — just keep technique honest if you go heavy.\"\n"
         )
 
-    # Whether the Reading may reference today's rounded activity/food numbers. Every
-    # data-bearing slot may; the early slots (sleep, recovery before anything's logged)
-    # fall through to the no-numbers default. train-2 now reads today's load to judge the
-    # session, so it gets numbers too — unlike the old evening slot which suppressed them.
-    if show_today_data:
-        numbers_rule = (
-            "- You MAY reference today's activity and food as rounded, everyday numbers in natural "
-            "speech (e.g. \"about 3,000 steps down already\", \"protein's barely halfway\") — but only "
-            "woven into the read as lived context, never as a stat list, and never with units/decimals.\n"
-        )
+    # The clipped Observation/Impact/Action format keeps each line ~6-10 words, so the
+    # Reading never quotes numbers — the data below INFORMS the read, but the lines stay
+    # plain words. (The nutrition nudge card carries any specific "front-load 50g" call.)
+    numbers_rule = (
+        "- Do NOT quote numbers, even rounded ones — the data below informs the read, but the "
+        "three lines stay plain words.\n"
+    )
+
+    # Line-4 label: the sleep slot is a forward STATUS projection (he's asleep); every
+    # other slot lands on an imperative Action.
+    if slot == "sleep":
+        action_label = "Status"
+        action_desc = ("a one-line projection of how the night is setting up tomorrow — NOT an "
+                       "imperative, since he's asleep")
     else:
-        numbers_rule = "- Do not write numbers; there's no accumulated activity to reference yet.\n"
+        action_label = "Action"
+        action_desc = "ONE specific imperative — what to do right now"
 
     prompt = (
         "You are a recovery and performance coach writing a short daily read for an athlete (Alfie). "
@@ -1140,29 +1108,20 @@ def main():
         "followed by a colon. No markdown, no bullets, no preamble, no closing remarks.\n\n"
         "Recovery: ONE word only — Poor, Average, Good, or Excellent. Nothing else on this line. "
         "Base it ONLY on the overnight recovery/sleep data, never on the time of day.\n"
-        "Reading: ONE paragraph, two or three sentences, flowing prose, written in the tone of the slot "
-        "framing above. Shape it physiology -> state -> action: open with the slot's LEAD framing (see "
-        "the slot block above) — sleep leads with the night's recovery in progress, recovery with what "
-        "kind of day the wake-up read sets up, the fuel slots with how energy/fueling is tracking, "
-        "train-1 with the workout window opening, train-2 with how the session landed (or the wind-down "
-        "if he didn't train) — then land on a direct, actionable directive. In the MIDDLE you may note "
-        "any body area that actually deserves attention today (joints, tendons, shoulders, neck, lower "
-        "body) — ONLY when there's a real physical signal worth noting; if nothing's flagged, skip body "
-        "areas entirely rather than opening with them. No sub-headings inside the paragraph; one smooth read.\n"
-        "HARD VARIATION RULES (absolute):\n"
-        "- Each slot must OPEN with the slot-specific LEAD framing above. Do NOT start the prose with "
-        "\"Nothing's flagging\" or any line about watch areas / body areas — those can appear mid-prose "
-        "or be skipped entirely. Never lead with them.\n"
-        "- Do not reuse the same opening sentence STRUCTURE across slots; vary the sentence type.\n"
-        "- Body areas (knees, joints, shoulders, neck) are optional context — mention only when there's "
-        "an actual signal worth noting, not as a recurring opener.\n"
-        "- Crutch phrases — \"stacking steady days\", \"the tank's full\", \"Nothing's flagging\", \"your "
-        "usual watch areas\" — are overused. Use AT MOST ONE of these per prose; find fresh wording for "
-        "everything else.\n"
-        "Example (fuel-2, leads with what's LEFT, body areas only mid-prose, ends on an action): "
-        "\"Plenty of day still in you, but protein's been coasting since lunch and the tank's going to "
-        "feel it by evening. Knees and shoulders are quiet, nothing pulling for attention — anchor the "
-        "next meal on real protein and get a short walk in before the window closes.\"\n"
+        "Reading: output EXACTLY THREE short lines, each on its OWN line, no blank line between them, "
+        "no paragraph and no flowing prose, in this exact order:\n"
+        "  Line 1 (Observation): ONE plain-English physiological observation — about 6 to 10 words, a "
+        "clipped statement with no narrator. No numbers, no jargon.\n"
+        "  Line 2 (Impact): ONE plain-English consequence for today — about 6 to 10 words.\n"
+        f"  Line 3 ({action_label}): start with '{action_label}:' then {action_desc} — about 6 to 10 words.\n"
+        "The slot framing above sets WHAT each of the three lines is about. NO narrative voice — never "
+        "open with \"You're a couple hours in…\" / \"The day's setting up…\". NO filler — cut every word "
+        "that doesn't carry weight. Line 1 may name a body area (knees, shoulders, neck) ONLY when there's "
+        "a real signal worth noting; otherwise keep it on the recovery/energy read.\n"
+        "Example shape (do NOT copy the words, match the SHAPE):\n"
+        "Recovery is sitting below your usual.\n"
+        "Capacity's there, but the ceiling is lower today.\n"
+        "Action: Keep it controlled — no PR-chasing on tired legs.\n"
         f"{perf_instr}"
         "Transit: write exactly the single word: none. (This section is retired in the direct-data "
         "reframe — always output none, never astrology.)\n"

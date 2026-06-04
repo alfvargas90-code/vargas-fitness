@@ -358,16 +358,23 @@
       <div class="text-[10px] text-muted font-medium mb-1.5 ml-[18px]">Recovery Environment</div>
       <div id="lsi-empty" class="text-[12px] text-muted">First read computes on the next Polar sync.</div>
       <div id="lsi-content" class="hidden">
+        <!-- Band word + 2-line plain-English read of what that band means functionally.
+             Score ("2/10") dropped — the band word carries the signal more cleanly. -->
         <div class="text-[18px] font-bold glow-sleep leading-tight" id="lsi-band" style="color:#9A6BFF">—</div>
-        <div class="text-[15px] font-bold stat-num text-neutral-200 mt-0.5" id="lsi-score">—</div>
-        <!-- Recommendation prose (merged in from the former context card) -->
-        <p class="text-[12px] leading-snug text-neutral-300 mt-1.5" id="lsi-recommendation"></p>
-        <!-- Moon context — sign · degree · phase, next ingress, VoC / retro. The
-             moon readout that used to sit under the hero moon now lives here. -->
-        <div id="lsi-moon-context" class="mt-1.5 space-y-0.5 text-[11px] leading-snug"></div>
-        <p class="text-[10.5px] text-muted mt-1.5 leading-tight" id="lsi-trigger"></p>
-        <span class="hidden" id="lsi-ts"></span>
-        <!-- legacy ref kept so app.js never throws after sparkline removal -->
+        <div class="text-[12.5px] leading-snug text-neutral-300 mt-1 space-y-0.5" id="lsi-read"></div>
+        <!-- Detail rows (sign · degree · phase, next ingress, VoC / retro, trigger,
+             updated stamp) collapse into a tap-to-open disclosure so the card stays a
+             clean 3-line read by default. -->
+        <details class="mt-2">
+          <summary class="text-[11px] text-muted font-semibold cursor-pointer select-none">Details</summary>
+          <div class="mt-1.5">
+            <div id="lsi-moon-context" class="space-y-0.5 text-[11px] leading-snug"></div>
+            <p class="text-[10.5px] text-muted mt-1.5 leading-tight" id="lsi-trigger"></p>
+            <p class="text-[10.5px] text-muted mt-1.5 leading-tight" id="lsi-ts"></p>
+          </div>
+        </details>
+        <!-- legacy refs kept so app.js never throws (score hidden, sparkline removed) -->
+        <span class="hidden" id="lsi-score"></span>
         <span class="hidden" id="lsi-spark"></span>
       </div>
     </section>
