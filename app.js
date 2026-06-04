@@ -935,7 +935,7 @@ function readBlock(subtitle, text) {
 }
 
 // LPI v1 replica — compact Today's read: a color-coded Recovery word + a
-// clamped summary paragraph (full text lives in "View full analysis"), with an
+// full-length summary paragraph (Currents IS the full analysis), with an
 // "Updated HH:MM" timestamp in the header. Mirrors the source mockup.
 const READ_WORD_COLOR = { poor: "#FF5E62", average: "#FF8A3D", good: "#00C8FF", excellent: "#39D98A" };
 async function renderTodaysRead() {
@@ -955,13 +955,9 @@ async function renderTodaysRead() {
       word.style.color = c;
       word.style.textShadow = w ? `0 0 12px ${c}` : "none";
     }
-    // Summary paragraph — clamp to keep the card compact (full read = day-review).
+    // Summary paragraph — full length, no clamp. Currents IS the full analysis.
     const read = (simple && (simple.reading || simple.performance)) || s.summary || "First read drops at 9:05 AM";
     body.textContent = read;
-    body.style.display = "-webkit-box";
-    body.style.webkitBoxOrient = "vertical";
-    body.style.webkitLineClamp = "3";
-    body.style.overflow = "hidden";
     if (ts && s.generated_at) {
       const t = new Date(s.generated_at);
       ts.textContent = "Updated " + t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
