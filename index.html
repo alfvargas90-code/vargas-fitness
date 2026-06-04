@@ -62,6 +62,10 @@
   }
   .stat-num { font-variant-numeric: tabular-nums; }
   html, body { overflow-x: hidden; max-width: 100%; }
+  /* Root paints the area outside body (top notch + bottom safe-area) the same
+     deep OLED navy as the page base, so no white chrome bleeds through under the
+     fixed bottom nav or above the content. (body keeps its own gradient.) */
+  html { background: #03050F; }
 
   /* ── Layer 2: wave system — gradient ribbons converging on the moon center ──
      viewBox is 390×844 (the 1× design frame), so path coords are CSS pixels and
@@ -88,14 +92,6 @@
     opacity: .06;
   }
   @media (prefers-reduced-motion: reduce) { #bg-waves { animation: none; } }
-
-  /* ── Faux iOS status bar (cosmetic — matches the mockup chrome) ───────────── */
-  .statusbar {
-    height: 30px; display: flex; align-items: center; justify-content: space-between;
-    padding: 0 18px 0 22px; font-size: 14px; font-weight: 600; color: #EAEDF4;
-    letter-spacing: .2px;
-  }
-  .statusbar .sb-icons { display: flex; align-items: center; gap: 6px; }
 
   /* ── Hero metric corners ────────────────────────────────────────────────── */
   .metric-corner { display: flex; flex-direction: column; line-height: 1.02; }
@@ -198,16 +194,6 @@
     </svg>
   </div>
 
-  <!-- Faux iOS status bar (cosmetic chrome to match the mockup frame) -->
-  <div class="statusbar" aria-hidden="true">
-    <span id="sb-time">9:41</span>
-    <span class="sb-icons">
-      <svg width="17" height="11" viewBox="0 0 17 11" fill="#EAEDF4"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.5" y="5" width="3" height="6" rx="1"/><rect x="9" y="2.5" width="3" height="8.5" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg>
-      <svg width="16" height="11" viewBox="0 0 16 11" fill="#EAEDF4"><path d="M8 2.2c2 0 3.9.8 5.3 2.1l1.2-1.3C12.8 1.2 10.5.3 8 .3S3.2 1.2 1.5 3l1.2 1.3C4.1 3 6 2.2 8 2.2zm0 3.2c1.1 0 2.1.4 2.9 1.2l1.2-1.3C10.9 4.1 9.5 3.5 8 3.5s-2.9.6-4.1 1.8l1.2 1.3C5.9 5.8 6.9 5.4 8 5.4zM8 8.6 9.7 6.9C9.2 6.4 8.6 6.2 8 6.2s-1.2.2-1.7.7L8 8.6z"/></svg>
-      <svg width="26" height="12" viewBox="0 0 26 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="3" stroke="#EAEDF4" stroke-opacity="0.5"/><rect x="2" y="2" width="18" height="8" rx="1.5" fill="#EAEDF4"/><rect x="24" y="3.5" width="1.5" height="5" rx="0.75" fill="#EAEDF4" fill-opacity="0.6"/></svg>
-    </span>
-  </div>
-
   <div class="mx-auto w-full max-w-[440px] px-3.5 pb-24" style="padding-top:2px">
     <!-- Date header -->
     <header class="flex items-center justify-between mb-1.5 px-1">
@@ -244,7 +230,7 @@
         <span class="metric-word" id="m-strain-label" style="color:#FF5E62"></span>
         <span class="metric-detail" id="m-strain-spark"></span>
         <span class="metric-detail" id="m-strain-detail"></span>
-        <span class="metric-cap mt-0.5" style="color:#FF5E62;opacity:.85">Strain</span>
+        <span class="metric-cap mt-0.5" id="m-strain-cap" style="color:#FF5E62;opacity:.85">Strain</span>
       </button>
 
       <!-- Center: moon + orbital rings (composite SVG) -->

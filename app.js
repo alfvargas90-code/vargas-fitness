@@ -87,9 +87,6 @@ function renderHeader() {
     weekday: "long", year: "numeric", month: "long", day: "numeric",
   });
   sub.textContent = date;
-  // Faux status-bar clock (cosmetic chrome) — H:MM, no AM/PM, like iOS.
-  const sb = document.getElementById("sb-time");
-  if (sb) sb.textContent = now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }).replace(/\s?[AP]M$/i, "");
 }
 
 function ageOn(dateStr) {
@@ -211,12 +208,11 @@ function energyColor(v) {             // Recovery — cyan when restored, warns 
        : v >= 30 ? "#F59E0B"   // amber — low (caution)
        :           "#FF6B6B";  // coral — poor (recovery risk)
 }
-function strainColor(pct) {           // Strain — strain family, hotter with load
-  return pct < 15 ? "#64748B"   // slate — nothing meaningful yet (calm)
-       : pct < 50 ? "#F59E0B"   // amber — light/moderate load building
-       : pct < 80 ? "#FF8A8A"   // light coral — real load
-       : pct < 95 ? "#FF6B6B"   // coral — heavy
-       :            "#EF4444";  // red — max / red zone
+function strainColor(pct) {           // Strain — graduated; RED ONLY near max load
+  return pct < 30 ? "#7d84a8"   // muted metadata gray — low load, no urgency
+       : pct < 60 ? "#FFBA00"   // gold — building (warm caution)
+       : pct < 80 ? "#FF6B6B"   // coral — heavy load
+       :            "#FF5E62";  // red — approaching max (the only red zone)
 }
 
 // Overnight recovery score — combines recharge + sleep + HRV vs an adaptive HRV
@@ -280,17 +276,21 @@ const ORBIT_DEFS = `<defs>
   </linearGradient>
 </defs>`;
 
-// One flat ring: faint full track + bright gradient arc (clockwise from top).
-function orbitGroup(r, pct, gradId, glowColor) {
+// One flat ring: faint full track + bright arc (clockwise from top). Pass a
+// `solidColor` to override the gradient with a flat stroke+glow — used by the
+// Strain ring so its hue can graduate with load (gray → gold → coral → red).
+function orbitGroup(r, pct, gradId, glowColor, solidColor) {
   const c = 2 * Math.PI * r;
   const arc = (Math.max(0, Math.min(100, pct || 0)) / 100) * c;
   const track = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${ORBIT.base}" stroke-width="${ORBIT.baseW}"/>`;
   if (!(pct > 0)) return track;
-  const prog = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="url(#${gradId})"
+  const stroke = solidColor || `url(#${gradId})`;
+  const glow = solidColor || glowColor;
+  const prog = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${stroke}"
       stroke-width="${ORBIT.arcW}" stroke-linecap="round"
       stroke-dasharray="${arc.toFixed(2)} ${(c - arc).toFixed(2)}"
       transform="rotate(-90 130 130)"
-      style="filter:drop-shadow(0 0 5px ${glowColor})"/>`;
+      style="filter:drop-shadow(0 0 5px ${glow})"/>`;
   return track + prog;
 }
 
@@ -389,7 +389,8 @@ function renderOrbit({ recovery, sleep, strain, moon }) {
   host.innerHTML = `<svg viewBox="0 0 260 260" width="100%" height="100%" class="block"
        preserveAspectRatio="xMidYMid meet" style="overflow:visible" aria-label="Orbit rings around moon">
     ${ORBIT_DEFS}
-    ${orbitGroup(rings.strain.r,   strain?.pct,   rings.strain.grad,   rings.strain.glow)}
+    ${orbitGroup(rings.strain.r,   strain?.pct,   rings.strain.grad,   rings.strain.glow,
+                 strain?.pct != null ? strainColor(strain.pct) : null)}
     ${orbitGroup(rings.recovery.r, recovery?.pct, rings.recovery.grad, rings.recovery.glow)}
     ${orbitGroup(rings.sleep.r,    sleep?.pct,    rings.sleep.grad,    rings.sleep.glow)}
     <g transform="translate(${cx} ${cy})">${moonSVG(moonR, m.illum, m.waning)}</g>
@@ -522,7 +523,7 @@ async function renderRings() {
         .map(a => a && a["active-calories"] != null ? Number(a["active-calories"]) : null).filter(v => v != null);
       const sp = document.getElementById("m-strain-spark");
       if (sp) sp.innerHTML = cals.length >= 2
-        ? `<span style="display:inline-block;width:54px;color:#FF5E62">${sparkline(cals)}</span>` : "";
+        ? `<span style="display:inline-block;width:54px;color:${strainColor(strainPct)}">${sparkline(cals)}</span>` : "";
     }
   } catch (e) { /* file:// or no sync yet → orbits stay faint, corners "—" */ }
 
@@ -541,11 +542,17 @@ async function renderRings() {
     sleepScore != null ? sleepLabel(sleepScore) : "",
     sleepDur || "",
     LPI.sleep, "#9A6BFF");
+  // Strain hue graduates with load (gray → gold → coral → red) — red is the
+  // approaching-max signal, not the default. Number, label, glow + caption all
+  // share it so a low-load morning reads muted, not alarming.
+  const strainHue = strainPct != null ? strainColor(strainPct) : LPI.strain;
   setMetricCorner("strain",
     strainPct != null ? `${Math.round(strainPct)}%` : null,
     strainPct != null ? strainLabel(strainPct) : "",
     strainCal != null ? `Load ${strainCal}` : "",
-    LPI.strain, "#FF5E62");
+    strainHue, strainHue);
+  const strainCap = document.getElementById("m-strain-cap");
+  if (strainCap) strainCap.style.color = strainHue;
 
   // Recovery Window derives from the same recovery/sleep/strain state — render
   // it here so it can never disagree with the corners (no second fetch pass).
