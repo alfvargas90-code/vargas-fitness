@@ -1,19 +1,19 @@
 {
-  "date": "2026-06-02",
-  "generated_at": "2026-06-02T21:48:03-05:00",
+  "date": "2026-06-03",
+  "generated_at": "2026-06-03T21:45:00-05:00",
   "verdict": "Big",
   "stats": {
-    "steps": 7936,
-    "active_minutes": 365,
-    "active_time_display": "6h 5m",
-    "calories_burned": 2480,
-    "active_calories": 938,
-    "calories_eaten": 1596,
-    "net_deficit": 884,
+    "steps": 6171,
+    "active_minutes": 345,
+    "active_time_display": "5h 45m",
+    "calories_burned": 2333,
+    "active_calories": 834,
+    "calories_eaten": 2080,
+    "net_deficit": 253,
     "calorie_target": 2574,
-    "protein_g": 196,
+    "protein_g": 72,
     "protein_target_g": 138,
-    "protein_gap_g": -58
+    "protein_gap_g": 66
   },
-  "prose": "Big day, big burn \u2014 about 7,936 steps, six hours on your feet, and you cleared 196 grams of protein, which is exactly the kind of intake that protects your muscle while the fat comes off. You did leave an 884-calorie gap between what you ate and what you burned, which is a touch steeper than ideal \u2014 push the food a little harder on heavy days like this so you're not eating into the muscle you're working to build. Tomorrow, hold that protein right where it is and add a little more on your plate."
+  "prose": "You ran today like a rest day should look \u2014 easy movement, a light 253-calorie deficit, nothing that taxes the muscle you're trying to build. The one gap was protein: 72g is well short of where you need to be, and on a recovery day that's exactly when your body wants the building blocks. Eat slow tonight, hydrate, get to bed early \u2014 and tomorrow, make protein the first thing you plan, not the afterthought."
 }
