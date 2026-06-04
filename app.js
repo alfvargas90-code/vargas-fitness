@@ -586,8 +586,7 @@ function renderRecoveryWindow(s) {
 
 // ---------- Physiology grid (Today's Read right column) ----------
 // HRV / RHR / Respiratory Rate are real Polar fields. Skin Temp + SpO2 are NOT
-// in Alfie's Polar device feed (confirmed Step 0) — rendered as em-dash + muted
-// "not tracked", never faked (LPI v1 Known Risks).
+// in Alfie's Polar device feed, so they're not shown (removed 2026-06-04).
 async function renderPhysiology() {
   const grid = document.getElementById("physiology-grid");
   if (!grid) return;
@@ -612,12 +611,10 @@ async function renderPhysiology() {
     }
   } catch (e) { /* file:// / no sync → all em-dash */ }
 
-  // Icon set — matches the mockup's row glyphs (heart, heart, lungs, thermo, drop).
+  // Icon set — matches the mockup's row glyphs (heart, heart, lungs).
   const ICONS = {
     heart: '<path d="M19 5.5a4 4 0 0 0-7-2 4 4 0 0 0-7 2c0 4 7 8.5 7 8.5s7-4.5 7-8.5z"/>',
     lungs: '<path d="M12 3v8M8 21c-2 0-3-1.5-3-4 0-3 1-5 2.5-6.5C9 9 9.5 10 9.5 12V18c0 2-.5 3-1.5 3zM16 21c2 0 3-1.5 3-4 0-3-1-5-2.5-6.5C15 9 14.5 10 14.5 12V18c0 2 .5 3 1.5 3z"/>',
-    thermo: '<path d="M12 3a2 2 0 0 0-2 2v8.3a4 4 0 1 0 4 0V5a2 2 0 0 0-2-2z"/>',
-    drop: '<path d="M12 3s6 6.5 6 10.5a6 6 0 1 1-12 0C6 9.5 12 3 12 3z"/>',
   };
   const row = (icon, iconColor, label, value, unit, delta, deltaSuffix, goodIsUp) => {
     let deltaHTML = "";
@@ -641,9 +638,7 @@ async function renderPhysiology() {
   grid.innerHTML =
     row("heart",  "#FF5E62", "HRV",   hrv,  "", hrvDelta, "%",   true) +
     row("heart",  "#FF5E62", "RHR",   rhr,  "", rhrDelta, "",    false) +
-    row("lungs",  "#00C8FF", "Resp",  resp, "", null,     "",    false) +
-    row("thermo", "#FF8A3D", "Skin",  null, "", null,     "",    false) +
-    row("drop",   "#00C8FF", "SpO₂",  null, "", null,     "",    true);
+    row("lungs",  "#00C8FF", "Resp",  resp, "", null,     "",    false);
 }
 
 // ---------- Supporting summary cards (Nutrition / Scale / Activity) ----------
@@ -1469,7 +1464,7 @@ function renderAll() {
   renderScaleSnapshot(); // async, VeSync screenshot OCR snapshot (manual via Penny)
   renderScaleHistory(); // async, VeSync scale history table (manual via Penny)
   renderRings(); // async, LPI hero: moon + 3 orbital rings + metric corners + recovery window
-  renderPhysiology(); // async, Today's Read physiology grid (HRV/RHR/Resp + em-dash Skin Temp/SpO2)
+  renderPhysiology(); // async, Today's Read physiology grid (HRV/RHR/Resp)
   renderSupportCards(); // async, Nutrition / Scale / Activity summary cards
   wireRings();   // tap-through scroll on metric corners + card links
   renderActivity(); // async, Polar Loop Gen 2 daily activity (steps / active time / calories)
