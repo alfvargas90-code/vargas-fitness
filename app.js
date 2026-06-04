@@ -380,23 +380,6 @@ function moonSVG(r, illum, waning) {
     <circle cx="0" cy="0" r="${r}" fill="none" stroke="#3c3c44" stroke-width="1"/>`;
 }
 
-// Ring identity labels — tiny, color-matched tags seated just OUTSIDE the outer
-// ring, each placed toward that metric's hero corner so a new user reads the
-// glowing rings as Recovery / Sleep / Strain within ~3s. Rendered inside the
-// orbit SVG (viewBox space) so they scale with the rings and stay aligned at any
-// container width. Color is the only thing tying word→ring→corner — no clutter.
-function ringLabels() {
-  const tag = (x, y, anchor, color, text) =>
-    `<text x="${x}" y="${y}" text-anchor="${anchor}" font-size="9.5"
-       font-weight="700" letter-spacing="1.4" fill="${color}" opacity="0.92"
-       style="filter:drop-shadow(0 0 4px ${color})">${text}</text>`;
-  return (
-    tag(50, 58, "end", LPI.recovery, "RECOVERY") +   // toward top-left corner
-    tag(210, 58, "start", LPI.sleep, "SLEEP") +       // toward top-right corner
-    tag(236, 152, "start", LPI.strain, "STRAIN")      // toward right (Strain) corner
-  );
-}
-
 // Strain ↔ outer-ring integration: a soft bloom seated on the outer ring's
 // lower-right, blooming toward the Strain corner. The connection is FELT, not
 // stated. Hue + intensity track load (neutral gray halo at low load → red bloom
@@ -428,9 +411,64 @@ function renderOrbit({ recovery, sleep, strain, moon }) {
     ${orbitGroup(rings.recovery.r, recovery?.pct, rings.recovery.grad, rings.recovery.glow)}
     ${orbitGroup(rings.sleep.r,    sleep?.pct,    rings.sleep.grad,    rings.sleep.glow)}
     <g transform="translate(${cx} ${cy})">${moonSVG(moonR, m.illum, m.waning)}</g>
-    ${ringLabels()}
   </svg>`;
+  renderHeroLinks();
 }
+
+// ── Ring meaning — connector hairlines (Priority 3) ─────────────────────────
+// The corners already NAME + color-match each metric; what's missing is the link
+// from a corner to its concentric ring. We draw a thin, color-matched, fading
+// hairline from each corner to the nearest point on ITS ring. Endpoints are
+// MEASURED from the live DOM (corner rects + ring center), so the lines stay
+// aligned at any container width (the rings-wrap is a fixed 260px but the corners
+// sit at the hero's variable edges). The Strain line is the shortest — it doubles
+// as the Strain↔outer-ring tie (Priority 4), reinforcing the bloom.
+const HERO_LINKS = [
+  { corner: '[data-target="todays-read"]', r: 84,  color: "#00C8FF", side: "right" }, // Recovery → middle
+  { corner: '[data-target="polar-panel"]', r: 63,  color: "#8A5CFF", side: "left"  }, // Sleep → inner
+  { corner: '#lpi-hero > [data-target="activity"]', r: 100, color: "#FF5E62", side: "left" }, // Strain → outer
+];
+function renderHeroLinks() {
+  const hero = document.getElementById("lpi-hero");
+  const wrap = document.getElementById("rings-wrap");
+  const svg  = document.getElementById("hero-links");
+  if (!hero || !wrap || !svg) return;
+  const H = hero.getBoundingClientRect();
+  const W = wrap.getBoundingClientRect();
+  svg.setAttribute("width", H.width);
+  svg.setAttribute("height", H.height);
+  svg.setAttribute("viewBox", `0 0 ${H.width} ${H.height}`);
+  const cx = W.left - H.left + W.width / 2;
+  const cy = W.top  - H.top  + W.height / 2;
+  const k  = W.width / 260;  // px per viewBox unit
+
+  let defs = "", lines = "";
+  HERO_LINKS.forEach((L, i) => {
+    const el = hero.querySelector(L.corner);
+    if (!el) return;
+    const c = el.getBoundingClientRect();
+    // Anchor on the corner's inner edge, vertically centered on its block.
+    const ax = (L.side === "right" ? c.right : c.left) - H.left;
+    const ay = c.top - H.top + c.height * 0.55;
+    // Nearest point on this metric's ring, toward the anchor.
+    const dx = ax - cx, dy = ay - cy, len = Math.hypot(dx, dy) || 1;
+    const rx = cx + (dx / len) * L.r * k;
+    const ry = cy + (dy / len) * L.r * k;
+    // Start a few px out from the corner so the line doesn't kiss the text.
+    const sx = ax + (dx / len) * -6, sy = ay + (dy / len) * -6;
+    const gid = `hl${i}`;
+    // Fade from faint at the corner → slightly brighter dot at the ring.
+    defs += `<linearGradient id="${gid}" x1="${sx}" y1="${sy}" x2="${rx}" y2="${ry}" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="${L.color}" stop-opacity="0.05"/>
+        <stop offset="1" stop-color="${L.color}" stop-opacity="0.42"/>
+      </linearGradient>`;
+    lines += `<line x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${rx.toFixed(1)}" y2="${ry.toFixed(1)}"
+        stroke="url(#${gid})" stroke-width="1.1" stroke-linecap="round"/>
+      <circle cx="${rx.toFixed(1)}" cy="${ry.toFixed(1)}" r="1.7" fill="${L.color}" opacity="0.55"/>`;
+  });
+  svg.innerHTML = `<defs>${defs}</defs>${lines}`;
+}
+window.addEventListener("resize", () => { try { renderHeroLinks(); } catch (e) {} });
 
 // ── LPI v1 metric-corner label bands ───────────────────────────────────────
 // Qualitative word under each big number. Derived from the same score the ring
@@ -446,6 +484,28 @@ function sleepLabel(score) {
 function strainLabel(pct) {
   return pct >= 95 ? "Very High" : pct >= 80 ? "High" : pct >= 50 ? "Moderate"
        : pct >= 15 ? "Light" : "Minimal";
+}
+
+// Performance-state header (above the moon) — the dashboard's top-line read.
+// Derived from the SAME recovery score the ring + corner render, so the three
+// can never disagree. 2-3 words, all caps, wide-tracked; color graduates with
+// readiness (cyan high → gold moderate → coral building → gray rest).
+function perfState(score) {
+  if (score == null) return null;
+  return score >= 90 ? { text: "PEAK READINESS",    color: "#22E0FF" }
+       : score >= 75 ? { text: "STRONG RECOVERY",   color: "#00C8FF" }
+       : score >= 50 ? { text: "STEADY RECOVERY",   color: "#FFBA00" }
+       : score >= 30 ? { text: "BUILDING RECOVERY", color: "#FF8A3D" }
+       :               { text: "RECOVERY PRIORITY", color: "#8A90A6" };
+}
+function renderPerfState(score) {
+  const el = document.getElementById("perf-state-text");
+  if (!el) return;
+  const s = perfState(score);
+  if (!s) { el.textContent = ""; el.style.textShadow = "none"; return; }
+  el.textContent = s.text;
+  el.style.color = s.color;
+  el.style.textShadow = `0 0 16px ${s.color}99, 0 0 5px ${s.color}66`;
 }
 
 // Set one hero metric corner: big number + qualitative label + small detail.
@@ -563,6 +623,9 @@ async function renderRings() {
   } catch (e) { /* file:// or no sync yet → orbits stay faint, corners "—" */ }
 
   renderOrbit({ recovery, sleep, strain, moon });
+
+  // Performance-state header above the moon (same recovery score as the corner).
+  renderPerfState(recoveryScore);
 
   // Hero metric corners (big number + label + detail), all from real data.
   // Recovery number reads near-white (cyan glow); Sleep/Strain numbers carry

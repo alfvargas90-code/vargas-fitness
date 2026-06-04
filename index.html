@@ -175,15 +175,15 @@
         </linearGradient>
         <!-- Radial glow halos — depth under the wave intersections, not brightness -->
         <radialGradient id="haloCyan" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0" stop-color="#00C8FF" stop-opacity="0.20"/>
+          <stop offset="0" stop-color="#00C8FF" stop-opacity="0.23"/>
           <stop offset="1" stop-color="#00C8FF" stop-opacity="0"/>
         </radialGradient>
         <radialGradient id="haloViolet" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0" stop-color="#8A5CFF" stop-opacity="0.20"/>
+          <stop offset="0" stop-color="#8A5CFF" stop-opacity="0.24"/>
           <stop offset="1" stop-color="#8A5CFF" stop-opacity="0"/>
         </radialGradient>
         <radialGradient id="haloCoral" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0" stop-color="#FF5E62" stop-opacity="0.17"/>
+          <stop offset="0" stop-color="#FF5E62" stop-opacity="0.20"/>
           <stop offset="1" stop-color="#FF5E62" stop-opacity="0"/>
         </radialGradient>
         <filter id="wvblur" x="-30%" y="-30%" width="160%" height="160%">
@@ -198,10 +198,12 @@
            low-alpha blooms read as atmospheric depth (a field you're inside of),
            not as extra brightness. -->
       <g>
-        <circle cx="150" cy="370" r="155" fill="url(#haloCyan)"/>
-        <circle cx="197" cy="290" r="165" fill="url(#haloViolet)"/>
-        <circle cx="252" cy="370" r="155" fill="url(#haloCoral)"/>
-        <circle cx="197" cy="690" r="210" fill="url(#haloViolet)"/>
+        <circle cx="150" cy="370" r="160" fill="url(#haloCyan)"/>
+        <circle cx="197" cy="290" r="170" fill="url(#haloViolet)"/>
+        <circle cx="252" cy="370" r="160" fill="url(#haloCoral)"/>
+        <!-- Lower blooms seated behind the Today's Read band (depth through the page) -->
+        <circle cx="120" cy="660" r="210" fill="url(#haloCyan)"/>
+        <circle cx="270" cy="700" r="210" fill="url(#haloViolet)"/>
       </g>
 
       <!-- Layer B — back parallax ribbons: softer-blurred, dimmer, wider reach
@@ -237,10 +239,10 @@
            blur softens them; the color still registers → "energy runs through the
            page", Linear / Mission Control feel). Soft-blurred so they read as
            atmosphere, not lines. -->
-      <g filter="url(#wvblurSoft)" opacity="0.42" fill="none" stroke-linecap="round">
-        <path d="M -40 670 C 120 632, 280 706, 440 656" stroke="url(#wvCyan)" stroke-width="6"/>
-        <path d="M 440 760 C 280 720, 120 792, -40 748" stroke="url(#wvCoral)" stroke-width="6"/>
-        <path d="M -40 840 C 150 808, 250 866, 440 822" stroke="url(#wvPurple)" stroke-width="5"/>
+      <g filter="url(#wvblurSoft)" opacity="0.5" fill="none" stroke-linecap="round">
+        <path d="M -40 612 C 120 576, 280 648, 440 600" stroke="url(#wvCyan)" stroke-width="8"/>
+        <path d="M 440 708 C 280 668, 120 740, -40 696" stroke="url(#wvCoral)" stroke-width="8"/>
+        <path d="M -40 800 C 150 768, 250 826, 440 782" stroke="url(#wvPurple)" stroke-width="7"/>
       </g>
     </svg>
   </div>
@@ -256,6 +258,10 @@
 
     <!-- ════════════════ HERO — moon + 3 orbital rings + metric corners ═══════ -->
     <section id="lpi-hero" class="relative w-full" style="height:252px" aria-label="Lunar performance hero">
+      <!-- Connector hairlines (corner → its ring), drawn in app.js from measured
+           DOM positions. Sits beneath the rings + corners. -->
+      <svg id="hero-links" class="absolute inset-0 pointer-events-none" style="z-index:0" aria-hidden="true"></svg>
+
       <!-- Recovery — top left -->
       <button type="button" data-target="todays-read"
               class="ring-corner metric-corner items-start text-left absolute left-1 top-1 z-10 focus:outline-none">
