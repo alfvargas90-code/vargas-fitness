@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-04T01:59:10-05:00",
+  "generated_at": "2026-06-04T02:29:23-05:00",
   "score": 10,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -9,10 +9,10 @@
     "sleep_score": 58
   },
   "workout_intensity": "rest",
-  "recommendation": "Hold the charge on the heaviest training session of your week \u2014 load resistance work first, then settle protein high. Initiate the calls and decisions you've been queuing; the system is regulated enough to execute, so calibrate each against what actually needs to ship today.",
+  "recommendation": "Channel today's charge into resistance work\u2014load heavy, push the working sets near failure\u2014and anchor it with deliberate protein at every meal.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "26\u00b0 Cap 37'",
+    "degree": "26\u00b0 Cap 52'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -41,7 +41,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 296.62,
+    "moon_longitude": 296.87,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
@@ -62,7 +62,7 @@
       "hrv_7d": 64.1,
       "rhr_7d": 54.1
     },
-    "active_calories": 2,
+    "active_calories": 3,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
