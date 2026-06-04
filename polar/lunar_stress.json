@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-03T20:10:33-05:00",
+  "generated_at": "2026-06-03T20:27:03-05:00",
   "score": 10,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -9,10 +9,10 @@
     "sleep_score": 58
   },
   "workout_intensity": "rest",
-  "recommendation": "Channel the charge into resistance-priority recovery \u2014 front-load protein and run deliberate mobility work \u2014 and close the day with an early, structured shutdown rather than one more output cycle.",
+  "recommendation": "Channel today's charge into protein-loading and deliberate recovery \u2014 mobility, hydration, an early night \u2014 and treat that structured downshift as the day's output, not a collapse into nothing.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "23\u00b0 Cap 43'",
+    "degree": "23\u00b0 Cap 51'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -41,7 +41,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 293.72,
+    "moon_longitude": 293.86,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
@@ -62,7 +62,7 @@
       "hrv_7d": 64.1,
       "rhr_7d": 54.1
     },
-    "active_calories": 799,
+    "active_calories": 834,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
