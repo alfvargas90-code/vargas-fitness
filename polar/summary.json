@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-04T15:07:54-05:00",
-  "slot": "fuel-2",
-  "summary": "Recovery: Average\n\nReading: Lunch landed well \u2014 energy's steadier than this morning. Enough in the tank for tonight's training window. Action: Go lean from here \u2014 protein and carbs, skip the oils.\n\nPerformance: Moderate effort. The night ran short and recovery's middling, so train tonight \u2014 keep it controlled, nothing maximal.\n\nTransit: none",
+  "generated_at": "2026-06-04T17:37:04-05:00",
+  "slot": "train-1",
+  "summary": "Recovery: Average\n\nReading: State\nRecovery 62 \u00b7 Average \u00b7 HRV -6%\nStrain 74% \u00b7 Moderate \u00b7 590 cal spent\nSleep 6h 10m \u00b7 Fair \u00b7 Above baseline\n\nRead\nRecovery's middling and you've already burned through most of the day's reserve, but the engine is steady \u2014 enough for a controlled session, not a heavy one.\n\nEligible to work out?\nYes \u2014 controlled strength session, 45 minutes, leave max-effort sets for a stronger day.\n\nShould you eat?\nYes \u2014 40g protein and clean carbs within the hour; skip oils, fat budget's spent.\n\nShould you rest?\nBank it \u2014 train, then take an early night; recovery is running behind the work.\n\nPerformance: Yes \u2014 controlled strength session, 45 minutes, leave max-effort sets for a stronger day.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -9,11 +9,11 @@
     },
     {
       "label": "Reading",
-      "text": "Lunch landed well \u2014 energy's steadier than this morning. Enough in the tank for tonight's training window. Action: Go lean from here \u2014 protein and carbs, skip the oils."
+      "text": "State\nRecovery 62 \u00b7 Average \u00b7 HRV -6%\nStrain 74% \u00b7 Moderate \u00b7 590 cal spent\nSleep 6h 10m \u00b7 Fair \u00b7 Above baseline\n\nRead\nRecovery's middling and you've already burned through most of the day's reserve, but the engine is steady \u2014 enough for a controlled session, not a heavy one.\n\nEligible to work out?\nYes \u2014 controlled strength session, 45 minutes, leave max-effort sets for a stronger day.\n\nShould you eat?\nYes \u2014 40g protein and clean carbs within the hour; skip oils, fat budget's spent.\n\nShould you rest?\nBank it \u2014 train, then take an early night; recovery is running behind the work."
     },
     {
       "label": "Performance",
-      "text": "Moderate effort. The night ran short and recovery's middling, so train tonight \u2014 keep it controlled, nothing maximal."
+      "text": "Yes \u2014 controlled strength session, 45 minutes, leave max-effort sets for a stronger day."
     },
     {
       "label": "Transit",
@@ -22,11 +22,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "Lunch landed well \u2014 energy's steadier than this morning. Enough in the tank for tonight's training window. Action: Go lean from here \u2014 protein and carbs, skip the oils.",
-    "performance": "Moderate effort. The night ran short and recovery's middling, so train tonight \u2014 keep it controlled, nothing maximal.",
+    "reading": "State\nRecovery 62 \u00b7 Average \u00b7 HRV -6%\nStrain 74% \u00b7 Moderate \u00b7 590 cal spent\nSleep 6h 10m \u00b7 Fair \u00b7 Above baseline\n\nRead\nRecovery's middling and you've already burned through most of the day's reserve, but the engine is steady \u2014 enough for a controlled session, not a heavy one.\n\nEligible to work out?\nYes \u2014 controlled strength session, 45 minutes, leave max-effort sets for a stronger day.\n\nShould you eat?\nYes \u2014 40g protein and clean carbs within the hour; skip oils, fat budget's spent.\n\nShould you rest?\nBank it \u2014 train, then take an early night; recovery is running behind the work.",
+    "performance": "Yes \u2014 controlled strength session, 45 minutes, leave max-effort sets for a stronger day.",
     "transit": null
   },
-  "nutrition_nudge": "Fat budget's spent \u2014 keep dinner lean and let protein carry the rest of the day.",
+  "nutrition_nudge": "Fat budget's spent \u2014 keep the next meal lean and let protein carry it.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -35,6 +35,6 @@
     "hrv_7d_avg": 63.6,
     "nutrition": "calories 1250 of 2574 goal, protein 87g of 138g goal, carbs 75g of 290g goal, fat 75g of 72g goal",
     "nutrition_detail": "calories 1250 of 2574 goal -> 1324 left; protein 87g of 138g goal -> 51g gap; carbs 75g of 290g goal; fat 75g of 72g goal",
-    "activity_today": "2,790 steps so far, 3h 14m active, 1,574 calories burned, Moderate training load"
+    "activity_today": "3,602 steps so far, 4h active, 1,838 calories burned, Moderate training load"
   }
 }
