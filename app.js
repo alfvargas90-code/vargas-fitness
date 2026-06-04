@@ -669,11 +669,41 @@ async function renderPhysiology() {
 
   grid.innerHTML =
     row("heart",  "#FF5E62", "HRV",   hrv,  "", hrvDelta, "%",   true,
-        "Autonomic balance. Higher = recovered; below = stress.") +
+        hrvState(hrvDelta)) +
     row("heart",  "#FF5E62", "RHR",   rhr,  "", rhrDelta, "",    false,
-        "Resting heart rate. Lower trends with fitness; above = working.") +
+        rhrState(rhrDelta)) +
     row("lungs",  "#00C8FF", "Resp",  resp, "", null,     "",    false,
-        "Breaths per minute. Stable = good; elevated = stress or illness.");
+        respState(resp));
+}
+
+// ---------- State-aware physiology meanings ----------
+// Each maps the CURRENT reading (delta vs baseline, or raw value) to a one-line
+// interpretation + suggested action. Replaces the old static metric glosses so
+// the subtitle says what THIS number means right now, not what the metric is.
+// Null input (no sync / no baseline) falls back to the generic gloss.
+function hrvState(deltaPct) {
+  if (deltaPct == null) return "Autonomic balance. Higher = recovered; below = stress.";
+  const d = Math.round(deltaPct);
+  if (d >= 8)   return "Above baseline. Recovered. Push normally or harder if rested.";
+  if (d >= 3)   return "Slightly above baseline. Recovered. Train as planned.";
+  if (d >= -3)  return "On baseline. Normal recovery profile.";
+  if (d >= -10) return "Below baseline. Mild stress — hydrate, protein, sleep.";
+  return "Well below baseline. Real stress — cut intensity, recover.";
+}
+function rhrState(deltaBpm) {
+  if (deltaBpm == null) return "Resting heart rate. Lower trends with fitness; above = working.";
+  const d = Math.round(deltaBpm);
+  if (d <= -3) return "Below baseline. Cardiovascular recovery is strong.";
+  if (d <= 2)  return "On baseline. Normal resting state.";
+  if (d <= 6)  return "Slightly elevated. Working harder — check hydration, sleep.";
+  return "Elevated. Real signal — stress, illness, or dehydration. Recover.";
+}
+function respState(value) {
+  if (value == null) return "Breaths per minute. Stable = good; elevated = stress or illness.";
+  if (value <= 12.0) return "On the low end of normal. Calm, well-recovered breathing.";
+  if (value <= 14.5) return "Stable around normal. Good.";
+  if (value <= 16.0) return "Slightly elevated. Stress, activity, or warm sleep environment.";
+  return "Elevated. Watch for stress, illness, or poor sleep quality.";
 }
 
 // ---------- Supporting summary cards (Nutrition / Scale / Activity) ----------
