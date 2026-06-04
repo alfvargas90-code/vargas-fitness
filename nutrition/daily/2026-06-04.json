@@ -1,6 +1,6 @@
 {
   "date": "2026-06-04",
-  "synced_at": "2026-06-04T18:58:38+00:00",
+  "synced_at": "2026-06-04T19:28:47+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 1810.0,
-    "protein_g": 133.0,
-    "carbs_g": 83.0,
-    "fat_g": 117.0
+    "calories": 1250.0,
+    "protein_g": 87.0,
+    "carbs_g": 75.0,
+    "fat_g": 75.0
   },
-  "meal_count": 3,
+  "meal_count": 2,
   "raw": {
     "date": "2026-06-04",
     "meals": [
@@ -28,15 +28,6 @@
         "emoji": "\u00f0\u009f\u00a5\u00aa"
       },
       {
-        "title": "High-protein breakfast",
-        "time": "12:47",
-        "calories": 560,
-        "protein": 46,
-        "fat": 42,
-        "carbs": 8,
-        "emoji": "\u00f0\u009f\u008d\u00b3"
-      },
-      {
         "title": "Breakfast with Eggs and Sausage",
         "time": "12:48",
         "calories": 600,
@@ -47,10 +38,10 @@
       }
     ],
     "totals": {
-      "calories": 1810,
-      "protein": 133,
-      "fat": 117,
-      "carbs": 83
+      "calories": 1250,
+      "protein": 87,
+      "fat": 75,
+      "carbs": 75
     },
     "targets": {
       "calories": 2574,
@@ -59,14 +50,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 764,
+      "calories": 1324,
       "is_over": false
     },
-    "meal_count": 3,
+    "meal_count": 2,
     "labels": {
       "header": "Today",
-      "calories_remaining": "764 kcal remaining today",
-      "meals_logged": "3 meals logged",
+      "calories_remaining": "1324 kcal remaining today",
+      "meals_logged": "2 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
