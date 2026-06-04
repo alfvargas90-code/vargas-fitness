@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-04T00:58:47-05:00",
+  "generated_at": "2026-06-04T01:28:58-05:00",
   "score": 10,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -9,10 +9,10 @@
     "sleep_score": 58
   },
   "workout_intensity": "rest",
-  "recommendation": "Channel the charge into resistance work and hit your protein target before the day fragments into smaller tasks; initiate the harder calls selectively while the system can carry them.",
+  "recommendation": "Hold the load steady and push hard into resistance training, anchoring the day's first build around hitting your protein number. Initiate the heavy calls and high-output work directly\u2014the system is calibrated to handle full output, so spend it.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "26\u00b0 Cap 07'",
+    "degree": "26\u00b0 Cap 22'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -41,7 +41,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 296.11,
+    "moon_longitude": 296.36,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
