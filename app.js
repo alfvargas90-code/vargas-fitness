@@ -380,22 +380,6 @@ function moonSVG(r, illum, waning) {
     <circle cx="0" cy="0" r="${r}" fill="none" stroke="#3c3c44" stroke-width="1"/>`;
 }
 
-// Strain ↔ outer-ring integration: a soft bloom seated on the outer ring's
-// lower-right, blooming toward the Strain corner. The connection is FELT, not
-// stated. Hue + intensity track load (neutral gray halo at low load → red bloom
-// near max) so a calm morning reads quiet, never alarming. Drawn behind the
-// arcs so it glows from under the outer ring.
-function strainBloom(strain) {
-  if (!strain || strain.pct == null) return "";
-  const hue = strainColor(strain.pct);
-  const a = (0.10 + Math.min(strain.pct, 100) / 100 * 0.20).toFixed(2);
-  return `<radialGradient id="strainBloomG" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0" stop-color="${hue}" stop-opacity="${a}"/>
-      <stop offset="1" stop-color="${hue}" stop-opacity="0"/>
-    </radialGradient>
-    <ellipse cx="224" cy="160" rx="66" ry="54" fill="url(#strainBloomG)"/>`;
-}
-
 // Assemble the composite SVG and inject; null pct → empty orbit (faint only).
 function renderOrbit({ recovery, sleep, strain, moon }) {
   const host = document.getElementById("rings-orbit-svg");
@@ -405,70 +389,13 @@ function renderOrbit({ recovery, sleep, strain, moon }) {
   host.innerHTML = `<svg viewBox="0 0 260 260" width="100%" height="100%" class="block"
        preserveAspectRatio="xMidYMid meet" style="overflow:visible" aria-label="Orbit rings around moon">
     ${ORBIT_DEFS}
-    ${strainBloom(strain)}
     ${orbitGroup(rings.strain.r,   strain?.pct,   rings.strain.grad,   rings.strain.glow,
                  strain?.pct != null ? strainColor(strain.pct) : null)}
     ${orbitGroup(rings.recovery.r, recovery?.pct, rings.recovery.grad, rings.recovery.glow)}
     ${orbitGroup(rings.sleep.r,    sleep?.pct,    rings.sleep.grad,    rings.sleep.glow)}
     <g transform="translate(${cx} ${cy})">${moonSVG(moonR, m.illum, m.waning)}</g>
   </svg>`;
-  renderHeroLinks();
 }
-
-// ── Ring meaning — connector hairlines (Priority 3) ─────────────────────────
-// The corners already NAME + color-match each metric; what's missing is the link
-// from a corner to its concentric ring. We draw a thin, color-matched, fading
-// hairline from each corner to the nearest point on ITS ring. Endpoints are
-// MEASURED from the live DOM (corner rects + ring center), so the lines stay
-// aligned at any container width (the rings-wrap is a fixed 260px but the corners
-// sit at the hero's variable edges). The Strain line is the shortest — it doubles
-// as the Strain↔outer-ring tie (Priority 4), reinforcing the bloom.
-const HERO_LINKS = [
-  { corner: '[data-target="todays-read"]', r: 84,  color: "#00C8FF", side: "right" }, // Recovery → middle
-  { corner: '[data-target="polar-panel"]', r: 63,  color: "#8A5CFF", side: "left"  }, // Sleep → inner
-  { corner: '#lpi-hero > [data-target="activity"]', r: 100, color: "#FF5E62", side: "left" }, // Strain → outer
-];
-function renderHeroLinks() {
-  const hero = document.getElementById("lpi-hero");
-  const wrap = document.getElementById("rings-wrap");
-  const svg  = document.getElementById("hero-links");
-  if (!hero || !wrap || !svg) return;
-  const H = hero.getBoundingClientRect();
-  const W = wrap.getBoundingClientRect();
-  svg.setAttribute("width", H.width);
-  svg.setAttribute("height", H.height);
-  svg.setAttribute("viewBox", `0 0 ${H.width} ${H.height}`);
-  const cx = W.left - H.left + W.width / 2;
-  const cy = W.top  - H.top  + W.height / 2;
-  const k  = W.width / 260;  // px per viewBox unit
-
-  let defs = "", lines = "";
-  HERO_LINKS.forEach((L, i) => {
-    const el = hero.querySelector(L.corner);
-    if (!el) return;
-    const c = el.getBoundingClientRect();
-    // Anchor on the corner's inner edge, vertically centered on its block.
-    const ax = (L.side === "right" ? c.right : c.left) - H.left;
-    const ay = c.top - H.top + c.height * 0.55;
-    // Nearest point on this metric's ring, toward the anchor.
-    const dx = ax - cx, dy = ay - cy, len = Math.hypot(dx, dy) || 1;
-    const rx = cx + (dx / len) * L.r * k;
-    const ry = cy + (dy / len) * L.r * k;
-    // Start a few px out from the corner so the line doesn't kiss the text.
-    const sx = ax + (dx / len) * -6, sy = ay + (dy / len) * -6;
-    const gid = `hl${i}`;
-    // Fade from faint at the corner → slightly brighter dot at the ring.
-    defs += `<linearGradient id="${gid}" x1="${sx}" y1="${sy}" x2="${rx}" y2="${ry}" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stop-color="${L.color}" stop-opacity="0.05"/>
-        <stop offset="1" stop-color="${L.color}" stop-opacity="0.42"/>
-      </linearGradient>`;
-    lines += `<line x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${rx.toFixed(1)}" y2="${ry.toFixed(1)}"
-        stroke="url(#${gid})" stroke-width="1.1" stroke-linecap="round"/>
-      <circle cx="${rx.toFixed(1)}" cy="${ry.toFixed(1)}" r="1.7" fill="${L.color}" opacity="0.55"/>`;
-  });
-  svg.innerHTML = `<defs>${defs}</defs>${lines}`;
-}
-window.addEventListener("resize", () => { try { renderHeroLinks(); } catch (e) {} });
 
 // ── LPI v1 metric-corner label bands ───────────────────────────────────────
 // Qualitative word under each big number. Derived from the same score the ring
@@ -486,28 +413,6 @@ function strainLabel(pct) {
        : pct >= 15 ? "Light" : "Minimal";
 }
 
-// Performance-state header (above the moon) — the dashboard's top-line read.
-// Derived from the SAME recovery score the ring + corner render, so the three
-// can never disagree. 2-3 words, all caps, wide-tracked; color graduates with
-// readiness (cyan high → gold moderate → coral building → gray rest).
-function perfState(score) {
-  if (score == null) return null;
-  return score >= 90 ? { text: "PEAK READINESS",    color: "#22E0FF" }
-       : score >= 75 ? { text: "STRONG RECOVERY",   color: "#00C8FF" }
-       : score >= 50 ? { text: "STEADY RECOVERY",   color: "#FFBA00" }
-       : score >= 30 ? { text: "BUILDING RECOVERY", color: "#FF8A3D" }
-       :               { text: "RECOVERY PRIORITY", color: "#8A90A6" };
-}
-function renderPerfState(score) {
-  const el = document.getElementById("perf-state-text");
-  if (!el) return;
-  const s = perfState(score);
-  if (!s) { el.textContent = ""; el.style.textShadow = "none"; return; }
-  el.textContent = s.text;
-  el.style.color = s.color;
-  el.style.textShadow = `0 0 16px ${s.color}99, 0 0 5px ${s.color}66`;
-}
-
 // Set one hero metric corner: big number + qualitative label + small detail.
 // `color` tints number+label; null metric → em-dash + muted, glow cleared.
 function setMetricCorner(key, val, label, detail, color, numColor) {
@@ -521,32 +426,6 @@ function setMetricCorner(key, val, label, detail, color, numColor) {
   }
   if (lblEl) { lblEl.textContent = label || ""; lblEl.style.color = color || "#8A90A6"; }
   if (detEl) detEl.textContent = detail || "";
-}
-
-// Phase readout under the moon: "Waning Gibbous · Moon in Capricorn" + the
-// next-sign-change line (uses lunar_stress.json's own ENTERS/LEAVES verb — the
-// `display` string is authoritative, so the verb is whatever the data says).
-function renderMoonReadout(lunar) {
-  const phase = document.getElementById("moon-readout-phase");
-  const main  = document.getElementById("moon-readout-main");
-  const sub   = document.getElementById("moon-readout-sub");
-  if (!main) return;
-  const L = lunar?.lunar;
-  if (!L || !L.sign) { main.textContent = "—"; if (phase) phase.textContent = ""; if (sub) sub.textContent = ""; return; }
-  if (phase) phase.textContent = L.phase || "";
-  main.textContent = `Moon in ${L.sign}`;
-  if (sub) {
-    // Mockup shows the ingress on its own line + the time underneath. Split the
-    // data's `display` ("Enters Aquarius 6/4 at 8:45 AM") into label + time.
-    const bits = [];
-    const disp = L.next_sign_change && L.next_sign_change.display;
-    if (disp) {
-      const mt = disp.match(/at\s+(.+)$/i);
-      if (mt) bits.push(disp.replace(/\s+at\s+.+$/i, "") + "<br>" + mt[1]);
-      else bits.push(disp);
-    }
-    sub.innerHTML = bits.join("  ·  ");
-  }
 }
 
 async function renderRings() {
@@ -566,7 +445,6 @@ async function renderRings() {
       const { illum, waning } = phaseToIllum(lunar.lunar.phase);
       moon = { illum, waning };
     }
-    renderMoonReadout(lunar);
 
     const cats = (await fetchJSON("polar/manifest.json")).categories || {};
     const recDates   = (cats.recharge || []).slice().sort();
@@ -623,9 +501,6 @@ async function renderRings() {
   } catch (e) { /* file:// or no sync yet → orbits stay faint, corners "—" */ }
 
   renderOrbit({ recovery, sleep, strain, moon });
-
-  // Performance-state header above the moon (same recovery score as the corner).
-  renderPerfState(recoveryScore);
 
   // Hero metric corners (big number + label + detail), all from real data.
   // Recovery number reads near-white (cyan glow); Sleep/Strain numbers carry
@@ -1190,6 +1065,22 @@ async function renderLunarStress() {
     const arr = await Promise.all(days.map(dd => fetchJSON(`polar/lunar_daily/${dd}.json`).catch(() => null)));
     const series = arr.map(a => a && a.score != null ? scoreToIndex10(a.score) : null).filter(v => v != null);
     sparkEl.innerHTML = series.length >= 2 ? sparkline(series) : "";
+  }
+
+  // --- Moon context (the lunar readout moved out of the hero) ---
+  // Compact: "Sign · degree · phase", next ingress, then VoC / retrograde flags
+  // in amber when active. Lives in the card body so the hero stays text-empty.
+  const moonCtx = document.getElementById("lsi-moon-context");
+  if (moonCtx) {
+    const parts = [];
+    const head = [L.sign, L.degree, L.phase].filter(Boolean).join(" · ");
+    if (head) parts.push(`<div class="text-neutral-200 font-medium">${head}</div>`);
+    const next = L.next_sign_change && L.next_sign_change.display;
+    if (next) parts.push(`<div class="text-muted">→ ${next}</div>`);
+    if (voc && voc.active)
+      parts.push(`<div class="text-warn font-medium">Void of course · until ${voc.until_display || "next ingress"}</div>`);
+    transits.filter(isRetro).forEach(t => parts.push(`<div class="text-warn font-medium">${t}</div>`));
+    moonCtx.innerHTML = parts.join("");
   }
 
   // --- Moon details (kept accessible per spec) ---
