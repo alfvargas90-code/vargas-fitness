@@ -155,41 +155,92 @@
       <defs>
         <linearGradient id="wvCyan" x1="0" y1="0.5" x2="1" y2="0.7">
           <stop offset="0" stop-color="#00C8FF" stop-opacity="0"/>
-          <stop offset="0.45" stop-color="#00C8FF" stop-opacity="0.85"/>
+          <stop offset="0.45" stop-color="#00C8FF" stop-opacity="0.9"/>
           <stop offset="1" stop-color="#8A5CFF" stop-opacity="0.05"/>
         </linearGradient>
         <linearGradient id="wvPurple" x1="0" y1="0.5" x2="1" y2="0.7">
           <stop offset="0" stop-color="#8A5CFF" stop-opacity="0"/>
-          <stop offset="0.5" stop-color="#8A5CFF" stop-opacity="0.8"/>
+          <stop offset="0.5" stop-color="#8A5CFF" stop-opacity="0.85"/>
           <stop offset="1" stop-color="#00C8FF" stop-opacity="0.05"/>
         </linearGradient>
         <linearGradient id="wvCoral" x1="1" y1="0.5" x2="0" y2="0.7">
           <stop offset="0" stop-color="#FF5E62" stop-opacity="0"/>
-          <stop offset="0.45" stop-color="#FF5E62" stop-opacity="0.9"/>
+          <stop offset="0.45" stop-color="#FF5E62" stop-opacity="0.95"/>
           <stop offset="1" stop-color="#8A5CFF" stop-opacity="0.05"/>
         </linearGradient>
         <linearGradient id="wvOrange" x1="1" y1="0.5" x2="0" y2="0.7">
           <stop offset="0" stop-color="#FF8A3D" stop-opacity="0"/>
-          <stop offset="0.5" stop-color="#FF8A3D" stop-opacity="0.85"/>
+          <stop offset="0.5" stop-color="#FF8A3D" stop-opacity="0.9"/>
           <stop offset="1" stop-color="#FF5E62" stop-opacity="0.05"/>
         </linearGradient>
+        <!-- Radial glow halos — depth under the wave intersections, not brightness -->
+        <radialGradient id="haloCyan" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#00C8FF" stop-opacity="0.20"/>
+          <stop offset="1" stop-color="#00C8FF" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="haloViolet" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#8A5CFF" stop-opacity="0.20"/>
+          <stop offset="1" stop-color="#8A5CFF" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="haloCoral" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stop-color="#FF5E62" stop-opacity="0.17"/>
+          <stop offset="1" stop-color="#FF5E62" stop-opacity="0"/>
+        </radialGradient>
         <filter id="wvblur" x="-30%" y="-30%" width="160%" height="160%">
           <feGaussianBlur stdDeviation="7"/>
         </filter>
+        <filter id="wvblurSoft" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="17"/>
+        </filter>
       </defs>
-      <!-- All ribbons aim their bright end at the moon center (197,188), fanning
-           out to the lower-left (cyan/purple) and lower-right (coral/orange). -->
-      <g filter="url(#wvblur)" fill="none" stroke-linecap="round">
-        <!-- LEFT fan: cyan + purple, converging toward the moon from lower-left -->
+
+      <!-- Layer A — radial glow halos seated under the wave intersections. Large,
+           low-alpha blooms read as atmospheric depth (a field you're inside of),
+           not as extra brightness. -->
+      <g>
+        <circle cx="150" cy="370" r="155" fill="url(#haloCyan)"/>
+        <circle cx="197" cy="290" r="165" fill="url(#haloViolet)"/>
+        <circle cx="252" cy="370" r="155" fill="url(#haloCoral)"/>
+        <circle cx="197" cy="690" r="210" fill="url(#haloViolet)"/>
+      </g>
+
+      <!-- Layer B — back parallax ribbons: softer-blurred, dimmer, wider reach
+           (extend toward the center + upper band). Sits behind the sharp fans to
+           create depth without lifting overall brightness. -->
+      <g filter="url(#wvblurSoft)" opacity="0.55" fill="none" stroke-linecap="round">
+        <path d="M -60 430 C 60 380, 150 320, 197 205" stroke="url(#wvCyan)" stroke-width="11"/>
+        <path d="M -50 560 C 90 540, 185 415, 222 270" stroke="url(#wvPurple)" stroke-width="14"/>
+        <path d="M 450 430 C 330 380, 240 320, 197 205" stroke="url(#wvCoral)" stroke-width="11"/>
+        <path d="M 440 560 C 300 540, 205 415, 172 270" stroke="url(#wvOrange)" stroke-width="14"/>
+        <path d="M -40 700 C 120 650, 178 520, 197 350" stroke="url(#wvCyan)" stroke-width="9"/>
+        <path d="M 430 700 C 270 650, 222 520, 197 350" stroke="url(#wvCoral)" stroke-width="9"/>
+      </g>
+
+      <!-- Layer C — front fans: sharp ribbons aiming their bright end at the moon
+           center (197,188), fanning out to the lower-left (cyan/purple) and
+           lower-right (coral/orange). -->
+      <g filter="url(#wvblur)" opacity="0.96" fill="none" stroke-linecap="round">
+        <!-- LEFT fan -->
         <path d="M -40 470 C 70 430, 150 360, 197 250" stroke="url(#wvCyan)" stroke-width="6"/>
         <path d="M -40 540 C 80 520, 160 430, 205 300" stroke="url(#wvPurple)" stroke-width="9"/>
         <path d="M -30 610 C 100 600, 175 470, 210 320" stroke="url(#wvCyan)" stroke-width="5"/>
         <path d="M -20 360 C 80 340, 150 300, 197 235" stroke="url(#wvPurple)" stroke-width="4"/>
-        <!-- RIGHT fan: coral + orange, converging toward the moon from lower-right -->
+        <!-- RIGHT fan -->
         <path d="M 430 470 C 320 430, 240 360, 197 250" stroke="url(#wvCoral)" stroke-width="6"/>
         <path d="M 430 540 C 310 520, 235 430, 192 300" stroke="url(#wvOrange)" stroke-width="9"/>
         <path d="M 420 610 C 290 600, 220 470, 188 320" stroke="url(#wvCoral)" stroke-width="5"/>
         <path d="M 410 360 C 310 340, 245 300, 197 235" stroke="url(#wvOrange)" stroke-width="4"/>
+      </g>
+
+      <!-- Layer D — lower wave signature: gentle streamers flowing through the
+           lower third, beneath Today's Read + the supporting card grid (the glass
+           blur softens them; the color still registers → "energy runs through the
+           page", Linear / Mission Control feel). Soft-blurred so they read as
+           atmosphere, not lines. -->
+      <g filter="url(#wvblurSoft)" opacity="0.42" fill="none" stroke-linecap="round">
+        <path d="M -40 670 C 120 632, 280 706, 440 656" stroke="url(#wvCyan)" stroke-width="6"/>
+        <path d="M 440 760 C 280 720, 120 792, -40 748" stroke="url(#wvCoral)" stroke-width="6"/>
+        <path d="M -40 840 C 150 808, 250 866, 440 822" stroke="url(#wvPurple)" stroke-width="5"/>
       </g>
     </svg>
   </div>
@@ -232,6 +283,14 @@
         <span class="metric-detail" id="m-strain-detail"></span>
         <span class="metric-cap mt-0.5" id="m-strain-cap" style="color:#FF5E62;opacity:.85">Strain</span>
       </button>
+
+      <!-- Performance state — top-line read, anchored ABOVE the moon. Derived from
+           the recovery score (set in app.js) so it can never disagree with the
+           ring/corner. Sits clear above the locked ring geometry; this is what
+           makes the hero read as performance intelligence, not lunar tracking. -->
+      <div class="absolute left-1/2 -translate-x-1/2 text-center z-20 pointer-events-none" style="top:1px" id="perf-state">
+        <span class="text-[14px] font-extrabold uppercase tracking-[0.2em] whitespace-nowrap" id="perf-state-text" style="color:#00C8FF"></span>
+      </div>
 
       <!-- Center: moon + orbital rings (composite SVG) -->
       <div class="absolute left-1/2 -translate-x-1/2" style="top:4px;width:260px;height:260px" id="rings-wrap">

@@ -380,6 +380,39 @@ function moonSVG(r, illum, waning) {
     <circle cx="0" cy="0" r="${r}" fill="none" stroke="#3c3c44" stroke-width="1"/>`;
 }
 
+// Ring identity labels — tiny, color-matched tags seated just OUTSIDE the outer
+// ring, each placed toward that metric's hero corner so a new user reads the
+// glowing rings as Recovery / Sleep / Strain within ~3s. Rendered inside the
+// orbit SVG (viewBox space) so they scale with the rings and stay aligned at any
+// container width. Color is the only thing tying word→ring→corner — no clutter.
+function ringLabels() {
+  const tag = (x, y, anchor, color, text) =>
+    `<text x="${x}" y="${y}" text-anchor="${anchor}" font-size="9.5"
+       font-weight="700" letter-spacing="1.4" fill="${color}" opacity="0.92"
+       style="filter:drop-shadow(0 0 4px ${color})">${text}</text>`;
+  return (
+    tag(50, 58, "end", LPI.recovery, "RECOVERY") +   // toward top-left corner
+    tag(210, 58, "start", LPI.sleep, "SLEEP") +       // toward top-right corner
+    tag(236, 152, "start", LPI.strain, "STRAIN")      // toward right (Strain) corner
+  );
+}
+
+// Strain ↔ outer-ring integration: a soft bloom seated on the outer ring's
+// lower-right, blooming toward the Strain corner. The connection is FELT, not
+// stated. Hue + intensity track load (neutral gray halo at low load → red bloom
+// near max) so a calm morning reads quiet, never alarming. Drawn behind the
+// arcs so it glows from under the outer ring.
+function strainBloom(strain) {
+  if (!strain || strain.pct == null) return "";
+  const hue = strainColor(strain.pct);
+  const a = (0.10 + Math.min(strain.pct, 100) / 100 * 0.20).toFixed(2);
+  return `<radialGradient id="strainBloomG" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="${hue}" stop-opacity="${a}"/>
+      <stop offset="1" stop-color="${hue}" stop-opacity="0"/>
+    </radialGradient>
+    <ellipse cx="224" cy="160" rx="66" ry="54" fill="url(#strainBloomG)"/>`;
+}
+
 // Assemble the composite SVG and inject; null pct → empty orbit (faint only).
 function renderOrbit({ recovery, sleep, strain, moon }) {
   const host = document.getElementById("rings-orbit-svg");
@@ -389,11 +422,13 @@ function renderOrbit({ recovery, sleep, strain, moon }) {
   host.innerHTML = `<svg viewBox="0 0 260 260" width="100%" height="100%" class="block"
        preserveAspectRatio="xMidYMid meet" style="overflow:visible" aria-label="Orbit rings around moon">
     ${ORBIT_DEFS}
+    ${strainBloom(strain)}
     ${orbitGroup(rings.strain.r,   strain?.pct,   rings.strain.grad,   rings.strain.glow,
                  strain?.pct != null ? strainColor(strain.pct) : null)}
     ${orbitGroup(rings.recovery.r, recovery?.pct, rings.recovery.grad, rings.recovery.glow)}
     ${orbitGroup(rings.sleep.r,    sleep?.pct,    rings.sleep.grad,    rings.sleep.glow)}
     <g transform="translate(${cx} ${cy})">${moonSVG(moonR, m.illum, m.waning)}</g>
+    ${ringLabels()}
   </svg>`;
 }
 
