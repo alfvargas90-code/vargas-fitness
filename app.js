@@ -238,17 +238,30 @@ function computeRecoveryScore(rec, sleep, hrvBaseline) {
 // clockwise from the ellipse top to the data point. Percent values live in
 // floating corner labels (in index.html), not on the rings.
 
+// LPI v1 flat semantic colors (spec color table) — one fixed hue per metric,
+// replacing the Concept 02 severity gradients on the orbital rings + corners.
+const LPI = {
+  recovery: "#00C8FF",  // Recovery
+  sleep:    "#9B5CFF",  // Sleep
+  strain:   "#FF5E62",  // Strain
+  activity: "#FF8A3D",  // Activity
+  nutrition:"#39D98A",  // Nutrition
+  context:  "#8A5CFF",  // Context (Lunar)
+};
+
 const ORBIT = {
   cx: 150, cy: 150,          // viewBox center (viewBox is 0 0 300 300)
   tilt: 35, flatten: 0.55,   // 35° disk; ry = rx * 0.55
   moonR: 30,                 // inner orbit clears the moon by ~14px at its narrowest
+  // LPI v1 ring assignment (SWAP from Concept 02): Sleep is now innermost,
+  // Recovery middle, Strain outer + highest visual weight.
   rings: {                   // inside → out
-    recovery: { rx: 80 },
-    sleep:    { rx: 104 },
+    sleep:    { rx: 80 },
+    recovery: { rx: 104 },
     strain:   { rx: 128 },
   },
-  base: "#2E2A45",           // faint orbit stroke (muted violet-gray — metadata)
-  arcW: 6, baseW: 2,
+  base: "#241B3A",           // faint orbit track (muted violet — metadata)
+  arcW: 5, baseW: 2,         // thinner active stroke than Concept 02 (was 6)
 };
 
 // Ramanujan ellipse-perimeter approximation — used as the dash period so the
@@ -383,15 +396,57 @@ function renderOrbit({ recovery, sleep, strain, moon }) {
   </svg>`;
 }
 
-// Update a floating corner label's value + color (index.html owns the markup).
-function setRingLabel(id, text, color) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = text;
-  el.style.color = color;
-  // Same-hue glow at the card-corner anchor when a live value is present;
-  // cleared for the faint default so "—" stays calm.
-  el.style.textShadow = color && color !== ORBIT.base ? `0 0 8px ${color}` : "none";
+// ── LPI v1 metric-corner label bands ───────────────────────────────────────
+// Qualitative word under each big number. Derived from the same score the ring
+// arc renders, so the corner word and the arc length never disagree.
+function recoveryLabel(score) {
+  return score >= 85 ? "Peak" : score >= 70 ? "Excellent" : score >= 50 ? "Good"
+       : score >= 30 ? "Fair" : "Low";
+}
+function sleepLabel(score) {
+  return score >= 85 ? "Excellent" : score >= 70 ? "Good" : score >= 55 ? "Fair"
+       : score >= 40 ? "Low" : "Poor";
+}
+function strainLabel(pct) {
+  return pct >= 95 ? "Very High" : pct >= 80 ? "High" : pct >= 50 ? "Moderate"
+       : pct >= 15 ? "Light" : "Minimal";
+}
+
+// Set one hero metric corner: big number + qualitative label + small detail.
+// `color` tints number+label; null metric → em-dash + muted, glow cleared.
+function setMetricCorner(key, val, label, detail, color) {
+  const numEl = document.getElementById(`m-${key}-val`);
+  const lblEl = document.getElementById(`m-${key}-label`);
+  const detEl = document.getElementById(`m-${key}-detail`);
+  if (numEl) {
+    numEl.textContent = val ?? "—";
+    numEl.style.color = color || ORBIT.base;
+    numEl.style.textShadow = (val != null && color) ? `0 0 10px ${color}` : "none";
+  }
+  if (lblEl) { lblEl.textContent = label || ""; lblEl.style.color = color || "#9CA3AF"; }
+  if (detEl) detEl.textContent = detail || "";
+}
+
+// Phase readout under the moon: "Waning Gibbous · Moon in Capricorn" + the
+// next-sign-change line (uses lunar_stress.json's own ENTERS/LEAVES verb — the
+// `display` string is authoritative, so the verb is whatever the data says).
+function renderMoonReadout(lunar) {
+  const main = document.getElementById("moon-readout-main");
+  const sub  = document.getElementById("moon-readout-sub");
+  if (!main) return;
+  const L = lunar?.lunar;
+  if (!L || !L.sign) { main.textContent = "—"; if (sub) sub.textContent = ""; return; }
+  const parts = [];
+  if (L.phase) parts.push(L.phase);
+  parts.push(`Moon in ${L.sign}`);
+  main.textContent = parts.join(" · ");
+  if (sub) {
+    const bits = [];
+    if (L.next_sign_change && L.next_sign_change.display) bits.push(L.next_sign_change.display);
+    if (L.void_of_course && L.void_of_course.active)
+      bits.push(`Void of Course until ${L.void_of_course.until_display || "next ingress"}`);
+    sub.textContent = bits.join("  ·  ");
+  }
 }
 
 async function renderRings() {
@@ -401,6 +456,9 @@ async function renderRings() {
   // Defaults — faint orbits + a half-lit moon so something renders on file:// / no sync.
   let recovery = null, sleep = null, strain = null;
   let moon = { illum: 0.5, waning: true };
+  // Corner detail values (kept around so the corners + Today's Read agree).
+  let recoveryScore = null, sleepScore = null, sleepDur = null, strainPct = null,
+      strainCal = null, hrvDeltaPct = null;
 
   try {
     const lunar = await fetchJSON("polar/lunar_stress.json").catch(() => null);
@@ -408,6 +466,7 @@ async function renderRings() {
       const { illum, waning } = phaseToIllum(lunar.lunar.phase);
       moon = { illum, waning };
     }
+    renderMoonReadout(lunar);
 
     const cats = (await fetchJSON("polar/manifest.json")).categories || {};
     const recDates   = (cats.recharge || []).slice().sort();
@@ -419,8 +478,10 @@ async function renderRings() {
     const sleepFresh = sleepDate && (daysSinceDate(sleepDate) ?? 99) <= 1;
     const sleepData = sleepDate ? await fetchJSON(`polar/sleep/${sleepDate}.json`).catch(() => null) : null;
     if (sleepFresh && sleepData?.sleep_score != null) {
-      const s = Math.round(sleepData.sleep_score);
-      sleep = { pct: s, label: `${s}`, color: sleepColor(s) };
+      sleepScore = Math.round(sleepData.sleep_score);
+      const durSecs = (sleepData.light_sleep || 0) + (sleepData.deep_sleep || 0) + (sleepData.rem_sleep || 0);
+      sleepDur = durSecs ? secsToHM(durSecs) : null;
+      sleep = { pct: sleepScore, color: LPI.sleep };
     }
 
     // --- RECOVERY — lifted overnight recovery score ---
@@ -432,8 +493,10 @@ async function renderRings() {
       const hrvs = (await Promise.all(recDates.map(d => fetchJSON(`polar/recharge/${d}.json`).catch(() => null))))
         .map(r => r?.heart_rate_variability_avg).filter(v => v != null);
       const hrvBaseline = hrvs.length ? hrvs.reduce((a, b) => a + b, 0) / hrvs.length : null;
-      const score = computeRecoveryScore(rec, sleepData, hrvBaseline);
-      recovery = { pct: score, label: `${score}`, color: energyColor(score) };
+      recoveryScore = computeRecoveryScore(rec, sleepData, hrvBaseline);
+      if (rec?.heart_rate_variability_avg != null && hrvBaseline)
+        hrvDeltaPct = Math.round((rec.heart_rate_variability_avg / hrvBaseline - 1) * 100);
+      recovery = { pct: recoveryScore, color: LPI.recovery };
     }
 
     // --- STRAIN — inverse of the old Reserve bar (depletion % of 800 cal) ---
@@ -441,23 +504,52 @@ async function renderRings() {
     const actFresh = actDate && (daysSinceDate(actDate) ?? 99) <= 1;
     const act = actDate ? await fetchJSON(`polar/daily_activity/${actDate}.json`).catch(() => null) : null;
     if (actFresh && act && act["active-calories"] != null) {
-      const pct = Math.min(100, (Number(act["active-calories"]) / RESERVE_DEPLETION_CAL) * 100);
-      strain = { pct, label: `${Math.round(pct)}%`, color: strainColor(pct) };
+      strainCal = Math.round(Number(act["active-calories"]));
+      strainPct = Math.min(100, (strainCal / RESERVE_DEPLETION_CAL) * 100);
+      strain = { pct: strainPct, color: LPI.strain };
     }
-  } catch (e) { /* file:// or no sync yet → orbits stay faint, labels "—" */ }
+  } catch (e) { /* file:// or no sync yet → orbits stay faint, corners "—" */ }
 
   renderOrbit({ recovery, sleep, strain, moon });
-  setRingLabel("lbl-recovery-val", recovery?.label ?? "—", recovery?.color ?? ORBIT.base);
-  setRingLabel("lbl-sleep-val",    sleep?.label    ?? "—", sleep?.color    ?? ORBIT.base);
-  setRingLabel("lbl-strain-val",   strain?.label   ?? "—", strain?.color   ?? ORBIT.base);
+
+  // Hero metric corners (big number + label + detail), all from real data.
+  setMetricCorner("recovery",
+    recoveryScore != null ? `${recoveryScore}` : null,
+    recoveryScore != null ? recoveryLabel(recoveryScore) : "",
+    hrvDeltaPct != null ? `HRV ${hrvDeltaPct >= 0 ? "+" : ""}${hrvDeltaPct}%` : "",
+    LPI.recovery);
+  setMetricCorner("sleep",
+    sleepScore != null ? `${sleepScore}` : null,
+    sleepScore != null ? sleepLabel(sleepScore) : "",
+    sleepDur || "",
+    LPI.sleep);
+  setMetricCorner("strain",
+    strainPct != null ? `${Math.round(strainPct)}%` : null,
+    strainPct != null ? strainLabel(strainPct) : "",
+    strainCal != null ? `Load ${strainCal}` : "",
+    LPI.strain);
+
+  // Stash for Recovery Window derivation (avoids a second fetch pass).
+  window.__lpiState = { recoveryScore, sleepScore, strainPct, strainCal };
 }
 
-// Tap-through: each floating corner label scrolls to its detail card.
+// Tap-through: hero metric corners + bottom-nav anchors scroll to their section.
+function scrollToId(id) {
+  const t = document.getElementById(id);
+  if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 function wireRings() {
-  document.querySelectorAll("#glance-rings button[data-target]").forEach(btn => {
+  document.querySelectorAll(".ring-corner[data-target]").forEach(btn => {
+    btn.addEventListener("click", () => scrollToId(btn.dataset.target));
+  });
+  // Bottom nav. Dashboard/History/Insights scroll to anchors; Add + Settings are
+  // visual placeholders for v1 (no-op) — flagged in LPI v1 Known Risks.
+  const navTargets = { dashboard: "lpi-hero", history: "scale-history-panel", insights: "lunar-stress" };
+  document.querySelectorAll("#lpi-bottom-nav button[data-nav]").forEach(btn => {
     btn.addEventListener("click", () => {
-      const t = document.getElementById(btn.dataset.target);
-      if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+      const t = navTargets[btn.dataset.nav];
+      if (t === "lpi-hero") window.scrollTo({ top: 0, behavior: "smooth" });
+      else if (t) scrollToId(t);
     });
   });
 }
