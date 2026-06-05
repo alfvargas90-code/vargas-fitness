@@ -22,14 +22,21 @@ auto-commits + pushes **only** the four dashboard meta files when they change:
 `index.html`, `app.js`, `WHEN_HOME.md`, `polar/summary.py`. Polar/nutrition JSON is
 **not** touched — that stays polar-sync's job.
 
-- **Script:** `~/bin/dashboard-deploy-watch.sh` (internal disk, on purpose — same
-  FDA reason as `keep-claude-alive.sh`). **Source-of-truth + plist** committed to the
-  repo at `deploy-watch/` so a Mac reset can redeploy.
+- **Entrypoint:** `deploy-watch/dashboard_deploy_watch.py`, run by the **FDA-granted
+  python.org Python** (`polar/.venv/bin/python3`) — same interpreter polar-sync uses.
+  A bare `/bin/bash` launchd job is **TCC-blocked from the external volume** (proven
+  here: `getcwd: Operation not permitted`), so it would silently never fire. The
+  `.py` + plist live in-repo at `deploy-watch/` (committed → survives a Mac reset;
+  the FDA grant on the python is the one machine-setup step to re-do).
+- **Manual deploy-now:** `~/bin/dashboard-deploy-watch.sh` — thin shim that execs the
+  same `.py` (works from a Terminal, which has FDA). One source of logic.
 - **Safe by construction:** commits with an explicit pathspec (`git commit -- <4
   files>`), so it can never absorb polar's staged JSON even when they sit in the
-  index mid-cycle. Stale `.git/*.lock` sweep (ports `summary.py::_sweep_stale_git_locks`),
-  5s concurrency defer if another git op is mid-flight, and a post-commit guard that
-  undoes + screams `[DEPLOY-UNEXPECTED-STAGED]` if a non-watched file ever sneaks in.
+  index mid-cycle. Stale `.git/*.lock` sweep (ports `summary.py::_sweep_stale_git_locks`,
+  but only a live **git** holder blocks the sweep — an incidental Spotlight reader no
+  longer pins the lock forever), 5s concurrency defer if another git op is mid-flight,
+  and a post-commit guard that undoes + screams `[DEPLOY-UNEXPECTED-STAGED]` if a
+  non-watched file ever sneaks in.
 - **Loud failures only:** `[DEPLOY-FAIL]` + stderr + non-zero exit on any push/auth
   failure — never a silent exit 0 (silent-401 lesson). Log:
   `~/.local/state/dashboard-deploy-watch.log`.
