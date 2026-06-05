@@ -266,11 +266,11 @@ const LPI = {
 // (subtler) → background waves/particles (soft, receding).
 const ORBIT = {
   cx: 130, cy: 130,
-  moonR: 58,                 // was 40 → +15% (moon is now the anchor)
+  moonR: 62,                 // was 40 → +15% (moon is now the anchor)
   rings: {                   // inside → out
-    sleep:    { r: 63,  grad: "gSleep",  glow: "#8A5CFF" },
-    recovery: { r: 84,  grad: "gRecov",  glow: "#00C8FF" },
-    strain:   { r: 100, grad: "gStrain", glow: "#FF5E62" },
+    sleep:    { r: 76,  grad: "gSleep",  glow: "#8A5CFF" },
+    recovery: { r: 90,  grad: "gRecov",  glow: "#00C8FF" },
+    strain:   { r: 104, grad: "gStrain", glow: "#FF5E62" },
   },
   arcW: 6.5, baseW: 6.5,     // BOLD rings — match the mockup's prominent glowing orbits
   arcOpacity: 0.97,          // vivid arcs (mockup reads at near-full opacity)
@@ -310,6 +310,13 @@ function orbitGroup(r, pct, gradId, glowColor, solidColor, emphasis) {
   const haloOpacity = emphasis ? 0.34 : 0.28;   // restrained bloom — clean concentric rings
   const haloBlur    = emphasis ? 21 : 17;        // tighter halo, less inter-ring bleed
   const progBlur    = emphasis ? 15 : 12;         // crisp arc with soft glow
+  // Soft color bleed — a wide, very low-alpha echo of the arc that lets each ring's
+  // hue diffuse outward (cyan / coral / violet aura), separate from the tighter halo.
+  const auraOpacity = emphasis ? 0.16 : 0.13;
+  const auraBlur    = emphasis ? 33 : 27;
+  const aura = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${glow}"
+      stroke-width="${ORBIT.arcW + 8}" stroke-linecap="round" stroke-opacity="${auraOpacity}"
+      ${dash} style="filter:drop-shadow(0 0 ${auraBlur}px ${glow})"/>`;
   // Outer bloom halo — a low-alpha, wide-blur echo of the arc so the ring reads
   // as energy emanating outward rather than a hard progress stroke.
   const halo = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${glow}"
@@ -319,7 +326,7 @@ function orbitGroup(r, pct, gradId, glowColor, solidColor, emphasis) {
   const prog = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${stroke}"
       stroke-width="${ORBIT.arcW}" stroke-linecap="round" stroke-opacity="${ORBIT.arcOpacity}"
       ${dash} style="filter:drop-shadow(0 0 ${progBlur}px ${glow})"/>`;
-  return track + halo + prog;
+  return track + aura + halo + prog;
 }
 
 // Phase name → {illum 0-1, waning}. lunar_stress.json carries no
@@ -356,14 +363,14 @@ function moonSVG(r, illum, waning) {
   const dim = illum > 0.99; // full moon → no shadow path
   const f = (n) => +(n * r).toFixed(2);
   const haloR = f(2.05);
-  const outerHaloR = f(2.82);
+  const outerHaloR = f(3.15);
   const innerHaloR = f(1.36);
 
   return `<defs>
       <clipPath id="moonClip"><circle cx="0" cy="0" r="${r}"/></clipPath>
       <radialGradient id="moonOuterHalo" cx="50%" cy="50%" r="50%">
-        <stop offset="0%"   stop-color="#E4ECFF" stop-opacity="0.16"/>
-        <stop offset="38%"  stop-color="#C8D8FF" stop-opacity="0.10"/>
+        <stop offset="0%"   stop-color="#E4ECFF" stop-opacity="0.22"/>
+        <stop offset="38%"  stop-color="#C8D8FF" stop-opacity="0.14"/>
         <stop offset="72%"  stop-color="#AAC3F0" stop-opacity="0.045"/>
         <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"/>
       </radialGradient>
@@ -385,6 +392,12 @@ function moonSVG(r, illum, waning) {
         <stop offset="82%"  stop-color="#000000" stop-opacity="0"/>
         <stop offset="100%" stop-color="#08080E" stop-opacity="0.50"/>
       </radialGradient>
+      <radialGradient id="moonSpec" cx="34%" cy="28%" r="50%">
+        <stop offset="0%" stop-color="#FFFDF6" stop-opacity="0.20"/>
+        <stop offset="45%" stop-color="#EAF1FF" stop-opacity="0.07"/>
+        <stop offset="100%" stop-color="#EAF1FF" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="moonRimBlur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDev="${f(0.05)}"/></filter>
       <filter id="moonOuterHaloBlur" x="-120%" y="-120%" width="340%" height="340%">
         <feGaussianBlur stdDev="${f(0.34)}"/></filter>
       <filter id="moonHaloBlur" x="-90%" y="-90%" width="280%" height="280%">
@@ -404,9 +417,11 @@ function moonSVG(r, illum, waning) {
       <image href="assets/moon-lro.webp" x="${-r}" y="${-r}" width="${2 * r}" height="${2 * r}"
              preserveAspectRatio="xMidYMid slice" style="filter:brightness(1.12)"/>
       <circle cx="0" cy="0" r="${r}" fill="url(#moonLimb)"/>
+      <circle cx="0" cy="0" r="${r}" fill="url(#moonSpec)"/>
       ${dim ? "" : `<path d="${shadow}" fill="#070B16" opacity="0.86" filter="url(#moonTerm)"/>`}
     </g>
-    <circle cx="0" cy="0" r="${r}" fill="none" stroke="#7A8AA0" stroke-opacity="0.32" stroke-width="0.8"/>`;
+    <circle cx="0" cy="0" r="${r}" fill="none" stroke="#CFE0FF" stroke-opacity="0.50" stroke-width="${f(0.045)}" filter="url(#moonRimBlur)"/>
+    <circle cx="0" cy="0" r="${r}" fill="none" stroke="#EAF1FF" stroke-opacity="0.60" stroke-width="${f(0.018)}"/>`;
 }
 
 // Assemble the composite SVG and inject; null pct → empty orbit (faint only).
@@ -451,9 +466,17 @@ function setMetricCorner(key, val, label, detail, color, numColor) {
   if (numEl) {
     numEl.textContent = val ?? "—";
     numEl.style.color = val != null ? (numColor || color || "#8A90A6") : "#5A607A";
-    numEl.style.textShadow = (val != null) ? `0 0 18px ${color}` : "none";
+    // Layered illuminated glow: faint dark seat (legibility over the moon) +
+    // tight bright core + wide soft bloom — numbers read as lit, not printed.
+    numEl.style.textShadow = (val != null)
+      ? `0 0 1px rgba(3,5,15,0.65), 0 0 10px ${color}, 0 0 22px ${color}b3, 0 0 40px ${color}59`
+      : "none";
   }
-  if (lblEl) { lblEl.textContent = label || ""; lblEl.style.color = color || "#8A90A6"; }
+  if (lblEl) {
+    lblEl.textContent = label || "";
+    lblEl.style.color = color || "#8A90A6";
+    lblEl.style.textShadow = label ? `0 0 12px ${color}99` : "none";
+  }
   if (detEl) detEl.textContent = detail || "";
 }
 
