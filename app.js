@@ -498,6 +498,24 @@ async function renderRings() {
       moon = { illum, waning };
     }
 
+    // Hero under-moon lunar context — REAL data from lunar_stress.json, mirroring
+    // the mockup's 4-line block: phase / "Moon in {sign}" / "Leaves {sign}" / ingress
+    // time. Never hardcoded; the sign + ingress come straight from lunar.lunar.
+    const moonCtxHero = document.getElementById("moon-context-hero");
+    if (moonCtxHero && lunar?.lunar) {
+      const L = lunar.lunar;
+      const rows = [];
+      if (L.phase) rows.push(`<div class="text-[12px] font-semibold tracking-wide" style="color:#B6A0FF;text-shadow:0 0 2px rgba(3,5,15,0.95),0 1px 7px rgba(3,5,15,0.85),0 0 13px rgba(154,107,255,0.5)">${L.phase}</div>`);
+      if (L.sign)  rows.push(`<div class="text-[18px] font-semibold leading-tight mt-0.5" style="color:#F4F7FF;text-shadow:0 0 12px rgba(3,5,15,0.85)">Moon in ${L.sign}</div>`);
+      const nsc = L.next_sign_change;
+      if (nsc && L.sign) {
+        rows.push(`<div class="text-[12px] font-semibold tracking-wide mt-1" style="color:#B6A0FF;text-shadow:0 0 2px rgba(3,5,15,0.92),0 1px 6px rgba(3,5,15,0.8)">Leaves ${L.sign}</div>`);
+        const mt = (nsc.at || "").match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+        if (mt) { let h = +mt[4]; const ap = h >= 12 ? "PM" : "AM"; h = h % 12 || 12; rows.push(`<div class="text-[12px] font-semibold tracking-wide" style="color:#B6A0FF;text-shadow:0 0 2px rgba(3,5,15,0.92),0 1px 6px rgba(3,5,15,0.8)">${+mt[2]}/${+mt[3]} · ${h}:${mt[5]} ${ap}</div>`); }
+      }
+      moonCtxHero.innerHTML = rows.join("");
+    }
+
     const cats = (await fetchJSON("polar/manifest.json")).categories || {};
     const recDates   = (cats.recharge || []).slice().sort();
     const sleepDates = (cats.sleep || []).slice().sort();

@@ -157,11 +157,11 @@
      Sits behind the Sleep button inside the overlay; soft-edged, pointer-events
      none. Recovery/Strain corners sit on dark ground and need no scrim. */
   .hero-sleep-scrim {
-    position: absolute; top: 200px; left: 50%; transform: translateX(-50%);
-    width: 212px; height: 100px; pointer-events: none; z-index: 0;
-    background: radial-gradient(58% 68% at 50% 62%,
-      rgba(3,5,15,0.58), rgba(3,5,15,0.30) 54%, rgba(3,5,15,0) 78%);
-    filter: blur(4px);
+    position: absolute; top: 184px; left: 50%; transform: translateX(-50%);
+    width: 250px; height: 152px; pointer-events: none; z-index: 0;
+    background: radial-gradient(60% 64% at 50% 54%,
+      rgba(3,5,15,0.82), rgba(3,5,15,0.5) 50%, rgba(3,5,15,0) 80%);
+    filter: blur(7px);
   }
 
   /* ── Hero metric corners ────────────────────────────────────────────────── */
@@ -407,21 +407,7 @@
     </svg>
   </div>
 
-  <div class="mx-auto w-full max-w-[440px] px-3.5" style="padding-top:2px">
-    <!-- Identity header — Lunar Performance eyebrow + Dashboard title + avatar (mockup) -->
-    <header class="flex items-end justify-between mb-3 px-1 pt-1">
-      <div class="min-w-0">
-        <p class="text-[10px] font-bold uppercase" style="color:#00C8FF;letter-spacing:2.4px;text-shadow:0 0 12px rgba(0,200,255,0.45)">Lunar Performance</p>
-        <h1 class="text-[27px] font-extrabold leading-none tracking-tight mt-1.5" style="color:#F4F7FF">Dashboard</h1>
-        <p class="text-[12px] font-medium tracking-tight mt-1.5" style="color:#8A90A6" id="header-sub">Loading…</p>
-      </div>
-      <div class="shrink-0 ml-3 w-9 h-9 rounded-full flex items-center justify-center"
-           style="background:linear-gradient(135deg,rgba(0,200,255,0.22),rgba(138,92,255,0.30));border:1px solid rgba(255,255,255,0.14);box-shadow:0 0 16px rgba(138,92,255,0.28)">
-        <span class="text-[13px] font-bold tracking-wide" style="color:#EAF1FF">AV</span>
-      </div>
-      <span class="hidden" id="profile-strip"></span>
-    </header>
-
+  <div class="mx-auto w-full max-w-[440px] px-3.5" style="padding-top:max(2px, env(safe-area-inset-top))">
     <!-- ════════════════ HERO — moon + 3 orbital rings + metric corners ═══════ -->
     <section id="lpi-hero" class="relative w-full" style="height:330px" aria-label="Lunar performance hero">
       <div class="hero-stack" aria-hidden="true">
@@ -602,7 +588,7 @@
 
         <!-- Sleep — top right -->
         <button type="button" data-target="polar-panel"
-                class="ring-corner metric-corner items-center text-center absolute left-1/2 -translate-x-1/2 z-10 focus:outline-none" style="top:198px">
+                class="ring-corner metric-corner items-end text-right absolute right-1 top-1 z-10 focus:outline-none">
           <span class="metric-cap" style="color:#8A5CFF">Sleep</span>
           <span class="metric-num glow-sleep" id="m-sleep-val" style="color:#9A6BFF">—</span>
           <span class="metric-word" id="m-sleep-label" style="color:#8A5CFF"></span>
@@ -611,12 +597,14 @@
 
         <!-- Strain — right, lower -->
         <button type="button" data-target="activity"
-                class="ring-corner metric-corner items-end text-right absolute right-1 top-1 z-10 focus:outline-none">
+                class="ring-corner metric-corner items-end text-right absolute right-1 z-10 focus:outline-none" style="top:128px">
           <span class="metric-cap" id="m-strain-cap" style="color:#FF5E62">Strain</span>
           <span class="metric-num glow-strain" id="m-strain-val" style="color:#FF5E62">—</span>
           <span class="metric-word" id="m-strain-label" style="color:#FF5E62"></span>
           <span class="metric-detail" id="m-strain-detail"></span>
         </button>
+        <!-- Lunar context under the moon — filled from real lunar_stress.json data by app.js -->
+        <div id="moon-context-hero" class="absolute left-1/2 -translate-x-1/2 text-center z-10 pointer-events-none" style="top:208px;width:210px" aria-live="polite"></div>
       </div>
     </section>
 
@@ -893,6 +881,6 @@
        style="height:env(safe-area-inset-bottom);background:#03050F"></div>
 
   <script src="data.js"></script>
-  <script src="app.js?v=redesign5"></script>
+  <script src="app.js?v=redesign7"></script>
 </body>
 </html>
