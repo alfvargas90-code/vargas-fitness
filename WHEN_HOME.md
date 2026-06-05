@@ -14,7 +14,27 @@ _Last updated: 2026-06-05 (octopus / Claude Code)._
 
 ---
 
-## 🌙 STATUS 2026-06-05 (latest) — v3 micro-tweaks (redesign8)
+## 🌙 STATUS 2026-06-05 (latest) — v4 micro-tweaks (redesign9)
+
+Three Codex-lane tweaks, PVR-verified + pushed:
+1. **Strain dark-seat** — added `.hero-strain-scrim` (soft dark radial, BR corner,
+   mirrors `.hero-sleep-scrim`) so the coral 75% / Load lines read over the bright
+   orange waves. Localized — does not dim the rest of the wave band.
+2. **Lunar block lowered** — `#moon-context-hero` top:208 → **228px** so there's
+   clean space between the inner ring's bottom and "Waning Gibbous" (was touching).
+3. **Next-sign fix (live data)** — lunar block was "Moon in Aquarius / **Leaves
+   Aquarius**" (redundant). Now "Moon in Aquarius / **Enters {next_sign_change.sign}**"
+   = **"Enters Pisces"** today, pulled live (not hardcoded). Graceful fallback: if
+   `nsc.sign` is absent, the Enters line is skipped and only the ingress time shows.
+   Verified via DOM: lines = Waning Gibbous / Moon in Aquarius / Enters Pisces /
+   6/6 · 7:42 PM.
+
+Cache → **`redesign9`**. Lunar engine / Currents / 60s polling untouched; `node
+--check` passes; no console errors.
+
+---
+
+## 🌙 STATUS 2026-06-05 — v3 micro-tweaks (redesign8)
 
 Two small Codex-lane tweaks, PVR-verified + pushed:
 1. **Lunar text shrunk ~17%** — under-moon block fonts 12/18/12/12px → **10/15/10/10px**
