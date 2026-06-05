@@ -14,6 +14,24 @@ _Last updated: 2026-06-05 (octopus / Claude Code)._
 
 ---
 
+## 🌙 STATUS 2026-06-05 (latest) — v3 micro-tweaks (redesign8)
+
+Two small Codex-lane tweaks, PVR-verified + pushed:
+1. **Lunar text shrunk ~17%** — under-moon block fonts 12/18/12/12px → **10/15/10/10px**
+   (phase / "Moon in {sign}" / "Leaves {sign}" / ingress). Copy, positioning,
+   scrim, and dark-seat text-shadows all unchanged; hierarchy preserved.
+2. **Strain → true bottom-right corner** — was "lower-right" (`right-1` + `top:128px`);
+   now `right-1 bottom-1` (real BR corner). No clip into Currents (stays inside the
+   330px hero). **Known minor:** at the BR corner Strain sits over the bright orange
+   waves → coral-on-orange is legible but not crisp; no scrim added (would dim the
+   waves) — ping me if you want a soft dark-seat there.
+
+Cache → **`redesign8`**. Lunar engine / Currents / 60s polling untouched; app.js
+parses (`node --check`); no console errors. Pushed to origin/main (verified SHA in
+the session report).
+
+---
+
 ## 🛡️ STATUS 2026-06-05 — deploy-watch gate LIVE (belt-and-suspenders auto-push)
 
 New LaunchAgent **`com.alfredo.dashboard-deploy-watch`** closes the loop that broke
