@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-06-05T07:14:59-05:00",
+  "generated_at": "2026-06-05T07:45:10-05:00",
   "score": 15,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
   "physiology": {
-    "hrv_pct_baseline": -6,
-    "rhr_delta_bpm": 1,
-    "sleep_score": 56
+    "hrv_pct_baseline": -21,
+    "rhr_delta_bpm": 0,
+    "sleep_score": 75
   },
   "workout_intensity": "rest",
-  "recommendation": "Channel the load into resistance work and hit your protein target before the day fragments; initiate calls and decisions selectively, gating each on whether it actually needs you today.",
+  "recommendation": "Channel the charge into resistance work and hit your protein target hard; initiate the high-stakes calls and commits selectively, vetting each against the data before you fire.",
   "lunar": {
     "sign": "Aquarius",
-    "degree": "11\u00b0 Aqu 19'",
+    "degree": "11\u00b0 Aqu 34'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Pisces",
@@ -37,7 +37,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 311.31,
+    "moon_longitude": 311.56,
     "moon_sign": "Aquarius",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
@@ -49,14 +49,14 @@
     "transit_points": 0,
     "physiology_points": 15,
     "breakdown": [
-      "+5 HRV -6% below baseline",
-      "+10 Sleep score 56 (<70)"
+      "+10 HRV -21% below baseline",
+      "+5 Sleep score 75 (70-80)"
     ],
     "baselines": {
-      "hrv_7d": 63.6,
-      "rhr_7d": 53.3
+      "hrv_7d": 63.3,
+      "rhr_7d": 53.1
     },
-    "active_calories": 35,
+    "active_calories": 71,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693

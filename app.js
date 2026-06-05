@@ -272,9 +272,9 @@ const ORBIT = {
     recovery: { r: 84,  grad: "gRecov",  glow: "#00C8FF" },
     strain:   { r: 100, grad: "gStrain", glow: "#FF5E62" },
   },
-  arcW: 4.3, baseW: 3,       // strokes −20% so rings recede behind the moon
-  arcOpacity: 0.68,          // pulled back further → rings read as energy fields, not progress bars
-  base: "rgba(255,255,255,0.028)", // inactive track barely there
+  arcW: 6.5, baseW: 6.5,     // BOLD rings — match the mockup's prominent glowing orbits
+  arcOpacity: 0.97,          // vivid arcs (mockup reads at near-full opacity)
+  base: "rgba(255,255,255,0.028)", // (track now tints to each ring's hue — see orbitGroup)
 };
 
 // SVG <defs> — per-ring linear gradients tuned to the mockup's ring hues.
@@ -299,14 +299,18 @@ const ORBIT_DEFS = `<defs>
 function orbitGroup(r, pct, gradId, glowColor, solidColor, emphasis) {
   const c = 2 * Math.PI * r;
   const arc = (Math.max(0, Math.min(100, pct || 0)) / 100) * c;
-  const track = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${ORBIT.base}" stroke-width="${ORBIT.baseW}"/>`;
+  // Full track tinted to the ring's own hue (low alpha + faint bloom) so all three
+  // read as COMPLETE glowing orbits — the mockup look — while the bright arc on top
+  // still encodes the metric value.
+  const trackHue = solidColor || glowColor;
+  const track = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${trackHue}" stroke-opacity="0.20" stroke-width="${ORBIT.baseW}" style="filter:drop-shadow(0 0 4px ${trackHue}66)"/>`;
   if (!(pct > 0)) return track;
   const stroke = solidColor || `url(#${gradId})`;
   const glow = solidColor || glowColor;
   const dash = `stroke-dasharray="${arc.toFixed(2)} ${(c - arc).toFixed(2)}" transform="rotate(-90 130 130)"`;
-  const haloOpacity = emphasis ? 0.15 : 0.10;   // +50% bloom presence on the emphasized ring
-  const haloBlur    = emphasis ? 17 : 14;        // +25% wider bloom
-  const progBlur    = emphasis ? 12 : 9;         // arc bloom 7 → 10px (~+30%)
+  const haloOpacity = emphasis ? 0.32 : 0.26;   // bolder bloom — match the mockup's glowing orbits
+  const haloBlur    = emphasis ? 22 : 18;        // wider, brighter halo
+  const progBlur    = emphasis ? 16 : 13;        // dreamier arc bloom
   // Outer bloom halo — a low-alpha, wide-blur echo of the arc so the ring reads
   // as energy emanating outward rather than a hard progress stroke.
   const halo = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${glow}"
