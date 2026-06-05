@@ -14,6 +14,25 @@ _Last updated: 2026-06-05 (octopus / Claude Code)._
 
 ---
 
+## 🔒 LOCKED 2026-06-05 — dashboard frozen for the day
+
+The Lunar Performance Dashboard is **locked**. No more iteration today — anything new
+routes to the **weekend fix list**.
+
+**Canonical reference:** [`LOCKED.md`](./LOCKED.md) — read it first when picking the
+project up cold. It captures the full journey (Acts 1–3), the current spec, the
+**protected/locked features** (lunar engine, Currents state-interpreter, 60s polling,
+deploy gate), the **acceptable residuals** (e.g. moon phase = live data, hero
+compression), and the **parked items**. This WHEN_HOME file remains the running
+incident/status log; LOCKED.md is the frozen source-of-truth snapshot.
+
+Shipped state at lock: hero 3-layer artwork, header-free top, Recovery TL / Sleep TR /
+Strain BR (with dark-seat), under-moon lunar block (live `next_sign_change`, clear of
+the rings), cache `redesign10`. Fix A (node on launchd PATH) validated live via the
+autonomous 17:30 fire. Origin verified.
+
+---
+
 ## 🌙 STATUS 2026-06-05 — lunar block clear of rings (redesign10)
 
 You were right — the v4 +20px (top:228) only cleared the **inner** ring. Measured at
