@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-05T14:18:43-05:00",
+  "generated_at": "2026-06-05T15:19:09-05:00",
   "score": 18,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -9,17 +9,21 @@
     "sleep_score": 75
   },
   "workout_intensity": "moderate",
-  "recommendation": "Hold the line you're already producing on, and route the extra charge into resistance work and a protein-loaded plate before chasing anything new.",
+  "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Aquarius",
-    "degree": "14\u00b0 Aqu 53'",
+    "degree": "15\u00b0 Aqu 24'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Pisces",
       "at": "2026-06-06T19:42-05:00",
       "display": "Enters Pisces 6/6 at 7:42 PM"
     },
-    "void_of_course": null,
+    "void_of_course": {
+      "active": true,
+      "until": "2026-06-06T19:42-05:00",
+      "until_display": "6/6 at 7:42 PM"
+    },
     "active_transits": []
   },
   "bars": {
@@ -37,7 +41,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 314.89,
+    "moon_longitude": 315.4,
     "moon_sign": "Aquarius",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
@@ -57,7 +61,7 @@
       "hrv_7d": 63.3,
       "rhr_7d": 53.1
     },
-    "active_calories": 447,
+    "active_calories": 512,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
