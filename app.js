@@ -996,7 +996,8 @@ function readBlock(subtitle, text) {
 // header) fall through to one styled paragraph, so an existing summary.json still
 // renders cleanly. Section blocks get a small vertical gap.
 const BRIEF_HEADERS = ["State", "Read", "Eligible to work out?", "Should you work out?",
-                       "Should you eat?", "Should you rest?", "Setup for today?"];
+                       "Should you eat?", "Should you rest?", "Setup for today?",
+                       "TRAINING", "NUTRITION", "RECOVERY"];
 function renderBrief(host, text) {
   host.innerHTML = "";
   const blocks = String(text).split(/\n\s*\n/).map(b => b.replace(/\s+$/, "")).filter(b => b.trim());

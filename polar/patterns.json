@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-05T03:38:11+00:00",
+  "generated_at": "2026-06-05T04:08:24+00:00",
   "current_phase": "Waning Gibbous",
   "phase_stats": {
     "New Moon": {
@@ -17,7 +17,7 @@
     "Full Moon": {
       "sleep_delta_h": 0.8,
       "recovery_delta_pct": 13,
-      "strain_delta_pct": -15,
+      "strain_delta_pct": -16,
       "sample_size": 3
     },
     "Waning Gibbous": {
@@ -42,6 +42,6 @@
   "overall_avg": {
     "sleep_h": 6.4,
     "recovery": 59,
-    "strain_kcal": 919
+    "strain_kcal": 923
   }
 }
