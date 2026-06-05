@@ -41,6 +41,7 @@ auto-commits + pushes **only** the four dashboard meta files when they change:
   failure — never a silent exit 0 (silent-401 lesson). Log:
   `~/.local/state/dashboard-deploy-watch.log`.
 - **Verify it's alive:** `launchctl list | grep dashboard-deploy-watch`.
+- _PVR 2026-06-05: launchd RunAtLoad + `kickstart` both fired the python entrypoint and pushed to origin/main with zero stderr — gate confirmed end-to-end._
 
 ---
 
