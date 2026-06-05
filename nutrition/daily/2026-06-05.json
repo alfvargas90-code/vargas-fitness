@@ -1,6 +1,6 @@
 {
   "date": "2026-06-05",
-  "synced_at": "2026-06-05T18:04:39+00:00",
+  "synced_at": "2026-06-05T18:34:47+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 800.0,
-    "protein_g": 53.0,
-    "carbs_g": 32.0,
-    "fat_g": 53.0
+    "calories": 2000.0,
+    "protein_g": 108.0,
+    "carbs_g": 172.0,
+    "fat_g": 83.0
   },
-  "meal_count": 2,
+  "meal_count": 3,
   "raw": {
     "date": "2026-06-05",
     "meals": [
@@ -35,13 +35,22 @@
         "fat": 35,
         "carbs": 2,
         "emoji": "\u00f0\u009f\u008d\u00b3"
+      },
+      {
+        "title": "Chicken and Rice Bowls",
+        "time": "13:05",
+        "calories": 1200,
+        "protein": 55,
+        "fat": 30,
+        "carbs": 140,
+        "emoji": "\u00f0\u009f\u008d\u009a"
       }
     ],
     "totals": {
-      "calories": 800,
-      "protein": 53,
-      "fat": 53,
-      "carbs": 32
+      "calories": 2000,
+      "protein": 108,
+      "fat": 83,
+      "carbs": 172
     },
     "targets": {
       "calories": 2574,
@@ -50,14 +59,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 1774,
+      "calories": 574,
       "is_over": false
     },
-    "meal_count": 2,
+    "meal_count": 3,
     "labels": {
       "header": "Today",
-      "calories_remaining": "1774 kcal remaining today",
-      "meals_logged": "2 meals logged",
+      "calories_remaining": "574 kcal remaining today",
+      "meals_logged": "3 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
