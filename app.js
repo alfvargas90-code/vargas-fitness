@@ -272,7 +272,7 @@ const ORBIT = {
     recovery: { r: 84,  grad: "gRecov",  glow: "#00C8FF" },
     strain:   { r: 100, grad: "gStrain", glow: "#FF5E62" },
   },
-  arcW: 4, baseW: 3,         // strokes −20% so rings recede behind the moon
+  arcW: 4.3, baseW: 3,       // strokes −20% so rings recede behind the moon
   arcOpacity: 0.68,          // pulled back further → rings read as energy fields, not progress bars
   base: "rgba(255,255,255,0.028)", // inactive track barely there
 };
@@ -304,9 +304,9 @@ function orbitGroup(r, pct, gradId, glowColor, solidColor, emphasis) {
   const stroke = solidColor || `url(#${gradId})`;
   const glow = solidColor || glowColor;
   const dash = `stroke-dasharray="${arc.toFixed(2)} ${(c - arc).toFixed(2)}" transform="rotate(-90 130 130)"`;
-  const haloOpacity = emphasis ? 0.12 : 0.08;   // +50% bloom presence on the emphasized ring
-  const haloBlur    = emphasis ? 15 : 12;        // +25% wider bloom
-  const progBlur    = emphasis ? 10 : 7;         // arc bloom 7 → 10px (~+30%)
+  const haloOpacity = emphasis ? 0.15 : 0.10;   // +50% bloom presence on the emphasized ring
+  const haloBlur    = emphasis ? 17 : 14;        // +25% wider bloom
+  const progBlur    = emphasis ? 12 : 9;         // arc bloom 7 → 10px (~+30%)
   // Outer bloom halo — a low-alpha, wide-blur echo of the arc so the ring reads
   // as energy emanating outward rather than a hard progress stroke.
   const halo = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${glow}"
@@ -352,14 +352,14 @@ function moonSVG(r, illum, waning) {
   const shadow = `M 0 ${-r} A ${r} ${r} 0 0 ${limbSweep} 0 ${r} A ${rxT} ${r} 0 0 ${termSweep} 0 ${-r} Z`;
   const dim = illum > 0.99; // full moon → no shadow path
   const f = (n) => +(n * r).toFixed(2);
-  const haloR = f(1.65);
+  const haloR = f(1.90);
 
   return `<defs>
       <clipPath id="moonClip"><circle cx="0" cy="0" r="${r}"/></clipPath>
       <radialGradient id="moonHalo" cx="50%" cy="50%" r="50%">
-        <stop offset="0%"   stop-color="#DCE6FF" stop-opacity="0.20"/>
-        <stop offset="42%"  stop-color="#C8D8FF" stop-opacity="0.13"/>
-        <stop offset="70%"  stop-color="#AAC3F0" stop-opacity="0.055"/>
+        <stop offset="0%"   stop-color="#DCE6FF" stop-opacity="0.26"/>
+        <stop offset="42%"  stop-color="#C8D8FF" stop-opacity="0.17"/>
+        <stop offset="70%"  stop-color="#AAC3F0" stop-opacity="0.075"/>
         <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"/>
       </radialGradient>
       <radialGradient id="moonLimb" cx="42%" cy="38%" r="62%">
@@ -369,17 +369,17 @@ function moonSVG(r, illum, waning) {
         <stop offset="100%" stop-color="#08080E" stop-opacity="0.50"/>
       </radialGradient>
       <filter id="moonHaloBlur" x="-90%" y="-90%" width="280%" height="280%">
-        <feGaussianBlur stdDev="${f(0.18)}"/></filter>
+        <feGaussianBlur stdDev="${f(0.22)}"/></filter>
       <filter id="moonTerm" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDev="${f(0.07)}"/></filter>
       <filter id="moonCast" x="-140%" y="-140%" width="380%" height="380%">
         <feGaussianBlur stdDev="${f(0.16)}"/></filter>
     </defs>
-    <ellipse cx="0" cy="${f(0.32)}" rx="${f(1.05)}" ry="${f(0.42)}" fill="#02030A" opacity="0.55" filter="url(#moonCast)"/>
+    <ellipse cx="0" cy="${f(0.32)}" rx="${f(1.14)}" ry="${f(0.42)}" fill="#02030A" opacity="0.44" filter="url(#moonCast)"/>
     <circle cx="0" cy="0" r="${haloR}" fill="url(#moonHalo)" filter="url(#moonHaloBlur)"/>
     <g clip-path="url(#moonClip)">
       <image href="assets/moon-lro.webp" x="${-r}" y="${-r}" width="${2 * r}" height="${2 * r}"
-             preserveAspectRatio="xMidYMid slice"/>
+             preserveAspectRatio="xMidYMid slice" style="filter:brightness(1.12)"/>
       <circle cx="0" cy="0" r="${r}" fill="url(#moonLimb)"/>
       ${dim ? "" : `<path d="${shadow}" fill="#05060C" opacity="0.93" filter="url(#moonTerm)"/>`}
     </g>
@@ -428,7 +428,7 @@ function setMetricCorner(key, val, label, detail, color, numColor) {
   if (numEl) {
     numEl.textContent = val ?? "—";
     numEl.style.color = val != null ? (numColor || color || "#8A90A6") : "#5A607A";
-    numEl.style.textShadow = (val != null) ? `0 0 14px ${color}` : "none";
+    numEl.style.textShadow = (val != null) ? `0 0 18px ${color}` : "none";
   }
   if (lblEl) { lblEl.textContent = label || ""; lblEl.style.color = color || "#8A90A6"; }
   if (detEl) detEl.textContent = detail || "";
@@ -602,9 +602,14 @@ function renderRecoveryWindow(s) {
   statusEl.textContent = status;
   statusEl.style.color = color;
   statusEl.style.textShadow = `0 0 12px ${color}`;
-  if (nowEl) nowEl.textContent = "Now";
+  if (nowEl) {
+    nowEl.textContent = "Now";
+    nowEl.style.color = "#E9EDF5";
+    nowEl.style.textShadow = "0 0 8px rgba(233,237,245,0.45)";
+    nowEl.style.fontWeight = "700";
+  }
   if (bar) { bar.style.width = `${pos}%`; bar.style.background = grad; }
-  if (dot) { dot.style.left = `${pos}%`; dot.style.background = color; dot.style.boxShadow = `0 0 8px ${color}`; }
+  if (dot) { dot.style.left = `${pos}%`; dot.style.background = color; dot.style.boxShadow = `0 0 11px ${color}, 0 0 22px ${color}66, -7px 0 16px ${color}55`; }
   if (left) left.textContent = hm(now);
   if (right) right.textContent = hm(end);
   if (note) note.textContent = derived;
@@ -1020,7 +1025,7 @@ function renderBrief(host, text) {
       h.textContent = header;
       wrap.appendChild(h);
       const p = document.createElement("p");
-      p.className = "text-[12.5px] leading-snug text-neutral-200";
+      p.className = "text-[12.5px] leading-snug text-neutral-100";
       p.style.whiteSpace = "pre-line";
       p.style.marginTop = "1px";
       p.textContent = lines.slice(1).join("\n").trim();

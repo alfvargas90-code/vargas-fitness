@@ -93,13 +93,13 @@
     background-image:
       radial-gradient(rgba(255,255,255,.9) 0.6px, transparent 1.0px),
       radial-gradient(rgba(0,200,255,.8) 0.5px, transparent 0.9px);
-    background-size: 36px 36px, 54px 54px;
+    background-size: 30px 30px, 46px 46px;
     background-position: 0 0, 19px 13px;
-    -webkit-mask-image: radial-gradient(150% 70% at 50% 38%, #000 0%, transparent 60%);
-    mask-image: radial-gradient(150% 70% at 50% 38%, #000 0%, transparent 60%);
+    -webkit-mask-image: radial-gradient(162% 84% at 50% 34%, #000 0%, transparent 66%);
+    mask-image: radial-gradient(162% 84% at 50% 34%, #000 0%, transparent 66%);
     /* Lifted .07 → .12 for slightly more atmospheric presence (still clearly
        behind moon + rings). */
-    opacity: .12;
+    opacity: .16;
   }
   @media (prefers-reduced-motion: reduce) { #bg-waves { animation: none; } }
 
@@ -112,9 +112,9 @@
   .hero-zones {
     position: absolute; inset: 0; z-index: 0; pointer-events: none;
     background:
-      radial-gradient(150px 150px at 13% 72%, rgba(0,200,255,0.19),  transparent 68%),
-      radial-gradient(165px 165px at 87% 19%, rgba(155,92,255,0.18), transparent 68%),
-      radial-gradient(150px 150px at 83% 80%, rgba(255,94,98,0.16),  transparent 70%);
+      radial-gradient(168px 168px at 13% 72%, rgba(0,200,255,0.24),  transparent 70%),
+      radial-gradient(185px 185px at 87% 19%, rgba(155,92,255,0.23), transparent 70%),
+      radial-gradient(168px 168px at 83% 80%, rgba(255,94,98,0.21),  transparent 72%);
     filter: blur(16px);
   }
 
@@ -126,15 +126,15 @@
   .metric-detail{ font-size: 11px; color: #8A90A6; margin-top: 2px; font-weight: 600; }
 
   /* ── Soft semantic glows ─────────────────────────────────────────────────── */
-  .glow-recov  { text-shadow: 0 0 14px rgba(0,200,255,0.65); }
-  .glow-sleep  { text-shadow: 0 0 14px rgba(138,92,255,0.65); }
-  .glow-strain { text-shadow: 0 0 14px rgba(255,94,98,0.70); }
+  .glow-recov  { text-shadow: 0 0 17px rgba(0,200,255,0.78); }
+  .glow-sleep  { text-shadow: 0 0 17px rgba(138,92,255,0.78); }
+  .glow-strain { text-shadow: 0 0 18px rgba(255,94,98,0.85); }
   .glow-activ  { text-shadow: 0 0 11px rgba(255,138,61,0.55); }
   .glow-nutri  { text-shadow: 0 0 11px rgba(57,217,138,0.55); }
   .glow-ctx    { text-shadow: 0 0 12px rgba(138,92,255,0.60); }
-  .glow-purple, .glow-violet, .glow-electric { text-shadow: 0 0 14px rgba(138,92,255,0.65); }
-  .glow-cyan, .glow-cobalt   { text-shadow: 0 0 14px rgba(0,200,255,0.65); }
-  .glow-coral, .glow-bad     { text-shadow: 0 0 14px rgba(255,94,98,0.70); }
+  .glow-purple, .glow-violet, .glow-electric { text-shadow: 0 0 17px rgba(138,92,255,0.78); }
+  .glow-cyan, .glow-cobalt   { text-shadow: 0 0 17px rgba(0,200,255,0.78); }
+  .glow-coral, .glow-bad     { text-shadow: 0 0 18px rgba(255,94,98,0.85); }
   .glow-green, .glow-good     { text-shadow: 0 0 11px rgba(57,217,138,0.55); }
   .glow-amber, .glow-gold, .glow-warn   { text-shadow: 0 0 11px rgba(255,138,61,0.55); }
   .glow-maroon   { text-shadow: 0 0 7px rgba(100,116,139,0.50); }
@@ -143,10 +143,10 @@
   .gradient-card, .lpi-card {
     background: rgba(12,16,38,0.62);
     border: 1px solid rgba(255,255,255,0.07);
-    -webkit-backdrop-filter: blur(18px) saturate(1.1);
-    backdrop-filter: blur(18px) saturate(1.1);
+    -webkit-backdrop-filter: blur(22px) saturate(1.18);
+    backdrop-filter: blur(22px) saturate(1.18);
     border-radius: 22px;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 20px 46px rgba(0,0,0,.5);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.10), inset 0 -1px 0 rgba(0,0,0,.35), 0 20px 46px rgba(0,0,0,.5);
   }
   @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
     .gradient-card, .lpi-card { background: rgba(9,12,28,0.94); }
@@ -600,6 +600,6 @@
        style="height:env(safe-area-inset-bottom);background:#03050F"></div>
 
   <script src="data.js"></script>
-  <script src="app.js?v=2026-06-04-2"></script>
+  <script src="app.js?v=2026-06-04-3"></script>
 </body>
 </html>
