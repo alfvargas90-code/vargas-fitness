@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-06-04T20:00:13-05:00",
-  "slot": "train-2",
-  "summary": "Recovery: Average\n\nReading: State\nRecovery 62 \u00b7 Average \u00b7 HRV -6%\nStrain 88% \u00b7 Heavy \u00b7 704 cal spent\nSleep 6h 10m \u00b7 Fair \u00b7 Above baseline\n\nRead\nYou slept a bit better than usual, but your tank's still lighter than normal and you've already burned through a full day's effort.\n\nShould you work out?\nDone well \u2014 moderate effort logged; no need to chase more tonight.\n\nShould you eat?\nYes \u2014 50g+ protein before 9:30, lean and light, to close the day's gap.\n\nShould you rest?\nBank it \u2014 sleep is tonight's real lift; protect it and let muscle rebuild.\n\nPerformance: Done well \u2014 moderate effort logged; no need to chase more tonight.\n\nTransit: none",
+  "generated_at": "2026-06-05T07:10:16-05:00",
+  "slot": "recovery",
+  "summary": "Recovery: Average\n\nReading: State\nRecovery 62 \u00b7 Average \u00b7 HRV -6%\nStrain 2% \u00b7 Minimal \u00b7 17 cal spent\nSleep 6h 10m \u00b7 Fair \u00b7 Above baseline\n\nRead\nYou slept better than you have all week but woke up only moderately charged \u2014 a steady, capable day, not a peak one.\n\nTRAINING\nTrain, but keep it to one solid resistance session, moderate weight and effort; skip grinding to failure or piling on extra volume.\n\nNUTRITION\nYou're starting empty \u2014 get a protein-heavy breakfast in within the hour, aim for 35 to 40g now, and stay near your full calorie target so the deficit stays gentle and muscle's protected.\n\nRECOVERY\nLock in tonight's bedtime to repeat last night's better sleep; that's what keeps this middling recovery from sliding lower.\n\nPerformance: Train, but keep it to one solid resistance session, moderate weight and effort; skip grinding to failure or piling on extra volume.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -9,11 +9,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nRecovery 62 \u00b7 Average \u00b7 HRV -6%\nStrain 88% \u00b7 Heavy \u00b7 704 cal spent\nSleep 6h 10m \u00b7 Fair \u00b7 Above baseline\n\nRead\nYou slept a bit better than usual, but your tank's still lighter than normal and you've already burned through a full day's effort.\n\nShould you work out?\nDone well \u2014 moderate effort logged; no need to chase more tonight.\n\nShould you eat?\nYes \u2014 50g+ protein before 9:30, lean and light, to close the day's gap.\n\nShould you rest?\nBank it \u2014 sleep is tonight's real lift; protect it and let muscle rebuild."
+      "text": "State\nRecovery 62 \u00b7 Average \u00b7 HRV -6%\nStrain 2% \u00b7 Minimal \u00b7 17 cal spent\nSleep 6h 10m \u00b7 Fair \u00b7 Above baseline\n\nRead\nYou slept better than you have all week but woke up only moderately charged \u2014 a steady, capable day, not a peak one.\n\nTRAINING\nTrain, but keep it to one solid resistance session, moderate weight and effort; skip grinding to failure or piling on extra volume.\n\nNUTRITION\nYou're starting empty \u2014 get a protein-heavy breakfast in within the hour, aim for 35 to 40g now, and stay near your full calorie target so the deficit stays gentle and muscle's protected.\n\nRECOVERY\nLock in tonight's bedtime to repeat last night's better sleep; that's what keeps this middling recovery from sliding lower."
     },
     {
       "label": "Performance",
-      "text": "Done well \u2014 moderate effort logged; no need to chase more tonight."
+      "text": "Train, but keep it to one solid resistance session, moderate weight and effort; skip grinding to failure or piling on extra volume."
     },
     {
       "label": "Transit",
@@ -22,19 +22,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nRecovery 62 \u00b7 Average \u00b7 HRV -6%\nStrain 88% \u00b7 Heavy \u00b7 704 cal spent\nSleep 6h 10m \u00b7 Fair \u00b7 Above baseline\n\nRead\nYou slept a bit better than usual, but your tank's still lighter than normal and you've already burned through a full day's effort.\n\nShould you work out?\nDone well \u2014 moderate effort logged; no need to chase more tonight.\n\nShould you eat?\nYes \u2014 50g+ protein before 9:30, lean and light, to close the day's gap.\n\nShould you rest?\nBank it \u2014 sleep is tonight's real lift; protect it and let muscle rebuild.",
-    "performance": "Done well \u2014 moderate effort logged; no need to chase more tonight.",
+    "reading": "State\nRecovery 62 \u00b7 Average \u00b7 HRV -6%\nStrain 2% \u00b7 Minimal \u00b7 17 cal spent\nSleep 6h 10m \u00b7 Fair \u00b7 Above baseline\n\nRead\nYou slept better than you have all week but woke up only moderately charged \u2014 a steady, capable day, not a peak one.\n\nTRAINING\nTrain, but keep it to one solid resistance session, moderate weight and effort; skip grinding to failure or piling on extra volume.\n\nNUTRITION\nYou're starting empty \u2014 get a protein-heavy breakfast in within the hour, aim for 35 to 40g now, and stay near your full calorie target so the deficit stays gentle and muscle's protected.\n\nRECOVERY\nLock in tonight's bedtime to repeat last night's better sleep; that's what keeps this middling recovery from sliding lower.",
+    "performance": "Train, but keep it to one solid resistance session, moderate weight and effort; skip grinding to failure or piling on extra volume.",
     "transit": null
   },
-  "nutrition_nudge": "Front-load protein into your next meal \u2014 make it carry at least 50g to close the gap.",
+  "nutrition_nudge": "Protein's at zero with 138g to land \u2014 open with 40g at breakfast and keep meals evenly spaced.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
     "sleep_hours": 6.2,
     "hrv_today": 60,
     "hrv_7d_avg": 63.6,
-    "nutrition": "calories 1250 of 2574 goal, protein 87g of 138g goal, carbs 75g of 290g goal, fat 75g of 72g goal",
-    "nutrition_detail": "calories 1250 of 2574 goal -> 1324 left; protein 87g of 138g goal -> 51g gap; carbs 75g of 290g goal; fat 75g of 72g goal",
-    "activity_today": "4,116 steps so far, 5h 3m active, 2,068 calories burned, Moderate training load"
+    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
+    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
+    "activity_today": "16 steps so far, 1m active, 408 calories burned, \u2014 training load"
   }
 }

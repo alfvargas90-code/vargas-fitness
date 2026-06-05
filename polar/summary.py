@@ -4,16 +4,16 @@
 Reads the latest Polar recharge/sleep data + body-comp seed and writes
 polar/summary.json with a `simple` block the dashboard Currents card renders, then
 pushes so the live URL updates. The headline product is the TACTICAL BRIEF in
-`simple.reading`: a multiline read that answers, in order — what's the state, what
-does it mean, should I work out, should I eat, should I rest?
+`simple.reading`: a multiline read that briefs, in order — what's the state, what
+does it mean, training, nutrition, and recovery.
 
 The brief has two layers. The STATE block (3 lines: Recovery / Strain / Sleep) is
 computed deterministically in Python and mirrors the dashboard's Recovery/Strain/Sleep
-rings exactly — real numbers, no LLM. The READ line plus the decision verdicts
-(workout / eat / rest, each a fixed-vocabulary verdict + one tight qualifier) are the
-only `claude -p` (Alfie's Claude Max plan — no API key, no marginal cost) authored
-parts. The Read never quotes biometric numbers; the Eat qualifier may use gram amounts
-and clock times. No astrology, no natal/lunar texture.
+rings exactly — real numbers, no LLM. The READ line plus the declarative briefing
+conclusions (workout / eat / rest) are the only `claude -p` (Alfie's Claude Max plan
+— no API key, no marginal cost) authored parts. The Read never quotes biometric
+numbers; the Eat conclusion may use gram amounts and clock times. No astrology, no
+natal/lunar texture.
 
 Run by the com.alfredo.polar-summary LaunchAgent 7x/day (CDT), one fire per slot:
   04:00 sleep · 07:00 recovery · 11:30 fuel-1 · 15:00 fuel-2 · 17:30 train-1 ·
@@ -117,8 +117,8 @@ SIMPLE_KEYS = ["recovery", "reading", "performance", "transit"]
 # Per-slot framing for the tactical brief. Each entry sets WHERE Alfie is in his day
 # (`when` — sets the tone), what the AI Read line should focus on (`read`), and which
 # decision blocks fire (`blocks`). The STATE block is deterministic Python; the Read +
-# decision verdicts are the only LLM-authored parts, each verdict drawn from a fixed
-# vocabulary. The clock matters: the 4 AM sleep slot has no workout/eat call (he's
+# declarative decision conclusions are the only LLM-authored parts, each written as a
+# concise Mission-Control briefing section. The clock matters: the 4 AM sleep slot has no workout/eat call (he's
 # asleep) — it answers "Setup for today?" instead; the 8 PM train-2 slot answers the
 # workout question RETROSPECTIVELY and weights the rest/sleep-prep call. The day's stat
 # recap stays owned by the 9:45 PM Day-in-Review card (untouched).
@@ -158,9 +158,10 @@ SLOT_FRAMING = {
 
 # --- Tactical-brief instruction builders -----------------------------------------
 # Each returns the one-line instruction that tells claude -p how to write that block.
-# Decision blocks lock the verdict to a fixed vocabulary (verdict word first, then a
-# <=15-word qualifier); the Read line is the only free interpretation, capped at 30
-# words and barred from quoting numbers (the State block already shows them).
+# Decision blocks now deliver declarative briefing conclusions: no question framing,
+# no leading verdict words, and 1 to 2 tight sentences. The Read line remains the
+# only free interpretation, capped at 30 words and barred from quoting numbers (the
+# State block already shows them).
 
 def read_instruction():
     return (
@@ -175,35 +176,35 @@ def read_instruction():
 def workout_instruction(slot, rest_today):
     if slot == "train-2":
         return (
-            "Workout: RETROSPECTIVE — the window has closed. If today's load shows he trained, start "
-            "with EXACTLY one of: Done well / Done too hard / Done light — then <=15 words on how it "
-            "landed. If he did NOT train, start with EXACTLY: Wind down — then <=15 words (window's "
-            "closed, tomorrow's the platform). Use ONLY these verdicts."
+            "Workout: RETROSPECTIVE — the window has closed. In 1 to 2 declarative sentences, "
+            "30 words MAX, state what logged training accomplished and whether more work tonight "
+            "adds value. If no training logged, state the window has closed and tomorrow is the platform. "
+            "No question framing; do NOT lead with a verdict word or phrase."
         )
     if rest_today:
         return (
-            "Workout: start with EXACTLY: Rest day — then <=15 words framing today as deliberate "
-            "recovery, not training output."
+            "Workout: 1 to 2 declarative sentences, 30 words MAX. State that today is deliberate "
+            "recovery, not training output. No question framing; do NOT lead with a verdict word or phrase."
         )
     return (
-        "Workout: start with EXACTLY one of: Yes / Light only / Skip / Rest day — then <=15 words on "
-        "duration, intensity, or what to skip (or why rest). Use ONLY these verdicts."
+        "Workout: 1 to 2 declarative sentences, 30 words MAX. State whether training is warranted "
+        "and at what intensity/duration, or why to hold. No question framing; do NOT lead with a verdict word or phrase."
     )
 
 
 def eat_instruction():
     return (
-        "Eat: start with EXACTLY one of: Yes / Not yet / Hold / Wind down — then <=15 words on WHAT "
-        "to eat and BY WHEN, anchored to the clock. Gram amounts and time windows ARE allowed here "
-        "(e.g. \"50g protein in the next 90 min\"). Lean on the nutrition data — calories left, "
-        "protein gap, time since the last meal. Use ONLY these verdicts."
+        "Eat: 1 to 2 declarative sentences, 30 words MAX. State the nutrition priority and by when, "
+        "anchored to the clock. Gram amounts and time windows ARE allowed. Lean on calories left, "
+        "protein gap, and time since the last meal. No question framing; do NOT lead with a verdict word or phrase."
     )
 
 
 def rest_instruction():
     return (
-        "Rest: start with EXACTLY one of: Yes / Light only / Push / Bank it — then <=15 words on the "
-        "move: banking sleep, maintaining output, or pushing. Use ONLY these verdicts."
+        "Rest: 1 to 2 declarative sentences, 30 words MAX. State the highest-leverage recovery move "
+        "and why: banking sleep, protecting capacity, maintaining output, or room to push. No question framing; "
+        "do NOT lead with a verdict word or phrase."
     )
 
 
@@ -224,15 +225,13 @@ BLOCK_INSTR = {
 
 
 def block_header(label, slot):
-    """Human-facing question header for each block in the rendered brief."""
+    """Human-facing declarative section header for each block in the rendered brief."""
     if label == "Workout":
-        # train-2 is retrospective ("Should you work out?" — did you?); every other
-        # slot is forward-looking ("Eligible to work out?").
-        return "Should you work out?" if slot == "train-2" else "Eligible to work out?"
+        return "TRAINING"
     return {
         "Read": "Read",
-        "Eat": "Should you eat?",
-        "Rest": "Should you rest?",
+        "Eat": "NUTRITION",
+        "Rest": "RECOVERY",
         "Setup": "Setup for today?",
     }.get(label, label)
 
@@ -421,6 +420,33 @@ def hrv_delta_pct(hrv_today, hrv_7d):
     if hrv_today is None or not hrv_7d:
         return None
     return round((hrv_today / hrv_7d - 1) * 100)
+
+
+def _append_metric_snapshot(now, slot, rec, slp, hrv_all_mean, hrv_today, hrv_7d, slp_hours, active_cal):
+    try:
+        recovery = recovery_score_100(rec, slp, hrv_all_mean)
+        delta = hrv_delta_pct(hrv_today, hrv_7d)
+        rhr = round(rec.get("heart_rate_avg")) if rec and rec.get("heart_rate_avg") is not None else None
+        sleep_min = round(slp_hours * 60) if slp_hours is not None else None
+        sleep_quality = sleep_word_4(slp.get("sleep_score")) if slp else None
+        strain_pct = strain_pct_label(active_cal)[0]
+        active_cal_out = round(active_cal) if active_cal is not None else None
+        snapshot = {
+            "ts": now.replace(microsecond=0).isoformat(),
+            "slot": slot,
+            "recovery": recovery,
+            "hrv_delta_pct": delta,
+            "rhr": rhr,
+            "sleep_min": sleep_min,
+            "sleep_quality": sleep_quality,
+            "strain_pct": strain_pct,
+            "active_cal": active_cal_out,
+        }
+        path = os.path.join(HERE, "metrics_history.jsonl")
+        with open(path, "a") as f:
+            f.write(json.dumps(snapshot) + "\n")
+    except Exception as e:
+        log(f"metrics snapshot append failed (non-fatal): {e}")
 
 
 def lunar_hrv_pct():
@@ -1073,6 +1099,7 @@ def generate_day_review(now):
     log("wrote day_review.json")
 
     try:
+        _sweep_stale_git_locks()
         subprocess.run(["git", "add", "polar/day_review.json"], cwd=ROOT, check=True)
         subprocess.run(["git", "commit", "-m", f"chore: day review {today}"],
                        cwd=ROOT, check=True)
@@ -1104,18 +1131,42 @@ def parse_sections(text):
 
 
 def call_claude(prompt):
-    claude = shutil.which("claude") or "/Users/alfredovargas/.local/bin/claude"
+    # v0.1 role-router shim (09_Reference/agent_workflow/role_router_spec.md):
+    # reasoning-lane calls go through ~/bin/llm so backend choice, billing, and
+    # usage logging live in one auditable place. The shim dispatches the
+    # reasoning lane to `claude -p`, so behavior is unchanged — but a failure
+    # there still surfaces here as a "claude exited <n>" RuntimeError, which the
+    # silent-401 notifier (_notify_dark_fire) parses. Keep that wording.
+    # Original direct `claude -p` body is preserved commented out below for one
+    # rollback cycle (role_router_spec acceptance criterion #5).
+    llm = shutil.which("llm") or os.path.expanduser("~/bin/llm")
+    env = {**os.environ, "LLM_CALLER": "polar/summary.py"}
     out = subprocess.run(
-        [claude, "-p", prompt],
-        capture_output=True, text=True, timeout=180, cwd=ROOT,
+        [llm, "--lane", "reasoning", prompt],
+        capture_output=True, text=True, timeout=180, cwd=ROOT, env=env,
     )
     if out.returncode != 0:
-        # `claude -p` writes auth/401 failures to STDOUT, not stderr — fold both
-        # in so the silent-401 notifier (_notify_dark_fire) can tell auth from
-        # rate from other. stderr first (real errors), else the stdout body.
+        # The shim folds the backend's stderr/stdout into its own diagnostics;
+        # stderr first (real errors + [AUTH]/[ERROR] tag), else stdout body.
         detail = (out.stderr.strip() or out.stdout.strip())[:300]
         raise RuntimeError(f"claude exited {out.returncode}: {detail}")
     return out.stdout
+
+# --- ORIGINAL pre-router body (role_router_spec #5: keep one cycle) ----------
+# def call_claude(prompt):
+#     claude = shutil.which("claude") or "/Users/alfredovargas/.local/bin/claude"
+#     out = subprocess.run(
+#         [claude, "-p", prompt],
+#         capture_output=True, text=True, timeout=180, cwd=ROOT,
+#     )
+#     if out.returncode != 0:
+#         # `claude -p` writes auth/401 failures to STDOUT, not stderr — fold both
+#         # in so the silent-401 notifier (_notify_dark_fire) can tell auth from
+#         # rate from other. stderr first (real errors), else the stdout body.
+#         detail = (out.stderr.strip() or out.stdout.strip())[:300]
+#         raise RuntimeError(f"claude exited {out.returncode}: {detail}")
+#     return out.stdout
+# -----------------------------------------------------------------------------
 
 
 def clean(text):
@@ -1124,8 +1175,56 @@ def clean(text):
     return text
 
 
+def _sweep_stale_git_locks():
+    try:
+        lock_paths = (
+            os.path.join(ROOT, ".git", "HEAD.lock"),
+            os.path.join(ROOT, ".git", "index.lock"),
+        )
+        now_ts = datetime.now().timestamp()
+
+        for path in lock_paths:
+            try:
+                if not os.path.exists(path):
+                    continue
+
+                name = os.path.basename(path)
+                mtime = os.path.getmtime(path)
+                age = now_ts - mtime
+                mtime_iso = datetime.fromtimestamp(mtime).isoformat(timespec="seconds")
+
+                if age <= 600:
+                    log(f"[stale-lock] held, skipping {name}")
+                    continue
+
+                try:
+                    proc = subprocess.run(
+                        ["lsof", "--", path],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        text=True,
+                        timeout=5,
+                    )
+                except Exception:
+                    log(f"[stale-lock] held, skipping {name}")
+                    continue
+
+                if proc.returncode == 0 and proc.stdout.strip():
+                    log(f"[stale-lock] held, skipping {name}")
+                    continue
+
+                age_min = age / 60.0
+                os.remove(path)
+                log(f"[stale-lock] removed {name} (age={age_min:.1f}m, mtime={mtime_iso})")
+            except Exception:
+                continue
+    except Exception:
+        pass
+
+
 def git_push(slot, date):
     try:
+        _sweep_stale_git_locks()
         subprocess.run(["git", "add", "polar/summary.json"], cwd=ROOT, check=True)
         subprocess.run(["git", "commit", "-m", f"chore: {slot} summary {date}"],
                        cwd=ROOT, check=True)
@@ -1391,6 +1490,7 @@ def main():
             "activity_today": activity if show_today_data else None,
         },
     }
+    _append_metric_snapshot(now, slot, rec, slp, hrv_all_mean, hrv_today, hrv_7d, slp_hours, active_cal)
     target = out_path or os.path.join(HERE, "summary.json")
     with open(target, "w") as f:
         json.dump(payload, f, indent=2)
