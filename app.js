@@ -266,7 +266,7 @@ const LPI = {
 // (subtler) → background waves/particles (soft, receding).
 const ORBIT = {
   cx: 130, cy: 130,
-  moonR: 46,                 // was 40 → +15% (moon is now the anchor)
+  moonR: 58,                 // was 40 → +15% (moon is now the anchor)
   rings: {                   // inside → out
     sleep:    { r: 63,  grad: "gSleep",  glow: "#8A5CFF" },
     recovery: { r: 84,  grad: "gRecov",  glow: "#00C8FF" },
@@ -307,13 +307,13 @@ function orbitGroup(r, pct, gradId, glowColor, solidColor, emphasis) {
   const stroke = solidColor || `url(#${gradId})`;
   const glow = solidColor || glowColor;
   const dash = `stroke-dasharray="${arc.toFixed(2)} ${(c - arc).toFixed(2)}" transform="rotate(-90 130 130)"`;
-  const haloOpacity = emphasis ? 0.22 : 0.18;   // restrained bloom — clean concentric rings
-  const haloBlur    = emphasis ? 15 : 12;        // tighter halo, less inter-ring bleed
-  const progBlur    = emphasis ? 10 : 8;         // crisp arc with soft glow
+  const haloOpacity = emphasis ? 0.34 : 0.28;   // restrained bloom — clean concentric rings
+  const haloBlur    = emphasis ? 21 : 17;        // tighter halo, less inter-ring bleed
+  const progBlur    = emphasis ? 15 : 12;         // crisp arc with soft glow
   // Outer bloom halo — a low-alpha, wide-blur echo of the arc so the ring reads
   // as energy emanating outward rather than a hard progress stroke.
   const halo = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${glow}"
-      stroke-width="${ORBIT.arcW + 2}" stroke-linecap="round" stroke-opacity="${haloOpacity}"
+      stroke-width="${ORBIT.arcW + 3}" stroke-linecap="round" stroke-opacity="${haloOpacity}"
       ${dash} style="filter:drop-shadow(0 0 ${haloBlur}px ${glow})"/>`;
   // Bright arc — softer, dreamier bloom (drop-shadow 4 → 7px, → 10px when emphasized).
   const prog = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${stroke}"
@@ -356,14 +356,28 @@ function moonSVG(r, illum, waning) {
   const dim = illum > 0.99; // full moon → no shadow path
   const f = (n) => +(n * r).toFixed(2);
   const haloR = f(2.05);
+  const outerHaloR = f(2.82);
+  const innerHaloR = f(1.36);
 
   return `<defs>
       <clipPath id="moonClip"><circle cx="0" cy="0" r="${r}"/></clipPath>
+      <radialGradient id="moonOuterHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stop-color="#E4ECFF" stop-opacity="0.16"/>
+        <stop offset="38%"  stop-color="#C8D8FF" stop-opacity="0.10"/>
+        <stop offset="72%"  stop-color="#AAC3F0" stop-opacity="0.045"/>
+        <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"/>
+      </radialGradient>
       <radialGradient id="moonHalo" cx="50%" cy="50%" r="50%">
         <stop offset="0%"   stop-color="#E4ECFF" stop-opacity="0.34"/>
         <stop offset="42%"  stop-color="#C8D8FF" stop-opacity="0.22"/>
         <stop offset="70%"  stop-color="#AAC3F0" stop-opacity="0.11"/>
         <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="moonInnerHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stop-color="#F4F8FF" stop-opacity="0.36"/>
+        <stop offset="46%"  stop-color="#E4ECFF" stop-opacity="0.24"/>
+        <stop offset="78%"  stop-color="#C8D8FF" stop-opacity="0.09"/>
+        <stop offset="100%" stop-color="#AAC3F0" stop-opacity="0"/>
       </radialGradient>
       <radialGradient id="moonLimb" cx="42%" cy="38%" r="62%">
         <stop offset="0%"   stop-color="#FFFCF4" stop-opacity="0.10"/>
@@ -371,15 +385,21 @@ function moonSVG(r, illum, waning) {
         <stop offset="82%"  stop-color="#000000" stop-opacity="0"/>
         <stop offset="100%" stop-color="#08080E" stop-opacity="0.50"/>
       </radialGradient>
+      <filter id="moonOuterHaloBlur" x="-120%" y="-120%" width="340%" height="340%">
+        <feGaussianBlur stdDev="${f(0.34)}"/></filter>
       <filter id="moonHaloBlur" x="-90%" y="-90%" width="280%" height="280%">
         <feGaussianBlur stdDev="${f(0.22)}"/></filter>
+      <filter id="moonInnerHaloBlur" x="-70%" y="-70%" width="240%" height="240%">
+        <feGaussianBlur stdDev="${f(0.12)}"/></filter>
       <filter id="moonTerm" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDev="${f(0.07)}"/></filter>
       <filter id="moonCast" x="-140%" y="-140%" width="380%" height="380%">
         <feGaussianBlur stdDev="${f(0.16)}"/></filter>
     </defs>
     <ellipse cx="0" cy="${f(0.32)}" rx="${f(1.14)}" ry="${f(0.42)}" fill="#02030A" opacity="0.44" filter="url(#moonCast)"/>
+    <circle cx="0" cy="0" r="${outerHaloR}" fill="url(#moonOuterHalo)" filter="url(#moonOuterHaloBlur)"/>
     <circle cx="0" cy="0" r="${haloR}" fill="url(#moonHalo)" filter="url(#moonHaloBlur)"/>
+    <circle cx="0" cy="0" r="${innerHaloR}" fill="url(#moonInnerHalo)" filter="url(#moonInnerHaloBlur)"/>
     <g clip-path="url(#moonClip)">
       <image href="assets/moon-lro.webp" x="${-r}" y="${-r}" width="${2 * r}" height="${2 * r}"
              preserveAspectRatio="xMidYMid slice" style="filter:brightness(1.12)"/>
