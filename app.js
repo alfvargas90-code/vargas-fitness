@@ -546,6 +546,22 @@ async function renderRings() {
   // Recovery Window derives from the same recovery/sleep/strain state — render
   // it here so it can never disagree with the corners (no second fetch pass).
   renderRecoveryWindow({ recoveryScore, sleepScore, strainPct, strainCal });
+
+  // Currents State metric echo — computed LIVE from the same ring values so it can
+  // never disagree with the rings (the numbers in summary.json are a frozen snapshot
+  // and drift when a sync lands between fires; these are authoritative).
+  setStateMetricLine(recoveryScore, sleepScore, strainPct);
+}
+
+// The deterministic "Recovery N • Sleep N • Strain N%" line under the Currents State
+// word. Driven by renderRings so it always mirrors the rings exactly.
+function setStateMetricLine(recovery, sleep, strain) {
+  const el = document.getElementById("read-metrics");
+  if (!el) return;
+  const r = recovery != null ? Math.round(recovery) : "—";
+  const s = sleep != null ? Math.round(sleep) : "—";
+  const st = strain != null ? `${Math.round(strain)}%` : "—";
+  el.textContent = `Recovery ${r} • Sleep ${s} • Strain ${st}`;
 }
 
 // ---------- Recovery Window (derived status card) ----------
