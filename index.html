@@ -54,9 +54,9 @@
     color: #F2F5FA;
     min-height: 100vh;
     background:
-      radial-gradient(118% 60% at 50% 28%, rgba(88,62,205,.58), transparent 62%),
-      radial-gradient(circle at 2% 42%, rgba(0,200,255,.21), transparent 46%),
-      radial-gradient(circle at 98% 42%, rgba(255,94,98,.20), transparent 46%),
+      radial-gradient(118% 60% at 50% 28%, rgba(88,62,205,.40), transparent 62%),
+      radial-gradient(circle at 2% 42%, rgba(0,200,255,.10), transparent 46%),
+      radial-gradient(circle at 98% 42%, rgba(255,94,98,.10), transparent 46%),
       radial-gradient(circle at 86% 70%, rgba(255,138,61,.09), transparent 46%),
       radial-gradient(circle at 14% 72%, rgba(138,92,255,.12), transparent 46%),
       linear-gradient(180deg, #03050F 0%, #04061a 50%, #03040E 100%);
@@ -122,9 +122,9 @@
     position: absolute; inset: 0; z-index: 0; pointer-events: none;
     background:
       /* Central violet/blue bloom seated behind the moon — the mockup's core glow. */
-      radial-gradient(300px 250px at 50% 34%, rgba(120,108,255,0.28), transparent 70%),
-      radial-gradient(285px 285px at 8% 60%, rgba(0,200,255,0.52), transparent 74%),
-      radial-gradient(308px 308px at 92% 40%, rgba(255,94,98,0.45), transparent 74%);
+      radial-gradient(300px 250px at 50% 34%, rgba(120,108,255,0.20), transparent 70%),
+      radial-gradient(260px 260px at 6% 62%, rgba(0,200,255,0.20), transparent 76%),
+      radial-gradient(280px 280px at 94% 42%, rgba(255,94,98,0.18), transparent 76%);
     filter: blur(24px);
     animation: zoneBreathe 9s ease-in-out infinite alternate;
   }
@@ -157,7 +157,7 @@
      Sits behind the Sleep button inside the overlay; soft-edged, pointer-events
      none. Recovery/Strain corners sit on dark ground and need no scrim. */
   .hero-sleep-scrim {
-    position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%);
+    position: absolute; top: 200px; left: 50%; transform: translateX(-50%);
     width: 212px; height: 100px; pointer-events: none; z-index: 0;
     background: radial-gradient(58% 68% at 50% 62%,
       rgba(3,5,15,0.58), rgba(3,5,15,0.30) 54%, rgba(3,5,15,0) 78%);
@@ -423,9 +423,9 @@
     </header>
 
     <!-- ════════════════ HERO — moon + 3 orbital rings + metric corners ═══════ -->
-    <section id="lpi-hero" class="relative w-full" style="height:252px" aria-label="Lunar performance hero">
+    <section id="lpi-hero" class="relative w-full" style="height:330px" aria-label="Lunar performance hero">
       <div class="hero-stack" aria-hidden="true">
-        <svg class="hero-layer-1" viewBox="0 0 390 260" preserveAspectRatio="xMidYMid slice" fill="none">
+        <svg class="hero-layer-1" viewBox="0 0 390 341" preserveAspectRatio="xMidYMid slice" fill="none">
           <defs>
             <radialGradient id="l1-nebula" cx="50%" cy="30%" r="46%">
               <stop offset="0%"  stop-color="#4a3a9e" stop-opacity="0.34"/>
@@ -478,73 +478,77 @@
             <circle cx="96"  cy="120" r="0.8" fill="#FFFFFF" opacity="0.85"/>
           </g>
         </svg>
-        <svg class="hero-layer-2" viewBox="0 0 390 260" preserveAspectRatio="xMidYMid slice" fill="none">
+        <svg class="hero-layer-2" viewBox="0 0 390 341" preserveAspectRatio="xMidYMid slice" fill="none">
           <defs>
-            <linearGradient id="l2-recov" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0"    stop-color="#00C8FF" stop-opacity="0"/>
-              <stop offset="0.28" stop-color="#22D8FF" stop-opacity="1"/>
-              <stop offset="0.62" stop-color="#5A8CFF" stop-opacity="0.98"/>
-              <stop offset="1"    stop-color="#8A5CFF" stop-opacity="0.55"/>
-            </linearGradient>
-            <linearGradient id="l2-recov2" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0"    stop-color="#8A5CFF" stop-opacity="0"/>
-              <stop offset="0.35" stop-color="#7A6BFF" stop-opacity="0.95"/>
-              <stop offset="0.7"  stop-color="#22D8FF" stop-opacity="0.9"/>
-              <stop offset="1"    stop-color="#00C8FF" stop-opacity="0.4"/>
-            </linearGradient>
-            <linearGradient id="l2-strain" x1="1" y1="0" x2="0" y2="0">
-              <stop offset="0"    stop-color="#FF5E62" stop-opacity="0"/>
-              <stop offset="0.28" stop-color="#FF5E62" stop-opacity="1"/>
-              <stop offset="0.62" stop-color="#FF7A48" stop-opacity="0.98"/>
-              <stop offset="1"    stop-color="#FFB070" stop-opacity="0.55"/>
-            </linearGradient>
-            <linearGradient id="l2-strain2" x1="1" y1="0" x2="0" y2="0">
-              <stop offset="0"    stop-color="#FFB070" stop-opacity="0"/>
-              <stop offset="0.35" stop-color="#FF8A3D" stop-opacity="0.95"/>
-              <stop offset="0.7"  stop-color="#FF5E62" stop-opacity="0.9"/>
-              <stop offset="1"    stop-color="#FF6B6B" stop-opacity="0.4"/>
-            </linearGradient>
-            <radialGradient id="l2-merge" cx="50%" cy="50%" r="50%">
-              <stop offset="0"   stop-color="#C9B6FF" stop-opacity="0.6"/>
-              <stop offset="45%" stop-color="#8A5CFF" stop-opacity="0.32"/>
-              <stop offset="100%" stop-color="#8A5CFF" stop-opacity="0"/>
-            </radialGradient>
-            <filter id="l2-wide" x="-30%" y="-60%" width="160%" height="260%"><feGaussianBlur stdDeviation="13"/></filter>
-            <filter id="l2-med"  x="-20%" y="-50%" width="140%" height="220%"><feGaussianBlur stdDeviation="5.5"/></filter>
-            <filter id="l2-core" x="-20%" y="-40%" width="140%" height="200%"><feGaussianBlur stdDeviation="1.6"/></filter>
+            <linearGradient id="l2-recov" x1="0" x2="1"><stop offset="0" stop-color="#22D8FF" stop-opacity="0"/><stop offset=".22" stop-color="#22D8FF"/><stop offset=".6" stop-color="#5A8CFF"/><stop offset="1" stop-color="#8A5CFF" stop-opacity=".5"/></linearGradient>
+            <linearGradient id="l2-recov2" x1="0" x2="1"><stop offset="0" stop-color="#8A5CFF" stop-opacity="0"/><stop offset=".3" stop-color="#7A6BFF"/><stop offset=".72" stop-color="#22D8FF"/><stop offset="1" stop-color="#00C8FF" stop-opacity=".4"/></linearGradient>
+            <linearGradient id="l2-strain" x1="1" x2="0"><stop offset="0" stop-color="#FF5E62" stop-opacity="0"/><stop offset=".22" stop-color="#FF5E62"/><stop offset=".6" stop-color="#FF7A48"/><stop offset="1" stop-color="#FFB070" stop-opacity=".5"/></linearGradient>
+            <linearGradient id="l2-strain2" x1="1" x2="0"><stop offset="0" stop-color="#FFB070" stop-opacity="0"/><stop offset=".3" stop-color="#FF8A3D"/><stop offset=".72" stop-color="#FF5E62"/><stop offset="1" stop-color="#FF6B6B" stop-opacity=".4"/></linearGradient>
+            <linearGradient id="l2-span" x1="0" x2="1"><stop offset="0" stop-color="#22D8FF" stop-opacity="0"/><stop offset=".13" stop-color="#22D8FF" stop-opacity=".92"/><stop offset=".42" stop-color="#8A5CFF" stop-opacity=".85"/><stop offset=".58" stop-color="#9A6BFF" stop-opacity=".85"/><stop offset=".87" stop-color="#FF6B5E" stop-opacity=".92"/><stop offset="1" stop-color="#FF8A3D" stop-opacity="0"/></linearGradient>
+            <radialGradient id="l2-merge" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#CDBCFF" stop-opacity=".5"/><stop offset=".5" stop-color="#8A5CFF" stop-opacity=".22"/><stop offset="1" stop-color="#8A5CFF" stop-opacity="0"/></radialGradient>
+            <filter id="l2-glow" x="-20%" y="-80%" width="140%" height="320%"><feGaussianBlur stdDeviation="5"/></filter>
+            <filter id="l2-band" x="-15%" y="-60%" width="130%" height="280%"><feGaussianBlur stdDeviation="1.9"/></filter>
+            <filter id="l2-hot" x="-15%" y="-50%" width="130%" height="240%"><feGaussianBlur stdDeviation="0.8"/></filter>
           </defs>
-
-          <!-- WIDE atmospheric undersweeps (depth, full width, heavily blurred) -->
-          <g filter="url(#l2-wide)" fill="none" stroke-linecap="round" opacity="0.68">
-            <path d="M -40 178 C 70 214, 140 226, 197 217"  stroke="url(#l2-recov)"  stroke-width="38"/>
-            <path d="M 430 178 C 320 214, 254 226, 197 217" stroke="url(#l2-strain)" stroke-width="38"/>
-            <path d="M -40 252 C 92 246, 152 232, 198 221"  stroke="url(#l2-recov2)" stroke-width="30"/>
-            <path d="M 430 252 C 298 246, 238 232, 196 221" stroke="url(#l2-strain2)" stroke-width="30"/>
+          <g filter="url(#l2-glow)" fill="none" stroke-linecap="round" opacity="0.62">
+            <path d="M -30 246 C 34 230, 80 244, 120 262 C 156 278, 180 294, 196 300" stroke="url(#l2-recov2)" stroke-width="13"/>
+            <path d="M -32 268 C 36 250, 84 256, 122 276 C 158 294, 182 300, 198 302" stroke="url(#l2-recov)" stroke-width="14"/>
+            <path d="M -30 292 C 40 280, 92 282, 130 296 C 162 308, 184 308, 200 306" stroke="url(#l2-recov)" stroke-width="12"/>
+            <path d="M 422 246 C 358 230, 312 244, 272 262 C 236 278, 212 294, 196 300" stroke="url(#l2-strain)" stroke-width="13"/>
+            <path d="M 424 268 C 356 250, 308 256, 270 276 C 234 294, 210 300, 194 302" stroke="url(#l2-strain)" stroke-width="14"/>
+            <path d="M 422 292 C 352 280, 300 282, 262 296 C 230 308, 208 308, 192 306" stroke="url(#l2-strain2)" stroke-width="12"/>
+            <path d="M -34 322 C 90 312, 150 330, 196 332 C 250 334, 320 320, 426 330" stroke="url(#l2-span)" stroke-width="11"/>
           </g>
-
-          <!-- MAIN bold bands — sweep down from upper-outer corners + up from the
-               bottom, converging low beneath the moon (~197,217). Full width. -->
-          <g filter="url(#l2-med)" fill="none" stroke-linecap="round">
-            <path d="M -34 164 C 66 200, 136 217, 197 215"  stroke="url(#l2-recov)"  stroke-width="18"/>
-            <path d="M -34 234 C 56 246, 128 235, 197 221"  stroke="url(#l2-recov2)" stroke-width="14"/>
-            <path d="M -26 198 C 62 216, 136 211, 198 211"  stroke="url(#l2-recov)"  stroke-width="9.5"/>
-            <path d="M 424 164 C 324 200, 254 217, 197 215" stroke="url(#l2-strain)"  stroke-width="18"/>
-            <path d="M 424 234 C 334 246, 262 235, 197 221" stroke="url(#l2-strain2)" stroke-width="14"/>
-            <path d="M 416 198 C 328 216, 254 211, 196 211" stroke="url(#l2-strain)"  stroke-width="9.5"/>
+          <g filter="url(#l2-band)" fill="none" stroke-linecap="round">
+            <path d="M -30 246 C 34 230, 80 244, 120 262 C 156 278, 180 294, 196 300" stroke="url(#l2-recov2)" stroke-width="5"/>
+            <path d="M -32 268 C 36 250, 84 256, 122 276 C 158 294, 182 300, 198 302" stroke="url(#l2-recov)" stroke-width="6.5"/>
+            <path d="M -30 292 C 40 280, 92 282, 130 296 C 162 308, 184 308, 200 306" stroke="url(#l2-recov)" stroke-width="4.5"/>
+            <path d="M -34 316 C 44 310, 104 306, 146 314 C 174 320, 192 318, 204 314" stroke="url(#l2-recov2)" stroke-width="3.2"/>
+            <path d="M 422 246 C 358 230, 312 244, 272 262 C 236 278, 212 294, 196 300" stroke="url(#l2-strain)" stroke-width="5"/>
+            <path d="M 424 268 C 356 250, 308 256, 270 276 C 234 294, 210 300, 194 302" stroke="url(#l2-strain)" stroke-width="6.5"/>
+            <path d="M 422 292 C 352 280, 300 282, 262 296 C 230 308, 208 308, 192 306" stroke="url(#l2-strain2)" stroke-width="4.5"/>
+            <path d="M 426 316 C 348 310, 288 306, 246 314 C 218 320, 200 318, 188 314" stroke="url(#l2-strain2)" stroke-width="3.2"/>
+            <path d="M -34 322 C 90 312, 150 330, 196 332 C 250 334, 320 320, 426 330" stroke="url(#l2-span)" stroke-width="4"/>
           </g>
-
-          <!-- TIGHT bright cores — the defined luminous edge that reads as a ribbon -->
-          <g filter="url(#l2-core)" fill="none" stroke-linecap="round" opacity="0.95">
-            <path d="M -34 164 C 66 200, 136 217, 197 215"  stroke="#9EE8FF" stroke-width="3.0"/>
-            <path d="M -34 234 C 56 246, 128 235, 197 221"  stroke="#BFD0FF" stroke-width="1.9"/>
-            <path d="M 424 164 C 324 200, 254 217, 197 215" stroke="#FFB6A0" stroke-width="3.0"/>
-            <path d="M 424 234 C 334 246, 262 235, 197 221" stroke="#FFC9A0" stroke-width="1.9"/>
+          <g filter="url(#l2-hot)" fill="none" stroke-linecap="round" opacity="1">
+            <path d="M -32 268 C 36 250, 84 256, 122 276 C 158 294, 182 300, 198 302" stroke="#BEEFFF" stroke-width="2.7"/>
+            <path d="M -30 246 C 34 230, 80 244, 120 262 C 156 278, 180 294, 196 300" stroke="#D8CBFF" stroke-width="1.3"/>
+            <path d="M 424 268 C 356 250, 308 256, 270 276 C 234 294, 210 300, 194 302" stroke="#FFC2AC" stroke-width="2.7"/>
+            <path d="M 422 246 C 358 230, 312 244, 272 262 C 236 278, 212 294, 196 300" stroke="#FFD0B0" stroke-width="1.3"/>
+            <path d="M -34 322 C 90 312, 150 330, 196 332 C 250 334, 320 320, 426 330" stroke="#CFE6FF" stroke-width="1.1"/>
           </g>
-
-          <!-- convergence bloom beneath the moon where the two energies meet -->
-          <g filter="url(#l2-med)">
-            <ellipse cx="197" cy="217" rx="92" ry="30" fill="url(#l2-merge)"/>
-            <ellipse cx="197" cy="218" rx="46" ry="16" fill="url(#l2-merge)"/>
+          <g filter="url(#l2-glow)" fill="none" stroke-linecap="round" opacity="0.5">
+            <path d="M -30 196 C 30 214, 78 246, 124 274 C 158 292, 182 300, 198 302" stroke="url(#l2-recov)" stroke-width="11"/>
+            <path d="M -32 224 C 26 240, 74 264, 120 286 C 156 300, 182 304, 200 304" stroke="url(#l2-recov2)" stroke-width="9"/>
+            <path d="M 420 196 C 360 214, 312 246, 266 274 C 232 292, 208 300, 192 302" stroke="url(#l2-strain)" stroke-width="11"/>
+            <path d="M 422 224 C 364 240, 316 264, 270 286 C 234 300, 208 304, 190 304" stroke="url(#l2-strain2)" stroke-width="9"/>
+          </g>
+          <g filter="url(#l2-band)" fill="none" stroke-linecap="round">
+            <path d="M -30 196 C 30 214, 78 246, 124 274 C 158 292, 182 300, 198 302" stroke="url(#l2-recov)" stroke-width="4"/>
+            <path d="M -32 224 C 26 240, 74 264, 120 286 C 156 300, 182 304, 200 304" stroke="url(#l2-recov2)" stroke-width="3"/>
+            <path d="M 420 196 C 360 214, 312 246, 266 274 C 232 292, 208 300, 192 302" stroke="url(#l2-strain)" stroke-width="4"/>
+            <path d="M 422 224 C 364 240, 316 264, 270 286 C 234 300, 208 304, 190 304" stroke="url(#l2-strain2)" stroke-width="3"/>
+          </g>
+          <g filter="url(#l2-hot)" fill="none" stroke-linecap="round" opacity="0.9">
+            <path d="M -30 196 C 30 214, 78 246, 124 274 C 158 292, 182 300, 198 302" stroke="#BEEFFF" stroke-width="1.3"/>
+            <path d="M 420 196 C 360 214, 312 246, 266 274 C 232 292, 208 300, 192 302" stroke="#FFC2AC" stroke-width="1.3"/>
+          </g>
+          <g fill="#FFFFFF">
+            <circle cx="64" cy="276" r="0.9" fill-opacity="0.7"/>
+            <circle cx="108" cy="300" r="0.7" fill-opacity="0.5"/>
+            <circle cx="150" cy="288" r="1.0" fill-opacity="0.75"/>
+            <circle cx="92" cy="320" r="0.6" fill-opacity="0.45"/>
+            <circle cx="300" cy="280" r="0.9" fill="#FFD9C2" fill-opacity="0.7"/>
+            <circle cx="262" cy="302" r="0.7" fill="#FFD9C2" fill-opacity="0.5"/>
+            <circle cx="320" cy="316" r="1.0" fill="#FFE0CC" fill-opacity="0.7"/>
+            <circle cx="232" cy="320" r="0.6" fill-opacity="0.45"/>
+            <circle cx="196" cy="318" r="0.8" fill="#E6D8FF" fill-opacity="0.6"/>
+            <circle cx="356" cy="300" r="0.7" fill="#FFD9C2" fill-opacity="0.5"/>
+            <circle cx="36" cy="298" r="0.7" fill="#CFEFFF" fill-opacity="0.55"/>
+          </g>
+          <g filter="url(#l2-glow)">
+            <ellipse cx="196" cy="302" rx="70" ry="20" fill="url(#l2-merge)"/>
+            <ellipse cx="196" cy="303" rx="34" ry="11" fill="url(#l2-merge)"/>
           </g>
         </svg>
         <div class="hero-zones" aria-hidden="true"></div>
@@ -552,7 +556,7 @@
         <div class="absolute left-1/2 -translate-x-1/2" style="top:4px;width:260px;height:260px;filter:saturate(1.12) contrast(1.04)" id="rings-wrap">
           <div class="w-full h-full" id="rings-orbit-svg"></div>
         </div>
-        <svg class="hero-layer-3" viewBox="0 0 390 260" preserveAspectRatio="xMidYMid slice" fill="none">
+        <svg class="hero-layer-3" viewBox="0 0 390 341" preserveAspectRatio="xMidYMid slice" fill="none">
           <defs>
             <radialGradient id="l3-seat" cx="50%" cy="50%" r="50%">
               <stop offset="0%"   stop-color="#02030B" stop-opacity="0"/>
@@ -598,7 +602,7 @@
 
         <!-- Sleep — top right -->
         <button type="button" data-target="polar-panel"
-                class="ring-corner metric-corner items-center text-center absolute left-1/2 -translate-x-1/2 z-10 focus:outline-none" style="bottom:0">
+                class="ring-corner metric-corner items-center text-center absolute left-1/2 -translate-x-1/2 z-10 focus:outline-none" style="top:198px">
           <span class="metric-cap" style="color:#8A5CFF">Sleep</span>
           <span class="metric-num glow-sleep" id="m-sleep-val" style="color:#9A6BFF">—</span>
           <span class="metric-word" id="m-sleep-label" style="color:#8A5CFF"></span>
