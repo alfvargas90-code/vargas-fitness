@@ -355,12 +355,19 @@
         </h2>
         <span class="text-[12px] text-muted" id="read-ts"></span>
       </div>
-      <!-- Interpretation prose only (physiology rows moved to Recovery Window) -->
+      <!-- Currents v3 — state interpreter: State (word + metric echo) → Read (one
+           synthesized paragraph) → optional Close line. No category prescriptions. -->
       <div class="min-w-0" id="read-left">
-        <div class="text-[11px] uppercase tracking-wider text-muted font-semibold">Recovery</div>
-        <div class="text-[21px] font-bold leading-none mt-0.5 glow-green" id="read-recovery-word" style="color:#39D98A"></div>
-        <div class="text-[12.5px] leading-snug text-neutral-300 mt-1.5" id="read-body">First read drops at 9:05 AM</div>
-        <p class="text-[10px] text-muted mt-2" id="read-basis"></p>
+        <!-- State -->
+        <div class="text-[10px] uppercase tracking-wider text-muted font-semibold">State</div>
+        <div class="text-[22px] font-bold leading-none mt-1" id="read-recovery-word" style="color:#E9EDF5">—</div>
+        <div class="text-[11.5px] text-muted font-medium mt-1.5 stat-num" id="read-metrics"></div>
+        <!-- Read -->
+        <div class="text-[10px] uppercase tracking-wider text-muted font-semibold mt-3.5 mb-1" id="read-label">Read</div>
+        <div class="text-[13px] leading-relaxed text-neutral-200" id="read-body">First read drops at 9:05 AM</div>
+        <!-- Optional closing posture line -->
+        <div class="text-[12.5px] font-semibold mt-2.5 hidden" id="read-closing" style="color:#9A6BFF;text-shadow:0 0 12px rgba(154,107,255,0.45)"></div>
+        <p class="hidden" id="read-basis"></p>
       </div>
     </section>
 
@@ -612,6 +619,6 @@
        style="height:env(safe-area-inset-bottom);background:#03050F"></div>
 
   <script src="data.js"></script>
-  <script src="app.js?v=2026-06-05-1"></script>
+  <script src="app.js?v=2026-06-05-2"></script>
 </body>
 </html>

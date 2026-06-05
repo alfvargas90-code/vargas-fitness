@@ -1049,37 +1049,101 @@ function renderBrief(host, text) {
 // full-length summary paragraph (Currents IS the full analysis), with an
 // "Updated HH:MM" timestamp in the header. Mirrors the source mockup.
 const READ_WORD_COLOR = { poor: "#FF5E62", average: "#FF8A3D", good: "#00C8FF", excellent: "#39D98A" };
+
+// Currents v3 brief parser. summary.py writes:
+//   State\n{Word}\n{Recovery N • Sleep N • Strain N%}\n\nRead\n{paragraph}\n\n{optional close}
+// Split on blank lines; map the State + Read blocks; a short trailing headerless block
+// is the optional Close. Legacy single-paragraph (or old TRAINING/NUTRITION) summaries
+// degrade gracefully — the whole text falls through to the Read paragraph.
+function parseCurrents(text) {
+  const blocks = String(text).split(/\n\s*\n/).map(b => b.replace(/\s+$/, "")).filter(b => b.trim());
+  let stateWord = "", stateMetrics = "", read = "", closing = "";
+  for (const b of blocks) {
+    const lines = b.split("\n").map(l => l.trim()).filter(Boolean);
+    const head = lines[0] || "";
+    if (/^state$/i.test(head)) {
+      stateWord = lines[1] || "";
+      stateMetrics = lines[2] || "";
+    } else if (/^read$/i.test(head)) {
+      read = lines.slice(1).join(" ").trim();
+    } else if (lines.length === 1 && head.length <= 80) {
+      closing = head;                       // lone short line → optional Close
+    }
+  }
+  if (!read && !stateWord) read = String(text).trim();   // legacy fallback
+  return { stateWord, stateMetrics, read, closing };
+}
+
 async function renderTodaysRead() {
   const ts = document.getElementById("read-ts");
   const body = document.getElementById("read-body");
   const word = document.getElementById("read-recovery-word");
-  const basis = document.getElementById("read-basis");
+  const metrics = document.getElementById("read-metrics");
+  const closing = document.getElementById("read-closing");
+  const readLabel = document.getElementById("read-label");
   if (!body) return;
   try {
     const s = await fetchJSON("polar/summary.json");
     const simple = s.simple || null;
-    // Recovery word (color-coded).
+    const raw = (simple && (simple.reading || simple.performance)) || s.summary || "";
+    const p = parseCurrents(raw);
+    // State word — color-coded by the recovery verdict word.
     if (word) {
-      const w = simple && simple.recovery ? String(simple.recovery).trim() : "";
-      word.textContent = w;
+      const w = (p.stateWord || (simple && simple.recovery) || "").trim();
+      word.textContent = w || "—";
       const c = READ_WORD_COLOR[w.toLowerCase()] || "#E9EDF5";
-      word.style.color = c;
+      word.style.color = w ? c : "#E9EDF5";
       word.style.textShadow = w ? `0 0 12px ${c}` : "none";
     }
-    // Tactical brief (multiline) — full length, no clamp. Currents IS the full analysis.
-    const read = (simple && (simple.reading || simple.performance)) || s.summary || "First read drops at 9:05 AM";
-    renderBrief(body, read);
+    if (metrics) metrics.textContent = p.stateMetrics || "";
+    // Read — single synthesized paragraph.
+    body.textContent = p.read || "First read drops at 9:05 AM";
+    if (readLabel) readLabel.style.display = p.read ? "" : "none";
+    // Optional Close posture line.
+    if (closing) {
+      if (p.closing) { closing.textContent = p.closing; closing.classList.remove("hidden"); }
+      else { closing.textContent = ""; closing.classList.add("hidden"); }
+    }
     if (ts && s.generated_at) {
       const t = new Date(s.generated_at);
       ts.textContent = "updated " + t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
     }
-    if (basis) basis.textContent = "";
   } catch (e) {
     body.textContent = "First read drops at 9:05 AM";   // file missing / file://
-    if (word) word.textContent = "";
+    if (word) word.textContent = "—";
+    if (metrics) metrics.textContent = "";
+    if (closing) closing.classList.add("hidden");
     if (ts) ts.textContent = "";
-    if (basis) basis.textContent = "";
   }
+}
+
+// ---------- Currents auto-refresh (60s poll on data_hash) ----------
+// Currents must stay live as new data lands (nutrition / activity / recovery / sleep /
+// scale syncs) and as summary.py fires through the day. summary.json carries a
+// `data_hash` fingerprint of its inputs; we poll every 60s and, when it changes, re-
+// render Currents AND the hero/cards/physiology so every number stays consistent. Pure
+// local re-read — no LLM call, no cost. First poll seeds the signature so it only fires
+// on a real change after load.
+let _lastSummarySig = null;
+async function pollCurrents() {
+  try {
+    const s = await fetchJSON("polar/summary.json");
+    const sig = s.data_hash || s.generated_at || null;
+    if (sig && sig !== _lastSummarySig) {
+      _lastSummarySig = sig;
+      renderTodaysRead();
+      renderRings();          // recovery/sleep/strain numbers + recovery window
+      renderSupportCards();   // nutrition / scale / activity tiles
+      renderPhysiology();     // HRV / RHR / Resp strip
+      renderNutritionNudge();
+    }
+  } catch (e) { /* offline / file missing → keep last render */ }
+}
+function startCurrentsPolling() {
+  fetchJSON("polar/summary.json")
+    .then(s => { _lastSummarySig = s.data_hash || s.generated_at || null; })
+    .catch(() => {});
+  setInterval(pollCurrents, 60000);
 }
 
 // ---------- Lunar tracker (polar/lunar_stress.py `lunar` block) ----------
@@ -1701,3 +1765,4 @@ function renderAll() {
 }
 
 renderAll();
+startCurrentsPolling();   // Currents auto-refresh: 60s poll on summary.json data_hash
