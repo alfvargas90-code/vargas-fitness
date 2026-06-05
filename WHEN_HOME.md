@@ -14,6 +14,24 @@ _Last updated: 2026-06-05 (octopus / Claude Code)._
 
 ---
 
+## 🌙 STATUS 2026-06-05 — lunar block clear of rings (redesign10)
+
+You were right — the v4 +20px (top:228) only cleared the **inner** ring. Measured at
+375px: first line top was 230 vs the outer/strain ring arc bottom ~238 (+glow ~244)
+→ still overlapping. Pushed to **top:252** (scrim follows to top:200). Re-measured:
+first line top **254**, ring arc bottom ~238 → **16px clean gap**, confirmed by
+screenshot. Cache → **redesign10**.
+
+Note: index.html itself isn't query-cache-busted (no service worker exists) — if it
+still looks stale on your phone, hard-refresh / re-add to home screen; the position
+fix lives in index.html, which the `app.js?v=` bump does NOT bust.
+
+**Fix A validated live:** the **17:30 train-1 launchd fire ran autonomously, Codex
+served it** (summary.json generated_at 17:30:00, self-pushed `ed9d459`) — no dark
+fire. The PATH fix holds end-to-end.
+
+---
+
 ## 🚑 STATUS 2026-06-05 17:2x CDT — Fix A applied: Codex now resolves under launchd
 
 **Incident:** dashboard pinned at `fuel-1` (11:30) all afternoon. The 15:00 `fuel-2`
