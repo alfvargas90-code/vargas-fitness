@@ -133,6 +133,37 @@
     to   { opacity: 1; }
   }
 
+  /* ── Hero artwork stack — explicit 3-layer rendering pipeline ─────────────
+     Back-to-front z-order inside #lpi-hero:
+       layer-1 (z1) star field + deep-space atmosphere
+       layer-2 (z2) full-width wave bands
+       #rings-wrap (z3) metric rings composite (moon+rings SVG, untouched)
+       layer-3 (z4) moon volumetric bloom + shadow halo
+       metrics-overlay (z5) Recovery/Sleep/Strain numbers + labels
+     Layers are empty scaffolding for now; B2–B4 populate them. */
+  .hero-stack { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+  .hero-layer-1, .hero-layer-2, .hero-layer-3 {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    pointer-events: none; overflow: visible;
+  }
+  .hero-layer-1 { z-index: 1; }
+  .hero-layer-2 { z-index: 2; }
+  .hero-stack #rings-wrap { z-index: 3; }
+  .hero-layer-3 { z-index: 4; }
+  .hero-metrics-overlay { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
+  .hero-metrics-overlay .ring-corner { pointer-events: auto; }
+  /* Localized dark scrim behind the bottom-center Sleep metric only — restores
+     legibility of the purple Sleep number/label over the bright wave convergence.
+     Sits behind the Sleep button inside the overlay; soft-edged, pointer-events
+     none. Recovery/Strain corners sit on dark ground and need no scrim. */
+  .hero-sleep-scrim {
+    position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%);
+    width: 212px; height: 100px; pointer-events: none; z-index: 0;
+    background: radial-gradient(58% 68% at 50% 62%,
+      rgba(3,5,15,0.58), rgba(3,5,15,0.30) 54%, rgba(3,5,15,0) 78%);
+    filter: blur(4px);
+  }
+
   /* ── Hero metric corners ────────────────────────────────────────────────── */
   .metric-corner { display: flex; flex-direction: column; line-height: 1.02; }
   .metric-cap   { font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; }
@@ -393,41 +424,195 @@
 
     <!-- ════════════════ HERO — moon + 3 orbital rings + metric corners ═══════ -->
     <section id="lpi-hero" class="relative w-full" style="height:252px" aria-label="Lunar performance hero">
-      <!-- Environmental energy zones — soft ambient fields lighting each corner
-           (cyan lower-left, purple upper-right, coral lower-right). Behind rings
-           + corners, in front of the base wave layer. -->
-      <div class="hero-zones" aria-hidden="true"></div>
+      <div class="hero-stack" aria-hidden="true">
+        <svg class="hero-layer-1" viewBox="0 0 390 260" preserveAspectRatio="xMidYMid slice" fill="none">
+          <defs>
+            <radialGradient id="l1-nebula" cx="50%" cy="30%" r="46%">
+              <stop offset="0%"  stop-color="#4a3a9e" stop-opacity="0.34"/>
+              <stop offset="55%" stop-color="#1f1a52" stop-opacity="0.12"/>
+              <stop offset="100%" stop-color="#0a0a22" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="l1-vignette" cx="50%" cy="36%" r="78%">
+              <stop offset="0%"   stop-color="#02030B" stop-opacity="0"/>
+              <stop offset="68%"  stop-color="#02030B" stop-opacity="0"/>
+              <stop offset="100%" stop-color="#02030B" stop-opacity="0.55"/>
+            </radialGradient>
+            <radialGradient id="l1-star" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <!-- deep-space nebula bloom behind the moon -->
+          <rect x="0" y="0" width="390" height="260" fill="url(#l1-nebula)"/>
+          <!-- soft containment vignette → frames the hero as deep space -->
+          <rect x="0" y="0" width="390" height="260" fill="url(#l1-vignette)"/>
+          <!-- scattered star field, denser in the upper deep-space band -->
+          <g fill="#FFFFFF">
+            <circle cx="34"  cy="30"  r="0.9" fill-opacity="0.55"/>
+            <circle cx="78"  cy="18"  r="0.6" fill-opacity="0.40"/>
+            <circle cx="120" cy="44"  r="1.1" fill-opacity="0.70"/>
+            <circle cx="158" cy="24"  r="0.7" fill-opacity="0.45"/>
+            <circle cx="232" cy="20"  r="0.8" fill-opacity="0.50"/>
+            <circle cx="286" cy="38"  r="1.2" fill-opacity="0.72"/>
+            <circle cx="332" cy="22"  r="0.6" fill-opacity="0.42"/>
+            <circle cx="362" cy="52"  r="0.9" fill-opacity="0.55"/>
+            <circle cx="20"  cy="74"  r="0.7" fill-opacity="0.44"/>
+            <circle cx="58"  cy="96"  r="1.0" fill-opacity="0.60"/>
+            <circle cx="104" cy="78"  r="0.6" fill-opacity="0.38"/>
+            <circle cx="300" cy="86"  r="0.8" fill-opacity="0.50"/>
+            <circle cx="346" cy="104" r="1.0" fill-opacity="0.58"/>
+            <circle cx="372" cy="132" r="0.7" fill-opacity="0.42"/>
+            <circle cx="16"  cy="140" r="0.9" fill-opacity="0.52"/>
+            <circle cx="44"  cy="170" r="0.6" fill-opacity="0.36"/>
+            <circle cx="350" cy="166" r="0.8" fill-opacity="0.48"/>
+            <circle cx="318" cy="198" r="0.6" fill-opacity="0.34"/>
+            <circle cx="64"  cy="206" r="0.7" fill-opacity="0.38"/>
+          </g>
+          <!-- a few brighter feature stars with soft glow -->
+          <g>
+            <circle cx="150" cy="58" r="3.4" fill="url(#l1-star)" opacity="0.5"/>
+            <circle cx="150" cy="58" r="1.0" fill="#EAF2FF" opacity="0.95"/>
+            <circle cx="262" cy="70" r="3.0" fill="url(#l1-star)" opacity="0.42"/>
+            <circle cx="262" cy="70" r="0.9" fill="#DCEBFF" opacity="0.9"/>
+            <circle cx="96"  cy="120" r="2.6" fill="url(#l1-star)" opacity="0.38"/>
+            <circle cx="96"  cy="120" r="0.8" fill="#FFFFFF" opacity="0.85"/>
+          </g>
+        </svg>
+        <svg class="hero-layer-2" viewBox="0 0 390 260" preserveAspectRatio="xMidYMid slice" fill="none">
+          <defs>
+            <linearGradient id="l2-recov" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0"    stop-color="#00C8FF" stop-opacity="0"/>
+              <stop offset="0.28" stop-color="#22D8FF" stop-opacity="1"/>
+              <stop offset="0.62" stop-color="#5A8CFF" stop-opacity="0.98"/>
+              <stop offset="1"    stop-color="#8A5CFF" stop-opacity="0.55"/>
+            </linearGradient>
+            <linearGradient id="l2-recov2" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0"    stop-color="#8A5CFF" stop-opacity="0"/>
+              <stop offset="0.35" stop-color="#7A6BFF" stop-opacity="0.95"/>
+              <stop offset="0.7"  stop-color="#22D8FF" stop-opacity="0.9"/>
+              <stop offset="1"    stop-color="#00C8FF" stop-opacity="0.4"/>
+            </linearGradient>
+            <linearGradient id="l2-strain" x1="1" y1="0" x2="0" y2="0">
+              <stop offset="0"    stop-color="#FF5E62" stop-opacity="0"/>
+              <stop offset="0.28" stop-color="#FF5E62" stop-opacity="1"/>
+              <stop offset="0.62" stop-color="#FF7A48" stop-opacity="0.98"/>
+              <stop offset="1"    stop-color="#FFB070" stop-opacity="0.55"/>
+            </linearGradient>
+            <linearGradient id="l2-strain2" x1="1" y1="0" x2="0" y2="0">
+              <stop offset="0"    stop-color="#FFB070" stop-opacity="0"/>
+              <stop offset="0.35" stop-color="#FF8A3D" stop-opacity="0.95"/>
+              <stop offset="0.7"  stop-color="#FF5E62" stop-opacity="0.9"/>
+              <stop offset="1"    stop-color="#FF6B6B" stop-opacity="0.4"/>
+            </linearGradient>
+            <radialGradient id="l2-merge" cx="50%" cy="50%" r="50%">
+              <stop offset="0"   stop-color="#C9B6FF" stop-opacity="0.6"/>
+              <stop offset="45%" stop-color="#8A5CFF" stop-opacity="0.32"/>
+              <stop offset="100%" stop-color="#8A5CFF" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="l2-wide" x="-30%" y="-60%" width="160%" height="260%"><feGaussianBlur stdDeviation="13"/></filter>
+            <filter id="l2-med"  x="-20%" y="-50%" width="140%" height="220%"><feGaussianBlur stdDeviation="5.5"/></filter>
+            <filter id="l2-core" x="-20%" y="-40%" width="140%" height="200%"><feGaussianBlur stdDeviation="1.6"/></filter>
+          </defs>
 
-      <!-- Recovery — top left -->
-      <button type="button" data-target="todays-read"
-              class="ring-corner metric-corner items-start text-left absolute left-1 top-1 z-10 focus:outline-none">
-        <span class="metric-cap" style="color:#00C8FF">Recovery</span>
-        <span class="metric-num glow-recov" id="m-recovery-val" style="color:#E9F7FF">—</span>
-        <span class="metric-word" id="m-recovery-label" style="color:#00C8FF"></span>
-        <span class="metric-detail" id="m-recovery-detail" style="color:#00C8FF"></span>
-      </button>
+          <!-- WIDE atmospheric undersweeps (depth, full width, heavily blurred) -->
+          <g filter="url(#l2-wide)" fill="none" stroke-linecap="round" opacity="0.68">
+            <path d="M -40 178 C 70 214, 140 226, 197 217"  stroke="url(#l2-recov)"  stroke-width="38"/>
+            <path d="M 430 178 C 320 214, 254 226, 197 217" stroke="url(#l2-strain)" stroke-width="38"/>
+            <path d="M -40 252 C 92 246, 152 232, 198 221"  stroke="url(#l2-recov2)" stroke-width="30"/>
+            <path d="M 430 252 C 298 246, 238 232, 196 221" stroke="url(#l2-strain2)" stroke-width="30"/>
+          </g>
 
-      <!-- Sleep — top right -->
-      <button type="button" data-target="polar-panel"
-              class="ring-corner metric-corner items-center text-center absolute left-1/2 -translate-x-1/2 z-10 focus:outline-none" style="bottom:0">
-        <span class="metric-cap" style="color:#8A5CFF">Sleep</span>
-        <span class="metric-num glow-sleep" id="m-sleep-val" style="color:#9A6BFF">—</span>
-        <span class="metric-word" id="m-sleep-label" style="color:#8A5CFF"></span>
-        <span class="metric-detail" id="m-sleep-detail"></span>
-      </button>
+          <!-- MAIN bold bands — sweep down from upper-outer corners + up from the
+               bottom, converging low beneath the moon (~197,217). Full width. -->
+          <g filter="url(#l2-med)" fill="none" stroke-linecap="round">
+            <path d="M -34 164 C 66 200, 136 217, 197 215"  stroke="url(#l2-recov)"  stroke-width="18"/>
+            <path d="M -34 234 C 56 246, 128 235, 197 221"  stroke="url(#l2-recov2)" stroke-width="14"/>
+            <path d="M -26 198 C 62 216, 136 211, 198 211"  stroke="url(#l2-recov)"  stroke-width="9.5"/>
+            <path d="M 424 164 C 324 200, 254 217, 197 215" stroke="url(#l2-strain)"  stroke-width="18"/>
+            <path d="M 424 234 C 334 246, 262 235, 197 221" stroke="url(#l2-strain2)" stroke-width="14"/>
+            <path d="M 416 198 C 328 216, 254 211, 196 211" stroke="url(#l2-strain)"  stroke-width="9.5"/>
+          </g>
 
-      <!-- Strain — right, lower -->
-      <button type="button" data-target="activity"
-              class="ring-corner metric-corner items-end text-right absolute right-1 top-1 z-10 focus:outline-none">
-        <span class="metric-cap" id="m-strain-cap" style="color:#FF5E62">Strain</span>
-        <span class="metric-num glow-strain" id="m-strain-val" style="color:#FF5E62">—</span>
-        <span class="metric-word" id="m-strain-label" style="color:#FF5E62"></span>
-        <span class="metric-detail" id="m-strain-detail"></span>
-      </button>
+          <!-- TIGHT bright cores — the defined luminous edge that reads as a ribbon -->
+          <g filter="url(#l2-core)" fill="none" stroke-linecap="round" opacity="0.95">
+            <path d="M -34 164 C 66 200, 136 217, 197 215"  stroke="#9EE8FF" stroke-width="3.0"/>
+            <path d="M -34 234 C 56 246, 128 235, 197 221"  stroke="#BFD0FF" stroke-width="1.9"/>
+            <path d="M 424 164 C 324 200, 254 217, 197 215" stroke="#FFB6A0" stroke-width="3.0"/>
+            <path d="M 424 234 C 334 246, 262 235, 197 221" stroke="#FFC9A0" stroke-width="1.9"/>
+          </g>
 
-      <!-- Center: moon + orbital rings (composite SVG) -->
-      <div class="absolute left-1/2 -translate-x-1/2" style="top:4px;width:260px;height:260px;filter:saturate(1.12) contrast(1.04)" id="rings-wrap">
-        <div class="w-full h-full" id="rings-orbit-svg"></div>
+          <!-- convergence bloom beneath the moon where the two energies meet -->
+          <g filter="url(#l2-med)">
+            <ellipse cx="197" cy="217" rx="92" ry="30" fill="url(#l2-merge)"/>
+            <ellipse cx="197" cy="218" rx="46" ry="16" fill="url(#l2-merge)"/>
+          </g>
+        </svg>
+        <div class="hero-zones" aria-hidden="true"></div>
+        <!-- moon + rings composite (lunar engine renders into #rings-orbit-svg — DO NOT MODIFY) -->
+        <div class="absolute left-1/2 -translate-x-1/2" style="top:4px;width:260px;height:260px;filter:saturate(1.12) contrast(1.04)" id="rings-wrap">
+          <div class="w-full h-full" id="rings-orbit-svg"></div>
+        </div>
+        <svg class="hero-layer-3" viewBox="0 0 390 260" preserveAspectRatio="xMidYMid slice" fill="none">
+          <defs>
+            <radialGradient id="l3-seat" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stop-color="#02030B" stop-opacity="0"/>
+              <stop offset="74%"  stop-color="#02030B" stop-opacity="0"/>
+              <stop offset="86%"  stop-color="#02030B" stop-opacity="0.30"/>
+              <stop offset="100%" stop-color="#02030B" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="l3-bloomWide" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stop-color="#CBDBFF" stop-opacity="0"/>
+              <stop offset="42%"  stop-color="#C2D4FF" stop-opacity="0"/>
+              <stop offset="56%"  stop-color="#B9CCFF" stop-opacity="0.13"/>
+              <stop offset="78%"  stop-color="#9CC0F4" stop-opacity="0.05"/>
+              <stop offset="100%" stop-color="#7FA8E8" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="l3-bloom" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stop-color="#EAF2FF" stop-opacity="0"/>
+              <stop offset="52%"  stop-color="#E0EBFF" stop-opacity="0"/>
+              <stop offset="62%"  stop-color="#D2E2FF" stop-opacity="0.40"/>
+              <stop offset="72%"  stop-color="#B6D0FF" stop-opacity="0.18"/>
+              <stop offset="100%" stop-color="#93BBF2" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="l3-soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="7"/></filter>
+          </defs>
+          <!-- shadow halo: soft dark seat ring OUTSIDE the rings, separating the
+               moon+rings system from the bright wave bands so the moon dominates -->
+          <circle cx="195" cy="138" r="150" fill="url(#l3-seat)" filter="url(#l3-soft)"/>
+          <!-- wide volumetric bloom: soft atmospheric scatter around the body -->
+          <circle cx="195" cy="138" r="150" fill="url(#l3-bloomWide)"/>
+          <!-- tight limb bloom: the moon's illuminated edge glows into space -->
+          <circle cx="195" cy="138" r="98"  fill="url(#l3-bloom)"/>
+        </svg>
+      </div>
+      <div class="hero-metrics-overlay">
+        <div class="hero-sleep-scrim" aria-hidden="true"></div>
+        <!-- Recovery — top left -->
+        <button type="button" data-target="todays-read"
+                class="ring-corner metric-corner items-start text-left absolute left-1 top-1 z-10 focus:outline-none">
+          <span class="metric-cap" style="color:#00C8FF">Recovery</span>
+          <span class="metric-num glow-recov" id="m-recovery-val" style="color:#E9F7FF">—</span>
+          <span class="metric-word" id="m-recovery-label" style="color:#00C8FF"></span>
+          <span class="metric-detail" id="m-recovery-detail" style="color:#00C8FF"></span>
+        </button>
+
+        <!-- Sleep — top right -->
+        <button type="button" data-target="polar-panel"
+                class="ring-corner metric-corner items-center text-center absolute left-1/2 -translate-x-1/2 z-10 focus:outline-none" style="bottom:0">
+          <span class="metric-cap" style="color:#8A5CFF">Sleep</span>
+          <span class="metric-num glow-sleep" id="m-sleep-val" style="color:#9A6BFF">—</span>
+          <span class="metric-word" id="m-sleep-label" style="color:#8A5CFF"></span>
+          <span class="metric-detail" id="m-sleep-detail"></span>
+        </button>
+
+        <!-- Strain — right, lower -->
+        <button type="button" data-target="activity"
+                class="ring-corner metric-corner items-end text-right absolute right-1 top-1 z-10 focus:outline-none">
+          <span class="metric-cap" id="m-strain-cap" style="color:#FF5E62">Strain</span>
+          <span class="metric-num glow-strain" id="m-strain-val" style="color:#FF5E62">—</span>
+          <span class="metric-word" id="m-strain-label" style="color:#FF5E62"></span>
+          <span class="metric-detail" id="m-strain-detail"></span>
+        </button>
       </div>
     </section>
 
@@ -704,6 +889,6 @@
        style="height:env(safe-area-inset-bottom);background:#03050F"></div>
 
   <script src="data.js"></script>
-  <script src="app.js?v=redesign4"></script>
+  <script src="app.js?v=redesign5"></script>
 </body>
 </html>
