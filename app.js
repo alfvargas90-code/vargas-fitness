@@ -283,7 +283,7 @@ const ORBIT_DEFS = `<defs>
     <stop offset="0" stop-color="#6E3FD6"/><stop offset="1" stop-color="#B58CFF"/>
   </linearGradient>
   <linearGradient id="gRecov" x1="0" y1="0.2" x2="1" y2="0.9">
-    <stop offset="0" stop-color="#00E0FF"/><stop offset="0.6" stop-color="#00A6FF"/><stop offset="1" stop-color="#3F66FF"/>
+    <stop offset="0" stop-color="#5CEBFF"/><stop offset="1" stop-color="#00B4FF"/>
   </linearGradient>
   <linearGradient id="gStrain" x1="0.1" y1="0" x2="0.95" y2="1">
     <stop offset="0" stop-color="#FF9A3D"/><stop offset="0.55" stop-color="#FF5E62"/><stop offset="1" stop-color="#FF2E55"/>
@@ -302,15 +302,14 @@ function orbitGroup(r, pct, gradId, glowColor, solidColor, emphasis) {
   // Full track tinted to the ring's own hue (low alpha + faint bloom) so all three
   // read as COMPLETE glowing orbits — the mockup look — while the bright arc on top
   // still encodes the metric value.
-  const trackHue = solidColor || glowColor;
-  const track = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${trackHue}" stroke-opacity="0.20" stroke-width="${ORBIT.baseW}" style="filter:drop-shadow(0 0 4px ${trackHue}66)"/>`;
+  const track = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="${ORBIT.baseW}"/>`;
   if (!(pct > 0)) return track;
   const stroke = solidColor || `url(#${gradId})`;
   const glow = solidColor || glowColor;
   const dash = `stroke-dasharray="${arc.toFixed(2)} ${(c - arc).toFixed(2)}" transform="rotate(-90 130 130)"`;
-  const haloOpacity = emphasis ? 0.32 : 0.26;   // bolder bloom — match the mockup's glowing orbits
-  const haloBlur    = emphasis ? 22 : 18;        // wider, brighter halo
-  const progBlur    = emphasis ? 16 : 13;        // dreamier arc bloom
+  const haloOpacity = emphasis ? 0.22 : 0.18;   // restrained bloom — clean concentric rings
+  const haloBlur    = emphasis ? 15 : 12;        // tighter halo, less inter-ring bleed
+  const progBlur    = emphasis ? 10 : 8;         // crisp arc with soft glow
   // Outer bloom halo — a low-alpha, wide-blur echo of the arc so the ring reads
   // as energy emanating outward rather than a hard progress stroke.
   const halo = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${glow}"
@@ -356,14 +355,14 @@ function moonSVG(r, illum, waning) {
   const shadow = `M 0 ${-r} A ${r} ${r} 0 0 ${limbSweep} 0 ${r} A ${rxT} ${r} 0 0 ${termSweep} 0 ${-r} Z`;
   const dim = illum > 0.99; // full moon → no shadow path
   const f = (n) => +(n * r).toFixed(2);
-  const haloR = f(1.90);
+  const haloR = f(2.05);
 
   return `<defs>
       <clipPath id="moonClip"><circle cx="0" cy="0" r="${r}"/></clipPath>
       <radialGradient id="moonHalo" cx="50%" cy="50%" r="50%">
-        <stop offset="0%"   stop-color="#DCE6FF" stop-opacity="0.26"/>
-        <stop offset="42%"  stop-color="#C8D8FF" stop-opacity="0.17"/>
-        <stop offset="70%"  stop-color="#AAC3F0" stop-opacity="0.075"/>
+        <stop offset="0%"   stop-color="#E4ECFF" stop-opacity="0.34"/>
+        <stop offset="42%"  stop-color="#C8D8FF" stop-opacity="0.22"/>
+        <stop offset="70%"  stop-color="#AAC3F0" stop-opacity="0.11"/>
         <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"/>
       </radialGradient>
       <radialGradient id="moonLimb" cx="42%" cy="38%" r="62%">
@@ -385,7 +384,7 @@ function moonSVG(r, illum, waning) {
       <image href="assets/moon-lro.webp" x="${-r}" y="${-r}" width="${2 * r}" height="${2 * r}"
              preserveAspectRatio="xMidYMid slice" style="filter:brightness(1.12)"/>
       <circle cx="0" cy="0" r="${r}" fill="url(#moonLimb)"/>
-      ${dim ? "" : `<path d="${shadow}" fill="#05060C" opacity="0.93" filter="url(#moonTerm)"/>`}
+      ${dim ? "" : `<path d="${shadow}" fill="#070B16" opacity="0.86" filter="url(#moonTerm)"/>`}
     </g>
     <circle cx="0" cy="0" r="${r}" fill="none" stroke="#7A8AA0" stroke-opacity="0.32" stroke-width="0.8"/>`;
 }
@@ -400,7 +399,7 @@ function renderOrbit({ recovery, sleep, strain, moon }) {
        preserveAspectRatio="xMidYMid meet" style="overflow:visible" aria-label="Orbit rings around moon">
     ${ORBIT_DEFS}
     ${orbitGroup(rings.strain.r,   strain?.pct,   rings.strain.grad,   rings.strain.glow,
-                 strain?.pct != null ? strainPresenceColor(strain.pct) : null, true)}
+                 null, true)}
     ${orbitGroup(rings.recovery.r, recovery?.pct, rings.recovery.grad, rings.recovery.glow)}
     ${orbitGroup(rings.sleep.r,    sleep?.pct,    rings.sleep.grad,    rings.sleep.glow)}
     <g transform="translate(${cx} ${cy})">${moonSVG(moonR, m.illum, m.waning)}</g>
@@ -531,7 +530,7 @@ async function renderRings() {
   // approaching-max signal, not the default. Number, label, glow + caption all
   // share the PRESENCE color so a low-load morning still reads coral and alive
   // (floored off the cold gray-zone), with equal weight to Recovery/Sleep.
-  const strainHue = strainPct != null ? strainPresenceColor(strainPct) : LPI.strain;
+  const strainHue = LPI.strain;
   setMetricCorner("strain",
     strainPct != null ? `${Math.round(strainPct)}%` : null,
     strainPct != null ? strainLabel(strainPct) : "",

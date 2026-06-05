@@ -54,9 +54,9 @@
     color: #F2F5FA;
     min-height: 100vh;
     background:
-      radial-gradient(120% 62% at 50% 28%, rgba(26,20,70,.62), transparent 62%),
-      radial-gradient(circle at 6% 38%, rgba(0,200,255,.16), transparent 42%),
-      radial-gradient(circle at 95% 44%, rgba(255,94,98,.15), transparent 42%),
+      radial-gradient(118% 60% at 50% 28%, rgba(88,62,205,.58), transparent 62%),
+      radial-gradient(circle at 2% 42%, rgba(0,200,255,.21), transparent 46%),
+      radial-gradient(circle at 98% 42%, rgba(255,94,98,.20), transparent 46%),
       radial-gradient(circle at 86% 70%, rgba(255,138,61,.09), transparent 46%),
       radial-gradient(circle at 14% 72%, rgba(138,92,255,.12), transparent 46%),
       linear-gradient(180deg, #03050F 0%, #04061a 50%, #03040E 100%);
@@ -91,17 +91,18 @@
   .bg-fx::after {
     content: ""; position: absolute; inset: 0;
     background-image:
-      radial-gradient(rgba(255,255,255,.9) 0.6px, transparent 1.0px),
-      radial-gradient(rgba(0,200,255,.8) 0.5px, transparent 0.9px);
-    background-size: 30px 30px, 46px 46px;
-    background-position: 0 0, 19px 13px;
-    -webkit-mask-image: radial-gradient(162% 84% at 50% 34%, #000 0%, transparent 66%);
-    mask-image: radial-gradient(162% 84% at 50% 34%, #000 0%, transparent 66%);
+      radial-gradient(rgba(255,255,255,.96) 0.7px, transparent 1.15px),
+      radial-gradient(rgba(0,200,255,.9) 0.6px, transparent 1.05px),
+      radial-gradient(rgba(255,255,255,1) 1.1px, transparent 1.7px);
+    background-size: 34px 34px, 50px 50px, 90px 90px;
+    background-position: 0 0, 19px 13px, 41px 27px;
+    -webkit-mask-image: radial-gradient(170% 95% at 50% 30%, #000 0%, transparent 72%);
+    mask-image: radial-gradient(170% 95% at 50% 30%, #000 0%, transparent 72%);
     /* Lifted .07 → .12 for slightly more atmospheric presence (still clearly
        behind moon + rings). */
-    opacity: .16;
+    opacity: .34;
   }
-  @media (prefers-reduced-motion: reduce) { #bg-waves { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { #bg-waves, .hero-zones { animation: none; } }
 
   /* ── Hero energy zones ──────────────────────────────────────────────────────
      Three soft atmospheric color fields seated in the hero canvas, one per
@@ -113,11 +114,15 @@
     position: absolute; inset: 0; z-index: 0; pointer-events: none;
     background:
       /* Central violet/blue bloom seated behind the moon — the mockup's core glow. */
-      radial-gradient(230px 210px at 50% 46%, rgba(120,108,255,0.22), transparent 68%),
-      radial-gradient(168px 168px at 13% 72%, rgba(0,200,255,0.28),  transparent 70%),
-      radial-gradient(185px 185px at 87% 19%, rgba(155,92,255,0.27), transparent 70%),
-      radial-gradient(168px 168px at 83% 80%, rgba(255,94,98,0.24),  transparent 72%);
+      radial-gradient(260px 230px at 50% 44%, rgba(120,108,255,0.28), transparent 70%),
+      radial-gradient(190px 190px at 8% 60%, rgba(0,200,255,0.35),  transparent 72%),
+      radial-gradient(205px 205px at 92% 40%, rgba(255,94,98,0.30),  transparent 72%);
     filter: blur(16px);
+    animation: zoneBreathe 9s ease-in-out infinite alternate;
+  }
+  @keyframes zoneBreathe {
+    from { opacity: 0.86; }
+    to   { opacity: 1; }
   }
 
   /* ── Hero metric corners ────────────────────────────────────────────────── */
@@ -253,13 +258,13 @@
       <!-- Layer B — back parallax ribbons: softer-blurred, dimmer, wider reach
            (extend toward the center + upper band). Sits behind the sharp fans to
            create depth without lifting overall brightness. -->
-      <g filter="url(#wvblurSoft)" opacity="0.68" fill="none" stroke-linecap="round">
-        <path d="M -60 430 C 60 380, 150 320, 197 205" stroke="url(#wvCyan)" stroke-width="11"/>
-        <path d="M -50 560 C 90 540, 185 415, 222 270" stroke="url(#wvPurple)" stroke-width="14"/>
-        <path d="M 450 430 C 330 380, 240 320, 197 205" stroke="url(#wvCoral)" stroke-width="11"/>
-        <path d="M 440 560 C 300 540, 205 415, 172 270" stroke="url(#wvOrange)" stroke-width="14"/>
-        <path d="M -40 700 C 120 650, 178 520, 197 350" stroke="url(#wvCyan)" stroke-width="9"/>
-        <path d="M 430 700 C 270 650, 222 520, 197 350" stroke="url(#wvCoral)" stroke-width="9"/>
+      <g filter="url(#wvblurSoft)" opacity="0.9" fill="none" stroke-linecap="round">
+        <path d="M -60 430 C 60 380, 150 320, 197 205" stroke="url(#wvCyan)" stroke-width="15"/>
+        <path d="M -50 560 C 90 540, 185 415, 222 270" stroke="url(#wvPurple)" stroke-width="20"/>
+        <path d="M 450 430 C 330 380, 240 320, 197 205" stroke="url(#wvCoral)" stroke-width="15"/>
+        <path d="M 440 560 C 300 540, 205 415, 172 270" stroke="url(#wvOrange)" stroke-width="20"/>
+        <path d="M -40 700 C 120 650, 178 520, 197 350" stroke="url(#wvCyan)" stroke-width="13"/>
+        <path d="M 430 700 C 270 650, 222 520, 197 350" stroke="url(#wvCoral)" stroke-width="13"/>
       </g>
 
       <!-- Layer C — front fans: sharp ribbons aiming their bright end at the moon
@@ -267,15 +272,15 @@
            lower-right (coral/orange). -->
       <g filter="url(#wvblur)" opacity="1" fill="none" stroke-linecap="round">
         <!-- LEFT fan -->
-        <path d="M -40 470 C 70 430, 150 360, 197 250" stroke="url(#wvCyan)" stroke-width="6"/>
-        <path d="M -40 540 C 80 520, 160 430, 205 300" stroke="url(#wvPurple)" stroke-width="9"/>
-        <path d="M -30 610 C 100 600, 175 470, 210 320" stroke="url(#wvCyan)" stroke-width="5"/>
-        <path d="M -20 360 C 80 340, 150 300, 197 235" stroke="url(#wvPurple)" stroke-width="4"/>
+        <path d="M -40 470 C 70 430, 150 360, 197 250" stroke="url(#wvCyan)" stroke-width="8.5"/>
+        <path d="M -40 540 C 80 520, 160 430, 205 300" stroke="url(#wvPurple)" stroke-width="13"/>
+        <path d="M -30 610 C 100 600, 175 470, 210 320" stroke="url(#wvCyan)" stroke-width="7"/>
+        <path d="M -20 360 C 80 340, 150 300, 197 235" stroke="url(#wvPurple)" stroke-width="5.5"/>
         <!-- RIGHT fan -->
-        <path d="M 430 470 C 320 430, 240 360, 197 250" stroke="url(#wvCoral)" stroke-width="6"/>
-        <path d="M 430 540 C 310 520, 235 430, 192 300" stroke="url(#wvOrange)" stroke-width="9"/>
-        <path d="M 420 610 C 290 600, 220 470, 188 320" stroke="url(#wvCoral)" stroke-width="5"/>
-        <path d="M 410 360 C 310 340, 245 300, 197 235" stroke="url(#wvOrange)" stroke-width="4"/>
+        <path d="M 430 470 C 320 430, 240 360, 197 250" stroke="url(#wvCoral)" stroke-width="8.5"/>
+        <path d="M 430 540 C 310 520, 235 430, 192 300" stroke="url(#wvOrange)" stroke-width="13"/>
+        <path d="M 420 610 C 290 600, 220 470, 188 320" stroke="url(#wvCoral)" stroke-width="7"/>
+        <path d="M 410 360 C 310 340, 245 300, 197 235" stroke="url(#wvOrange)" stroke-width="5.5"/>
       </g>
 
       <!-- Layer D — lower wave signature: gentle streamers flowing through the
@@ -283,10 +288,11 @@
            blur softens them; the color still registers → "energy runs through the
            page", Linear / Mission Control feel). Soft-blurred so they read as
            atmosphere, not lines. -->
-      <g filter="url(#wvblurSoft)" opacity="0.62" fill="none" stroke-linecap="round">
-        <path d="M -40 612 C 120 576, 280 648, 440 600" stroke="url(#wvCyan)" stroke-width="8"/>
-        <path d="M 440 708 C 280 668, 120 740, -40 696" stroke="url(#wvCoral)" stroke-width="8"/>
-        <path d="M -40 800 C 150 768, 250 826, 440 782" stroke="url(#wvPurple)" stroke-width="7"/>
+      <g filter="url(#wvblurSoft)" opacity="0.9" fill="none" stroke-linecap="round">
+        <path d="M -40 612 C 120 576, 280 648, 440 600" stroke="url(#wvCyan)" stroke-width="11.5"/>
+        <path d="M 440 708 C 280 668, 120 740, -40 696" stroke="url(#wvCoral)" stroke-width="11.5"/>
+        <path d="M -40 800 C 150 768, 250 826, 440 782" stroke="url(#wvPurple)" stroke-width="10"/>
+        <path d="M -44 766 C 92 732, 258 842, 434 806" stroke="url(#wvCyan)" stroke-width="9"/>
       </g>
     </svg>
   </div>
@@ -324,7 +330,7 @@
 
       <!-- Sleep — top right -->
       <button type="button" data-target="polar-panel"
-              class="ring-corner metric-corner items-end text-right absolute right-1 top-1 z-10 focus:outline-none">
+              class="ring-corner metric-corner items-center text-center absolute left-1/2 -translate-x-1/2 z-10 focus:outline-none" style="bottom:0">
         <span class="metric-cap" style="color:#8A5CFF">Sleep</span>
         <span class="metric-num glow-sleep" id="m-sleep-val" style="color:#9A6BFF">—</span>
         <span class="metric-word" id="m-sleep-label" style="color:#8A5CFF"></span>
@@ -333,7 +339,7 @@
 
       <!-- Strain — right, lower -->
       <button type="button" data-target="activity"
-              class="ring-corner metric-corner items-end text-right absolute right-1 z-10 focus:outline-none" style="bottom:6px">
+              class="ring-corner metric-corner items-end text-right absolute right-1 top-1 z-10 focus:outline-none">
         <span class="metric-cap" id="m-strain-cap" style="color:#FF5E62">Strain</span>
         <span class="metric-num glow-strain" id="m-strain-val" style="color:#FF5E62">—</span>
         <span class="metric-word" id="m-strain-label" style="color:#FF5E62"></span>
@@ -619,6 +625,6 @@
        style="height:env(safe-area-inset-bottom);background:#03050F"></div>
 
   <script src="data.js"></script>
-  <script src="app.js?v=2026-06-05-3"></script>
+  <script src="app.js?v=2026-06-05-redesign2"></script>
 </body>
 </html>
