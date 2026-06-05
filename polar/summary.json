@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-05T11:30:00-05:00",
-  "data_hash": "33bdba90789185b7",
-  "slot": "fuel-1",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 39%\n\nRead\nSleep came in deeper last night, yet recovery sits only moderate and reserves aren't fully restored. Output so far is light and the morning's protein start is solid, though the day still leans well under fuel with most of the protein left to close. A measured day, one that favors steady fueling over a widening gap.\n\nMind the deficit.\n\nPerformance: Mind the deficit.\n\nTransit: none",
+  "generated_at": "2026-06-05T17:12:18-05:00",
+  "data_hash": "ca63ead78f1a494b",
+  "slot": "train-1",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 75%\n\nRead\nLast night restored more than usual, but recovery is only moderate and today has already taken a meaningful share. Protein still looks a bit behind for preserving muscle through a modest deficit. The window favors measured resistance work over intensity.\n\nMeasured strength.\n\nPerformance: Measured strength.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 39%\n\nRead\nSleep came in deeper last night, yet recovery sits only moderate and reserves aren't fully restored. Output so far is light and the morning's protein start is solid, though the day still leans well under fuel with most of the protein left to close. A measured day, one that favors steady fueling over a widening gap.\n\nMind the deficit."
+      "text": "State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 75%\n\nRead\nLast night restored more than usual, but recovery is only moderate and today has already taken a meaningful share. Protein still looks a bit behind for preserving muscle through a modest deficit. The window favors measured resistance work over intensity.\n\nMeasured strength."
     },
     {
       "label": "Performance",
-      "text": "Mind the deficit."
+      "text": "Measured strength."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 39%\n\nRead\nSleep came in deeper last night, yet recovery sits only moderate and reserves aren't fully restored. Output so far is light and the morning's protein start is solid, though the day still leans well under fuel with most of the protein left to close. A measured day, one that favors steady fueling over a widening gap.\n\nMind the deficit.",
-    "performance": "Mind the deficit.",
+    "reading": "State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 75%\n\nRead\nLast night restored more than usual, but recovery is only moderate and today has already taken a meaningful share. Protein still looks a bit behind for preserving muscle through a modest deficit. The window favors measured resistance work over intensity.\n\nMeasured strength.",
+    "performance": "Measured strength.",
     "transit": null
   },
-  "nutrition_nudge": "On pace across all macros \u2014 keep dinner protein-forward and meal timing steady.",
+  "nutrition_nudge": "Fat\u2019s over budget now \u2014 keep dinner lean and skip oils, cheese, and creamy sauces.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
     "sleep_hours": 7.0,
     "hrv_today": 50,
     "hrv_7d_avg": 63.3,
-    "nutrition": "calories 800 of 2574 goal, protein 53g of 138g goal, carbs 32g of 290g goal, fat 53g of 72g goal",
-    "nutrition_detail": "calories 800 of 2574 goal -> 1774 left; protein 53g of 138g goal -> 85g gap; carbs 32g of 290g goal; fat 53g of 72g goal",
-    "activity_today": "2,566 steps so far, 2h 20m active, 1,095 calories burned, Light training load"
+    "nutrition": "calories 2000 of 2574 goal, protein 108g of 138g goal, carbs 172g of 290g goal, fat 83g of 72g goal",
+    "nutrition_detail": "calories 2000 of 2574 goal -> 574 left; protein 108g of 138g goal -> 30g gap; carbs 172g of 290g goal; fat 83g of 72g goal",
+    "activity_today": "4,396 steps so far, 4h 28m active, 1,818 calories burned, Moderate training load"
   }
 }
