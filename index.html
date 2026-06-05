@@ -163,6 +163,16 @@
       rgba(3,5,15,0.82), rgba(3,5,15,0.5) 50%, rgba(3,5,15,0) 80%);
     filter: blur(7px);
   }
+  /* Localized dark seat behind the Strain metric only (bottom-right corner) — lifts
+     the coral number off the bright orange waves. Soft-edged; does not dim the rest
+     of the wave band. */
+  .hero-strain-scrim {
+    position: absolute; right: -4px; bottom: -6px;
+    width: 166px; height: 102px; pointer-events: none; z-index: 0;
+    background: radial-gradient(72% 70% at 74% 64%,
+      rgba(3,5,15,0.74), rgba(3,5,15,0.42) 52%, rgba(3,5,15,0) 80%);
+    filter: blur(6px);
+  }
 
   /* ── Hero metric corners ────────────────────────────────────────────────── */
   .metric-corner { display: flex; flex-direction: column; line-height: 1.02; }
@@ -577,6 +587,7 @@
       </div>
       <div class="hero-metrics-overlay">
         <div class="hero-sleep-scrim" aria-hidden="true"></div>
+        <div class="hero-strain-scrim" aria-hidden="true"></div>
         <!-- Recovery — top left -->
         <button type="button" data-target="todays-read"
                 class="ring-corner metric-corner items-start text-left absolute left-1 top-1 z-10 focus:outline-none">
@@ -604,7 +615,7 @@
           <span class="metric-detail" id="m-strain-detail"></span>
         </button>
         <!-- Lunar context under the moon — filled from real lunar_stress.json data by app.js -->
-        <div id="moon-context-hero" class="absolute left-1/2 -translate-x-1/2 text-center z-10 pointer-events-none" style="top:208px;width:210px" aria-live="polite"></div>
+        <div id="moon-context-hero" class="absolute left-1/2 -translate-x-1/2 text-center z-10 pointer-events-none" style="top:228px;width:210px" aria-live="polite"></div>
       </div>
     </section>
 
@@ -881,6 +892,6 @@
        style="height:env(safe-area-inset-bottom);background:#03050F"></div>
 
   <script src="data.js"></script>
-  <script src="app.js?v=redesign8"></script>
+  <script src="app.js?v=redesign9"></script>
 </body>
 </html>
