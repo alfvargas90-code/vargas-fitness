@@ -14,6 +14,29 @@ _Last updated: 2026-06-05 (octopus / Claude Code)._
 
 ---
 
+## 🛡️ STATUS 2026-06-05 — deploy-watch gate LIVE (belt-and-suspenders auto-push)
+
+New LaunchAgent **`com.alfredo.dashboard-deploy-watch`** closes the loop that broke
+all day 2026-06-05 (dashboard edits sitting un-pushed). Every 5 min (+ RunAtLoad) it
+auto-commits + pushes **only** the four dashboard meta files when they change:
+`index.html`, `app.js`, `WHEN_HOME.md`, `polar/summary.py`. Polar/nutrition JSON is
+**not** touched — that stays polar-sync's job.
+
+- **Script:** `~/bin/dashboard-deploy-watch.sh` (internal disk, on purpose — same
+  FDA reason as `keep-claude-alive.sh`). **Source-of-truth + plist** committed to the
+  repo at `deploy-watch/` so a Mac reset can redeploy.
+- **Safe by construction:** commits with an explicit pathspec (`git commit -- <4
+  files>`), so it can never absorb polar's staged JSON even when they sit in the
+  index mid-cycle. Stale `.git/*.lock` sweep (ports `summary.py::_sweep_stale_git_locks`),
+  5s concurrency defer if another git op is mid-flight, and a post-commit guard that
+  undoes + screams `[DEPLOY-UNEXPECTED-STAGED]` if a non-watched file ever sneaks in.
+- **Loud failures only:** `[DEPLOY-FAIL]` + stderr + non-zero exit on any push/auth
+  failure — never a silent exit 0 (silent-401 lesson). Log:
+  `~/.local/state/dashboard-deploy-watch.log`.
+- **Verify it's alive:** `launchctl list | grep dashboard-deploy-watch`.
+
+---
+
 ## 🌙 STATUS 2026-06-05 (latest) — v2 lunar-details pass (redesign6)
 
 New reference `design_refs/chatgpt_hero_v2_with_lunar_details.jpeg`. Three changes,
@@ -576,3 +599,4 @@ backfill the slot (`python3 polar/summary.py --slot <slot>`). Empty = healthy._
 > and the slot still writes (in Codex voice). A NEW dark-fire entry below this line
 > now means **both** claude AND codex failed, or the fallback regressed. Check
 > `~/.local/state/llm/fallbacks.jsonl` for the silent-but-handled claude failures.
+- ⚠️ **2026-06-05 15:00 CDT** — AI-prose fire went DARK · slot=`fuel-2` · claude_exit=`1` · theory: auth — re-auth: run `claude`, then backfill the slot · excerpt: `claude exited 1: [CODEX-FAIL] theory=other Try: quit + reopen Codex.app, or check ~/.codex/logs_*.sqlite for stale lock [FALLBACK] codex→claude (trigger=other). Codex failed; routed to Claude. Failed `
