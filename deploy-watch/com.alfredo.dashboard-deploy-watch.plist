@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.alfredo.dashboard-deploy-watch</string>
+
+    <!-- Runs via the python.org Python (polar/.venv/bin/python3), which is
+         Full-Disk-Access-granted so it can reach the external /Volumes volume
+         and git-push under launchd. A bare /bin/bash entrypoint is TCC-blocked
+         here (proven 2026-06-05) — see dashboard_deploy_watch.py header. -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Volumes/Alfie&amp;Co2/alfredo.v/04_Projects/fitness-dashboard/polar/.venv/bin/python3</string>
+        <string>/Volumes/Alfie&amp;Co2/alfredo.v/04_Projects/fitness-dashboard/deploy-watch/dashboard_deploy_watch.py</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Volumes/Alfie&amp;Co2/alfredo.v/04_Projects/fitness-dashboard</string>
+
+    <key>StartInterval</key>
+    <integer>300</integer>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/Users/alfredovargas/Library/Logs/dashboard-deploy-watch.out.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/alfredovargas/Library/Logs/dashboard-deploy-watch.err.log</string>
+</dict>
+</plist>
