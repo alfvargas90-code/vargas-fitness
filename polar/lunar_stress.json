@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-05T11:17:33-05:00",
+  "generated_at": "2026-06-05T11:47:44-05:00",
   "score": 15,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -9,10 +9,10 @@
     "sleep_score": 75
   },
   "workout_intensity": "rest",
-  "recommendation": "Hold today's charge on the bar, not the keyboard\u2014train resistance hard and load protein at every meal. Initiate calls and decisions selectively, gating each on whether it actually needs you today.",
+  "recommendation": "Hold the charge and put it under the bar\u2014load progressively today and hit protein first at every meal. Initiate the hard calls and ship the high-output work; your read is clean, so trust it and move.",
   "lunar": {
     "sign": "Aquarius",
-    "degree": "13\u00b0 Aqu 21'",
+    "degree": "13\u00b0 Aqu 37'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Pisces",
@@ -37,7 +37,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 313.36,
+    "moon_longitude": 313.61,
     "moon_sign": "Aquarius",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
