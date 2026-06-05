@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-05T17:50:05-05:00",
-  "score": 18,
+  "generated_at": "2026-06-05T18:20:16-05:00",
+  "score": 25,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
   "physiology": {
@@ -8,11 +8,11 @@
     "rhr_delta_bpm": 0,
     "sleep_score": 75
   },
-  "workout_intensity": "moderate",
+  "workout_intensity": "high",
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Aquarius",
-    "degree": "16\u00b0 Aqu 41'",
+    "degree": "16\u00b0 Aqu 56'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Pisces",
@@ -34,14 +34,14 @@
       "max": 55
     },
     "body": {
-      "filled": 4,
+      "filled": 6,
       "total": 10,
-      "points": 18,
+      "points": 25,
       "max": 40
     }
   },
   "transit_detail": {
-    "moon_longitude": 316.68,
+    "moon_longitude": 316.94,
     "moon_sign": "Aquarius",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
@@ -49,19 +49,19 @@
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 18,
+    "raw_score": 25,
     "transit_points": 0,
-    "physiology_points": 18,
+    "physiology_points": 25,
     "breakdown": [
       "+10 HRV -21% below baseline",
       "+5 Sleep score 75 (70-80)",
-      "+3 Moderate-intensity day"
+      "+10 High-intensity day on suppressed HRV"
     ],
     "baselines": {
       "hrv_7d": 63.3,
       "rhr_7d": 53.1
     },
-    "active_calories": 655,
+    "active_calories": 825,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
