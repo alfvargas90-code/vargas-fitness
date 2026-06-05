@@ -682,7 +682,7 @@ async function renderPhysiology() {
 // the subtitle says what THIS number means right now, not what the metric is.
 // Null input (no sync / no baseline) falls back to the generic gloss.
 function hrvState(deltaPct) {
-  if (deltaPct == null) return "Autonomic balance. Higher = recovered; below = stress.";
+  if (deltaPct == null) return "Autonomic balance. Higher = recovered; lower = stress.";
   const d = Math.round(deltaPct);
   if (d >= 8)   return "Above baseline. Recovered. Push normally or harder if rested.";
   if (d >= 3)   return "Slightly above baseline. Recovered. Train as planned.";
@@ -691,7 +691,7 @@ function hrvState(deltaPct) {
   return "Well below baseline. Real stress — cut intensity, recover.";
 }
 function rhrState(deltaBpm) {
-  if (deltaBpm == null) return "Resting heart rate. Lower trends with fitness; above = working.";
+  if (deltaBpm == null) return "Resting heart rate. Lower trends with fitness; higher = working.";
   const d = Math.round(deltaBpm);
   if (d <= -3) return "Below baseline. Cardiovascular recovery is strong.";
   if (d <= 2)  return "On baseline. Normal resting state.";
@@ -870,14 +870,14 @@ function renderPolarSleep(sleep) {
   wrap.innerHTML = `
     <h3 class="text-sm font-medium text-cobalt/80 mb-2">Sleep stages · ${labelMD(sleep.date)}</h3>
     <div class="stage-bar">
-      <div style="width:${pct(deep)};background:#0891B2" title="Deep ${secsToHM(deep)}"></div>
-      <div style="width:${pct(light)};background:#06B6D4" title="Light ${secsToHM(light)}"></div>
-      <div style="width:${pct(rem)};background:#67E8F9" title="REM ${secsToHM(rem)}"></div>
+      <div style="width:${pct(deep)};background:#2E1F6B" title="Deep ${secsToHM(deep)}"></div>
+      <div style="width:${pct(light)};background:#DCCBFF" title="Light ${secsToHM(light)}"></div>
+      <div style="width:${pct(rem)};background:#7B4DE0" title="REM ${secsToHM(rem)}"></div>
     </div>
     <div class="flex flex-wrap gap-4 text-xs text-muted mt-2">
-      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#0891B2"></span> Deep ${secsToHM(deep)}</span>
-      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#06B6D4"></span> Light ${secsToHM(light)}</span>
-      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#67E8F9"></span> REM ${secsToHM(rem)}</span>
+      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#2E1F6B"></span> Deep ${secsToHM(deep)}</span>
+      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#DCCBFF"></span> Light ${secsToHM(light)}</span>
+      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#7B4DE0"></span> REM ${secsToHM(rem)}</span>
     </div>`;
 }
 
@@ -1061,7 +1061,7 @@ async function renderTodaysRead() {
     renderBrief(body, read);
     if (ts && s.generated_at) {
       const t = new Date(s.generated_at);
-      ts.textContent = "Updated " + t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+      ts.textContent = "updated " + t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
     }
     if (basis) basis.textContent = "";
   } catch (e) {
@@ -1163,9 +1163,25 @@ async function renderLunarStress() {
   // --- Moon context (the lunar readout moved out of the hero) ---
   // Compact: "Sign · degree · phase", next ingress, then VoC / retrograde flags
   // in amber when active. Lives in the card body so the hero stays text-empty.
+  const SIGN_TO_NATAL_HOUSE = {
+    Capricorn: 1,
+    Aquarius: 2,
+    Pisces: 3,
+    Aries: 4,
+    Taurus: 5,
+    Gemini: 6,
+    Cancer: 7,
+    Leo: 8,
+    Virgo: 9,
+    Libra: 10,
+    Scorpio: 11,
+    Sagittarius: 12
+  };
   const moonCtx = document.getElementById("lsi-moon-context");
   if (moonCtx) {
     const parts = [];
+    const house = L.sign ? SIGN_TO_NATAL_HOUSE[L.sign] : null;
+    if (house) parts.push(`<div class="text-neutral-200 font-medium">Moon is currently in your ${house}H (${L.sign})</div>`);
     const head = [L.sign, L.degree, L.phase].filter(Boolean).join(" · ");
     if (head) parts.push(`<div class="text-neutral-200 font-medium">${head}</div>`);
     const next = L.next_sign_change && L.next_sign_change.display;
@@ -1469,10 +1485,10 @@ function activitySyncStamp(syncedAtISO) {
   const t = new Date(syncedAtISO).getTime();
   if (!isFinite(t)) return null;
   const mins = Math.max(0, Math.floor((Date.now() - t) / 60000)); // clamp clock skew
-  if (mins >= 120) return { text: "Updated 2h+ ago", stale: true };
-  if (mins >= 60)  return { text: `Updated ${Math.floor(mins / 60)} hr ago`, stale: false };
-  if (mins >= 1)   return { text: `Updated ${mins} min ago`, stale: false };
-  return { text: "Updated just now", stale: false };
+  if (mins >= 120) return { text: "updated 2h+ ago", stale: true };
+  if (mins >= 60)  return { text: `updated ${Math.floor(mins / 60)} hr ago`, stale: false };
+  if (mins >= 1)   return { text: `updated ${mins} min ago`, stale: false };
+  return { text: "updated just now", stale: false };
 }
 
 async function renderActivity() {

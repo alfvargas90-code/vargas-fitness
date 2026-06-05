@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-04T20:37:16-05:00",
+  "generated_at": "2026-06-04T21:07:27-05:00",
   "score": 18,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -9,10 +9,10 @@
     "sleep_score": 56
   },
   "workout_intensity": "moderate",
-  "recommendation": "Channel today's charge into resistance work at full output\u2014load heavy, then anchor protein intake to back the build. Initiate and decide freely; the system is calibrated to handle it.",
+  "recommendation": "Hold the high charge in the body\u2014load resistance work and hit protein hard before you spend it on output. Initiate outbound moves selectively; if a call must be made, make it, but route the rest of the charge into building rather than reacting.",
   "lunar": {
     "sign": "Aquarius",
-    "degree": "5\u00b0 Aqu 57'",
+    "degree": "6\u00b0 Aqu 12'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Pisces",
@@ -37,7 +37,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 305.95,
+    "moon_longitude": 306.2,
     "moon_sign": "Aquarius",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
