@@ -25,7 +25,7 @@ above is locked by Alfie; if a stale-read race resurfaces, nudge the offending f
 a few minutes off the boundary rather than reverting the schedule.
 The 21:45 fire is the nightly Day-in-Review slot: it freezes the day's stats + verdict + prose into day_review.json INSTEAD OF the regular summary.json.
 """
-import json, os, re, shutil, subprocess, sys
+import hashlib, json, os, re, shutil, subprocess, sys
 from datetime import datetime, date
 from statistics import mean
 
@@ -165,11 +165,27 @@ SLOT_FRAMING = {
 
 def read_instruction():
     return (
-        "Read: 1 to 2 sentences, 30 words MAX, plain language. Interpret the State holistically — "
-        "what does the COMBINATION mean? Do NOT repeat raw numbers; the State block already showed "
-        "them. No jargon, no astrology. "
-        "Example shape (do not copy): \"Body's on a thinner reserve than usual and you've already "
-        "spent a typical day's load.\""
+        "Read: ONE paragraph, 2 to 3 sentences, 45 words MAX. Synthesize the data into a single "
+        "coherent assessment of the day's OPERATING STATE: what kind of day this is and what it "
+        "FAVORS. Observational, premium, reflective — the voice of Apple Weather, Oura Readiness, or "
+        "WHOOP Insights, NOT a personal trainer or productivity guru.\n"
+        "  - Frame what the day FAVORS, never what to DO: \"favors consistency over intensity\", NOT "
+        "\"keep effort controlled\". \n"
+        "  - NO second-person imperatives and NO instruction verbs: do not write keep / lean on / get "
+        "/ aim / protect / hold / let / stay / build / fuel / train / eat / sleep as a command. \n"
+        "  - Describe the state only; no meal/workout/bedtime guidance, no action list, no question, "
+        "no heading, no bullet; do NOT repeat the raw numbers.\n"
+        "Example shape (do not copy): \"You slept better than earlier this week, but recovery remains "
+        "moderate and the system isn't yet at full capacity. Nothing currently signals elevated "
+        "stress or excessive fatigue. Today favors consistency over intensity.\""
+    )
+
+
+def close_instruction():
+    return (
+        "Close: OPTIONAL one short reflective line, 6 words MAX, capturing the day's posture — e.g. "
+        "\"Build gradually.\" / \"Stay steady.\" / \"Preserve momentum.\" No prescription, no metrics, "
+        "no clock times. If nothing meaningful adds, output exactly: Close: —"
     )
 
 
@@ -217,6 +233,7 @@ def setup_instruction():
 
 BLOCK_INSTR = {
     "Read": lambda slot, rest: read_instruction(),
+    "Close": lambda slot, rest: close_instruction(),
     "Workout": lambda slot, rest: workout_instruction(slot, rest),
     "Eat": lambda slot, rest: eat_instruction(),
     "Rest": lambda slot, rest: rest_instruction(),
@@ -462,40 +479,19 @@ def lunar_hrv_pct():
 
 def build_state_block(slot, rec, slp, rec_word, hrv_all_mean, hrv_today, hrv_7d,
                       slp_hours, slp_7d, active_cal):
-    """The deterministic 3-line State block. All real values; no LLM involvement.
-      Recovery {N} · {word} · HRV {±X%}
-      Strain {N}% · {word} · {N} cal spent
-      Sleep {Xh Ym} · {word} · {On|Above|Below} baseline"""
-    # Recovery line — N mirrors the ring; word is the constant overnight recovery word;
-    # the HRV % prefers the same baseline the ring corner uses.
-    n = recovery_score_100(rec, slp, hrv_all_mean)
-    hd = lunar_hrv_pct()
-    if hd is None:
-        hd = hrv_delta_pct(hrv_today, hrv_7d)
-    hrv_str = f"HRV {'+' if hd >= 0 else ''}{hd}%" if hd is not None else "HRV —"
-    rec_line = f"Recovery {n} · {rec_word or '—'} · {hrv_str}"
-
-    # Strain line — % of the 800-cal reserve spent, with the cal figure as the detail.
-    pct, word = strain_pct_label(active_cal)
-    if pct is not None:
-        strain_line = f"Strain {pct}% · {word} · {round(active_cal)} cal spent"
-    elif slot == "sleep":
-        strain_line = "Strain — · Resting · nothing logged overnight"
-    else:
-        strain_line = "Strain — · Minimal · no load logged yet"
-
-    # Sleep line — start→end span, 4-word quality, baseline comparison (±0.3h band).
-    span = sleep_span_hm(slp) if slp else None
-    sword = sleep_word_4(slp.get("sleep_score") if slp else None)
-    if slp_hours is not None and slp_7d is not None:
-        delta = slp_hours - slp_7d
-        base = ("On baseline" if abs(delta) <= 0.3 else
-                "Above baseline" if delta > 0.3 else "Below baseline")
-    else:
-        base = "—"
-    sleep_line = f"Sleep {span or '—'} · {sword or '—'} · {base}"
-
-    return f"{rec_line}\n{strain_line}\n{sleep_line}"
+    """The deterministic State block — a holistic state word + a one-line metric echo
+    that mirrors the dashboard rings exactly. No LLM involvement. Two lines:
+        {Word}
+        Recovery {N} • Sleep {N} • Strain {N}%
+    N values equal the Recovery / Sleep / Strain rings (same Python that feeds them)."""
+    n = recovery_score_100(rec, slp, hrv_all_mean)           # mirrors Recovery ring
+    sleep_score = round(slp["sleep_score"]) if slp and slp.get("sleep_score") is not None else None
+    pct, _word = strain_pct_label(active_cal)                # mirrors Strain ring
+    rec_str = str(n) if n is not None else "—"
+    slp_str = str(sleep_score) if sleep_score is not None else "—"
+    strain_str = f"{pct}%" if pct is not None else "—"
+    metric = f"Recovery {rec_str} • Sleep {slp_str} • Strain {strain_str}"
+    return f"{rec_word or '—'}\n{metric}"
 
 
 def hrv_of(rec):
@@ -1133,10 +1129,11 @@ def parse_sections(text):
 def call_claude(prompt):
     # v0.1 role-router shim (09_Reference/agent_workflow/role_router_spec.md):
     # reasoning-lane calls go through ~/bin/llm so backend choice, billing, and
-    # usage logging live in one auditable place. The shim dispatches the
-    # reasoning lane to `claude -p`, so behavior is unchanged — but a failure
-    # there still surfaces here as a "claude exited <n>" RuntimeError, which the
-    # silent-401 notifier (_notify_dark_fire) parses. Keep that wording.
+    # usage logging live in one auditable place. As of the 2026-06-05 flip the
+    # shim dispatches the reasoning lane to `codex exec` (claude -p fallback),
+    # so this prose is now Codex-authored — a failure still surfaces here as a
+    # "claude exited <n>" RuntimeError, which the silent-401 notifier
+    # (_notify_dark_fire) parses, so keep that wording regardless of backend.
     # Original direct `claude -p` body is preserved commented out below for one
     # rollback cycle (role_router_spec acceptance criterion #5).
     llm = shutil.which("llm") or os.path.expanduser("~/bin/llm")
@@ -1373,7 +1370,11 @@ def main():
                           "eat next.\n")
 
     slot_cfg = SLOT_FRAMING.get(slot, SLOT_FRAMING["recovery"])
-    blocks = slot_cfg["blocks"]
+    # Currents v3 (state interpreter): the brief is State (deterministic) + a single
+    # synthesized Read paragraph + an optional one-line Close. The old per-slot
+    # TRAINING/NUTRITION/RECOVERY decision blocks are retired — Currents now describes
+    # the operating state, it does not prescribe. (slot_cfg still sets the Read's tone.)
+    blocks = ["Read", "Close"]
     rest_today = is_rest_day(today_iso)
 
     # Per-block instructions (Read + the decision verdicts the slot calls for) and the
@@ -1382,24 +1383,24 @@ def main():
     output_skeleton = "\n".join(f"{b}: ..." for b in blocks)
 
     prompt = (
-        "You are a recovery and performance coach writing a tactical daily brief for an athlete "
-        "(Alfie). He knows his own body and does NOT want jargon. In plain English, answer: what does "
-        "his state MEAN, and — should he work out, eat, rest?\n\n"
+        "You are the intelligence layer of a premium health dashboard, writing the 'Currents' read for "
+        "Alfie. Your job is to INTERPRET — synthesize all of today's data into one coherent assessment "
+        "of his operating state. Observational, premium, and reflective, like Apple Weather, Oura "
+        "Readiness, or WHOOP Insights. NOT a personal trainer, NOT a productivity guru.\n\n"
         "HARD OUTPUT RULES (these are absolute):\n"
         "- NEVER quote recovery, heart-rate-variability, or sleep figures, and NEVER write "
-        "percentages, decimals, or biometric units in the Read line. No \"72ms\", \"5/6\", \"6.1h\", "
-        "\"%\". (The Eat line MAY use gram amounts and clock times — that is the one exception.)\n"
+        "percentages, decimals, or biometric units in the Read line. No \"72ms\", \"5/6\", \"6.1h\", \"%\".\n"
         "- NEVER write biometric jargon: HRV, Recharge, Nightly Recharge, BPM, ANS, Sleep Score.\n"
         "- NO ASTROLOGY, AT ALL. Never mention the moon, planets, signs, houses, aspects, transits, a "
         "chart, anything natal/lunar/cosmic — not named, not as subtle 'texture'. If a thought only "
         "makes sense through astrology, drop it.\n"
         "- The data below INFORMS you but must NOT be quoted back. Translate it into plain language; "
         "the data sets the conclusion, the conclusion is what you write.\n"
-        "- Every decision line MUST start with one of its allowed verdict words, then ONE tight "
-        "qualifier (15 words max). No preamble, no markdown, no closing remarks.\n\n"
+        "- INTERPRET, do not PRESCRIBE. Describe the state — what kind of day this is. NO meal, workout, "
+        "or bedtime instructions; NO action lists; NO questions; NO headings, bullets, or markdown.\n\n"
         "=== WHERE ALFIE IS IN HIS DAY (sets the tone) ===\n"
         f"{slot_cfg['when']}\n"
-        f"The Read line should focus on: {slot_cfg['read']}.\n\n"
+        f"The Read should focus on: {slot_cfg['read']}.\n\n"
         "=== RECOVERY & FITNESS DATA (informs you — never quote it) ===\n"
         "(Polar Nightly Recharge is a 1-6 scale, 6 best.)\n"
         f"- Recovery status today: {rec_today}/6 (7-day avg {rec_7d})\n"
@@ -1441,21 +1442,23 @@ def main():
     state_block = build_state_block(slot, rec, slp, rec_word, hrv_all_mean,
                                     hrv_today, hrv_7d, slp_hours, slp_7d, active_cal)
 
-    # Assemble the multiline tactical brief: deterministic State, then the LLM Read +
-    # decision verdicts under their human-facing question headers. Newlines are load-
-    # bearing — the render layer splits on blank lines and preserves them.
-    parts = [f"State\n{state_block}"]
-    for b in blocks:
-        txt = parsed.get(b) or "—"
-        parts.append(f"{block_header(b, slot)}\n{txt}")
+    # Assemble the Currents brief: deterministic State block, the synthesized Read
+    # paragraph, then an OPTIONAL one-line Close (no header — it renders as a lone
+    # posture line). Newlines are load-bearing — the render layer splits on blank lines.
+    read_txt = (parsed.get("Read") or "—").strip()
+    close_txt = (parsed.get("Close") or "").strip()
+    has_close = bool(close_txt) and close_txt not in ("—", "-", "–")
+    parts = [f"State\n{state_block}", f"Read\n{read_txt}"]
+    if has_close:
+        parts.append(close_txt)
     reading = "\n\n".join(parts)
     if not reading.strip():
         raise RuntimeError("empty tactical brief")
 
     # Keep the stored schema shape stable (summary + sections + simple) so nothing
-    # downstream breaks; the card reads simple.reading. `performance` keeps the workout
-    # (or sleep-slot setup) verdict as a backward-compat fallback for the renderer.
-    perf_text = parsed.get("Workout") or parsed.get("Setup") or ""
+    # downstream breaks; the card reads simple.reading. `performance` now carries the
+    # optional Close line as a backward-compat fallback for the renderer.
+    perf_text = close_txt if has_close else ""
     sections = [
         {"label": "Recovery", "text": rec_word or ""},
         {"label": "Reading", "text": reading},
@@ -1472,8 +1475,21 @@ def main():
 
     nutrition_nudge = build_nutrition_nudge(now)
 
+    # data_hash — a stable fingerprint of the inputs that drive Currents (recovery,
+    # sleep, strain, fuel, body) PLUS the rendered read. The dashboard polls
+    # summary.json every 60s and re-renders only when this changes, so a new fire, a
+    # manual run, or a data-triggered regen all surface live without a page reload.
+    data_hash = hashlib.sha1(
+        json.dumps({
+            "rec": rec_today, "hrv": hrv_today, "sleep": slp_hours,
+            "strain": active_cal, "nutrition": nutrition, "body": body,
+            "reading": reading,
+        }, sort_keys=True, default=str).encode()
+    ).hexdigest()[:16]
+
     payload = {
         "generated_at": now.replace(microsecond=0).isoformat(),
+        "data_hash": data_hash,
         "slot": slot,
         "summary": summary,
         "sections": sections,

@@ -14,6 +14,184 @@ _Last updated: 2026-06-05 (octopus / Claude Code)._
 
 ---
 
+## 🌙 STATUS 2026-06-05 (latest) — v2 lunar-details pass (redesign6)
+
+New reference `design_refs/chatgpt_hero_v2_with_lunar_details.jpeg`. Three changes,
+all via Codex implementation lane, PVR-verified by screenshot + DOM eval:
+
+1. **Header removed ENTIRELY** — eyebrow, "Dashboard" h1, AV avatar, AND the date
+   line all gone (you confirmed: header goes fully). The `<header>` element +
+   `#header-sub` + `#profile-strip` are deleted; app.js's `renderHeader` /
+   `renderProfileStrip` were already null-guarded (`if (!el) return`), so no
+   console errors. Hero now starts at the rings; first content is the Recovery
+   metric. Added `padding-top: max(2px, env(safe-area-inset-top))` so the bare top
+   clears the iPhone status bar / Dynamic Island in the standalone PWA (0 on
+   desktop, exact notch height on device — not chrome, just not hiding under it).
+2. **All 3 metrics now orbit the moon** — Recovery top-left, **Sleep moved up
+   bottom-center → top-right**, **Strain top-right → lower-right**. None below the
+   moon anymore. Matches the earlier `chatgpt_lunar_mockup.png` (Rec TL / Sleep TR
+   / Strain BR).
+3. **Lunar details restored UNDER the moon** (overrides the old "no hero text"
+   rule) — 4-line block from **REAL `lunar_stress.json` data**, not hardcoded:
+   "Waning Gibbous / **Moon in Aquarius** / Leaves Aquarius / 6/6 · 7:42 PM".
+   The mockup's "Capricorn / 8:45 AM" was dummy data; live data is Aquarius →
+   Pisces ingress 6/6 7:42 PM (from `lunar.next_sign_change.at`). New renderer
+   added to `renderRings` in app.js — **phase/terminator/illumination engine still
+   untouched** (verified `node --check` + grep).
+
+Legibility: enlarged/darkened the under-moon scrim so the lunar lines read over the
+waves (also gives the mockup's clearer dark space under the moon); lifted Strain
+clear of the bright wave band; dark-seated the purple lunar lines.
+
+**Locked features verified:** Currents state-interpreter, 60s polling, all Polar/
+VeSync/lunar bindings (Rec 73 / Sleep 75 / Strain 56% live), cards below hero
+unchanged. **Cache → `redesign7`.** No console errors. Not pushed (traveling).
+Hard-refresh / re-add to home screen to bust the cache.
+
+---
+
+## 🌙 STATUS 2026-06-05 — Hero = explicit 3-layer artwork (redesign5)
+
+**Structural refactor, not parameter tweaks.** The hero is now an explicit layered
+artwork pipeline instead of everything stacked inline. Claude orchestrated +
+screenshot-verified each batch; **Codex authored every file edit** via
+`llm --lane implementation`. Cache bumped `redesign4 → redesign5`.
+
+**New z-order inside `#lpi-hero` → `.hero-stack`:**
+1. `.hero-layer-1` (z1) — star field + deep-space nebula + containment vignette
+2. `.hero-layer-2` (z2) — full-width wave bands: cyan/blue from LEFT (Recovery),
+   coral/orange from RIGHT (Strain), converging beneath the moon, cradling it
+3. `#rings-wrap` (z3) — metric rings composite (moon+rings SVG, **untouched**)
+4. `.hero-layer-3` (z4) — moon volumetric bloom + shadow-halo seat (moon dominant)
+5. `.hero-metrics-overlay` (z5) — Recovery/Sleep/Strain numbers + labels
+
+**Deliberate architecture call:** moon + rings stay ONE composite SVG (the lunar
+engine renders them together into `#rings-orbit-svg`). Splitting the moon into its
+own layer would mean editing `renderOrbit` — out of bounds. The z-order intent
+(rings behind moon) is preserved because the composite already draws the moon last.
+Layer 3 adds bloom/halo *around* that composite, not inside it.
+
+**Codex scorecard:** 7 calls, **7/7 edits landed clean, 0 fallbacks, 0 corruption.**
+3 of 7 returned exit=124 (B1, B3b, B6... B6 exit=0 actually) — the watchdog killed
+Codex *after* the edits wrote, while it hung on its summary. Edits were verified by
+diff + screenshot every batch, not by Codex's stdout, so the hangs cost nothing.
+Wall times 22–93s; the bigger the paste, the closer to the 90s ceiling.
+
+**Locked features verified intact:** lunar engine (`phaseToIllum`/`moonSVG`/
+`renderOrbit`) — app.js **0 lines changed**; Currents state-interpreter; 60s
+data_hash polling; all Polar/VeSync bindings (Recovery 73 / Sleep 75 / Strain 52%
+all live). Cards below hero unchanged.
+
+**PVR iteration (strict, per Alfie 2026-06-05):** pushed past the first pass with
+4 more Codex rounds against the reference JPEG. Hero **grown 252→330px** (layer
+viewBoxes 260→341 to hold scale) so the waves got real vertical room; Layer 2 fully
+**rebuilt** as distinct separated luminous ribbons (cyan/blue/purple from left,
+coral/orange/red from right) with high amplitude + a full-width flow-through +
+woven particles + higher side-sweeps for vertical spread; **atmosphere cleaned**
+(killed the cyan-left/coral-right corner washes → reference's clean dark navy).
+
+**Honest element match vs `chatgpt_hero_artwork.jpeg` (final):** waves ~92,
+atmosphere ~92, moon render ~95, particles ~88, rings ~82, metric-glow ~95.
+**Residual sub-95% is mostly NOT closeable:** moon phase (~50% lit today) ≠ the
+mockup's gibbous and strain arc (56%) ≠ 100% — both **live data**, can't match a
+static mockup without faking; moon size, Sleep-bottom-center, and pure-cyan recovery
+ring are **your own prior deliberate decisions** the reference predates. The only
+real structural ceiling: even at 330px the wave band is ~140px vs the mockup's
+~250px (Currents card sits below) — so waves top out ~92, not 100, without making
+the hero eat the whole first screen. **Decision for you:** the mockup has Sleep
+top-right + a moon-context line bottom-center; we have Sleep bottom-center. Say the
+word and I'll match the mockup layout (or keep your remap).
+
+**Action for you:** none required — review on your phone (hard-refresh to bust the
+app.js cache). Backups left at `.index.html.pre-redesign.bak` + per-batch `.bN.bak`.
+Not pushed to git (you're traveling).
+
+---
+
+## 🎨 STATUS 2026-06-05 — Lunar Performance redesign shipped (Codex-built)
+
+First real load test of the Codex-primary flip on a substantial build job. The
+dashboard hero was rebuilt to pixel-match `design_refs/chatgpt_lunar_mockup.png`.
+**Claude orchestrated + reviewed; Codex authored every file edit** (builder ≠
+validator). Verified via Claude Preview at 375px after each batch.
+
+**What landed (7 batches → 6 Codex calls):**
+- **B1 Atmosphere** — star field opacity .16→.34 + 3rd bright-star layer; energy
+  fields cleaned to cyan-LEFT / violet-CENTER / coral-RIGHT.
+- **B2 Waves** — +40% presence (opacities .62/.68→.9, strokes +40%), extra
+  lower-third streamer.
+- **B3a Arcs** — the big one: inactive tracks now dark-navy `#243056` (were
+  hue-tinted glowing full-rings = the "tangle"); recovery gradient → pure cyan
+  (stopped bleeding into the purple sleep ring); strain ring + corner → coral
+  (was gold); glow restrained to stop inter-ring bleed. Now reads as 3 clean
+  concentric orbits.
+- **B3b Corners** — remapped to mockup layout: Recovery TL · **Strain TR** ·
+  **Sleep bottom-center** (was Recovery TL / Sleep TR / Strain BR).
+- **B4 Moon** — earthshine on the shadow side (`#070B16` @ .86) so crescents keep
+  crater detail + dimensionality and never vanish; stronger atmospheric halo.
+  **Terminator / phase math untouched.**
+- **B6+7 Polish** — tempered the central violet bloom for deeper OLED corners;
+  restrained 9s glow-breathing on the energy fields (reduced-motion guarded).
+- **B5 Typography** — HELD on a webfont. App already uses `-apple-system` = native
+  SF Pro on your iPhone PWA, which *is* the mockup typeface. Inter/Geist would
+  regress iOS fidelity + add a FOUT/network dep. No change = correct.
+
+**Locked features verified intact:** Currents state-interpreter, 60s data_hash
+polling, all Polar/VeSync/lunar_stress bindings, terminator/waning logic.
+
+**Codex scorecard (the point of the exercise):** 6 rounds, **6/6 exit=0, all
+model=codex, 0 fallbacks, 0 new incidents.** Flip held under load.
+- Arch concern: B2 ran **76s vs the 90s watchdog** — big multi-element edits
+  crowd the ceiling. Splitting B3 into 3a/3b kept calls at ~21s. **Keep Codex
+  batches surgical** (≤ a handful of find/replace) or they'll start tripping the
+  watchdog and forcing fallbacks.
+- Cache gotcha (not Codex): `app.js?v=` must be bumped or the browser serves
+  stale JS — wasted one verify cycle before I caught it. Bumped to `redesign2`.
+
+**Action for you:** none required — review the look on your phone (hard-refresh /
+re-add to home screen to bust the app.js cache). If the bottom-center Sleep label
+crowds the moon on your device, say so and I'll nudge it down a few px.
+
+---
+
+## ⚙️ STATUS 2026-06-05 (later) — reasoning lane FLIPPED to Codex-primary
+
+**The real fix, not another patch.** Reversed the lane priority in `~/bin/llm`:
+the reasoning lane is now **Codex primary, Claude fallback** (was Claude primary /
+Codex fallback from the earlier-today auto-fallback ship below). Net effect: $0
+incremental cost (Codex runs on the existing ChatGPT Plus sub) + the dashboard no
+longer goes dark when Claude OAuth dies overnight, because Claude was the flaky
+piece and is now only the safety net.
+
+- **What changed in `~/bin/llm`:** lane map `reasoning → codex` (was `claude`);
+  fallback direction reversed to `codex → claude`; new fallback log shape
+  `{primary:"codex", fallback:"claude", trigger:"hang|auth|rate|other"}`; Codex
+  401/auth detected via `Not authenticated`/`401`/`Unauthorized`, rate via
+  `429`/`rate limit`/`too many`; `[FALLBACK] codex→claude (trigger=…)` stderr line.
+  90s watchdog preserved on both backends. Header/USAGE/inline comments updated to
+  say codex-primary. `polar/summary.py` comment corrected (prose is now Codex-authored).
+- **Overrides intact:** `--model claude` and `--model codex` still force a backend,
+  and a forced `--model` now disables the fallback (pinned backend).
+- **5/5 tests passed:** (1) real reasoning → codex, exit 0, `model:codex`, no
+  fallback. (2) mock codex hang → watchdog killed at 90s → fallback to claude,
+  exit 0, `trigger:hang`. (3) mock codex 401 → fallback to claude, `trigger:auth`.
+  (4) `--model claude` → claude direct, no fallback. (5) `summary.py --slot recovery`
+  → valid summary.json, schema intact, usage log shows `model:codex`.
+- **Bootstrap exception used (documented):** per `claude-codex-playbook`, this is
+  implementation work that should route to Codex. But `codex exec` **refuses to
+  edit `~/bin`** ("Not inside a trusted directory") — it structurally cannot modify
+  its own calling shim. Gave it one round, it hard-failed (exit 1, not even a hang),
+  so I implemented directly (Claude builds, Claude reviews against the 5-test gate).
+- **Rollback:** pre-flip snapshots at `~/bin/llm.bak.*` and `/tmp/llm.preflip.*`.
+  To revert the lane only: `reasoning) DEFAULT_BACKEND=claude` and restore the
+  prior dispatch block.
+- **Not pushed** (Alfie's on the road) — polar-sync will absorb `polar/summary.py`;
+  `~/bin/llm` lives outside the repo so it's local-only either way.
+- **Playbook memory updated** with a dated note (dashboard reasoning lane now
+  Codex-default; flip edit was Claude-direct via the bootstrap exception).
+
+---
+
 ## ⚙️ STATUS 2026-06-05 — claude→codex auto-fallback SHIPPED (dark-dashboard fix, option 1)
 
 **This closes the dashboard-goes-dark-on-auth failure mode.** When the reasoning
