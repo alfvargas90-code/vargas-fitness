@@ -14,6 +14,44 @@ _Last updated: 2026-06-05 (octopus / Claude Code)._
 
 ---
 
+## 🚑 STATUS 2026-06-05 17:2x CDT — Fix A applied: Codex now resolves under launchd
+
+**Incident:** dashboard pinned at `fuel-1` (11:30) all afternoon. The 15:00 `fuel-2`
+fire went DARK — breadcrumb DID write (this file, the "went DARK" line @ ~15:00).
+Root cause = **both backends down at 15:00**: (1) Codex failed under launchd
+(`env: node: No such file or directory` — the launchd plist PATH had no nvm node
+dir, and Codex is a Node CLI), (2) Claude fallback failed (OAuth 401/expired). The
+"16:45 train-1 missing" was a non-issue — train-1 fires at **17:30** per the plist;
+it hadn't fired yet.
+
+**Backfilled** `train-1` manually (Codex served, exit 0) → summary.json @ 17:12:18,
+pushed `534cecc`, origin verified.
+
+**Fix A (applied, root-cause durable fix):** prepended
+`/Users/alfredovargas/.nvm/versions/node/v24.15.0/bin` to the **PATH** key in
+`~/Library/LaunchAgents/com.alfredo.polar-summary.plist` so Codex's `env node`
+resolves under launchd. Backed up first (`.plist.bak.20260605-171928`), `plutil
+-lint` OK, `launchctl unload/load` clean, job loaded.
+- **Smoke test (launchd-like stripped env, `--out` temp, no git):** node + codex both
+  resolve; summary.py exit 0, 33s, **served by Codex** — proven in that PATH context.
+- **Source-of-truth copy** committed to the repo at
+  `launchagents/com.alfredo.polar-summary.plist` (the live plist is outside the repo;
+  this makes it recoverable after a Mac reset — re-copy into `~/Library/LaunchAgents/`
+  + `launchctl load`).
+- **Next scheduled fire: 17:30 train-1** — will use the fixed PATH → Codex serves it,
+  no more dark fire from the codex side.
+
+**Still your action (Fix B):** re-auth Claude (`claude` login) to restore the
+fallback. Until then Codex is the sole backend — now working under launchd, but with
+no safety net if Codex itself hiccups.
+
+**Watch (secondary, not today's cause):** err log also shows occasional venv-python
+TCC `pyvenv.cfg` "Operation not permitted" + git `index.lock`/`HEAD.lock` contention
+(summary.py push vs polar-sync vs deploy-watch). Neither caused the dark dashboard;
+flagged for a calmer look.
+
+---
+
 ## 🌙 STATUS 2026-06-05 (latest) — v4 micro-tweaks (redesign9)
 
 Three Codex-lane tweaks, PVR-verified + pushed:
