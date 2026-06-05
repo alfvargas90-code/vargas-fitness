@@ -1,19 +1,19 @@
 {
-  "date": "2026-06-03",
-  "generated_at": "2026-06-03T21:45:00-05:00",
+  "date": "2026-06-04",
+  "generated_at": "2026-06-04T21:45:00-05:00",
   "verdict": "Big",
   "stats": {
-    "steps": 6171,
-    "active_minutes": 345,
-    "active_time_display": "5h 45m",
-    "calories_burned": 2333,
-    "active_calories": 834,
-    "calories_eaten": 2080,
-    "net_deficit": 253,
+    "steps": 4552,
+    "active_minutes": 333,
+    "active_time_display": "5h 33m",
+    "calories_burned": 2264,
+    "active_calories": 785,
+    "calories_eaten": 1850,
+    "net_deficit": 414,
     "calorie_target": 2574,
-    "protein_g": 72,
+    "protein_g": 132,
     "protein_target_g": 138,
-    "protein_gap_g": 66
+    "protein_gap_g": 6
   },
-  "prose": "You ran today like a rest day should look \u2014 easy movement, a light 253-calorie deficit, nothing that taxes the muscle you're trying to build. The one gap was protein: 72g is well short of where you need to be, and on a recovery day that's exactly when your body wants the building blocks. Eat slow tonight, hydrate, get to bed early \u2014 and tomorrow, make protein the first thing you plan, not the afterthought."
+  "prose": "You crushed it today \u2014 over five hours on your feet and a big calorie burn, with a sensible 400-ish deficit that trims fat without putting your muscle at risk. Protein landed at 132g, just a hair under where you want it, so you're well covered. Nudge that protein over the line tomorrow and get some resistance work in."
 }
