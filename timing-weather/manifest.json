@@ -1,0 +1,12 @@
+{
+  "name": "Timing Weather",
+  "short_name": "Timing",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#070707",
+  "theme_color": "#070707",
+  "icons": [
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

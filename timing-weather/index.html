@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Timing Weather</title>
+<!-- PWA / Add to Home Screen -->
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="theme-color" content="#070707" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Timing" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          bg:        "#070707",
+          gold:      "#D4AF37",   // primary gold
+          gold2:     "#E6C86E",   // secondary gold
+          card:      "rgba(255,255,255,0.04)",
+          line:      "rgba(255,255,255,0.08)",
+          ink:       "#FFFFFF",   // text primary
+          muted:     "#A1A1AA",   // text secondary
+          positive:  "#4ADE80",
+          warning:   "#FBBF24",
+          danger:    "#F87171",
+          info:      "#60A5FA",
+        },
+      },
+    },
+  };
+</script>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+    color: #FFFFFF;
+    background: #070707;
+    min-height: 100vh;
+  }
+  html { background: #070707; }
+  .tab-num { font-variant-numeric: tabular-nums; }
+
+  /* ── Hero Sun ────────────────────────────────────────────────────────────
+     A CSS-painted disc. Core color + glow are set per dominant planet by JS
+     via the data-dominant attribute on #sun-wrap. Vanilla keyframes only. */
+  .sun {
+    width: 132px; height: 132px; border-radius: 9999px;
+    position: relative; margin: 0 auto;
+    background: radial-gradient(circle at 50% 42%, #FFF4D0 0%, var(--sun-core) 46%, var(--sun-edge) 100%);
+    box-shadow: 0 0 var(--glow) var(--sun-core), 0 0 calc(var(--glow) * 2.2) var(--sun-edge);
+    --sun-core: #D4AF37; --sun-edge: #8a6d1f; --glow: 38px;
+  }
+  /* concentric rings (Saturn) */
+  .sun::before, .sun::after {
+    content: ""; position: absolute; inset: 50%; border-radius: 9999px;
+    transform: translate(-50%, -50%); opacity: var(--ring-op, 0);
+    border: 1px solid var(--sun-edge);
+  }
+  .sun::before { width: 164px; height: 164px; }
+  .sun::after  { width: 196px; height: 196px; }
+
+  @keyframes pulse-expand {
+    0%, 100% { transform: scale(1);    box-shadow: 0 0 var(--glow) var(--sun-core), 0 0 calc(var(--glow)*2.2) var(--sun-edge); }
+    50%      { transform: scale(1.05); box-shadow: 0 0 calc(var(--glow)*1.5) var(--sun-core), 0 0 calc(var(--glow)*3) var(--sun-edge); }
+  }
+  @keyframes pulse-soft {
+    0%, 100% { transform: scale(1);    opacity: 1; }
+    50%      { transform: scale(1.02); opacity: 0.94; }
+  }
+  @keyframes pulse-irregular {
+    0%   { transform: scale(1);    filter: brightness(1); }
+    18%  { transform: scale(1.045); filter: brightness(1.18); }
+    30%  { transform: scale(1.0);   filter: brightness(0.98); }
+    52%  { transform: scale(1.03);  filter: brightness(1.1); }
+    68%  { transform: scale(1.005); filter: brightness(1); }
+    100% { transform: scale(1);     filter: brightness(1); }
+  }
+  /* dominant-state styling */
+  .sun[data-dominant="jupiter"] { --sun-core:#D4AF37; --sun-edge:#8a6d1f; --glow:46px; animation: pulse-expand 4.5s ease-in-out infinite; }
+  .sun[data-dominant="saturn"]  { --sun-core:#B8860B; --sun-edge:#5c4408; --glow:24px; --ring-op:0.5; animation: pulse-soft 6s ease-in-out infinite; }
+  .sun[data-dominant="pluto"]   { --sun-core:#E6E6FA; --sun-edge:#3a3a6a; --glow:30px;
+                                  background: radial-gradient(circle at 50% 42%, #FFFFFF 0%, #E6E6FA 30%, #5a5a8a 100%);
+                                  animation: pulse-soft 5s ease-in-out infinite; }
+  .sun[data-dominant="uranus"]  { --sun-core:#F0E68C; --sun-edge:#9a8f3a; --glow:40px; animation: pulse-irregular 3.2s ease-in-out infinite; }
+  .sun[data-dominant="venus"]   { --sun-core:#E8B4B8; --sun-edge:#8a5a5e; --glow:36px;
+                                  background: radial-gradient(circle at 50% 42%, #FFF0F2 0%, #E8B4B8 48%, #8a5a5e 100%);
+                                  animation: pulse-soft 5.5s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { .sun { animation: none !important; } }
+</style>
+</head>
+<body>
+  <main class="mx-auto w-full max-w-md px-5 pt-10 pb-16">
+
+    <!-- ── Section 1 — Hero Forecast ──────────────────────────────────── -->
+    <section class="text-center">
+      <div class="text-[11px] tracking-[0.25em] text-muted uppercase mb-6">Timing Weather</div>
+      <div id="sun-wrap" class="mb-7">
+        <div id="sun" class="sun" data-dominant="jupiter"></div>
+      </div>
+      <h1 id="forecast-label" class="text-gold font-bold tracking-[0.12em] text-3xl leading-none">—</h1>
+      <p id="forecast-sub" class="text-muted text-sm mt-3">Reading the chart…</p>
+    </section>
+
+    <!-- ── Section 3 — Forecast Card ──────────────────────────────────── -->
+    <section class="mt-10 rounded-2xl border border-line bg-card p-5">
+      <div id="forecast-rows" class="divide-y divide-line">
+        <!-- rows injected -->
+      </div>
+    </section>
+
+    <!-- ── Section 4 — Weather Metrics ────────────────────────────────── -->
+    <section class="mt-6 grid grid-cols-2 gap-3" id="metrics-grid">
+      <!-- metric cards injected -->
+    </section>
+
+    <!-- ── Section 9 — Forecast Explanation ───────────────────────────── -->
+    <section class="mt-6 rounded-2xl border border-line bg-card p-5">
+      <p id="narrative" class="text-ink/90 text-[15px] leading-7">—</p>
+    </section>
+
+    <footer class="mt-10 text-center text-[11px] text-muted/70">
+      <span id="stamp">—</span>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

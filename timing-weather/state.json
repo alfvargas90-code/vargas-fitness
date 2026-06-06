@@ -1,0 +1,213 @@
+{
+  "generated_at": "2026-06-06T10:05:14-05:00",
+  "current_date": "2026-06-06",
+  "dominant_planet": "jupiter",
+  "forecast_label": "EXPANSION",
+  "supporting_planet": "venus",
+  "pressure_source": "saturn",
+  "confidence": "High",
+  "duration_days": 85,
+  "weather_metrics": {
+    "opportunity": 28,
+    "pressure": 73,
+    "volatility": 78,
+    "momentum": 71
+  },
+  "narrative": "This is a preparation window, not the moment to force final commitments. Use the next few days, through June 8, to clear loose ends, open conversations, update documents, map decision paths, and build the pipeline quietly. Pressure and volatility are high, so move fast but keep your options reversible: get meetings booked, drafts written, terms explored, and relationships warmed up without locking yourself in too early. The useful play is to create leverage now so that late August can carry real responsibility instead of rushed improvisation. Anything important should be ready to title, write down, or commit by the April 2027 checkpoint.",
+  "active_council_window": {
+    "name": "Late May\u2013early June clearing",
+    "started": "2026-05-28",
+    "ends": "2026-06-08"
+  },
+  "sources": [
+    "02_Astrology/Alfie/natal_context.md",
+    "02_Astrology/Alfie/deep_research_tropical_2026-2027.md",
+    "02_Astrology/Alfie/deep_research_vedic_2026.md",
+    "05_Council/octopus-debates/2026-06-06_predictive_convergence_review.md"
+  ],
+  "scoring_detail": {
+    "dominance_scores": {
+      "jupiter": 10.52,
+      "saturn": 7.36,
+      "pluto": 6.84,
+      "uranus": 6.82,
+      "venus": 5.88
+    },
+    "dominance_components": {
+      "jupiter": {
+        "static": 2.0,
+        "lord": 6.0,
+        "window": 0.0,
+        "aspect": 2.52,
+        "aspect_to": "mercury",
+        "aspect_name": "sextile",
+        "aspect_orb": 2.981
+      },
+      "saturn": {
+        "static": 3.0,
+        "lord": 0.0,
+        "window": 0.0,
+        "aspect": 4.36,
+        "aspect_to": "neptune",
+        "aspect_name": "square",
+        "aspect_orb": 0.768
+      },
+      "pluto": {
+        "static": 3.0,
+        "lord": 0.0,
+        "window": 0.0,
+        "aspect": 3.84,
+        "aspect_to": "mc",
+        "aspect_name": "square",
+        "aspect_orb": 1.396
+      },
+      "uranus": {
+        "static": 2.0,
+        "lord": 0.0,
+        "window": 0.0,
+        "aspect": 4.82,
+        "aspect_to": "jupiter",
+        "aspect_name": "sextile",
+        "aspect_orb": 0.212
+      },
+      "venus": {
+        "static": 1.0,
+        "lord": 0.0,
+        "window": 0.0,
+        "aspect": 4.88,
+        "aspect_to": "mercury",
+        "aspect_name": "sextile",
+        "aspect_orb": 0.144
+      }
+    },
+    "lord_of_year": "jupiter",
+    "active_windows": [
+      "Late May\u2013early June clearing"
+    ],
+    "metric_drivers": {
+      "opportunity": [
+        "Jupiter is lord of the year (benefic regime)",
+        "approaching benefic window: Jupiter return \u2014 chapter reset (36d)",
+        "Vedic Moon\u2013Venus antardasha (relationship-positive)"
+      ],
+      "pressure": [
+        "Saturn square natal neptune (0.77\u00b0)",
+        "Saturn square natal asc (4.35\u00b0)",
+        "Sade Sati (Small Panoti) \u2014 pressure on foundations",
+        "inside admin/clearing window: Late May\u2013early June clearing"
+      ],
+      "volatility": [
+        "Uranus square natal sun (4.85\u00b0)",
+        "Uranus conjunction natal mars (2.69\u00b0)",
+        "Uranus sextile natal jupiter (0.21\u00b0)",
+        "Uranus trine natal north_node (4.6\u00b0)",
+        "pluto square natal mc (angular, 1.4\u00b0)"
+      ],
+      "momentum": [
+        "8 fast transit(s) exact within 3\u00b0",
+        "approaching Jupiter return \u2014 chapter reset (36d)",
+        "BaZi Da Yun shift within 101 days"
+      ]
+    },
+    "transit_longitudes": {
+      "sun": 75.93,
+      "moon": 325.01,
+      "mercury": 98.07,
+      "venus": 112.02,
+      "mars": 43.92,
+      "jupiter": 115.15,
+      "saturn": 12.7,
+      "uranus": 62.39,
+      "neptune": 4.16,
+      "pluto": 305.3
+    },
+    "transit_signs": {
+      "sun": "15.93\u00b0 Gemini",
+      "moon": "25.01\u00b0 Aquarius",
+      "mercury": "8.07\u00b0 Cancer",
+      "venus": "22.02\u00b0 Cancer",
+      "mars": "13.92\u00b0 Taurus",
+      "jupiter": "25.15\u00b0 Cancer",
+      "saturn": "12.7\u00b0 Aries",
+      "uranus": "2.39\u00b0 Gemini",
+      "neptune": "4.16\u00b0 Aries",
+      "pluto": "5.3\u00b0 Aquarius"
+    },
+    "tight_aspects": [
+      {
+        "transit": "venus",
+        "natal": "mercury",
+        "aspect": "sextile",
+        "orb": 0.14
+      },
+      {
+        "transit": "uranus",
+        "natal": "jupiter",
+        "aspect": "sextile",
+        "orb": 0.21
+      },
+      {
+        "transit": "mercury",
+        "natal": "asc",
+        "aspect": "opposition",
+        "orb": 0.28
+      },
+      {
+        "transit": "saturn",
+        "natal": "neptune",
+        "aspect": "square",
+        "orb": 0.77
+      },
+      {
+        "transit": "mercury",
+        "natal": "sun",
+        "aspect": "sextile",
+        "orb": 0.84
+      },
+      {
+        "transit": "neptune",
+        "natal": "moon",
+        "aspect": "square",
+        "orb": 1.36
+      },
+      {
+        "transit": "mars",
+        "natal": "pluto",
+        "aspect": "opposition",
+        "orb": 1.4
+      },
+      {
+        "transit": "pluto",
+        "natal": "mc",
+        "aspect": "square",
+        "orb": 1.4
+      },
+      {
+        "transit": "neptune",
+        "natal": "uranus",
+        "aspect": "square",
+        "orb": 1.52
+      },
+      {
+        "transit": "neptune",
+        "natal": "jupiter",
+        "aspect": "trine",
+        "orb": 1.56
+      },
+      {
+        "transit": "pluto",
+        "natal": "north_node",
+        "aspect": "conjunction",
+        "orb": 1.69
+      },
+      {
+        "transit": "mars",
+        "natal": "neptune",
+        "aspect": "trine",
+        "orb": 1.98
+      }
+    ],
+    "transit_missing": [],
+    "natal_missing": []
+  }
+}
