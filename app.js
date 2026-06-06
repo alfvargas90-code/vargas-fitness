@@ -135,9 +135,10 @@ async function renderMonthlyHistory() {
     set("mh-stats-1", `${hl.sessions} sessions · ${hl.active_days} active days`);
     set("mh-stats-2", `Sleep avg ${hl.sleep_avg} · top week ${hl.top_week_sessions}`);
     set("mh-recommendation", h.recommendation || "");
-    card.classList.remove("hidden");
+    card.classList.remove("hidden");                       // show the May sub-block
+    document.getElementById("pattern-engine")?.classList.remove("hidden"); // May alone justifies the section
   } catch (e) {
-    // fetch failed (e.g. file absent) → card stays hidden gracefully
+    // fetch failed (e.g. file absent) → May sub-block + section stay hidden gracefully
   }
 }
 

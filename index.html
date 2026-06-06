@@ -645,12 +645,30 @@
     </section>
 
     <!-- ════════════════ MONTHLY HISTORY — static monthly retrospective (polar/history/) ═══════ -->
-    <section class="gradient-card p-3.5 mb-2.5 hidden" id="monthly-history-card" aria-label="Monthly training history">
-      <div class="text-[11px] uppercase tracking-wider font-bold" style="color:#9A6BFF;text-shadow:0 0 12px rgba(154,107,255,0.35)" id="mh-title">— · —</div>
-      <div class="text-[14px] font-semibold stat-num mt-2.5" id="mh-stats-1" style="color:#E9EDF5"></div>
-      <div class="text-[14px] font-semibold stat-num mt-0.5" id="mh-stats-2" style="color:#E9EDF5"></div>
-      <div class="text-[10px] uppercase tracking-wider text-muted font-semibold mt-3.5 mb-1">Recommendation</div>
-      <div class="text-[13px] leading-relaxed text-neutral-200" id="mh-recommendation"></div>
+    <!-- ════════════════ PATTERN ENGINE — canonical container for ALL historical/trend
+         data. Monthly retrospective (primary) above; lunar-phase correlations
+         (drill-down) below. Future trends (sleep/recovery/HRV history) nest here too. -->
+    <section class="gradient-card p-4 mb-2.5 hidden" id="pattern-engine">
+      <div class="text-[10px] uppercase tracking-wide font-bold text-muted mb-2.5">
+        Pattern Engine
+      </div>
+      <!-- Monthly retrospective sub-block (primary historical summary) -->
+      <div class="hidden" id="monthly-history-card">
+        <div class="text-[11px] uppercase tracking-wider font-bold" style="color:#9A6BFF;text-shadow:0 0 12px rgba(154,107,255,0.35)" id="mh-title">— · —</div>
+        <div class="text-[14px] font-semibold stat-num mt-2" id="mh-stats-1" style="color:#E9EDF5"></div>
+        <div class="text-[14px] font-semibold stat-num mt-0.5" id="mh-stats-2" style="color:#E9EDF5"></div>
+        <div class="text-[10px] uppercase tracking-wider text-muted font-semibold mt-3 mb-1">Recommendation</div>
+        <div class="text-[13px] leading-relaxed text-neutral-200" id="mh-recommendation"></div>
+      </div>
+      <!-- Lunar-phase correlations (deeper drill-down). renderPatternEngine populates
+           pe-*; on patterns.json failure it hides THIS sub-block only, not the section. -->
+      <div class="mt-4 pt-4 border-t border-line" id="pe-lunar">
+        <div class="text-[10px] uppercase tracking-wide font-bold text-muted mb-1.5">Lunar phase</div>
+        <div class="text-[13px] mb-3" style="color:rgba(255,255,255,0.55)" id="pe-phase">—</div>
+        <div class="space-y-2" id="pe-rows"></div>
+        <div class="text-xs mt-3" style="color:rgba(255,255,255,0.45)" id="pe-summary"></div>
+        <div class="text-xs mt-3" id="pe-sample"></div>
+      </div>
     </section>
 
     <!-- ════════════════ RECOVERY WINDOW (full-width; now hosts System Conditions inline) ═══════════════ -->
@@ -829,22 +847,6 @@
       </div>
     </section>
 
-    <!-- Pattern Engine — Option B "when X, then Y" framing. Historical family
-         (quieter, minimal glow). Per-phase sleep/recovery/strain deltas vs Alfie's
-         overall average, expressed as an explicit conditional pattern. -->
-    <section class="gradient-card p-4 mb-4 hidden" id="pattern-engine">
-      <div class="text-[10px] uppercase tracking-wide font-bold text-muted mb-1.5">
-        Pattern Engine
-      </div>
-      <!-- Context line: "When moon is {lowercase phase}" — carries the lunar framing -->
-      <div class="text-[13px] mb-3" style="color:rgba(255,255,255,0.55)" id="pe-phase">—</div>
-      <!-- Metric rows: Sleep / Recovery / Strain deltas -->
-      <div class="space-y-2" id="pe-rows"></div>
-      <!-- Interpretive one-line read — what the pattern means (after the rows) -->
-      <div class="text-xs mt-3" style="color:rgba(255,255,255,0.45)" id="pe-summary"></div>
-      <div class="text-xs mt-3" id="pe-sample"></div>
-    </section>
-
     <!-- Day in review detail -->
     <section class="gradient-card p-4 mb-4" id="day-review">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
@@ -901,6 +903,6 @@
        style="height:env(safe-area-inset-bottom);background:#03050F"></div>
 
   <script src="data.js"></script>
-  <script src="app.js?v=redesign11"></script>
+  <script src="app.js?v=redesign12"></script>
 </body>
 </html>
