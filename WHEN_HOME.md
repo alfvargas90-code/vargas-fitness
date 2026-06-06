@@ -14,6 +14,37 @@ _Last updated: 2026-06-05 (octopus / Claude Code)._
 
 ---
 
+## 📊 STATUS 2026-06-05 — baseline.json + "vs typical" deltas (redesign13)
+
+New `polar/baseline.json` (3-month history export 2026-03-07→05-20: resting HR 55,
+max 190, AeT 133, AnT 171, sleep avg 68.7, daily cal 2909, steps 8352, etc.). New
+memoized `loadBaseline()` in app.js (fetch-once on load, returns null on failure →
+displays degrade to no-delta = current behavior).
+
+**WIRED (clean, correct baseline match) — Activity card (`#activity`, visible):**
+- **Steps tile** (renderActivity) → "`7,659` steps · **−8% vs typical**" (vs steps_avg 8352)
+- **Calories tile** (total daily) → "`2,577` calories · **−11% vs typical**" (vs calories_avg 2909)
+- Rendered as a muted 9px sub-line under each tile; active-time has no baseline → no delta.
+
+**HIDDEN (didn't fit cleanly — reasoning):**
+- **Strain max-HR recalibration:** N/A. Strain is **calorie-based** (`active-calories /
+  RESERVE_DEPLETION_CAL`), not HR-based — no max-HR to recalibrate. Left untouched.
+- **Resting HR:** the physiology row already frames RHR against a 7-day rolling
+  baseline (`rhr_delta_bpm`, ▲/▼ + state text). A second historical-55 baseline would
+  CONTRADICT it ("on baseline" vs "2 below baseline") → double-baseline noise. Skipped.
+- **Sleep score:** lives only in the LOCKED hero corner + the untouchable Currents echo
+  — no non-locked surface to annotate without breaking a locked visual. Skipped.
+- **HR zones (AeT/AnT):** optional per spec; no HR value on a primary surface to anchor
+  "in aerobic zone" — would be visual noise. Skipped (data is in baseline.json for later).
+- **Support Activity card / active-kcal:** active-cal has no matching baseline; the small
+  card is redundant with the now-annotated `#activity` panel. Skipped.
+
+Lunar engine / Currents / Pattern Engine / 60s polling untouched. `node --check` passes,
+console clean. Cache → **redesign13**. (Applied directly via Edit tool — localized
+renderer logic; brief left lane choice to my judgment.)
+
+---
+
 ## 🧩 STATUS 2026-06-05 — Pattern Engine = canonical history container (redesign12)
 
 Architectural reorg (not a new feature). The standalone May card is gone; Pattern

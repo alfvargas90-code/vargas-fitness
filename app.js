@@ -152,6 +152,15 @@ async function fetchJSON(path) {
   return r.json();
 }
 
+// Historical baseline (polar/baseline.json) — fetched ONCE on page load, memoized.
+// Render functions `await loadBaseline()` to annotate "vs typical" deltas. Returns
+// null on any failure, so displays render WITHOUT deltas (graceful = current behavior).
+let _baselinePromise = null;
+function loadBaseline() {
+  if (!_baselinePromise) _baselinePromise = fetchJSON("polar/baseline.json").catch(() => null);
+  return _baselinePromise;
+}
+
 const secsToHM = s => (s == null ? "—" : `${Math.floor(s / 3600)}h ${Math.round((s % 3600) / 60)}m`);
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const labelMD = d => { const [, m, day] = d.split("-"); return `${MONTHS[+m - 1]} ${+day}`; };
@@ -1696,15 +1705,22 @@ async function renderActivity() {
     const steps = a["active-steps"] ?? a.step_count ?? null;
     const activeHM = isoDurationToHM(a.duration) || isoDurationToHM(a["active-time"]);
     const cal = a.calories ?? null;                               // total daily calories
+    // "vs typical" deltas from polar/baseline.json (graceful: null baseline → no sub-line).
+    const baseline = await loadBaseline();
+    const pctVsTyp = (val, avg) => (val != null && avg) ? Math.round((val / avg - 1) * 100) : null;
+    const vsTyp = d => d == null ? "" : `${d >= 0 ? "+" : ""}${d}% vs typical`;
+    const stepsDelta = pctVsTyp(steps != null ? Number(steps) : null, baseline?.activity?.steps_avg);
+    const calDelta   = pctVsTyp(cal != null ? Number(cal) : null, baseline?.activity?.calories_avg);
     const tiles = [
-      { label: "steps",       value: steps != null ? Number(steps).toLocaleString() : "—" },
-      { label: "active time", value: activeHM || "—" },
-      { label: "calories",    value: cal != null ? Number(cal).toLocaleString() : "—" },
+      { label: "steps",       value: steps != null ? Number(steps).toLocaleString() : "—", sub: vsTyp(stepsDelta) },
+      { label: "active time", value: activeHM || "—", sub: "" },
+      { label: "calories",    value: cal != null ? Number(cal).toLocaleString() : "—", sub: vsTyp(calDelta) },
     ];
     document.getElementById("activity-tiles").innerHTML = tiles.map(t => `
       <div class="bg-bg rounded-lg p-3 border border-line min-w-0">
         <div class="text-2xl font-semibold stat-num leading-tight truncate">${t.value}</div>
         <div class="text-xs text-muted mt-1">${t.label}</div>
+        ${t.sub ? `<div class="text-[9px] text-muted mt-0.5 stat-num whitespace-nowrap">${t.sub}</div>` : ""}
       </div>`).join("");
 
     // --- footer: goal % + intensity-zone breakdown — only if the payload carries them ---

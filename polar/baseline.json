@@ -1,0 +1,21 @@
+{
+  "source": "polar history export 2026-03-07 to 2026-05-20",
+  "valid_from": "2026-03-07",
+  "valid_to": "2026-05-20",
+  "heart_rate": {
+    "resting": 55,
+    "max": 190,
+    "aerobic_threshold": 133,
+    "anaerobic_threshold": 171
+  },
+  "sleep_score_avg": 68.7,
+  "activity": {
+    "calories_avg": 2909,
+    "steps_avg": 8352,
+    "steps_distance_avg_m": 4489
+  },
+  "training": {
+    "sessions_per_week_avg": 9.4,
+    "calories_per_session_avg": 307
+  }
+}
