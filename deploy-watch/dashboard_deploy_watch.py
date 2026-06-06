@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
-"""dashboard_deploy_watch.py — belt-and-suspenders deploy gate for the fitness
-dashboard. Auto-commits + pushes ONLY the four dashboard meta files when they
-change, so hand edits to index.html / app.js / WHEN_HOME.md / polar/summary.py
-never sit un-pushed (the loop that broke all day 2026-06-05).
+"""dashboard_deploy_watch.py — belt-and-suspenders deploy gate for BOTH fitness
+dashboards (root + timing-weather). Auto-commits + pushes ONLY the dashboard
+meta files when they change, so hand edits never sit un-pushed (the loop that
+broke all day 2026-06-05).
+
+SELF-HEALING CACHE BUST (added 2026-06-06)
+------------------------------------------
+Each dashboard ships a version.json. When a dashboard's CONTENT (its index.html
+or app.js) changes, this gate regenerates that dashboard's version.json with a
+fresh timestamp and includes it in the same commit. The browser's inline
+version check (top of each index.html) then sees the new version and busts its
+own cache — no more delete-and-re-add-the-home-screen dance on iOS. version.json
+is regenerated ONLY when content changed, so re-runs on a clean tree never loop.
 
 Fired every 5 minutes by LaunchAgent com.alfredo.dashboard-deploy-watch
 (+ RunAtLoad).
@@ -39,6 +48,7 @@ Source-of-truth + live copy is this in-repo file; it is committed to origin so a
 Mac reset can redeploy it (the FDA grant on the python.org interpreter is the
 one machine-setup step that must be re-done, same as for polar-sync).
 """
+import json
 import os
 import subprocess
 import sys
@@ -48,7 +58,29 @@ from datetime import datetime
 # --- config ------------------------------------------------------------------
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 REPO = os.path.dirname(SCRIPT_DIR)                       # deploy-watch/ -> repo root
-WATCHED = ["index.html", "app.js", "WHEN_HOME.md", "polar/summary.py"]
+
+# Each dashboard: a directory (relative to repo root; "" = repo root) and the
+# CONTENT files whose change warrants a fresh version stamp. version.json + sw.js
+# for each dashboard are derived from `dir` below.
+DASHBOARDS = [
+    {"name": "fitness",        "dir": "",               "content": ["index.html", "app.js"]},
+    {"name": "timing-weather", "dir": "timing-weather", "content": ["timing-weather/index.html",
+                                                                    "timing-weather/app.js"]},
+]
+# Non-dashboard files that still auto-push but get NO version stamp.
+EXTRA = ["WHEN_HOME.md", "polar/summary.py"]
+
+
+def _rel(dash, fname):
+    """Repo-relative, forward-slash path for a file inside a dashboard dir."""
+    return os.path.join(dash["dir"], fname) if dash["dir"] else fname
+
+
+CONTENT_FILES = [f for d in DASHBOARDS for f in d["content"]]
+VERSION_FILES = [_rel(d, "version.json") for d in DASHBOARDS]
+SW_FILES = [_rel(d, "sw.js") for d in DASHBOARDS]
+WATCHED = CONTENT_FILES + VERSION_FILES + SW_FILES + EXTRA
+
 STATE_DIR = os.path.expanduser("~/.local/state")
 LOG_PATH = os.path.join(STATE_DIR, "dashboard-deploy-watch.log")
 LOCKDIR = os.path.join(STATE_DIR, "dashboard-deploy-watch.lock.d")
@@ -74,6 +106,19 @@ def fail(msg, code=1):
     sys.stderr.write(f"[DEPLOY-FAIL] {msg}\n")
     _release_lock()
     sys.exit(code)
+
+
+def stamp_version(dash):
+    """Rewrite a dashboard's version.json with a fresh timestamp. Bulletproof:
+    raises OSError on write failure (caller turns that into a loud [DEPLOY-FAIL]),
+    never leaves a half-written file in place of a deploy."""
+    ts = datetime.now().astimezone().isoformat(timespec="seconds")
+    path = os.path.join(REPO, dash["dir"], "version.json") if dash["dir"] else \
+        os.path.join(REPO, "version.json")
+    payload = {"version": ts, "built_at": ts}
+    with open(path, "w") as f:
+        json.dump(payload, f, indent=2)
+        f.write("\n")
 
 
 # --- self-mutex: never let two instances overlap ----------------------------
@@ -175,6 +220,20 @@ def main():
         st = git(["status", "--porcelain", "--", f])
         if st.stdout.strip():
             changed.append(f)
+
+    # Regenerate version.json for any dashboard whose CONTENT changed, BEFORE
+    # staging, so the fresh stamp rides along in this same commit. Only on a real
+    # content change — never on a clean tree — so re-runs can't loop.
+    for dash in DASHBOARDS:
+        if any(c in changed for c in dash["content"]):
+            try:
+                stamp_version(dash)
+            except OSError as e:
+                fail(f"could not write version.json for {dash['name']}: {e}")
+            vf = _rel(dash, "version.json")
+            if vf not in changed:
+                changed.append(vf)
+            log(f"[version-stamp] {dash['name']} content changed -> bumped {vf}")
 
     if not changed:
         _release_lock()

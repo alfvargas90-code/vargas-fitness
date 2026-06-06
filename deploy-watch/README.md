@@ -1,11 +1,23 @@
 # deploy-watch — dashboard auto-push gate
 
-Belt-and-suspenders LaunchAgent that auto-commits + pushes **only** the four
+Belt-and-suspenders LaunchAgent that auto-commits + pushes **only** the
 dashboard meta files when they change, so hand edits never sit un-pushed (the
-loop that broke all day 2026-06-05).
+loop that broke all day 2026-06-05). Covers **both** dashboards: the root
+fitness dashboard and `timing-weather/`.
 
-**Watched (and nothing else):** `index.html`, `app.js`, `WHEN_HOME.md`,
-`polar/summary.py`. Polar/nutrition JSON is left to polar-sync.
+**Watched (and nothing else):**
+`index.html`, `app.js`, `version.json`, `sw.js`,
+`timing-weather/index.html`, `timing-weather/app.js`,
+`timing-weather/version.json`, `timing-weather/sw.js`,
+`WHEN_HOME.md`, `polar/summary.py`. Polar/nutrition JSON is left to polar-sync.
+
+**Self-healing cache bust:** when a dashboard's *content* (`index.html` or
+`app.js`) changes, the gate rewrites that dashboard's `version.json` with a
+fresh timestamp and ships it in the same commit. The inline version check at the
+top of each `index.html` then busts the browser/PWA cache automatically — no
+more delete-and-re-add the iOS home-screen icon. `version.json` is regenerated
+**only** on a real content change, so clean-tree re-runs never loop. Full
+explanation: `../docs/cache-busting.md`.
 
 ## Files (this dir = source-of-truth, committed to origin)
 
