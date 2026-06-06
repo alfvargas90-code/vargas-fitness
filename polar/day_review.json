@@ -1,19 +1,19 @@
 {
-  "date": "2026-06-04",
-  "generated_at": "2026-06-04T21:45:00-05:00",
+  "date": "2026-06-05",
+  "generated_at": "2026-06-05T21:45:00-05:00",
   "verdict": "Big",
   "stats": {
-    "steps": 4552,
-    "active_minutes": 333,
-    "active_time_display": "5h 33m",
-    "calories_burned": 2264,
-    "active_calories": 785,
-    "calories_eaten": 1850,
-    "net_deficit": 414,
+    "steps": 7659,
+    "active_minutes": 445,
+    "active_time_display": "7h 25m",
+    "calories_burned": 2577,
+    "active_calories": 1015,
+    "calories_eaten": 2000,
+    "net_deficit": 577,
     "calorie_target": 2574,
-    "protein_g": 132,
+    "protein_g": 108,
     "protein_target_g": 138,
-    "protein_gap_g": 6
+    "protein_gap_g": 30
   },
-  "prose": "You crushed it today \u2014 over five hours on your feet and a big calorie burn, with a sensible 400-ish deficit that trims fat without putting your muscle at risk. Protein landed at 132g, just a hair under where you want it, so you're well covered. Nudge that protein over the line tomorrow and get some resistance work in."
+  "prose": "You put in a big day with about 7,700 steps, a lot of active time, and about a 600-calorie deficit, which is a solid fat-loss push without getting too reckless for muscle. The miss was protein: coming up about 30 short makes it harder to protect and build lean mass after that much output. Push protein hard tomorrow and keep the deficit moderate."
 }
