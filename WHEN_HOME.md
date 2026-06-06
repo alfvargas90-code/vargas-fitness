@@ -14,6 +14,33 @@ _Last updated: 2026-06-05 (octopus / Claude Code)._
 
 ---
 
+## 🧩 STATUS 2026-06-05 — Pattern Engine = canonical history container (redesign12)
+
+Architectural reorg (not a new feature). The standalone May card is gone; Pattern
+Engine is now the single home for ALL historical/trend data.
+
+- **Moved** `#pattern-engine` UP from its deep position (below the support cards) to
+  **between Currents and Recovery Window**. Order is now Currents → Pattern Engine →
+  Recovery Window → other cards.
+- **Nested** the May retrospective INSIDE `#pattern-engine` as a sub-block (no longer
+  its own glass card — `#monthly-history-card` is now an inner div). Layout: PE eyebrow
+  → "MAY · 2026" + stats + recommendation (PRIMARY, on top) → hairline rule → "LUNAR
+  PHASE" drill-down (the existing `#pe-lunar` correlations). Monthly summary leads;
+  lunar is the deeper read.
+- **Renderers:** `renderMonthlyHistory()` now also unhides `#pattern-engine` (May data
+  alone justifies the section). `renderPatternEngine()` failure now hides ONLY
+  `#pe-lunar`, not the whole section — so a missing patterns.json can't blank the May
+  block. Both degrade gracefully and independently.
+- **Future trends** (sleep/recovery/HRV history) nest inside Pattern Engine too.
+
+PVR: no duplicate IDs (each pe-*/mh-*/section id appears once), section order verified,
+Currents/lunar-engine/polling untouched, May numbers + prose byte-identical, no sport
+codes, console clean. Cache → **redesign12**. (Applied directly via Edit tool, not the
+Codex lane — a multi-section DOM move with shared-ID coordination is safer atomic than
+under the 90s watchdog; brief didn't mandate the lane this turn.)
+
+---
+
 ## 📅 STATUS 2026-06-05 — Monthly Historical Card (redesign11) — NEW BUILD post-lock
 
 First historical view on the dashboard (Alfie ratified the 3 pre-build calls; ARV

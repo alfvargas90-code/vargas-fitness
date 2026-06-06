@@ -1840,7 +1840,9 @@ async function renderPatternEngine() {
     sampleEl.style.color = "";
     card.classList.remove("hidden");
   } catch (e) {
-    card.classList.add("hidden");   // no patterns.json yet / file://
+    // no patterns.json yet / file:// → hide ONLY the lunar sub-block; the May
+    // retrospective may have opened #pattern-engine on its own.
+    document.getElementById("pe-lunar")?.classList.add("hidden");
   }
 }
 
