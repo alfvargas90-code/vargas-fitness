@@ -619,6 +619,9 @@
       </div>
     </section>
 
+    <!-- ════════════════ NOW — live / today section eyebrow ═══════ -->
+    <div class="text-[11px] uppercase tracking-[2px] font-bold mb-2 px-1" style="color:#9A6BFF;opacity:0.85" aria-hidden="true">Now</div>
+
     <!-- ════════════════ TODAY'S READ — glass, prose + physiology rows ═══════ -->
     <section class="gradient-card p-3.5 mb-2.5" id="todays-read">
       <div class="flex items-center justify-between mb-2">
@@ -645,32 +648,6 @@
     </section>
 
     <!-- ════════════════ MONTHLY HISTORY — static monthly retrospective (polar/history/) ═══════ -->
-    <!-- ════════════════ PATTERN ENGINE — canonical container for ALL historical/trend
-         data. Monthly retrospective (primary) above; lunar-phase correlations
-         (drill-down) below. Future trends (sleep/recovery/HRV history) nest here too. -->
-    <section class="gradient-card p-4 mb-2.5 hidden" id="pattern-engine">
-      <div class="text-[10px] uppercase tracking-wide font-bold text-muted mb-2.5">
-        Pattern Engine
-      </div>
-      <!-- Monthly retrospective sub-block (primary historical summary) -->
-      <div class="hidden" id="monthly-history-card">
-        <div class="text-[11px] uppercase tracking-wider font-bold" style="color:#9A6BFF;text-shadow:0 0 12px rgba(154,107,255,0.35)" id="mh-title">— · —</div>
-        <div class="text-[14px] font-semibold stat-num mt-2" id="mh-stats-1" style="color:#E9EDF5"></div>
-        <div class="text-[14px] font-semibold stat-num mt-0.5" id="mh-stats-2" style="color:#E9EDF5"></div>
-        <div class="text-[10px] uppercase tracking-wider text-muted font-semibold mt-3 mb-1">Recommendation</div>
-        <div class="text-[13px] leading-relaxed text-neutral-200" id="mh-recommendation"></div>
-      </div>
-      <!-- Lunar-phase correlations (deeper drill-down). renderPatternEngine populates
-           pe-*; on patterns.json failure it hides THIS sub-block only, not the section. -->
-      <div class="mt-4 pt-4 border-t border-line" id="pe-lunar">
-        <div class="text-[10px] uppercase tracking-wide font-bold text-muted mb-1.5">Lunar phase</div>
-        <div class="text-[13px] mb-3" style="color:rgba(255,255,255,0.55)" id="pe-phase">—</div>
-        <div class="space-y-2" id="pe-rows"></div>
-        <div class="text-xs mt-3" style="color:rgba(255,255,255,0.45)" id="pe-summary"></div>
-        <div class="text-xs mt-3" id="pe-sample"></div>
-      </div>
-    </section>
-
     <!-- ════════════════ RECOVERY WINDOW (full-width; now hosts System Conditions inline) ═══════════════ -->
     <section class="lpi-card p-3 mb-3" id="recovery-window">
       <div class="flex items-center gap-1.5 text-[10px] uppercase tracking-wide font-bold" style="color:#39D98A">
@@ -797,24 +774,6 @@
       <div id="snapshot-content" class="hidden grid grid-cols-3 md:grid-cols-6 gap-4"></div>
     </section>
 
-    <!-- Activity detail -->
-    <section class="gradient-card p-4 mb-4" id="activity">
-      <div class="flex items-start justify-between mb-4 flex-wrap gap-2">
-        <div>
-          <h2 class="font-semibold text-neutral-300">Activity · today <span class="text-xs text-neutral-400 font-normal">· Polar Loop</span></h2>
-          <span class="text-xs text-muted" id="activity-updated"></span>
-        </div>
-        <span class="text-xs text-neutral-400" id="activity-sub"></span>
-      </div>
-      <div id="activity-empty" class="text-sm text-muted">
-        No activity data yet — run <code class="text-electric">polar/sync.py</code> to pull today's steps, active time &amp; calories.
-      </div>
-      <div id="activity-content" class="hidden">
-        <div class="grid grid-cols-3 gap-3" id="activity-tiles"></div>
-        <p class="text-xs text-muted mt-4" id="activity-footer"></p>
-      </div>
-    </section>
-
     <!-- Training & Recovery detail -->
     <section class="gradient-card p-4 mb-4" id="polar-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
@@ -863,6 +822,53 @@
       </div>
     </section>
 
+    <!-- ════════════════ TRENDS — historical / analytical section eyebrow ═══════ -->
+    <div class="text-[11px] uppercase tracking-[2px] font-bold mt-6 mb-2 px-1" style="color:#9A6BFF;opacity:0.85" aria-hidden="true">Trends</div>
+
+    <!-- ════════════════ PATTERN ENGINE — canonical container for ALL historical/trend
+         data. Monthly retrospective (primary) above; lunar-phase correlations
+         (drill-down) below. Future trends (sleep/recovery/HRV history) nest here too. -->
+    <section class="gradient-card p-4 mb-2.5 hidden" id="pattern-engine">
+      <div class="text-[10px] uppercase tracking-wide font-bold text-muted mb-2.5">
+        Pattern Engine
+      </div>
+      <!-- Monthly retrospective sub-block (primary historical summary) -->
+      <div class="hidden" id="monthly-history-card">
+        <div class="text-[11px] uppercase tracking-wider font-bold" style="color:#9A6BFF;text-shadow:0 0 12px rgba(154,107,255,0.35)" id="mh-title">— · —</div>
+        <div class="text-[14px] font-semibold stat-num mt-2" id="mh-stats-1" style="color:#E9EDF5"></div>
+        <div class="text-[14px] font-semibold stat-num mt-0.5" id="mh-stats-2" style="color:#E9EDF5"></div>
+        <div class="text-[10px] uppercase tracking-wider text-muted font-semibold mt-3 mb-1">Recommendation</div>
+        <div class="text-[13px] leading-relaxed text-neutral-200" id="mh-recommendation"></div>
+      </div>
+      <!-- Lunar-phase correlations (deeper drill-down). renderPatternEngine populates
+           pe-*; on patterns.json failure it hides THIS sub-block only, not the section. -->
+      <div class="mt-4 pt-4 border-t border-line" id="pe-lunar">
+        <div class="text-[10px] uppercase tracking-wide font-bold text-muted mb-1.5">Lunar phase</div>
+        <div class="text-[13px] mb-3" style="color:rgba(255,255,255,0.55)" id="pe-phase">—</div>
+        <div class="space-y-2" id="pe-rows"></div>
+        <div class="text-xs mt-3" style="color:rgba(255,255,255,0.45)" id="pe-summary"></div>
+        <div class="text-xs mt-3" id="pe-sample"></div>
+      </div>
+    </section>
+
+    <!-- Activity detail -->
+    <section class="gradient-card p-4 mb-4" id="activity">
+      <div class="flex items-start justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <h2 class="font-semibold text-neutral-300">Activity · today <span class="text-xs text-neutral-400 font-normal">· Polar Loop</span></h2>
+          <span class="text-xs text-muted" id="activity-updated"></span>
+        </div>
+        <span class="text-xs text-neutral-400" id="activity-sub"></span>
+      </div>
+      <div id="activity-empty" class="text-sm text-muted">
+        No activity data yet — run <code class="text-electric">polar/sync.py</code> to pull today's steps, active time &amp; calories.
+      </div>
+      <div id="activity-content" class="hidden">
+        <div class="grid grid-cols-3 gap-3" id="activity-tiles"></div>
+        <p class="text-xs text-muted mt-4" id="activity-footer"></p>
+      </div>
+    </section>
+
     <!-- Scale history detail -->
     <section class="gradient-card p-4 mb-4" id="scale-history-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
@@ -903,6 +909,6 @@
        style="height:env(safe-area-inset-bottom);background:#03050F"></div>
 
   <script src="data.js"></script>
-  <script src="app.js?v=redesign13"></script>
+  <script src="app.js?v=redesign14"></script>
 </body>
 </html>
