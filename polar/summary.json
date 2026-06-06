@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-06T11:57:18-05:00",
-  "data_hash": "c462e87778cb4b74",
+  "generated_at": "2026-06-06T12:39:22-05:00",
+  "data_hash": "039837cbe0e6c8c7",
   "slot": "macros-update",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 42%\n\nRead\nThe snack opens the day\u2019s intake only slightly: energy is still well behind the day, and protein has barely entered the picture. With recovery middling, sleep compressed, and output lighter than usual, this favors a measured catch-up over intensity, with muscle protection still underfed.\n\nQuietly catching up.\n\nPerformance: Quietly catching up.\n\nTransit: none",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 42%\n\nRead\nThe new meal changes the shape of the day: a low-input morning is now catching up, with protein finally carrying more of the load. Recovery is moderate and output remains lighter than usual, so today favors steady muscle protection over intensity.\n\nMomentum without strain.\n\nPerformance: Momentum without strain.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 42%\n\nRead\nThe snack opens the day\u2019s intake only slightly: energy is still well behind the day, and protein has barely entered the picture. With recovery middling, sleep compressed, and output lighter than usual, this favors a measured catch-up over intensity, with muscle protection still underfed.\n\nQuietly catching up."
+      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 42%\n\nRead\nThe new meal changes the shape of the day: a low-input morning is now catching up, with protein finally carrying more of the load. Recovery is moderate and output remains lighter than usual, so today favors steady muscle protection over intensity.\n\nMomentum without strain."
     },
     {
       "label": "Performance",
-      "text": "Quietly catching up."
+      "text": "Momentum without strain."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 42%\n\nRead\nThe snack opens the day\u2019s intake only slightly: energy is still well behind the day, and protein has barely entered the picture. With recovery middling, sleep compressed, and output lighter than usual, this favors a measured catch-up over intensity, with muscle protection still underfed.\n\nQuietly catching up.",
-    "performance": "Quietly catching up.",
+    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 42%\n\nRead\nThe new meal changes the shape of the day: a low-input morning is now catching up, with protein finally carrying more of the load. Recovery is moderate and output remains lighter than usual, so today favors steady muscle protection over intensity.\n\nMomentum without strain.",
+    "performance": "Momentum without strain.",
     "transit": null
   },
-  "nutrition_nudge": "You're on pace; make lunch protein-forward with 50g and keep meal timing steady.",
+  "nutrition_nudge": "You're on pace; keep lunch steady with a 45g protein anchor.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
     "sleep_hours": 5.2,
     "hrv_today": 70,
     "hrv_7d_avg": 65.4,
-    "nutrition": "calories 140 of 2574 goal, protein 2g of 138g goal, carbs 24g of 290g goal, fat 4g of 72g goal",
-    "nutrition_detail": "calories 140 of 2574 goal -> 2434 left; protein 2g of 138g goal -> 136g gap; carbs 24g of 290g goal; fat 4g of 72g goal",
+    "nutrition": "calories 740 of 2574 goal, protein 47g of 138g goal, carbs 94g of 290g goal, fat 19g of 72g goal",
+    "nutrition_detail": "calories 740 of 2574 goal -> 1834 left; protein 47g of 138g goal -> 91g gap; carbs 94g of 290g goal; fat 19g of 72g goal",
     "activity_today": "2,391 steps so far, 2h 8m active, 1,081 calories burned, Light training load"
   }
 }
