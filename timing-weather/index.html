@@ -94,7 +94,7 @@
 <body>
   <main class="mx-auto w-full max-w-md px-5 pt-10 pb-16">
 
-    <!-- ── Section 1 — Hero Forecast ──────────────────────────────────── -->
+    <!-- ── 1 · Hero Forecast ──────────────────────────────────────────── -->
     <section class="text-center">
       <div class="text-[11px] tracking-[0.25em] text-muted uppercase mb-6">Timing Weather</div>
       <div id="sun-wrap" class="mb-7">
@@ -104,23 +104,77 @@
       <p id="forecast-sub" class="text-muted text-sm mt-3">Reading the chart…</p>
     </section>
 
-    <!-- ── Section 3 — Forecast Card ──────────────────────────────────── -->
-    <section class="mt-10 rounded-2xl border border-line bg-card p-5">
-      <div id="forecast-rows" class="divide-y divide-line">
-        <!-- rows injected -->
+    <!-- ── 2 · Current Phase ──────────────────────────────────────────── -->
+    <section class="mt-8 rounded-2xl border border-line bg-card p-5 text-center">
+      <div class="text-[11px] tracking-[0.2em] text-muted uppercase mb-2">Current Phase</div>
+      <div id="phase-name" class="text-gold text-2xl font-bold leading-tight">—</div>
+      <div id="phase-range" class="text-muted text-sm mt-1.5 tab-num">—</div>
+    </section>
+
+    <!-- ── 3 · Forecast Card ──────────────────────────────────────────── -->
+    <section class="mt-6 rounded-2xl border border-line bg-card p-5">
+      <div id="forecast-rows" class="divide-y divide-line"><!-- rows injected --></div>
+    </section>
+
+    <!-- ── 4 · Active Sky ─────────────────────────────────────────────── -->
+    <section class="mt-6 rounded-2xl border border-line bg-card p-5">
+      <div class="text-[11px] tracking-[0.2em] text-muted uppercase mb-1">Active Sky</div>
+      <div id="sky-rows" class="divide-y divide-line"><!-- rows injected --></div>
+    </section>
+
+    <!-- ── 5 · Top Drivers ────────────────────────────────────────────── -->
+    <section id="sec-drivers" class="mt-6 rounded-2xl border border-line bg-card p-5 hidden">
+      <div class="text-[11px] tracking-[0.2em] text-muted uppercase mb-1">Top Drivers</div>
+      <div id="drivers-list" class="divide-y divide-line"><!-- rows injected --></div>
+    </section>
+
+    <!-- ── 6 · Forecast Trend ─────────────────────────────────────────── -->
+    <section id="sec-trend" class="mt-6 rounded-2xl border border-line bg-card p-5 hidden">
+      <div class="text-[11px] tracking-[0.2em] text-muted uppercase mb-1">Forecast Trend</div>
+      <div id="trend-rows" class="divide-y divide-line"><!-- rows injected --></div>
+      <div id="trend-direction" class="text-right text-sm mt-3 pt-3 border-t border-line">—</div>
+    </section>
+
+    <!-- ── 7 · Next Major Window ──────────────────────────────────────── -->
+    <section id="sec-next" class="mt-6 rounded-2xl border border-line bg-card p-5 hidden">
+      <div class="flex items-start justify-between">
+        <div class="text-[11px] tracking-[0.2em] text-muted uppercase">Next Major Window</div>
+        <span id="next-category" class="hidden text-[11px] text-gold border border-gold/40 rounded-full px-2.5 py-0.5"></span>
+      </div>
+      <div id="next-title" class="text-gold text-2xl font-bold mt-2 leading-tight">—</div>
+      <div class="flex items-end justify-between mt-1.5">
+        <div id="next-date" class="text-muted text-sm tab-num">—</div>
+        <div id="next-strength" class="text-lg">—</div>
       </div>
     </section>
 
-    <!-- ── Section 4 — Weather Metrics ────────────────────────────────── -->
-    <section class="mt-6 grid grid-cols-2 gap-3" id="metrics-grid">
-      <!-- metric cards injected -->
+    <!-- ── 8 · Weather Metrics ────────────────────────────────────────── -->
+    <section class="mt-6 grid grid-cols-2 gap-3" id="metrics-grid"><!-- cards injected --></section>
+
+    <!-- ── 9 · Recommended Actions ────────────────────────────────────── -->
+    <section id="sec-actions" class="mt-6 rounded-2xl border border-line bg-card p-5 hidden">
+      <div class="text-[11px] tracking-[0.2em] text-muted uppercase mb-3">Recommended Actions</div>
+      <div class="text-positive text-xs font-medium uppercase tracking-wide mb-1">Do More Of</div>
+      <ul id="do-list" class="mb-4"><!-- items injected --></ul>
+      <div class="text-danger text-xs font-medium uppercase tracking-wide mb-1">Avoid</div>
+      <ul id="avoid-list"><!-- items injected --></ul>
     </section>
 
-    <!-- ── Section 9 — Forecast Explanation ───────────────────────────── -->
+    <!-- ── 10 · Why This Forecast (collapsible) ───────────────────────── -->
+    <details id="sec-why" class="mt-6 rounded-2xl border border-line bg-card p-5 hidden">
+      <summary class="flex items-center justify-between cursor-pointer list-none">
+        <span class="text-[11px] tracking-[0.2em] text-muted uppercase">Why This Forecast</span>
+        <span id="why-summary" class="text-sm"></span>
+      </summary>
+      <div id="why-rows" class="divide-y divide-line mt-3 pt-1 border-t border-line"><!-- rows injected --></div>
+    </details>
+
+    <!-- ── 11 · Narrative Guidance ────────────────────────────────────── -->
     <section class="mt-6 rounded-2xl border border-line bg-card p-5">
       <p id="narrative" class="text-ink/90 text-[15px] leading-7">—</p>
     </section>
 
+    <!-- ── 12 · Timestamp ─────────────────────────────────────────────── -->
     <footer class="mt-10 text-center text-[11px] text-muted/70">
       <span id="stamp">—</span>
     </footer>

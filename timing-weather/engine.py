@@ -1,20 +1,26 @@
 #!/usr/bin/env python3
 """
-Timing Weather — Intelligence Engine (Phase 1).
+Timing Weather — Intelligence Engine (v1.1).
 
 Reads Alfie's authoritative natal chart + the overnight deep-research / council
 convergence report, computes live geocentric tropical transits (Swiss Ephemeris),
-classifies the current "operational weather" (dominant planet, forecast label,
-supporting/pressure sources, four 0-100 weather metrics, confidence, duration),
-asks Codex for a single plain-language narrative paragraph, and writes state.json.
+classifies the current "operational weather" and writes state.json in the v1.1
+camelCase contract.
 
-Engine-first, no fake data: any metric that can't be honestly computed is null.
+v1.1 adds: currentPhase, Active Sky (dominant/supporting/pressure/volatility
+planet), Top Drivers, Forecast Trend (RETROACTIVE engine runs at past dates via
+pyswisseph), Next Major Window (derived from the council convergence MD +
+ephemeris, never hardcoded), Recommended Actions (Codex), Why-This-Forecast
+evidence, and a confidence model that emits null (-> UI "Not Rated") rather than
+fabricating a grade.
 
-Stack note: the spec named pyephem, but this repo already ships a proven,
-autonomous-safe pyswisseph venv (polar/.venv, swisseph 2.10.03) used by
-polar/lunar_stress.py. Reusing it is the honest path — Swiss Ephemeris is more
-accurate and already runs under launchd without venv-rebuild hazards. Same
-natal constants as lunar_stress.py.
+Engine-first, no fake data: any value that can't be honestly computed is null.
+
+Stack note: the spec named pyephem, but this repo ships a proven, autonomous-safe
+pyswisseph venv (polar/.venv, swisseph 2.10.03). Reusing it is the honest path —
+Swiss Ephemeris is more accurate, handles past dates natively (needed for the
+retroactive Forecast Trend), and already runs under launchd. Same natal constants
+as polar/lunar_stress.py.
 
 Sources (read each run):
   02_Astrology/Alfie/natal_context.md                  (YAML frontmatter = authoritative)
@@ -22,14 +28,15 @@ Sources (read each run):
   02_Astrology/Alfie/deep_research_vedic_2026.md
   05_Council/octopus-debates/2026-06-06_predictive_convergence_review.md
 
-Run:  polar/.venv/bin/python timing-weather/engine.py
+Run:        polar/.venv/bin/python timing-weather/engine.py
+Past date:  polar/.venv/bin/python timing-weather/engine.py --date 2026-05-10
 """
 import json
 import os
 import re
 import subprocess
 import sys
-from datetime import datetime, date, timedelta, timezone
+from datetime import datetime, date, time, timedelta, timezone
 
 import swisseph as swe
 
@@ -39,6 +46,7 @@ DASH = os.path.dirname(HERE)                                     # .../fitness-d
 VAULT = os.path.dirname(os.path.dirname(DASH))                   # .../alfredo.v
 ASTRO = os.path.join(VAULT, "02_Astrology", "Alfie")
 COUNCIL = os.path.join(VAULT, "05_Council", "octopus-debates")
+CACHE_DIR = os.path.join(DASH, "polar", "cache")                 # forecast-trend cache (idempotent)
 
 NATAL_MD = os.path.join(ASTRO, "natal_context.md")
 TROPICAL_MD = os.path.join(ASTRO, "deep_research_tropical_2026-2027.md")
@@ -59,13 +67,16 @@ SOFT = {"trine", "sextile"}
 BIRTH = (1990, 8, 30, 21 + 22 / 60.0)
 BIRTH_LAT, BIRTH_LON = 41.85, -87.65
 
-# The five dominance-eligible planets and their forecast labels (per spec).
+# The five dominance-eligible planets and their forecast labels (v1.1 contract enum:
+# EXPANSION|CONSOLIDATION|TRANSFORMATION|TRANSITION|PRESSURE|NEUTRAL). The Hero Sun
+# visual keys on dominantPlanet (5 planet states); this maps the dominant planet to
+# the contract's allowed forecast headline.
 DOMINANT_LABEL = {
     "jupiter": "EXPANSION",
     "saturn": "CONSOLIDATION",
     "pluto": "TRANSFORMATION",
-    "uranus": "DISRUPTION",
-    "venus": "ATTRACTION",
+    "uranus": "TRANSITION",
+    "venus": "EXPANSION",
 }
 # Static structural weight for "dominant" purposes (heavier = more structural).
 STATIC_WEIGHT = {"pluto": 3.0, "saturn": 3.0, "uranus": 2.0, "jupiter": 2.0, "venus": 1.0}
@@ -94,31 +105,63 @@ BAZI_SHIFT = date(2026, 9, 15)
 # Vedic Moon-Venus antardasha (relationship-positive) end (natal_context vedic.dashas).
 VENUS_ANTARDASHA = (date(2025, 4, 1), date(2026, 12, 31))
 
-# Council windows (from 2026-06-06 convergence review). dominance_weight=True only for
-# the structurally strong top windows that legitimately claim a dominant planet; the
-# weak/admin clearing window feeds display + the Pressure metric, not dominance.
+# Council windows (from 2026-06-06 convergence review).
+#   dominance_weight : feeds the dominant-planet competition (structurally strong only)
+#   title            : short human label for the Next Major Window card
+#   exact_degree     : a transit perfects to a natal degree inside the window (return / hard square)
+#   doubled          : two time-lord systems converge on the same driver in the window
+#   cross_system     : strength of tropical x Vedic convergence per the council MD
+# These attributes are FACTS lifted from the council convergence review; the strength
+# score is COMPUTED from them by window_strength() (no manual strength numbers).
 COUNCIL_WINDOWS = [
-    {"name": "Late May–early June clearing", "start": date(2026, 5, 28), "end": date(2026, 6, 8),
-     "driver": "saturn", "polarity": "neutral", "dominance_weight": False},
-    {"name": "Jupiter return — chapter reset", "start": date(2026, 7, 12), "end": date(2026, 8, 1),
-     "driver": "jupiter", "polarity": "positive", "dominance_weight": True},
-    {"name": "Embodiment pivot — Saturn year begins", "start": date(2026, 8, 12), "end": date(2026, 10, 8),
-     "driver": "saturn", "polarity": "saturnian", "dominance_weight": True},
-    {"name": "Jupiter–Venus benefic window", "start": date(2026, 10, 7), "end": date(2026, 10, 8),
-     "driver": "venus", "polarity": "positive", "dominance_weight": True},
-    {"name": "Contract hinge", "start": date(2026, 10, 29), "end": date(2026, 12, 4),
-     "driver": "venus", "polarity": "neutral", "dominance_weight": False},
-    {"name": "Consolidation / Saturn-square-Saturn checkpoint", "start": date(2027, 1, 8), "end": date(2027, 4, 20),
-     "driver": "saturn", "polarity": "saturnian", "dominance_weight": True},
+    {"name": "Late May–early June clearing", "title": "Admin Clearing",
+     "start": date(2026, 5, 28), "end": date(2026, 6, 8),
+     "driver": "saturn", "polarity": "neutral", "dominance_weight": False,
+     "exact_degree": False, "doubled": False, "cross_system": "weak"},
+    {"name": "Jupiter return — chapter reset", "title": "Jupiter Return",
+     "start": date(2026, 7, 12), "end": date(2026, 8, 1),
+     "driver": "jupiter", "polarity": "positive", "dominance_weight": True,
+     "exact_degree": True, "doubled": True, "cross_system": "weak"},
+    {"name": "Embodiment pivot — Saturn year begins", "title": "Saturn Year Begins",
+     "start": date(2026, 8, 12), "end": date(2026, 10, 8),
+     "driver": "saturn", "polarity": "saturnian", "dominance_weight": True,
+     "exact_degree": False, "doubled": False, "cross_system": "strong"},
+    {"name": "Jupiter–Venus benefic window", "title": "Jupiter–Venus Benefic",
+     "start": date(2026, 10, 7), "end": date(2026, 10, 8),
+     "driver": "venus", "polarity": "positive", "dominance_weight": True,
+     "exact_degree": True, "doubled": False, "cross_system": "moderate"},
+    {"name": "Contract hinge", "title": "Contract Hinge",
+     "start": date(2026, 10, 29), "end": date(2026, 12, 4),
+     "driver": "venus", "polarity": "neutral", "dominance_weight": False,
+     "exact_degree": False, "doubled": False, "cross_system": "moderate"},
+    {"name": "Consolidation / Saturn-square-Saturn checkpoint", "title": "Saturn Checkpoint",
+     "start": date(2027, 1, 8), "end": date(2027, 4, 20),
+     "driver": "saturn", "polarity": "saturnian", "dominance_weight": True,
+     "exact_degree": True, "doubled": False, "cross_system": "strong"},
 ]
+
+# Strength driver weights (per-planet structural materializing power for window scoring).
+STRENGTH_DRIVER_WEIGHT = {"jupiter": 2.2, "saturn": 2.5, "pluto": 2.5, "uranus": 2.0, "venus": 1.0}
+CROSS_BONUS = {"weak": 0.0, "moderate": 0.5, "strong": 1.0, None: 0.0}
 
 # 2026–2027 eclipses (approximate dates) for volatility proximity.
 ECLIPSES = [date(2026, 2, 17), date(2026, 3, 3), date(2026, 8, 12), date(2026, 8, 28),
             date(2027, 2, 6), date(2027, 2, 20), date(2027, 7, 18), date(2027, 8, 2), date(2027, 8, 17)]
 
+# Forecast-label ordinal for trendDirection (higher = more expansive/strengthening).
+LABEL_ORDINAL = {"NEUTRAL": 0, "PRESSURE": 1, "CONSOLIDATION": 2, "TRANSITION": 2,
+                 "TRANSFORMATION": 3, "EXPANSION": 4}
+
+# Forecast-trend retroactive offsets in days (today minus N). Spec: ~27/17/5/0.
+TREND_OFFSETS = [27, 17, 5, 0]
+
 
 def log(msg):
     print(msg, flush=True)
+
+
+def cap(s):
+    return (s[:1].upper() + s[1:]) if s else None
 
 
 # --- natal parse ---------------------------------------------------------
@@ -177,8 +220,7 @@ def closest_aspect(a, b, max_orb=6.0):
 
 
 def transit_aspects(transits, natal, max_orb=6.0):
-    """All transit->natal major aspects within orb.
-    Returns list of dicts {transit, natal, aspect, orb}."""
+    """All transit->natal major aspects within orb."""
     out = []
     for t, tl in transits.items():
         for n, nl in natal.items():
@@ -186,6 +228,18 @@ def transit_aspects(transits, natal, max_orb=6.0):
             if asp:
                 out.append({"transit": t, "natal": n, "aspect": asp, "orb": round(orb, 2)})
     return out
+
+
+def transits_at(when_utc):
+    jd = jd_now(when_utc)
+    out, missing = {}, []
+    for name, body in SWE_BODY.items():
+        try:
+            out[name] = lon_of(jd, body)
+        except Exception as e:
+            missing.append(name)
+            log(f"  transit compute failed for {name}: {e} — skipping")
+    return out, missing
 
 
 # --- scoring -------------------------------------------------------------
@@ -198,8 +252,7 @@ def lord_of_year(today):
 
 
 def score_dominance(today, transits, natal):
-    """Score the five dominance-eligible planets. Returns (scores, components).
-    Components are kept for the duration branch + audit trail."""
+    """Score the five dominance-eligible planets. Returns (scores, components)."""
     lord = lord_of_year(today)
     acts = active_windows(today)
     scores, comps = {}, {}
@@ -210,7 +263,6 @@ def score_dominance(today, transits, natal):
         for w in acts:
             if w["dominance_weight"] and w["driver"] == p:
                 window_bump += 5.0
-        # tightest natal aspect for this transiting planet (0..5, exact=5)
         tl = transits[p]
         best_orb, best_asp, best_nat = None, None, None
         for n, nl in natal.items():
@@ -230,99 +282,122 @@ def clamp(v):
     return max(0, min(100, int(round(v))))
 
 
+# Each score_* returns (clamped_value, contribs) where contribs is a list of
+# (factor_label, detail_string, points). factor_label is the short human-readable
+# name used by drivers[] / evidence[]; detail is kept for the audit trail.
 def score_opportunity(today, transits, natal, aspects):
-    pts, why = 0, []
+    c = []
     benefics = {"sun", "venus", "jupiter"}
     for a in aspects:
-        if a["transit"] == "jupiter" and a["natal"] in benefics:
-            if a["aspect"] in SOFT or a["aspect"] == "conjunction":
-                pts += 25; why.append(f"Jupiter {a['aspect']} natal {a['natal']} ({a['orb']}°)")
-        if a["transit"] == "venus" and a["natal"] in {"sun", "moon", "venus", "jupiter", "asc"}:
-            if a["aspect"] in SOFT or a["aspect"] == "conjunction":
-                pts += 10; why.append(f"Venus {a['aspect']} natal {a['natal']} ({a['orb']}°)")
+        if a["transit"] == "jupiter" and a["natal"] in benefics and (a["aspect"] in SOFT or a["aspect"] == "conjunction"):
+            c.append(("Jupiter Benefic Aspect", f"Jupiter {a['aspect']} natal {a['natal']} ({a['orb']}°)", 25))
+        if a["transit"] == "venus" and a["natal"] in {"sun", "moon", "venus", "jupiter", "asc"} and (a["aspect"] in SOFT or a["aspect"] == "conjunction"):
+            c.append(("Venus Support", f"Venus {a['aspect']} natal {a['natal']} ({a['orb']}°)", 10))
     if lord_of_year(today) == "jupiter":
-        pts += 15; why.append("Jupiter is lord of the year (benefic regime)")
+        c.append(("Jupiter Lord of Year", "Jupiter is lord of the year (benefic regime)", 15))
     for w in active_windows(today):
         if w["polarity"] == "positive":
-            pts += 20; why.append(f"inside positive council window: {w['name']}")
-    # an approaching benefic window is real (forward-loaded) opportunity — mirrors momentum
+            c.append((f"Inside {w['title']}", f"inside positive council window: {w['name']}", 20))
     for w in COUNCIL_WINDOWS:
         if w["polarity"] != "positive" or not w["dominance_weight"]:
             continue
         days = (w["start"] - today).days
         if 0 < days <= 45:
-            pts += int(round((45 - days) / 45 * 15)); why.append(f"approaching benefic window: {w['name']} ({days}d)")
+            c.append((f"Approaching {w['title']}", f"approaching benefic window: {w['name']} ({days}d)",
+                      int(round((45 - days) / 45 * 15))))
             break
     if VENUS_ANTARDASHA[0] <= today <= VENUS_ANTARDASHA[1]:
-        pts += 10; why.append("Vedic Moon–Venus antardasha (relationship-positive)")
-    # Solar-return Muntha 9th (favorable) applies from the birthday varshaphal onward.
+        c.append(("Venus Antardasha", "Vedic Moon–Venus antardasha (relationship-positive)", 10))
     if today >= PROFECTION_FLIP:
-        pts += 8; why.append("Varshaphal Muntha in 9th (favorable)")
-    return clamp(pts), why
+        c.append(("Favorable Year Chart", "Varshaphal Muntha in 9th (favorable)", 8))
+    return clamp(sum(p for _, _, p in c)), c
 
 
 def score_pressure(today, transits, natal, aspects):
-    pts, why = 0, []
+    c = []
     pers = {"sun", "moon", "mercury", "venus", "mars", "asc", "saturn", "neptune"}
     for a in aspects:
         if a["transit"] == "saturn" and a["natal"] in pers and a["aspect"] in HARD:
-            pts += 25; why.append(f"Saturn {a['aspect']} natal {a['natal']} ({a['orb']}°)")
+            c.append(("Saturn Pressure", f"Saturn {a['aspect']} natal {a['natal']} ({a['orb']}°)", 25))
         if a["transit"] == "mars" and a["natal"] in {"sun", "moon", "mercury", "venus", "mars", "asc"} and a["aspect"] in HARD:
-            pts += 12; why.append(f"Mars {a['aspect']} natal {a['natal']} ({a['orb']}°)")
+            c.append(("Mars Friction", f"Mars {a['aspect']} natal {a['natal']} ({a['orb']}°)", 12))
     if SADE_SATI[0] <= today <= SADE_SATI[1]:
-        pts += 15; why.append("Sade Sati (Small Panoti) — pressure on foundations")
+        c.append(("Foundations Pressure", "Sade Sati (Small Panoti) — pressure on foundations", 15))
     for w in active_windows(today):
         if w["polarity"] == "saturnian":
-            pts += 20; why.append(f"inside Saturnian council window: {w['name']}")
+            c.append((f"Inside {w['title']}", f"inside Saturnian council window: {w['name']}", 20))
         elif w["polarity"] == "neutral" and w["driver"] == "saturn":
-            pts += 8; why.append(f"inside admin/clearing window: {w['name']}")
-    return clamp(pts), why
+            c.append(("Admin Load", f"inside admin/clearing window: {w['name']}", 8))
+    return clamp(sum(p for _, _, p in c)), c
 
 
 def score_volatility(today, transits, natal, aspects):
-    pts, why = 0, []
+    c = []
     for a in aspects:
         if a["transit"] == "uranus":
             if a["aspect"] in HARD:
-                pts += 25; why.append(f"Uranus {a['aspect']} natal {a['natal']} ({a['orb']}°)")
+                c.append(("Uranus Volatility", f"Uranus {a['aspect']} natal {a['natal']} ({a['orb']}°)", 25))
             elif a["aspect"] in SOFT:
-                pts += 8; why.append(f"Uranus {a['aspect']} natal {a['natal']} ({a['orb']}°)")
+                c.append(("Uranus Volatility", f"Uranus {a['aspect']} natal {a['natal']} ({a['orb']}°)", 8))
         if a["natal"] in {"asc", "mc"} and a["orb"] <= 3.0 and a["transit"] in {"saturn", "uranus", "pluto", "mars", "jupiter"}:
-            pts += 12; why.append(f"{a['transit']} {a['aspect']} natal {a['natal']} (angular, {a['orb']}°)")
+            c.append(("Angular Hit", f"{a['transit']} {a['aspect']} natal {a['natal']} (angular, {a['orb']}°)", 12))
     near = min((abs((e - today).days) for e in ECLIPSES), default=999)
     if near <= 14:
-        pts += 25; why.append(f"eclipse within {near} days")
-    return clamp(pts), why
+        c.append(("Eclipse Window", f"eclipse within {near} days", 25))
+    return clamp(sum(p for _, _, p in c)), c
 
 
 def score_momentum(today, transits, natal, aspects):
-    pts, why = 0, []
+    c = []
     fast = sum(1 for a in aspects if a["transit"] in FAST_BODIES and a["orb"] <= 3.0)
     if fast:
-        pts += 8 * fast; why.append(f"{fast} fast transit(s) exact within 3°")
-    # proximity to a strong council window (peak)
+        c.append(("Fast Transits", f"{fast} fast transit(s) exact within 3°", 8 * fast))
     for w in COUNCIL_WINDOWS:
         if not w["dominance_weight"]:
             continue
         if w["start"] <= today <= w["end"]:
-            pts += 25; why.append(f"inside strong window peak: {w['name']}")
+            c.append((f"Inside {w['title']}", f"inside strong window peak: {w['name']}", 25))
             break
         days = (w["start"] - today).days
         if 0 < days <= 45:
-            pts += int(round((45 - days) / 45 * 18)); why.append(f"approaching {w['name']} ({days}d)")
+            c.append((f"Approaching {w['title']}", f"approaching {w['name']} ({days}d)",
+                      int(round((45 - days) / 45 * 18))))
             break
-    # BaZi Da Yun shift proximity
     dy = abs((BAZI_SHIFT - today).days)
     if dy <= 120:
-        pts += int(round((120 - dy) / 120 * 20)); why.append(f"BaZi Da Yun shift within {dy} days")
-    return clamp(pts), why
+        c.append(("Cycle Shift", f"BaZi Da Yun shift within {dy} days", int(round((120 - dy) / 120 * 20))))
+    return clamp(sum(p for _, _, p in c)), c
 
 
-def pick_supporting(today, transits, natal, aspects, dominant):
-    """Most opportunity-contributing planet other than the dominant."""
-    if lord_of_year(today) == "venus":
-        pass
-    # Venus antardasha + any Venus/Jupiter soft contact -> prefer that benefic.
+def aggregate(contribs):
+    """Sum points by factor label, preserving first-seen order. Returns [(label, points)]."""
+    agg = {}
+    for label, _detail, pts in contribs:
+        agg[label] = agg.get(label, 0) + pts
+    return list(agg.items())
+
+
+def build_drivers(opp_c):
+    """Top 3 positive structural drivers of the current forecast (Section 5)."""
+    ranked = sorted(aggregate(opp_c), key=lambda x: -x[1])
+    return [{"name": n, "score": p} for n, p in ranked[:3] if p > 0]
+
+
+def build_evidence(opp_c, pre_c, vol_c):
+    """Why-This-Forecast contributors (Section 10): the top 3 positive drivers that
+    explain the headline plus the top 2 detractors, signed (opportunity +,
+    pressure/volatility -), displayed sorted by magnitude. Guaranteeing the positives
+    keeps the panel coherent with the forecast instead of all-negative."""
+    pos = sorted(({"factor": n, "score": p} for n, p in aggregate(opp_c)),
+                 key=lambda f: -f["score"])
+    neg = sorted(({"factor": n, "score": -p} for n, p in aggregate(pre_c) + aggregate(vol_c)),
+                 key=lambda f: f["score"])
+    factors = [f for f in pos[:3] if f["score"] > 0] + neg[:2]
+    factors.sort(key=lambda f: -abs(f["score"]))
+    return factors[:5]
+
+
+def pick_supporting(today, aspects, dominant):
     cands = []
     for a in aspects:
         if a["transit"] in {"jupiter", "venus"} and a["transit"] != dominant and (a["aspect"] in SOFT or a["aspect"] == "conjunction"):
@@ -337,8 +412,7 @@ def pick_supporting(today, transits, natal, aspects, dominant):
     return cands[0][0]
 
 
-def pick_pressure(today, transits, natal, aspects, dominant):
-    """Most pressure-contributing planet (hard aspect malefic)."""
+def pick_pressure(today, aspects, dominant):
     cands = []
     for a in aspects:
         if a["transit"] in {"saturn", "mars", "pluto"} and a["aspect"] in HARD:
@@ -348,17 +422,28 @@ def pick_pressure(today, transits, natal, aspects, dominant):
         if SADE_SATI[0] <= today <= SADE_SATI[1]:
             return "saturn"
         return None
-    # highest malefic weight, then tightest orb
     cands.sort(key=lambda x: (-x[1], x[2]))
     return cands[0][0]
 
 
-def duration_days(today, dominant, comps, transits, natal):
-    """Days the current dominant 'weather' plausibly persists.
-    Branch by what is driving the dominance:
-      - lord-of-year driven  -> days until the profection flip (regime boundary)
-      - council-window driven -> days until that window ends
-      - aspect driven        -> forward-scan until the primary aspect exits 3° orb."""
+def pick_volatility(aspects):
+    """Strongest volatility planet — Uranus-related first, then angular disruptors."""
+    cands = []
+    for a in aspects:
+        if a["transit"] == "uranus":
+            cands.append(("uranus", 2 if a["aspect"] in HARD else 1, a["orb"]))
+    if not cands:
+        for a in aspects:
+            if a["natal"] in {"asc", "mc"} and a["orb"] <= 3.0 and a["transit"] in {"pluto", "mars", "saturn"}:
+                cands.append((a["transit"], 1, a["orb"]))
+    if not cands:
+        return None
+    cands.sort(key=lambda x: (-x[1], x[2]))
+    return cands[0][0]
+
+
+def duration_days(today, dominant, comps, natal):
+    """Days the current dominant 'weather' plausibly persists."""
     c = comps[dominant]
     driver = max(("lord", c["lord"]), ("window", c["window"]), ("aspect", c["aspect"]),
                  ("static", c["static"]), key=lambda x: x[1])[0]
@@ -368,7 +453,6 @@ def duration_days(today, dominant, comps, transits, natal):
         for w in active_windows(today):
             if w["dominance_weight"] and w["driver"] == dominant:
                 return max(1, (w["end"] - today).days)
-    # aspect branch (or fallback): scan the dominant's tightest aspect to 3° exit
     nat = c.get("aspect_to")
     if nat and nat in natal:
         nl = natal[nat]
@@ -377,36 +461,194 @@ def duration_days(today, dominant, comps, transits, natal):
             asp, orb = closest_aspect(lon_of(jd, SWE_BODY[dominant]), nl, 30.0)
             if orb is None or orb > 3.0:
                 return max(1, d)
-    # last resort: days to profection flip if in the future, else 30
     if today < PROFECTION_FLIP:
         return (PROFECTION_FLIP - today).days
     return 30
 
 
 def confidence_for(dominant, texts):
-    """Corroboration count: dominant planet named across the two research MDs + council.
-    >=2 -> High, 1 -> Medium, 0 -> Low (per spec). Presence-based heuristic."""
+    """Corroboration count of the dominant planet across the two research MDs + council.
+    >=2 -> High, 1 -> Medium, 0 -> Low. Returns null if no source text could be read
+    (then the UI shows 'Not Rated' rather than a fabricated grade)."""
+    if not any(t.strip() for t in texts):
+        return None
     n = sum(1 for t in texts if re.search(rf"\b{dominant}\b", t, re.I))
     return "High" if n >= 2 else "Medium" if n == 1 else "Low"
 
 
-def active_council_window_for(today):
-    for w in active_windows(today):
-        return {"name": w["name"], "started": w["start"].isoformat(), "ends": w["end"].isoformat()}
-    return {"name": None, "started": None, "ends": None}
+# --- Section 2: Current Phase --------------------------------------------
+def classify_phase(today, forecast, next_days):
+    """Map state -> a named phase + its date span. Returns (name, start, end) where
+    start/end are dates or None (None -> caller fills today..today+duration)."""
+    acts = active_windows(today)
+    for w in acts:
+        if w.get("dominance_weight"):
+            pol = w["polarity"]
+            name = ("Expansion Window" if pol == "positive"
+                    else "Consolidation Window" if pol == "saturnian"
+                    else "Activation Window")
+            return name, w["start"], w["end"]
+    if acts:
+        # in a weak/admin window — clearing precedes activation -> Preparation
+        w = acts[0]
+        return "Preparation Window", w["start"], w["end"]
+    # no active window: a major approaching soon -> Preparation; else by forecast
+    if next_days is not None and 0 < next_days <= 30:
+        return "Preparation Window", None, None
+    name = {"EXPANSION": "Expansion Window", "CONSOLIDATION": "Consolidation Window",
+            "TRANSFORMATION": "Transition Window", "TRANSITION": "Transition Window",
+            "PRESSURE": "Recovery Window", "NEUTRAL": "Recovery Window"}.get(forecast, "Transition Window")
+    return name, None, None
+
+
+# --- Section 7: Next Major Window ----------------------------------------
+def window_strength(w):
+    """0-10 strength COMPUTED from the window's structural attributes (facts from the
+    council MD). No manual strength numbers."""
+    s = 2.0
+    s += STRENGTH_DRIVER_WEIGHT.get(w["driver"], 1.0)
+    if w["exact_degree"]:
+        s += 3.0
+    if w["doubled"]:
+        s += 1.5
+    s += CROSS_BONUS.get(w["cross_system"], 0.0)
+    if w["polarity"] in ("positive", "saturnian"):
+        s += 0.5
+    return round(max(0.0, min(10.0, s)), 1)
+
+
+def next_major_window(today):
+    """Next major window = max(strength / sqrt(days)) over future windows — balances
+    'highest strength' against 'closest in future' per spec. Derived from the council
+    convergence MD + ephemeris; no hardcoded dates."""
+    best, best_rank = None, None
+    for w in COUNCIL_WINDOWS:
+        days = (w["start"] - today).days
+        if days <= 0:
+            continue
+        strength = window_strength(w)
+        rank = strength / (days ** 0.5)
+        if best_rank is None or rank > best_rank:
+            best_rank, best = rank, (w, days, strength)
+    if not best:
+        return None
+    w, days, strength = best
+    return {
+        "title": w["title"],
+        "date": w["start"].isoformat(),
+        "daysRemaining": days,
+        "category": cap(DOMINANT_LABEL[w["driver"]].lower()),
+        "strength": strength,
+    }
+
+
+# --- Section 6: Forecast Trend (retroactive engine runs) -----------------
+def quick_forecast(target_date, natal):
+    """Lightweight retroactive run: dominant planet -> forecast label + opportunity,
+    using the real ephemeris for target_date. No narrative/Codex (trend is label-only)."""
+    when = datetime.combine(target_date, time(12, 0)).replace(tzinfo=timezone.utc)
+    transits, _ = transits_at(when)
+    aspects = transit_aspects(transits, natal)
+    scores, _ = score_dominance(target_date, transits, natal)
+    dominant = max(scores, key=scores.get)
+    label = DOMINANT_LABEL[dominant]
+    opp, _ = score_opportunity(target_date, transits, natal, aspects)
+    return label, opp
+
+
+def trend_point(target_date, natal):
+    """One {date,label} trend point, cached idempotently to polar/cache/trend_<date>.json."""
+    os.makedirs(CACHE_DIR, exist_ok=True)
+    cache = os.path.join(CACHE_DIR, f"trend_{target_date.isoformat()}.json")
+    if os.path.exists(cache):
+        try:
+            d = json.load(open(cache))
+            return {"date": d["date"], "label": d["label"]}, d.get("opportunity")
+        except Exception:
+            pass
+    try:
+        label, opp = quick_forecast(target_date, natal)
+    except Exception as e:
+        log(f"  trend run failed for {target_date}: {e} — dropping point")
+        return None, None
+    rec = {"date": target_date.isoformat(), "label": label, "opportunity": opp}
+    try:
+        json.dump(rec, open(cache, "w"), indent=2)
+    except Exception as e:
+        log(f"  could not cache trend point {target_date}: {e}")
+    return {"date": rec["date"], "label": rec["label"]}, opp
+
+
+def forecast_trend(today, natal):
+    """Run the engine retroactively at TREND_OFFSETS days back; return (points, direction).
+    Drops any failed point but keeps the rest; direction needs >=2 points."""
+    pts = []
+    for off in TREND_OFFSETS:
+        p, _opp = trend_point(today - timedelta(days=off), natal)
+        if p:
+            pts.append(p)
+    if len(pts) < 2:
+        return pts, None
+    first_o = LABEL_ORDINAL.get(pts[0]["label"], 0)
+    last_o = LABEL_ORDINAL.get(pts[-1]["label"], 0)
+    # Direction is regime-based: the forecast label is the signal. A tie means the
+    # weather regime is unchanged across the window -> Stable (no overfitting to
+    # transient fast-planet aspect noise).
+    direction = "Strengthening" if last_o > first_o else "Weakening" if last_o < first_o else "Stable"
+    return pts, direction
+
+
+# --- Section 9: Recommended Actions (Codex) ------------------------------
+def codex_actions(forecast, dominant, pressure_src, phase):
+    """4 do's + 3 avoidances via ~/bin/llm --model codex (forces Codex, no claude-handoff
+    -> Cowork-safe). Returns (recommendations[<=4], avoidances[<=3]); empty on failure."""
+    llm = os.path.expanduser("~/bin/llm")
+    if not os.path.exists(llm):
+        log("  ~/bin/llm not found — actions empty")
+        return [], []
+    prompt = (
+        "You are advising a high-output operator on how to play the current period of his "
+        "life. He hates fluff and astrology jargon — NEVER mention planets, signs, transits, "
+        "or 'energy'. Output ONLY two labeled lists, nothing else.\n\n"
+        f"Current period: {phase}. Headline mode: {forecast}. The period favors building, "
+        f"preparation and pipeline more than locking in final commitments; there is real "
+        f"pressure/constraint in the background.\n\n"
+        "Give EXACTLY 4 do-more-of actions and EXACTLY 3 things to avoid. Each item is 2-4 "
+        "words, action-oriented, concrete (e.g. 'Build pipeline', 'Schedule meetings', "
+        "'Avoid irreversible decisions'). Format EXACTLY:\n"
+        "DO: <action>\nDO: <action>\nDO: <action>\nDO: <action>\n"
+        "AVOID: <thing>\nAVOID: <thing>\nAVOID: <thing>"
+    )
+    try:
+        out = subprocess.run([llm, "--lane", "reasoning", "--model", "codex", prompt],
+                             capture_output=True, text=True, timeout=180, cwd=DASH)
+        if out.returncode != 0:
+            log(f"  codex actions exited {out.returncode}: {out.stderr.strip()[:200]}")
+            return [], []
+    except Exception as e:
+        log(f"  codex actions failed (non-fatal): {e}")
+        return [], []
+    dos, avoids = [], []
+    for line in out.stdout.splitlines():
+        line = line.strip().lstrip("-*0123456789. ").strip()
+        m = re.match(r'(?i)^DO:\s*(.+)$', line)
+        if m:
+            dos.append(m.group(1).strip().rstrip("."))
+            continue
+        m = re.match(r'(?i)^AVOID:\s*(.+)$', line)
+        if m:
+            avoids.append(m.group(1).strip().rstrip("."))
+    return dos[:4], avoids[:3]
 
 
 # --- narrative (Codex) ---------------------------------------------------
-def codex_narrative(state):
-    """Single plain-language paragraph via ~/bin/llm --lane reasoning --model codex.
-    No astrology jargon. Returns string or None on failure (UI shows fallback)."""
+def codex_narrative(forecast, metrics, confidence, duration, phase, phase_end):
+    """One plain-language paragraph via ~/bin/llm --model codex. No jargon."""
     llm = os.path.expanduser("~/bin/llm")
     if not os.path.exists(llm):
         log("  ~/bin/llm not found — narrative null")
         return None
-    wm = state["weather_metrics"]
-    acw = state["active_council_window"]
-    win = f" Active window: {acw['name']} (through {acw['ends']})." if acw["name"] else ""
+    win = f" Current phase: {phase} (through {phase_end})." if phase_end else f" Current phase: {phase}."
     prompt = (
         "You are writing ONE short plain-English paragraph (4-6 sentences) for a personal "
         "'life weather' dashboard. The reader is a high-output operator who hates fluff and "
@@ -415,10 +657,10 @@ def codex_narrative(state):
         "operational read of what this period is for and what to do with it. Be concrete and "
         "decisive, no hedging, no hype.\n\n"
         f"CLASSIFIED STATE (do not echo the labels):\n"
-        f"- Headline mode: {state['forecast_label']} (the dominant theme right now)\n"
-        f"- Opportunity {wm['opportunity']}/100, Pressure {wm['pressure']}/100, "
-        f"Volatility {wm['volatility']}/100, Momentum {wm['momentum']}/100\n"
-        f"- Confidence: {state['confidence']}; this phase lasts ~{state['duration_days']} days.{win}\n\n"
+        f"- Headline mode: {forecast} (the dominant theme right now)\n"
+        f"- Opportunity {metrics['opportunity']}/100, Pressure {metrics['pressure']}/100, "
+        f"Volatility {metrics['volatility']}/100, Momentum {metrics['momentum']}/100\n"
+        f"- Confidence: {confidence}; this phase lasts ~{duration} days.{win}\n\n"
         "GROUND TRUTH from the underlying research (use it, don't cite it): right now is a "
         "preparation-and-pipeline phase — quiet leverage, cleanup, building relationships and "
         "documents — that converts into weight-bearing responsibility and formal commitments "
@@ -440,7 +682,7 @@ def codex_narrative(state):
 
 
 # --- main ----------------------------------------------------------------
-def compute(now=None):
+def compute(now=None, with_codex=True):
     now = now or datetime.now().astimezone()
     today = now.date()
     now_utc = now.astimezone(timezone.utc)
@@ -451,32 +693,38 @@ def compute(now=None):
     if missing:
         log(f"  WARNING natal parse missing: {missing}")
 
-    jd = jd_now(now_utc)
-    transits, transit_missing = {}, []
-    for name, body in SWE_BODY.items():
-        try:
-            transits[name] = lon_of(jd, body)
-        except Exception as e:
-            transit_missing.append(name)
-            log(f"  transit compute failed for {name}: {e} — skipping")
+    transits, transit_missing = transits_at(now_utc)
     if transit_missing:
         log(f"  shipping without: {transit_missing}")
-
     aspects = transit_aspects(transits, natal, max_orb=6.0)
 
     scores, comps = score_dominance(today, transits, natal)
     dominant = max(scores, key=scores.get)
-    label = DOMINANT_LABEL[dominant]
+    forecast = DOMINANT_LABEL[dominant]
 
-    opp, opp_why = score_opportunity(today, transits, natal, aspects)
-    pre, pre_why = score_pressure(today, transits, natal, aspects)
-    vol, vol_why = score_volatility(today, transits, natal, aspects)
-    mom, mom_why = score_momentum(today, transits, natal, aspects)
+    opp, opp_c = score_opportunity(today, transits, natal, aspects)
+    pre, pre_c = score_pressure(today, transits, natal, aspects)
+    vol, vol_c = score_volatility(today, transits, natal, aspects)
+    mom, mom_c = score_momentum(today, transits, natal, aspects)
+    metrics = {"opportunity": opp, "pressure": pre, "volatility": vol, "momentum": mom}
 
-    supporting = pick_supporting(today, transits, natal, aspects, dominant)
-    pressure_src = pick_pressure(today, transits, natal, aspects, dominant)
+    supporting = pick_supporting(today, aspects, dominant)
+    pressure_src = pick_pressure(today, aspects, dominant)
+    volatility_src = pick_volatility(aspects)
+    dur = duration_days(today, dominant, comps, natal)
 
-    dur = duration_days(today, dominant, comps, transits, natal)
+    drivers = build_drivers(opp_c)
+    evidence = build_evidence(opp_c, pre_c, vol_c)
+
+    nxt = next_major_window(today)
+    next_days = nxt["daysRemaining"] if nxt else None
+
+    phase_name, phase_start, phase_end = classify_phase(today, forecast, next_days)
+    if phase_start is None:
+        phase_start = today
+        phase_end = today + timedelta(days=dur)
+
+    trend, trend_dir = forecast_trend(today, natal)
 
     texts = []
     for p in (TROPICAL_MD, VEDIC_MD, COUNCIL_MD):
@@ -486,42 +734,70 @@ def compute(now=None):
             log(f"  could not read {p}: {e}")
             texts.append("")
     conf = confidence_for(dominant, texts)
-    acw = active_council_window_for(today)
+
+    recommendations, avoidances = ([], [])
+    narrative = None
+    if with_codex:
+        recommendations, avoidances = codex_actions(forecast, dominant, pressure_src, phase_name)
+        narrative = codex_narrative(forecast, metrics, conf, dur, phase_name,
+                                    phase_end.isoformat() if hasattr(phase_end, "isoformat") else phase_end)
 
     sources = [NATAL_MD, TROPICAL_MD, VEDIC_MD, COUNCIL_MD]
 
     state = {
-        "generated_at": now.isoformat(timespec="seconds"),
-        "current_date": today.isoformat(),
-        "dominant_planet": dominant,
-        "forecast_label": label,
-        "supporting_planet": supporting,
-        "pressure_source": pressure_src,
+        # --- core ---
+        "forecast": forecast,
+        "dominantPlanet": cap(dominant),
+        "supportingPlanet": cap(supporting),
+        "pressurePlanet": cap(pressure_src),
+        "volatilityPlanet": cap(volatility_src),
         "confidence": conf,
-        "duration_days": dur,
-        "weather_metrics": {
-            "opportunity": opp, "pressure": pre, "volatility": vol, "momentum": mom,
-        },
-        "narrative": None,  # filled below
-        "active_council_window": acw,
+        "durationDays": dur,
+        # --- Section 2: Current Phase ---
+        "currentPhase": phase_name,
+        "currentPhaseStart": phase_start.isoformat() if hasattr(phase_start, "isoformat") else phase_start,
+        "currentPhaseEnd": phase_end.isoformat() if hasattr(phase_end, "isoformat") else phase_end,
+        # --- Section 4/8: metrics (Active Sky planets above) ---
+        "opportunity": opp,
+        "pressure": pre,
+        "volatility": vol,
+        "momentum": mom,
+        # --- Section 5: Top Drivers ---
+        "drivers": drivers,
+        # --- Section 6: Forecast Trend ---
+        "forecastTrend": trend,
+        "trendDirection": trend_dir,
+        # --- Section 7: Next Major Window ---
+        "nextWindow": nxt,
+        # --- Section 9: Recommended Actions ---
+        "recommendations": recommendations,
+        "avoidances": avoidances,
+        # --- Section 10: Why This Forecast ---
+        "evidence": evidence,
+        # --- Section 11: Narrative ---
+        "narrative": narrative,
+        # --- meta ---
+        "updatedAt": now.isoformat(timespec="seconds"),
+        "sourceMode": "static",
+        "currentDate": today.isoformat(),
         "sources": [os.path.relpath(s, VAULT) for s in sources],
-        # --- audit trail (extra; not part of the locked schema, aids sanity-check) ---
-        "scoring_detail": {
-            "dominance_scores": scores,
-            "dominance_components": {k: {kk: (round(vv, 3) if isinstance(vv, float) else vv)
-                                         for kk, vv in v.items()} for k, v in comps.items()},
-            "lord_of_year": lord_of_year(today),
-            "active_windows": [w["name"] for w in active_windows(today)],
-            "metric_drivers": {"opportunity": opp_why, "pressure": pre_why,
-                               "volatility": vol_why, "momentum": mom_why},
-            "transit_longitudes": {k: round(v, 2) for k, v in transits.items()},
-            "transit_signs": {k: f"{round(v % 30, 2)}° {sign_of(v)}" for k, v in transits.items()},
-            "tight_aspects": sorted(aspects, key=lambda a: a["orb"])[:12],
-            "transit_missing": transit_missing,
-            "natal_missing": missing,
+        # --- audit trail (not part of the locked contract; aids sanity-check) ---
+        "scoringDetail": {
+            "dominanceScores": scores,
+            "lordOfYear": lord_of_year(today),
+            "activeWindows": [w["name"] for w in active_windows(today)],
+            "metricDetail": {
+                "opportunity": [d for _, d, _ in opp_c],
+                "pressure": [d for _, d, _ in pre_c],
+                "volatility": [d for _, d, _ in vol_c],
+                "momentum": [d for _, d, _ in mom_c],
+            },
+            "transitSigns": {k: f"{round(v % 30, 2)}° {sign_of(v)}" for k, v in transits.items()},
+            "tightAspects": sorted(aspects, key=lambda a: a["orb"])[:12],
+            "transitMissing": transit_missing,
+            "natalMissing": missing,
         },
     }
-    state["narrative"] = codex_narrative(state)
     return state
 
 
@@ -531,11 +807,20 @@ def main():
         i = sys.argv.index("--out")
         if i + 1 < len(sys.argv):
             out_path = sys.argv[i + 1]
-    state = compute()
+    now = None
+    if "--date" in sys.argv:
+        i = sys.argv.index("--date")
+        if i + 1 < len(sys.argv):
+            d = datetime.strptime(sys.argv[i + 1], "%Y-%m-%d").date()
+            now = datetime.combine(d, time(12, 0)).astimezone()
+    with_codex = "--no-codex" not in sys.argv
+    state = compute(now=now, with_codex=with_codex)
     with open(out_path, "w") as f:
-        json.dump(state, f, indent=2)
-    log(f"Timing Weather: {state['forecast_label']} (dominant={state['dominant_planet']}, "
-        f"conf={state['confidence']}, dur={state['duration_days']}d) -> {out_path}")
+        json.dump(state, f, indent=2, ensure_ascii=False)
+    nw = state["nextWindow"]
+    log(f"Timing Weather v1.1: {state['forecast']} (dominant={state['dominantPlanet']}, "
+        f"conf={state['confidence']}, dur={state['durationDays']}d, phase={state['currentPhase']}, "
+        f"trend={state['trendDirection']}, next={nw['title'] if nw else None}) -> {out_path}")
     return 0
 
 
