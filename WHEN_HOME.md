@@ -14,6 +14,32 @@ _Last updated: 2026-06-05 (octopus / Claude Code)._
 
 ---
 
+## 📅 STATUS 2026-06-05 — Monthly Historical Card (redesign11) — NEW BUILD post-lock
+
+First historical view on the dashboard (Alfie ratified the 3 pre-build calls; ARV
+PROCEED). Implemented exactly to the locked Penny-lane spec.
+
+- **Data:** `polar/history/2026-05.json` — locked schema (`month`, `year`,
+  `headlines`{sessions, active_days, sleep_avg, top_week_sessions}, `recommendation`).
+  Numbers used **verbatim** from `polar/history/source_reports/2026-03-to-05_polar_pattern_report.md`
+  (source kept local, untracked — context only). I wrote the JSON directly (not via
+  Codex) so the 429-char recommendation prose is byte-exact.
+- **Card:** `#monthly-history-card`, glass `gradient-card` (matches Currents),
+  inserted **below Currents, above Recovery Window**. Layout: "MAY · 2026" eyebrow →
+  "22 sessions · 12 active days" / "Sleep avg 68.7 · top week 9" → "RECOMMENDATION" +
+  paragraph styled like the Currents Read block.
+- **Renderer:** `renderMonthlyHistory()` in app.js — fetches the ONE hardcoded path
+  (no auto-discovery, Alfie's manual option B), called once on load (no polling). Card
+  starts `hidden`; on any fetch/parse failure it **stays hidden gracefully** (try/catch
+  + null guard, no throw). **No sport codes rendered** (hidden until Alfie's code map).
+- **Future months:** drop a new `polar/history/YYYY-MM.json` + one-line path change (or
+  add another card). No discovery logic — complexity stays Low.
+
+PVR: numbers match JSON exactly (DOM-verified), full recommendation rendered, no sport
+codes, **Currents/lunar/polling untouched**, console clean. Cache → **redesign11**.
+
+---
+
 ## 🔒 LOCKED 2026-06-05 — dashboard frozen for the day
 
 The Lunar Performance Dashboard is **locked**. No more iteration today — anything new

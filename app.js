@@ -119,6 +119,28 @@ function renderProfileStrip() {
   el.textContent = "";
 }
 
+// Monthly Historical Card — reads ONE hardcoded month file (no auto-discovery yet,
+// per Alfie's manual option B). Static data: fetched once on load, no polling. On any
+// fetch/parse failure the card simply stays hidden (no throw, no break). No sport
+// breakdown is rendered (hidden until Alfie provides the code map).
+async function renderMonthlyHistory() {
+  const card = document.getElementById("monthly-history-card");
+  if (!card) return;
+  try {
+    const h = await fetchJSON("polar/history/2026-05.json");
+    if (!h || !h.headlines) return; // malformed → stay hidden
+    const hl = h.headlines;
+    const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+    set("mh-title", `${h.month} · ${h.year}`);
+    set("mh-stats-1", `${hl.sessions} sessions · ${hl.active_days} active days`);
+    set("mh-stats-2", `Sleep avg ${hl.sleep_avg} · top week ${hl.top_week_sessions}`);
+    set("mh-recommendation", h.recommendation || "");
+    card.classList.remove("hidden");
+  } catch (e) {
+    // fetch failed (e.g. file absent) → card stays hidden gracefully
+  }
+}
+
 // ---------- Polar live data (Training & Recovery) ----------
 // Reads polar/manifest.json + per-day JSON written by polar/sync.py.
 // fetch() works when the dashboard is served over http(s); on file:// it
@@ -1823,6 +1845,7 @@ async function renderPatternEngine() {
 
 function renderAll() {
   renderTodaysRead(); // async, AI health summary
+  renderMonthlyHistory(); // static monthly retrospective card (polar/history/2026-05.json)
   renderLunarStress(); // async, Lunar Stress Index (polar/lunar_stress.py)
   renderNutrition(); // async, today's macros from Calories Club
   renderNutritionNudge(); // async, single-line time-aware nutrition nudge (summary.json)

@@ -1,0 +1,11 @@
+{
+  "month": "May",
+  "year": 2026,
+  "headlines": {
+    "sessions": 22,
+    "active_days": 12,
+    "sleep_avg": 68.7,
+    "top_week_sessions": 9
+  },
+  "recommendation": "May — the load was front-loaded; sleep stayed the bottleneck. Training volume tapered through the month (W18-21 declined steadily), but sleep score held in the high 60s — not deep enough to fully unlock training adaptation. Going into June, the asymmetry to address is sleep first, volume second. The pattern shows you can train through suboptimal sleep, but the absorption isn't there. Protect sleep before adding sessions back."
+}
