@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-05T19:25:20-05:00",
-  "data_hash": "892bdade8d7a3164",
+  "generated_at": "2026-06-05T20:00:00-05:00",
+  "data_hash": "cd43ef5de45d6f39",
   "slot": "train-2",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 100%\n\nRead\nThe training window has done its work, and the day now reads as productive but costly. Recovery is serviceable, not deep; the remaining signal favors a calm landing, enough nourishment to preserve muscle, and no extra intensity layered onto an already heavy load.\n\nDownshift cleanly.\n\nPerformance: Downshift cleanly.\n\nTransit: none",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 100%\n\nRead\nTonight finds the system worked but not depleted, with a heavier session sitting on moderate recovery and better rest than recent days. The day favors absorption over more strain, with protein still the main unfinished note for preserving muscle while leaning out.\n\nQuiet consolidation.\n\nPerformance: Quiet consolidation.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 100%\n\nRead\nThe training window has done its work, and the day now reads as productive but costly. Recovery is serviceable, not deep; the remaining signal favors a calm landing, enough nourishment to preserve muscle, and no extra intensity layered onto an already heavy load.\n\nDownshift cleanly."
+      "text": "State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 100%\n\nRead\nTonight finds the system worked but not depleted, with a heavier session sitting on moderate recovery and better rest than recent days. The day favors absorption over more strain, with protein still the main unfinished note for preserving muscle while leaning out.\n\nQuiet consolidation."
     },
     {
       "label": "Performance",
-      "text": "Downshift cleanly."
+      "text": "Quiet consolidation."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 100%\n\nRead\nThe training window has done its work, and the day now reads as productive but costly. Recovery is serviceable, not deep; the remaining signal favors a calm landing, enough nourishment to preserve muscle, and no extra intensity layered onto an already heavy load.\n\nDownshift cleanly.",
-    "performance": "Downshift cleanly.",
+    "reading": "State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 100%\n\nRead\nTonight finds the system worked but not depleted, with a heavier session sitting on moderate recovery and better rest than recent days. The day favors absorption over more strain, with protein still the main unfinished note for preserving muscle while leaning out.\n\nQuiet consolidation.",
+    "performance": "Quiet consolidation.",
     "transit": null
   },
-  "nutrition_nudge": "Fat is already over; keep the rest lean and skip oils so protein can land.",
+  "nutrition_nudge": "Fat budget is spent; pull back oils and fats at dinner and make protein lean.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
