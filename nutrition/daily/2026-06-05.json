@@ -1,6 +1,6 @@
 {
   "date": "2026-06-05",
-  "synced_at": "2026-06-06T03:06:27+00:00",
+  "synced_at": "2026-06-06T03:36:33+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 2000.0,
-    "protein_g": 108.0,
-    "carbs_g": 172.0,
-    "fat_g": 83.0
+    "calories": 2140.0,
+    "protein_g": 110.0,
+    "carbs_g": 206.0,
+    "fat_g": 84.0
   },
-  "meal_count": 3,
+  "meal_count": 4,
   "raw": {
     "date": "2026-06-05",
     "meals": [
@@ -44,13 +44,22 @@
         "fat": 30,
         "carbs": 140,
         "emoji": "\u00f0\u009f\u008d\u009a"
+      },
+      {
+        "title": "Mandarin Snack",
+        "time": "22:12",
+        "calories": 140,
+        "protein": 2,
+        "fat": 1,
+        "carbs": 34,
+        "emoji": "\u00f0\u009f\u008d\u008a"
       }
     ],
     "totals": {
-      "calories": 2000,
-      "protein": 108,
-      "fat": 83,
-      "carbs": 172
+      "calories": 2140,
+      "protein": 110,
+      "fat": 84,
+      "carbs": 206
     },
     "targets": {
       "calories": 2574,
@@ -59,14 +68,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 574,
+      "calories": 434,
       "is_over": false
     },
-    "meal_count": 3,
+    "meal_count": 4,
     "labels": {
       "header": "Today",
-      "calories_remaining": "574 kcal remaining today",
-      "meals_logged": "3 meals logged",
+      "calories_remaining": "434 kcal remaining today",
+      "meals_logged": "4 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
