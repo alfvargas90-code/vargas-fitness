@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-06T01:22:59-05:00",
+  "generated_at": "2026-06-06T01:53:12-05:00",
   "score": 15,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -9,10 +9,10 @@
     "sleep_score": 75
   },
   "workout_intensity": "rest",
-  "recommendation": "Hold the charge and aim it at the bar today\u2014prioritize a heavy resistance session and hit your protein hard. Initiate the harder conversations and decisions selectively, gating each on whether it actually moves the needle.",
+  "recommendation": "Hold the charge against resistance work today\u2014load protein first, push the heavy sets, and let the lower HRV cap your top-end volume; initiate hard conversations or new fronts only if the day genuinely calls for it.",
   "lunar": {
     "sign": "Aquarius",
-    "degree": "20\u00b0 Aqu 32'",
+    "degree": "20\u00b0 Aqu 48'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Pisces",
@@ -41,7 +41,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 320.54,
+    "moon_longitude": 320.8,
     "moon_sign": "Aquarius",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 2,
