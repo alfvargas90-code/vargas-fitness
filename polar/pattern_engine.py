@@ -106,15 +106,24 @@ def _dates_in(folder):
 
 
 def _collect(folder, extractor):
-    """-> {date: value} for every readable file with a non-None metric."""
+    """-> {date: value} for every readable file with a non-None metric.
+
+    Reads the live ``<folder>/*.json`` files AND the backfilled
+    ``<folder>/historical/*.json`` files (written by parse_history_export.py),
+    deduping by date with LIVE taking precedence. So overlapping nights count
+    once, and a date the live sync already owns is never overwritten by the
+    coarser history-export version. If the historical folder is absent the
+    behaviour is identical to before — the engine degrades gracefully."""
     out = {}
-    for date_iso, path in _dates_in(folder):
-        try:
-            v = extractor(_load(path))
-        except Exception:
-            v = None
-        if v is not None:
-            out[date_iso] = v
+    # Historical first, then live overwrites any shared date (live precedence).
+    for src in (os.path.join(folder, "historical"), folder):
+        for date_iso, path in _dates_in(src):
+            try:
+                v = extractor(_load(path))
+            except Exception:
+                v = None
+            if v is not None:
+                out[date_iso] = v
     return out
 
 
@@ -156,28 +165,26 @@ def build():
     phase_stats = {}
     for ph in PHASES:
         b = buckets[ph]
-        n = len(b["days"])
+        n = len(b["days"])              # distinct days with ANY metric → "Based on N nights"
         if n == 0:
             continue
-        ps = _mean(b["sleep"])
-        pr = _mean(b["recovery"])
-        pstr = _mean(b["strain"])
-        if n < MIN_SAMPLE:
-            # Honest signal: too thin to claim a delta. Keep the bucket + count so
-            # the card can say "Not enough data yet" for the current phase.
-            phase_stats[ph] = {
-                "sleep_delta_h": None,
-                "recovery_delta_pct": None,
-                "strain_delta_pct": None,
-                "sample_size": n,
-            }
-            continue
+        # Per-metric gating. Each metric's delta is claimed only when THAT metric
+        # clears MIN_SAMPLE on its own — not when the union day-count does. This
+        # matters now that the history backfill makes sleep far denser (~68 nights)
+        # than recovery/strain (live-only): without it, a phase could show a
+        # recovery delta computed from a single live night while displaying n=10.
+        # Below the per-metric threshold we emit None, and the card renders "—".
+        ns, nr, nstr = len(b["sleep"]), len(b["recovery"]), len(b["strain"])
+        ps = _mean(b["sleep"]) if ns >= MIN_SAMPLE else None
+        pr = _mean(b["recovery"]) if nr >= MIN_SAMPLE else None
+        pstr = _mean(b["strain"]) if nstr >= MIN_SAMPLE else None
         phase_stats[ph] = {
             "sleep_delta_h": (round(ps - overall["sleep_h"], 1)
                               if ps is not None and overall["sleep_h"] is not None else None),
             "recovery_delta_pct": _delta_pct(pr, overall["recovery"]),
             "strain_delta_pct": _delta_pct(pstr, overall["strain_kcal"]),
             "sample_size": n,
+            "metric_samples": {"sleep": ns, "recovery": nr, "strain": nstr},
         }
 
     today = datetime.now().astimezone().date().isoformat()

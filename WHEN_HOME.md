@@ -10,7 +10,95 @@ description: User-action-required queue for when Alfie is back at his Mac. Items
 > judgment call. Penny cannot complete these remotely. Work top-to-bottom or
 > cherry-pick; check items off as done. Penny references this when he's back.
 
-_Last updated: 2026-06-05 (octopus / Claude Code)._
+_Last updated: 2026-06-06 ~00:00 (overnight autonomous build — Pattern Engine history backfill)._
+
+---
+
+## 🌙 STATUS 2026-06-06 (overnight) — Pattern Engine history backfill: 18 → 68 nights ✅ READY
+
+**The unlock landed.** The Pattern Engine was undersampled on ~18 live nights. I
+found the Polar history export, parsed 62 historical sleep nights into the live
+schema, and the engine now computes on **68 distinct nights** (deduped). All 8
+moon phases are populated with real sleep deltas; previously only 6 phases had
+any data and most were too thin to claim a delta.
+
+### Where the export was
+- **Found via Spotlight in iCloud Drive** (not Downloads/Desktop/vault):
+  `~/Library/Mobile Documents/com~apple~CloudDocs/polar-user-data-export_248d7c4a-…(no "(1)").zip`
+  — 50 MB, fully materialized (not an iCloud placeholder). 210 files inside.
+- The earlier source report listed the filename with a `(1)` suffix; the actual
+  file on disk has no suffix. Same UUID, same data.
+
+### What parsed cleanly (and what didn't)
+| Data | In export | Mapped | Notes |
+|---|---|---|---|
+| **Sleep** (`sleep_result` + `sleep_score`, joined by night) | 62 nights | ✅ 62/62 written | Start/end times + ISO-8601 stage durations → live schema. This is the real win. |
+| **Nightly recovery** (`nightly_recovery`) | 62 nights | ⚠️ partial | Has mean RR-interval, **rMSSD (HRV)**, respiration interval. **No `ans_charge_status`** (Polar's ANS Charge 1-6) and no recovery score in the export. |
+| **Activity / strain** | 72 days | ❌ not backfilled | Export carries *total* calories (~2600), not the *active*-calories (~1000) the engine uses. Different scale → would corrupt strain deltas. Deliberately skipped. |
+
+### Honest decisions (no faked numbers)
+- **Recovery deltas stay live-only.** The export lacks ANS Charge, the exact field
+  `pattern_engine.recovery_pct()` keys off. I did **not** synthesise it. Historical
+  recharge files feed the HRV baseline but are correctly excluded from the
+  recovery-delta buckets (they have no `ans_charge_status`).
+- **Per-metric sample gating (new, important).** Backfill made sleep far denser
+  (68) than recovery/strain (live-only, ~18 and ~6). The old gate checked the
+  *union* day-count, which would have let a phase show a recovery delta computed
+  from a single live night while displaying "n=10". The engine now gates **each
+  metric by its own sample count** (≥3). So sleep deltas populate everywhere;
+  recovery/strain show "—" where individually thin. More honest, not less.
+
+### Numbers — before → after
+- Distinct sleep nights feeding engine: **18 → 68**
+- Phases populated with data: **6 → 8** (all of them)
+- Current phase (Waning Gibbous) sample size on the card: **6 → 10**
+- Per-phase sleep sample sizes now: 6–11 each (New Moon 6, Waxing Crescent 11,
+  First Quarter 6, Waxing Gibbous 6, Full Moon 10, Waning Gibbous 10,
+  Last Quarter 11, Waning Crescent 9).
+- Recovery deltas now claimed only where ≥3 live recovery nights exist
+  (Waxing Crescent, Waning Gibbous, Last Quarter) — rest show "—". Honest.
+
+### baseline.json — new `nightly_recharge` block (from 62 history nights)
+- `hrv_avg`: **51.5** ms rMSSD (min 33, max 85)
+- `resting_hr_from_rri_avg`: **58** bpm (sanity-checks vs profile resting 55)
+- `breathing_rate_avg`: **12.8** /min
+- `recovery_avg`: **null**, `ans_state_distribution`: **null** — not in export,
+  left null with a `_note` rather than faked.
+
+### Dashboard
+- Card verified live in preview: "When moon is waning gibbous · Sleep +0.3h ·
+  Recovery +17% · Strain +9% · **Based on 10 nights**". No console errors.
+- Recovery +17% for the current phase is **identical to the prior live-only value**
+  — the backfill added sleep depth without disturbing the existing recovery read.
+- **No cache bump.** `fetchJSON` uses `cache:"no-store"`, and I changed neither
+  `app.js` nor `index.html` (the card already renders null deltas as "—"), so the
+  `?v=redesign14` asset version is untouched. Only data files (patterns.json,
+  baseline.json) changed.
+
+### Artifacts committed + pushed
+- `polar/parse_history_export.py` (new — idempotent, reads straight from the zip;
+  `--zip`/`--dir` overrides; locates iCloud path automatically)
+- `polar/sleep/historical/*.json` (62, lean — no hypnogram/HR-sample blobs)
+- `polar/recharge/historical/*.json` (62)
+- `polar/pattern_engine.py` (reads live+historical, live-wins dedup, per-metric gating)
+- `polar/patterns.json` (regenerated, 8 phases)
+- `polar/baseline.json` (new `nightly_recharge` block)
+
+### ⚙️ Build notes
+- **Codex rounds: 0** — no council/Codex calls needed; this was deterministic
+  parse + schema-map work, done directly. No hangs.
+- Re-running the parser is safe (idempotent — overwrites same per-night files).
+- If historical/ folders are ever removed, the engine degrades gracefully back to
+  live-only (18 nights), no crash. Verified.
+
+### 👉 Next when you're ready (no action required tonight)
+- **Penny: wire HRV/Recovery baselines into the prose prompts.** `baseline.json`
+  now has `nightly_recharge.hrv_avg` (51.5) + breathing/RHR. summary.py's Read
+  prompt could reference "HRV vs your 51.5ms baseline" in plain language (no raw
+  numbers, same pattern as the calorie/sleep baseline). I did **not** touch
+  summary.py tonight to avoid scope creep — it's a clean next step.
+- `recovery_avg` will populate naturally as live recharge nights accumulate (it
+  needs ANS Charge, which only the live sync captures).
 
 ---
 

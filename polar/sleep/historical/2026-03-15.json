@@ -1,0 +1,21 @@
+{
+  "date": "2026-03-15",
+  "sleep_start_time": "2026-03-15T00:42:19-05:00",
+  "sleep_end_time": "2026-03-15T10:08:49-05:00",
+  "continuity": 2.5,
+  "continuity_class": 2,
+  "light_sleep": 17430,
+  "deep_sleep": 7950,
+  "rem_sleep": 6150,
+  "unrecognized_sleep_stage": 0,
+  "sleep_score": 76,
+  "total_interruption_duration": 2460,
+  "short_interruption_duration": 1770,
+  "long_interruption_duration": 690,
+  "sleep_cycles": 6,
+  "group_duration_score": 100.0,
+  "group_solidity_score": 63.528,
+  "group_regeneration_score": 72.4247,
+  "efficiency_percent": 92.76257722859664,
+  "source": "history_export"
+}

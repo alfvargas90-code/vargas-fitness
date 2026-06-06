@@ -17,5 +17,17 @@
   "training": {
     "sessions_per_week_avg": 9.4,
     "calories_per_session_avg": 307
+  },
+  "nightly_recharge": {
+    "_source": "polar history export nightly_recovery records (62 nights, 2026-03-08..2026-05-20)",
+    "_note": "HRV/RHR/breathing derived from mean RR-interval + rMSSD in the export. Polar ANS Charge status (1-6), Nightly Recharge status, and the recovery score are NOT present in the export, so recovery_avg and ans_state_distribution are null (not synthesised). Wire recovery_avg from live recharge ans_charge_status when enough live nights accumulate.",
+    "nights": 62,
+    "hrv_avg": 51.5,
+    "hrv_min": 33,
+    "hrv_max": 85,
+    "resting_hr_from_rri_avg": 58,
+    "breathing_rate_avg": 12.8,
+    "recovery_avg": null,
+    "ans_state_distribution": null
   }
 }

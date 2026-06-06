@@ -1,0 +1,8 @@
+{
+  "date": "2026-05-01",
+  "heart_rate_avg": 60,
+  "beat_to_beat_avg": 999,
+  "heart_rate_variability_avg": 40,
+  "breathing_rate_avg": 12.7,
+  "source": "history_export"
+}
