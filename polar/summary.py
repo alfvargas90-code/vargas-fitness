@@ -1382,6 +1382,27 @@ def main():
     block_instrs = "\n".join(BLOCK_INSTR[b](slot, rest_today) for b in blocks)
     output_skeleton = "\n".join(f"{b}: ..." for b in blocks)
 
+    # Historical baseline (polar/baseline.json) — lets the Read note when today's
+    # activity/sleep runs meaningfully off the user's typical 3-month norms, in PLAIN
+    # LANGUAGE (never a number — the no-figures rule still holds). Graceful: empty
+    # string if the file is absent, so the prose is unchanged when there's no baseline.
+    try:
+        _bl = load_json(os.path.join(HERE, "baseline.json"))
+        _act = _bl.get("activity", {}) or {}
+        baseline_block = (
+            "=== TYPICAL BASELINE (the user's 3-month norms — use ONLY to judge if today "
+            "runs high or low; translate to plain language, NEVER quote a number) ===\n"
+            f"- Typical day: about {_act.get('calories_avg')} calories burned, about {_act.get('steps_avg')} steps\n"
+            f"- Typical sleep score: {_bl.get('sleep_score_avg')}\n"
+            "If today's activity (calories or steps) or sleep is meaningfully off this "
+            "baseline (roughly 10% or more), let it shift the read and say so in PLAIN "
+            "LANGUAGE — e.g. 'output ran lighter than your usual day' or 'you moved more "
+            "than a typical day' — never as a number or percent. Only reference a delta "
+            "when it changes the read; do not list every one.\n\n"
+        )
+    except Exception:
+        baseline_block = ""
+
     prompt = (
         "You are the intelligence layer of a premium health dashboard, writing the 'Currents' read for "
         "Alfie. Your job is to INTERPRET — synthesize all of today's data into one coherent assessment "
@@ -1409,6 +1430,7 @@ def main():
         f"- Body composition: {body}\n"
         f"{today_block}"
         f"{fuel_block}"
+        f"{baseline_block}"
         f"\n{goal_framing()}"
         f"{rest_day_framing(today_iso)}"
         "=== WRITE THESE LABELED LINES, IN THIS ORDER, AND NOTHING ELSE ===\n"

@@ -14,6 +14,38 @@ _Last updated: 2026-06-05 (octopus / Claude Code)._
 
 ---
 
+## 🗂️ STATUS 2026-06-05 — state-first rearrangement: NOW / TRENDS (redesign14)
+
+Heavy section reorg + Currents-prose baseline awareness.
+
+**Two section eyebrows** (soft-purple `#9A6BFF`, uppercase, matching the card eyebrows):
+- **NOW** — above Currents; spans the live/today stack.
+- **TRENDS** — above Pattern Engine; spans the historical/analytical stack.
+
+**Final card order** (verified live):
+`Hero → [NOW] → Currents → Recovery Window → support-cards → nutrition → scale-snapshot
+→ polar/Training → Day-in-review → [TRENDS] → Pattern Engine (May+Lunar) → Activity
+(vs-typical deltas) → Scale history`.
+- **Moved:** Pattern Engine DOWN (was between Currents/Recovery Window) and Activity DOWN
+  into TRENDS. Recovery Window now sits directly under Currents in NOW.
+- **Neutral cards** (support/nutrition/scale-snapshot/polar/day-review) stay in the middle
+  between the two sections, per the brief.
+- Done with the Edit tool, cut-before-insert so IDs never duplicated; verified each
+  pe-*/mh-*/section id appears exactly once.
+
+**Currents prose now baseline-aware** (`summary.py`): the Read prompt gets a new
+"TYPICAL BASELINE" block from `polar/baseline.json` (typical calories/steps/sleep) +
+an instruction to reference a meaningful delta (~10%+) in **plain language only**
+("output ran lighter than your usual day") — never a number, preserving the Apple-
+Weather voice + the existing no-figures/no-bullets/single-paragraph rules. Graceful:
+empty block if baseline.json is absent → prose unchanged. `py_compile` passes.
+
+Lunar engine / Currents structure / 60s polling / Pattern Engine internals / baseline.json
+untouched. No console errors. Cache → **redesign14**. (Direct Edit-tool application —
+multi-section DOM move; brief left lane to judgment.)
+
+---
+
 ## 📊 STATUS 2026-06-05 — baseline.json + "vs typical" deltas (redesign13)
 
 New `polar/baseline.json` (3-month history export 2026-03-07→05-20: resting HR 55,
