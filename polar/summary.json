@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-06T11:30:00-05:00",
-  "data_hash": "f6af72d374ae008b",
-  "slot": "fuel-1",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 42%\n\nRead\nYour system is moving on short sleep and only moderate recovery, while output has stayed lighter than usual. First fuel barely covers the morning curve, leaving the afternoon under-supported; this favors measured work and muscle preservation over intensity.\n\nMeasured, not depleted.\n\nPerformance: Measured, not depleted.\n\nTransit: none",
+  "generated_at": "2026-06-06T11:57:18-05:00",
+  "data_hash": "c462e87778cb4b74",
+  "slot": "macros-update",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 42%\n\nRead\nThe snack opens the day\u2019s intake only slightly: energy is still well behind the day, and protein has barely entered the picture. With recovery middling, sleep compressed, and output lighter than usual, this favors a measured catch-up over intensity, with muscle protection still underfed.\n\nQuietly catching up.\n\nPerformance: Quietly catching up.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 42%\n\nRead\nYour system is moving on short sleep and only moderate recovery, while output has stayed lighter than usual. First fuel barely covers the morning curve, leaving the afternoon under-supported; this favors measured work and muscle preservation over intensity.\n\nMeasured, not depleted."
+      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 42%\n\nRead\nThe snack opens the day\u2019s intake only slightly: energy is still well behind the day, and protein has barely entered the picture. With recovery middling, sleep compressed, and output lighter than usual, this favors a measured catch-up over intensity, with muscle protection still underfed.\n\nQuietly catching up."
     },
     {
       "label": "Performance",
-      "text": "Measured, not depleted."
+      "text": "Quietly catching up."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 42%\n\nRead\nYour system is moving on short sleep and only moderate recovery, while output has stayed lighter than usual. First fuel barely covers the morning curve, leaving the afternoon under-supported; this favors measured work and muscle preservation over intensity.\n\nMeasured, not depleted.",
-    "performance": "Measured, not depleted.",
+    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 42%\n\nRead\nThe snack opens the day\u2019s intake only slightly: energy is still well behind the day, and protein has barely entered the picture. With recovery middling, sleep compressed, and output lighter than usual, this favors a measured catch-up over intensity, with muscle protection still underfed.\n\nQuietly catching up.",
+    "performance": "Quietly catching up.",
     "transit": null
   },
-  "nutrition_nudge": "Keep meal pacing steady and anchor lunch with 50g protein to protect muscle.",
+  "nutrition_nudge": "You're on pace; make lunch protein-forward with 50g and keep meal timing steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
