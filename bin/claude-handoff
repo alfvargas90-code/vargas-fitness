@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+# claude-handoff — evict the Claude.app desktop before running the real claude CLI.
+#
+# WHY
+#   When the desktop app and a Terminal `claude` CLI are both signed in, they
+#   fight over the same OAuth refresh token (multi-client collision) and auth
+#   dies. This makes the Terminal the exclusive owner: launching `claude` in a
+#   Terminal first kills the desktop. The com.alfredo.cowork-watchdog LaunchAgent
+#   brings the desktop back (~5 min) once the Terminal session ends, so the
+#   iMessage bridge self-heals. Net: Terminal use auto-evicts the desktop and
+#   Alfie never has to think about it.
+#
+# WIRING
+#   Invoked by the `claude()` zsh function in ~/.zshrc — INTERACTIVE shells only.
+#   Non-interactive callers (launchd jobs, the ~/bin/llm reasoning fallback,
+#   subagents) never see that function; they hit the real CLI directly via PATH.
+#   So automated fires are fully transparent and never kill the desktop.
+#
+#   This script is NOT named `claude` on purpose: ~/.local/bin (the real claude)
+#   sits ahead of ~/bin on PATH, so a ~/bin/claude wrapper would never win. The
+#   zsh function is what actually intercepts; this script holds the logic.
+#
+# DETECTION
+#   The desktop main process argv is EXACTLY this path (optionally + args). Every
+#   other Claude.app process (Helper, Frameworks, Helpers/disclaimer, the
+#   lowercase bundled CLI) has a different prefix, so an exact / prefix match
+#   isolates the one process to kill. pgrep -f is deliberately avoided: on this
+#   machine it fails to match the app's main process (returns no PID).
+#
+# Source of truth: 04_Projects/fitness-dashboard/bin/claude-handoff  (git)
+# Deployed copy:   ~/bin/claude-handoff
+set -uo pipefail
+
+REAL_CLAUDE="$HOME/.local/bin/claude"
+DESKTOP_EXE="/Applications/Claude.app/Contents/MacOS/Claude"
+LOG="$HOME/.local/state/claude-handoff.log"
+mkdir -p "$(dirname "$LOG")" 2>/dev/null || true
+
+ts()  { date +%Y-%m-%dT%H:%M:%S%z; }
+logln() { printf '%s %s\n' "$(ts)" "$*" >> "$LOG" 2>/dev/null || true; }
+
+# Print PIDs whose full command line IS the desktop exe (bare or with args).
+desktop_pids() {
+  ps -axo pid=,command= | awk -v t="$DESKTOP_EXE" '
+    { pid=$1; $1=""; sub(/^ /,"");
+      if ($0==t || index($0, t" ")==1) print pid }'
+}
+
+# Re-entry guard: a parent handoff already evicted the desktop — just hand off.
+if [ "${CLAUDE_HANDOFF_DONE:-}" != "1" ]; then
+  export CLAUDE_HANDOFF_DONE=1
+
+  pids="$(desktop_pids)"
+  if [ -n "${pids//[[:space:]]/}" ]; then
+    logln "[handoff] killing desktop PID(s): $(echo $pids)"
+    # shellcheck disable=SC2086
+    kill $pids 2>/dev/null || true
+
+    # Wait up to ~3s for graceful exit, then escalate to SIGKILL once.
+    remaining=""
+    for _ in 1 2 3 4 5 6; do
+      sleep 0.5
+      remaining="$(desktop_pids)"
+      [ -z "${remaining//[[:space:]]/}" ] && break
+    done
+    if [ -n "${remaining//[[:space:]]/}" ]; then
+      logln "[handoff] SIGTERM did not clear; SIGKILL PID(s): $(echo $remaining)"
+      # shellcheck disable=SC2086
+      kill -9 $remaining 2>/dev/null || true
+    else
+      logln "[handoff] desktop evicted cleanly"
+    fi
+  else
+    logln "[handoff] no desktop process running; nothing to evict"
+  fi
+fi
+
+# Hand off to the real CLI. Absolute path => no PATH/function re-resolution,
+# so this can never loop back into itself.
+if [ ! -x "$REAL_CLAUDE" ]; then
+  logln "[handoff] ERROR: real claude not executable at $REAL_CLAUDE"
+  echo "claude-handoff: real claude not found at $REAL_CLAUDE" >&2
+  exit 127
+fi
+exec "$REAL_CLAUDE" "$@"
