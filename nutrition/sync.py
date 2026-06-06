@@ -444,7 +444,34 @@ def main():
     log(f"Totals: {payload['totals']}")
 
     git_push(today)
+
+    # Event-driven Currents refresh: let the macro-delta gate decide whether today's
+    # intake moved enough to regenerate the dashboard prose between scheduled slots.
+    # Pure no-op unless the gate's thresholds are crossed; never fatal to the sync.
+    fire_macros_trigger()
     return 0
+
+
+def fire_macros_trigger():
+    """Run polar/macros_trigger.py after the macro write. The trigger is a gate — it
+    fires summary.py --slot macros-update only on a meaningful nutrition change, else
+    no-ops. Failures here must never crash the 30-min nutrition sync (best-effort)."""
+    import subprocess
+    trigger = os.path.join(REPO_ROOT, "polar", "macros_trigger.py")
+    if not os.path.exists(trigger):
+        log("macros_trigger.py not found — skipping Currents refresh hook")
+        return
+    try:
+        out = subprocess.run(
+            [sys.executable, trigger],
+            cwd=REPO_ROOT, capture_output=True, text=True, timeout=300,
+        )
+        for line in (out.stdout or "").strip().splitlines():
+            log(line)
+        if out.returncode != 0:
+            log(f"macros_trigger exited {out.returncode} (non-fatal): {(out.stderr or '').strip()[:200]}")
+    except Exception as e:
+        log(f"macros_trigger invocation failed (non-fatal): {e}")
 
 
 def git_push(day):
