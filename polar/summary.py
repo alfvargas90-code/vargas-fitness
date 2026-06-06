@@ -153,6 +153,15 @@ SLOT_FRAMING = {
         "read": "how the session landed (or that the window passed) and what the night needs",
         "blocks": ["Read", "Workout", "Eat", "Rest"],
     },
+    # Event-driven slot (NOT on the 7-fire clock). Fired by macros_trigger.py when a
+    # meal was just logged and the day's intake moved meaningfully since the last read,
+    # so Currents refreshes between scheduled slots instead of feeling stale. The read
+    # anchors to the fresh fueling change; the actual delta is passed in via --macro-note.
+    "macros-update": {
+        "when": "SLOT — MACRO UPDATE (a meal was just logged and the day's intake moved meaningfully since the last read). It is daytime; anchor the read to that fresh change in fueling, not the clock.",
+        "read": "what just shifted in fueling and what the day's intake now sets up — frame the change in plain language (the calorie window opening back up, protein climbing toward target, a low-input morning catching up), never the raw numbers",
+        "blocks": ["Read", "Workout", "Eat", "Rest"],
+    },
 }
 
 
@@ -274,7 +283,7 @@ def parse_brief_blocks(text, labels):
 # slot is too early to have any. The fuel slots are literally fueling/energy checks and
 # the train slots need today's load to judge the session, so all four get the data — and
 # train-2 (unlike the old hardcoded evening wind-down) needs it to read whether he trained.
-TODAY_DATA_SLOTS = {"recovery", "fuel-1", "fuel-2", "train-1", "train-2"}
+TODAY_DATA_SLOTS = {"recovery", "fuel-1", "fuel-2", "train-1", "train-2", "macros-update"}
 
 
 def log(msg):
@@ -1356,7 +1365,7 @@ def main():
     # Layer 4 — fuel slots read the recent meal log + the energy response since the
     # first meal in the window, and comment on whether fueling matches output.
     fuel_block = ""
-    if slot in ("fuel-1", "fuel-2"):
+    if slot in ("fuel-1", "fuel-2", "macros-update"):
         timeline, first_t = meals_in_window(now, hours=4)
         if timeline:
             fuel_block = (
@@ -1368,6 +1377,17 @@ def main():
         else:
             fuel_block = ("- No meals logged in the last ~4 hours — name the gap and say what to "
                           "eat next.\n")
+
+    # macros-update slot: macros_trigger.py passes a plain-language note describing
+    # what just changed (e.g. "calories jumped ~430 — a real meal landed after a light
+    # morning"). It's a focusing hint for the Read, never quoted back verbatim.
+    macro_block = ""
+    macro_note = _arg_value("--macro-note")
+    if macro_note:
+        macro_block = (
+            f"- WHAT JUST CHANGED (anchor the read to this; translate to plain language, "
+            f"do not quote the figures): {macro_note}\n"
+        )
 
     slot_cfg = SLOT_FRAMING.get(slot, SLOT_FRAMING["recovery"])
     # Currents v3 (state interpreter): the brief is State (deterministic) + a single
@@ -1430,6 +1450,7 @@ def main():
         f"- Body composition: {body}\n"
         f"{today_block}"
         f"{fuel_block}"
+        f"{macro_block}"
         f"{baseline_block}"
         f"\n{goal_framing()}"
         f"{rest_day_framing(today_iso)}"
