@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-06T03:23:49-05:00",
+  "generated_at": "2026-06-06T03:54:03-05:00",
   "score": 15,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -9,10 +9,10 @@
     "sleep_score": 75
   },
   "workout_intensity": "rest",
-  "recommendation": "Channel the charge into resistance work today\u2014load heavy, hit progressive overload, and anchor protein at every meal. Initiate the harder calls selectively: make the one that moves the needle, and gate the rest on whether they actually need you.",
+  "recommendation": "Load heavy today\u2014the system's green, so push resistance work hard and anchor the day's protein early while the charge is high. Initiate the harder calls and outreach selectively; if it serves the day's output, make it.",
   "lunar": {
     "sign": "Aquarius",
-    "degree": "21\u00b0 Aqu 34'",
+    "degree": "21\u00b0 Aqu 50'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Pisces",
@@ -41,7 +41,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 321.57,
+    "moon_longitude": 321.83,
     "moon_sign": "Aquarius",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 2,
