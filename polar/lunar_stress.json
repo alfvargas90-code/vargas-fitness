@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-06T16:25:14-05:00",
+  "generated_at": "2026-06-06T16:55:29-05:00",
   "score": 13,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -12,7 +12,7 @@
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Aquarius",
-    "degree": "28\u00b0 Aqu 17'",
+    "degree": "28\u00b0 Aqu 33'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Pisces",
@@ -41,7 +41,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 328.29,
+    "moon_longitude": 328.55,
     "moon_sign": "Aquarius",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 2,
@@ -62,7 +62,7 @@
       "hrv_7d": 65.4,
       "rhr_7d": 52.9
     },
-    "active_calories": 653,
+    "active_calories": 672,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
