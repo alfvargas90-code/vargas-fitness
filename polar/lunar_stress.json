@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-05T21:21:23-05:00",
+  "generated_at": "2026-06-05T21:51:34-05:00",
   "score": 25,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -9,10 +9,10 @@
     "sleep_score": 75
   },
   "workout_intensity": "high",
-  "recommendation": "Channel today's charge into resistance work that loads the muscle hard, and protein the rest. If a call must be made, calibrate against the data before initiating rather than reacting to the HRV dip.",
+  "recommendation": "Channel the charge into resistance work and load protein on the rebuild; reserve judgment-gated calls for what actually needs you today, and let the rest sit.",
   "lunar": {
     "sign": "Aquarius",
-    "degree": "18\u00b0 Aqu 29'",
+    "degree": "18\u00b0 Aqu 44'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Pisces",
@@ -41,7 +41,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 318.48,
+    "moon_longitude": 318.74,
     "moon_sign": "Aquarius",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
