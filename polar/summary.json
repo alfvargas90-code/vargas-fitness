@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-05T17:30:00-05:00",
-  "data_hash": "ca482da12f1f094d",
-  "slot": "train-1",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 82%\n\nRead\nYou enter the workout window with decent sleep behind you and a moderate amount already spent, leaving the system serviceable rather than sharp. The day favors controlled strength over intensity, with muscle protection tied more to protein than extra movement.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
+  "generated_at": "2026-06-05T19:25:20-05:00",
+  "data_hash": "892bdade8d7a3164",
+  "slot": "train-2",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 100%\n\nRead\nThe training window has done its work, and the day now reads as productive but costly. Recovery is serviceable, not deep; the remaining signal favors a calm landing, enough nourishment to preserve muscle, and no extra intensity layered onto an already heavy load.\n\nDownshift cleanly.\n\nPerformance: Downshift cleanly.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 82%\n\nRead\nYou enter the workout window with decent sleep behind you and a moderate amount already spent, leaving the system serviceable rather than sharp. The day favors controlled strength over intensity, with muscle protection tied more to protein than extra movement.\n\nSteady, not forceful."
+      "text": "State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 100%\n\nRead\nThe training window has done its work, and the day now reads as productive but costly. Recovery is serviceable, not deep; the remaining signal favors a calm landing, enough nourishment to preserve muscle, and no extra intensity layered onto an already heavy load.\n\nDownshift cleanly."
     },
     {
       "label": "Performance",
-      "text": "Steady, not forceful."
+      "text": "Downshift cleanly."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 82%\n\nRead\nYou enter the workout window with decent sleep behind you and a moderate amount already spent, leaving the system serviceable rather than sharp. The day favors controlled strength over intensity, with muscle protection tied more to protein than extra movement.\n\nSteady, not forceful.",
-    "performance": "Steady, not forceful.",
+    "reading": "State\nGood\nRecovery 73 \u2022 Sleep 75 \u2022 Strain 100%\n\nRead\nThe training window has done its work, and the day now reads as productive but costly. Recovery is serviceable, not deep; the remaining signal favors a calm landing, enough nourishment to preserve muscle, and no extra intensity layered onto an already heavy load.\n\nDownshift cleanly.",
+    "performance": "Downshift cleanly.",
     "transit": null
   },
-  "nutrition_nudge": "Fat budget is spent; keep dinner lean, skip oils, and anchor it with 30g protein.",
+  "nutrition_nudge": "Fat is already over; keep the rest lean and skip oils so protein can land.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 63.3,
     "nutrition": "calories 2000 of 2574 goal, protein 108g of 138g goal, carbs 172g of 290g goal, fat 83g of 72g goal",
     "nutrition_detail": "calories 2000 of 2574 goal -> 574 left; protein 108g of 138g goal -> 30g gap; carbs 172g of 290g goal; fat 83g of 72g goal",
-    "activity_today": "5,136 steps so far, 4h 56m active, 1,914 calories burned, Moderate training load"
+    "activity_today": "7,309 steps so far, 6h 46m active, 2,326 calories burned, Heavy training load"
   }
 }
