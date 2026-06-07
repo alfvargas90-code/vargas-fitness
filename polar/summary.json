@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-06T17:30:00-05:00",
-  "data_hash": "ca8ce5fa02806188",
-  "slot": "train-1",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 88%\n\nRead\nRecovery is serviceable, not full, and output has run lighter than usual as the workout window opens. With a meaningful intake gap still present, the day favors measured resistance work over intensity for intensity\u2019s sake.\n\nMeasured, not maximal.\n\nPerformance: Measured, not maximal.\n\nTransit: none",
+  "generated_at": "2026-06-06T19:07:39-05:00",
+  "data_hash": "f1cc61f0b58043ef",
+  "slot": "macros-update",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nThe latest fueling moved the day out of a low-input pattern, but it mostly widened energy availability without much muscle-supporting weight. With heavy effort already spent and recovery only moderate, the day favors steady repair over added strain.\n\nSteady, with reserves.\n\nPerformance: Steady, with reserves.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 88%\n\nRead\nRecovery is serviceable, not full, and output has run lighter than usual as the workout window opens. With a meaningful intake gap still present, the day favors measured resistance work over intensity for intensity\u2019s sake.\n\nMeasured, not maximal."
+      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nThe latest fueling moved the day out of a low-input pattern, but it mostly widened energy availability without much muscle-supporting weight. With heavy effort already spent and recovery only moderate, the day favors steady repair over added strain.\n\nSteady, with reserves."
     },
     {
       "label": "Performance",
-      "text": "Measured, not maximal."
+      "text": "Steady, with reserves."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 88%\n\nRead\nRecovery is serviceable, not full, and output has run lighter than usual as the workout window opens. With a meaningful intake gap still present, the day favors measured resistance work over intensity for intensity\u2019s sake.\n\nMeasured, not maximal.",
-    "performance": "Measured, not maximal.",
+    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nThe latest fueling moved the day out of a low-input pattern, but it mostly widened energy availability without much muscle-supporting weight. With heavy effort already spent and recovery only moderate, the day favors steady repair over added strain.\n\nSteady, with reserves.",
+    "performance": "Steady, with reserves.",
     "transit": null
   },
-  "nutrition_nudge": "Stay steady at dinner: anchor it with 50g protein and keep calories coming.",
+  "nutrition_nudge": "Stay on pace: build dinner around 50g protein and keep portions steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
     "sleep_hours": 5.2,
     "hrv_today": 70,
     "hrv_7d_avg": 65.4,
-    "nutrition": "calories 740 of 2574 goal, protein 47g of 138g goal, carbs 94g of 290g goal, fat 19g of 72g goal",
-    "nutrition_detail": "calories 740 of 2574 goal -> 1834 left; protein 47g of 138g goal -> 91g gap; carbs 94g of 290g goal; fat 19g of 72g goal",
-    "activity_today": "4,899 steps so far, 4h 53m active, 1,929 calories burned, Moderate training load"
+    "nutrition": "calories 1190 of 2574 goal, protein 55g of 138g goal, carbs 159g of 290g goal, fat 36g of 72g goal",
+    "nutrition_detail": "calories 1190 of 2574 goal -> 1384 left; protein 55g of 138g goal -> 83g gap; carbs 159g of 290g goal; fat 36g of 72g goal",
+    "activity_today": "5,897 steps so far, 5h 53m active, 2,154 calories burned, Heavy training load"
   }
 }
