@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-06-07T10:04:31-05:00",
-  "score": 10,
+  "generated_at": "2026-06-07T10:34:44-05:00",
+  "score": 5,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
   "physiology": {
-    "hrv_pct_baseline": 7,
-    "rhr_delta_bpm": 2,
-    "sleep_score": 53
+    "hrv_pct_baseline": 0,
+    "rhr_delta_bpm": -3,
+    "sleep_score": 65
   },
   "workout_intensity": "rest",
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Pisces",
-    "degree": "7\u00b0 Pis 32'",
+    "degree": "7\u00b0 Pis 48'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aries",
@@ -30,14 +30,14 @@
       "max": 55
     },
     "body": {
-      "filled": 2,
+      "filled": 1,
       "total": 10,
-      "points": 10,
+      "points": 5,
       "max": 40
     }
   },
   "transit_detail": {
-    "moon_longitude": 337.53,
+    "moon_longitude": 337.8,
     "moon_sign": "Pisces",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 2,
@@ -45,19 +45,18 @@
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 10,
+    "raw_score": 5,
     "transit_points": 0,
-    "physiology_points": 10,
+    "physiology_points": 5,
     "breakdown": [
-      "-5 HRV 7% above baseline",
-      "+5 RHR +2 bpm vs baseline",
-      "+10 Sleep score 53 (<70)"
+      "-5 RHR -3 bpm vs baseline",
+      "+10 Sleep score 65 (<70)"
     ],
     "baselines": {
-      "hrv_7d": 65.4,
-      "rhr_7d": 52.9
+      "hrv_7d": 64.7,
+      "rhr_7d": 52.7
     },
-    "active_calories": 86,
+    "active_calories": 115,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
