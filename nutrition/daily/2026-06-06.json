@@ -1,6 +1,6 @@
 {
   "date": "2026-06-06",
-  "synced_at": "2026-06-07T02:38:58+00:00",
+  "synced_at": "2026-06-07T03:09:02+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 1830.0,
-    "protein_g": 59.0,
-    "carbs_g": 219.0,
-    "fat_g": 80.0
+    "calories": 2550.0,
+    "protein_g": 121.0,
+    "carbs_g": 267.0,
+    "fat_g": 109.0
   },
-  "meal_count": 5,
+  "meal_count": 7,
   "raw": {
     "date": "2026-06-06",
     "meals": [
@@ -62,13 +62,31 @@
         "fat": 44,
         "carbs": 60,
         "emoji": "\u00f0\u009f\u0094\u00a5"
+      },
+      {
+        "title": "Hershey's Protein Bars",
+        "time": "21:44",
+        "calories": 480,
+        "protein": 36,
+        "fat": 20,
+        "carbs": 36,
+        "emoji": "\u00f0\u009f\u008d\u00ab"
+      },
+      {
+        "title": "Kirkland Milk",
+        "time": "21:56",
+        "calories": 240,
+        "protein": 26,
+        "fat": 9,
+        "carbs": 12,
+        "emoji": "\u00f0\u009f\u00a5\u009b"
       }
     ],
     "totals": {
-      "calories": 1830,
-      "protein": 59,
-      "fat": 80,
-      "carbs": 219
+      "calories": 2550,
+      "protein": 121,
+      "fat": 109,
+      "carbs": 267
     },
     "targets": {
       "calories": 2574,
@@ -77,14 +95,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 744,
+      "calories": 24,
       "is_over": false
     },
-    "meal_count": 5,
+    "meal_count": 7,
     "labels": {
       "header": "Today",
-      "calories_remaining": "744 kcal remaining today",
-      "meals_logged": "5 meals logged",
+      "calories_remaining": "24 kcal remaining today",
+      "meals_logged": "7 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
