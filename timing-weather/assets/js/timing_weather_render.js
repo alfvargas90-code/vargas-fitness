@@ -1,377 +1,223 @@
-/* Timing Weather — v1.1 render module.
- * PURE render functions only: each takes the engine state object and returns an
- * HTML string. No fetching, no polling, no DOM mutation, no business logic — the
- * engine wrapper (timing_weather_engine.js) owns all of that. Every value traces
- * back to a state.json field; missing/null degrades to "—" or a hidden block
- * (PVR law — never fabricate a value here).
- *
- * Exposed as window.TWRender = { ...cardFns, helpers }.
+/* timing_weather_render.js — v2 Intelligence Dashboard renderer
+ * Reads state.json (no-store), polls every 60s, re-renders only when updatedAt changes.
+ * Field paths mapped against the live v2 state.json schema (engine.py output).
  */
-(function () {
-  "use strict";
 
-  // ── helpers ──────────────────────────────────────────────────────────
-  var dash = function (v) { return (v === null || v === undefined || v === "") ? "—" : v; };
-  var esc = function (s) {
-    return String(s).replace(/[&<>"']/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
-    });
-  };
+const State = { lastHash: null, polling: false };
 
-  var PLANET_GLYPH = {
-    Sun: "☉", Moon: "☽", Mercury: "☿", Venus: "♀", Mars: "♂",
-    Jupiter: "♃", Saturn: "♄", Uranus: "♅", Neptune: "♆", Pluto: "♇"
-  };
-  // Spec color coding — only the 5 named planets get a class; others fall back to gold.
-  var PLANET_CLASS = {
-    Jupiter: "p-jupiter", Venus: "p-venus", Saturn: "p-saturn",
-    Uranus: "p-uranus", Mars: "p-mars"
-  };
+async function loadState() {
+  const r = await fetch('state.json', { cache: 'no-store' });
+  if (!r.ok) return null;
+  return await r.json();
+}
 
-  function planetBadge(name) {
-    if (!name) return '<span class="muted">—</span>';
-    var cls = PLANET_CLASS[name] || "gold";
-    var g = PLANET_GLYPH[name] || "";
-    return '<span class="planet-badge ' + cls + '">' + esc(name) +
-           (g ? ' <span class="glyph">' + g + "</span>" : "") + "</span>";
-  }
+function $(id) { return document.getElementById(id); }
+function setText(id, val, fallback = '—') {
+  const el = $(id);
+  if (el) el.textContent = (val === null || val === undefined || val === '') ? fallback : val;
+}
+function clamp(n) { return Math.max(0, Math.min(100, n)); }
 
-  function fmtDayMon(iso) {
-    if (!iso) return "—";
-    var d = new Date(iso + "T00:00:00");
-    if (isNaN(d)) return "—";
-    return d.toLocaleDateString([], { month: "short", day: "numeric" });
-  }
-  function fmtLongDate(iso) {
-    if (!iso) return "—";
-    var d = new Date(iso + "T00:00:00");
-    if (isNaN(d)) return "—";
-    return d.toLocaleDateString([], { year: "numeric", month: "long", day: "numeric" });
-  }
-  function fmtStamp(iso) {
-    if (!iso) return "—";
-    var d = new Date(iso);
-    if (isNaN(d)) return "—";
-    return d.toLocaleString([], { year: "numeric", month: "short", day: "numeric",
-      hour: "numeric", minute: "2-digit" });
-  }
+// Whole-day difference between two YYYY-MM-DD strings (b - a), UTC-safe.
+function daysBetween(a, b) {
+  const da = Date.parse(a + 'T00:00:00Z');
+  const db = Date.parse(b + 'T00:00:00Z');
+  if (isNaN(da) || isNaN(db)) return null;
+  return Math.round((db - da) / 86400000);
+}
 
-  // ── Header + Hero + Forecast Title ───────────────────────────────────
-  function header() {
-    return '<div class="header-label">Timing Weather</div>';
-  }
-  function hero(s) {
-    return '<div class="sun-hero" role="img" aria-label="Forecast: ' +
-           esc(s.forecast || "") + '"></div>';
-  }
-  function forecastTitle(s) {
-    return '<h1 class="forecast-title">' + esc(dash(s.forecast)) + "</h1>" +
-           '<p class="forecast-subtitle">' + esc(s.subtitle || "") + "</p>";
-  }
+function renderHero(s) {
+  setText('forecast-title', s.forecast);
+  setText('forecast-subtitle', s.subtitle);
+}
 
-  // ── Current Phase ────────────────────────────────────────────────────
-  function currentPhase(s) {
-    var range = (s.currentPhaseStart || s.currentPhaseEnd)
-      ? fmtLongShort(s.currentPhaseStart) + " – " + fmtLongShort(s.currentPhaseEnd)
-      : "—";
-    return '<div class="card">' +
-      '<div class="section-heading">Current Phase</div>' +
-      '<div class="phase-body">' +
-        '<div class="phase-main">' +
-          '<div class="phase-icon">◐</div>' +
-          '<div>' +
-            '<div class="phase-name">' + esc(dash(s.currentPhase)) + "</div>" +
-            '<div class="phase-range">' + range + "</div>" +
-          "</div>" +
-        "</div>" +
-        '<div class="cal-icon">📅</div>' +
-      "</div>" +
-    "</div>";
-  }
-  function fmtLongShort(iso) {
-    if (!iso) return "—";
-    var d = new Date(iso + "T00:00:00");
-    if (isNaN(d)) return "—";
-    return d.toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" });
-  }
+function renderNowBar(s) {
+  const nb = s.nowBar || {};
+  setText('now-forecast', nb.forecast || s.forecast);
+  setText('now-pressure', nb.pressureLevel);
+  setText('now-momentum', nb.momentumDirection);
+  setText('now-next-event', nb.nextEventDays != null ? `${nb.nextEventDays} Days` : null);
+}
 
-  // ── Forecast Card (6 rows) ───────────────────────────────────────────
-  var CONF_CLASS = { High: "m-green", Medium: "m-orange", Low: "m-red" };
-  function forecastCard(s) {
-    var dur = s.durationDays == null ? "—"
-      : s.durationDays + " day" + (s.durationDays === 1 ? "" : "s");
-    var conf = s.confidence == null
-      ? '<span class="muted">Not Rated</span>'
-      : '<span class="' + (CONF_CLASS[s.confidence] || "") + '" style="font-weight:700">' +
-        esc(s.confidence) + "</span>";
-    var rows = [
-      ["Forecast", '<span class="gold" style="font-weight:700">' + esc(dash(s.forecast)) + "</span>"],
-      ["Dominant", planetBadge(s.dominantPlanet)],
-      ["Supporting", planetBadge(s.supportingPlanet)],
-      ["Pressure Source", planetBadge(s.pressurePlanet)],
-      ["Confidence", conf],
-      ["Duration", '<span class="tab-num">' + dur + "</span>"]
-    ];
-    return '<div class="card">' + rows.map(function (r) {
-      return '<div class="tw-row"><span class="row-label">' + r[0] +
-             '</span><span class="row-value">' + r[1] + "</span></div>";
-    }).join("") + "</div>";
-  }
+function renderPhase(s) {
+  // currentPhase is a string; start/end live at the top level.
+  setText('phase-name', s.currentPhase);
+  const start = s.currentPhaseStart;
+  const end = s.currentPhaseEnd;
+  setText('phase-range', start && end ? `${start} – ${end}` : null);
 
-  // ── Active Sky (4 mini-cards) ────────────────────────────────────────
-  function activeSky(s) {
-    var defs = [
-      [s.dominantPlanet, "Dominant"],
-      [s.supportingPlanet, "Supporting"],
-      [s.pressurePlanet, "Pressure"],
-      [s.volatilityPlanet, "Volatility"]
-    ];
-    var cards = defs.map(function (d) {
-      var name = d[0], role = d[1];
-      var cls = name ? (PLANET_CLASS[name] || "gold") : "muted";
-      var g = name ? (PLANET_GLYPH[name] || "•") : "•";
-      return '<div class="sky-mini">' +
-        '<div class="sym ' + cls + '">' + g + "</div>" +
-        '<div class="name ' + cls + '">' + esc(dash(name)) + "</div>" +
-        '<div class="role">' + role + "</div>" +
-      "</div>";
-    }).join("");
-    var foot = s.updatedAt ? "Updated " + fmtStamp(s.updatedAt) : "";
-    return '<div class="card">' +
-      '<div class="section-heading">Active Sky</div>' +
-      '<div class="sky-grid">' + cards + "</div>" +
-      (foot ? '<div class="sky-footer">' + esc(foot) + "</div>" : "") +
-    "</div>";
+  const today = s.currentDate;
+  let daysRemaining = null, progress = null;
+  if (start && end && today) {
+    const total = daysBetween(start, end);
+    const elapsed = daysBetween(start, today);
+    daysRemaining = daysBetween(today, end);
+    if (total && total > 0 && elapsed != null) progress = clamp((elapsed / total) * 100);
   }
+  setText('phase-days', daysRemaining != null ? `${Math.max(0, daysRemaining)} Days Remaining` : null);
+  const bar = $('phase-progress');
+  if (bar) bar.style.width = progress != null ? `${progress}%` : '0%';
+}
 
-  // ── Top Drivers ──────────────────────────────────────────────────────
-  function topDrivers(s) {
-    var drivers = s.drivers || [];
-    if (!drivers.length) return "";
-    var rows = drivers.map(function (d, i) {
-      return '<div class="driver-row">' +
-        '<span class="driver-name"><span class="num tab-num">' + (i + 1) + ".</span>" +
-          esc(dash(d.name)) + "</span>" +
-        '<span class="driver-score tab-num">+' + esc(d.score) + "</span>" +
-      "</div>";
-    }).join("");
-    return '<div class="card">' +
-      '<div class="section-heading">Top Drivers</div>' + rows +
-      '<div class="drivers-footer"><span>View all drivers</span><span>›</span></div>' +
-    "</div>";
-  }
-
-  // ── Forecast Trend ───────────────────────────────────────────────────
-  var DIR = {
-    Strengthening: { cls: "dir-up", arrow: "↗" },
-    Stable:        { cls: "dir-flat", arrow: "→" },
-    Weakening:     { cls: "dir-down", arrow: "↘" }
-  };
-  function trendChartSVG(pts) {
-    // small polyline from opportunity-ordinal of each label state (0..4)
-    var ORD = { NEUTRAL: 0, PRESSURE: 1, CONSOLIDATION: 2, TRANSITION: 2, TRANSFORMATION: 3, EXPANSION: 4 };
-    var n = pts.length;
-    if (n < 2) return "";
-    var W = 120, H = 64, pad = 6;
-    var coords = pts.map(function (p, i) {
-      var o = ORD[p.state] != null ? ORD[p.state] : 0;
-      var x = pad + (W - 2 * pad) * (i / (n - 1));
-      var y = H - pad - (H - 2 * pad) * (o / 4);
-      return x.toFixed(1) + "," + y.toFixed(1);
-    });
-    var last = coords[coords.length - 1].split(",");
-    return '<svg viewBox="0 0 ' + W + " " + H + '" preserveAspectRatio="none" aria-hidden="true">' +
-      '<polyline fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" ' +
-      'stroke-linejoin="round" points="' + coords.join(" ") + '"/>' +
-      '<circle cx="' + last[0] + '" cy="' + last[1] + '" r="3" fill="#F4C542"/>' +
-    "</svg>";
-  }
-  function forecastTrend(s) {
-    var pts = s.forecastTrend || [];
-    if (pts.length < 2) return "";
-    var list = pts.map(function (p) {
-      return '<div class="trend-item"><span class="t-date tab-num">' + fmtDayMon(p.date) +
-             '</span><span class="t-state">' + esc(dash(p.state)) + "</span></div>";
-    }).join("");
-    var d = DIR[s.trendDirection];
-    var dirHTML = s.trendDirection
-      ? 'Direction: <span class="dir-val ' + (d ? d.cls : "") + '">' +
-        esc(s.trendDirection) + (d ? " " + d.arrow : "") + "</span>"
-      : 'Direction: <span class="muted">—</span>';
-    return '<div class="card">' +
-      '<div class="section-heading">Forecast Trend</div>' +
-      '<div class="trend-body">' +
-        '<div class="trend-list">' + list + "</div>" +
-        '<div class="trend-chart">' + trendChartSVG(pts) + "</div>" +
-      "</div>" +
-      '<div class="trend-direction">' + dirHTML + "</div>" +
-    "</div>";
-  }
-
-  // ── Next Major Window ────────────────────────────────────────────────
-  function nextMajorWindow(s) {
-    var w = s.nextWindow;
-    if (!w) return "";
-    var strength = (w.strength == null) ? "" :
-      '<span><b>' + w.strength.toFixed(1) + "</b> / 10</span>";
-    var cat = w.category ? '<span>Category <b>' + esc(w.category) + "</b></span>" : "";
-    var days = (w.daysRemaining == null) ? "—" : w.daysRemaining;
-    return '<div class="card">' +
-      '<div class="section-heading">Next Major Window</div>' +
-      '<div class="nmw-top">' +
-        '<div class="nmw-cal">📅</div>' +
-        '<div>' +
-          '<div class="nmw-title">' + esc(dash(w.title)) + "</div>" +
-          '<div class="nmw-date">' + fmtLongDate(w.date) + "</div>" +
-        "</div>" +
-        '<div class="nmw-count"><div class="n tab-num">' + days +
-          '</div><div class="lbl">Days Remaining</div></div>' +
-      "</div>" +
-      ((strength || cat) ? '<div class="nmw-footer">' + strength + cat + "</div>" : "") +
-    "</div>";
-  }
-
-  // ── Weather Metrics ──────────────────────────────────────────────────
-  var METRICS = [
-    { key: "opportunity", label: "Opportunity", cls: "m-green", bar: "bar-green" },
-    { key: "pressure",    label: "Pressure",    cls: "m-red",   bar: "bar-red" },
-    { key: "volatility",  label: "Volatility",  cls: "m-orange",bar: "bar-orange" },
-    { key: "momentum",    label: "Momentum",    cls: "m-blue",  bar: "bar-blue" }
+function renderEventRadar(s) {
+  const rings = $('radar-rings');
+  if (!rings) return;
+  const er = s.eventRadar || {};
+  const buckets = [
+    { label: 'NEAR', items: er.near || [] },
+    { label: 'MID', items: er.mid || [] },
+    { label: 'LONG', items: er.long || [] }
   ];
-  function weatherMetrics(s) {
-    var cards = METRICS.map(function (m) {
-      var v = s[m.key];
-      var num = (v == null) ? "—" : v;
-      var pct = (v == null) ? 0 : Math.max(0, Math.min(100, v));
-      return '<div class="metric-mini">' +
-        '<div class="m-label">' + m.label + "</div>" +
-        '<div class="m-num tab-num ' + m.cls + '">' + num + "</div>" +
-        '<div class="metric-bar"><span class="' + m.bar + '" style="width:' + pct + '%"></span></div>' +
-      "</div>";
-    }).join("");
-    return '<div class="card">' +
-      '<div class="section-heading">Weather Metrics</div>' +
-      '<div class="metrics-grid">' + cards + "</div>" +
-    "</div>";
-  }
+  rings.innerHTML = buckets.map(b => {
+    const top = b.items[0];
+    return `
+    <div class="radar-ring">
+      <span class="radar-label">${b.label}</span>
+      <span class="radar-value">${top ? `${top.days} Days` : '—'}</span>
+      <span class="radar-event">${top ? top.title : ''}</span>
+    </div>`;
+  }).join('');
+}
 
-  // ── Daily Horoscope (Tropical + Vedic) ───────────────────────────────
-  // Shared renderer; null field or missing body -> graceful placeholder (no fakes).
-  function horoscopeCard(heading, data) {
-    if (!data || !data.body) {
-      return '<div class="card horoscope-card">' +
-        '<div class="section-heading">' + heading + "</div>" +
-        '<p class="horoscope-empty">Horoscope not yet computed</p>' +
-      "</div>";
-    }
-    var foot = data.for_date ? "For " + fmtLongDate(data.for_date) : "";
-    return '<div class="card horoscope-card">' +
-      '<div class="section-heading">' + heading + "</div>" +
-      (data.subtitle ? '<div class="horoscope-subtitle">' + esc(data.subtitle) + "</div>" : "") +
-      '<p class="horoscope-body">' + esc(data.body) + "</p>" +
-      (foot ? '<div class="horoscope-footer">' + esc(foot) + "</div>" : "") +
-    "</div>";
-  }
-  function tropicalHoroscope(s) {
-    return horoscopeCard("Tropical Horoscope", s.tropicalHoroscope);
-  }
-  function vedicHoroscope(s) {
-    return horoscopeCard("Vedic Horoscope", s.vedicHoroscope);
-  }
+function renderPlanetInfluences(s) {
+  const grid = $('influences-grid');
+  if (!grid) return;
+  const items = s.planetInfluences || [];
+  if (!items.length) { grid.innerHTML = '<div class="card empty">No active influences</div>'; return; }
+  grid.innerHTML = items.map(p => `
+    <div class="card influence-card influence--${(p.role || '').toLowerCase()}">
+      <div class="influence-name">${p.planet || '—'}</div>
+      <div class="influence-role">${p.role || ''}</div>
+      <div class="influence-score">${p.influence > 0 ? '+' : ''}${p.influence ?? '—'}</div>
+      <div class="influence-summary">${p.summary || ''}</div>
+    </div>`).join('');
+}
 
-  // ── Recommended Actions ──────────────────────────────────────────────
-  function recommendedActions(s) {
-    var recs = s.recommendations || [];
-    var avoid = s.avoidances || [];
-    if (!recs.length && !avoid.length) return "";
-    var doItems = recs.map(function (r) {
-      return '<div class="action-item do"><span class="mark">✓</span><span>' + esc(r) + "</span></div>";
-    }).join("");
-    var avoidItems = avoid.map(function (a) {
-      return '<div class="action-item avoid"><span class="mark">✕</span><span>' + esc(a) + "</span></div>";
-    }).join("");
-    return '<div class="card">' +
-      '<div class="section-heading">Recommended Actions</div>' +
-      (recs.length ? '<div class="actions-sub do">Do More Of</div>' + doItems : "") +
-      (avoid.length ? '<div class="actions-sub avoid">Avoid</div>' + avoidItems : "") +
-    "</div>";
-  }
+function renderUpcomingEvents(s) {
+  const ul = $('events-list');
+  if (!ul) return;
+  const items = (s.upcomingEvents || []).slice(0, 3);
+  ul.innerHTML = items.map(e => `
+    <li class="event-row">
+      <span class="event-title">${e.title}</span>
+      <span class="event-theme">${e.theme || ''}</span>
+      <span class="event-days">${(e.daysRemaining ?? e.days) ?? '—'} Days</span>
+    </li>`).join('');
+}
 
-  // ── Why This Forecast (nested evidence contract) ─────────────────────
-  function whyForecast(s) {
-    var ev = s.evidence;
-    if (!ev || typeof ev !== "object") return "";
-    var contributors = ev.contributors || [];
-    var reducers = ev.reducers || [];
-    if (!contributors.length && !reducers.length) return "";
-    function line(f, pos) {
-      var sign = pos ? "+" : "−";
-      return '<div class="why-line"><span>' + esc(dash(f.factor)) +
-        '</span><span class="sc ' + (pos ? "pos" : "neg") + ' tab-num">' +
-        sign + Math.abs(f.score) + "</span></div>";
-    }
-    var score = (ev.expansionScore == null) ? "—" : ev.expansionScore;
-    return '<div class="card">' +
-      '<div class="section-heading">Why This Forecast</div>' +
-      '<div class="card-inner">' +
-        '<div class="why-score"><span class="lbl">Expansion Score</span><span class="val tab-num">' +
-          score + "</span></div>" +
-        (contributors.length ? '<div class="why-block"><div class="why-h">Contributors</div>' +
-          contributors.map(function (f) { return line(f, true); }).join("") + "</div>" : "") +
-        (reducers.length ? '<div class="why-block"><div class="why-h">Reducers</div>' +
-          reducers.map(function (f) { return line(f, false); }).join("") + "</div>" : "") +
-      "</div>" +
-    "</div>";
-  }
+function renderSkyConditions(s) {
+  const card = $('sky-card');
+  if (!card) return;
+  const sk = s.skyConditions || {};
+  const metrics = [
+    { label: 'Expansion', val: sk.expansion ?? s.opportunity, color: 'positive' },
+    { label: 'Pressure', val: sk.pressure ?? s.pressure, color: 'warning' },
+    { label: 'Volatility', val: sk.volatility ?? s.volatility, color: 'danger' },
+    { label: 'Support', val: sk.support ?? s.momentum, color: 'info' }
+  ];
+  card.innerHTML = metrics.map(m => `
+    <div class="sky-row">
+      <span class="sky-label">${m.label}</span>
+      <div class="sky-bar"><div class="sky-fill sky-fill--${m.color}" style="width:${clamp(m.val ?? 0)}%"></div></div>
+      <span class="sky-value">${m.val != null ? m.val + '%' : '—'}</span>
+    </div>`).join('');
+}
 
-  // ── Guidance (narrative) ─────────────────────────────────────────────
-  function guidance(s) {
-    var text = s.narrative || "Narrative computation pending.";
-    return '<div class="card">' +
-      '<div class="section-heading">Guidance</div>' +
-      '<p class="guidance-text">' + esc(text) + "</p>" +
-    "</div>";
-  }
+function renderDailyReading(s) {
+  const dr = s.dailyReading || {};
+  setText('reading-state', (dr.state || s.forecast || '').toUpperCase());
+  setText('reading-body', dr.read || dr.body);
+}
 
-  // ── Timestamp footer ─────────────────────────────────────────────────
-  function timestamp(s) {
-    var src = s.sourceMode ? (s.sourceMode.charAt(0).toUpperCase() + s.sourceMode.slice(1)) : "Static";
-    var when = s.updatedAt ? "Updated " + fmtStamp(s.updatedAt) : "—";
-    return '<div class="timestamp-footer">' + esc(when) + " · Source: " + esc(src) + "</div>";
+function renderWhatChanged(s) {
+  const card = $('changed-card');
+  if (!card) return;
+  const dc = s.dailyChanges;
+  if (!dc) {
+    card.innerHTML = '<div class="changed-empty">Tracking begins today — deltas appear tomorrow.</div>';
+    return;
   }
+  const rows = [
+    { label: 'Momentum', val: dc.momentum },
+    { label: 'Opportunity', val: dc.opportunity },
+    { label: 'Pressure', val: dc.pressure },
+    { label: 'Volatility', val: dc.volatility }
+  ];
+  const compared = dc.comparedTo || dc.lastComparedAt;
+  card.innerHTML = rows.map(r => {
+    if (r.val == null) return `<div class="changed-row"><span class="changed-label">${r.label}</span><span class="changed-val">—</span></div>`;
+    const sign = r.val > 0 ? '+' : '';
+    const cls = r.val > 0 ? 'changed-pos' : (r.val < 0 ? 'changed-neg' : 'changed-flat');
+    return `<div class="changed-row"><span class="changed-label">${r.label}</span><span class="changed-val ${cls}">${sign}${r.val}</span></div>`;
+  }).join('') + (compared ? `<div class="changed-footer">Updated vs ${String(compared).slice(0, 10)}</div>` : '');
+}
 
-  // ── Bottom nav (Home active; rest decorative no-ops) ─────────────────
-  function bottomNav() {
-    var items = [
-      { icon: "⌂", label: "Home", active: true },
-      { icon: "◷", label: "Timeline", active: false },
-      { icon: "▤", label: "Reports", active: false },
-      { icon: "○", label: "Profile", active: false }
-    ];
-    return items.map(function (it) {
-      return '<button class="nav-item' + (it.active ? " active" : "") +
-        '" type="button" aria-disabled="' + (it.active ? "false" : "true") + '" tabindex="-1">' +
-        '<span class="nav-icon">' + it.icon + "</span><span>" + it.label + "</span></button>";
-    }).join("");
-  }
+function renderTodaysInsight(s) {
+  setText('insight-card', s.todaysInsight);
+}
 
-  window.TWRender = {
-    header: header,
-    hero: hero,
-    forecastTitle: forecastTitle,
-    currentPhase: currentPhase,
-    forecastCard: forecastCard,
-    activeSky: activeSky,
-    topDrivers: topDrivers,
-    forecastTrend: forecastTrend,
-    nextMajorWindow: nextMajorWindow,
-    weatherMetrics: weatherMetrics,
-    tropicalHoroscope: tropicalHoroscope,
-    vedicHoroscope: vedicHoroscope,
-    recommendedActions: recommendedActions,
-    whyForecast: whyForecast,
-    guidance: guidance,
-    timestamp: timestamp,
-    bottomNav: bottomNav
-  };
-})();
+function renderRecommended(s) {
+  const dos = $('actions-do');
+  const avoids = $('actions-avoid');
+  if (dos) dos.innerHTML = (s.recommendations || []).slice(0, 4).map(a => `<li>${a}</li>`).join('');
+  if (avoids) avoids.innerHTML = (s.avoidances || []).slice(0, 3).map(a => `<li>${a}</li>`).join('');
+}
+
+function renderDrivers(s) {
+  const ol = $('drivers-list');
+  if (!ol) return;
+  const items = (s.drivers || s.topDrivers || []).slice(0, 3);
+  ol.innerHTML = items.map(d =>
+    `<li class="driver-row"><span class="driver-name">${d.name}</span><span class="driver-score">${d.score > 0 ? '+' : ''}${d.score}</span></li>`
+  ).join('');
+}
+
+function renderWhy(s) {
+  const ev = s.evidence || {};
+  setText('expansion-score', ev.expansionScore);
+  const rows = $('why-rows');
+  if (!rows) return;
+  // contributors/reducers use `factor` (not `name`); reducer scores are already negative.
+  const pick = (x) => ({ name: x.name ?? x.factor ?? '—', score: x.score });
+  const contributors = (ev.contributors || []).map(c => ({ ...pick(c), kind: 'pos' }));
+  const reducers = (ev.reducers || []).map(r => ({ ...pick(r), kind: 'neg' }));
+  const all = [...contributors, ...reducers]
+    .sort((a, b) => Math.abs(b.score) - Math.abs(a.score))
+    .slice(0, 5);
+  rows.innerHTML = all.map(r =>
+    `<div class="why-row why-row--${r.kind}"><span>${r.name}</span><span>${r.score > 0 ? '+' : ''}${r.score}</span></div>`
+  ).join('');
+}
+
+function renderAll(s) {
+  renderHero(s);
+  renderNowBar(s);
+  renderPhase(s);
+  renderEventRadar(s);
+  renderPlanetInfluences(s);
+  renderUpcomingEvents(s);
+  renderSkyConditions(s);
+  renderDailyReading(s);
+  renderWhatChanged(s);
+  renderTodaysInsight(s);
+  renderRecommended(s);
+  renderDrivers(s);
+  renderWhy(s);
+  // Confidence stays "Not Rated" — static in HTML/CSS; no JS bind required.
+}
+
+async function tick() {
+  if (State.polling) return;
+  State.polling = true;
+  try {
+    const s = await loadState();
+    if (!s) return;
+    const hash = JSON.stringify({ u: s.updatedAt, h: s.data_hash });
+    if (hash === State.lastHash) return;
+    State.lastHash = hash;
+    renderAll(s);
+  } finally { State.polling = false; }
+}
+
+tick();
+setInterval(tick, 60000);

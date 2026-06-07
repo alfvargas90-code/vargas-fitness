@@ -5,15 +5,116 @@
   "supportingPlanet": "Venus",
   "pressurePlanet": "Saturn",
   "volatilityPlanet": "Uranus",
-  "confidence": "High",
-  "durationDays": 85,
+  "confidence": null,
+  "durationDays": 84,
+  "nowBar": {
+    "forecast": "EXPANSION",
+    "pressureLevel": "High",
+    "momentumDirection": "Falling",
+    "nextEventDays": 35
+  },
   "currentPhase": "Preparation Window",
   "currentPhaseStart": "2026-05-28",
   "currentPhaseEnd": "2026-06-08",
+  "eventRadar": {
+    "near": [
+      {
+        "title": "Jupiter Return",
+        "days": 35
+      }
+    ],
+    "mid": [
+      {
+        "title": "Saturn Year Begins",
+        "days": 66
+      },
+      {
+        "title": "Jupiter–Venus Benefic",
+        "days": 122
+      },
+      {
+        "title": "Contract Hinge",
+        "days": 144
+      }
+    ],
+    "long": [
+      {
+        "title": "Saturn Checkpoint",
+        "days": 215
+      }
+    ]
+  },
+  "planetInfluences": [
+    {
+      "planet": "Jupiter",
+      "role": "Dominant",
+      "influence": 18,
+      "summary": "Opens doors and widens the pipeline"
+    },
+    {
+      "planet": "Venus",
+      "role": "Supporting",
+      "influence": 10,
+      "summary": "Smooths relationships and resources"
+    },
+    {
+      "planet": "Saturn",
+      "role": "Pressure",
+      "influence": -50,
+      "summary": "Adds weight, structure, and constraint"
+    },
+    {
+      "planet": "Uranus",
+      "role": "Volatility",
+      "influence": -66,
+      "summary": "Injects sudden change and volatility"
+    }
+  ],
+  "upcomingEvents": [
+    {
+      "title": "Jupiter Return",
+      "theme": "Expansion",
+      "days": 35
+    },
+    {
+      "title": "Saturn Year Begins",
+      "theme": "Consolidation",
+      "days": 66
+    },
+    {
+      "title": "Jupiter–Venus Benefic",
+      "theme": "Expansion",
+      "days": 122
+    }
+  ],
   "opportunity": 28,
   "pressure": 73,
   "volatility": 78,
-  "momentum": 47,
+  "momentum": 55,
+  "dailyReading": {
+    "state": "EXPANSION",
+    "read": "Today you may notice a wider field of options, but not a clean green light. This is a stretch for your attention: conversations, introductions, drafts, negotiations, and planning threads can all open useful doors, yet the ground underneath may still feel noisy or unsettled. Your best move is to build leverage without forcing finality. Ask the question, send the note, map the offer, clarify the numbers, clean up the document, and keep the relationship warm. Work benefits from sharper language and better positioning, especially if you slow down enough to say what you actually mean. Relationships may require more patience than usual; people can be receptive and confusing at the same time. Do not make mood, guilt, or pressure the basis for a binding decision. Money and home matters ask for restraint. Fewer, better moves will beat scattered expansion. If something feels promising but not stable, treat it as pipeline, not proof. You are in a building phase: useful openings can appear now, but the heavier commitments need more structure, cleaner terms, and time. Today supports preparation, repair, and quiet influence more than dramatic action."
+  },
+  "dailyChanges": {
+    "momentum": -16,
+    "opportunity": 0,
+    "pressure": 0,
+    "volatility": 0,
+    "comparedTo": "2026-06-06",
+    "lastComparedAt": "2026-06-07T01:17:50-05:00"
+  },
+  "todaysInsight": "Build the pipeline before you lock the plan. Keep pressure visible, but delay final commitments.",
+  "recommendations": [
+    "Build pipeline",
+    "Prepare assets",
+    "Schedule meetings",
+    "Stress-test plans"
+  ],
+  "avoidances": [
+    "Locking commitments",
+    "Overextending capacity",
+    "Ignoring constraints"
+  ],
   "drivers": [
     {
       "name": "Jupiter Lord of Year",
@@ -27,43 +128,6 @@
       "name": "Approaching Jupiter Return",
       "score": 3
     }
-  ],
-  "forecastTrend": [
-    {
-      "date": "2026-05-10",
-      "state": "EXPANSION"
-    },
-    {
-      "date": "2026-05-20",
-      "state": "EXPANSION"
-    },
-    {
-      "date": "2026-06-01",
-      "state": "EXPANSION"
-    },
-    {
-      "date": "2026-06-06",
-      "state": "EXPANSION"
-    }
-  ],
-  "trendDirection": "Stable",
-  "nextWindow": {
-    "title": "Jupiter Return",
-    "date": "2026-07-12",
-    "daysRemaining": 36,
-    "category": "Expansion",
-    "strength": 9.2
-  },
-  "recommendations": [
-    "Build pipeline",
-    "Schedule meetings",
-    "Strengthen systems",
-    "Prepare options"
-  ],
-  "avoidances": [
-    "Force commitments",
-    "Ignore constraints",
-    "Overextend capacity"
   ],
   "evidence": {
     "expansionScore": 28,
@@ -104,32 +168,35 @@
       }
     ]
   },
-  "tropicalHoroscope": {
-    "for_date": "2026-06-06",
-    "subtitle": "Today's transits",
-    "body": "Today you may notice a wider sense of possibility, but it comes through small openings rather than a clean green light. Conversations can help you clarify your position, make useful introductions, or turn scattered ideas into something others can understand. At the same time, emotional signals may feel blurred, and background pressure can make ordinary decisions seem heavier than they are. This is a day for fewer, better moves: clean up loose ends, refine the pitch, strengthen key relationships, and build leverage without forcing commitment too soon. Let useful doors open, but give the final shape more time.",
-    "key_factors": [
-      "Mercury opposition natal Ascendant (0.55°)",
-      "Neptune square natal Moon (1.35°)",
-      "Mercury sextile natal Sun (1.66°)"
-    ]
+  "nextWindow": {
+    "title": "Jupiter Return",
+    "date": "2026-07-12",
+    "daysRemaining": 35,
+    "category": "Expansion",
+    "strength": 9.2
   },
-  "vedicHoroscope": {
-    "for_date": "2026-06-06",
-    "subtitle": "Today's sidereal picture · Moon–Venus–Jupiter",
-    "body": "Today you may notice a wider field of possibility, but it comes with background pressure rather than ease. There is support for building leverage: refining systems, opening practical conversations, improving finances, work flow, or home foundations. The useful move is preparation, not forcing closure. Tensions may show up as uncertainty around direction, heavier responsibility, or a feeling that every choice carries extra weight. Treat that as a signal to slow the decision-making, document what matters, and keep commitments realistic. This is a day for structured expansion: make the next useful move, strengthen the base, and leave formal agreements for when the shape is clearer.",
-    "key_factors": [
-      "Vimshottari Moon–Venus–Jupiter sub-period",
-      "Sade Sati (Small Panoti)",
-      "Transit Moon in Shatabhisha",
-      "Sidereal Neptune square natal Lagna (4.7°)",
-      "Sidereal Saturn square natal Lagna (3.9°)"
-    ]
-  },
-  "narrative": "This is a build-the-pipeline period, not a force-the-outcome period. Use now through June 8, 2026 to clean up loose ends, strengthen key relationships, assemble documents, and open doors without locking yourself into final terms. The next 85 days carry high pressure and high churn, so keep commitments reversible, reduce operational mess, and preserve negotiating room. After late August 2026, the work starts becoming formal responsibility, with an April 2027 checkpoint where the strongest pieces need to be written down, titled, signed, or otherwise made official. Open the door now; commit later.",
-  "updatedAt": "2026-06-06T23:53:08-05:00",
+  "forecastTrend": [
+    {
+      "date": "2026-05-11",
+      "state": "EXPANSION"
+    },
+    {
+      "date": "2026-05-21",
+      "state": "EXPANSION"
+    },
+    {
+      "date": "2026-06-02",
+      "state": "EXPANSION"
+    },
+    {
+      "date": "2026-06-07",
+      "state": "EXPANSION"
+    }
+  ],
+  "trendDirection": "Stable",
+  "updatedAt": "2026-06-07T01:17:50-05:00",
   "sourceMode": "static",
-  "currentDate": "2026-06-06",
+  "currentDate": "2026-06-07",
   "sources": [
     "02_Astrology/Alfie/natal_context.md",
     "02_Astrology/Alfie/deep_research_tropical_2026-2027.md",
@@ -138,12 +205,13 @@
   ],
   "scoringDetail": {
     "dominanceScores": {
-      "jupiter": 10.42,
+      "jupiter": 10.41,
       "saturn": 7.32,
       "pluto": 6.84,
       "uranus": 6.85,
-      "venus": 5.56
+      "venus": 5.5
     },
+    "corroboration": "High",
     "lordOfYear": "jupiter",
     "activeWindows": [
       "Late May–early June clearing"
@@ -151,11 +219,11 @@
     "metricDetail": {
       "opportunity": [
         "Jupiter is lord of the year (benefic regime)",
-        "approaching benefic window: Jupiter return — chapter reset (36d)",
+        "approaching benefic window: Jupiter return — chapter reset (35d)",
         "Vedic Moon–Venus antardasha (relationship-positive)"
       ],
       "pressure": [
-        "Saturn square natal neptune (0.81°)",
+        "Saturn square natal neptune (0.82°)",
         "Saturn square natal asc (4.4°)",
         "Sade Sati (Small Panoti) — pressure on foundations",
         "inside admin/clearing window: Late May–early June clearing"
@@ -168,18 +236,18 @@
         "pluto square natal mc (angular, 1.39°)"
       ],
       "momentum": [
-        "5 fast transit(s) exact within 3°",
-        "approaching Jupiter return — chapter reset (36d)",
-        "BaZi Da Yun shift within 101 days"
+        "6 fast transit(s) exact within 3°",
+        "approaching Jupiter return — chapter reset (35d)",
+        "BaZi Da Yun shift within 100 days"
       ]
     },
     "transitSigns": {
-      "sun": "16.48° Gemini",
-      "moon": "2.18° Pisces",
-      "mercury": "8.9° Cancer",
-      "venus": "22.7° Cancer",
-      "mars": "14.34° Taurus",
-      "jupiter": "25.26° Cancer",
+      "sun": "16.53° Gemini",
+      "moon": "2.91° Pisces",
+      "mercury": "8.98° Cancer",
+      "venus": "22.77° Cancer",
+      "mars": "14.38° Taurus",
+      "jupiter": "25.27° Cancer",
       "saturn": "12.75° Aries",
       "uranus": "2.42° Gemini",
       "neptune": "4.17° Aries",
@@ -196,25 +264,31 @@
         "transit": "venus",
         "natal": "mercury",
         "aspect": "sextile",
-        "orb": 0.53
+        "orb": 0.6
       },
       {
         "transit": "mercury",
         "natal": "asc",
         "aspect": "opposition",
-        "orb": 0.55
+        "orb": 0.63
       },
       {
         "transit": "saturn",
         "natal": "neptune",
         "aspect": "square",
-        "orb": 0.81
+        "orb": 0.82
       },
       {
         "transit": "mars",
         "natal": "pluto",
         "aspect": "opposition",
-        "orb": 0.98
+        "orb": 0.93
+      },
+      {
+        "transit": "moon",
+        "natal": "mc",
+        "aspect": "trine",
+        "orb": 0.99
       },
       {
         "transit": "neptune",
@@ -241,22 +315,16 @@
         "orb": 1.57
       },
       {
-        "transit": "mercury",
-        "natal": "sun",
-        "aspect": "sextile",
-        "orb": 1.66
-      },
-      {
         "transit": "pluto",
         "natal": "north_node",
         "aspect": "conjunction",
         "orb": 1.7
       },
       {
-        "transit": "moon",
-        "natal": "mc",
-        "aspect": "trine",
-        "orb": 1.72
+        "transit": "mercury",
+        "natal": "sun",
+        "aspect": "sextile",
+        "orb": 1.75
       }
     ],
     "transitMissing": [],

@@ -1,11 +1,23 @@
 #!/usr/bin/env python3
 """
-Timing Weather — Intelligence Engine (v1.1).
+Timing Weather — Intelligence Engine (v2.0 — Intelligence Dashboard).
 
 Reads Alfie's authoritative natal chart + the overnight deep-research / council
 convergence report, computes live geocentric tropical transits (Swiss Ephemeris),
-classifies the current "operational weather" and writes state.json in the v1.1
+classifies the current "operational weather" and writes state.json in the v2
 camelCase contract.
+
+v2 adds, on top of the v1.1 fields:
+  - dailyReading {state, read}  — ONE unified Tropical+Vedic synthesis (collapses
+    the two horoscope cards; tropicalHoroscope/vedicHoroscope fields removed)
+  - dailyChanges {momentum, opportunity, pressure, volatility, comparedTo,
+    lastComparedAt} or null — real day-over-day deltas from polar/state_history/
+  - todaysInsight  — Codex one-liner (<=2 imperative sentences)
+  - eventRadar {near, mid, long}  — council windows bucketed by days remaining
+  - upcomingEvents [{title, theme, days}]  — top-3 future windows
+  - nowBar {forecast, pressureLevel, momentumDirection, nextEventDays}
+  - planetInfluences [{planet, role, influence, summary}]
+  - confidence is now ALWAYS null (Confidence Engine deferred to v3 -> UI "Not Rated")
 
 v1.1 adds: currentPhase, Active Sky (dominant/supporting/pressure/volatility
 planet), Top Drivers, Forecast Trend (RETROACTIVE engine runs at past dates via
@@ -47,6 +59,7 @@ VAULT = os.path.dirname(os.path.dirname(DASH))                   # .../alfredo.v
 ASTRO = os.path.join(VAULT, "02_Astrology", "Alfie")
 COUNCIL = os.path.join(VAULT, "05_Council", "octopus-debates")
 CACHE_DIR = os.path.join(DASH, "polar", "cache")                 # forecast-trend cache (idempotent)
+HISTORY_DIR = os.path.join(DASH, "polar", "state_history")       # v2 daily snapshots (What Changed)
 
 NATAL_MD = os.path.join(ASTRO, "natal_context.md")
 TROPICAL_MD = os.path.join(ASTRO, "deep_research_tropical_2026-2027.md")
@@ -192,6 +205,22 @@ SUBTITLE = {
     "ATTRACTION":     "Relationships and resources flow in",
     "PRESSURE":       "Under load — protect the essentials",
     "NEUTRAL":        "Quiet skies — steady as she goes",
+}
+
+# Section 5 (Planet Influences) one-line archetype summaries. DESIGN COPY (same
+# class as SUBTITLE) — descriptive of each planet's standing function, NOT a
+# fabricated metric. The signed influence number alongside each is engine-sourced.
+PLANET_SUMMARY = {
+    "Jupiter": "Opens doors and widens the pipeline",
+    "Venus":   "Smooths relationships and resources",
+    "Saturn":  "Adds weight, structure, and constraint",
+    "Uranus":  "Injects sudden change and volatility",
+    "Pluto":   "Forces deep, irreversible restructuring",
+    "Mars":    "Raises friction and urgency",
+    "Mercury": "Speeds communication and decisions",
+    "Neptune": "Blurs signals — verify before acting",
+    "Sun":     "Spotlights identity and recognition",
+    "Moon":    "Colors mood and daily rhythm",
 }
 
 # Forecast-trend retroactive offsets in days (today minus N). Spec: ~27/17/5/0.
@@ -684,44 +713,167 @@ def codex_actions(forecast, dominant, pressure_src, phase):
     return dos[:4], avoids[:3]
 
 
-# --- narrative (Codex) ---------------------------------------------------
-def codex_narrative(forecast, metrics, confidence, duration, phase, phase_end):
-    """One plain-language paragraph via ~/bin/llm --model codex. No jargon."""
-    llm = os.path.expanduser("~/bin/llm")
-    if not os.path.exists(llm):
-        log("  ~/bin/llm not found — narrative null")
+# --- Section 9: What Changed (state persistence) -------------------------
+HISTORY_KEYS = ("forecast", "momentum", "opportunity", "pressure", "volatility", "expansionScore")
+
+
+def latest_prior_snapshot(today):
+    """Most recent persisted snapshot STRICTLY BEFORE today (so a same-day re-run
+    still compares against yesterday, not against itself). Returns (date, dict) or
+    (None, None) when no prior history exists."""
+    if not os.path.isdir(HISTORY_DIR):
+        return None, None
+    best = None
+    for fn in os.listdir(HISTORY_DIR):
+        m = re.match(r"(\d{4}-\d{2}-\d{2})\.json$", fn)
+        if not m:
+            continue
+        d = datetime.strptime(m.group(1), "%Y-%m-%d").date()
+        if d >= today:
+            continue
+        if best is None or d > best[0]:
+            try:
+                data = json.load(open(os.path.join(HISTORY_DIR, fn)))
+            except Exception:
+                continue
+            best = (d, data)
+    return best if best else (None, None)
+
+
+def compute_daily_changes(today, metrics, expansion_score, now):
+    """Real day-over-day deltas vs the most recent prior snapshot. None on the first
+    day (no prior) -> UI shows 'Tracking begins today'. Honest about staleness: the
+    snapshot we actually compared against is named in `comparedTo`."""
+    prior_date, prior = latest_prior_snapshot(today)
+    if not prior:
         return None
-    win = f" Current phase: {phase} (through {phase_end})." if phase_end else f" Current phase: {phase}."
-    prompt = (
-        "You are writing ONE short plain-English paragraph (4-6 sentences) for a personal "
-        "'life weather' dashboard. The reader is a high-output operator who hates fluff and "
-        "does NOT want astrology jargon. NEVER mention planets, signs, houses, transits, "
-        "horoscopes, or 'energy'. Translate the classified state below into a grounded, "
-        "operational read of what this period is for and what to do with it. Be concrete and "
-        "decisive, no hedging, no hype.\n\n"
-        f"CLASSIFIED STATE (do not echo the labels):\n"
-        f"- Headline mode: {forecast} (the dominant theme right now)\n"
-        f"- Opportunity {metrics['opportunity']}/100, Pressure {metrics['pressure']}/100, "
-        f"Volatility {metrics['volatility']}/100, Momentum {metrics['momentum']}/100\n"
-        f"- Confidence: {confidence}; this phase lasts ~{duration} days.{win}\n\n"
-        "GROUND TRUTH from the underlying research (use it, don't cite it): right now is a "
-        "preparation-and-pipeline phase — quiet leverage, cleanup, building relationships and "
-        "documents — that converts into weight-bearing responsibility and formal commitments "
-        "after late August 2026, with a hard checkpoint in April 2027 where what got built "
-        "must be written, titled, or committed. Open doors now; sign and formalize later.\n\n"
-        "Output ONLY the paragraph, no preamble."
-    )
+    cur = {"momentum": metrics["momentum"], "opportunity": metrics["opportunity"],
+           "pressure": metrics["pressure"], "volatility": metrics["volatility"],
+           "expansionScore": expansion_score}
+    deltas = {}
+    for k in ("momentum", "opportunity", "pressure", "volatility"):
+        base = prior.get(k)
+        deltas[k] = (cur[k] - base) if isinstance(base, (int, float)) else None
+    deltas["comparedTo"] = prior_date.isoformat()
+    deltas["lastComparedAt"] = now.isoformat(timespec="seconds")
+    return deltas
+
+
+def write_history_snapshot(today, forecast, metrics, expansion_score, now):
+    """Persist today's snapshot to polar/state_history/<date>.json (overwrites a
+    same-day re-run idempotently). Written AFTER deltas are computed so it never
+    pollutes its own comparison. Non-fatal on failure."""
+    os.makedirs(HISTORY_DIR, exist_ok=True)
+    snap = {
+        "forecast": forecast,
+        "momentum": metrics["momentum"],
+        "opportunity": metrics["opportunity"],
+        "pressure": metrics["pressure"],
+        "volatility": metrics["volatility"],
+        "expansionScore": expansion_score,
+        "timestamp": now.isoformat(timespec="seconds"),
+    }
+    path = os.path.join(HISTORY_DIR, f"{today.isoformat()}.json")
     try:
-        out = subprocess.run([llm, "--lane", "reasoning", "--model", "codex", prompt],
-                             capture_output=True, text=True, timeout=180, cwd=DASH)
-        if out.returncode != 0:
-            log(f"  codex narrative exited {out.returncode}: {out.stderr.strip()[:200]}")
-            return None
-        text = re.sub(r"\s+", " ", out.stdout).strip()
-        return text or None
+        with open(path, "w") as f:
+            json.dump(snap, f, indent=2)
     except Exception as e:
-        log(f"  codex narrative failed (non-fatal): {e}")
+        log(f"  could not write history snapshot {path}: {e}")
+    return snap
+
+
+# --- Section 4: Event Radar (timing buckets, NO planet glyphs) ------------
+def event_radar(today):
+    """Future council windows bucketed purely by days remaining:
+    Near (<=45) / Mid (46-180) / Long (>180). Pure timing — the UI renders rings
+    with day counts, never planet symbols."""
+    near, mid, lng = [], [], []
+    for w in COUNCIL_WINDOWS:
+        days = (w["start"] - today).days
+        if days <= 0:
+            continue
+        item = {"title": w["title"], "days": days}
+        (near if days <= 45 else mid if days <= 180 else lng).append(item)
+    for b in (near, mid, lng):
+        b.sort(key=lambda x: x["days"])
+    return {"near": near, "mid": mid, "long": lng}
+
+
+# --- Section 6: Upcoming Events (top-3 future windows) -------------------
+def upcoming_events(today, limit=3):
+    fut = []
+    for w in COUNCIL_WINDOWS:
+        days = (w["start"] - today).days
+        if days <= 0:
+            continue
+        theme = cap(DOMINANT_LABEL.get(w["driver"], "").lower()) or cap(w["driver"])
+        fut.append({"title": w["title"], "theme": theme, "days": days})
+    fut.sort(key=lambda x: x["days"])
+    return fut[:limit]
+
+
+# --- Section 2: Now Bar (quick-render glance row) ------------------------
+def pressure_level(p):
+    if p is None:
         return None
+    return "Low" if p < 34 else "Moderate" if p < 67 else "High"
+
+
+def momentum_direction(daily_changes, trend_dir):
+    """Day-over-day momentum delta first (real persistence); fall back to the
+    regime trend direction when there's no prior snapshot yet."""
+    if daily_changes and isinstance(daily_changes.get("momentum"), (int, float)):
+        d = daily_changes["momentum"]
+        return "Rising" if d > 0 else "Falling" if d < 0 else "Steady"
+    return {"Strengthening": "Rising", "Weakening": "Falling",
+            "Stable": "Steady"}.get(trend_dir, "Steady")
+
+
+def build_now_bar(forecast, pre, daily_changes, trend_dir, nxt):
+    return {
+        "forecast": forecast,
+        "pressureLevel": pressure_level(pre),
+        "momentumDirection": momentum_direction(daily_changes, trend_dir),
+        "nextEventDays": nxt["daysRemaining"] if nxt else None,
+    }
+
+
+# --- Section 5: Planet Influences ---------------------------------------
+def _planet_contrib_points(planet, contribs):
+    """Sum the scoring points a given planet contributed within one metric's
+    contribs list (matching the planet name in either the label or the audit
+    detail). Returns total points (0 if none)."""
+    total = 0
+    for label, detail, pts in contribs:
+        if re.search(rf"\b{planet}\b", label, re.I) or re.search(rf"\b{planet}\b", detail, re.I):
+            total += pts
+    return total
+
+
+def build_planet_influences(dominant, supporting, pressure_src, volatility_src,
+                            opp_c, pre_c, vol_c, metrics):
+    """One row per role: planet, role, signed engine influence, archetype summary.
+    Influence is engine-sourced (the planet's net scoring contribution to its metric,
+    signed +benefic / -pressure / -volatility); summary is design copy (PLANET_SUMMARY)."""
+    rows = []
+
+    def add(planet_cap, role, contribs, sign, fallback_metric):
+        if not planet_cap:
+            return
+        pts = _planet_contrib_points(planet_cap.lower(), contribs)
+        infl = sign * (pts if pts else fallback_metric)
+        rows.append({
+            "planet": planet_cap,
+            "role": role,
+            "influence": int(round(infl)),
+            "summary": PLANET_SUMMARY.get(planet_cap, "Active in the current sky"),
+        })
+
+    add(cap(dominant),       "Dominant",   opp_c, +1, metrics["opportunity"])
+    add(cap(supporting),     "Supporting", opp_c, +1, max(1, metrics["opportunity"] // 3))
+    add(cap(pressure_src),   "Pressure",   pre_c, -1, metrics["pressure"])
+    add(cap(volatility_src), "Volatility", vol_c, -1, metrics["volatility"])
+    return rows
 
 
 # --- Vedic horoscope (sidereal Lahiri) -----------------------------------
@@ -806,41 +958,25 @@ def vedic_key_aspects(vtransits, vnatal, limit=2):
     return out
 
 
-def compute_vedic_horoscope(today, natal, now_utc, mood, with_codex=True):
-    """Build the vedicHoroscope field, or None if it can't be authored honestly."""
+def vedic_factor_list(today, natal, now_utc):
+    """Sidereal (Lahiri) factor list feeding the unified Daily Reading. Returns []
+    (never raises) when the Vedic layer can't be computed honestly."""
     try:
         vnatal = sidereal_natal(natal)
-        vtransits, vmissing = vedic_transits_at(now_utc)
+        vtransits, _vmissing = vedic_transits_at(now_utc)
     except Exception as e:
-        log(f"  vedic computation failed: {e} — vedicHoroscope null")
-        return None
+        log(f"  vedic computation failed: {e} — vedic factors empty")
+        return []
     if "moon" not in vtransits:
-        log("  vedic: no sidereal Moon — vedicHoroscope null")
-        return None
-
+        log("  vedic: no sidereal Moon — vedic factors empty")
+        return []
     chain, _sub = vedic_subperiod(today)
     factors = [f"Vimshottari {chain} sub-period"]
     if SADE_SATI[0] <= today <= SADE_SATI[1]:
         factors.append(f"Sade Sati ({SADE_SATI_PHASE})")
     factors.append(f"Transit Moon in {nakshatra_of(vtransits['moon'])}")
     factors.extend(vedic_key_aspects(vtransits, vnatal, limit=2))
-
-    subtitle = "Today's sidereal picture · " + chain
-    body = None
-    if with_codex:
-        background = (
-            "This Vedic year externalizes after a long inward phase: the live themes are "
-            "concrete movement in work/operations, home/property, finances and important "
-            "agreements — not fairy-tale romance. Now is supportive restructuring; "
-            "responsibility and weight build from late August, with paperwork and "
-            "formalization in the late-autumn stretch. There is steady background pressure "
-            "on home and foundations that rewards patience and structure."
-        )
-        body = codex_horoscope("Vedic / sidereal", factors, mood, background)
-    if not body:
-        return None
-    return {"for_date": today.isoformat(), "subtitle": subtitle,
-            "body": body, "key_factors": factors}
+    return factors
 
 
 def read_transit_snapshot(today):
@@ -880,66 +1016,98 @@ def tropical_key_factors(aspects, limit=3):
     return out
 
 
-def compute_tropical_horoscope(today, aspects, mood, with_codex=True):
-    """Build the tropicalHoroscope field, or None if it can't be authored honestly.
-    Factors come from the engine's live geocentric ephemeris (the same Swiss
-    Ephemeris the iMessage snapshot uses); today's persisted snapshot, if present,
-    only enriches the Codex prompt — it is never required."""
-    factors = tropical_key_factors(aspects, limit=3)
-    if not factors:
-        log("  tropical: no transit aspects today — tropicalHoroscope null")
-        return None
-    body = None
-    if with_codex:
-        snap = read_transit_snapshot(today)
-        background = (
-            "This is a preparation-and-pipeline phase: quiet leverage, cleanup, building "
-            "relationships and documents, opening doors that convert into weight-bearing "
-            "commitments after late August 2026 — open doors now, sign and formalize "
-            "later. Real background pressure and volatility ask for fewer, better moves."
-        )
-        if snap:
-            background += " Today's read from the morning snapshot: " + snap
-        body = codex_horoscope("Tropical / Western transits", factors, mood, background)
-    if not body:
-        return None
-    return {"for_date": today.isoformat(), "subtitle": "Today's transits",
-            "body": body, "key_factors": factors}
-
-
-def codex_horoscope(tradition, factors, mood, background):
-    """Plain-English daily horoscope body via ~/bin/llm --model codex (Cowork-safe).
-    No jargon, ~80-120 words, second person, single paragraph. None on failure."""
+# --- Section 8: Daily Reading (unified Tropical + Vedic synthesis) --------
+def codex_daily_reading(forecast, tropical_factors, vedic_factors, mood, snap=""):
+    """ONE unified ~200-word reading synthesizing BOTH tropical and Vedic factors via
+    ~/bin/llm --model codex (Cowork-safe). Plain language, NO jargon, and crucially NO
+    'according to Vedic / according to Tropical' callouts — just the merged takeaway.
+    Returns the body string, or None on failure (UI shows a placeholder)."""
     llm = os.path.expanduser("~/bin/llm")
     if not os.path.exists(llm):
-        log("  ~/bin/llm not found — horoscope body null")
+        log("  ~/bin/llm not found — dailyReading body null")
         return None
+    factors = [f for f in (list(tropical_factors) + list(vedic_factors)) if f]
+    if not factors:
+        log("  no tropical/vedic factors — dailyReading body null")
+        return None
+    background = (
+        "This is a preparation-and-pipeline phase: quiet leverage, cleanup, building "
+        "relationships and documents, opening doors that convert into weight-bearing "
+        "commitments after late August 2026 — open doors now, sign and formalize later. "
+        "Real background pressure and volatility on home and foundations ask for fewer, "
+        "better moves. Two independent traditions are pointing at the same behavioral "
+        "prescription; speak with ONE voice, never naming a tradition."
+    )
+    if snap:
+        background += " Today's read from the morning snapshot: " + snap
     prompt = (
-        "You are writing a plain-English daily horoscope reading. NO astrology jargon, "
-        "NO Latin terms, NO aspect names, NO planet or sign names. Speak in observable "
-        "themes — energy, focus, relationships, work, decisions. ~80-120 words. The "
-        "subject is a high-output operator on a known multi-month cycle; reference the "
-        "subtle current tensions AND supports honestly. No predictions of specific events, "
-        "no fortune-telling, no hype, no fluff.\n\n"
-        f"Context (translate, do not quote): {tradition} factors for today — "
+        "You are writing a single plain-English daily reading for a personal 'life weather' "
+        "dashboard. NO astrology jargon, NO Latin terms, NO aspect names, NO planet or sign "
+        "names, and NEVER say 'according to' any tradition or system. Speak with one unified "
+        "voice in observable themes — focus, relationships, work, money, home, decisions. "
+        "Roughly 180-200 words, second person. The subject is a high-output operator on a "
+        "known multi-month cycle; be honest about BOTH the supports and the tensions. No "
+        "predictions of specific events, no fortune-telling, no hype, no fluff.\n\n"
+        f"Headline mode (translate, do not echo the label): {forecast}.\n"
+        "Underlying factors to synthesize into one read (translate, do not quote): "
         + "; ".join(factors) + ".\n"
         f"Mood: {mood}\n"
         f"Background: {background}\n\n"
-        "Output: a SINGLE second-person paragraph (\"today you may notice\", \"this is a "
-        "day for\"). Honest about both supports and tensions. Output ONLY the paragraph, "
-        "no heading, no preamble."
+        "Output: ONE cohesive second-person passage (\"today you may notice\", \"this is a "
+        "stretch for\"). Output ONLY the passage — no heading, no preamble, no labels."
     )
     try:
         out = subprocess.run([llm, "--lane", "reasoning", "--model", "codex", prompt],
                              capture_output=True, text=True, timeout=180, cwd=DASH)
         if out.returncode != 0:
-            log(f"  codex horoscope ({tradition}) exited {out.returncode}: "
-                f"{out.stderr.strip()[:200]}")
+            log(f"  codex daily reading exited {out.returncode}: {out.stderr.strip()[:200]}")
             return None
         text = re.sub(r"\s+", " ", out.stdout).strip()
         return text or None
     except Exception as e:
-        log(f"  codex horoscope ({tradition}) failed (non-fatal): {e}")
+        log(f"  codex daily reading failed (non-fatal): {e}")
+        return None
+
+
+# --- Section 10: Today's Insight (Codex one-liner) -----------------------
+def codex_todays_insight(forecast, dominant, daily_changes, phase):
+    """<=2 imperative sentences via ~/bin/llm --model codex. No jargon. None on failure."""
+    llm = os.path.expanduser("~/bin/llm")
+    if not os.path.exists(llm):
+        log("  ~/bin/llm not found — todaysInsight null")
+        return None
+    change_note = ""
+    if daily_changes:
+        parts = []
+        for k in ("momentum", "opportunity", "pressure", "volatility"):
+            v = daily_changes.get(k)
+            if isinstance(v, (int, float)) and v != 0:
+                parts.append(f"{k} {'up' if v > 0 else 'down'} {abs(v)}")
+        if parts:
+            change_note = " Since yesterday: " + ", ".join(parts) + "."
+    prompt = (
+        "You are writing the single headline insight for a personal 'life weather' "
+        "dashboard. Output EXACTLY one or two short sentences, imperative voice "
+        "(e.g. 'Build leverage. Do not finalize commitments.'). NO astrology jargon, NO "
+        "planet/sign names, NO 'energy'. Concrete and decisive, no hedging, no hype.\n\n"
+        f"Current period: {phase}. Headline mode: {forecast}. The period favors building, "
+        f"preparation and pipeline over locking in final commitments; there is real "
+        f"background pressure.{change_note}\n\n"
+        "Output ONLY the one or two sentences, nothing else."
+    )
+    try:
+        out = subprocess.run([llm, "--lane", "reasoning", "--model", "codex", prompt],
+                             capture_output=True, text=True, timeout=180, cwd=DASH)
+        if out.returncode != 0:
+            log(f"  codex insight exited {out.returncode}: {out.stderr.strip()[:200]}")
+            return None
+        text = re.sub(r"\s+", " ", out.stdout).strip()
+        # keep at most two sentences, hard-trim runaway output
+        sentences = re.split(r"(?<=[.!?])\s+", text)
+        text = " ".join(sentences[:2]).strip()
+        return text or None
+    except Exception as e:
+        log(f"  codex insight failed (non-fatal): {e}")
         return None
 
 
@@ -995,65 +1163,89 @@ def compute(now=None, with_codex=True):
         except Exception as e:
             log(f"  could not read {p}: {e}")
             texts.append("")
-    conf = confidence_for(dominant, texts)
+    # Confidence ENGINE is deferred to v3 (roadmap). v2 emits null on the contract
+    # -> UI renders "Not Rated" in a neutral ring (PVR: never a fabricated grade).
+    # The corroboration count is kept in the audit trail only.
+    conf = None
+    corroboration = confidence_for(dominant, texts)
 
+    # --- Section 9: What Changed (real persistence) ----------------------
+    # Compute deltas vs the most recent PRIOR snapshot first, THEN write today's —
+    # so a same-day re-run still compares against yesterday, never itself.
+    daily_changes = compute_daily_changes(today, metrics, evidence["expansionScore"], now)
+    write_history_snapshot(today, forecast, metrics, evidence["expansionScore"], now)
+
+    # --- Sections 2/4/5/6: derived structure (pure, no Codex) ------------
+    radar = event_radar(today)
+    upcoming = upcoming_events(today)
+    now_bar = build_now_bar(forecast, pre, daily_changes, trend_dir, nxt)
+    influences = build_planet_influences(dominant, supporting, pressure_src, volatility_src,
+                                         opp_c, pre_c, vol_c, metrics)
+
+    # --- Codex layers: Recommended Actions, Daily Reading, Today's Insight
     recommendations, avoidances = ([], [])
-    narrative = None
+    daily_read_body = None
+    todays_insight = None
     if with_codex:
         recommendations, avoidances = codex_actions(forecast, dominant, pressure_src, phase_name)
-        narrative = codex_narrative(forecast, metrics, conf, dur, phase_name,
-                                    phase_end.isoformat() if hasattr(phase_end, "isoformat") else phase_end)
-
-    # Daily horoscope cards (v1.2). Shared plain-English "mood" derived from the
-    # classified state; each tradition sources its own factors. Either may be null
-    # (UI shows a graceful placeholder) — never fabricated.
-    horoscope_mood = (
-        f"{forecast.title()} headline. Preparation/building phase — supportive openings "
-        f"(opportunity {opp}/100) against real background pressure ({pre}/100) and high "
-        f"volatility ({vol}/100); momentum {mom}/100. Build leverage now, formalize later."
-    )
-    tropical_horoscope = compute_tropical_horoscope(today, aspects, horoscope_mood, with_codex)
-    vedic_horoscope = compute_vedic_horoscope(today, natal, now_utc, horoscope_mood, with_codex)
+        reading_mood = (
+            f"{forecast.title()} headline. Preparation/building phase — supportive openings "
+            f"(opportunity {opp}/100) against real background pressure ({pre}/100) and high "
+            f"volatility ({vol}/100); momentum {mom}/100. Build leverage now, formalize later."
+        )
+        trop_factors = tropical_key_factors(aspects, limit=3)
+        ved_factors = vedic_factor_list(today, natal, now_utc)
+        snap = read_transit_snapshot(today)
+        daily_read_body = codex_daily_reading(forecast, trop_factors, ved_factors, reading_mood, snap)
+        todays_insight = codex_todays_insight(forecast, dominant, daily_changes, phase_name)
 
     sources = [NATAL_MD, TROPICAL_MD, VEDIC_MD, COUNCIL_MD]
 
     state = {
-        # --- core ---
+        # --- Section 1: Hero Solar Intelligence ---
         "forecast": forecast,
         "subtitle": SUBTITLE.get(forecast, ""),
         "dominantPlanet": cap(dominant),
         "supportingPlanet": cap(supporting),
         "pressurePlanet": cap(pressure_src),
         "volatilityPlanet": cap(volatility_src),
-        "confidence": conf,
+        "confidence": conf,          # always null in v2 -> UI "Not Rated"
         "durationDays": dur,
-        # --- Section 2: Current Phase ---
+        # --- Section 2: Now Bar ---
+        "nowBar": now_bar,
+        # --- Section 3: Current Phase ---
         "currentPhase": phase_name,
         "currentPhaseStart": phase_start.isoformat() if hasattr(phase_start, "isoformat") else phase_start,
         "currentPhaseEnd": phase_end.isoformat() if hasattr(phase_end, "isoformat") else phase_end,
-        # --- Section 4/8: metrics (Active Sky planets above) ---
+        # --- Section 4: Event Radar (pure timing) ---
+        "eventRadar": radar,
+        # --- Section 5: Planet Influences ---
+        "planetInfluences": influences,
+        # --- Section 6: Upcoming Events ---
+        "upcomingEvents": upcoming,
+        # --- Section 7: Sky Conditions (renders from these 4 metrics) ---
         "opportunity": opp,
         "pressure": pre,
         "volatility": vol,
         "momentum": mom,
-        # --- Section 5: Top Drivers ---
-        "drivers": drivers,
-        # --- Section 6: Forecast Trend ---
-        "forecastTrend": trend,
-        "trendDirection": trend_dir,
-        # --- Section 7: Next Major Window ---
-        "nextWindow": nxt,
-        # --- Section 9: Recommended Actions ---
+        # --- Section 8: Daily Reading (unified Tropical + Vedic) ---
+        "dailyReading": {"state": forecast, "read": daily_read_body},
+        # --- Section 9: What Changed (null on first day) ---
+        "dailyChanges": daily_changes,
+        # --- Section 10: Today's Insight ---
+        "todaysInsight": todays_insight,
+        # --- Section 11: Recommended Actions ---
         "recommendations": recommendations,
         "avoidances": avoidances,
-        # --- Section 10: Why This Forecast ---
+        # --- Section 12: Top Drivers ---
+        "drivers": drivers,
+        # --- Section 13: Why This Forecast ---
         "evidence": evidence,
-        # --- v1.2: Daily Horoscope cards (right panel, between Weather Metrics
-        #           and Recommended Actions). null -> UI placeholder. ---
-        "tropicalHoroscope": tropical_horoscope,
-        "vedicHoroscope": vedic_horoscope,
-        # --- Section 11: Narrative ---
-        "narrative": narrative,
+        # --- Section 7 (legacy): Next Major Window + Forecast Trend (kept for
+        #     nowBar/Upcoming derivation + audit; not a standalone v2 section) ---
+        "nextWindow": nxt,
+        "forecastTrend": trend,
+        "trendDirection": trend_dir,
         # --- meta ---
         "updatedAt": now.isoformat(timespec="seconds"),
         "sourceMode": "static",
@@ -1062,6 +1254,7 @@ def compute(now=None, with_codex=True):
         # --- audit trail (not part of the locked contract; aids sanity-check) ---
         "scoringDetail": {
             "dominanceScores": scores,
+            "corroboration": corroboration,
             "lordOfYear": lord_of_year(today),
             "activeWindows": [w["name"] for w in active_windows(today)],
             "metricDetail": {
@@ -1096,9 +1289,12 @@ def main():
     with open(out_path, "w") as f:
         json.dump(state, f, indent=2, ensure_ascii=False)
     nw = state["nextWindow"]
-    log(f"Timing Weather v1.1: {state['forecast']} (dominant={state['dominantPlanet']}, "
+    dc = state["dailyChanges"]
+    log(f"Timing Weather v2.0: {state['forecast']} (dominant={state['dominantPlanet']}, "
         f"conf={state['confidence']}, dur={state['durationDays']}d, phase={state['currentPhase']}, "
-        f"trend={state['trendDirection']}, next={nw['title'] if nw else None}) -> {out_path}")
+        f"changes={'tracking-begins' if dc is None else 'computed'}, "
+        f"insight={'yes' if state['todaysInsight'] else 'null'}, "
+        f"next={nw['title'] if nw else None}) -> {out_path}")
     return 0
 
 

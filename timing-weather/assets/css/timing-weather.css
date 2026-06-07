@@ -1,371 +1,612 @@
-/* Timing Weather — v1.1 Visual Redesign
- * Hand-written glass + gold aesthetic per Alfie's approved two-panel mockup.
- * Tailwind CDN handles a few utilities in markup; everything load-bearing for the
- * look lives here. Two-column desktop (>=860px) / single stacked column (<860px).
- * All data binds from state.json via timing_weather_render.js — no values hardcoded here. */
+/* ════════════════════════════════════════════════════════════════════════════
+   TIMING WEATHER — v2.0.0
+   Glassmorphic solar-intelligence dashboard. 15 sections. Mobile-first.
+   Dark gold-on-black aesthetic, dimensional layering, no constant motion.
+   All data binds from state.json via timing_weather_render.js.
+   ════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* backgrounds */
-  --bg-primary:   #030404;
-  --bg-secondary: #06100F;
-  /* text */
-  --text-primary:   #F5F5F5;
-  --text-secondary: #A1A1AA;
-  --text-muted:     #71717A;
-  /* gold */
-  --gold:        #D4AF37;
+  --bg-1: #030404;
+  --bg-2: #06100F;
+  --card: rgba(255,255,255,0.035);
+  --line: rgba(255,255,255,0.10);
+  --gold: #D4AF37;
   --gold-bright: #F4C542;
-  /* accents */
-  --green:  #4ADE80;
-  --red:    #F87171;
+  --text: #F5F5F5;
+  --muted: #A1A1AA;
+  --dim: #71717A;
+  --green: #4ADE80;
+  --red: #F87171;
   --orange: #F59E0B;
-  --blue:   #60A5FA;
+  --blue: #60A5FA;
   --purple: #C084FC;
-  --cyan:   #22D3EE;
-  /* planet badge colors */
-  --p-jupiter: #C084FC;
-  --p-venus:   #4ADE80;
-  --p-saturn:  #F59E0B;
-  --p-uranus:  #22D3EE;
-  --p-mars:    #F87171;
+  --cyan: #22D3EE;
 }
 
-* { box-sizing: border-box; }
-
-html { background: var(--bg-primary); }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
-  color: var(--text-primary);
   background:
     radial-gradient(circle at 50% 18%, rgba(212,175,55,0.12), transparent 32%),
-    linear-gradient(180deg, #020303 0%, #06100F 100%);
+    linear-gradient(180deg, #020303 0%, var(--bg-2) 100%);
   background-attachment: fixed;
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
   min-height: 100vh;
+  padding-bottom: 80px; /* footer nav clearance */
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-.tab-num { font-variant-numeric: tabular-nums; }
-
-/* ── Layout shell ──────────────────────────────────────────────────────── */
 .timing-weather-shell {
   max-width: 1180px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
   padding: 16px;
-  padding-bottom: 96px; /* clear the fixed bottom nav */
-  min-height: 100vh;
 }
 
-.panel {
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 28px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.018));
-  padding: 24px;
-  overflow: hidden;
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.header {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  justify-content: center;
+  padding: 8px 0 18px;
 }
-
-/* ── Cards (glassmorphism) ─────────────────────────────────────────────── */
-.card {
-  background: rgba(255,255,255,0.035);
-  border: 1px solid rgba(255,255,255,0.10);
-  border-radius: 24px;
-  padding: 22px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-}
-
-.card-inner {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  padding: 16px;
-}
-
-/* ── Typography ────────────────────────────────────────────────────────── */
-.header-label {
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.38em;
+.header-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  color: var(--muted);
   text-transform: uppercase;
-  color: rgba(255,255,255,0.72);
-  text-align: center;
 }
 
-.forecast-title {
-  font-size: clamp(48px, 10vw, 72px);
-  font-weight: 800;
-  letter-spacing: 0.20em;
-  color: var(--gold);
-  text-align: center;
-  line-height: 1;
-  margin: 0;
+/* ── Section scaffolding ─────────────────────────────────────────────────── */
+section[data-section] {
+  margin-bottom: 26px;
 }
-
-.forecast-subtitle {
-  text-align: center;
-  color: var(--text-secondary);
-  font-size: 15px;
-  margin-top: 12px;
-}
-
 .section-heading {
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--gold-bright);
-  margin: 0 0 14px;
+  color: var(--gold);
+  margin-bottom: 12px;
 }
 
-.big-number {
-  font-size: 48px;
-  font-weight: 800;
-  line-height: 1;
+/* ── Card (glassmorphism base) ───────────────────────────────────────────── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 22px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
 }
 
-.muted  { color: var(--text-muted); }
-.dim    { color: var(--text-secondary); }
-.gold   { color: var(--gold); }
-
-/* ── Hero Sun ──────────────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════════
+   SECTION 1 — Hero Solar Intelligence
+   ════════════════════════════════════════════════════════════════════════ */
+#section-1-hero {
+  text-align: center;
+  margin-bottom: 34px;
+}
 .sun-hero {
-  width: 260px; height: 260px;
-  border-radius: 999px;
-  margin: 36px auto 24px;
-  background: radial-gradient(circle at center, #FFF8C7 0%, #F6D65A 18%, #D4AF37 48%, #8A650F 100%);
+  width: 240px;
+  height: 240px;
+  margin: 4px auto 22px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%,
+      rgba(244,197,66,0.95) 0%,
+      rgba(212,175,55,0.55) 34%,
+      rgba(212,175,55,0.18) 58%,
+      transparent 72%);
   box-shadow:
-    0 0 40px rgba(244,197,66,0.45),
-    0 0 100px rgba(212,175,55,0.35),
-    0 0 180px rgba(212,175,55,0.18);
+    0 0 80px rgba(212,175,55,0.35),
+    inset 0 0 60px rgba(244,197,66,0.25);
   animation: sun-pulse 6s ease-in-out infinite;
 }
-@keyframes sun-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
-@media (prefers-reduced-motion: reduce) { .sun-hero { animation: none; } }
-
-/* ── Generic row (label left / value right, divider) ───────────────────── */
-.tw-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 52px;
-  border-top: 1px solid rgba(255,255,255,0.07);
+@keyframes sun-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.02); }
 }
-.tw-row:first-child { border-top: none; }
-.tw-row .row-label { color: var(--text-secondary); font-size: 14px; }
-.tw-row .row-value { font-size: 14px; text-align: right; color: var(--text-primary); }
-
-/* ── Planet badge ──────────────────────────────────────────────────────── */
-.planet-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 600;
-  font-size: 14px;
+.forecast-title {
+  font-size: clamp(48px, 10vw, 72px);
+  font-weight: 800;
+  letter-spacing: 0.20em;
+  line-height: 1.02;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 10px;
 }
-.planet-badge .glyph { font-size: 15px; }
-.p-jupiter { color: var(--p-jupiter); }
-.p-venus   { color: var(--p-venus); }
-.p-saturn  { color: var(--p-saturn); }
-.p-uranus  { color: var(--p-uranus); }
-.p-mars    { color: var(--p-mars); }
-
-/* ── Current Phase card ────────────────────────────────────────────────── */
-.phase-body {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+.forecast-subtitle {
+  font-size: 15px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  max-width: 520px;
+  margin: 0 auto;
 }
-.phase-main { display: flex; align-items: center; gap: 14px; }
-.phase-icon {
-  width: 44px; height: 44px; border-radius: 12px;
-  display: grid; place-items: center;
-  background: rgba(212,175,55,0.12);
-  color: var(--gold); font-size: 20px;
-  flex: none;
-}
-.phase-name { font-weight: 700; font-size: 16px; color: var(--text-primary); }
-.phase-range { color: var(--text-secondary); font-size: 13px; margin-top: 2px; }
-.cal-icon { color: var(--text-muted); font-size: 18px; flex: none; }
 
-/* ── Active Sky mini-cards ─────────────────────────────────────────────── */
-.sky-grid {
+/* ════════════════════════════════════════════════════════════════════════
+   SECTION 2 — Now Bar
+   ════════════════════════════════════════════════════════════════════════ */
+.now-bar-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr); /* 2x2 mobile */
   gap: 10px;
 }
-.sky-mini {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px;
-  padding: 14px;
+.now-cell {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 16px 14px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
-.sky-mini .sym { font-size: 22px; line-height: 1; }
-.sky-mini .name { font-weight: 700; font-size: 14px; margin-top: 8px; }
-.sky-mini .role { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
-.sky-footer { color: var(--text-muted); font-size: 12px; margin-top: 12px; }
-
-/* ── Top Drivers ───────────────────────────────────────────────────────── */
-.driver-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 0;
-  border-top: 1px solid rgba(255,255,255,0.07);
+.now-cell .label {
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--dim);
 }
-.driver-row:first-child { border-top: none; }
-.driver-name { font-size: 14px; }
-.driver-name .num { color: var(--text-muted); margin-right: 12px; }
-.driver-score { color: var(--gold); font-weight: 700; font-size: 14px; }
-.drivers-footer {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-top: 12px; padding-top: 12px;
-  border-top: 1px solid rgba(255,255,255,0.07);
-  color: var(--text-secondary); font-size: 13px; cursor: default;
+.now-cell .value {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text);
 }
 
-/* ── Forecast Trend ────────────────────────────────────────────────────── */
-.trend-body { display: flex; gap: 16px; align-items: stretch; }
-.trend-list { flex: 1; min-width: 0; }
-.trend-item {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 0; font-size: 13px;
+/* ════════════════════════════════════════════════════════════════════════
+   SECTION 3 — Current Phase
+   ════════════════════════════════════════════════════════════════════════ */
+.phase-card { display: flex; flex-direction: column; gap: 12px; }
+.phase-name {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--gold-bright);
+  letter-spacing: 0.01em;
 }
-.trend-item .t-date { color: var(--text-secondary); }
-.trend-item .t-state { color: var(--text-primary); font-weight: 600; }
-.trend-chart { width: 120px; flex: none; display: grid; place-items: center; }
-.trend-chart svg { width: 120px; height: 64px; }
-.trend-direction {
-  margin-top: 14px; padding-top: 12px;
-  border-top: 1px solid rgba(255,255,255,0.07);
-  font-size: 13px; color: var(--text-secondary);
-}
-.trend-direction .dir-val { font-weight: 700; }
-.dir-up    { color: var(--green); }
-.dir-flat  { color: var(--text-secondary); }
-.dir-down  { color: var(--red); }
-
-/* ── Next Major Window ─────────────────────────────────────────────────── */
-.nmw-top { display: flex; align-items: center; gap: 16px; }
-.nmw-cal {
-  width: 52px; height: 52px; border-radius: 999px; flex: none;
-  display: grid; place-items: center;
-  background: rgba(212,175,55,0.14);
-  color: var(--gold); font-size: 22px;
-}
-.nmw-title { font-weight: 800; font-size: 20px; color: var(--text-primary); }
-.nmw-date  { color: var(--text-secondary); font-size: 14px; margin-top: 2px; }
-.nmw-count { text-align: right; margin-left: auto; }
-.nmw-count .n { font-size: 32px; font-weight: 800; line-height: 1; color: var(--gold); }
-.nmw-count .lbl { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
-.nmw-footer {
-  display: flex; gap: 18px; margin-top: 14px; padding-top: 12px;
-  border-top: 1px solid rgba(255,255,255,0.07);
-  font-size: 13px; color: var(--text-secondary);
-}
-.nmw-footer b { color: var(--text-primary); font-weight: 700; }
-
-/* ── Weather Metrics ───────────────────────────────────────────────────── */
-.metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.metric-mini {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  padding: 16px;
-}
-.metric-mini .m-label { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; }
-.metric-mini .m-num { font-size: 36px; font-weight: 800; line-height: 1; margin: 8px 0 10px; }
-.metric-bar { height: 6px; border-radius: 999px; background: rgba(255,255,255,0.08); overflow: hidden; }
-.metric-bar > span { display: block; height: 100%; border-radius: 999px; }
-.m-green  { color: var(--green); }  .m-green  + .metric-bar > span,  .bar-green  { background: var(--green); }
-.m-red    { color: var(--red); }    .bar-red    { background: var(--red); }
-.m-orange { color: var(--orange); } .bar-orange { background: var(--orange); }
-.m-blue   { color: var(--blue); }   .bar-blue   { background: var(--blue); }
-
-/* ── Daily Horoscope (Tropical + Vedic) ────────────────────────────────── */
-.horoscope-subtitle {
-  color: var(--text-muted);
+.phase-range {
   font-size: 13px;
-  margin: -6px 0 12px;
+  color: var(--muted);
 }
-.horoscope-body {
+.phase-days {
+  font-size: 13px;
+  color: var(--dim);
+}
+.progress {
+  width: 100%;
+  height: 8px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-bright) 100%);
+  box-shadow: 0 0 12px rgba(244,197,66,0.45);
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   SECTION 4 — Event Radar (concentric rings, NO planet markers)
+   ════════════════════════════════════════════════════════════════════════ */
+.radar-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.radar-rings {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 1px solid rgba(212,175,55,0.30);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.radar-rings::before,
+.radar-rings::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(212,175,55,0.18);
+}
+.radar-rings::before { width: 66%; height: 66%; }
+.radar-rings::after  { width: 33%; height: 33%; border-color: rgba(212,175,55,0.32); }
+
+/* ════════════════════════════════════════════════════════════════════════
+   SECTION 5 — Planet Influences
+   ════════════════════════════════════════════════════════════════════════ */
+.influences-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* 1 col mobile */
+  gap: 12px;
+}
+.influences-grid .influence {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 16px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.influences-grid .influence .planet {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+.influences-grid .influence .effect {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   SECTION 6 — Upcoming Events
+   ════════════════════════════════════════════════════════════════════════ */
+.events-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  overflow: hidden;
+}
+.events-list li {
+  background: var(--bg-1);
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+.events-list li .event-when {
+  color: var(--gold);
+  font-weight: 600;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   SECTION 7 — Sky Conditions (4 horizontal bars)
+   Expansion green · Pressure orange · Volatility red · Support blue
+   ════════════════════════════════════════════════════════════════════════ */
+.sky-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.sky-row {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.sky-row .sky-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--muted);
+}
+.sky-row .sky-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.sky-row .sky-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sky-row[data-metric="expansion"]  .sky-fill { background: var(--green); }
+.sky-row[data-metric="pressure"]   .sky-fill { background: var(--orange); }
+.sky-row[data-metric="volatility"] .sky-fill { background: var(--red); }
+.sky-row[data-metric="support"]    .sky-fill { background: var(--blue); }
+
+/* ════════════════════════════════════════════════════════════════════════
+   SECTION 8 — Daily Reading
+   ════════════════════════════════════════════════════════════════════════ */
+.reading-card { display: flex; flex-direction: column; }
+.reading-state {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.reading-body {
   font-size: 15px;
   line-height: 1.6;
-  color: var(--text-primary);
-  margin: 0;
+  color: var(--text);
 }
-.horoscope-footer {
-  color: var(--text-muted);
-  font-size: 12px;
-  margin-top: 14px;
+
+/* ════════════════════════════════════════════════════════════════════════
+   SECTION 9 — Since Yesterday (delta rows, green + / red −)
+   ════════════════════════════════════════════════════════════════════════ */
+.changed-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
-.horoscope-empty {
-  color: var(--text-muted);
+.changed-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 2px;
   font-size: 14px;
-  font-style: italic;
-  margin: 4px 0 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.changed-row:last-child { border-bottom: none; }
+.changed-row .changed-label { color: var(--muted); }
+.changed-row .changed-delta {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.changed-row .changed-delta.positive { color: var(--green); }
+.changed-row .changed-delta.negative { color: var(--red); }
+.changed-row .changed-delta.neutral  { color: var(--dim); }
+
+/* ════════════════════════════════════════════════════════════════════════
+   SECTION 10 — Today's Insight (highlighted, gold border accent)
+   ════════════════════════════════════════════════════════════════════════ */
+.insight-card {
+  border-left: 3px solid var(--gold);
+  background: linear-gradient(90deg, rgba(212,175,55,0.08), rgba(255,255,255,0.02));
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--text);
 }
 
-/* ── Recommended Actions ───────────────────────────────────────────────── */
-.actions-sub { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin: 4px 0 8px; }
-.actions-sub.do    { color: var(--green); }
-.actions-sub.avoid { color: var(--red); margin-top: 16px; }
-.action-item { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; font-size: 14px; }
-.action-item .mark { margin-top: 1px; flex: none; }
-.action-item.do .mark    { color: var(--green); }
-.action-item.avoid .mark { color: var(--red); }
-
-/* ── Why This Forecast ─────────────────────────────────────────────────── */
-.why-score {
-  display: flex; align-items: baseline; gap: 10px;
-  margin-bottom: 14px;
+/* ════════════════════════════════════════════════════════════════════════
+   SECTION 11 — Recommended Actions (✓ green / ✗ red bullets)
+   ════════════════════════════════════════════════════════════════════════ */
+.actions-card h3 {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin: 4px 0 8px;
 }
-.why-score .lbl { color: var(--text-secondary); font-size: 13px; }
-.why-score .val { color: var(--gold); font-size: 28px; font-weight: 800; }
-.why-block + .why-block { margin-top: 12px; }
-.why-block .why-h { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
-.why-line { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; font-size: 14px; }
-.why-line .sc { font-weight: 700; }
-.why-line .sc.pos { color: var(--green); }
-.why-line .sc.neg { color: var(--red); }
-
-/* ── Guidance ──────────────────────────────────────────────────────────── */
-.guidance-text { font-size: 15px; line-height: 1.6; color: var(--text-primary); margin: 0; }
-
-/* ── Timestamp footer ──────────────────────────────────────────────────── */
-.timestamp-footer { color: var(--text-muted); font-size: 12px; text-align: center; padding: 8px 0 4px; }
-
-/* ── Bottom navigation (fixed) ─────────────────────────────────────────── */
-.bottom-nav {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
-  display: flex; justify-content: space-around; align-items: center;
-  padding: 10px 8px calc(10px + env(safe-area-inset-bottom, 0px));
-  background: rgba(3,4,4,0.82);
-  -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
-  border-top: 1px solid rgba(255,255,255,0.10);
+.actions-card h3 + ul { margin-bottom: 18px; }
+.actions-card ul:last-child { margin-bottom: 0; }
+.actions-card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
-.nav-item {
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
-  font-size: 10px; letter-spacing: 0.03em;
-  color: var(--text-secondary);
-  background: none; border: none; cursor: default;
-  padding: 4px 16px;
+.actions-card li {
+  position: relative;
+  padding-left: 26px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
 }
-.nav-item .nav-icon { font-size: 19px; line-height: 1; }
-.nav-item.active { color: var(--gold-bright); }
-.nav-item:not(.active) { opacity: 0.85; }
+.actions-card #actions-do li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--green);
+  font-weight: 700;
+}
+.actions-card #actions-avoid li::before {
+  content: "✗";
+  position: absolute;
+  left: 0;
+  color: var(--red);
+  font-weight: 700;
+}
 
-/* ── Mobile (<860px): single stacked column ────────────────────────────── */
-@media (max-width: 860px) {
-  .timing-weather-shell { display: block; padding: 12px; padding-bottom: 92px; }
-  .panel {
-    border: none; border-radius: 0; padding: 16px 8px; min-height: auto;
-    background: none;
+/* ════════════════════════════════════════════════════════════════════════
+   SECTION 12 — Top Drivers (numbered list, gold counters)
+   ════════════════════════════════════════════════════════════════════════ */
+.drivers-list {
+  list-style: none;
+  counter-reset: driver;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.drivers-list li {
+  counter-increment: driver;
+  position: relative;
+  padding: 14px 16px 14px 52px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+}
+.drivers-list li::before {
+  content: counter(driver);
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(212,175,55,0.45);
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   SECTION 13 — Why This Forecast (collapsible details/summary)
+   ════════════════════════════════════════════════════════════════════════ */
+.why-card { padding: 0; overflow: hidden; }
+.why-card summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 18px 22px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.why-card summary::-webkit-details-marker { display: none; }
+.why-card summary::after {
+  content: "+";
+  color: var(--gold);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1;
+}
+.why-card[open] summary::after { content: "−"; }
+.why-card summary span#expansion-score {
+  color: var(--gold-bright);
+  font-weight: 800;
+}
+.why-rows {
+  padding: 0 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.why-rows .why-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--muted);
+  padding: 6px 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.why-rows .why-row .why-weight {
+  color: var(--text);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   SECTION 14 — Confidence (unrated → muted gray ring, no fill)
+   ════════════════════════════════════════════════════════════════════════ */
+.confidence-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.confidence-ring {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+}
+.confidence-ring--unrated {
+  border: 4px solid rgba(255,255,255,0.10);
+  background: transparent;
+}
+.confidence-label {
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   SECTION 15 — Footer Nav (fixed bottom on mobile)
+   ════════════════════════════════════════════════════════════════════════ */
+.footer-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(2,3,3,0.92);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 12px 12px calc(12px + env(safe-area-inset-bottom, 0px));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.footer-nav .nav-item {
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  padding: 4px 10px;
+  transition: color 0.2s ease;
+}
+.footer-nav .nav-item:hover { color: var(--text); }
+.footer-nav .nav-item.active { color: var(--gold-bright); }
+
+/* ════════════════════════════════════════════════════════════════════════
+   RESPONSIVE — desktop ≥ 860px
+   Hero / Now Bar / Phase span full width; the mid + lower analytic sections
+   pair into a 2-column layout for denser dimensional composition.
+   ════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 860px) {
+  .timing-weather-shell { padding: 28px; }
+
+  .sun-hero { width: 260px; height: 260px; }
+
+  .now-bar-grid { grid-template-columns: repeat(4, 1fr); } /* 4 cols desktop */
+
+  .influences-grid { grid-template-columns: repeat(3, 1fr); } /* 3 cols desktop */
+
+  /* Two-column pairing for sections 4–7 and 11–13. */
+  #section-4-event-radar,
+  #section-6-upcoming-events,
+  #section-11-recommended,
+  #section-13-why-forecast {
+    width: calc(50% - 13px);
+    display: inline-block;
+    vertical-align: top;
   }
-  .panel + .panel { padding-top: 0; }
-  .sun-hero { width: 200px; height: 200px; margin: 24px auto 18px; }
+  #section-5-planet-influences,
+  #section-7-sky-conditions,
+  #section-12-top-drivers,
+  #section-14-confidence {
+    width: calc(50% - 13px);
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 22px;
+  }
+
+  /* Footer nav un-fixes into a top-right inline cluster on desktop. */
+  .footer-nav {
+    position: static;
+    justify-content: flex-end;
+    gap: 8px;
+    background: transparent;
+    border-top: none;
+    padding: 0;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    margin-top: 8px;
+  }
+  body { padding-bottom: 24px; }
+}
+
+/* ── Reduced motion — honor the OS preference, kill the pulse + transitions. */
+@media (prefers-reduced-motion: reduce) {
+  .sun-hero { animation: none; }
+  .progress-bar,
+  .sky-row .sky-fill { transition: none; }
 }
