@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-06T22:09:06-05:00",
-  "data_hash": "f2a2970e3591c5d9",
-  "slot": "macros-update",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nThe late intake changed the shape of the day: a low-input stretch has mostly caught up, with protein now closer to where muscle retention wants it. Recovery still reads moderate after short sleep and a heavy movement day, so this favors replenishment over added strain.\n\nRecovery with structure.\n\nPerformance: Recovery with structure.\n\nTransit: none",
+  "generated_at": "2026-06-07T04:00:05-05:00",
+  "data_hash": "d7dc8ed7d192b808",
+  "slot": "sleep",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 7%\n\nRead\nLast night gave you workable, not abundant, reserve: sleep ran lighter than your usual pattern, while the system still shows enough stability for a composed start. For muscle protection, the day favors measured output and adequate intake over hard strain.\n\nMeasured, not depleted.\n\nPerformance: Measured, not depleted.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nThe late intake changed the shape of the day: a low-input stretch has mostly caught up, with protein now closer to where muscle retention wants it. Recovery still reads moderate after short sleep and a heavy movement day, so this favors replenishment over added strain.\n\nRecovery with structure."
+      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 7%\n\nRead\nLast night gave you workable, not abundant, reserve: sleep ran lighter than your usual pattern, while the system still shows enough stability for a composed start. For muscle protection, the day favors measured output and adequate intake over hard strain.\n\nMeasured, not depleted."
     },
     {
       "label": "Performance",
-      "text": "Recovery with structure."
+      "text": "Measured, not depleted."
     },
     {
       "label": "Transit",
@@ -23,8 +23,8 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nThe late intake changed the shape of the day: a low-input stretch has mostly caught up, with protein now closer to where muscle retention wants it. Recovery still reads moderate after short sleep and a heavy movement day, so this favors replenishment over added strain.\n\nRecovery with structure.",
-    "performance": "Recovery with structure.",
+    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 7%\n\nRead\nLast night gave you workable, not abundant, reserve: sleep ran lighter than your usual pattern, while the system still shows enough stability for a composed start. For muscle protection, the day favors measured output and adequate intake over hard strain.\n\nMeasured, not depleted.",
+    "performance": "Measured, not depleted.",
     "transit": null
   },
   "nutrition_nudge": "",
@@ -34,8 +34,8 @@
     "sleep_hours": 5.2,
     "hrv_today": 70,
     "hrv_7d_avg": 65.4,
-    "nutrition": "calories 2550 of 2574 goal, protein 121g of 138g goal, carbs 267g of 290g goal, fat 109g of 72g goal",
-    "nutrition_detail": "calories 2550 of 2574 goal -> 24 left; protein 121g of 138g goal -> 17g gap; carbs 267g of 290g goal; fat 109g of 72g goal",
-    "activity_today": "7,357 steps so far, 8h 46m active, 2,640 calories burned, Heavy training load"
+    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
+    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
+    "activity_today": null
   }
 }
