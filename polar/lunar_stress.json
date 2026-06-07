@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-06T23:58:42-05:00",
+  "generated_at": "2026-06-07T00:30:05-05:00",
   "score": 10,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -9,10 +9,10 @@
     "sleep_score": 53
   },
   "workout_intensity": "rest",
-  "recommendation": "Rest day: load protein and run structured recovery \u2014 hydration, easy mobility, an early night. Recover deliberately, don't collapse.",
+  "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Pisces",
-    "degree": "2\u00b0 Pis 13'",
+    "degree": "2\u00b0 Pis 30'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aries",
@@ -37,7 +37,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 332.22,
+    "moon_longitude": 332.5,
     "moon_sign": "Pisces",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 2,
@@ -57,7 +57,7 @@
       "hrv_7d": 65.4,
       "rhr_7d": 52.9
     },
-    "active_calories": 1063,
+    "active_calories": null,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
