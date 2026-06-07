@@ -1,6 +1,6 @@
 {
   "date": "2026-06-06",
-  "synced_at": "2026-06-07T00:07:35+00:00",
+  "synced_at": "2026-06-07T02:38:58+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 1190.0,
-    "protein_g": 55.0,
-    "carbs_g": 159.0,
-    "fat_g": 36.0
+    "calories": 1830.0,
+    "protein_g": 59.0,
+    "carbs_g": 219.0,
+    "fat_g": 80.0
   },
-  "meal_count": 4,
+  "meal_count": 5,
   "raw": {
     "date": "2026-06-06",
     "meals": [
@@ -53,13 +53,22 @@
         "fat": 12,
         "carbs": 30,
         "emoji": "\u00e2\u0098\u0095"
+      },
+      {
+        "title": "Flamin' Hot Cheetos",
+        "time": "19:48",
+        "calories": 640,
+        "protein": 4,
+        "fat": 44,
+        "carbs": 60,
+        "emoji": "\u00f0\u009f\u0094\u00a5"
       }
     ],
     "totals": {
-      "calories": 1190,
-      "protein": 55,
-      "fat": 36,
-      "carbs": 159
+      "calories": 1830,
+      "protein": 59,
+      "fat": 80,
+      "carbs": 219
     },
     "targets": {
       "calories": 2574,
@@ -68,14 +77,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 1384,
+      "calories": 744,
       "is_over": false
     },
-    "meal_count": 4,
+    "meal_count": 5,
     "labels": {
       "header": "Today",
-      "calories_remaining": "1384 kcal remaining today",
-      "meals_logged": "4 meals logged",
+      "calories_remaining": "744 kcal remaining today",
+      "meals_logged": "5 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",

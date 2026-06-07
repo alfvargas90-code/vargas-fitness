@@ -1,19 +1,19 @@
 {
-  "date": "2026-06-05",
-  "generated_at": "2026-06-05T21:45:00-05:00",
+  "date": "2026-06-06",
+  "generated_at": "2026-06-06T21:45:00-05:00",
   "verdict": "Big",
   "stats": {
-    "steps": 7659,
-    "active_minutes": 445,
-    "active_time_display": "7h 25m",
-    "calories_burned": 2577,
-    "active_calories": 1015,
-    "calories_eaten": 2000,
-    "net_deficit": 577,
+    "steps": 7107,
+    "active_minutes": 495,
+    "active_time_display": "8h 15m",
+    "calories_burned": 2556,
+    "active_calories": 1017,
+    "calories_eaten": 1830,
+    "net_deficit": 726,
     "calorie_target": 2574,
-    "protein_g": 108,
+    "protein_g": 59,
     "protein_target_g": 138,
-    "protein_gap_g": 30
+    "protein_gap_g": 79
   },
-  "prose": "You put in a big day with about 7,700 steps, a lot of active time, and about a 600-calorie deficit, which is a solid fat-loss push without getting too reckless for muscle. The miss was protein: coming up about 30 short makes it harder to protect and build lean mass after that much output. Push protein hard tomorrow and keep the deficit moderate."
+  "prose": "Solid rest day: about 7,100 steps and a 725-calorie deficit kept fat loss moving without getting reckless, but only 59 grams of protein is the problem because recovery needs material to protect muscle. You did enough daily movement; the miss was feeding the rebuild. Push protein hard tomorrow."
 }
