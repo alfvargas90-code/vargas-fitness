@@ -110,6 +110,31 @@ The 15 sections (all engine-backed, PVR law — null → graceful "—"/empty st
 - **State persistence** — `state_history/<date>.json` written each run; `dailyChanges` computes deltas against the prior snapshot.
 - Live verified: HTTP 200, 15 `data-section` markers, render.js + version.json + state.json v2 fields all live at `https://alfvargas90-code.github.io/vargas-fitness/timing-weather/`.
 
+## v2.1 — Ambient Intelligence ✅ SHIPPED (2026-06-07)
+
+Visual redesign of v2 based on Alfie's approved Apple Watch / Oura / Bloomberg
+reference mockup. Same engine, same data schema; UI completely rebuilt.
+
+Hero now has 4 corner ring progress arcs (Opportunity green / Pressure orange /
+Momentum cyan / Next Event gold) around a photographic sun core with
+EXPANSION title + subtitle.
+
+Layout: 14 sections, multi-column desktop (3-col rows) + single-column mobile.
+
+Key visual elements:
+- Hero ring corners (conic-gradient progress arcs; render.js wraps `.corner-value`
+  in `.corner-ring` and sets `--ring-pct`; Next Event inverts days→pct)
+- Photographic sun (layered radial gradients + corona shadows + pulse)
+- Upcoming Conditions = gold gradient horizontal bars (length = proximity),
+  NO radar circles
+- Planet Influences = compact list rows (glyph + name + role + score),
+  NOT large cards
+- Why This Forecast = inline open (no collapse; `<details open>`)
+- Confidence = small standalone card with "Not Rated" + neutral ring
+
+Cache bumped to v2.1.0. Engine + state.json + state_history unchanged.
+Live verified: HTTP 200, 14 `data-section` markers, version.json shows v2.1.0.
+
 ## v1.3 — Metric Breakdowns (deferred)
 
 - Opportunity breakdown by life domain (career / money / relationships / home)
