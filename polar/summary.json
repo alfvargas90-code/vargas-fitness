@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-06T20:08:16-05:00",
-  "data_hash": "41883ddea5520d49",
+  "generated_at": "2026-06-06T22:09:06-05:00",
+  "data_hash": "f2a2970e3591c5d9",
   "slot": "macros-update",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nThe new log narrowed the energy gap, but most of the lift came without much muscle-supporting protein. With recovery still middling and daily movement already heavy for a rest day, this favors replenishment and muscle preservation over intensity.\n\nRecovery holds the frame.\n\nPerformance: Recovery holds the frame.\n\nTransit: none",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nThe late intake changed the shape of the day: a low-input stretch has mostly caught up, with protein now closer to where muscle retention wants it. Recovery still reads moderate after short sleep and a heavy movement day, so this favors replenishment over added strain.\n\nRecovery with structure.\n\nPerformance: Recovery with structure.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nThe new log narrowed the energy gap, but most of the lift came without much muscle-supporting protein. With recovery still middling and daily movement already heavy for a rest day, this favors replenishment and muscle preservation over intensity.\n\nRecovery holds the frame."
+      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nThe late intake changed the shape of the day: a low-input stretch has mostly caught up, with protein now closer to where muscle retention wants it. Recovery still reads moderate after short sleep and a heavy movement day, so this favors replenishment over added strain.\n\nRecovery with structure."
     },
     {
       "label": "Performance",
-      "text": "Recovery holds the frame."
+      "text": "Recovery with structure."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nThe new log narrowed the energy gap, but most of the lift came without much muscle-supporting protein. With recovery still middling and daily movement already heavy for a rest day, this favors replenishment and muscle preservation over intensity.\n\nRecovery holds the frame.",
-    "performance": "Recovery holds the frame.",
+    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nThe late intake changed the shape of the day: a low-input stretch has mostly caught up, with protein now closer to where muscle retention wants it. Recovery still reads moderate after short sleep and a heavy movement day, so this favors replenishment over added strain.\n\nRecovery with structure.",
+    "performance": "Recovery with structure.",
     "transit": null
   },
-  "nutrition_nudge": "Front-load dinner with 60g protein to protect muscle while keeping tonight\u2019s deficit modest.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
     "sleep_hours": 5.2,
     "hrv_today": 70,
     "hrv_7d_avg": 65.4,
-    "nutrition": "calories 1830 of 2574 goal, protein 59g of 138g goal, carbs 219g of 290g goal, fat 80g of 72g goal",
-    "nutrition_detail": "calories 1830 of 2574 goal -> 744 left; protein 59g of 138g goal -> 79g gap; carbs 219g of 290g goal; fat 80g of 72g goal",
-    "activity_today": "6,607 steps so far, 6h 46m active, 2,319 calories burned, Heavy training load"
+    "nutrition": "calories 2550 of 2574 goal, protein 121g of 138g goal, carbs 267g of 290g goal, fat 109g of 72g goal",
+    "nutrition_detail": "calories 2550 of 2574 goal -> 24 left; protein 121g of 138g goal -> 17g gap; carbs 267g of 290g goal; fat 109g of 72g goal",
+    "activity_today": "7,357 steps so far, 8h 46m active, 2,640 calories burned, Heavy training load"
   }
 }
