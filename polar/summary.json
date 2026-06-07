@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-07T04:00:05-05:00",
-  "data_hash": "d7dc8ed7d192b808",
-  "slot": "sleep",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 7%\n\nRead\nLast night gave you workable, not abundant, reserve: sleep ran lighter than your usual pattern, while the system still shows enough stability for a composed start. For muscle protection, the day favors measured output and adequate intake over hard strain.\n\nMeasured, not depleted.\n\nPerformance: Measured, not depleted.\n\nTransit: none",
+  "generated_at": "2026-06-07T07:00:00-05:00",
+  "data_hash": "1d3c3935369ea418",
+  "slot": "recovery",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 8%\n\nRead\nYou woke with a workable but not fully restored system; sleep ran light, while overnight regulation looks steadier than usual. Effort spent so far is light, leaving the day open. For muscle retention, today favors measured strength and early protein consistency over intensity.\n\nQuiet capacity.\n\nPerformance: Quiet capacity.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 7%\n\nRead\nLast night gave you workable, not abundant, reserve: sleep ran lighter than your usual pattern, while the system still shows enough stability for a composed start. For muscle protection, the day favors measured output and adequate intake over hard strain.\n\nMeasured, not depleted."
+      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 8%\n\nRead\nYou woke with a workable but not fully restored system; sleep ran light, while overnight regulation looks steadier than usual. Effort spent so far is light, leaving the day open. For muscle retention, today favors measured strength and early protein consistency over intensity.\n\nQuiet capacity."
     },
     {
       "label": "Performance",
-      "text": "Measured, not depleted."
+      "text": "Quiet capacity."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 7%\n\nRead\nLast night gave you workable, not abundant, reserve: sleep ran lighter than your usual pattern, while the system still shows enough stability for a composed start. For muscle protection, the day favors measured output and adequate intake over hard strain.\n\nMeasured, not depleted.",
-    "performance": "Measured, not depleted.",
+    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 8%\n\nRead\nYou woke with a workable but not fully restored system; sleep ran light, while overnight regulation looks steadier than usual. Effort spent so far is light, leaving the day open. For muscle retention, today favors measured strength and early protein consistency over intensity.\n\nQuiet capacity.",
+    "performance": "Quiet capacity.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Start breakfast with 35g protein and keep meal pacing steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 65.4,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "364 steps so far, 29m active, 494 calories burned, Light training load"
   }
 }
