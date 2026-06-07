@@ -1,6 +1,6 @@
 {
   "date": "2026-06-06",
-  "synced_at": "2026-06-06T23:37:29+00:00",
+  "synced_at": "2026-06-07T00:07:35+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 740.0,
-    "protein_g": 47.0,
-    "carbs_g": 94.0,
-    "fat_g": 19.0
+    "calories": 1190.0,
+    "protein_g": 55.0,
+    "carbs_g": 159.0,
+    "fat_g": 36.0
   },
-  "meal_count": 2,
+  "meal_count": 4,
   "raw": {
     "date": "2026-06-06",
     "meals": [
@@ -35,13 +35,31 @@
         "fat": 15,
         "carbs": 70,
         "emoji": "\u00f0\u009f\u008d\u009a"
+      },
+      {
+        "title": "Blueberry Fig Bar",
+        "time": "18:45",
+        "calories": 200,
+        "protein": 3,
+        "fat": 5,
+        "carbs": 35,
+        "emoji": "\u00f0\u009f\u00ab\u0090"
+      },
+      {
+        "title": "Vietnamese Coffee",
+        "time": "18:55",
+        "calories": 250,
+        "protein": 5,
+        "fat": 12,
+        "carbs": 30,
+        "emoji": "\u00e2\u0098\u0095"
       }
     ],
     "totals": {
-      "calories": 740,
-      "protein": 47,
-      "fat": 19,
-      "carbs": 94
+      "calories": 1190,
+      "protein": 55,
+      "fat": 36,
+      "carbs": 159
     },
     "targets": {
       "calories": 2574,
@@ -50,14 +68,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 1834,
+      "calories": 1384,
       "is_over": false
     },
-    "meal_count": 2,
+    "meal_count": 4,
     "labels": {
       "header": "Today",
-      "calories_remaining": "1834 kcal remaining today",
-      "meals_logged": "2 meals logged",
+      "calories_remaining": "1384 kcal remaining today",
+      "meals_logged": "4 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
