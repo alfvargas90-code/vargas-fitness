@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-06T21:57:54-05:00",
+  "generated_at": "2026-06-06T22:28:05-05:00",
   "score": 10,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -12,7 +12,7 @@
   "recommendation": "Rest day: load protein and run structured recovery \u2014 hydration, easy mobility, an early night. Recover deliberately, don't collapse.",
   "lunar": {
     "sign": "Pisces",
-    "degree": "1\u00b0 Pis 10'",
+    "degree": "1\u00b0 Pis 26'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aries",
@@ -37,7 +37,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 331.17,
+    "moon_longitude": 331.44,
     "moon_sign": "Pisces",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 2,
