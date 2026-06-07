@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Timing" />
-  <link rel="stylesheet" href="assets/css/timing-weather.css?v=v2.1.0" />
+  <link rel="stylesheet" href="assets/css/timing-weather.css?v=v2.2.0" />
 
   <!-- ── Self-healing cache buster (Layers 1+3) ─────────────────────────────────
        Runs before any other JS. Compares this device's stored version against the
@@ -69,140 +69,160 @@
 <body>
   <div class="timing-weather-shell">
 
-    <!-- 1: Hero Solar Intelligence (4 corner stats + solar core + forecast) -->
-    <section id="section-1-hero" data-section="Hero Solar Intelligence">
-      <div class="hero-shell">
-        <!-- top-left -->
-        <div class="hero-corner hero-corner--tl">
-          <div class="corner-label">Opportunity</div>
-          <div class="corner-value" id="hero-opportunity">—</div>
-          <div class="corner-tag" id="hero-opportunity-tag">—</div>
+    <!-- Row 0: Header chrome (full bleed) -->
+    <header class="row row--bleed header-chrome" data-section="Header">
+      <button class="header-menu" aria-label="Menu">≡</button>
+      <div class="header-title-block">
+        <h1 class="header-title">TIMING WEATHER</h1>
+        <p class="header-date" id="header-date">—</p>
+      </div>
+      <div class="header-status" aria-hidden="true">
+        <span class="status-dot"></span>
+        <span class="status-dot"></span>
+        <span class="status-dot"></span>
+      </div>
+    </header>
+
+    <!-- Row 1: Hero (full bleed) -->
+    <div class="row row--bleed">
+      <!-- 1: Hero Solar Intelligence (4 corner stats + solar core + forecast) -->
+      <section id="section-1-hero" data-section="Hero Solar Intelligence">
+        <div class="hero-shell">
+          <!-- top-left -->
+          <div class="hero-corner hero-corner--tl">
+            <div class="corner-label">Opportunity</div>
+            <div class="corner-value" id="hero-opportunity">—</div>
+            <div class="corner-tag" id="hero-opportunity-tag">—</div>
+          </div>
+          <!-- top-right -->
+          <div class="hero-corner hero-corner--tr">
+            <div class="corner-label">Pressure</div>
+            <div class="corner-value" id="hero-pressure">—</div>
+            <div class="corner-tag" id="hero-pressure-tag">—</div>
+          </div>
+
+          <!-- center solar core -->
+          <div class="sun-hero" id="sun-hero" aria-hidden="true"></div>
+          <h1 class="forecast-title" id="forecast-title">—</h1>
+          <p class="forecast-subtitle" id="forecast-subtitle">—</p>
+
+          <!-- bottom-left -->
+          <div class="hero-corner hero-corner--bl">
+            <div class="corner-label">Momentum</div>
+            <div class="corner-value" id="hero-momentum">—</div>
+            <div class="corner-tag" id="hero-momentum-tag">—</div>
+          </div>
+          <!-- bottom-right -->
+          <div class="hero-corner hero-corner--br">
+            <div class="corner-label">Next Event</div>
+            <div class="corner-value" id="hero-next-event-days">—</div>
+            <div class="corner-tag" id="hero-next-event-label">Days</div>
+          </div>
         </div>
-        <!-- top-right -->
-        <div class="hero-corner hero-corner--tr">
-          <div class="corner-label">Pressure</div>
-          <div class="corner-value" id="hero-pressure">—</div>
-          <div class="corner-tag" id="hero-pressure-tag">—</div>
+      </section>
+    </div>
+
+    <!-- Row 2: Now Bar (full-width strip) -->
+    <div class="row row--bleed row--strip">
+      <!-- 2: Now Bar -->
+      <section id="section-2-now-bar" data-section="Now Bar">
+        <div class="now-bar-card">
+          <div class="now-cell"><span class="label">Forecast</span><span class="value" id="now-forecast">—</span></div>
+          <div class="now-cell"><span class="label">Pressure</span><span class="value" id="now-pressure">—</span></div>
+          <div class="now-cell"><span class="label">Momentum</span><span class="value" id="now-momentum">—</span></div>
+          <div class="now-cell"><span class="label">Next Event</span><span class="value" id="now-next-event">—</span></div>
         </div>
+      </section>
+    </div>
 
-        <!-- center solar core -->
-        <div class="sun-hero" id="sun-hero" aria-hidden="true"></div>
-        <h1 class="forecast-title" id="forecast-title">—</h1>
-        <p class="forecast-subtitle" id="forecast-subtitle">—</p>
-
-        <!-- bottom-left -->
-        <div class="hero-corner hero-corner--bl">
-          <div class="corner-label">Momentum</div>
-          <div class="corner-value" id="hero-momentum">—</div>
-          <div class="corner-tag" id="hero-momentum-tag">—</div>
+    <!-- Row 3: "Today" composition (named-areas grid) -->
+    <div class="row row--today">
+      <!-- 3: Daily Reading -->
+      <section id="section-3-daily-reading" data-section="Daily Reading">
+        <h2 class="section-heading">DAILY READING <span class="ai-badge">✦</span></h2>
+        <div class="card reading-card">
+          <div class="reading-state" id="reading-state">—</div>
+          <p class="reading-body" id="reading-body">—</p>
         </div>
-        <!-- bottom-right -->
-        <div class="hero-corner hero-corner--br">
-          <div class="corner-label">Next Event</div>
-          <div class="corner-value" id="hero-next-event-days">—</div>
-          <div class="corner-tag" id="hero-next-event-label">Days</div>
+      </section>
+
+      <!-- 4: What Changed -->
+      <section id="section-4-what-changed" data-section="What Changed">
+        <h2 class="section-heading">WHAT CHANGED <span class="heading-sub">SINCE YESTERDAY</span></h2>
+        <div class="card changed-card" id="changed-card"></div>
+      </section>
+
+      <div class="rail">
+        <!-- 5: Today's Insight -->
+        <section id="section-5-todays-insight" data-section="Today's Insight">
+          <h2 class="section-heading">TODAY'S INSIGHT</h2>
+          <div class="card insight-card" id="insight-card">—</div>
+        </section>
+
+        <!-- 6: Recommended Actions -->
+        <section id="section-6-recommended" data-section="Recommended Actions">
+          <h2 class="section-heading">RECOMMENDED ACTIONS</h2>
+          <div class="card actions-card">
+            <h3>Do More Of</h3>
+            <ul id="actions-do"></ul>
+            <h3>Avoid</h3>
+            <ul id="actions-avoid"></ul>
+          </div>
+        </section>
+      </div>
+
+      <!-- 7: Upcoming Conditions (timeline bars, not radar) -->
+      <section id="section-7-upcoming-conditions" data-section="Upcoming Conditions">
+        <h2 class="section-heading">UPCOMING CONDITIONS</h2>
+        <ul class="timeline-list" id="timeline-list"></ul>
+      </section>
+    </div>
+
+    <!-- Row 4: Analytics (4 equal cols) -->
+    <div class="row row--4col">
+      <!-- 9: Sky Conditions -->
+      <section id="section-9-sky-conditions" data-section="Sky Conditions">
+        <h2 class="section-heading">SKY CONDITIONS</h2>
+        <div class="card sky-card" id="sky-card"></div>
+      </section>
+
+      <!-- 10: Planet Influences (compact grid) -->
+      <section id="section-10-planet-influences" data-section="Planet Influences">
+        <h2 class="section-heading">PLANET INFLUENCES</h2>
+        <ul class="influences-compact" id="influences-grid"></ul>
+      </section>
+
+      <!-- 11: Top Drivers -->
+      <section id="section-11-top-drivers" data-section="Top Drivers">
+        <h2 class="section-heading">TOP DRIVERS</h2>
+        <ol class="drivers-list" id="drivers-list"></ol>
+      </section>
+
+      <!-- 12: Why This Forecast -->
+      <section id="section-12-why-forecast" data-section="Why This Forecast">
+        <h2 class="section-heading">WHY THIS FORECAST</h2>
+        <details class="card why-card">
+          <summary>Expansion Score: <span id="expansion-score">—</span></summary>
+          <div class="why-rows" id="why-rows"></div>
+        </details>
+      </section>
+    </div>
+
+    <!-- Row 5: Confidence (single card, mockup shows it bottom-left) -->
+    <div class="row row--meta">
+      <!-- 13: Confidence -->
+      <section id="section-13-confidence" data-section="Confidence">
+        <h2 class="section-heading">CONFIDENCE</h2>
+        <div class="card confidence-card">
+          <div class="confidence-ring confidence-ring--unrated" aria-hidden="true"></div>
+          <div class="confidence-label">Not Rated</div>
+          <div class="confidence-sub">Gathering More Data</div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
 
-    <!-- 2: Now Bar -->
-    <section id="section-2-now-bar" data-section="Now Bar">
-      <div class="now-bar-card">
-        <div class="now-cell"><span class="label">Forecast</span><span class="value" id="now-forecast">—</span></div>
-        <div class="now-cell"><span class="label">Pressure</span><span class="value" id="now-pressure">—</span></div>
-        <div class="now-cell"><span class="label">Momentum</span><span class="value" id="now-momentum">—</span></div>
-        <div class="now-cell"><span class="label">Next Event</span><span class="value" id="now-next-event">—</span></div>
-      </div>
-    </section>
-
-    <!-- 3: Daily Reading -->
-    <section id="section-3-daily-reading" data-section="Daily Reading">
-      <h2 class="section-heading">DAILY READING <span class="ai-badge">✦</span></h2>
-      <div class="card reading-card">
-        <div class="reading-state" id="reading-state">—</div>
-        <p class="reading-body" id="reading-body">—</p>
-      </div>
-    </section>
-
-    <!-- 4: What Changed -->
-    <section id="section-4-what-changed" data-section="What Changed">
-      <h2 class="section-heading">WHAT CHANGED <span class="heading-sub">SINCE YESTERDAY</span></h2>
-      <div class="card changed-card" id="changed-card"></div>
-    </section>
-
-    <!-- 5: Today's Insight -->
-    <section id="section-5-todays-insight" data-section="Today's Insight">
-      <h2 class="section-heading">TODAY'S INSIGHT</h2>
-      <div class="card insight-card" id="insight-card">—</div>
-    </section>
-
-    <!-- 6: Recommended Actions -->
-    <section id="section-6-recommended" data-section="Recommended Actions">
-      <h2 class="section-heading">RECOMMENDED ACTIONS</h2>
-      <div class="card actions-card">
-        <h3>Do More Of</h3>
-        <ul id="actions-do"></ul>
-        <h3>Avoid</h3>
-        <ul id="actions-avoid"></ul>
-      </div>
-    </section>
-
-    <!-- 7: Upcoming Conditions (timeline bars, not radar) -->
-    <section id="section-7-upcoming-conditions" data-section="Upcoming Conditions">
-      <h2 class="section-heading">UPCOMING CONDITIONS</h2>
-      <ul class="timeline-list" id="timeline-list"></ul>
-    </section>
-
-    <!-- 8: Current Phase -->
-    <section id="section-8-current-phase" data-section="Current Phase">
-      <h2 class="section-heading">CURRENT PHASE</h2>
-      <div class="card phase-card">
-        <div class="phase-name" id="phase-name">—</div>
-        <div class="phase-range" id="phase-range">—</div>
-        <div class="progress"><div class="progress-bar" id="phase-progress"></div></div>
-        <div class="phase-days" id="phase-days">—</div>
-      </div>
-    </section>
-
-    <!-- 9: Sky Conditions -->
-    <section id="section-9-sky-conditions" data-section="Sky Conditions">
-      <h2 class="section-heading">SKY CONDITIONS</h2>
-      <div class="card sky-card" id="sky-card"></div>
-    </section>
-
-    <!-- 10: Planet Influences (compact grid) -->
-    <section id="section-10-planet-influences" data-section="Planet Influences">
-      <h2 class="section-heading">PLANET INFLUENCES</h2>
-      <ul class="influences-compact" id="influences-grid"></ul>
-    </section>
-
-    <!-- 11: Top Drivers -->
-    <section id="section-11-top-drivers" data-section="Top Drivers">
-      <h2 class="section-heading">TOP DRIVERS</h2>
-      <ol class="drivers-list" id="drivers-list"></ol>
-    </section>
-
-    <!-- 12: Why This Forecast -->
-    <section id="section-12-why-forecast" data-section="Why This Forecast">
-      <h2 class="section-heading">WHY THIS FORECAST</h2>
-      <details class="card why-card">
-        <summary>Expansion Score: <span id="expansion-score">—</span></summary>
-        <div class="why-rows" id="why-rows"></div>
-      </details>
-    </section>
-
-    <!-- 13: Confidence -->
-    <section id="section-13-confidence" data-section="Confidence">
-      <h2 class="section-heading">CONFIDENCE</h2>
-      <div class="card confidence-card">
-        <div class="confidence-ring confidence-ring--unrated" aria-hidden="true"></div>
-        <div class="confidence-label">Not Rated</div>
-        <div class="confidence-sub">Gathering More Data</div>
-      </div>
-    </section>
-
-    <!-- 14: Footer Nav -->
-    <nav id="section-14-footer-nav" class="footer-nav" data-section="Footer Navigation">
+    <!-- Row 6: Footer Nav (full bleed) -->
+    <nav class="row row--bleed footer-nav" id="section-14-footer-nav" data-section="Footer Navigation">
       <a class="nav-item active" href="#">Home</a>
       <a class="nav-item" href="#">Timeline</a>
       <a class="nav-item" href="#">Reports</a>
@@ -210,6 +230,6 @@
     </nav>
   </div>
 
-  <script src="assets/js/timing_weather_render.js?v=v2.1.0"></script>
+  <script src="assets/js/timing_weather_render.js?v=v2.2.0"></script>
 </body>
 </html>
