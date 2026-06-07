@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-07T05:32:31-05:00",
+  "generated_at": "2026-06-07T06:02:44-05:00",
   "score": 0,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -12,7 +12,7 @@
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Pisces",
-    "degree": "5\u00b0 Pis 08'",
+    "degree": "5\u00b0 Pis 24'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aries",
@@ -37,11 +37,11 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 335.14,
+    "moon_longitude": 335.41,
     "moon_sign": "Pisces",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 2,
-    "aspect_to_natal_moon": "sextile (0.4\u00b0 applying)",
+    "aspect_to_natal_moon": "sextile (0.1\u00b0 separating)",
     "is_full_moon": false
   },
   "scoring_detail": {
@@ -58,7 +58,7 @@
       "hrv_7d": 65.4,
       "rhr_7d": 52.9
     },
-    "active_calories": 64,
+    "active_calories": 65,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
