@@ -78,6 +78,38 @@ text (PVR law — `key_factors` may carry technical terms for audit only).
 - ✅ Both bodies Codex-authored (`~/bin/llm --model codex`, Cowork-safe bypass);
   `null` → UI "Horoscope not yet computed" placeholder (no fakes).
 
+## v2 — Intelligence Dashboard ✅ SHIPPED (2026-06-07)
+
+Full rebuild into a single-column, 15-section mobile intelligence dashboard.
+Engine rewritten to a v2 schema (`engine.py`), `index.html` rebuilt to 15
+`data-section` blocks, `timing_weather_render.js` rewritten as a self-contained
+poller (fetch `state.json` `no-store`, 60s interval, re-render only on
+`updatedAt` change). Daily state snapshots persist to `polar/state_history/` so
+"Since Yesterday" deltas are real, not fabricated. Cache bumped to **v2.0.0**
+(self-healing PWA buster nukes + reloads stale clients once).
+
+The 15 sections (all engine-backed, PVR law — null → graceful "—"/empty state):
+
+1. **Hero Solar Intelligence** — forecast title + subtitle + sun hero
+2. **Now Bar** — Forecast / Pressure level / Momentum direction / Next event (days)
+3. **Current Phase** — named phase + date span + progress bar + days remaining (computed client-side from start/end vs currentDate)
+4. **Event Radar** — NEAR / MID / LONG buckets, top event + days each
+5. **Planet Influences** — Dominant / Supporting / Pressure / Volatility cards with signed influence score
+6. **Upcoming Events** — top-3 with theme + days
+7. **Sky Conditions** — Expansion / Pressure / Volatility / Support bars (0-100%)
+8. **Daily Reading** — state label + full prose read (the testable narrative)
+9. **Since Yesterday** — Momentum/Opportunity/Pressure/Volatility deltas vs `comparedTo` date; first-day empty state until history exists
+10. **Today's Insight** — single-line actionable insight
+11. **Recommended Actions** — Do More Of (4) + Avoid (3)
+12. **Top Drivers** — top-3 with +score
+13. **Why This Forecast** — collapsible `<details>`; Expansion Score + top-5 evidence factors (contributors/reducers, `factor` field) by magnitude
+14. **Confidence** — static "Not Rated" (engine emits `null`; never a fabricated grade)
+15. **Footer Nav** — Home active; Timeline/Reports/Profile decorative
+
+- **Daily Reading collapse** — the v1.2 dual Tropical/Vedic horoscope cards collapse into one engine-authored Daily Reading (`dailyReading.read`), removing jargon and the two-card split.
+- **State persistence** — `state_history/<date>.json` written each run; `dailyChanges` computes deltas against the prior snapshot.
+- Live verified: HTTP 200, 15 `data-section` markers, render.js + version.json + state.json v2 fields all live at `https://alfvargas90-code.github.io/vargas-fitness/timing-weather/`.
+
 ## v1.3 — Metric Breakdowns (deferred)
 
 - Opportunity breakdown by life domain (career / money / relationships / home)
