@@ -1,24 +1,25 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Timing Weather</title>
-<!-- PWA / Add to Home Screen -->
-<link rel="manifest" href="manifest.json" />
-<link rel="apple-touch-icon" href="apple-touch-icon.png" />
-<meta name="theme-color" content="#030404" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Timing" />
-<!-- ── Self-healing cache buster (Layers 1+3) ─────────────────────────────────
-     Runs before any other JS. Compares this device's stored version against the
-     live version.json; on a mismatch it nukes caches and reloads ONCE so a stale
-     home-screen PWA can never pin an old build. First visit never reloads.
-     Wrapped in try/catch — a failure here must never block the page from loading.
-     Escape hatch: append ?clear=1 to the URL to fully reset every storage layer.
-     Docs: docs/cache-busting.md -->
-<script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Timing Weather</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta name="theme-color" content="#030404" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Timing" />
+  <link rel="stylesheet" href="assets/css/timing-weather.css?v=v2.0.0" />
+
+  <!-- ── Self-healing cache buster (Layers 1+3) ─────────────────────────────────
+       Runs before any other JS. Compares this device's stored version against the
+       live version.json; on a mismatch it nukes caches and reloads ONCE so a stale
+       home-screen PWA can never pin an old build. First visit never reloads.
+       Wrapped in try/catch — a failure here must never block the page from loading.
+       Escape hatch: append ?clear=1 to the URL to fully reset every storage layer.
+       Docs: docs/cache-busting.md -->
+  <script>
 (async () => {
   try {
     const url = new URL(window.location.href);
@@ -63,22 +64,117 @@
     }
   } catch (e) { /* silent — never block page load on the cache check */ }
 })();
-</script>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="assets/css/timing-weather.css?v=v1.2-horoscope" />
+  </script>
 </head>
 <body>
   <div class="timing-weather-shell">
-    <!-- Left panel (sections 1-8). On mobile, panels stack into the linear order. -->
-    <section class="panel" id="tw-left" aria-label="Forecast"></section>
-    <!-- Right panel (sections 1-6). -->
-    <section class="panel" id="tw-right" aria-label="Details"></section>
+
+    <section id="section-1-hero" data-section="Hero Solar Intelligence">
+      <header class="header"><span class="header-title">TIMING WEATHER</span></header>
+      <div class="sun-hero" id="sun-hero"></div>
+      <h1 class="forecast-title" id="forecast-title">—</h1>
+      <p class="forecast-subtitle" id="forecast-subtitle">—</p>
+    </section>
+
+    <section id="section-2-now-bar" data-section="Now Bar">
+      <h2 class="section-heading">NOW BAR</h2>
+      <div class="now-bar-grid">
+        <div class="now-cell"><span class="label">Forecast</span><span class="value" id="now-forecast">—</span></div>
+        <div class="now-cell"><span class="label">Pressure</span><span class="value" id="now-pressure">—</span></div>
+        <div class="now-cell"><span class="label">Momentum</span><span class="value" id="now-momentum">—</span></div>
+        <div class="now-cell"><span class="label">Next Event</span><span class="value" id="now-next-event">—</span></div>
+      </div>
+    </section>
+
+    <section id="section-3-current-phase" data-section="Current Phase">
+      <h2 class="section-heading">CURRENT PHASE</h2>
+      <div class="card phase-card">
+        <div class="phase-name" id="phase-name">—</div>
+        <div class="phase-range" id="phase-range">—</div>
+        <div class="progress"><div class="progress-bar" id="phase-progress"></div></div>
+        <div class="phase-days" id="phase-days">—</div>
+      </div>
+    </section>
+
+    <section id="section-4-event-radar" data-section="Event Radar">
+      <h2 class="section-heading">EVENT RADAR</h2>
+      <div class="card radar-card">
+        <div class="radar-rings" id="radar-rings"></div>
+      </div>
+    </section>
+
+    <section id="section-5-planet-influences" data-section="Planet Influences">
+      <h2 class="section-heading">PLANET INFLUENCES</h2>
+      <div class="influences-grid" id="influences-grid"></div>
+    </section>
+
+    <section id="section-6-upcoming-events" data-section="Upcoming Events">
+      <h2 class="section-heading">UPCOMING EVENTS</h2>
+      <ul class="events-list" id="events-list"></ul>
+    </section>
+
+    <section id="section-7-sky-conditions" data-section="Sky Conditions">
+      <h2 class="section-heading">SKY CONDITIONS</h2>
+      <div class="card sky-card" id="sky-card"></div>
+    </section>
+
+    <section id="section-8-daily-reading" data-section="Daily Reading">
+      <h2 class="section-heading">DAILY READING</h2>
+      <div class="card reading-card">
+        <div class="reading-state" id="reading-state">—</div>
+        <p class="reading-body" id="reading-body">—</p>
+      </div>
+    </section>
+
+    <section id="section-9-what-changed" data-section="What Changed">
+      <h2 class="section-heading">SINCE YESTERDAY</h2>
+      <div class="card changed-card" id="changed-card"></div>
+    </section>
+
+    <section id="section-10-todays-insight" data-section="Today's Insight">
+      <h2 class="section-heading">TODAY'S INSIGHT</h2>
+      <div class="card insight-card" id="insight-card">—</div>
+    </section>
+
+    <section id="section-11-recommended" data-section="Recommended Actions">
+      <h2 class="section-heading">RECOMMENDED ACTIONS</h2>
+      <div class="card actions-card">
+        <h3>Do More Of</h3>
+        <ul id="actions-do"></ul>
+        <h3>Avoid</h3>
+        <ul id="actions-avoid"></ul>
+      </div>
+    </section>
+
+    <section id="section-12-top-drivers" data-section="Top Drivers">
+      <h2 class="section-heading">TOP DRIVERS</h2>
+      <ol class="drivers-list" id="drivers-list"></ol>
+    </section>
+
+    <section id="section-13-why-forecast" data-section="Why This Forecast">
+      <h2 class="section-heading">WHY THIS FORECAST</h2>
+      <details class="card why-card">
+        <summary>Expansion Score: <span id="expansion-score">—</span></summary>
+        <div class="why-rows" id="why-rows"></div>
+      </details>
+    </section>
+
+    <section id="section-14-confidence" data-section="Confidence">
+      <h2 class="section-heading">CONFIDENCE</h2>
+      <div class="card confidence-card">
+        <div class="confidence-ring confidence-ring--unrated"></div>
+        <div class="confidence-label">Not Rated</div>
+      </div>
+    </section>
+
+    <nav id="section-15-footer-nav" class="footer-nav" data-section="Footer Nav">
+      <a class="nav-item active" href="#">Home</a>
+      <a class="nav-item" href="#">Timeline</a>
+      <a class="nav-item" href="#">Reports</a>
+      <a class="nav-item" href="#">Profile</a>
+    </nav>
   </div>
 
-  <!-- Bottom navigation — fixed across both panels. Home active; rest decorative. -->
-  <nav class="bottom-nav" id="tw-nav" aria-label="Primary"></nav>
-
-  <script src="assets/js/timing_weather_render.js?v=v1.2-horoscope"></script>
-  <script src="assets/js/timing_weather_engine.js?v=v1.2-horoscope"></script>
+  <script src="assets/js/timing_weather_render.js?v=v2.0.0"></script>
 </body>
 </html>
