@@ -1,11 +1,11 @@
 ---
 name: timing-weather-roadmap
-description: "Phased roadmap for Timing Weather. v1 + v1.1 shipped; v1.2 + v2 + v3 explicitly deferred. Locked by Alfie 2026-06-06."
+description: "Phased roadmap for Timing Weather. v1 + v1.1 + v1.2 (Daily Horoscope) shipped; v1.3 + v3 + v4 explicitly deferred. Locked by Alfie 2026-06-06."
 ---
 
 # Timing Weather — Phased Roadmap
 
-**Locked 2026-06-06.** Phases are strict — do not pull v1.2/v2/v3 work forward without explicit unlock.
+**Locked 2026-06-06.** Phases are strict — do not pull v1.3/v3/v4 work forward without explicit unlock.
 
 ## v1 — Foundation ✅ SHIPPED
 
@@ -59,20 +59,39 @@ Alfie's approved two-panel mockup. Engine kept; UI rebuilt from scratch.
 - Engine adds `subtitle` field, `evidence` becomes nested, `forecastTrend` uses
   `state` instead of `label`
 
-## v1.2 — Metric Breakdowns (deferred)
+## v1.2 — Daily Horoscope ✅ SHIPPED (2026-06-06)
+
+Two daily reading cards in the right panel, between Weather Metrics and
+Recommended Actions (same slot in the stacked mobile order). Same glass + gold
+aesthetic; plain-English body (~80-120 words), no astrology jargon in the visible
+text (PVR law — `key_factors` may carry technical terms for audit only).
+
+- ✅ **Tropical Horoscope** — `tropicalHoroscope` field. Factors from the engine's
+  live geocentric ephemeris (same Swiss Ephemeris the morning iMessage transit
+  snapshot uses); today's persisted snapshot, if present, only enriches the Codex
+  prompt — never required. Subtitle "Today's transits".
+- ✅ **Vedic Horoscope** — `vedicHoroscope` field. New sidereal (Lahiri) engine:
+  natal sidereal = tropical − ayanamsha@birth; live `FLG_SIDEREAL` transits;
+  current Vimshottari sub-period (Moon–Venus–<sub> from the deep-research KP timing
+  table), Sade Sati (Small Panoti), transit-Moon nakshatra, tightest sidereal
+  aspects to Lagna/Moon/Sun. Subtitle "Today's sidereal picture · Moon–Venus–…".
+- ✅ Both bodies Codex-authored (`~/bin/llm --model codex`, Cowork-safe bypass);
+  `null` → UI "Horoscope not yet computed" placeholder (no fakes).
+
+## v1.3 — Metric Breakdowns (deferred)
 
 - Opportunity breakdown by life domain (career / money / relationships / home)
 - Pressure breakdown by source (Saturn / Sade Sati / admin load / eclipse proximity)
 - Per-metric drill-down cards. **Do not pull forward without Alfie's unlock.**
 
-## v2 — Transit Radar (deferred)
+## v3 — Transit Radar (deferred)
 
 - Orbital rings around the Sun = live transit planet positions
 - Each planet: symbol + degree + sign + influence score + color state
 - Glow intensity reflects influence score
 - Live ephemeris feeds the radar
 
-## v3 — Historical Intelligence (deferred)
+## v4 — Historical Intelligence (deferred)
 
 - Cycle comparison cards (1990, 2002, 2014) — same Jupiter return cycle, last 3 returns
 - Each card: growth score + major themes + notable events + cycle similarity %

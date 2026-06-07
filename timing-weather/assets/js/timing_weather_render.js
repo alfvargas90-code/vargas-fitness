@@ -255,6 +255,30 @@
     "</div>";
   }
 
+  // ── Daily Horoscope (Tropical + Vedic) ───────────────────────────────
+  // Shared renderer; null field or missing body -> graceful placeholder (no fakes).
+  function horoscopeCard(heading, data) {
+    if (!data || !data.body) {
+      return '<div class="card horoscope-card">' +
+        '<div class="section-heading">' + heading + "</div>" +
+        '<p class="horoscope-empty">Horoscope not yet computed</p>' +
+      "</div>";
+    }
+    var foot = data.for_date ? "For " + fmtLongDate(data.for_date) : "";
+    return '<div class="card horoscope-card">' +
+      '<div class="section-heading">' + heading + "</div>" +
+      (data.subtitle ? '<div class="horoscope-subtitle">' + esc(data.subtitle) + "</div>" : "") +
+      '<p class="horoscope-body">' + esc(data.body) + "</p>" +
+      (foot ? '<div class="horoscope-footer">' + esc(foot) + "</div>" : "") +
+    "</div>";
+  }
+  function tropicalHoroscope(s) {
+    return horoscopeCard("Tropical Horoscope", s.tropicalHoroscope);
+  }
+  function vedicHoroscope(s) {
+    return horoscopeCard("Vedic Horoscope", s.vedicHoroscope);
+  }
+
   // ── Recommended Actions ──────────────────────────────────────────────
   function recommendedActions(s) {
     var recs = s.recommendations || [];
@@ -342,6 +366,8 @@
     forecastTrend: forecastTrend,
     nextMajorWindow: nextMajorWindow,
     weatherMetrics: weatherMetrics,
+    tropicalHoroscope: tropicalHoroscope,
+    vedicHoroscope: vedicHoroscope,
     recommendedActions: recommendedActions,
     whyForecast: whyForecast,
     guidance: guidance,

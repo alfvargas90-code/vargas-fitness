@@ -105,6 +105,33 @@ BAZI_SHIFT = date(2026, 9, 15)
 # Vedic Moon-Venus antardasha (relationship-positive) end (natal_context vedic.dashas).
 VENUS_ANTARDASHA = (date(2025, 4, 1), date(2026, 12, 31))
 
+# --- Vedic (sidereal Lahiri) horoscope facts -----------------------------
+# Vimshottari pratyantardasha (sub-sub-period) windows inside the Moon mahadasha /
+# Venus antardasha. These are FACTS lifted from deep_research_vedic_2026.md's KP
+# timing table (Moon–Venus–Jupiter to early Aug, –Saturn to late Oct, –Mercury to
+# early Dec, –Ketu to year-end), not computed from a dasha balance we don't hold.
+# Looked up by date; outside the table we fall back to the Moon–Venus chain only.
+VEDIC_MAHADASHA = "Moon"      # 2017-06-21 → 2027-06-21 (natal_context vedic.dashas)
+VEDIC_ANTARDASHA = "Venus"    # 2025-04 → 2026-12 (first relationship-positive sub-period)
+VEDIC_SUBPERIODS = [
+    {"sub": "Jupiter", "start": date(2026, 4, 20), "end": date(2026, 8, 12)},
+    {"sub": "Saturn",  "start": date(2026, 8, 12), "end": date(2026, 10, 29)},
+    {"sub": "Mercury", "start": date(2026, 10, 29), "end": date(2026, 12, 7)},
+    {"sub": "Ketu",    "start": date(2026, 12, 7),  "end": date(2026, 12, 31)},
+]
+# Sade Sati phase label (natal_context vedic.sade_sati). Window reuses SADE_SATI above.
+SADE_SATI_PHASE = "Small Panoti"
+
+# 27 nakshatras in sidereal order (each 13°20'). Used for the transit-Moon factor —
+# a genuinely sidereal detail with no tropical analogue.
+NAKSHATRAS = [
+    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra", "Punarvasu",
+    "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta",
+    "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha", "Mula", "Purva Ashadha",
+    "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha", "Purva Bhadrapada",
+    "Uttara Bhadrapada", "Revati",
+]
+
 # Council windows (from 2026-06-06 convergence review).
 #   dominance_weight : feeds the dominant-planet competition (structurally strong only)
 #   title            : short human label for the Next Major Window card
@@ -697,6 +724,225 @@ def codex_narrative(forecast, metrics, confidence, duration, phase, phase_end):
         return None
 
 
+# --- Vedic horoscope (sidereal Lahiri) -----------------------------------
+def birth_jd():
+    return swe.julday(BIRTH[0], BIRTH[1], BIRTH[2], BIRTH[3])
+
+
+def sidereal_natal(natal):
+    """Natal sidereal longitudes = tropical natal − ayanamsha(at birth). Lahiri.
+    natal[] holds tropical ecliptic longitudes parsed from natal_context.md; for a
+    single ecliptic longitude, sidereal = tropical − ayanamsha is exact. Sanity-
+    checked against natal_context vedic signs (Sun→Leo, Moon→Sagittarius, etc.)."""
+    swe.set_sid_mode(swe.SIDM_LAHIRI, 0, 0)
+    aya = swe.get_ayanamsa_ut(birth_jd())
+    sid = {b: (lon - aya) % 360 for b, lon in natal.items()}
+    # Ketu = opposite the (north) node, if present.
+    if "north_node" in sid:
+        sid["ketu"] = (sid["north_node"] + 180) % 360
+        sid["rahu"] = sid["north_node"]
+    return sid
+
+
+def vedic_transits_at(when_utc):
+    """Today's sidereal (Lahiri) transit longitudes."""
+    swe.set_sid_mode(swe.SIDM_LAHIRI, 0, 0)
+    jd = jd_now(when_utc)
+    flags = swe.FLG_SWIEPH | swe.FLG_SIDEREAL
+    out, missing = {}, []
+    for name, body in SWE_BODY.items():
+        try:
+            out[name] = swe.calc_ut(jd, body, flags)[0][0]
+        except Exception as e:
+            missing.append(name)
+            log(f"  vedic transit compute failed for {name}: {e} — skipping")
+    return out, missing
+
+
+def vedic_subperiod(today):
+    """Current Vimshottari chain (Mahadasha–Antardasha–Pratyantardasha) for `today`.
+    Returns (chain_string, sub_lord_or_None)."""
+    for w in VEDIC_SUBPERIODS:
+        if w["start"] <= today <= w["end"]:
+            return (f"{VEDIC_MAHADASHA}–{VEDIC_ANTARDASHA}–{w['sub']}", w["sub"])
+    # Outside the sourced sub-period table — fall back to the MD–AD chain only.
+    if VENUS_ANTARDASHA[0] <= today <= VENUS_ANTARDASHA[1]:
+        return (f"{VEDIC_MAHADASHA}–{VEDIC_ANTARDASHA}", None)
+    return (VEDIC_MAHADASHA, None)
+
+
+def nakshatra_of(lon):
+    return NAKSHATRAS[int(lon // (360.0 / 27)) % 27]
+
+
+# Natal points to weight when picking the strongest Vedic transit (Lagna/Moon/Sun
+# carry the chart in Vimshottari practice), then everything else.
+VEDIC_PRIORITY = {"moon": 3, "asc": 3, "sun": 2, "mc": 1}
+
+
+def vedic_key_aspects(vtransits, vnatal, limit=2):
+    """1–2 strongest sidereal transit→natal aspects, prioritizing Moon/Lagna/Sun.
+    Excludes a planet's transit-to-its-own-natal trivial conjunction noise only when
+    it isn't a real return. Returns list of factor strings (jargon OK — internal)."""
+    cands = []
+    for t, tl in vtransits.items():
+        for n, nl in vnatal.items():
+            asp, orb = closest_aspect(tl, nl, 5.0)
+            if not asp:
+                continue
+            pri = VEDIC_PRIORITY.get(n, 0)
+            cands.append((pri, -orb, t, asp, n, orb))
+    cands.sort(key=lambda c: (-c[0], c[1]))
+    seen, out = set(), []
+    for pri, _negorb, t, asp, n, orb in cands:
+        key = (t, n)
+        if key in seen:
+            continue
+        seen.add(key)
+        label = {"asc": "Lagna", "north_node": "Rahu"}.get(n, cap(n))
+        out.append(f"Sidereal {cap(t)} {asp} natal {label} ({round(orb, 1)}°)")
+        if len(out) >= limit:
+            break
+    return out
+
+
+def compute_vedic_horoscope(today, natal, now_utc, mood, with_codex=True):
+    """Build the vedicHoroscope field, or None if it can't be authored honestly."""
+    try:
+        vnatal = sidereal_natal(natal)
+        vtransits, vmissing = vedic_transits_at(now_utc)
+    except Exception as e:
+        log(f"  vedic computation failed: {e} — vedicHoroscope null")
+        return None
+    if "moon" not in vtransits:
+        log("  vedic: no sidereal Moon — vedicHoroscope null")
+        return None
+
+    chain, _sub = vedic_subperiod(today)
+    factors = [f"Vimshottari {chain} sub-period"]
+    if SADE_SATI[0] <= today <= SADE_SATI[1]:
+        factors.append(f"Sade Sati ({SADE_SATI_PHASE})")
+    factors.append(f"Transit Moon in {nakshatra_of(vtransits['moon'])}")
+    factors.extend(vedic_key_aspects(vtransits, vnatal, limit=2))
+
+    subtitle = "Today's sidereal picture · " + chain
+    body = None
+    if with_codex:
+        background = (
+            "This Vedic year externalizes after a long inward phase: the live themes are "
+            "concrete movement in work/operations, home/property, finances and important "
+            "agreements — not fairy-tale romance. Now is supportive restructuring; "
+            "responsibility and weight build from late August, with paperwork and "
+            "formalization in the late-autumn stretch. There is steady background pressure "
+            "on home and foundations that rewards patience and structure."
+        )
+        body = codex_horoscope("Vedic / sidereal", factors, mood, background)
+    if not body:
+        return None
+    return {"for_date": today.isoformat(), "subtitle": subtitle,
+            "body": body, "key_factors": factors}
+
+
+def read_transit_snapshot(today):
+    """Opportunistically read today's persisted daily transit snapshot (the iMessage
+    generator's archive) to enrich the tropical Codex context. Non-fatal: returns a
+    short context string or '' if absent. Source: ~/Documents/Claude/Scheduled/."""
+    path = os.path.expanduser(
+        f"~/Documents/Claude/Scheduled/daily-transit-snapshot/{today.isoformat()}-transit-snapshot.md")
+    try:
+        txt = open(path, encoding="utf-8").read()
+    except Exception:
+        return ""
+    grabbed = []
+    for line in txt.splitlines():
+        s = line.strip()
+        if s.startswith("**Hierarchy") or s.startswith("**Guidance"):
+            grabbed.append(re.sub(r"\*\*", "", s))
+    return " ".join(grabbed)[:600]
+
+
+def tropical_key_factors(aspects, limit=3):
+    """Top tropical transit→natal aspects for today, prioritizing personal/angular
+    natal points then tightness. Jargon OK (internal/audit array)."""
+    pri = {"sun": 3, "moon": 3, "asc": 3, "mc": 2, "mercury": 1, "venus": 1, "mars": 1}
+    ranked = sorted(aspects, key=lambda a: (-pri.get(a["natal"], 0), a["orb"]))
+    out, seen = [], set()
+    for a in ranked:
+        key = (a["transit"], a["natal"])
+        if key in seen:
+            continue
+        seen.add(key)
+        label = {"asc": "Ascendant", "mc": "Midheaven",
+                 "north_node": "North Node"}.get(a["natal"], cap(a["natal"]))
+        out.append(f"{cap(a['transit'])} {a['aspect']} natal {label} ({a['orb']}°)")
+        if len(out) >= limit:
+            break
+    return out
+
+
+def compute_tropical_horoscope(today, aspects, mood, with_codex=True):
+    """Build the tropicalHoroscope field, or None if it can't be authored honestly.
+    Factors come from the engine's live geocentric ephemeris (the same Swiss
+    Ephemeris the iMessage snapshot uses); today's persisted snapshot, if present,
+    only enriches the Codex prompt — it is never required."""
+    factors = tropical_key_factors(aspects, limit=3)
+    if not factors:
+        log("  tropical: no transit aspects today — tropicalHoroscope null")
+        return None
+    body = None
+    if with_codex:
+        snap = read_transit_snapshot(today)
+        background = (
+            "This is a preparation-and-pipeline phase: quiet leverage, cleanup, building "
+            "relationships and documents, opening doors that convert into weight-bearing "
+            "commitments after late August 2026 — open doors now, sign and formalize "
+            "later. Real background pressure and volatility ask for fewer, better moves."
+        )
+        if snap:
+            background += " Today's read from the morning snapshot: " + snap
+        body = codex_horoscope("Tropical / Western transits", factors, mood, background)
+    if not body:
+        return None
+    return {"for_date": today.isoformat(), "subtitle": "Today's transits",
+            "body": body, "key_factors": factors}
+
+
+def codex_horoscope(tradition, factors, mood, background):
+    """Plain-English daily horoscope body via ~/bin/llm --model codex (Cowork-safe).
+    No jargon, ~80-120 words, second person, single paragraph. None on failure."""
+    llm = os.path.expanduser("~/bin/llm")
+    if not os.path.exists(llm):
+        log("  ~/bin/llm not found — horoscope body null")
+        return None
+    prompt = (
+        "You are writing a plain-English daily horoscope reading. NO astrology jargon, "
+        "NO Latin terms, NO aspect names, NO planet or sign names. Speak in observable "
+        "themes — energy, focus, relationships, work, decisions. ~80-120 words. The "
+        "subject is a high-output operator on a known multi-month cycle; reference the "
+        "subtle current tensions AND supports honestly. No predictions of specific events, "
+        "no fortune-telling, no hype, no fluff.\n\n"
+        f"Context (translate, do not quote): {tradition} factors for today — "
+        + "; ".join(factors) + ".\n"
+        f"Mood: {mood}\n"
+        f"Background: {background}\n\n"
+        "Output: a SINGLE second-person paragraph (\"today you may notice\", \"this is a "
+        "day for\"). Honest about both supports and tensions. Output ONLY the paragraph, "
+        "no heading, no preamble."
+    )
+    try:
+        out = subprocess.run([llm, "--lane", "reasoning", "--model", "codex", prompt],
+                             capture_output=True, text=True, timeout=180, cwd=DASH)
+        if out.returncode != 0:
+            log(f"  codex horoscope ({tradition}) exited {out.returncode}: "
+                f"{out.stderr.strip()[:200]}")
+            return None
+        text = re.sub(r"\s+", " ", out.stdout).strip()
+        return text or None
+    except Exception as e:
+        log(f"  codex horoscope ({tradition}) failed (non-fatal): {e}")
+        return None
+
+
 # --- main ----------------------------------------------------------------
 def compute(now=None, with_codex=True):
     now = now or datetime.now().astimezone()
@@ -758,6 +1004,17 @@ def compute(now=None, with_codex=True):
         narrative = codex_narrative(forecast, metrics, conf, dur, phase_name,
                                     phase_end.isoformat() if hasattr(phase_end, "isoformat") else phase_end)
 
+    # Daily horoscope cards (v1.2). Shared plain-English "mood" derived from the
+    # classified state; each tradition sources its own factors. Either may be null
+    # (UI shows a graceful placeholder) — never fabricated.
+    horoscope_mood = (
+        f"{forecast.title()} headline. Preparation/building phase — supportive openings "
+        f"(opportunity {opp}/100) against real background pressure ({pre}/100) and high "
+        f"volatility ({vol}/100); momentum {mom}/100. Build leverage now, formalize later."
+    )
+    tropical_horoscope = compute_tropical_horoscope(today, aspects, horoscope_mood, with_codex)
+    vedic_horoscope = compute_vedic_horoscope(today, natal, now_utc, horoscope_mood, with_codex)
+
     sources = [NATAL_MD, TROPICAL_MD, VEDIC_MD, COUNCIL_MD]
 
     state = {
@@ -791,6 +1048,10 @@ def compute(now=None, with_codex=True):
         "avoidances": avoidances,
         # --- Section 10: Why This Forecast ---
         "evidence": evidence,
+        # --- v1.2: Daily Horoscope cards (right panel, between Weather Metrics
+        #           and Recommended Actions). null -> UI placeholder. ---
+        "tropicalHoroscope": tropical_horoscope,
+        "vedicHoroscope": vedic_horoscope,
         # --- Section 11: Narrative ---
         "narrative": narrative,
         # --- meta ---

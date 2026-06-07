@@ -57,13 +57,13 @@
   "recommendations": [
     "Build pipeline",
     "Schedule meetings",
-    "Prepare assets",
-    "Expand options"
+    "Strengthen systems",
+    "Prepare options"
   ],
   "avoidances": [
     "Force commitments",
     "Ignore constraints",
-    "Overpromise capacity"
+    "Overextend capacity"
   ],
   "evidence": {
     "expansionScore": 28,
@@ -104,8 +104,30 @@
       }
     ]
   },
-  "narrative": "This is a preparation window, not the moment to force a big public move. Use the next few days to clean up loose ends, strengthen key relationships, organize documents, and open doors that can become real commitments later. Pressure and volatility are high, so reduce optional noise and keep your pipeline disciplined: fewer conversations, better follow-through, clearer records. Momentum is strong, but the smart play is to build leverage quietly now and delay signing, naming, or locking in major obligations until the structure is ready. What you set up now should be able to carry weight by late August, with everything needing a clear title, written form, or firm commitment by April 2027.",
-  "updatedAt": "2026-06-06T22:52:16-05:00",
+  "tropicalHoroscope": {
+    "for_date": "2026-06-06",
+    "subtitle": "Today's transits",
+    "body": "Today you may notice a wider sense of possibility, but it comes through small openings rather than a clean green light. Conversations can help you clarify your position, make useful introductions, or turn scattered ideas into something others can understand. At the same time, emotional signals may feel blurred, and background pressure can make ordinary decisions seem heavier than they are. This is a day for fewer, better moves: clean up loose ends, refine the pitch, strengthen key relationships, and build leverage without forcing commitment too soon. Let useful doors open, but give the final shape more time.",
+    "key_factors": [
+      "Mercury opposition natal Ascendant (0.55°)",
+      "Neptune square natal Moon (1.35°)",
+      "Mercury sextile natal Sun (1.66°)"
+    ]
+  },
+  "vedicHoroscope": {
+    "for_date": "2026-06-06",
+    "subtitle": "Today's sidereal picture · Moon–Venus–Jupiter",
+    "body": "Today you may notice a wider field of possibility, but it comes with background pressure rather than ease. There is support for building leverage: refining systems, opening practical conversations, improving finances, work flow, or home foundations. The useful move is preparation, not forcing closure. Tensions may show up as uncertainty around direction, heavier responsibility, or a feeling that every choice carries extra weight. Treat that as a signal to slow the decision-making, document what matters, and keep commitments realistic. This is a day for structured expansion: make the next useful move, strengthen the base, and leave formal agreements for when the shape is clearer.",
+    "key_factors": [
+      "Vimshottari Moon–Venus–Jupiter sub-period",
+      "Sade Sati (Small Panoti)",
+      "Transit Moon in Shatabhisha",
+      "Sidereal Neptune square natal Lagna (4.7°)",
+      "Sidereal Saturn square natal Lagna (3.9°)"
+    ]
+  },
+  "narrative": "This is a build-the-pipeline period, not a force-the-outcome period. Use now through June 8, 2026 to clean up loose ends, strengthen key relationships, assemble documents, and open doors without locking yourself into final terms. The next 85 days carry high pressure and high churn, so keep commitments reversible, reduce operational mess, and preserve negotiating room. After late August 2026, the work starts becoming formal responsibility, with an April 2027 checkpoint where the strongest pieces need to be written down, titled, signed, or otherwise made official. Open the door now; commit later.",
+  "updatedAt": "2026-06-06T23:53:08-05:00",
   "sourceMode": "static",
   "currentDate": "2026-06-06",
   "sources": [
@@ -116,11 +138,11 @@
   ],
   "scoringDetail": {
     "dominanceScores": {
-      "jupiter": 10.43,
-      "saturn": 7.33,
+      "jupiter": 10.42,
+      "saturn": 7.32,
       "pluto": 6.84,
       "uranus": 6.85,
-      "venus": 5.6
+      "venus": 5.56
     },
     "lordOfYear": "jupiter",
     "activeWindows": [
@@ -134,7 +156,7 @@
       ],
       "pressure": [
         "Saturn square natal neptune (0.81°)",
-        "Saturn square natal asc (4.39°)",
+        "Saturn square natal asc (4.4°)",
         "Sade Sati (Small Panoti) — pressure on foundations",
         "inside admin/clearing window: Late May–early June clearing"
       ],
@@ -152,13 +174,13 @@
       ]
     },
     "transitSigns": {
-      "sun": "16.44° Gemini",
-      "moon": "1.65° Pisces",
-      "mercury": "8.84° Cancer",
-      "venus": "22.65° Cancer",
-      "mars": "14.31° Taurus",
-      "jupiter": "25.25° Cancer",
-      "saturn": "12.74° Aries",
+      "sun": "16.48° Gemini",
+      "moon": "2.18° Pisces",
+      "mercury": "8.9° Cancer",
+      "venus": "22.7° Cancer",
+      "mars": "14.34° Taurus",
+      "jupiter": "25.26° Cancer",
+      "saturn": "12.75° Aries",
       "uranus": "2.42° Gemini",
       "neptune": "4.17° Aries",
       "pluto": "5.29° Aquarius"
@@ -174,13 +196,13 @@
         "transit": "venus",
         "natal": "mercury",
         "aspect": "sextile",
-        "orb": 0.48
+        "orb": 0.53
       },
       {
         "transit": "mercury",
         "natal": "asc",
         "aspect": "opposition",
-        "orb": 0.49
+        "orb": 0.55
       },
       {
         "transit": "saturn",
@@ -192,7 +214,7 @@
         "transit": "mars",
         "natal": "pluto",
         "aspect": "opposition",
-        "orb": 1.01
+        "orb": 0.98
       },
       {
         "transit": "neptune",
@@ -222,19 +244,19 @@
         "transit": "mercury",
         "natal": "sun",
         "aspect": "sextile",
-        "orb": 1.6
+        "orb": 1.66
       },
       {
         "transit": "pluto",
         "natal": "north_node",
         "aspect": "conjunction",
-        "orb": 1.69
+        "orb": 1.7
       },
       {
         "transit": "moon",
-        "natal": "mars",
-        "aspect": "square",
-        "orb": 1.95
+        "natal": "mc",
+        "aspect": "trine",
+        "orb": 1.72
       }
     ],
     "transitMissing": [],

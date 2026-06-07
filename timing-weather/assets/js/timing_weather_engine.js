@@ -29,6 +29,8 @@
     return [
       R.nextMajorWindow(s),
       R.weatherMetrics(s),
+      R.tropicalHoroscope(s),
+      R.vedicHoroscope(s),
       R.recommendedActions(s),
       R.whyForecast(s),
       R.guidance(s),

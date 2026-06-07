@@ -286,6 +286,30 @@ body {
 .m-orange { color: var(--orange); } .bar-orange { background: var(--orange); }
 .m-blue   { color: var(--blue); }   .bar-blue   { background: var(--blue); }
 
+/* ── Daily Horoscope (Tropical + Vedic) ────────────────────────────────── */
+.horoscope-subtitle {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin: -6px 0 12px;
+}
+.horoscope-body {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin: 0;
+}
+.horoscope-footer {
+  color: var(--text-muted);
+  font-size: 12px;
+  margin-top: 14px;
+}
+.horoscope-empty {
+  color: var(--text-muted);
+  font-size: 14px;
+  font-style: italic;
+  margin: 4px 0 0;
+}
+
 /* ── Recommended Actions ───────────────────────────────────────────────── */
 .actions-sub { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin: 4px 0 8px; }
 .actions-sub.do    { color: var(--green); }
