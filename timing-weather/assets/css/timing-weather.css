@@ -1,17 +1,21 @@
 /* ════════════════════════════════════════════════════════════════════════════
-   TIMING WEATHER — v2.0.0
-   Glassmorphic solar-intelligence dashboard. 15 sections. Mobile-first.
-   Dark gold-on-black aesthetic, dimensional layering, no constant motion.
+   TIMING WEATHER — v2.1.0  "Ambient Intelligence"
+   Reference-locked dark dashboard. Oura Ring + Apple Weather + Bloomberg Terminal.
+   Navy/black field, gold accents, Apple-Watch ring progress, photographic sun.
+   14 sections. Mobile-first single column → desktop 12-col grid (≥860px).
    All data binds from state.json via timing_weather_render.js.
    ════════════════════════════════════════════════════════════════════════════ */
 
+/* ── Global tokens ─────────────────────────────────────────────────────────── */
 :root {
-  --bg-1: #030404;
-  --bg-2: #06100F;
-  --card: rgba(255,255,255,0.035);
+  --bg-1: #050609;
+  --bg-2: #0a0e14;
+  --card: rgba(255,255,255,0.04);
+  --card-strong: rgba(255,255,255,0.07);
   --line: rgba(255,255,255,0.10);
   --gold: #D4AF37;
   --gold-bright: #F4C542;
+  --gold-deep: #8A650F;
   --text: #F5F5F5;
   --muted: #A1A1AA;
   --dim: #71717A;
@@ -19,334 +23,297 @@
   --red: #F87171;
   --orange: #F59E0B;
   --blue: #60A5FA;
-  --purple: #C084FC;
   --cyan: #22D3EE;
+  --purple: #C084FC;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   background:
-    radial-gradient(circle at 50% 18%, rgba(212,175,55,0.12), transparent 32%),
-    linear-gradient(180deg, #020303 0%, var(--bg-2) 100%);
+    radial-gradient(circle at 50% 12%, rgba(212,175,55,0.10), transparent 34%),
+    linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
   background-attachment: fixed;
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
   min-height: 100vh;
-  padding-bottom: 80px; /* footer nav clearance */
+  padding-bottom: 84px;            /* fixed footer nav clearance (mobile) */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
+/* ── Shell ─────────────────────────────────────────────────────────────────── */
 .timing-weather-shell {
   max-width: 1180px;
   margin: 0 auto;
   padding: 16px;
 }
 
-/* ── Header ──────────────────────────────────────────────────────────────── */
-.header {
-  display: flex;
-  justify-content: center;
-  padding: 8px 0 18px;
-}
-.header-title {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.32em;
-  color: var(--muted);
-  text-transform: uppercase;
-}
+/* ── Section scaffolding ───────────────────────────────────────────────────── */
+section[data-section] { margin-bottom: 22px; }
 
-/* ── Section scaffolding ─────────────────────────────────────────────────── */
-section[data-section] {
-  margin-bottom: 26px;
-}
 .section-heading {
-  font-size: 14px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 12px;
 }
+.ai-badge {
+  color: var(--gold-bright);
+  font-size: 13px;
+  text-shadow: 0 0 10px rgba(244,197,66,0.5);
+}
+.heading-sub {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  color: var(--dim);
+}
+.heading-sub a, a.heading-sub { color: var(--muted); text-decoration: none; }
+.heading-sub a:hover { color: var(--gold-bright); }
 
-/* ── Card (glassmorphism base) ───────────────────────────────────────────── */
+/* ── Card base ─────────────────────────────────────────────────────────────── */
 .card {
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 24px;
-  padding: 22px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.40);
 }
 
-/* ════════════════════════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════════════════════════
    SECTION 1 — Hero Solar Intelligence
-   ════════════════════════════════════════════════════════════════════════ */
-#section-1-hero {
-  text-align: center;
-  margin-bottom: 34px;
-}
-.sun-hero {
-  width: 240px;
-  height: 240px;
-  margin: 4px auto 22px;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 50% 50%,
-      rgba(244,197,66,0.95) 0%,
-      rgba(212,175,55,0.55) 34%,
-      rgba(212,175,55,0.18) 58%,
-      transparent 72%);
-  box-shadow:
-    0 0 80px rgba(212,175,55,0.35),
-    inset 0 0 60px rgba(244,197,66,0.25);
-  animation: sun-pulse 6s ease-in-out infinite;
-}
-@keyframes sun-pulse {
-  0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.02); }
-}
-.forecast-title {
-  font-size: clamp(48px, 10vw, 72px);
-  font-weight: 800;
-  letter-spacing: 0.20em;
-  line-height: 1.02;
-  color: var(--gold);
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-.forecast-subtitle {
-  font-size: 15px;
-  color: var(--muted);
-  letter-spacing: 0.02em;
-  max-width: 520px;
-  margin: 0 auto;
+   4 corner rings · photographic sun core · EXPANSION forecast stack
+   Layout: 3 columns (corner | center | corner) × 3 rows (sun / title / subtitle).
+   Corners flank the center stack; the sun + title + subtitle never overlap.
+   ════════════════════════════════════════════════════════════════════════════ */
+#section-1-hero { margin-bottom: 26px; }
+
+.hero-shell {
+  display: grid;
+  grid-template-columns: 1fr minmax(220px, 2fr) 1fr;
+  grid-template-rows: auto auto auto;
+  align-items: center;
+  justify-items: center;
+  gap: 10px 14px;
+  min-height: 360px;
+  position: relative;
 }
 
-/* ════════════════════════════════════════════════════════════════════════
-   SECTION 2 — Now Bar
-   ════════════════════════════════════════════════════════════════════════ */
-.now-bar-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2x2 mobile */
-  gap: 10px;
-}
-.now-cell {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 16px 14px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+/* Corner stat blocks — pinned to the four outer cells */
+.hero-corner {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  align-items: center;
+  text-align: center;
+  position: relative;
 }
-.now-cell .label {
+.hero-corner--tl { grid-column: 1; grid-row: 1; align-self: start; }
+.hero-corner--tr { grid-column: 3; grid-row: 1; align-self: start; }
+.hero-corner--bl { grid-column: 1; grid-row: 3; align-self: end; }
+.hero-corner--br { grid-column: 3; grid-row: 3; align-self: end; }
+
+.corner-label {
   font-size: 11px;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  color: var(--dim);
-}
-.now-cell .value {
-  font-size: 19px;
-  font-weight: 700;
-  color: var(--text);
-}
-
-/* ════════════════════════════════════════════════════════════════════════
-   SECTION 3 — Current Phase
-   ════════════════════════════════════════════════════════════════════════ */
-.phase-card { display: flex; flex-direction: column; gap: 12px; }
-.phase-name {
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--gold-bright);
-  letter-spacing: 0.01em;
-}
-.phase-range {
-  font-size: 13px;
+  letter-spacing: 0.20em;
   color: var(--muted);
-}
-.phase-days {
-  font-size: 13px;
-  color: var(--dim);
-}
-.progress {
-  width: 100%;
-  height: 8px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 999px;
-  overflow: hidden;
-}
-.progress-bar {
-  height: 100%;
-  width: 0%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-bright) 100%);
-  box-shadow: 0 0 12px rgba(244,197,66,0.45);
-  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  text-transform: uppercase;
+  margin-bottom: 6px;
 }
 
-/* ════════════════════════════════════════════════════════════════════════
-   SECTION 4 — Event Radar (concentric rings, NO planet markers)
-   ════════════════════════════════════════════════════════════════════════ */
-.radar-card {
+/* Apple-Watch ring. render.js wraps .corner-value inside .corner-ring and sets
+   --ring-pct (0–100) + --ring-color per corner. The conic arc fills the ring;
+   the ::before punches the dark center so only the arc reads as progress. */
+.corner-ring {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--ring-color, var(--gold)) calc(var(--ring-pct, 60) * 1%),
+    rgba(255,255,255,0.08) 0
+  );
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.radar-rings {
   position: relative;
+  box-shadow: 0 0 18px rgba(0,0,0,0.45);
+}
+.corner-ring::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: var(--bg-1);
+}
+.corner-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  position: relative;
+  z-index: 1;
+}
+
+/* Per-corner ring hues */
+.hero-corner--tl .corner-ring { --ring-color: var(--green); }
+.hero-corner--tr .corner-ring { --ring-color: var(--orange); }
+.hero-corner--bl .corner-ring { --ring-color: var(--cyan); }
+.hero-corner--br .corner-ring { --ring-color: var(--gold); }
+
+.corner-tag {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* SUN — photographic core via layered radial gradient + volumetric glows.
+   Off-center highlight + inset shadows give it dimensional "sphere" weight. */
+.sun-hero {
+  grid-column: 2;
+  grid-row: 1;
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  border: 1px solid rgba(212,175,55,0.30);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin: 0 auto;
+  background:
+    radial-gradient(circle at 40% 38%,
+      #FFFCEA 0%,
+      #FFF1B3 12%,
+      #FFD659 30%,
+      #E8A93A 55%,
+      #8A4D0B 100%);
+  box-shadow:
+    0 0 60px rgba(255, 218, 109, 0.55),
+    0 0 140px rgba(244, 197, 66, 0.45),
+    0 0 240px rgba(212, 175, 55, 0.30),
+    inset -20px -30px 60px rgba(180, 80, 0, 0.55),
+    inset 8px 8px 30px rgba(255, 250, 200, 0.50);
+  animation: sun-pulse 6s ease-in-out infinite;
+  position: relative;
 }
-.radar-rings::before,
-.radar-rings::after {
+.sun-hero::after {
   content: "";
   position: absolute;
+  inset: -40px;
   border-radius: 50%;
-  border: 1px solid rgba(212,175,55,0.18);
+  background: radial-gradient(circle, rgba(255,210,80,0.20) 0%, transparent 60%);
+  filter: blur(8px);
+  z-index: -1;
 }
-.radar-rings::before { width: 66%; height: 66%; }
-.radar-rings::after  { width: 33%; height: 33%; border-color: rgba(212,175,55,0.32); }
+@keyframes sun-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.025); }
+}
 
-/* ════════════════════════════════════════════════════════════════════════
-   SECTION 5 — Planet Influences
-   ════════════════════════════════════════════════════════════════════════ */
-.influences-grid {
-  display: grid;
-  grid-template-columns: 1fr; /* 1 col mobile */
-  gap: 12px;
+.forecast-title {
+  grid-column: 2;
+  grid-row: 2;
+  margin-top: 12px;
+  font-size: clamp(40px, 7vw, 64px);
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  line-height: 1.0;
+  color: var(--gold);
+  text-transform: uppercase;
+  text-align: center;
+  text-shadow: 0 0 30px rgba(212,175,55,0.35);
 }
-.influences-grid .influence {
+.forecast-subtitle {
+  grid-column: 2;
+  grid-row: 3;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+  max-width: 460px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 2 — Now Bar  (single horizontal card, 4 cells, gold dividers)
+   ════════════════════════════════════════════════════════════════════════════ */
+.now-bar-card {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 16px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  border-radius: 20px;
+  padding: 14px 18px;
+  gap: 14px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
-.influences-grid .influence .planet {
-  font-size: 15px;
+.now-cell { display: flex; flex-direction: column; gap: 2px; }
+.now-cell .label {
+  font-size: 11px;
+  letter-spacing: 0.20em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.now-cell .value {
+  font-size: 18px;
   font-weight: 700;
   color: var(--text);
+  font-variant-numeric: tabular-nums;
 }
-.influences-grid .influence .effect {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-/* ════════════════════════════════════════════════════════════════════════
-   SECTION 6 — Upcoming Events
-   ════════════════════════════════════════════════════════════════════════ */
-.events-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  overflow: hidden;
-}
-.events-list li {
-  background: var(--bg-1);
-  padding: 14px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
-}
-.events-list li .event-when {
-  color: var(--gold);
-  font-weight: 600;
-  white-space: nowrap;
-  font-size: 13px;
+/* gold vertical separators between cells */
+.now-bar-card .now-cell + .now-cell {
+  border-left: 1px solid rgba(212,175,55,0.18);
+  padding-left: 14px;
 }
 
-/* ════════════════════════════════════════════════════════════════════════
-   SECTION 7 — Sky Conditions (4 horizontal bars)
-   Expansion green · Pressure orange · Volatility red · Support blue
-   ════════════════════════════════════════════════════════════════════════ */
-.sky-card {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.sky-row {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-.sky-row .sky-label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  color: var(--muted);
-}
-.sky-row .sky-track {
-  width: 100%;
-  height: 8px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 999px;
-  overflow: hidden;
-}
-.sky-row .sky-fill {
-  height: 100%;
-  width: 0%;
-  border-radius: 999px;
-  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.sky-row[data-metric="expansion"]  .sky-fill { background: var(--green); }
-.sky-row[data-metric="pressure"]   .sky-fill { background: var(--orange); }
-.sky-row[data-metric="volatility"] .sky-fill { background: var(--red); }
-.sky-row[data-metric="support"]    .sky-fill { background: var(--blue); }
-
-/* ════════════════════════════════════════════════════════════════════════
-   SECTION 8 — Daily Reading
-   ════════════════════════════════════════════════════════════════════════ */
-.reading-card { display: flex; flex-direction: column; }
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 3 — Daily Reading
+   ════════════════════════════════════════════════════════════════════════════ */
+.reading-card { display: flex; flex-direction: column; gap: 8px; }
 .reading-state {
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.10em;
   text-transform: uppercase;
   color: var(--gold);
-  margin-bottom: 10px;
+}
+/* render.js may emit a small "STATE" label + large state name; keep both legible */
+.reading-card .reading-state-label {
+  font-size: 11px;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.reading-card .reading-state-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--gold-bright);
+  letter-spacing: 0.01em;
 }
 .reading-body {
   font-size: 15px;
   line-height: 1.6;
   color: var(--text);
 }
-
-/* ════════════════════════════════════════════════════════════════════════
-   SECTION 9 — Since Yesterday (delta rows, green + / red −)
-   ════════════════════════════════════════════════════════════════════════ */
-.changed-card {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.reading-footnote {
+  font-size: 11px;
+  color: var(--dim);
+  margin-top: 4px;
 }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 4 — What Changed  (delta rows: green + / red −)
+   ════════════════════════════════════════════════════════════════════════════ */
+.changed-card { display: flex; flex-direction: column; gap: 2px; }
 .changed-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 2px;
+  padding: 9px 2px;
   font-size: 14px;
   border-bottom: 1px solid rgba(255,255,255,0.05);
 }
@@ -360,9 +327,9 @@ section[data-section] {
 .changed-row .changed-delta.negative { color: var(--red); }
 .changed-row .changed-delta.neutral  { color: var(--dim); }
 
-/* ════════════════════════════════════════════════════════════════════════
-   SECTION 10 — Today's Insight (highlighted, gold border accent)
-   ════════════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 5 — Today's Insight  (gold accent rail)
+   ════════════════════════════════════════════════════════════════════════════ */
 .insight-card {
   border-left: 3px solid var(--gold);
   background: linear-gradient(90deg, rgba(212,175,55,0.08), rgba(255,255,255,0.02));
@@ -371,19 +338,18 @@ section[data-section] {
   color: var(--text);
 }
 
-/* ════════════════════════════════════════════════════════════════════════
-   SECTION 11 — Recommended Actions (✓ green / ✗ red bullets)
-   ════════════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 6 — Recommended Actions  (✓ green / ✗ red)
+   ════════════════════════════════════════════════════════════════════════════ */
 .actions-card h3 {
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
   color: var(--dim);
   margin: 4px 0 8px;
 }
-.actions-card h3 + ul { margin-bottom: 18px; }
-.actions-card ul:last-child { margin-bottom: 0; }
+.actions-card h3:not(:first-child) { margin-top: 16px; }
 .actions-card ul {
   list-style: none;
   display: flex;
@@ -412,9 +378,151 @@ section[data-section] {
   font-weight: 700;
 }
 
-/* ════════════════════════════════════════════════════════════════════════
-   SECTION 12 — Top Drivers (numbered list, gold counters)
-   ════════════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 7 — Upcoming Conditions  (gold gradient proximity bars)
+   bar length = proximity (longer = sooner). No circles, no glyphs.
+   ════════════════════════════════════════════════════════════════════════════ */
+.timeline-list { list-style: none; padding: 0; }
+.timeline-row {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.timeline-row:last-child { border-bottom: none; }
+.timeline-days {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.0;
+}
+.timeline-days .unit {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+.timeline-main { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.timeline-event { font-size: 14px; color: var(--text); }
+.timeline-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--gold-deep), var(--gold), var(--gold-bright));
+  width: var(--bar-length, 50%);
+  box-shadow: 0 0 12px rgba(244,197,66,0.30);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 8 — Current Phase
+   ════════════════════════════════════════════════════════════════════════════ */
+.phase-card { display: flex; flex-direction: column; gap: 12px; }
+.phase-name {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--gold-bright);
+  letter-spacing: 0.01em;
+}
+.phase-range { font-size: 13px; color: var(--muted); }
+.phase-days { font-size: 13px; color: var(--dim); }
+.progress {
+  width: 100%;
+  height: 8px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-bright) 100%);
+  box-shadow: 0 0 12px rgba(244,197,66,0.45);
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 9 — Sky Conditions  (4 horizontal progress bars)
+   Expansion green · Pressure orange · Volatility red · Support blue
+   ════════════════════════════════════════════════════════════════════════════ */
+.sky-card { display: flex; flex-direction: column; gap: 12px; }
+.sky-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 50px;
+  align-items: center;
+  gap: 12px;
+}
+.sky-name {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+.sky-bar {
+  background: var(--line);
+  border-radius: 6px;
+  height: 8px;
+  overflow: hidden;
+}
+.sky-fill {
+  height: 100%;
+  border-radius: 6px;
+  width: 0%;
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sky-fill--positive { background: var(--green); }
+.sky-fill--warning  { background: var(--orange); }
+.sky-fill--danger   { background: var(--red); }
+.sky-fill--info     { background: var(--blue); }
+.sky-value {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 10 — Planet Influences  (compact list — glyph · name · role · score)
+   ════════════════════════════════════════════════════════════════════════════ */
+.influences-compact { list-style: none; padding: 0; }
+.influence-row {
+  display: grid;
+  grid-template-columns: 30px 1fr 100px 50px;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+.influence-row:last-child { border-bottom: none; }
+.influence-glyph {
+  font-size: 20px;
+  color: var(--gold);
+  text-align: center;
+}
+.influence-name { color: var(--text); }
+.influence-role {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+}
+.influence-score {
+  text-align: right;
+  font-weight: 700;
+  font-family: "SF Mono", ui-monospace, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+}
+.influence-score.positive { color: var(--green); }
+.influence-score.negative { color: var(--red); }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 11 — Top Drivers  (numbered, gold counters)
+   ════════════════════════════════════════════════════════════════════════════ */
 .drivers-list {
   list-style: none;
   counter-reset: driver;
@@ -453,160 +561,179 @@ section[data-section] {
   justify-content: center;
 }
 
-/* ════════════════════════════════════════════════════════════════════════
-   SECTION 13 — Why This Forecast (collapsible details/summary)
-   ════════════════════════════════════════════════════════════════════════ */
-.why-card { padding: 0; overflow: hidden; }
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 12 — Why This Forecast  (INLINE, open by default — not collapsed)
+   Expansion Score headline + contributors (green) / reducers (red).
+   ════════════════════════════════════════════════════════════════════════════ */
+.why-card { background: transparent; }
 .why-card summary {
   list-style: none;
-  cursor: pointer;
-  padding: 18px 22px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin-bottom: 12px;
+  cursor: default;                 /* user wants the inline view, no toggle */
 }
 .why-card summary::-webkit-details-marker { display: none; }
-.why-card summary::after {
-  content: "+";
-  color: var(--gold);
-  font-size: 20px;
-  font-weight: 400;
-  line-height: 1;
-}
-.why-card[open] summary::after { content: "−"; }
 .why-card summary span#expansion-score {
   color: var(--gold-bright);
   font-weight: 800;
+  font-size: 28px;
+  font-variant-numeric: tabular-nums;
 }
-.why-rows {
-  padding: 0 22px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.why-rows .why-row {
-  display: flex;
-  justify-content: space-between;
+.why-rows { display: flex; flex-direction: column; gap: 6px; }
+.why-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
   font-size: 13px;
-  color: var(--muted);
   padding: 6px 0;
   border-top: 1px solid rgba(255,255,255,0.05);
 }
-.why-rows .why-row .why-weight {
-  color: var(--text);
-  font-weight: 600;
+.why-row .why-weight {
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
+  padding-left: 12px;
 }
-
-/* ════════════════════════════════════════════════════════════════════════
-   SECTION 14 — Confidence (unrated → muted gray ring, no fill)
-   ════════════════════════════════════════════════════════════════════════ */
-.confidence-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-}
-.confidence-ring {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-}
-.confidence-ring--unrated {
-  border: 4px solid rgba(255,255,255,0.10);
-  background: transparent;
-}
-.confidence-label {
-  font-size: 13px;
-  letter-spacing: 0.06em;
+.why-row--pos, .why-row--pos .why-weight { color: var(--green); }
+.why-row--neg, .why-row--neg .why-weight { color: var(--red); }
+/* group sub-labels (CONTRIBUTORS / REDUCERS) if render.js emits them */
+.why-group-label {
+  font-size: 11px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--dim);
+  margin: 10px 0 2px;
 }
 
-/* ════════════════════════════════════════════════════════════════════════
-   SECTION 15 — Footer Nav (fixed bottom on mobile)
-   ════════════════════════════════════════════════════════════════════════ */
-.footer-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 50;
-  display: flex;
-  justify-content: space-around;
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 13 — Confidence  (small card, muted unrated ring)
+   ════════════════════════════════════════════════════════════════════════════ */
+.confidence-card {
+  display: grid;
+  grid-template-columns: 80px 1fr;
   align-items: center;
-  background: rgba(2,3,3,0.92);
-  border-top: 1px solid rgba(255,255,255,0.08);
-  padding: 12px 12px calc(12px + env(safe-area-inset-bottom, 0px));
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  gap: 16px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
-.footer-nav .nav-item {
-  text-decoration: none;
+.confidence-ring {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  justify-self: center;
+}
+.confidence-ring--unrated {
+  border: 6px solid rgba(255,255,255,0.08);
+  background: transparent;
+}
+.confidence-label { font-size: 16px; color: var(--muted); }
+.confidence-sub { font-size: 12px; color: var(--dim); margin-top: 2px; }
+/* the section heading + grid card live in the same section; let them stack */
+#section-13-confidence .confidence-card { grid-column: 1 / -1; }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 14 — Footer Nav  (fixed bottom mobile → inline desktop)
+   ════════════════════════════════════════════════════════════════════════════ */
+.footer-nav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(2,3,3,0.95);
+  border-top: 1px solid var(--line);
+  padding: 10px 0 calc(10px + env(safe-area-inset-bottom, 0px));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 100;
+}
+.nav-item {
+  text-align: center;
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.10em;
   color: var(--muted);
-  padding: 4px 10px;
+  text-decoration: none;
   transition: color 0.2s ease;
 }
-.footer-nav .nav-item:hover { color: var(--text); }
-.footer-nav .nav-item.active { color: var(--gold-bright); }
+.nav-item:hover { color: var(--text); }
+.nav-item.active { color: var(--gold-bright); }
 
-/* ════════════════════════════════════════════════════════════════════════
-   RESPONSIVE — desktop ≥ 860px
-   Hero / Now Bar / Phase span full width; the mid + lower analytic sections
-   pair into a 2-column layout for denser dimensional composition.
-   ════════════════════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════════════════
+   DESKTOP  ≥ 860px  — 12-column grid; alternating full-width + 3-col rows
+   ════════════════════════════════════════════════════════════════════════════ */
 @media (min-width: 860px) {
-  .timing-weather-shell { padding: 28px; }
-
-  .sun-hero { width: 260px; height: 260px; }
-
-  .now-bar-grid { grid-template-columns: repeat(4, 1fr); } /* 4 cols desktop */
-
-  .influences-grid { grid-template-columns: repeat(3, 1fr); } /* 3 cols desktop */
-
-  /* Two-column pairing for sections 4–7 and 11–13. */
-  #section-4-event-radar,
-  #section-6-upcoming-events,
-  #section-11-recommended,
-  #section-13-why-forecast {
-    width: calc(50% - 13px);
-    display: inline-block;
-    vertical-align: top;
-  }
-  #section-5-planet-influences,
-  #section-7-sky-conditions,
-  #section-12-top-drivers,
-  #section-14-confidence {
-    width: calc(50% - 13px);
-    display: inline-block;
-    vertical-align: top;
-    margin-left: 22px;
-  }
-
-  /* Footer nav un-fixes into a top-right inline cluster on desktop. */
-  .footer-nav {
-    position: static;
-    justify-content: flex-end;
-    gap: 8px;
-    background: transparent;
-    border-top: none;
-    padding: 0;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    margin-top: 8px;
-  }
   body { padding-bottom: 24px; }
+
+  .timing-weather-shell {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 14px;
+    padding: 24px;
+  }
+
+  /* sections own no bottom margin inside the grid; let gap do the spacing */
+  section[data-section] { margin-bottom: 0; }
+  /* each section is a column flex so its .card fills the row height */
+  section[data-section] { display: flex; flex-direction: column; }
+  section[data-section] > .card,
+  section[data-section] > .now-bar-card,
+  section[data-section] > .timeline-list,
+  section[data-section] > .influences-compact,
+  section[data-section] > .drivers-list { flex: 1; }
+
+  /* Hero + Now Bar span all 12 */
+  #section-1-hero,
+  #section-2-now-bar { grid-column: 1 / -1; }
+
+  /* Row A: Daily Reading | What Changed | Insight + Actions (stacked right).
+     The two left cards span both rows of the band so the right column's two
+     stacked cards (insight on top, actions below) fill the same height with
+     no empty cells left under the tall Daily Reading card. */
+  #section-3-daily-reading { grid-column: 1 / span 4;  grid-row: 3 / span 2; }
+  #section-4-what-changed  { grid-column: 5 / span 4;  grid-row: 3 / span 2; }
+  #section-5-todays-insight{ grid-column: 9 / span 4;  grid-row: 3; }
+  #section-6-recommended   { grid-column: 9 / span 4;  grid-row: 4; }
+
+  /* Row B: Upcoming Conditions full width */
+  #section-7-upcoming-conditions { grid-column: 1 / -1; grid-row: 5; }
+
+  /* Current Phase full width */
+  #section-8-current-phase { grid-column: 1 / -1; grid-row: 6; }
+
+  /* Row C: Sky | Influences | Why */
+  #section-9-sky-conditions   { grid-column: 1 / span 4;  grid-row: 7; }
+  #section-10-planet-influences { grid-column: 5 / span 4; grid-row: 7; }
+  #section-12-why-forecast    { grid-column: 9 / span 4;  grid-row: 7; }
+
+  /* Top Drivers full row below */
+  #section-11-top-drivers { grid-column: 1 / -1; grid-row: 8; }
+
+  /* Confidence small + footer */
+  #section-13-confidence { grid-column: 1 / -1; grid-row: 9; }
+
+  /* Footer nav un-fixes into the flow */
+  #section-14-footer-nav {
+    grid-column: 1 / -1;
+    grid-row: 10;
+    position: static;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    border-top: 1px solid var(--line);
+    margin: 4px 0 0;
+    padding: 16px 0;
+    background: var(--card);
+  }
 }
 
-/* ── Reduced motion — honor the OS preference, kill the pulse + transitions. */
+/* ════════════════════════════════════════════════════════════════════════════
+   ACCESSIBILITY — honor reduced-motion (kill the sun pulse + all transitions)
+   ════════════════════════════════════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
   .sun-hero { animation: none; }
-  .progress-bar,
-  .sky-row .sky-fill { transition: none; }
+  * { transition: none !important; }
 }
