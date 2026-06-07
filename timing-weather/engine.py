@@ -152,6 +152,21 @@ ECLIPSES = [date(2026, 2, 17), date(2026, 3, 3), date(2026, 8, 12), date(2026, 8
 LABEL_ORDINAL = {"NEUTRAL": 0, "PRESSURE": 1, "CONSOLIDATION": 2, "TRANSITION": 2,
                  "TRANSFORMATION": 3, "EXPANSION": 4}
 
+# v1.1 visual redesign — forecast-label taglines (design copy, not engine data).
+# Maps 1:1 to the headline forecast; rendered under the hero. Covers every label
+# the engine can emit (DOMINANT_LABEL set + quick_forecast PRESSURE/NEUTRAL +
+# the design-spec DISRUPTION/ATTRACTION aliases).
+SUBTITLE = {
+    "EXPANSION":      "Doors opening — build the pipeline",
+    "CONSOLIDATION":  "Make it concrete — formalize and commit",
+    "TRANSFORMATION": "Deep restructuring underway",
+    "TRANSITION":     "Things are shifting — stay adaptable",
+    "DISRUPTION":     "Sudden shifts — stay adaptable",
+    "ATTRACTION":     "Relationships and resources flow in",
+    "PRESSURE":       "Under load — protect the essentials",
+    "NEUTRAL":        "Quiet skies — steady as she goes",
+}
+
 # Forecast-trend retroactive offsets in days (today minus N). Spec: ~27/17/5/0.
 TREND_OFFSETS = [27, 17, 5, 0]
 
@@ -383,18 +398,17 @@ def build_drivers(opp_c):
     return [{"name": n, "score": p} for n, p in ranked[:3] if p > 0]
 
 
-def build_evidence(opp_c, pre_c, vol_c):
-    """Why-This-Forecast contributors (Section 10): the top 3 positive drivers that
-    explain the headline plus the top 2 detractors, signed (opportunity +,
-    pressure/volatility -), displayed sorted by magnitude. Guaranteeing the positives
-    keeps the panel coherent with the forecast instead of all-negative."""
-    pos = sorted(({"factor": n, "score": p} for n, p in aggregate(opp_c)),
-                 key=lambda f: -f["score"])
-    neg = sorted(({"factor": n, "score": -p} for n, p in aggregate(pre_c) + aggregate(vol_c)),
-                 key=lambda f: f["score"])
-    factors = [f for f in pos[:3] if f["score"] > 0] + neg[:2]
-    factors.sort(key=lambda f: -abs(f["score"]))
-    return factors[:5]
+def build_evidence(opp, opp_c, pre_c, vol_c):
+    """Why-This-Forecast (Section 10), v1.1 nested contract:
+        {expansionScore, contributors[{factor,score:+}], reducers[{factor,score:-}]}
+    expansionScore is the headline opportunity score (0-100); contributors are the
+    positive opportunity drivers, reducers the pressure/volatility detractors —
+    each signed and sorted by magnitude. Coherent with the forecast headline."""
+    contributors = sorted(({"factor": n, "score": p} for n, p in aggregate(opp_c) if p > 0),
+                          key=lambda f: -f["score"])[:5]
+    reducers = sorted(({"factor": n, "score": -p} for n, p in aggregate(pre_c) + aggregate(vol_c) if p > 0),
+                      key=lambda f: f["score"])[:5]
+    return {"expansionScore": opp, "contributors": contributors, "reducers": reducers}
 
 
 def pick_supporting(today, aspects, dominant):
@@ -563,7 +577,9 @@ def trend_point(target_date, natal):
     if os.path.exists(cache):
         try:
             d = json.load(open(cache))
-            return {"date": d["date"], "label": d["label"]}, d.get("opportunity")
+            # tolerate legacy caches keyed on "label" (pre-v1.1-visual rename).
+            st = d.get("state", d.get("label"))
+            return {"date": d["date"], "state": st}, d.get("opportunity")
         except Exception:
             pass
     try:
@@ -571,12 +587,12 @@ def trend_point(target_date, natal):
     except Exception as e:
         log(f"  trend run failed for {target_date}: {e} — dropping point")
         return None, None
-    rec = {"date": target_date.isoformat(), "label": label, "opportunity": opp}
+    rec = {"date": target_date.isoformat(), "state": label, "opportunity": opp}
     try:
         json.dump(rec, open(cache, "w"), indent=2)
     except Exception as e:
         log(f"  could not cache trend point {target_date}: {e}")
-    return {"date": rec["date"], "label": rec["label"]}, opp
+    return {"date": rec["date"], "state": rec["state"]}, opp
 
 
 def forecast_trend(today, natal):
@@ -589,8 +605,8 @@ def forecast_trend(today, natal):
             pts.append(p)
     if len(pts) < 2:
         return pts, None
-    first_o = LABEL_ORDINAL.get(pts[0]["label"], 0)
-    last_o = LABEL_ORDINAL.get(pts[-1]["label"], 0)
+    first_o = LABEL_ORDINAL.get(pts[0]["state"], 0)
+    last_o = LABEL_ORDINAL.get(pts[-1]["state"], 0)
     # Direction is regime-based: the forecast label is the signal. A tie means the
     # weather regime is unchanged across the window -> Stable (no overfitting to
     # transient fast-planet aspect noise).
@@ -714,7 +730,7 @@ def compute(now=None, with_codex=True):
     dur = duration_days(today, dominant, comps, natal)
 
     drivers = build_drivers(opp_c)
-    evidence = build_evidence(opp_c, pre_c, vol_c)
+    evidence = build_evidence(opp, opp_c, pre_c, vol_c)
 
     nxt = next_major_window(today)
     next_days = nxt["daysRemaining"] if nxt else None
@@ -747,6 +763,7 @@ def compute(now=None, with_codex=True):
     state = {
         # --- core ---
         "forecast": forecast,
+        "subtitle": SUBTITLE.get(forecast, ""),
         "dominantPlanet": cap(dominant),
         "supportingPlanet": cap(supporting),
         "pressurePlanet": cap(pressure_src),

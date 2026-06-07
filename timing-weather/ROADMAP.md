@@ -44,6 +44,21 @@ expanded to the locked 12-section page order. 6 new sections, all engine-backed
 - ✅ **Why This Forecast** (Section 10) — collapsible `<details>`; top-5 `evidence[]` contributors (+/-) sorted by magnitude
 - ✅ **Confidence** now emits `null` → UI "Not Rated" (never a fabricated grade)
 
+## v1.1 — Visual Redesign ✅ SHIPPED (2026-06-06)
+
+Supersedes the prior "additive only" v1.1 framing. Full visual redesign per
+Alfie's approved two-panel mockup. Engine kept; UI rebuilt from scratch.
+
+- Two-column desktop / stacked mobile
+- Glassmorphism cards, gold radial gradient hero
+- New planet color coding (Jupiter purple, Venus green, Saturn orange, Uranus cyan)
+- Bottom navigation rendered with Home active, Timeline/Reports/Profile decorative
+  (deferred-screens compliance noted — they exist visually but are no-op until
+  v2/v3 ships)
+- File structure: index.html + assets/css/ + assets/js/ (engine + render split)
+- Engine adds `subtitle` field, `evidence` becomes nested, `forecastTrend` uses
+  `state` instead of `label`
+
 ## v1.2 — Metric Breakdowns (deferred)
 
 - Opportunity breakdown by life domain (career / money / relationships / home)

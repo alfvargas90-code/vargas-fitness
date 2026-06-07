@@ -1,5 +1,6 @@
 {
   "forecast": "EXPANSION",
+  "subtitle": "Doors opening — build the pipeline",
   "dominantPlanet": "Jupiter",
   "supportingPlanet": "Venus",
   "pressurePlanet": "Saturn",
@@ -12,7 +13,7 @@
   "opportunity": 28,
   "pressure": 73,
   "volatility": 78,
-  "momentum": 71,
+  "momentum": 47,
   "drivers": [
     {
       "name": "Jupiter Lord of Year",
@@ -30,19 +31,19 @@
   "forecastTrend": [
     {
       "date": "2026-05-10",
-      "label": "EXPANSION"
+      "state": "EXPANSION"
     },
     {
       "date": "2026-05-20",
-      "label": "EXPANSION"
+      "state": "EXPANSION"
     },
     {
       "date": "2026-06-01",
-      "label": "EXPANSION"
+      "state": "EXPANSION"
     },
     {
       "date": "2026-06-06",
-      "label": "EXPANSION"
+      "state": "EXPANSION"
     }
   ],
   "trendDirection": "Stable",
@@ -64,30 +65,47 @@
     "Ignore constraints",
     "Overpromise capacity"
   ],
-  "evidence": [
-    {
-      "factor": "Uranus Volatility",
-      "score": -66
-    },
-    {
-      "factor": "Saturn Pressure",
-      "score": -50
-    },
-    {
-      "factor": "Jupiter Lord of Year",
-      "score": 15
-    },
-    {
-      "factor": "Venus Antardasha",
-      "score": 10
-    },
-    {
-      "factor": "Approaching Jupiter Return",
-      "score": 3
-    }
-  ],
+  "evidence": {
+    "expansionScore": 28,
+    "contributors": [
+      {
+        "factor": "Jupiter Lord of Year",
+        "score": 15
+      },
+      {
+        "factor": "Venus Antardasha",
+        "score": 10
+      },
+      {
+        "factor": "Approaching Jupiter Return",
+        "score": 3
+      }
+    ],
+    "reducers": [
+      {
+        "factor": "Uranus Volatility",
+        "score": -66
+      },
+      {
+        "factor": "Saturn Pressure",
+        "score": -50
+      },
+      {
+        "factor": "Foundations Pressure",
+        "score": -15
+      },
+      {
+        "factor": "Angular Hit",
+        "score": -12
+      },
+      {
+        "factor": "Admin Load",
+        "score": -8
+      }
+    ]
+  },
   "narrative": "This is a preparation window, not the moment to force a big public move. Use the next few days to clean up loose ends, strengthen key relationships, organize documents, and open doors that can become real commitments later. Pressure and volatility are high, so reduce optional noise and keep your pipeline disciplined: fewer conversations, better follow-through, clearer records. Momentum is strong, but the smart play is to build leverage quietly now and delay signing, naming, or locking in major obligations until the structure is ready. What you set up now should be able to carry weight by late August, with everything needing a clear title, written form, or firm commitment by April 2027.",
-  "updatedAt": "2026-06-06T11:06:46-05:00",
+  "updatedAt": "2026-06-06T22:52:16-05:00",
   "sourceMode": "static",
   "currentDate": "2026-06-06",
   "sources": [
@@ -98,11 +116,11 @@
   ],
   "scoringDetail": {
     "dominanceScores": {
-      "jupiter": 10.51,
-      "saturn": 7.36,
+      "jupiter": 10.43,
+      "saturn": 7.33,
       "pluto": 6.84,
-      "uranus": 6.83,
-      "venus": 5.92
+      "uranus": 6.85,
+      "venus": 5.6
     },
     "lordOfYear": "jupiter",
     "activeWindows": [
@@ -115,96 +133,96 @@
         "Vedic Moon–Venus antardasha (relationship-positive)"
       ],
       "pressure": [
-        "Saturn square natal neptune (0.77°)",
-        "Saturn square natal asc (4.35°)",
+        "Saturn square natal neptune (0.81°)",
+        "Saturn square natal asc (4.39°)",
         "Sade Sati (Small Panoti) — pressure on foundations",
         "inside admin/clearing window: Late May–early June clearing"
       ],
       "volatility": [
-        "Uranus square natal sun (4.84°)",
-        "Uranus conjunction natal mars (2.69°)",
-        "Uranus sextile natal jupiter (0.21°)",
-        "Uranus trine natal north_node (4.59°)",
-        "pluto square natal mc (angular, 1.4°)"
+        "Uranus square natal sun (4.81°)",
+        "Uranus conjunction natal mars (2.72°)",
+        "Uranus sextile natal jupiter (0.18°)",
+        "Uranus trine natal north_node (4.56°)",
+        "pluto square natal mc (angular, 1.39°)"
       ],
       "momentum": [
-        "8 fast transit(s) exact within 3°",
+        "5 fast transit(s) exact within 3°",
         "approaching Jupiter return — chapter reset (36d)",
         "BaZi Da Yun shift within 101 days"
       ]
     },
     "transitSigns": {
-      "sun": "15.97° Gemini",
-      "moon": "25.54° Aquarius",
-      "mercury": "8.14° Cancer",
-      "venus": "22.07° Cancer",
-      "mars": "13.95° Taurus",
-      "jupiter": "25.16° Cancer",
-      "saturn": "12.7° Aries",
-      "uranus": "2.39° Gemini",
-      "neptune": "4.16° Aries",
-      "pluto": "5.3° Aquarius"
+      "sun": "16.44° Gemini",
+      "moon": "1.65° Pisces",
+      "mercury": "8.84° Cancer",
+      "venus": "22.65° Cancer",
+      "mars": "14.31° Taurus",
+      "jupiter": "25.25° Cancer",
+      "saturn": "12.74° Aries",
+      "uranus": "2.42° Gemini",
+      "neptune": "4.17° Aries",
+      "pluto": "5.29° Aquarius"
     },
     "tightAspects": [
+      {
+        "transit": "uranus",
+        "natal": "jupiter",
+        "aspect": "sextile",
+        "orb": 0.18
+      },
       {
         "transit": "venus",
         "natal": "mercury",
         "aspect": "sextile",
-        "orb": 0.09
+        "orb": 0.48
       },
       {
         "transit": "mercury",
         "natal": "asc",
         "aspect": "opposition",
-        "orb": 0.21
-      },
-      {
-        "transit": "uranus",
-        "natal": "jupiter",
-        "aspect": "sextile",
-        "orb": 0.21
+        "orb": 0.49
       },
       {
         "transit": "saturn",
         "natal": "neptune",
         "aspect": "square",
-        "orb": 0.77
-      },
-      {
-        "transit": "mercury",
-        "natal": "sun",
-        "aspect": "sextile",
-        "orb": 0.9
-      },
-      {
-        "transit": "neptune",
-        "natal": "moon",
-        "aspect": "square",
-        "orb": 1.36
+        "orb": 0.81
       },
       {
         "transit": "mars",
         "natal": "pluto",
         "aspect": "opposition",
-        "orb": 1.37
+        "orb": 1.01
+      },
+      {
+        "transit": "neptune",
+        "natal": "moon",
+        "aspect": "square",
+        "orb": 1.35
       },
       {
         "transit": "pluto",
         "natal": "mc",
         "aspect": "square",
-        "orb": 1.4
+        "orb": 1.39
       },
       {
         "transit": "neptune",
         "natal": "uranus",
         "aspect": "square",
-        "orb": 1.52
+        "orb": 1.51
       },
       {
         "transit": "neptune",
         "natal": "jupiter",
         "aspect": "trine",
-        "orb": 1.56
+        "orb": 1.57
+      },
+      {
+        "transit": "mercury",
+        "natal": "sun",
+        "aspect": "sextile",
+        "orb": 1.6
       },
       {
         "transit": "pluto",
@@ -213,10 +231,10 @@
         "orb": 1.69
       },
       {
-        "transit": "mars",
-        "natal": "neptune",
-        "aspect": "trine",
-        "orb": 2.02
+        "transit": "moon",
+        "natal": "mars",
+        "aspect": "square",
+        "orb": 1.95
       }
     ],
     "transitMissing": [],
