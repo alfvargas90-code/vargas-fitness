@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-08T09:19:31-05:00",
-  "data_hash": "1ce803ea7d634a42",
-  "slot": "macros-update",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nThe new meal moved a light-input morning into sturdier territory: energy room remains open, and protein is finally gaining traction. Recovery looks supportive, while output is still quiet for you, so the day favors steady muscle protection over intensity.\n\nSteady foundation.\n\nPerformance: Steady foundation.\n\nTransit: none",
+  "generated_at": "2026-06-08T11:30:00-05:00",
+  "data_hash": "1bc5c8b6634ef8b9",
+  "slot": "fuel-1",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nRecovery looks solid and sleep is slightly improved, but output has run light and the first fueling is heavier on energy than muscle support. The afternoon favors steady, low-friction consistency, with protein becoming the main limiter for preserving lean mass.\n\nMuscle needs coverage.\n\nPerformance: Muscle needs coverage.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nThe new meal moved a light-input morning into sturdier territory: energy room remains open, and protein is finally gaining traction. Recovery looks supportive, while output is still quiet for you, so the day favors steady muscle protection over intensity.\n\nSteady foundation."
+      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nRecovery looks solid and sleep is slightly improved, but output has run light and the first fueling is heavier on energy than muscle support. The afternoon favors steady, low-friction consistency, with protein becoming the main limiter for preserving lean mass.\n\nMuscle needs coverage."
     },
     {
       "label": "Performance",
-      "text": "Steady foundation."
+      "text": "Muscle needs coverage."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nThe new meal moved a light-input morning into sturdier territory: energy room remains open, and protein is finally gaining traction. Recovery looks supportive, while output is still quiet for you, so the day favors steady muscle protection over intensity.\n\nSteady foundation.",
-    "performance": "Steady foundation.",
+    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nRecovery looks solid and sleep is slightly improved, but output has run light and the first fueling is heavier on energy than muscle support. The afternoon favors steady, low-friction consistency, with protein becoming the main limiter for preserving lean mass.\n\nMuscle needs coverage.",
+    "performance": "Muscle needs coverage.",
     "transit": null
   },
-  "nutrition_nudge": "Stay steady: make lunch protein-forward with 45g and keep portions normal.",
+  "nutrition_nudge": "On pace so far; anchor lunch with 50g protein and keep meal timing steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
