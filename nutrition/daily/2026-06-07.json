@@ -1,6 +1,6 @@
 {
   "date": "2026-06-07",
-  "synced_at": "2026-06-08T01:45:16+00:00",
+  "synced_at": "2026-06-08T02:15:56+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 1410.0,
-    "protein_g": 59.0,
-    "carbs_g": 192.0,
-    "fat_g": 44.0
+    "calories": 1975.0,
+    "protein_g": 100.0,
+    "carbs_g": 249.0,
+    "fat_g": 61.0
   },
-  "meal_count": 3,
+  "meal_count": 4,
   "raw": {
     "date": "2026-06-07",
     "meals": [
@@ -44,13 +44,22 @@
         "fat": 1,
         "carbs": 36,
         "emoji": "\u00f0\u009f\u008d\u009e"
+      },
+      {
+        "title": "Bread, Milk, and Protein",
+        "time": "21:02",
+        "calories": 565,
+        "protein": 41,
+        "fat": 17,
+        "carbs": 57,
+        "emoji": "\u00f0\u009f\u008d\u009e"
       }
     ],
     "totals": {
-      "calories": 1410,
-      "protein": 59,
-      "fat": 44,
-      "carbs": 192
+      "calories": 1975,
+      "protein": 100,
+      "fat": 61,
+      "carbs": 249
     },
     "targets": {
       "calories": 2574,
@@ -59,14 +68,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 1164,
+      "calories": 599,
       "is_over": false
     },
-    "meal_count": 3,
+    "meal_count": 4,
     "labels": {
       "header": "Today",
-      "calories_remaining": "1164 kcal remaining today",
-      "meals_logged": "3 meals logged",
+      "calories_remaining": "599 kcal remaining today",
+      "meals_logged": "4 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
