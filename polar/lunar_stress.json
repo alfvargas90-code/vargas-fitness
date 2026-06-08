@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-08T06:12:43-05:00",
+  "generated_at": "2026-06-08T06:42:55-05:00",
   "score": 5,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -12,7 +12,7 @@
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Pisces",
-    "degree": "18\u00b0 Pis 17'",
+    "degree": "18\u00b0 Pis 34'",
     "phase": "Last Quarter",
     "next_sign_change": {
       "sign": "Aries",
@@ -37,7 +37,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 348.29,
+    "moon_longitude": 348.56,
     "moon_sign": "Pisces",
     "moon_phase": "Last Quarter",
     "moon_house_natal": 2,
@@ -56,7 +56,7 @@
       "hrv_7d": 64.7,
       "rhr_7d": 52.7
     },
-    "active_calories": 13,
+    "active_calories": 19,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
