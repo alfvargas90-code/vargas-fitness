@@ -135,6 +135,31 @@ Key visual elements:
 Cache bumped to v2.1.0. Engine + state.json + state_history unchanged.
 Live verified: HTTP 200, 14 `data-section` markers, version.json shows v2.1.0.
 
+## v2.2 — Mockup-faithful Row Structure ✅ SHIPPED (2026-06-07)
+
+Structural rebuild after v2.1 failed visual comparison against Alfie's
+reference mockup. HTML was 14 flat sections inside one shell — auto-flow grid
+over flat sections couldn't reproduce the curated mockup composition.
+
+- **Row containers** — 7 explicit `.row--*` wrappers replace flat shell layout.
+  Row 0 Header chrome (new) · Row 1 Hero (bleed) · Row 2 Now Bar (strip) ·
+  Row 3 Today composition (3-col grid w/ named areas
+  `"reading changed rail" / "upcoming upcoming rail"`) · Row 4 Analytics
+  (4-col) · Row 5 Confidence (meta) · Row 6 Footer Nav (bleed).
+- **Header chrome added** — TIMING WEATHER title bar + date subtitle +
+  hamburger + 3 status dots. Mockup-faithful. render.js wires `#header-date`
+  to state.currentDate ("Sun · Jun 7", UTC-safe parse, client-clock fallback).
+- **Current Phase DROPPED** — not in the mockup. Section + bindings
+  (`phase-name`/`range`/`progress`/`days`) removed from HTML and render.js.
+  Engine field `currentPhase` left in state.json untouched (intentionally unread).
+- **Mobile collapse** — `.row--today` areas dissolve to single column,
+  `.rail` becomes `display:contents` so children spill in DOM order: Hero →
+  Now → Reading → Changed → Insight → Actions → Upcoming → Sky → Planet →
+  Drivers → Why → Confidence → Footer.
+- Cache bust is handled by the deploy-watch gate, which stamps version.json with
+  a fresh timestamp when index.html/app.js change (NOT a static semver — that
+  file is gate-owned). This entry is the durable v2.2.0 release record.
+
 ## v1.3 — Metric Breakdowns (deferred)
 
 - Opportunity breakdown by life domain (career / money / relationships / home)

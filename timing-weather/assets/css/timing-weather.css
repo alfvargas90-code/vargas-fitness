@@ -1,76 +1,112 @@
 /* ════════════════════════════════════════════════════════════════════════════
-   TIMING WEATHER — v2.1.0  "Ambient Intelligence"
-   Reference-locked dark dashboard. Oura Ring + Apple Weather + Bloomberg Terminal.
-   Navy/black field, gold accents, Apple-Watch ring progress, photographic sun.
-   14 sections. Mobile-first single column → desktop 12-col grid (≥860px).
-   All data binds from state.json via timing_weather_render.js.
+   TIMING WEATHER — v2.2.0  "Ambient Intelligence" (reference-locked)
+   Row-based composition: full-bleed chrome + curated "Today" grid + 4-col analytics.
+   Apple-Watch rings · Oura glass cards · Bloomberg density. Deep-navy near-black field.
+   DOM authored mobile-first (DOM order == mobile reading order); CSS pulls the
+   desktop composition together with grid-template-areas. Data binds via render.js.
    ════════════════════════════════════════════════════════════════════════════ */
 
-/* ── Global tokens ─────────────────────────────────────────────────────────── */
+/* ── Design tokens (mockup palette) ──────────────────────────────────────────── */
 :root {
-  --bg-1: #050609;
-  --bg-2: #0a0e14;
+  --bg-1: #06070a;                       /* true near-black, blue undertone */
+  --bg-2: #090c12;
+  --shell-max: 1280px;
+  --gutter: 28px;
+  --row-gap: 24px;
+  --grid-gap: 16px;
+
+  /* glass surfaces */
   --card: rgba(255,255,255,0.04);
-  --card-strong: rgba(255,255,255,0.07);
-  --line: rgba(255,255,255,0.10);
-  --gold: #D4AF37;
-  --gold-bright: #F4C542;
-  --gold-deep: #8A650F;
-  --text: #F5F5F5;
-  --muted: #A1A1AA;
-  --dim: #71717A;
+  --card-strong: rgba(255,255,255,0.06);
+  --line: rgba(255,255,255,0.08);
+  --line-soft: rgba(255,255,255,0.05);
+  --radius: 16px;
+  --radius-sm: 12px;
+
+  /* accents */
+  --gold: #D4A857;
+  --gold-bright: #E8C573;
+  --gold-deep: #7A5A18;
   --green: #4ADE80;
   --red: #F87171;
-  --orange: #F59E0B;
+  --orange: #F5A623;
   --blue: #60A5FA;
-  --cyan: #22D3EE;
+  --cyan: #67E8F9;
   --purple: #C084FC;
+
+  /* text */
+  --text: rgba(255,255,255,0.92);
+  --muted: rgba(255,255,255,0.55);
+  --dim: rgba(255,255,255,0.35);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   background:
-    radial-gradient(circle at 50% 12%, rgba(212,175,55,0.10), transparent 34%),
+    radial-gradient(1200px 600px at 50% -8%, rgba(212,168,87,0.10), transparent 55%),
+    radial-gradient(900px 500px at 50% 4%, rgba(212,168,87,0.06), transparent 60%),
     linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
   background-attachment: fixed;
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, sans-serif;
   min-height: 100vh;
-  padding-bottom: 84px;            /* fixed footer nav clearance (mobile) */
+  overflow-x: hidden;                    /* 100vw bleed rows must not spawn a scrollbar */
+  padding-bottom: 76px;                  /* mobile fixed footer clearance */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-/* ── Shell ─────────────────────────────────────────────────────────────────── */
+/* ── Shell + row system ──────────────────────────────────────────────────────── */
 .timing-weather-shell {
-  max-width: 1180px;
+  max-width: var(--shell-max);
   margin: 0 auto;
-  padding: 16px;
+  padding: 0 var(--gutter) 48px;
 }
 
-/* ── Section scaffolding ───────────────────────────────────────────────────── */
-section[data-section] { margin-bottom: 22px; }
+.row { width: 100%; margin-bottom: var(--row-gap); }
 
+/* Full-bleed: span the viewport, then re-inset inner content to the shell column.
+   The max() padding keeps content aligned to the centered 1280 column on wide
+   screens while the background/hairline still run edge to edge. */
+.row--bleed {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  width: 100vw;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  padding-inline: max(var(--gutter), calc(50vw - var(--shell-max) / 2 + var(--gutter)));
+}
+.row--strip { margin-top: -6px; }        /* tighten the now-bar against the hero */
+
+/* ── Reusable glass card ─────────────────────────────────────────────────────── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 16px 44px rgba(0,0,0,0.45);
+}
+
+/* ── Section heading (small-caps tracked label) ──────────────────────────────── */
 .section-heading {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 12px;
+  color: var(--muted);
+  margin-bottom: 10px;
 }
-.ai-badge {
-  color: var(--gold-bright);
-  font-size: 13px;
-  text-shadow: 0 0 10px rgba(244,197,66,0.5);
-}
+.ai-badge { color: var(--gold-bright); font-size: 11px; text-shadow: 0 0 10px rgba(232,197,115,0.5); }
 .heading-sub {
   margin-left: auto;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.10em;
   color: var(--dim);
@@ -78,73 +114,101 @@ section[data-section] { margin-bottom: 22px; }
 .heading-sub a, a.heading-sub { color: var(--muted); text-decoration: none; }
 .heading-sub a:hover { color: var(--gold-bright); }
 
-/* ── Card base ─────────────────────────────────────────────────────────────── */
-.card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  padding: 20px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 18px 50px rgba(0,0,0,0.40);
+/* ════════════════════════════════════════════════════════════════════════════
+   HEADER CHROME — hamburger · centered title block · status dots
+   ════════════════════════════════════════════════════════════════════════════ */
+.header-chrome {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  padding-block: 12px;
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: 22px;
 }
+.header-menu {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.header-menu:hover { color: var(--text); background: var(--card); }
+.header-title-block { flex: 1 1 auto; text-align: center; min-width: 0; }
+.header-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.header-title::before { content: "☼ "; color: var(--gold); letter-spacing: 0; }
+.header-date {
+  margin-top: 2px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.header-status { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; width: 52px; justify-content: flex-end; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dim); }
+.status-dot:nth-child(1) { background: var(--green); box-shadow: 0 0 6px rgba(74,222,128,0.5); }
+.status-dot:nth-child(2) { background: var(--gold); box-shadow: 0 0 6px rgba(212,168,87,0.5); }
+.status-dot:nth-child(3) { background: var(--blue); box-shadow: 0 0 6px rgba(96,165,250,0.5); }
 
 /* ════════════════════════════════════════════════════════════════════════════
-   SECTION 1 — Hero Solar Intelligence
-   4 corner rings · photographic sun core · EXPANSION forecast stack
-   Layout: 3 columns (corner | center | corner) × 3 rows (sun / title / subtitle).
-   Corners flank the center stack; the sun + title + subtitle never overlap.
+   HERO — photographic sun core + 4 corner rings  (v2.1 internals preserved)
    ════════════════════════════════════════════════════════════════════════════ */
-#section-1-hero { margin-bottom: 26px; }
-
+#section-1-hero { margin: 0; }
 .hero-shell {
   display: grid;
-  grid-template-columns: 1fr minmax(220px, 2fr) 1fr;
+  grid-template-columns: 1fr minmax(200px, 1.6fr) 1fr;
   grid-template-rows: auto auto auto;
   align-items: center;
   justify-items: center;
-  gap: 10px 14px;
-  min-height: 360px;
+  gap: 8px 16px;
+  min-height: 420px;
   position: relative;
 }
 
-/* Corner stat blocks — pinned to the four outer cells */
-.hero-corner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  position: relative;
-}
+/* Corner stat blocks pinned to the four outer cells */
+.hero-corner { display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; }
 .hero-corner--tl { grid-column: 1; grid-row: 1; align-self: start; }
 .hero-corner--tr { grid-column: 3; grid-row: 1; align-self: start; }
 .hero-corner--bl { grid-column: 1; grid-row: 3; align-self: end; }
 .hero-corner--br { grid-column: 3; grid-row: 3; align-self: end; }
 
 .corner-label {
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 0.20em;
   color: var(--muted);
   text-transform: uppercase;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
-/* Apple-Watch ring. render.js wraps .corner-value inside .corner-ring and sets
-   --ring-pct (0–100) + --ring-color per corner. The conic arc fills the ring;
-   the ::before punches the dark center so only the arc reads as progress. */
+/* Apple-Watch ring — render.js wraps .corner-value in .corner-ring + sets --ring-pct.
+   The conic arc reads as progress; ::before punches the dark hub. PRESERVE. */
 .corner-ring {
-  width: 76px;
-  height: 76px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   background: conic-gradient(
     var(--ring-color, var(--gold)) calc(var(--ring-pct, 60) * 1%),
-    rgba(255,255,255,0.08) 0
+    rgba(255,255,255,0.07) 0
   );
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  box-shadow: 0 0 18px rgba(0,0,0,0.45);
+  box-shadow: 0 0 18px rgba(0,0,0,0.5), 0 0 22px var(--ring-glow, transparent);
 }
 .corner-ring::before {
   content: "";
@@ -161,39 +225,27 @@ section[data-section] { margin-bottom: 22px; }
   position: relative;
   z-index: 1;
 }
+.hero-corner--tl .corner-ring { --ring-color: var(--green);  --ring-glow: rgba(74,222,128,0.22); }
+.hero-corner--tr .corner-ring { --ring-color: var(--orange); --ring-glow: rgba(245,166,35,0.22); }
+.hero-corner--bl .corner-ring { --ring-color: var(--cyan);   --ring-glow: rgba(103,232,249,0.22); }
+.hero-corner--br .corner-ring { --ring-color: var(--gold);   --ring-glow: rgba(212,168,87,0.22); }
+.corner-tag { font-size: 11px; color: var(--muted); margin-top: 7px; }
 
-/* Per-corner ring hues */
-.hero-corner--tl .corner-ring { --ring-color: var(--green); }
-.hero-corner--tr .corner-ring { --ring-color: var(--orange); }
-.hero-corner--bl .corner-ring { --ring-color: var(--cyan); }
-.hero-corner--br .corner-ring { --ring-color: var(--gold); }
-
-.corner-tag {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 6px;
-}
-
-/* SUN — photographic core via layered radial gradient + volumetric glows.
-   Off-center highlight + inset shadows give it dimensional "sphere" weight. */
+/* SUN — layered radial gradient sphere + volumetric corona + pulse. PRESERVE. */
 .sun-hero {
   grid-column: 2;
   grid-row: 1;
-  width: 220px;
-  height: 220px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   margin: 0 auto;
   background:
     radial-gradient(circle at 40% 38%,
-      #FFFCEA 0%,
-      #FFF1B3 12%,
-      #FFD659 30%,
-      #E8A93A 55%,
-      #8A4D0B 100%);
+      #FFFCEA 0%, #FFF1B3 12%, #FFD659 30%, #E8A93A 55%, #8A4D0B 100%);
   box-shadow:
     0 0 60px rgba(255, 218, 109, 0.55),
-    0 0 140px rgba(244, 197, 66, 0.45),
-    0 0 240px rgba(212, 175, 55, 0.30),
+    0 0 140px rgba(232, 197, 115, 0.42),
+    0 0 240px rgba(212, 168, 87, 0.28),
     inset -20px -30px 60px rgba(180, 80, 0, 0.55),
     inset 8px 8px 30px rgba(255, 250, 200, 0.50);
   animation: sun-pulse 6s ease-in-out infinite;
@@ -202,10 +254,10 @@ section[data-section] { margin-bottom: 22px; }
 .sun-hero::after {
   content: "";
   position: absolute;
-  inset: -40px;
+  inset: -44px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,210,80,0.20) 0%, transparent 60%);
-  filter: blur(8px);
+  background: radial-gradient(circle, rgba(255,210,80,0.20) 0%, transparent 62%);
+  filter: blur(10px);
   z-index: -1;
 }
 @keyframes sun-pulse {
@@ -216,184 +268,207 @@ section[data-section] { margin-bottom: 22px; }
 .forecast-title {
   grid-column: 2;
   grid-row: 2;
-  margin-top: 12px;
-  font-size: clamp(40px, 7vw, 64px);
+  margin-top: 10px;
+  font-size: clamp(34px, 5.5vw, 56px);
   font-weight: 800;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.16em;
   line-height: 1.0;
   color: var(--gold);
   text-transform: uppercase;
   text-align: center;
-  text-shadow: 0 0 30px rgba(212,175,55,0.35);
+  text-shadow: 0 0 30px rgba(212,168,87,0.35);
 }
 .forecast-subtitle {
   grid-column: 2;
   grid-row: 3;
-  margin-top: 4px;
+  margin-top: 6px;
   font-size: 13px;
   color: var(--muted);
   text-align: center;
-  max-width: 460px;
+  max-width: 440px;
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
-   SECTION 2 — Now Bar  (single horizontal card, 4 cells, gold dividers)
+   NOW BAR — single thin strip, "NOW" tag + 4 cells with gold dividers
    ════════════════════════════════════════════════════════════════════════════ */
+#section-2-now-bar { margin: 0; }
 .now-bar-card {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: auto repeat(4, 1fr);
   align-items: center;
+  min-height: 66px;
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 20px;
-  padding: 14px 18px;
-  gap: 14px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--radius);
+  padding: 12px 20px;
+  gap: 16px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
-.now-cell { display: flex; flex-direction: column; gap: 2px; }
+.now-bar-card::before {
+  content: "NOW";
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  padding-right: 16px;
+  border-right: 1px solid rgba(212,168,87,0.20);
+}
+.now-cell { display: flex; flex-direction: column; gap: 3px; }
 .now-cell .label {
-  font-size: 11px;
-  letter-spacing: 0.20em;
+  font-size: 10px;
+  letter-spacing: 0.18em;
   color: var(--muted);
   text-transform: uppercase;
 }
 .now-cell .value {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--text);
   font-variant-numeric: tabular-nums;
 }
-/* gold vertical separators between cells */
 .now-bar-card .now-cell + .now-cell {
-  border-left: 1px solid rgba(212,175,55,0.18);
-  padding-left: 14px;
+  border-left: 1px solid rgba(255,255,255,0.06);
+  padding-left: 16px;
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
-   SECTION 3 — Daily Reading
+   ROW 3 — "TODAY" composition (grid-template-areas)
+     desktop:  "reading  changed  rail"
+               "upcoming upcoming rail"
+   The rail (col 3) spans both sub-rows; Upcoming spans cols 1–2 of the lower row.
    ════════════════════════════════════════════════════════════════════════════ */
-.reading-card { display: flex; flex-direction: column; gap: 8px; }
+.row--today {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas:
+    "reading  changed  rail"
+    "upcoming upcoming rail";
+  gap: var(--grid-gap);
+  align-items: stretch;
+}
+#section-3-daily-reading      { grid-area: reading; }
+#section-4-what-changed       { grid-area: changed; }
+#section-7-upcoming-conditions{ grid-area: upcoming; }
+.row--today .rail             { grid-area: rail; display: flex; flex-direction: column; gap: var(--grid-gap); }
+
+/* every direct card-section in the composition stretches so its card fills the cell */
+.row--today section,
+.row--today .rail section,
+.row--4col section { display: flex; flex-direction: column; margin: 0; }
+.row--today section > .card,
+.row--today section > .timeline-list,
+.row--4col section > .card,
+.row--4col section > .influences-compact,
+.row--4col section > .drivers-list { flex: 1 1 auto; }
+/* Recommended Actions absorbs the rail's extra height under Insight */
+.row--today .rail #section-6-recommended { flex: 1 1 auto; }
+.row--today .rail #section-6-recommended > .card { flex: 1 1 auto; }
+
+/* ── Daily Reading ───────────────────────────────────────────────────────────── */
+.reading-card { display: flex; flex-direction: column; gap: 10px; }
 .reading-state {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  color: var(--gold);
-}
-/* render.js may emit a small "STATE" label + large state name; keep both legible */
-.reading-card .reading-state-label {
-  font-size: 11px;
-  letter-spacing: 0.20em;
-  text-transform: uppercase;
-  color: var(--dim);
-}
-.reading-card .reading-state-value {
   font-size: 26px;
   font-weight: 800;
-  color: var(--gold-bright);
   letter-spacing: 0.01em;
+  line-height: 1.1;
+  color: var(--gold-bright);
 }
-.reading-body {
-  font-size: 15px;
-  line-height: 1.6;
-  color: var(--text);
-}
-.reading-footnote {
-  font-size: 11px;
+.reading-state::before {            /* mockup's small "STATE" eyebrow above the value */
+  content: "STATE";
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
   color: var(--dim);
-  margin-top: 4px;
+  margin-bottom: 6px;
+}
+.reading-state-label { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--dim); }
+.reading-state-value { font-size: 26px; font-weight: 800; color: var(--gold-bright); letter-spacing: 0.01em; }
+.reading-body { font-size: 14px; line-height: 1.6; color: var(--text); }
+.reading-footnote {
+  margin-top: auto;
+  padding-top: 10px;
+  font-size: 11px;
+  color: var(--gold);
+  border-top: 1px solid rgba(212,168,87,0.18);
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   SECTION 4 — What Changed  (delta rows: green + / red −)
-   ════════════════════════════════════════════════════════════════════════════ */
-.changed-card { display: flex; flex-direction: column; gap: 2px; }
+/* ── What Changed (delta rows) ───────────────────────────────────────────────── */
+.changed-card { display: flex; flex-direction: column; gap: 0; }
 .changed-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 9px 2px;
   font-size: 14px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid var(--line-soft);
 }
 .changed-row:last-child { border-bottom: none; }
-.changed-row .changed-label { color: var(--muted); }
-.changed-row .changed-delta {
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
+.changed-label { color: var(--muted); }
+.changed-delta { font-weight: 700; font-variant-numeric: tabular-nums; }
+.changed-delta.positive { color: var(--green); }
+.changed-delta.positive::before { content: "↑ "; }
+.changed-delta.negative { color: var(--red); }
+.changed-delta.negative::before { content: "↓ "; }
+.changed-delta.neutral  { color: var(--dim); }
+.changed-footer, .changed-empty {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--dim);
 }
-.changed-row .changed-delta.positive { color: var(--green); }
-.changed-row .changed-delta.negative { color: var(--red); }
-.changed-row .changed-delta.neutral  { color: var(--dim); }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   SECTION 5 — Today's Insight  (gold accent rail)
-   ════════════════════════════════════════════════════════════════════════════ */
+/* ── Today's Insight (gold accent rail) ──────────────────────────────────────── */
 .insight-card {
   border-left: 3px solid var(--gold);
-  background: linear-gradient(90deg, rgba(212,175,55,0.08), rgba(255,255,255,0.02));
-  font-size: 16px;
+  background: linear-gradient(90deg, rgba(212,168,87,0.10), rgba(255,255,255,0.02));
+  font-size: 15px;
   line-height: 1.55;
   color: var(--text);
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   SECTION 6 — Recommended Actions  (✓ green / ✗ red)
-   ════════════════════════════════════════════════════════════════════════════ */
+/* ── Recommended Actions (✓ green / ✗ red) ───────────────────────────────────── */
+.actions-card { display: flex; flex-direction: column; }
 .actions-card h3 {
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.10em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--dim);
-  margin: 4px 0 8px;
+  margin: 2px 0 8px;
 }
 .actions-card h3:not(:first-child) { margin-top: 16px; }
-.actions-card ul {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.actions-card li {
-  position: relative;
-  padding-left: 26px;
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--text);
-}
-.actions-card #actions-do li::before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  color: var(--green);
-  font-weight: 700;
-}
-.actions-card #actions-avoid li::before {
-  content: "✗";
-  position: absolute;
-  left: 0;
-  color: var(--red);
-  font-weight: 700;
-}
+.actions-card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.actions-card li { position: relative; padding-left: 24px; font-size: 13.5px; line-height: 1.45; color: var(--text); }
+.actions-card #actions-do li::before    { content: "✓"; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+.actions-card #actions-avoid li::before { content: "✗"; position: absolute; left: 0; color: var(--red);   font-weight: 700; }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   SECTION 7 — Upcoming Conditions  (gold gradient proximity bars)
-   bar length = proximity (longer = sooner). No circles, no glyphs.
-   ════════════════════════════════════════════════════════════════════════════ */
-.timeline-list { list-style: none; padding: 0; }
+/* ── Upcoming Conditions (dot · day-count · label · proximity bar) ───────────── */
+#section-7-upcoming-conditions .card,
+.timeline-list { list-style: none; }
+.timeline-list { display: flex; flex-direction: column; }
 .timeline-row {
   display: grid;
-  grid-template-columns: 84px 1fr;
+  grid-template-columns: 12px 64px 1fr;
   align-items: center;
-  gap: 16px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--line);
+  gap: 14px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line-soft);
 }
 .timeline-row:last-child { border-bottom: none; }
+.timeline-row::before {                 /* colored category dot (cycles purple/orange/blue) */
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--dot, var(--gold));
+  box-shadow: 0 0 8px var(--dot, var(--gold));
+}
+.timeline-row:nth-child(1) { --dot: var(--purple); }
+.timeline-row:nth-child(2) { --dot: var(--orange); }
+.timeline-row:nth-child(3) { --dot: var(--blue); }
 .timeline-days {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 800;
   color: var(--gold);
   font-variant-numeric: tabular-nums;
@@ -401,116 +476,60 @@ section[data-section] { margin-bottom: 22px; }
 }
 .timeline-days .unit {
   display: block;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.12em;
   color: var(--dim);
   text-transform: uppercase;
 }
 .timeline-main { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-.timeline-event { font-size: 14px; color: var(--text); }
+.timeline-event { font-size: 13.5px; color: var(--text); }
 .timeline-bar {
-  height: 8px;
+  height: 7px;
   border-radius: 4px;
   background: linear-gradient(90deg, var(--gold-deep), var(--gold), var(--gold-bright));
   width: var(--bar-length, 50%);
-  box-shadow: 0 0 12px rgba(244,197,66,0.30);
+  box-shadow: 0 0 12px rgba(232,197,115,0.28);
 }
+.timeline-empty { color: var(--dim); font-size: 13px; padding: 8px 0; }
 
 /* ════════════════════════════════════════════════════════════════════════════
-   SECTION 8 — Current Phase
+   ROW 4 — Analytics (4 equal cards)
    ════════════════════════════════════════════════════════════════════════════ */
-.phase-card { display: flex; flex-direction: column; gap: 12px; }
-.phase-name {
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--gold-bright);
-  letter-spacing: 0.01em;
-}
-.phase-range { font-size: 13px; color: var(--muted); }
-.phase-days { font-size: 13px; color: var(--dim); }
-.progress {
-  width: 100%;
-  height: 8px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 999px;
-  overflow: hidden;
-}
-.progress-bar {
-  height: 100%;
-  width: 0%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-bright) 100%);
-  box-shadow: 0 0 12px rgba(244,197,66,0.45);
-  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* ════════════════════════════════════════════════════════════════════════════
-   SECTION 9 — Sky Conditions  (4 horizontal progress bars)
-   Expansion green · Pressure orange · Volatility red · Support blue
-   ════════════════════════════════════════════════════════════════════════════ */
-.sky-card { display: flex; flex-direction: column; gap: 12px; }
-.sky-row {
+.row--4col {
   display: grid;
-  grid-template-columns: 100px 1fr 50px;
-  align-items: center;
-  gap: 12px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--grid-gap);
+  align-items: stretch;
 }
-.sky-name {
-  font-size: 13px;
-  color: var(--muted);
-  letter-spacing: 0.02em;
-}
-.sky-bar {
-  background: var(--line);
-  border-radius: 6px;
-  height: 8px;
-  overflow: hidden;
-}
-.sky-fill {
-  height: 100%;
-  border-radius: 6px;
-  width: 0%;
-  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
+
+/* ── Sky Conditions (labeled progress bars) ──────────────────────────────────── */
+.sky-card { display: flex; flex-direction: column; gap: 14px; justify-content: center; }
+.sky-row { display: grid; grid-template-columns: 88px 1fr 46px; align-items: center; gap: 12px; }
+.sky-name { font-size: 13px; color: var(--muted); letter-spacing: 0.02em; }
+.sky-bar { background: var(--line); border-radius: 6px; height: 7px; overflow: hidden; }
+.sky-fill { height: 100%; border-radius: 6px; width: 0%; transition: width 0.8s cubic-bezier(0.22,1,0.36,1); }
 .sky-fill--positive { background: var(--green); }
 .sky-fill--warning  { background: var(--orange); }
 .sky-fill--danger   { background: var(--red); }
 .sky-fill--info     { background: var(--blue); }
-.sky-value {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text);
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
+.sky-value { font-size: 13px; font-weight: 700; color: var(--text); text-align: right; font-variant-numeric: tabular-nums; }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   SECTION 10 — Planet Influences  (compact list — glyph · name · role · score)
-   ════════════════════════════════════════════════════════════════════════════ */
-.influences-compact { list-style: none; padding: 0; }
+/* ── Planet Influences (compact glyph · name · role · score) ─────────────────── */
+.influences-compact { list-style: none; display: flex; flex-direction: column; }
 .influence-row {
   display: grid;
-  grid-template-columns: 30px 1fr 100px 50px;
+  grid-template-columns: 26px 1fr auto 44px;
   align-items: center;
   gap: 10px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--line);
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line-soft);
   font-size: 14px;
 }
 .influence-row:last-child { border-bottom: none; }
-.influence-glyph {
-  font-size: 20px;
-  color: var(--gold);
-  text-align: center;
-}
+.influence-glyph { font-size: 18px; color: var(--gold); text-align: center; }
 .influence-name { color: var(--text); }
-.influence-role {
-  font-size: 12px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.10em;
-}
+.influence-role { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.10em; text-align: right; }
 .influence-score {
   text-align: right;
   font-weight: 700;
@@ -520,86 +539,74 @@ section[data-section] { margin-bottom: 22px; }
 .influence-score.positive { color: var(--green); }
 .influence-score.negative { color: var(--red); }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   SECTION 11 — Top Drivers  (numbered, gold counters)
-   ════════════════════════════════════════════════════════════════════════════ */
-.drivers-list {
-  list-style: none;
-  counter-reset: driver;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+/* ── Top Drivers (numbered list) ─────────────────────────────────────────────── */
+.drivers-list { list-style: none; counter-reset: driver; display: flex; flex-direction: column; gap: 8px; }
 .drivers-list li {
   counter-increment: driver;
   position: relative;
-  padding: 14px 16px 14px 52px;
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  font-size: 14px;
-  line-height: 1.5;
+  padding: 11px 12px 11px 44px;
+  background: var(--card-strong);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  line-height: 1.45;
   color: var(--text);
 }
 .drivers-list li::before {
   content: counter(driver);
   position: absolute;
-  left: 16px;
+  left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  border: 1px solid rgba(212,175,55,0.45);
+  border: 1px solid rgba(212,168,87,0.45);
   color: var(--gold);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+.driver-name { display: inline-block; padding-right: 8px; }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   SECTION 12 — Why This Forecast  (INLINE, open by default — not collapsed)
-   Expansion Score headline + contributors (green) / reducers (red).
-   ════════════════════════════════════════════════════════════════════════════ */
-.why-card { background: transparent; }
+/* ── Why This Forecast (inline <details open>, big score + contributors/reducers) ─ */
+.why-card { background: var(--card); }
 .why-card summary {
   list-style: none;
-  font-size: 16px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
   font-weight: 600;
-  color: var(--text);
+  color: var(--muted);
   margin-bottom: 12px;
-  cursor: default;                 /* user wants the inline view, no toggle */
+  cursor: default;                       /* user wants the inline view — no toggle */
 }
 .why-card summary::-webkit-details-marker { display: none; }
 .why-card summary span#expansion-score {
   color: var(--gold-bright);
   font-weight: 800;
-  font-size: 28px;
+  font-size: 30px;
   font-variant-numeric: tabular-nums;
+  line-height: 1;
 }
-.why-rows { display: flex; flex-direction: column; gap: 6px; }
+.why-rows { display: flex; flex-direction: column; gap: 4px; }
 .why-row {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  font-size: 13px;
+  font-size: 12.5px;
   padding: 6px 0;
-  border-top: 1px solid rgba(255,255,255,0.05);
+  border-top: 1px solid var(--line-soft);
+  color: var(--text);
 }
-.why-row .why-weight {
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  padding-left: 12px;
-}
-.why-row--pos, .why-row--pos .why-weight { color: var(--green); }
-.why-row--neg, .why-row--neg .why-weight { color: var(--red); }
-/* group sub-labels (CONTRIBUTORS / REDUCERS) if render.js emits them */
+.why-weight { font-weight: 700; font-variant-numeric: tabular-nums; padding-left: 12px; }
+.why-row--pos .why-weight { color: var(--green); }
+.why-row--neg .why-weight { color: var(--red); }
 .why-group-label {
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--dim);
@@ -607,131 +614,128 @@ section[data-section] { margin-bottom: 22px; }
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
-   SECTION 13 — Confidence  (small card, muted unrated ring)
+   ROW 5 — Confidence (small, left-aligned meta card)
    ════════════════════════════════════════════════════════════════════════════ */
+.row--meta { max-width: 280px; }
+#section-13-confidence { margin: 0; }
 .confidence-card {
   display: grid;
-  grid-template-columns: 80px 1fr;
+  grid-template-columns: 56px 1fr;
+  grid-template-rows: auto auto;
   align-items: center;
-  gap: 16px;
+  column-gap: 14px;
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 14px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 .confidence-ring {
-  width: 60px;
-  height: 60px;
+  grid-row: 1 / span 2;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   justify-self: center;
 }
-.confidence-ring--unrated {
-  border: 6px solid rgba(255,255,255,0.08);
-  background: transparent;
-}
-.confidence-label { font-size: 16px; color: var(--muted); }
-.confidence-sub { font-size: 12px; color: var(--dim); margin-top: 2px; }
-/* the section heading + grid card live in the same section; let them stack */
-#section-13-confidence .confidence-card { grid-column: 1 / -1; }
+.confidence-ring--unrated { border: 6px solid rgba(255,255,255,0.08); background: transparent; }
+.confidence-label { font-size: 15px; font-weight: 600; color: var(--text); align-self: end; }
+.confidence-sub { font-size: 11px; color: var(--dim); align-self: start; margin-top: 2px; }
 
 /* ════════════════════════════════════════════════════════════════════════════
-   SECTION 14 — Footer Nav  (fixed bottom mobile → inline desktop)
+   FOOTER NAV — fixed bottom strip (mobile) → static full-width bar (desktop)
    ════════════════════════════════════════════════════════════════════════════ */
 .footer-nav {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   position: fixed;
   bottom: 0; left: 0; right: 0;
-  background: rgba(2,3,3,0.95);
+  width: 100%;
+  margin: 0;
+  background: rgba(6,7,10,0.94);
   border-top: 1px solid var(--line);
   padding: 10px 0 calc(10px + env(safe-area-inset-bottom, 0px));
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   z-index: 100;
 }
 .nav-item {
+  position: relative;
   text-align: center;
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.10em;
+  letter-spacing: 0.08em;
   color: var(--muted);
   text-decoration: none;
+  padding: 4px 0;
   transition: color 0.2s ease;
 }
 .nav-item:hover { color: var(--text); }
 .nav-item.active { color: var(--gold-bright); }
+.nav-item.active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--gold-bright);
+  box-shadow: 0 0 8px rgba(232,197,115,0.6);
+}
 
 /* ════════════════════════════════════════════════════════════════════════════
-   DESKTOP  ≥ 860px  — 12-column grid; alternating full-width + 3-col rows
+   TABLET  ≤ 1024px — analytics drops to 2 columns
    ════════════════════════════════════════════════════════════════════════════ */
-@media (min-width: 860px) {
+@media (max-width: 1024px) {
+  .row--4col { grid-template-columns: 1fr 1fr; }
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   MOBILE  ≤ 768px — every row collapses to one column in DOM order
+   (DOM order is authored mobile-correct; rail dissolves via display:contents)
+   ════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  :root { --gutter: 16px; }
+
+  .row--today { grid-template-columns: 1fr; grid-template-areas: none; }
+  .row--today > * { grid-area: auto !important; }
+  .row--today .rail { display: contents; }   /* spill Insight + Actions into row order */
+  .row--4col { grid-template-columns: 1fr; }
+  .row--meta { max-width: none; }
+
+  .hero-shell { min-height: 360px; gap: 6px 10px; }
+  .sun-hero { width: 150px; height: 150px; }
+  .corner-ring { width: 62px; height: 62px; }
+  .corner-value { font-size: 19px; }
+  .forecast-title { font-size: clamp(30px, 11vw, 44px); }
+
+  .header-title { letter-spacing: 0.22em; }
+  .header-date { font-size: 10px; }
+
+  .now-bar-card { grid-template-columns: auto 1fr 1fr; row-gap: 12px; }
+  .now-bar-card::before { grid-column: 1 / -1; border-right: none; border-bottom: 1px solid rgba(212,168,87,0.20); padding: 0 0 8px; }
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   DESKTOP  ≥ 769px — un-fix the footer into the page flow
+   ════════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 769px) {
   body { padding-bottom: 24px; }
-
-  .timing-weather-shell {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 14px;
-    padding: 24px;
-  }
-
-  /* sections own no bottom margin inside the grid; let gap do the spacing */
-  section[data-section] { margin-bottom: 0; }
-  /* each section is a column flex so its .card fills the row height */
-  section[data-section] { display: flex; flex-direction: column; }
-  section[data-section] > .card,
-  section[data-section] > .now-bar-card,
-  section[data-section] > .timeline-list,
-  section[data-section] > .influences-compact,
-  section[data-section] > .drivers-list { flex: 1; }
-
-  /* Hero + Now Bar span all 12 */
-  #section-1-hero,
-  #section-2-now-bar { grid-column: 1 / -1; }
-
-  /* Row A: Daily Reading | What Changed | Insight + Actions (stacked right).
-     The two left cards span both rows of the band so the right column's two
-     stacked cards (insight on top, actions below) fill the same height with
-     no empty cells left under the tall Daily Reading card. */
-  #section-3-daily-reading { grid-column: 1 / span 4;  grid-row: 3 / span 2; }
-  #section-4-what-changed  { grid-column: 5 / span 4;  grid-row: 3 / span 2; }
-  #section-5-todays-insight{ grid-column: 9 / span 4;  grid-row: 3; }
-  #section-6-recommended   { grid-column: 9 / span 4;  grid-row: 4; }
-
-  /* Row B: Upcoming Conditions full width */
-  #section-7-upcoming-conditions { grid-column: 1 / -1; grid-row: 5; }
-
-  /* Current Phase full width */
-  #section-8-current-phase { grid-column: 1 / -1; grid-row: 6; }
-
-  /* Row C: Sky | Influences | Why */
-  #section-9-sky-conditions   { grid-column: 1 / span 4;  grid-row: 7; }
-  #section-10-planet-influences { grid-column: 5 / span 4; grid-row: 7; }
-  #section-12-why-forecast    { grid-column: 9 / span 4;  grid-row: 7; }
-
-  /* Top Drivers full row below */
-  #section-11-top-drivers { grid-column: 1 / -1; grid-row: 8; }
-
-  /* Confidence small + footer */
-  #section-13-confidence { grid-column: 1 / -1; grid-row: 9; }
-
-  /* Footer nav un-fixes into the flow */
-  #section-14-footer-nav {
-    grid-column: 1 / -1;
-    grid-row: 10;
+  .hero-shell { min-height: 500px; }
+  .footer-nav {
     position: static;
-    border-radius: 16px;
-    border: 1px solid var(--line);
+    width: 100vw;
+    border-radius: 0;
+    padding: 18px 0;
+    background: rgba(255,255,255,0.02);
     border-top: 1px solid var(--line);
-    margin: 4px 0 0;
-    padding: 16px 0;
-    background: var(--card);
   }
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
-   ACCESSIBILITY — honor reduced-motion (kill the sun pulse + all transitions)
+   ACCESSIBILITY — honor reduced-motion
    ════════════════════════════════════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
   .sun-hero { animation: none; }

@@ -1,7 +1,8 @@
-/* timing_weather_render.js — v2.1 "Ambient Intelligence" renderer
+/* timing_weather_render.js — v2.2 "Ambient Intelligence" renderer
  * Reads state.json (no-store), polls every 60s, re-renders only when updatedAt changes.
- * Bound to the v2.1 14-section layout: hero corner rings, photographic sun core,
- * timeline proximity bars, compact planet influences. v2 engine/schema unchanged.
+ * Bound to the v2.2 row-structure layout: header chrome (title + short date),
+ * hero corner rings, photographic sun core, timeline proximity bars, compact
+ * planet influences. Current Phase dropped (not in mockup). v2 engine/schema unchanged.
  * PVR: null fields degrade to "—" or an empty state — never fabricate values.
  */
 
@@ -20,12 +21,24 @@ function setText(id, val, fallback = '—') {
 }
 function clamp(n) { return Math.max(0, Math.min(100, n)); }
 
-// Whole-day difference between two YYYY-MM-DD strings (b - a), UTC-safe.
-function daysBetween(a, b) {
-  const da = Date.parse(a + 'T00:00:00Z');
-  const db = Date.parse(b + 'T00:00:00Z');
-  if (isNaN(da) || isNaN(db)) return null;
-  return Math.round((db - da) / 86400000);
+/* ── Header chrome — short date in the title bar ──────────────────────────────
+   "Sun · Jun 7". Prefer state.currentDate (YYYY-MM-DD, parsed UTC-safe to dodge
+   the timezone off-by-one); fall back to the client clock when the field is absent. */
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+function formatHeaderDate(iso) {
+  if (iso && /^\d{4}-\d{2}-\d{2}/.test(iso)) {
+    const [y, m, day] = iso.slice(0, 10).split('-').map(Number);
+    const d = new Date(Date.UTC(y, m - 1, day));
+    return `${WEEKDAYS[d.getUTCDay()]} · ${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}`;
+  }
+  const d = new Date();
+  return `${WEEKDAYS[d.getDay()]} · ${MONTHS[d.getMonth()]} ${d.getDate()}`;
+}
+
+function renderHeaderDate(s) {
+  setText('header-date', formatHeaderDate(s && s.currentDate));
 }
 
 /* ── Hero corner rings ───────────────────────────────────────────────────────
@@ -185,24 +198,9 @@ function renderTimeline(s) {
   }).join('');
 }
 
-function renderPhase(s) {
-  setText('phase-name', s.currentPhase);
-  const start = s.currentPhaseStart;
-  const end = s.currentPhaseEnd;
-  setText('phase-range', start && end ? `${start} – ${end}` : null);
-
-  const today = s.currentDate;
-  let daysRemaining = null, progress = null;
-  if (start && end && today) {
-    const total = daysBetween(start, end);
-    const elapsed = daysBetween(start, today);
-    daysRemaining = daysBetween(today, end);
-    if (total && total > 0 && elapsed != null) progress = clamp((elapsed / total) * 100);
-  }
-  setText('phase-days', daysRemaining != null ? `${Math.max(0, daysRemaining)} Days Remaining` : null);
-  const bar = $('phase-progress');
-  if (bar) bar.style.width = progress != null ? `${progress}%` : '0%';
-}
+/* Current Phase section removed in v2.2 (not in mockup). The engine still emits
+   currentPhase / currentPhaseStart / currentPhaseEnd in state.json — intentionally
+   unread here; the DOM hooks (phase-name/range/progress/days) no longer exist. */
 
 function renderSkyConditions(s) {
   const card = $('sky-card');
@@ -277,6 +275,7 @@ function renderWhy(s) {
 }
 
 function renderAll(s) {
+  renderHeaderDate(s);
   renderHero(s);
   renderNowBar(s);
   renderDailyReading(s);
@@ -284,7 +283,6 @@ function renderAll(s) {
   renderTodaysInsight(s);
   renderRecommended(s);
   renderTimeline(s);
-  renderPhase(s);
   renderSkyConditions(s);
   renderInfluences(s);
   renderDrivers(s);
