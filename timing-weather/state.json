@@ -88,32 +88,32 @@
     }
   ],
   "opportunity": 28,
-  "pressure": 73,
+  "pressure": 85,
   "volatility": 78,
-  "momentum": 55,
+  "momentum": 39,
   "dailyReading": {
     "state": "EXPANSION",
-    "read": "Today you may notice a wider field of options, but not a clean green light. This is a stretch for your attention: conversations, introductions, drafts, negotiations, and planning threads can all open useful doors, yet the ground underneath may still feel noisy or unsettled. Your best move is to build leverage without forcing finality. Ask the question, send the note, map the offer, clarify the numbers, clean up the document, and keep the relationship warm. Work benefits from sharper language and better positioning, especially if you slow down enough to say what you actually mean. Relationships may require more patience than usual; people can be receptive and confusing at the same time. Do not make mood, guilt, or pressure the basis for a binding decision. Money and home matters ask for restraint. Fewer, better moves will beat scattered expansion. If something feels promising but not stable, treat it as pipeline, not proof. You are in a building phase: useful openings can appear now, but the heavier commitments need more structure, cleaner terms, and time. Today supports preparation, repair, and quiet influence more than dramatic action."
+    "read": "Today has an expansion tone, but it is not clean or effortless. You may notice more doors cracking open through conversations, documents, introductions, or quiet signs that your work is starting to travel further than your current title or setup. The useful move is to build leverage without rushing to lock everything in. Ask better questions, update the paper trail, clarify expectations, and keep relationships warm, especially with people who can later support a more formal step. The tension is that your foundations still feel loaded: home, money, family logistics, repairs, debt, shared resources, or emotional bandwidth may all demand more maturity than you would prefer. This is a stretch for your nervous system because the opportunity signal is real, but the background pressure is also real. Do not confuse movement with readiness. Work benefits from precise communication today. Say what you mean, but avoid forcing agreement before the structure is ready. Money decisions should be practical, not symbolic. Relationships may bring useful clarity, but not necessarily comfort. Fewer, cleaner moves beat big declarations. Open the door now; make it weight-bearing later."
   },
   "dailyChanges": {
-    "momentum": -16,
+    "momentum": -32,
     "opportunity": 0,
-    "pressure": 0,
+    "pressure": 12,
     "volatility": 0,
     "comparedTo": "2026-06-06",
-    "lastComparedAt": "2026-06-07T01:17:50-05:00"
+    "lastComparedAt": "2026-06-07T23:05:33-05:00"
   },
-  "todaysInsight": "Build the pipeline before you lock the plan. Keep pressure visible, but delay final commitments.",
+  "todaysInsight": "Build the pipeline and price your contribution clearly. Delay final commitments until the pressure exposes better terms.",
   "recommendations": [
     "Build pipeline",
-    "Prepare assets",
-    "Schedule meetings",
-    "Stress-test plans"
+    "Price your value",
+    "Document ownership",
+    "Schedule authority meetings"
   ],
   "avoidances": [
-    "Locking commitments",
-    "Overextending capacity",
-    "Ignoring constraints"
+    "Irreversible commitments",
+    "Salary dependency",
+    "Romance chasing"
   ],
   "drivers": [
     {
@@ -159,12 +159,12 @@
         "score": -15
       },
       {
-        "factor": "Angular Hit",
+        "factor": "Mars Friction",
         "score": -12
       },
       {
-        "factor": "Admin Load",
-        "score": -8
+        "factor": "Angular Hit",
+        "score": -12
       }
     ]
   },
@@ -194,7 +194,7 @@
     }
   ],
   "trendDirection": "Stable",
-  "updatedAt": "2026-06-07T01:17:50-05:00",
+  "updatedAt": "2026-06-07T23:05:33-05:00",
   "sourceMode": "static",
   "currentDate": "2026-06-07",
   "sources": [
@@ -205,11 +205,11 @@
   ],
   "scoringDetail": {
     "dominanceScores": {
-      "jupiter": 10.41,
-      "saturn": 7.32,
-      "pluto": 6.84,
-      "uranus": 6.85,
-      "venus": 5.5
+      "jupiter": 10.26,
+      "saturn": 7.26,
+      "pluto": 6.85,
+      "uranus": 6.9,
+      "venus": 4.61
     },
     "corroboration": "High",
     "lordOfYear": "jupiter",
@@ -223,108 +223,109 @@
         "Vedic Moon–Venus antardasha (relationship-positive)"
       ],
       "pressure": [
-        "Saturn square natal neptune (0.82°)",
-        "Saturn square natal asc (4.4°)",
+        "Mars square natal venus (5.75°)",
+        "Saturn square natal neptune (0.89°)",
+        "Saturn square natal asc (4.47°)",
         "Sade Sati (Small Panoti) — pressure on foundations",
         "inside admin/clearing window: Late May–early June clearing"
       ],
       "volatility": [
-        "Uranus square natal sun (4.81°)",
-        "Uranus conjunction natal mars (2.72°)",
-        "Uranus sextile natal jupiter (0.18°)",
-        "Uranus trine natal north_node (4.56°)",
-        "pluto square natal mc (angular, 1.39°)"
+        "Uranus square natal sun (4.76°)",
+        "Uranus conjunction natal mars (2.78°)",
+        "Uranus sextile natal jupiter (0.12°)",
+        "Uranus trine natal north_node (4.51°)",
+        "pluto square natal mc (angular, 1.37°)"
       ],
       "momentum": [
-        "6 fast transit(s) exact within 3°",
+        "4 fast transit(s) exact within 3°",
         "approaching Jupiter return — chapter reset (35d)",
         "BaZi Da Yun shift within 100 days"
       ]
     },
     "transitSigns": {
-      "sun": "16.53° Gemini",
-      "moon": "2.91° Pisces",
-      "mercury": "8.98° Cancer",
-      "venus": "22.77° Cancer",
-      "mars": "14.38° Taurus",
-      "jupiter": "25.27° Cancer",
-      "saturn": "12.75° Aries",
-      "uranus": "2.42° Gemini",
-      "neptune": "4.17° Aries",
-      "pluto": "5.29° Aquarius"
+      "sun": "17.4° Gemini",
+      "moon": "14.46° Pisces",
+      "mercury": "10.25° Cancer",
+      "venus": "23.83° Cancer",
+      "mars": "15.05° Taurus",
+      "jupiter": "25.45° Cancer",
+      "saturn": "12.82° Aries",
+      "uranus": "2.48° Gemini",
+      "neptune": "4.19° Aries",
+      "pluto": "5.27° Aquarius"
     },
     "tightAspects": [
       {
         "transit": "uranus",
         "natal": "jupiter",
         "aspect": "sextile",
-        "orb": 0.18
-      },
-      {
-        "transit": "venus",
-        "natal": "mercury",
-        "aspect": "sextile",
-        "orb": 0.6
-      },
-      {
-        "transit": "mercury",
-        "natal": "asc",
-        "aspect": "opposition",
-        "orb": 0.63
-      },
-      {
-        "transit": "saturn",
-        "natal": "neptune",
-        "aspect": "square",
-        "orb": 0.82
+        "orb": 0.12
       },
       {
         "transit": "mars",
         "natal": "pluto",
         "aspect": "opposition",
-        "orb": 0.93
+        "orb": 0.27
       },
       {
         "transit": "moon",
-        "natal": "mc",
+        "natal": "pluto",
         "aspect": "trine",
-        "orb": 0.99
+        "orb": 0.86
+      },
+      {
+        "transit": "saturn",
+        "natal": "neptune",
+        "aspect": "square",
+        "orb": 0.89
       },
       {
         "transit": "neptune",
         "natal": "moon",
         "aspect": "square",
-        "orb": 1.35
+        "orb": 1.33
       },
       {
         "transit": "pluto",
         "natal": "mc",
         "aspect": "square",
-        "orb": 1.39
+        "orb": 1.37
       },
       {
         "transit": "neptune",
         "natal": "uranus",
         "aspect": "square",
-        "orb": 1.51
+        "orb": 1.5
       },
       {
         "transit": "neptune",
         "natal": "jupiter",
         "aspect": "trine",
-        "orb": 1.57
+        "orb": 1.59
+      },
+      {
+        "transit": "venus",
+        "natal": "mercury",
+        "aspect": "sextile",
+        "orb": 1.66
+      },
+      {
+        "transit": "mercury",
+        "natal": "neptune",
+        "aspect": "opposition",
+        "orb": 1.69
       },
       {
         "transit": "pluto",
         "natal": "north_node",
         "aspect": "conjunction",
-        "orb": 1.7
+        "orb": 1.71
       },
       {
         "transit": "mercury",
-        "natal": "sun",
-        "aspect": "sextile",
-        "orb": 1.75
+        "natal": "asc",
+        "aspect": "opposition",
+        "orb": 1.9
       }
     ],
     "transitMissing": [],

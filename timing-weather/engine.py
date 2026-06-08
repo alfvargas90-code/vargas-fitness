@@ -67,6 +67,18 @@ VEDIC_MD = os.path.join(ASTRO, "deep_research_vedic_2026.md")
 COUNCIL_MD = os.path.join(COUNCIL, "2026-06-06_predictive_convergence_review.md")
 OUT_PATH = os.path.join(HERE, "state.json")
 
+# Dashboard-purpose-built astrology framework MDs (08_Drafts). These are HIGH-PRIORITY
+# Codex narrative context — Alfie authored them specifically to drive THIS dashboard's
+# tone, lifetime-arc framing, and which life domains surface. They outrank the
+# deep-research reference docs when there is tension. Read in place (NOT moved — final
+# placement undecided). Absolute paths into the vault root.
+VEDIC_DASHBOARD_MD = os.path.join(VAULT, "08_Drafts", "2026-06-07_vedic_dashboard.md")
+TROPICAL_DASHBOARD_MD = os.path.join(VAULT, "08_Drafts", "2026-06-07_tropical_dashboard.md")
+
+# Lazy per-run cache for the two dashboard MDs (read once, reused by all three Codex
+# prompt builders). Populated by load_astrology_dashboards().
+ASTRO_CONTEXT = {}
+
 SIGNS = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
          "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"]
 SIGN_IDX = {s: i for i, s in enumerate(SIGNS)}
@@ -670,6 +682,63 @@ def forecast_trend(today, natal):
     return pts, direction
 
 
+# --- High-priority dashboard framework (Codex narrative context) ---------
+def load_astrology_dashboards():
+    """Load Alfie's two dashboard-purpose-built astrology MDs (Vedic + Tropical) from
+    08_Drafts. Cached once per run in ASTRO_CONTEXT. A missing/unreadable file degrades
+    to '' (PVR: never fabricate) so the engine still ships its narrative."""
+    if ASTRO_CONTEXT:
+        return ASTRO_CONTEXT
+    for key, path in (("vedic_dashboard", VEDIC_DASHBOARD_MD),
+                      ("tropical_dashboard", TROPICAL_DASHBOARD_MD)):
+        try:
+            ASTRO_CONTEXT[key] = open(path, encoding="utf-8").read().strip()
+        except Exception as e:
+            log(f"  could not read dashboard MD {path}: {e}")
+            ASTRO_CONTEXT[key] = ""
+    return ASTRO_CONTEXT
+
+
+def astro_framework_block():
+    """Assemble the HIGH-PRIORITY framework context injected into the Codex narrative
+    prompts (daily reading, today's insight, recommended actions). Frames the two
+    08_Drafts MDs as Alfie's own structural framework for this dashboard — primary for
+    tone, lifetime-arc framing, and which life domains to surface; deep-research docs
+    are reference background only. Names specific sections so Codex can reason from
+    them. Returns '' when neither MD could be read (graceful degrade)."""
+    ctx = load_astrology_dashboards()
+    ved, trop = ctx.get("vedic_dashboard", ""), ctx.get("tropical_dashboard", "")
+    if not ved and not trop:
+        return ""
+    parts = [
+        "=== ALFIE'S STRUCTURAL FRAMEWORK — HIGH PRIORITY (purpose-built for THIS dashboard) ===",
+        "The document(s) below are Alfie's own structural framework, written specifically to "
+        "drive this dashboard. Treat them as the PRIMARY authority for tone, lifetime-arc "
+        "framing, and WHICH life domains to surface (career/authority, property/home, "
+        "financial reorganization, relationships — romance is explicitly NOT the headline). "
+        "They OUTWEIGH any deep-research or reference/background material when there is tension; "
+        "that other material is background only. Lean on their specific logic — the External "
+        "Manifestation Windows (especially the strongest, Aug 12 – Sep 5 2026), the Moon–Venus "
+        "antardasha, the 12th-House annual profection (a foundation/preparation year, not a "
+        "coronation), the 'valuation cycle, not destiny cycle' framing, the June = valuation "
+        "month read, and the self-valuation / 2nd-House North Node lifetime arc (servicing "
+        "institutions → owning unconventional value, IP over salary). Manifestation requires "
+        "agency — outcomes depend on decisions, not on the calendar. BUT still obey the output "
+        "rules above: translate everything into plain, observable language — never name a "
+        "planet, sign, house, window label, or tradition in your OUTPUT.",
+    ]
+    if ved:
+        parts.append(
+            "--- VEDIC DASHBOARD (Moon–Venus · External Manifestation Windows · Strongest Life "
+            "Themes · Most Likely 2026 Outcome sequence) ---\n" + ved)
+    if trop:
+        parts.append(
+            "--- TROPICAL DASHBOARD (Natal Structural Signature · 2026 Annual Profection · June "
+            "Structural Summary · Strategic Focus · Master Summary) ---\n" + trop)
+    parts.append("=== END STRUCTURAL FRAMEWORK ===")
+    return "\n\n".join(parts)
+
+
 # --- Section 9: Recommended Actions (Codex) ------------------------------
 def codex_actions(forecast, dominant, pressure_src, phase):
     """4 do's + 3 avoidances via ~/bin/llm --model codex (forces Codex, no claude-handoff
@@ -678,13 +747,16 @@ def codex_actions(forecast, dominant, pressure_src, phase):
     if not os.path.exists(llm):
         log("  ~/bin/llm not found — actions empty")
         return [], []
+    framework = astro_framework_block()
+    framework_section = ("\n\n" + framework + "\n") if framework else ""
     prompt = (
         "You are advising a high-output operator on how to play the current period of his "
         "life. He hates fluff and astrology jargon — NEVER mention planets, signs, transits, "
         "or 'energy'. Output ONLY two labeled lists, nothing else.\n\n"
         f"Current period: {phase}. Headline mode: {forecast}. The period favors building, "
         f"preparation and pipeline more than locking in final commitments; there is real "
-        f"pressure/constraint in the background.\n\n"
+        f"pressure/constraint in the background."
+        + framework_section + "\n"
         "Give EXACTLY 4 do-more-of actions and EXACTLY 3 things to avoid. Each item is 2-4 "
         "words, action-oriented, concrete (e.g. 'Build pipeline', 'Schedule meetings', "
         "'Avoid irreversible decisions'). Format EXACTLY:\n"
@@ -1040,6 +1112,8 @@ def codex_daily_reading(forecast, tropical_factors, vedic_factors, mood, snap=""
     )
     if snap:
         background += " Today's read from the morning snapshot: " + snap
+    framework = astro_framework_block()
+    framework_section = ("\n\n" + framework) if framework else ""
     prompt = (
         "You are writing a single plain-English daily reading for a personal 'life weather' "
         "dashboard. NO astrology jargon, NO Latin terms, NO aspect names, NO planet or sign "
@@ -1052,7 +1126,8 @@ def codex_daily_reading(forecast, tropical_factors, vedic_factors, mood, snap=""
         "Underlying factors to synthesize into one read (translate, do not quote): "
         + "; ".join(factors) + ".\n"
         f"Mood: {mood}\n"
-        f"Background: {background}\n\n"
+        f"Background: {background}"
+        + framework_section + "\n\n"
         "Output: ONE cohesive second-person passage (\"today you may notice\", \"this is a "
         "stretch for\"). Output ONLY the passage — no heading, no preamble, no labels."
     )
@@ -1085,6 +1160,8 @@ def codex_todays_insight(forecast, dominant, daily_changes, phase):
                 parts.append(f"{k} {'up' if v > 0 else 'down'} {abs(v)}")
         if parts:
             change_note = " Since yesterday: " + ", ".join(parts) + "."
+    framework = astro_framework_block()
+    framework_section = ("\n\n" + framework + "\n") if framework else ""
     prompt = (
         "You are writing the single headline insight for a personal 'life weather' "
         "dashboard. Output EXACTLY one or two short sentences, imperative voice "
@@ -1092,7 +1169,8 @@ def codex_todays_insight(forecast, dominant, daily_changes, phase):
         "planet/sign names, NO 'energy'. Concrete and decisive, no hedging, no hype.\n\n"
         f"Current period: {phase}. Headline mode: {forecast}. The period favors building, "
         f"preparation and pipeline over locking in final commitments; there is real "
-        f"background pressure.{change_note}\n\n"
+        f"background pressure.{change_note}"
+        + framework_section + "\n\n"
         "Output ONLY the one or two sentences, nothing else."
     )
     try:
