@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-08T07:00:00-05:00",
-  "data_hash": "b374859eec94d139",
-  "slot": "recovery",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 2%\n\nRead\nYou woke with a cleaner reserve than usual, after a slightly better night and no early strain in the system. For muscle gain with fat loss, the day favors measured output and enough protein before any deep deficit forms.\n\nSteady reserve.\n\nPerformance: Steady reserve.\n\nTransit: none",
+  "generated_at": "2026-06-08T08:48:47-05:00",
+  "data_hash": "45cde82ffc0fb3e8",
+  "slot": "macros-update",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nThe first food entry opens the day\u2019s intake, but protein is only beginning to register while output remains much lighter than usual. With strong overnight capacity in the background, the day favors a gradual catch-up that preserves muscle rather than a deep deficit.\n\nEarly runway.\n\nPerformance: Early runway.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 2%\n\nRead\nYou woke with a cleaner reserve than usual, after a slightly better night and no early strain in the system. For muscle gain with fat loss, the day favors measured output and enough protein before any deep deficit forms.\n\nSteady reserve."
+      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nThe first food entry opens the day\u2019s intake, but protein is only beginning to register while output remains much lighter than usual. With strong overnight capacity in the background, the day favors a gradual catch-up that preserves muscle rather than a deep deficit.\n\nEarly runway."
     },
     {
       "label": "Performance",
-      "text": "Steady reserve."
+      "text": "Early runway."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 2%\n\nRead\nYou woke with a cleaner reserve than usual, after a slightly better night and no early strain in the system. For muscle gain with fat loss, the day favors measured output and enough protein before any deep deficit forms.\n\nSteady reserve.",
-    "performance": "Steady reserve.",
+    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nThe first food entry opens the day\u2019s intake, but protein is only beginning to register while output remains much lighter than usual. With strong overnight capacity in the background, the day favors a gradual catch-up that preserves muscle rather than a deep deficit.\n\nEarly runway.",
+    "performance": "Early runway.",
     "transit": null
   },
-  "nutrition_nudge": "On pace this morning; start breakfast with 35g protein and keep meals steady.",
+  "nutrition_nudge": "On pace so far \u2014 make breakfast protein-forward and keep meals steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
     "sleep_hours": 6.2,
     "hrv_today": 65,
     "hrv_7d_avg": 64.7,
-    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
-    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "14 steps so far, 0m active, 461 calories burned, \u2014 training load"
+    "nutrition": "calories 250 of 2574 goal, protein 4g of 138g goal, carbs 32g of 290g goal, fat 12g of 72g goal",
+    "nutrition_detail": "calories 250 of 2574 goal -> 2324 left; protein 4g of 138g goal -> 134g gap; carbs 32g of 290g goal; fat 12g of 72g goal",
+    "activity_today": "118 steps so far, 18m active, 521 calories burned, \u2014 training load"
   }
 }
