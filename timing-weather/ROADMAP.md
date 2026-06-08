@@ -201,6 +201,39 @@ order reflects Alfie's "traditional first" preference. Moon Now footer
 moves into Vedic section. Cross-contamination guardrails preserved
 (programmatic scan).
 
+## v3.0 — Ambient Intelligence OS (in progress, 2026-06-09)
+
+Spec locked in `SPEC_V3.md` (2026-06-08). Transforms the dashboard from
+Report Viewer → Ambient Intelligence OS. Built in 4 chunks; each reviewed
+before the next.
+
+### Chunk 1 — Engine: Consensus + Snapshots ✅ (2026-06-08)
+Engine-only, additive, no UI. Adds three derived fields to `state.json`:
+
+- ✅ **`consensus`** — Modern-vs-Traditional state comparison: `modernState`,
+  `traditionalState`, `agreementPct`, `status` (agreement ≥85 / partial 50–84 /
+  disagreement <50), and a Codex-authored `primaryAction` synthesis sentence.
+  Vedic excluded from Home per Decision 1. Pure-derived pct/status (semantic
+  state-family map); null if both readings null.
+- ✅ **`snapshots.modern` + `snapshots.traditional`** — compact 5-field summaries
+  (`theme`, `driver`, `opportunity`, `pressure`, `action`). theme/opportunity/
+  pressure pure-derived (state label + numeric thresholds: 0-25 Low / 25-50
+  Moderate / 50-75 High / 75-100 Critical); driver + action from ONE Codex pass
+  per snapshot over the reading body. Per-system vocabulary isolation (no
+  cross-contamination).
+- ✅ **Quarter + Year drawer stubs** — `tropicalQuarter`, `traditionalQuarter`,
+  `tropicalYear`, `traditionalYear` emit `null` (Coming Soon, activate v3.1 per
+  Decision 2).
+
+Codex passes per run: 6 → 9 (6 existing + 2 snapshots + 1 primaryAction).
+All existing readings/monthlies/moonNow fields preserved unchanged. POP + PVR
+compliant (Codex failure → that field null, run unaffected). No UI / no
+version.json bump (chunks 2–4 follow).
+
+### Chunk 2 — index.html structure (pending)
+### Chunk 3 — CSS rebuild for Ambient Intelligence aesthetic (pending)
+### Chunk 4 — render.js wiring + drawer interactions (pending)
+
 ## v1.3 — Metric Breakdowns (deferred)
 
 - Opportunity breakdown by life domain (career / money / relationships / home)

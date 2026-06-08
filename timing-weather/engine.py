@@ -1655,6 +1655,208 @@ def codex_todays_insight(forecast, dominant, daily_changes, phase):
         return None
 
 
+# --- v3.0: Consensus + Snapshots derivation (Home Screen) ----------------
+# Per SPEC_V3.md: Home consumes Modern + Traditional + Consensus only (Vedic
+# hidden from home, Decision 1). These are ADDITIVE — existing readings/monthlies/
+# moonNow are untouched. PVR strict: any Codex failure -> that derived field null,
+# never fabricated; the rest of the run is unaffected.
+
+# Qualitative metric label from a 0-100 numeric. Thresholds per SPEC_V3 chunk 1:
+# 0-25 Low, 25-50 Moderate, 50-75 High, 75-100 Critical (lower bound inclusive).
+def qual_label(v):
+    if not isinstance(v, (int, float)):
+        return None
+    if v < 25:
+        return "Low"
+    if v < 50:
+        return "Moderate"
+    if v < 75:
+        return "High"
+    return "Critical"
+
+
+# Semantic family of a reading STATE label, for Modern-vs-Traditional comparison.
+# Codex emits free-text state labels; we bucket them so adjacency/opposition is
+# robust to wording. Unknown labels -> None (treated as "can't assert").
+_STATE_FAMILY = {
+    # growth / openness
+    "expansion": "growth", "growth": "growth", "activation": "growth",
+    "opportunity": "growth", "momentum": "growth", "attraction": "growth",
+    "ascent": "growth", "opening": "growth", "flow": "growth",
+    # restraint / structure
+    "consolidation": "restraint", "preparation": "restraint",
+    "contraction": "restraint", "foundation": "restraint",
+    "restraint": "restraint", "caution": "restraint", "formalize": "restraint",
+    "pressure": "restraint", "constraint": "restraint",
+    # deep change / flux
+    "transformation": "flux", "transition": "flux", "pivot": "flux",
+    "disruption": "flux", "restructuring": "flux", "change": "flux",
+}
+# Families that directly oppose each other.
+_OPPOSING_FAMILIES = {frozenset({"growth", "restraint"})}
+
+
+def _state_family(label):
+    if not label:
+        return None
+    return _STATE_FAMILY.get(label.strip().lower())
+
+
+def compute_consensus(tropical, traditional):
+    """Derive the Modern-vs-Traditional consensus block from the two daily readings.
+    Returns the consensus dict (primaryAction left None for compute_primary_action to
+    fill), or None if BOTH readings are null. Vedic is intentionally excluded
+    (Decision 1). agreementPct/status are pure-derived; no Codex here."""
+    m_state = tropical.get("state") if tropical else None
+    t_state = traditional.get("state") if traditional else None
+    if not m_state and not t_state:
+        return None
+    # If only one side exists we cannot truly compare -> partial, conservative pct.
+    if not m_state or not t_state:
+        return {
+            "modernState": m_state,
+            "traditionalState": t_state,
+            "agreementPct": 50,
+            "status": "partial",
+            "primaryAction": None,
+        }
+    same = m_state.strip().lower() == t_state.strip().lower()
+    mf, tf = _state_family(m_state), _state_family(t_state)
+    if same:
+        pct, status = 92, "agreement"
+    elif mf and tf and frozenset({mf, tf}) in _OPPOSING_FAMILIES:
+        pct, status = 30, "disagreement"
+    elif mf and tf and mf == tf:
+        pct, status = 72, "partial"
+    else:
+        # one/both unfamiliar, or non-opposing different families -> mild partial
+        pct, status = 60, "partial"
+    return {
+        "modernState": m_state,
+        "traditionalState": t_state,
+        "agreementPct": pct,
+        "status": status,
+        "primaryAction": None,
+    }
+
+
+# Per-system extraction config for snapshots (vocabulary isolation, no cross-contam).
+_SNAPSHOT_SYSTEMS = {
+    "modern": {
+        "name": "Modern Western (psychological transit) astrology",
+        "driver_desc": ("the single dominant planet driving this reading "
+                        "(e.g. Mercury, Jupiter, Saturn)"),
+        "forbid": ("Vedic terms (nakshatra, dasha, antardasha, pratyantar, "
+                   "Sade Sati, lord of the month/year, profection, whole-sign)"),
+    },
+    "traditional": {
+        "name": "Traditional Hellenistic (whole-sign profection) astrology",
+        "driver_desc": ("the dominant lord/planet of the period as named in the "
+                        "reading (e.g. Mercury, or a Moon-Venus-Jupiter chain)"),
+        "forbid": ("Vedic terms (nakshatra, dasha, antardasha, pratyantar, "
+                   "Sade Sati, Vimshottari, sidereal)"),
+    },
+}
+
+
+def extract_snapshot(reading, system_name, opp, pre):
+    """Compact 5-field Home snapshot for ONE system, extracted from its full daily
+    reading. theme/opportunity/pressure are pure-derived (reading state + numeric
+    thresholds); driver + action come from ONE Codex pass over the reading body.
+    Returns the 5-field dict, or None if the reading itself is null. On Codex
+    failure, driver/action are null but the deterministic fields still ship (PVR)."""
+    if not reading or not reading.get("body"):
+        return None
+    cfg = _SNAPSHOT_SYSTEMS[system_name]
+    snap = {
+        "theme": reading.get("state"),
+        "driver": None,
+        "opportunity": qual_label(opp),
+        "pressure": qual_label(pre),
+        "action": None,
+    }
+    llm = os.path.expanduser("~/bin/llm")
+    if not os.path.exists(llm):
+        log(f"  ~/bin/llm not found — {system_name} snapshot driver/action null")
+        return snap
+    prompt = (
+        f"You are extracting a compact summary from a {cfg['name']} reading. "
+        f"Read the passage and return TWO things ONLY:\n"
+        f"1. DRIVER: {cfg['driver_desc']} — name it exactly as the passage frames it. "
+        f"Do NOT use {cfg['forbid']}.\n"
+        "2. ACTION: a 2-4 word imperative phrase capturing the single recommended "
+        "move (e.g. 'Build leverage', 'Prepare quietly', 'Formalize agreements').\n\n"
+        "Reading:\n" + reading["body"] + "\n\n"
+        "Output EXACTLY this shape and nothing else:\n"
+        "DRIVER: <planet or lord-chain>\n"
+        "ACTION: <2-4 word imperative>"
+    )
+    try:
+        out = subprocess.run([llm, "--lane", "reasoning", "--model", "codex", prompt],
+                             capture_output=True, text=True, timeout=180, cwd=DASH)
+        if out.returncode != 0:
+            log(f"  codex {system_name} snapshot exited {out.returncode}: "
+                f"{out.stderr.strip()[:200]}")
+            return snap
+    except Exception as e:
+        log(f"  codex {system_name} snapshot failed (non-fatal): {e}")
+        return snap
+    raw = out.stdout
+    dm = re.search(r"(?im)^\s*DRIVER:\s*(.+?)\s*$", raw)
+    am = re.search(r"(?im)^\s*ACTION:\s*(.+?)\s*$", raw)
+    if dm:
+        snap["driver"] = dm.group(1).strip().strip(".").strip() or None
+    if am:
+        snap["action"] = am.group(1).strip().strip(".").strip() or None
+    return snap
+
+
+def compute_primary_action(consensus, snapshots):
+    """ONE Codex pass: synthesize Modern + Traditional into a SINGLE actionable
+    direction sentence for the Consensus block. Returns the sentence, or None if
+    consensus is null (both readings null) or Codex fails (PVR: no fabrication)."""
+    if not consensus:
+        return None
+    llm = os.path.expanduser("~/bin/llm")
+    if not os.path.exists(llm):
+        log("  ~/bin/llm not found — primaryAction null")
+        return None
+    m = snapshots.get("modern") or {}
+    t = snapshots.get("traditional") or {}
+    parts = []
+    if m.get("theme") or m.get("action"):
+        parts.append(f"Modern system: theme {m.get('theme')}, suggested move "
+                     f"'{m.get('action')}'.")
+    if t.get("theme") or t.get("action"):
+        parts.append(f"Traditional system: theme {t.get('theme')}, suggested move "
+                     f"'{t.get('action')}'.")
+    status = consensus.get("status")
+    prompt = (
+        "You advise a high-output operator. Two independent timing systems have read "
+        "the current period; synthesize them into ONE actionable direction. Output "
+        "EXACTLY one short sentence, imperative voice, concrete and decisive. NO "
+        "astrology jargon — NO planet/sign/lord names, NO 'energy', NO hedging, no "
+        "hype.\n\n"
+        f"System agreement level: {status}.\n"
+        + " ".join(parts) + "\n\n"
+        "Output ONLY the one sentence, nothing else."
+    )
+    try:
+        out = subprocess.run([llm, "--lane", "reasoning", "--model", "codex", prompt],
+                             capture_output=True, text=True, timeout=180, cwd=DASH)
+        if out.returncode != 0:
+            log(f"  codex primaryAction exited {out.returncode}: "
+                f"{out.stderr.strip()[:200]}")
+            return None
+        text = re.sub(r"\s+", " ", out.stdout).strip()
+        sentences = re.split(r"(?<=[.!?])\s+", text)
+        text = (sentences[0] if sentences else text).strip()
+        return text or None
+    except Exception as e:
+        log(f"  codex primaryAction failed (non-fatal): {e}")
+        return None
+
+
 # --- main ----------------------------------------------------------------
 def compute(now=None, with_codex=True):
     now = now or datetime.now().astimezone()
@@ -1786,6 +1988,17 @@ def compute(now=None, with_codex=True):
         vedic_monthly = {"state": vms, "body": vmb} if vmb else None
         todays_insight = codex_todays_insight(forecast, dominant, daily_changes, phase_name)
 
+    # --- v3.0 Home: Consensus + Snapshots (additive; Vedic excluded per Decision 1)
+    # Derived AFTER the readings exist. PVR: null-graceful at every step.
+    consensus = None
+    snapshots = {"modern": None, "traditional": None}
+    if with_codex:
+        consensus = compute_consensus(tropical_reading, traditional_reading)
+        snapshots["modern"] = extract_snapshot(tropical_reading, "modern", opp, pre)
+        snapshots["traditional"] = extract_snapshot(traditional_reading, "traditional", opp, pre)
+        if consensus is not None:
+            consensus["primaryAction"] = compute_primary_action(consensus, snapshots)
+
     sources = [NATAL_MD, TROPICAL_MD, VEDIC_MD, COUNCIL_MD]
 
     state = {
@@ -1825,6 +2038,14 @@ def compute(now=None, with_codex=True):
         "tropicalMonthly": tropical_monthly,         # Modern — Sun-sign transit month
         "traditionalMonthly": traditional_monthly,   # Traditional — profection month
         "vedicMonthly": vedic_monthly,               # Vedic — Vimshottari sub-period + nakshatra cycle
+        # --- v3.0 Home Screen: Consensus + Snapshots (additive; Vedic excluded) ---
+        "consensus": consensus,                      # Modern-vs-Traditional agreement or null
+        "snapshots": snapshots,                      # {modern, traditional} compact 5-field summaries
+        # --- v3.0 drawer stubs (null now; populated in v3.1 per Decision 2) ---
+        "tropicalQuarter": None,
+        "traditionalQuarter": None,
+        "tropicalYear": None,
+        "traditionalYear": None,
         "dailyReading": None,                        # DEPRECATED — split into the three above
         # --- Section 9: What Changed (null on first day) ---
         "dailyChanges": daily_changes,
