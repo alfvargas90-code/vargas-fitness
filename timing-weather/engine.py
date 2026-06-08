@@ -125,6 +125,25 @@ PROFECTION_FLIP = date(2026, 8, 30)
 LORD_BEFORE_FLIP = "jupiter"
 LORD_AFTER_FLIP = "saturn"
 
+# --- Traditional / Hellenistic whole-sign profection facts (v2.2.3) ------
+# Seven classical planets only. Domicile rulerships + exaltations drive the
+# lord-of-year / lord-of-month time-lord logic and essential-dignity reads.
+# (No modern rulers — Uranus/Neptune/Pluto are excluded from this framework.)
+TRADITIONAL_RULERS = {
+    "Aries": "Mars", "Taurus": "Venus", "Gemini": "Mercury", "Cancer": "Moon",
+    "Leo": "Sun", "Virgo": "Mercury", "Libra": "Venus", "Scorpio": "Mars",
+    "Sagittarius": "Jupiter", "Capricorn": "Saturn", "Aquarius": "Saturn",
+    "Pisces": "Jupiter",
+}
+EXALTATION = {  # planet -> sign of exaltation (detriment/fall derive from the opposite sign)
+    "Sun": "Aries", "Moon": "Taurus", "Mercury": "Virgo", "Venus": "Pisces",
+    "Mars": "Capricorn", "Jupiter": "Cancer", "Saturn": "Libra",
+}
+ASC_SIGN = "Capricorn"          # 8°21' Capricorn = 1st whole-sign house (natal_context western.ascendant)
+BIRTH_MONTH_DAY = (8, 30)       # solar return / birthday — anchors the monthly profection rotation
+CHART_SECT = "diurnal"          # natal Sun above the horizon (8th house) → day chart
+CLASSICAL_TRANSITS = ["sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn"]
+
 # Sade Sati Small Panoti active window (natal_context.md vedic.sade_sati).
 SADE_SATI = (date(2025, 3, 30), date(2027, 6, 2))
 
@@ -249,6 +268,12 @@ def log(msg):
 
 def cap(s):
     return (s[:1].upper() + s[1:]) if s else None
+
+
+def ordinal(n):
+    """1 -> '1st', 2 -> '2nd', 12 -> '12th'. Used for whole-sign house labels."""
+    suffix = "th" if 11 <= (n % 100) <= 13 else {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return f"{n}{suffix}"
 
 
 # --- natal parse ---------------------------------------------------------
@@ -1219,6 +1244,104 @@ def vedic_context_block():
     return "\n\n".join(parts)
 
 
+# --- Traditional (Hellenistic whole-sign) profection layer (v2.2.3) ------
+# A THIRD reading framework: same tropical zodiac as the Modern pass, but read
+# through traditional time-lord technique (annual + monthly profection) rather
+# than modern psychological transit framing. Runs as its own isolated Codex pass
+# with its own context window — no blending with Modern or Vedic.
+
+def essential_dignity(planet, sign):
+    """Traditional essential dignity of `planet` in `sign`: any of domicile /
+    exaltation / detriment / fall (seven classical planets only). Returns a list
+    (usually 0-2 labels); empty means peregrine (no essential dignity)."""
+    labels = []
+    opp = SIGNS[(SIGNS.index(sign) + 6) % 12]
+    if TRADITIONAL_RULERS.get(sign) == planet:
+        labels.append("domicile")
+    if EXALTATION.get(planet) == sign:
+        labels.append("exaltation")
+    if TRADITIONAL_RULERS.get(opp) == planet:
+        labels.append("detriment")
+    if EXALTATION.get(planet) == opp:
+        labels.append("fall")
+    return labels
+
+
+def traditional_profection(today, natal, aspects):
+    """Compute Alfie's current annual + monthly profection (Hellenistic whole-sign)
+    and the condition of the lord of the month by classical transit. Returns a list
+    of factor strings for the Traditional Codex pass. Pure structure, fully derived
+    (PVR: never fabricated) — annual house = age % 12 + 1 from the Ascendant; the
+    month rotates one whole sign per 1/12 of the profection year from the birthday."""
+    asc_i = SIGNS.index(ASC_SIGN)
+    by = today.year if (today.month, today.day) >= BIRTH_MONTH_DAY else today.year - 1
+    last_bd = date(by, *BIRTH_MONTH_DAY)
+    age = by - 1990
+    annual_house = age % 12 + 1
+    annual_sign = SIGNS[(asc_i + annual_house - 1) % 12]
+    lord_year = TRADITIONAL_RULERS[annual_sign]
+    year_len = (date(by + 1, *BIRTH_MONTH_DAY) - last_bd).days
+    month_index = min(12, int((today - last_bd).days // (year_len / 12)) + 1)
+    month_house = ((annual_house - 1) + (month_index - 1)) % 12 + 1
+    month_sign = SIGNS[(asc_i + month_house - 1) % 12]
+    lord_month = TRADITIONAL_RULERS[month_sign]
+
+    factors = [
+        f"This is a {CHART_SECT} (day) chart, so Jupiter is the in-sect benefic "
+        "(its help amplified) and Mars the out-of-sect malefic (its friction amplified)",
+        f"Lord of the year: {lord_year} — annual profection to the {ordinal(annual_house)} "
+        f"whole-sign house ({annual_sign})",
+        f"Lord of the month: {lord_month} — month {month_index} of 12 since the {by} solar "
+        f"return; monthly profection to the {ordinal(month_house)} whole-sign house ({month_sign})",
+    ]
+    lord_lc = lord_month.lower()
+    if lord_lc in natal:
+        nat_sign = sign_of(natal[lord_lc])
+        dign = essential_dignity(lord_month, nat_sign)
+        dign_txt = (" — " + " and ".join(dign)) if dign else " (peregrine, no essential dignity)"
+        factors.append(f"The lord of the month {lord_month} is natally in {nat_sign}{dign_txt}")
+        hits = sorted([a for a in aspects
+                       if a["natal"] == lord_lc and a["transit"] in CLASSICAL_TRANSITS],
+                      key=lambda a: a["orb"])
+        for a in hits[:2]:
+            tone = "hard / stressful" if a["aspect"] in HARD else "soft / supportive"
+            factors.append(f"{cap(a['transit'])} {a['aspect']} the lord of the month "
+                           f"({a['orb']}° — {tone})")
+        if not hits:
+            factors.append(f"No close classical transit to {lord_month} right now — the lord "
+                           "of the month is quiet by transit")
+    return factors
+
+
+def traditional_context_block():
+    """Traditional/Hellenistic-ONLY narrative context: natal chart + the Tropical
+    dashboard's Annual Profection section + an inline whole-sign methodology note.
+    Frames lord-of-year / lord-of-month / time-lord / essential-dignity vocabulary on
+    the tropical zodiac. Returns '' if nothing readable (graceful degrade)."""
+    natal = read_md(NATAL_MD, cap_chars=4000)
+    dash = load_astrology_dashboards().get("tropical_dashboard", "")
+    methodology = (
+        "--- HELLENISTIC WHOLE-SIGN METHODOLOGY (your framework) ---\n"
+        "Read with traditional whole-sign houses and the SEVEN CLASSICAL PLANETS ONLY "
+        "(Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn). The Ascendant sign is the 1st "
+        "whole-sign house. Annual profection: profected house = (age mod 12) + 1, counted from "
+        "the Ascendant as the 1st; that sign's domicile ruler is the LORD OF THE YEAR (the "
+        "year's time-lord). Monthly profection rotates one whole sign per month from the year's "
+        "profected house, starting on the solar return (birthday, Aug 30); that sign's ruler is "
+        "the LORD OF THE MONTH. Judge a time-lord by its natal essential dignity (domicile / "
+        "exaltation / detriment / fall) and by current transits from the classical planets only "
+        "— never from Uranus, Neptune, or Pluto, and never with modern psychological language."
+    )
+    parts = [methodology]
+    if natal:
+        parts.append("--- NATAL CHART (tropical longitudes; Ascendant 8° Capricorn, day chart) ---\n"
+                     + natal)
+    if dash:
+        parts.append("--- TROPICAL DASHBOARD — 2026 ANNUAL PROFECTION (12th-house Sagittarius year, "
+                     "Jupiter-ruled; a foundation/preparation year, not a coronation) ---\n" + dash)
+    return "\n\n".join(parts)
+
+
 # Per-system framing vocabulary + the cross-contamination guardrail (each system
 # names ONLY its own tradition's terms, never the other's).
 _READING_SYSTEMS = {
@@ -1230,6 +1353,18 @@ _READING_SYSTEMS = {
                 "2nd-House North Node self-valuation arc, and natal aspects."),
         "forbid": ("Mahadasha, antardasha, dasha, Vimshottari, nakshatra, pada, Lagna, "
                    "Sade Sati, Panoti, or 'External Manifestation Windows'"),
+    },
+    "traditional": {
+        "name": "TROPICAL · TRADITIONAL (Hellenistic)",
+        "use": ("traditional / Hellenistic whole-sign vocabulary naturally — the lord of the "
+                "year and the lord of the month (time-lords), the profected house, essential "
+                "dignity (domicile / exaltation / detriment / fall), sect (this is a day chart), "
+                "and the seven classical planets. NAME the month's profected house and its lord, "
+                "say whether that lord is well-placed or under stress by current transit, and "
+                "translate to plain English — what to lean into and what to watch THIS month."),
+        "forbid": ("Pluto, Neptune, Uranus, 'structural leverage', 'self-valuation', modern "
+                   "psychological framing, Mahadasha, antardasha, dasha, Vimshottari, nakshatra, "
+                   "pada, Lagna, Sade Sati, or Panoti"),
     },
     "vedic": {
         "name": "VEDIC (sidereal)",
@@ -1274,7 +1409,7 @@ def codex_reading(system, forecast, factors, moon_desc, context_block, mood, sna
                        + context_block + "\n=== END CONTEXT ===") if context_block else ""
     prompt = (
         f"You are writing the {cfg['name']} sub-reading for a personal astrology dashboard. "
-        f"This card has two clearly-labeled sub-sections; you write ONLY the {cfg['name']} one. "
+        f"This card has three clearly-labeled sub-sections; you write ONLY the {cfg['name']} one. "
         f"USE {cfg['use']} "
         f"Speak ONLY in the {cfg['name']} framework — do NOT use the OTHER tradition's terms "
         f"(no {cfg['forbid']}). "
@@ -1433,6 +1568,7 @@ def compute(now=None, with_codex=True):
     # --- Codex layers: Recommended Actions, Daily Reading, Today's Insight
     recommendations, avoidances = ([], [])
     tropical_reading = None
+    traditional_reading = None
     vedic_reading = None
     todays_insight = None
     if with_codex:
@@ -1457,12 +1593,17 @@ def compute(now=None, with_codex=True):
                 ved_moon_desc = (f"Sidereal Moon in {vl.get('sign')} {vl.get('degree')}°, "
                                  f"nakshatra {vl.get('nakshatra')} pada {vl.get('nakshatra_pada')}, "
                                  f"house {vl.get('house')}")
-        # Two independent passes — each sees ONLY its framework's MD context.
+        # Three independent passes — each sees ONLY its framework's MD context (no
+        # blending). v2.2.3 adds the Traditional/Hellenistic pass between the two.
+        trad_factors = traditional_profection(today, natal, aspects)
         ts, tb = codex_reading("tropical", forecast, trop_factors, trop_moon_desc,
                                tropical_context_block(), reading_mood, snap)
+        trs, trb = codex_reading("traditional", forecast, trad_factors, "",
+                                 traditional_context_block(), reading_mood)
         vs, vb = codex_reading("vedic", forecast, ved_factors, ved_moon_desc,
                                vedic_context_block(), reading_mood)
         tropical_reading = {"state": ts, "body": tb} if tb else None
+        traditional_reading = {"state": trs, "body": trb} if trb else None
         vedic_reading = {"state": vs, "body": vb} if vb else None
         todays_insight = codex_todays_insight(forecast, dominant, daily_changes, phase_name)
 
@@ -1497,10 +1638,11 @@ def compute(now=None, with_codex=True):
         "momentum": mom,
         # --- Moon Now (live Moon position, both systems; null on ephemeris failure) ---
         "moonNow": moon,
-        # --- Section 8: Daily Reading (v2.2.2 split: two independent sub-readings) ---
-        "tropicalReading": tropical_reading,   # {state, body} or null (Codex pass failed)
-        "vedicReading": vedic_reading,         # {state, body} or null (Codex pass failed)
-        "dailyReading": None,                  # DEPRECATED — split into the two above
+        # --- Section 8: Daily Reading (v2.2.3 split: three independent sub-readings) ---
+        "tropicalReading": tropical_reading,         # Modern Western — {state, body} or null
+        "traditionalReading": traditional_reading,   # Hellenistic whole-sign — {state, body} or null
+        "vedicReading": vedic_reading,               # sidereal Vedic — {state, body} or null
+        "dailyReading": None,                        # DEPRECATED — split into the three above
         # --- Section 9: What Changed (null on first day) ---
         "dailyChanges": daily_changes,
         # --- Section 10: Today's Insight ---
@@ -1565,6 +1707,7 @@ def main():
         f"conf={state['confidence']}, dur={state['durationDays']}d, phase={state['currentPhase']}, "
         f"changes={'tracking-begins' if dc is None else 'computed'}, "
         f"reading=trop:{'yes' if state['tropicalReading'] else 'null'}/"
+        f"trad:{'yes' if state['traditionalReading'] else 'null'}/"
         f"ved:{'yes' if state['vedicReading'] else 'null'}, "
         f"insight={'yes' if state['todaysInsight'] else 'null'}, "
         f"next={nw['title'] if nw else None}) -> {out_path}")

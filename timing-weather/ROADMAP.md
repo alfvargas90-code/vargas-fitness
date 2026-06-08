@@ -177,6 +177,16 @@ state.json fields `tropicalReading.{state,body}` and
 `vedicReading.{state,body}`. Old `dailyReading` deprecated. Moon Now line
 stays as shared footer (already spans both systems).
 
+## v2.2.3 — Whole-Sign Traditional reading ✅ SHIPPED (2026-06-08)
+
+Daily Reading card adds a third sub-section between Tropical Modern and
+Vedic: TROPICAL · TRADITIONAL. Hellenistic whole-sign framework with
+annual + monthly profection focus. Engine runs THREE Codex passes per run
+now (Modern / Traditional / Vedic), each on its own MD context — no
+blending. New `traditionalReading.{state, body}` field. Two dividers
+between subs, each toggling independently based on adjacent-sub presence.
+Moon Now footer unchanged.
+
 ## v1.3 — Metric Breakdowns (deferred)
 
 - Opportunity breakdown by life domain (career / money / relationships / home)

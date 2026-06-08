@@ -90,17 +90,17 @@
   "opportunity": 29,
   "pressure": 85,
   "volatility": 78,
-  "momentum": 40,
+  "momentum": 48,
   "moonNow": {
-    "timestamp": "2026-06-08T12:45:35Z",
+    "timestamp": "2026-06-08T14:42:23Z",
     "tropical": {
       "sign": "Pisces",
-      "degree": 19.13,
+      "degree": 20.18,
       "house": 2
     },
     "vedic": {
       "sign": "Aquarius",
-      "degree": 24.9,
+      "degree": 25.96,
       "nakshatra": "Purva Bhadrapada",
       "nakshatra_pada": 2,
       "house": 3
@@ -108,32 +108,36 @@
   },
   "tropicalReading": {
     "state": "Expansion",
-    "body": "With Capricorn Rising in a 12th-House annual profection, this is expansion through foundation work: quiet leverage, cleaner documents, and relationships that can carry weight later. Neptune square your natal Moon adds emotional fog and pressure beneath the surface, while Mercury opposing your Ascendant can make feedback feel personal. Still, Mercury sextile your Virgo Sun supports precise language and strategic repair. This is a valuation cycle, not destiny cycle: build structural leverage around the 2nd-House North Node self-valuation arc, then formalize when the ground is steadier."
+    "body": "With Capricorn Rising in a 12th-House annual profection, this is expansion through preparation: quiet cleanup, relationship-building, and documents that create structural leverage. This is a valuation cycle, not destiny cycle, with Pluto and the 2nd-House North Node pressing your self-valuation arc. Neptune square natal Moon raises emotional fog, while Mercury opposite your Ascendant can strain dialogue; Mercury sextile your Sun helps you clarify terms. The Pisces Moon in your 2nd House supports naming value carefully."
+  },
+  "traditionalReading": {
+    "state": "Expansion",
+    "body": "In this day chart, Jupiter is the in-sect benefic and lord of the year, guiding a 12th whole-sign Sagittarius year of preparation behind the scenes. This month profects to the 9th whole-sign house, Virgo, making Mercury lord of the month; natally Mercury is very strong in Virgo, in domicile and exaltation. Venus supports Mercury by sextile, opening help through allies and agreements, while the Moon’s opposition brings pressure, distraction, or changing needs. Lean into study, documents, counsel, and careful outreach; watch haste and overextension."
   },
   "vedicReading": {
     "state": "Expansion",
-    "body": "From Sagittarius Lagna, the Vimshottari chain of Moon Mahadasha, Venus antardasha, and Jupiter sub-period supports relationship, value, and opportunity-building, but Sade Sati / Small Panoti keeps the background heavy. With transit Moon in Purva Bhadrapada in the 3rd, use this as a preparation phase: write, speak, document, and open doors. Sidereal Mercury opposite natal Moon and Neptune square Lagna ask for precision; build leverage now, with the External Manifestation Windows strongest Aug 12 – Sep 5 2026."
+    "body": "Moon Mahadasha with Venus antardasha keeps relationship, value, and support channels open, and the Moon–Venus–Jupiter Vimshottari chain favors quiet leverage through people, documents, and resources. Yet Sade Sati / Small Panoti, Mercury opposing your natal Moon, and Neptune squaring Sagittarius Lagna make the ground pressured and unclear. With transit Moon in Purva Bhadrapada in the 3rd, build conversations now; the strongest External Manifestation Window is Aug 12 – Sep 5 2026."
   },
   "dailyReading": null,
   "dailyChanges": {
-    "momentum": 1,
+    "momentum": 9,
     "opportunity": 1,
     "pressure": 0,
     "volatility": 0,
     "comparedTo": "2026-06-07",
-    "lastComparedAt": "2026-06-08T07:45:35-05:00"
+    "lastComparedAt": "2026-06-08T09:42:23-05:00"
   },
-  "todaysInsight": "Build leverage and widen the pipeline. Price your contribution before you lock terms.",
+  "todaysInsight": "Build the pipeline and price your work higher. Keep commitments provisional until the terms match the value.",
   "recommendations": [
     "Build pipeline",
-    "Price contribution",
-    "Secure property milestones",
-    "Schedule authority conversations"
+    "Price contributions",
+    "Prepare property",
+    "Document ownership"
   ],
   "avoidances": [
-    "Irreversible commitments",
-    "Fantasy timelines",
-    "Salary dependency"
+    "Final commitments",
+    "Salary dependence",
+    "Romance fixation"
   ],
   "drivers": [
     {
@@ -214,7 +218,7 @@
     }
   ],
   "trendDirection": "Stable",
-  "updatedAt": "2026-06-08T07:45:35-05:00",
+  "updatedAt": "2026-06-08T09:42:23-05:00",
   "sourceMode": "static",
   "currentDate": "2026-06-08",
   "sources": [
@@ -225,11 +229,11 @@
   ],
   "scoringDetail": {
     "dominanceScores": {
-      "jupiter": 10.2,
-      "saturn": 7.24,
+      "jupiter": 10.19,
+      "saturn": 7.23,
       "pluto": 6.86,
-      "uranus": 6.91,
-      "venus": 4.26
+      "uranus": 6.92,
+      "venus": 4.18
     },
     "corroboration": "High",
     "lordOfYear": "jupiter",
@@ -243,32 +247,32 @@
         "Vedic Moon–Venus antardasha (relationship-positive)"
       ],
       "pressure": [
-        "Mars square natal venus (5.48°)",
-        "Saturn square natal neptune (0.91°)",
+        "Mars square natal venus (5.42°)",
+        "Saturn square natal neptune (0.92°)",
         "Saturn square natal asc (4.5°)",
         "Sade Sati (Small Panoti) — pressure on foundations",
         "inside admin/clearing window: Late May–early June clearing"
       ],
       "volatility": [
-        "Uranus square natal sun (4.74°)",
+        "Uranus square natal sun (4.73°)",
         "Uranus conjunction natal mars (2.8°)",
         "Uranus sextile natal jupiter (0.1°)",
-        "Uranus trine natal north_node (4.49°)",
+        "Uranus trine natal north_node (4.48°)",
         "pluto square natal mc (angular, 1.37°)"
       ],
       "momentum": [
-        "4 fast transit(s) exact within 3°",
+        "5 fast transit(s) exact within 3°",
         "approaching Jupiter return — chapter reset (34d)",
         "BaZi Da Yun shift within 99 days"
       ]
     },
     "transitSigns": {
-      "sun": "17.75° Gemini",
-      "moon": "19.13° Pisces",
-      "mercury": "10.74° Cancer",
-      "venus": "24.25° Cancer",
-      "mars": "15.32° Taurus",
-      "jupiter": "25.52° Cancer",
+      "sun": "17.83° Gemini",
+      "moon": "20.18° Pisces",
+      "mercury": "10.85° Cancer",
+      "venus": "24.35° Cancer",
+      "mars": "15.38° Taurus",
+      "jupiter": "25.54° Cancer",
       "saturn": "12.85° Aries",
       "uranus": "2.5° Gemini",
       "neptune": "4.19° Aries",
@@ -276,16 +280,10 @@
     },
     "tightAspects": [
       {
-        "transit": "moon",
-        "natal": "saturn",
-        "aspect": "sextile",
-        "orb": 0.0
-      },
-      {
         "transit": "mars",
         "natal": "pluto",
         "aspect": "opposition",
-        "orb": 0.0
+        "orb": 0.06
       },
       {
         "transit": "uranus",
@@ -297,19 +295,25 @@
         "transit": "saturn",
         "natal": "neptune",
         "aspect": "square",
-        "orb": 0.91
+        "orb": 0.92
+      },
+      {
+        "transit": "moon",
+        "natal": "saturn",
+        "aspect": "sextile",
+        "orb": 1.05
       },
       {
         "transit": "mercury",
         "natal": "neptune",
         "aspect": "opposition",
-        "orb": 1.19
+        "orb": 1.08
       },
       {
         "transit": "neptune",
         "natal": "moon",
         "aspect": "square",
-        "orb": 1.33
+        "orb": 1.32
       },
       {
         "transit": "pluto",
@@ -336,16 +340,16 @@
         "orb": 1.71
       },
       {
+        "transit": "moon",
+        "natal": "mercury",
+        "aspect": "opposition",
+        "orb": 1.98
+      },
+      {
         "transit": "venus",
         "natal": "mercury",
         "aspect": "sextile",
-        "orb": 2.09
-      },
-      {
-        "transit": "mercury",
-        "natal": "asc",
-        "aspect": "opposition",
-        "orb": 2.39
+        "orb": 2.18
       }
     ],
     "transitMissing": [],

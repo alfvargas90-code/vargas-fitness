@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Timing" />
-  <link rel="stylesheet" href="assets/css/timing-weather.css?v=v2.2.0" />
+  <link rel="stylesheet" href="assets/css/timing-weather.css?v=v2.2.3" />
 
   <!-- ── Self-healing cache buster (Layers 1+3) ─────────────────────────────────
        Runs before any other JS. Compares this device's stored version against the
@@ -143,12 +143,20 @@
         <div class="card reading-card">
 
           <div class="reading-sub" id="reading-sub-tropical">
-            <div class="reading-sub-label">TROPICAL</div>
+            <div class="reading-sub-label">TROPICAL · MODERN</div>
             <div class="reading-state" id="tropical-state">—</div>
             <p class="reading-body" id="tropical-body">—</p>
           </div>
 
-          <div class="reading-divider" id="reading-divider" aria-hidden="true"></div>
+          <div class="reading-divider" id="reading-divider-1" aria-hidden="true"></div>
+
+          <div class="reading-sub" id="reading-sub-traditional">
+            <div class="reading-sub-label">TROPICAL · TRADITIONAL</div>
+            <div class="reading-state" id="traditional-state">—</div>
+            <p class="reading-body" id="traditional-body">—</p>
+          </div>
+
+          <div class="reading-divider" id="reading-divider-2" aria-hidden="true"></div>
 
           <div class="reading-sub" id="reading-sub-vedic">
             <div class="reading-sub-label">VEDIC</div>
@@ -244,6 +252,6 @@
     </nav>
   </div>
 
-  <script src="assets/js/timing_weather_render.js?v=v2.2.0"></script>
+  <script src="assets/js/timing_weather_render.js?v=v2.2.3"></script>
 </body>
 </html>

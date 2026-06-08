@@ -121,10 +121,13 @@ function renderNowBar(s) {
   setText('now-next-event', nb.nextEventDays != null ? `${nb.nextEventDays} Days` : null);
 }
 
-/* v2.2.2 — Daily Reading is split into two independent sub-readings (Tropical on
-   top, Vedic below) inside the one card. Each reads its own state.json field and
-   populates its own #<sys>-state / #<sys>-body. PVR: a null field (Codex pass
-   failed) hides that whole sub-section; the divider only shows when BOTH render. */
+/* v2.2.3 — Daily Reading is split into THREE independent sub-readings inside the one
+   card: Tropical·Modern, then Tropical·Traditional (Hellenistic profection), then
+   Vedic. Each reads its own state.json field and populates its own #<sys>-state /
+   #<sys>-body. PVR: a null field (Codex pass failed) hides that whole sub-section.
+   Two dividers toggle independently so an empty middle/edge sub never orphans a rule:
+     divider-1 shows only when BOTH tropical AND traditional render;
+     divider-2 shows only when (tropical OR traditional) AND vedic render. */
 function hasReading(r) { return !!(r && (r.body || r.read || r.state)); }
 
 function applyReadingSub(r, prefix, fallbackState) {
@@ -140,19 +143,29 @@ function applyReadingSub(r, prefix, fallbackState) {
   setText(`${prefix}-body`, r.body || r.read);
 }
 
-function refreshReadingDivider(s) {
-  const d = $('reading-divider');
-  if (d) d.style.display = (hasReading(s.tropicalReading) && hasReading(s.vedicReading)) ? '' : 'none';
+function refreshReadingDividers(s) {
+  const hasTrop = hasReading(s.tropicalReading);
+  const hasTrad = hasReading(s.traditionalReading);
+  const hasVed = hasReading(s.vedicReading);
+  const d1 = $('reading-divider-1');
+  const d2 = $('reading-divider-2');
+  if (d1) d1.style.display = (hasTrop && hasTrad) ? '' : 'none';
+  if (d2) d2.style.display = ((hasTrop || hasTrad) && hasVed) ? '' : 'none';
 }
 
 function renderTropicalReading(s) {
   applyReadingSub(s.tropicalReading, 'tropical', s.forecast);
-  refreshReadingDivider(s);
+  refreshReadingDividers(s);
+}
+
+function renderTraditionalReading(s) {
+  applyReadingSub(s.traditionalReading, 'traditional', s.forecast);
+  refreshReadingDividers(s);
 }
 
 function renderVedicReading(s) {
   applyReadingSub(s.vedicReading, 'vedic', s.forecast);
-  refreshReadingDivider(s);
+  refreshReadingDividers(s);
 }
 
 /* Live Moon position as a compact Daily Reading subtitle.
@@ -326,6 +339,7 @@ function renderAll(s) {
   renderHero(s);
   renderNowBar(s);
   renderTropicalReading(s);
+  renderTraditionalReading(s);
   renderVedicReading(s);
   renderMoonNow(s);
   renderWhatChanged(s);
