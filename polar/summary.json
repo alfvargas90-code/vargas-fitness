@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-08T08:48:47-05:00",
-  "data_hash": "45cde82ffc0fb3e8",
+  "generated_at": "2026-06-08T09:19:31-05:00",
+  "data_hash": "1ce803ea7d634a42",
   "slot": "macros-update",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nThe first food entry opens the day\u2019s intake, but protein is only beginning to register while output remains much lighter than usual. With strong overnight capacity in the background, the day favors a gradual catch-up that preserves muscle rather than a deep deficit.\n\nEarly runway.\n\nPerformance: Early runway.\n\nTransit: none",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nThe new meal moved a light-input morning into sturdier territory: energy room remains open, and protein is finally gaining traction. Recovery looks supportive, while output is still quiet for you, so the day favors steady muscle protection over intensity.\n\nSteady foundation.\n\nPerformance: Steady foundation.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nThe first food entry opens the day\u2019s intake, but protein is only beginning to register while output remains much lighter than usual. With strong overnight capacity in the background, the day favors a gradual catch-up that preserves muscle rather than a deep deficit.\n\nEarly runway."
+      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nThe new meal moved a light-input morning into sturdier territory: energy room remains open, and protein is finally gaining traction. Recovery looks supportive, while output is still quiet for you, so the day favors steady muscle protection over intensity.\n\nSteady foundation."
     },
     {
       "label": "Performance",
-      "text": "Early runway."
+      "text": "Steady foundation."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nThe first food entry opens the day\u2019s intake, but protein is only beginning to register while output remains much lighter than usual. With strong overnight capacity in the background, the day favors a gradual catch-up that preserves muscle rather than a deep deficit.\n\nEarly runway.",
-    "performance": "Early runway.",
+    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nThe new meal moved a light-input morning into sturdier territory: energy room remains open, and protein is finally gaining traction. Recovery looks supportive, while output is still quiet for you, so the day favors steady muscle protection over intensity.\n\nSteady foundation.",
+    "performance": "Steady foundation.",
     "transit": null
   },
-  "nutrition_nudge": "On pace so far \u2014 make breakfast protein-forward and keep meals steady.",
+  "nutrition_nudge": "Stay steady: make lunch protein-forward with 45g and keep portions normal.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
     "sleep_hours": 6.2,
     "hrv_today": 65,
     "hrv_7d_avg": 64.7,
-    "nutrition": "calories 250 of 2574 goal, protein 4g of 138g goal, carbs 32g of 290g goal, fat 12g of 72g goal",
-    "nutrition_detail": "calories 250 of 2574 goal -> 2324 left; protein 4g of 138g goal -> 134g gap; carbs 32g of 290g goal; fat 12g of 72g goal",
+    "nutrition": "calories 1095 of 2574 goal, protein 42g of 138g goal, carbs 114g of 290g goal, fat 54g of 72g goal",
+    "nutrition_detail": "calories 1095 of 2574 goal -> 1479 left; protein 42g of 138g goal -> 96g gap; carbs 114g of 290g goal; fat 54g of 72g goal",
     "activity_today": "118 steps so far, 18m active, 521 calories burned, \u2014 training load"
   }
 }
