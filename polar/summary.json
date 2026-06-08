@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-08T12:50:45-05:00",
-  "data_hash": "72e953789a198169",
-  "slot": "macros-update",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nThe new meal lifts the day out of a low-input start and reopens a calmer calorie window, but protein is still carrying the main tension. With output still lighter than usual, the day favors muscle preservation and steady accumulation over intensity.\n\nMeasured momentum.\n\nPerformance: Measured momentum.\n\nTransit: none",
+  "generated_at": "2026-06-08T15:00:00-05:00",
+  "data_hash": "97678f1b963e1d84",
+  "slot": "fuel-2",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nRecovery is quietly supportive, and output has run much lighter than your usual day, leaving the system fresh rather than taxed. The midday meal steadied energy, but protein still trails the evening window, so today favors measured strength work and muscle preservation over chasing volume.\n\nQuiet momentum.\n\nPerformance: Quiet momentum.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nThe new meal lifts the day out of a low-input start and reopens a calmer calorie window, but protein is still carrying the main tension. With output still lighter than usual, the day favors muscle preservation and steady accumulation over intensity.\n\nMeasured momentum."
+      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nRecovery is quietly supportive, and output has run much lighter than your usual day, leaving the system fresh rather than taxed. The midday meal steadied energy, but protein still trails the evening window, so today favors measured strength work and muscle preservation over chasing volume.\n\nQuiet momentum."
     },
     {
       "label": "Performance",
-      "text": "Measured momentum."
+      "text": "Quiet momentum."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nThe new meal lifts the day out of a low-input start and reopens a calmer calorie window, but protein is still carrying the main tension. With output still lighter than usual, the day favors muscle preservation and steady accumulation over intensity.\n\nMeasured momentum.",
-    "performance": "Measured momentum.",
+    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nRecovery is quietly supportive, and output has run much lighter than your usual day, leaving the system fresh rather than taxed. The midday meal steadied energy, but protein still trails the evening window, so today favors measured strength work and muscle preservation over chasing volume.\n\nQuiet momentum.",
+    "performance": "Quiet momentum.",
     "transit": null
   },
-  "nutrition_nudge": "Fat budget is spent; keep remaining meals lean and skip added oils.",
+  "nutrition_nudge": "Fat budget is spent; keep remaining meals lean and skip oils, butter, nuts, and cheese.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
