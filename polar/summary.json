@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-07T20:00:06-05:00",
-  "data_hash": "6b600a610ce61914",
-  "slot": "train-2",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe workout window closes on a day that spent a lot of reserve, with movement slightly above normal and recovery steadier than recent patterns. The body can absorb the load, but the large energy and protein gap makes tonight favor restoration and muscle preservation over more strain.\n\nRecovery takes the lead.\n\nPerformance: Recovery takes the lead.\n\nTransit: none",
+  "generated_at": "2026-06-07T20:45:19-05:00",
+  "data_hash": "d5faa6e62069f6cd",
+  "slot": "macros-update",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe bread entry opened the intake window back up, but the day still reads underfed for the amount of heavy effort already spent. Protein is moving, not yet carrying the muscle-preservation side of the equation. This favors repair and steadiness over extra intensity.\n\nGradual gains.\n\nPerformance: Gradual gains.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe workout window closes on a day that spent a lot of reserve, with movement slightly above normal and recovery steadier than recent patterns. The body can absorb the load, but the large energy and protein gap makes tonight favor restoration and muscle preservation over more strain.\n\nRecovery takes the lead."
+      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe bread entry opened the intake window back up, but the day still reads underfed for the amount of heavy effort already spent. Protein is moving, not yet carrying the muscle-preservation side of the equation. This favors repair and steadiness over extra intensity.\n\nGradual gains."
     },
     {
       "label": "Performance",
-      "text": "Recovery takes the lead."
+      "text": "Gradual gains."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe workout window closes on a day that spent a lot of reserve, with movement slightly above normal and recovery steadier than recent patterns. The body can absorb the load, but the large energy and protein gap makes tonight favor restoration and muscle preservation over more strain.\n\nRecovery takes the lead.",
-    "performance": "Recovery takes the lead.",
+    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe bread entry opened the intake window back up, but the day still reads underfed for the amount of heavy effort already spent. Protein is moving, not yet carrying the muscle-preservation side of the equation. This favors repair and steadiness over extra intensity.\n\nGradual gains.",
+    "performance": "Gradual gains.",
     "transit": null
   },
-  "nutrition_nudge": "Front-load dinner with 60g protein now to close the gap and protect muscle.",
+  "nutrition_nudge": "Front-load protein into your next meal with 60g from lean meat, eggs, Greek yogurt, or tofu.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
     "sleep_hours": 6.2,
     "hrv_today": 65,
     "hrv_7d_avg": 64.7,
-    "nutrition": "calories 1230 of 2574 goal, protein 53g of 138g goal, carbs 156g of 290g goal, fat 43g of 72g goal",
-    "nutrition_detail": "calories 1230 of 2574 goal -> 1344 left; protein 53g of 138g goal -> 85g gap; carbs 156g of 290g goal; fat 43g of 72g goal",
+    "nutrition": "calories 1410 of 2574 goal, protein 59g of 138g goal, carbs 192g of 290g goal, fat 44g of 72g goal",
+    "nutrition_detail": "calories 1410 of 2574 goal -> 1164 left; protein 59g of 138g goal -> 79g gap; carbs 192g of 290g goal; fat 44g of 72g goal",
     "activity_today": "8,939 steps so far, 8h 15m active, 2,622 calories burned, Heavy training load"
   }
 }
