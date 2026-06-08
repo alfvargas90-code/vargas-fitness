@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-07T21:15:58-05:00",
-  "data_hash": "364f0588084f6c64",
-  "slot": "macros-update",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe latest meal meaningfully changed the day: the energy window reopened and protein moved from light to more credible. Output is already on the heavier side, so this stretch favors muscle-preserving steadiness over extra strain.\n\nSteady, not depleted.\n\nPerformance: Steady, not depleted.\n\nTransit: none",
+  "generated_at": "2026-06-08T04:00:00-05:00",
+  "data_hash": "d1b1d042e8d8901d",
+  "slot": "sleep",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 1%\n\nRead\nLast night restored more than recent nights, leaving a fuller reserve without a sense of overreach. The day favors measured strength and steady intake over chasing extra output, with enough capacity for muscle support while the deficit remains secondary.\n\nQuiet strength.\n\nPerformance: Quiet strength.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe latest meal meaningfully changed the day: the energy window reopened and protein moved from light to more credible. Output is already on the heavier side, so this stretch favors muscle-preserving steadiness over extra strain.\n\nSteady, not depleted."
+      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 1%\n\nRead\nLast night restored more than recent nights, leaving a fuller reserve without a sense of overreach. The day favors measured strength and steady intake over chasing extra output, with enough capacity for muscle support while the deficit remains secondary.\n\nQuiet strength."
     },
     {
       "label": "Performance",
-      "text": "Steady, not depleted."
+      "text": "Quiet strength."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe latest meal meaningfully changed the day: the energy window reopened and protein moved from light to more credible. Output is already on the heavier side, so this stretch favors muscle-preserving steadiness over extra strain.\n\nSteady, not depleted.",
-    "performance": "Steady, not depleted.",
+    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 1%\n\nRead\nLast night restored more than recent nights, leaving a fuller reserve without a sense of overreach. The day favors measured strength and steady intake over chasing extra output, with enough capacity for muscle support while the deficit remains secondary.\n\nQuiet strength.",
+    "performance": "Quiet strength.",
     "transit": null
   },
-  "nutrition_nudge": "Keep dinner steady and include 40g protein to protect muscle while staying on pace.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
     "sleep_hours": 6.2,
     "hrv_today": 65,
     "hrv_7d_avg": 64.7,
-    "nutrition": "calories 1975 of 2574 goal, protein 100g of 138g goal, carbs 249g of 290g goal, fat 61g of 72g goal",
-    "nutrition_detail": "calories 1975 of 2574 goal -> 599 left; protein 100g of 138g goal -> 38g gap; carbs 249g of 290g goal; fat 61g of 72g goal",
-    "activity_today": "8,939 steps so far, 8h 15m active, 2,622 calories burned, Heavy training load"
+    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
+    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
+    "activity_today": null
   }
 }
