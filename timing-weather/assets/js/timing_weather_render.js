@@ -121,51 +121,67 @@ function renderNowBar(s) {
   setText('now-next-event', nb.nextEventDays != null ? `${nb.nextEventDays} Days` : null);
 }
 
-/* v2.2.3 — Daily Reading is split into THREE independent sub-readings inside the one
-   card: Tropical·Modern, then Tropical·Traditional (Hellenistic profection), then
-   Vedic. Each reads its own state.json field and populates its own #<sys>-state /
-   #<sys>-body. PVR: a null field (Codex pass failed) hides that whole sub-section.
-   Two dividers toggle independently so an empty middle/edge sub never orphans a rule:
-     divider-1 shows only when BOTH tropical AND traditional render;
-     divider-2 shows only when (tropical OR traditional) AND vedic render. */
+/* v2.3 — Each astrology system (Traditional / Modern / Vedic) is its own full-width
+   page section holding a DAILY (today) view + a MONTHLY (this month) view. Six
+   independent state.json fields feed six #<sys>[-monthly]-state / -body hooks. PVR:
+   a null field (Codex pass failed) hides only that view, and the divider between
+   Daily and Monthly hides unless BOTH views render — so a failed monthly never
+   orphans a rule and a failed daily never breaks the monthly. The six render
+   functions stay independent and backward-compatible with the v2.2.x IDs. */
 function hasReading(r) { return !!(r && (r.body || r.read || r.state)); }
 
-function applyReadingSub(r, prefix, fallbackState) {
-  const wrap = $(`reading-sub-${prefix}`);
+/* Populate one view (daily or monthly). Returns true if it rendered, false if hidden. */
+function applyAstroView(r, viewId, stateId, bodyId, fallbackState) {
+  const view = $(viewId);
   if (!hasReading(r)) {
-    setText(`${prefix}-state`, '', '');
-    setText(`${prefix}-body`, '', '');
-    if (wrap) wrap.style.display = 'none';
-    return;
+    setText(stateId, '', '');
+    setText(bodyId, '', '');
+    if (view) view.style.display = 'none';
+    return false;
   }
-  if (wrap) wrap.style.display = '';
-  setText(`${prefix}-state`, (r.state || fallbackState || '').toUpperCase());
-  setText(`${prefix}-body`, r.body || r.read);
+  if (view) view.style.display = '';
+  setText(stateId, (r.state || fallbackState || '').toUpperCase());
+  setText(bodyId, r.body || r.read);
+  return true;
 }
 
-function refreshReadingDividers(s) {
-  const hasTrop = hasReading(s.tropicalReading);
-  const hasTrad = hasReading(s.traditionalReading);
-  const hasVed = hasReading(s.vedicReading);
-  const d1 = $('reading-divider-1');
-  const d2 = $('reading-divider-2');
-  if (d1) d1.style.display = (hasTrop && hasTrad) ? '' : 'none';
-  if (d2) d2.style.display = ((hasTrop || hasTrad) && hasVed) ? '' : 'none';
-}
-
-function renderTropicalReading(s) {
-  applyReadingSub(s.tropicalReading, 'tropical', s.forecast);
-  refreshReadingDividers(s);
+/* The Daily↔Monthly hairline shows only when BOTH views are present. */
+function toggleAstroDivider(sys, dailyShown, monthlyShown) {
+  const d = $(`${sys}-view-divider`);
+  if (d) d.style.display = (dailyShown && monthlyShown) ? '' : 'none';
 }
 
 function renderTraditionalReading(s) {
-  applyReadingSub(s.traditionalReading, 'traditional', s.forecast);
-  refreshReadingDividers(s);
+  const shown = applyAstroView(s.traditionalReading, 'traditional-daily-view',
+    'traditional-state', 'traditional-body', s.forecast);
+  toggleAstroDivider('traditional', shown, hasReading(s.traditionalMonthly));
+}
+function renderTraditionalMonthly(s) {
+  const shown = applyAstroView(s.traditionalMonthly, 'traditional-monthly-view',
+    'traditional-monthly-state', 'traditional-monthly-body', s.forecast);
+  toggleAstroDivider('traditional', hasReading(s.traditionalReading), shown);
+}
+
+function renderTropicalReading(s) {
+  const shown = applyAstroView(s.tropicalReading, 'tropical-daily-view',
+    'tropical-state', 'tropical-body', s.forecast);
+  toggleAstroDivider('tropical', shown, hasReading(s.tropicalMonthly));
+}
+function renderTropicalMonthly(s) {
+  const shown = applyAstroView(s.tropicalMonthly, 'tropical-monthly-view',
+    'tropical-monthly-state', 'tropical-monthly-body', s.forecast);
+  toggleAstroDivider('tropical', hasReading(s.tropicalReading), shown);
 }
 
 function renderVedicReading(s) {
-  applyReadingSub(s.vedicReading, 'vedic', s.forecast);
-  refreshReadingDividers(s);
+  const shown = applyAstroView(s.vedicReading, 'vedic-daily-view',
+    'vedic-state', 'vedic-body', s.forecast);
+  toggleAstroDivider('vedic', shown, hasReading(s.vedicMonthly));
+}
+function renderVedicMonthly(s) {
+  const shown = applyAstroView(s.vedicMonthly, 'vedic-monthly-view',
+    'vedic-monthly-state', 'vedic-monthly-body', s.forecast);
+  toggleAstroDivider('vedic', hasReading(s.vedicReading), shown);
 }
 
 /* Live Moon position as a compact Daily Reading subtitle.
@@ -338,9 +354,12 @@ function renderAll(s) {
   renderHeaderDate(s);
   renderHero(s);
   renderNowBar(s);
-  renderTropicalReading(s);
   renderTraditionalReading(s);
+  renderTraditionalMonthly(s);
+  renderTropicalReading(s);
+  renderTropicalMonthly(s);
   renderVedicReading(s);
+  renderVedicMonthly(s);
   renderMoonNow(s);
   renderWhatChanged(s);
   renderTodaysInsight(s);

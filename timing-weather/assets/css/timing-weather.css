@@ -342,14 +342,13 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-areas:
-    "reading  changed  rail"
+    "changed  changed  rail"
     "upcoming upcoming rail";
   gap: var(--grid-gap);
   align-items: stretch;
 }
-#section-3-daily-reading      { grid-area: reading; }
-#section-4-what-changed       { grid-area: changed; }
-#section-7-upcoming-conditions{ grid-area: upcoming; }
+#section-6-what-changed       { grid-area: changed; }
+#section-9-upcoming-conditions{ grid-area: upcoming; }
 .row--today .rail             { grid-area: rail; display: flex; flex-direction: column; gap: var(--grid-gap); }
 
 /* every direct card-section in the composition stretches so its card fills the cell */
@@ -362,10 +361,41 @@ body {
 .row--4col section > .influences-compact,
 .row--4col section > .drivers-list { flex: 1 1 auto; }
 /* Recommended Actions absorbs the rail's extra height under Insight */
-.row--today .rail #section-6-recommended { flex: 1 1 auto; }
-.row--today .rail #section-6-recommended > .card { flex: 1 1 auto; }
+.row--today .rail #section-8-recommended { flex: 1 1 auto; }
+.row--today .rail #section-8-recommended > .card { flex: 1 1 auto; }
 
-/* ── Daily Reading ───────────────────────────────────────────────────────────── */
+/* ── v2.3: Astrology page sections (Traditional / Modern / Vedic) ──────────────
+   Three full-width sections stacked one-per-row, each a glass card holding a DAILY
+   (today) and a MONTHLY (this month) view split by a hairline divider. 32px of
+   breathing room separates the three systems; render.js hides any empty view +
+   its divider (PVR: a failed Codex pass collapses cleanly, never an orphan rule). */
+.astro-sections section { margin-bottom: 32px; }
+.astro-sections section:last-child { margin-bottom: 0; }
+.astro-card { padding: 20px; display: flex; flex-direction: column; }
+.astro-view { display: flex; flex-direction: column; gap: 8px; }
+.astro-view:empty { display: none; }
+.astro-view-label {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.astro-state {            /* same value treatment as the old reading-state, no eyebrow */
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+  color: var(--gold-bright);
+}
+.astro-body { font-size: 14px; line-height: 1.6; color: var(--text); margin: 0; }
+.astro-view-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 20px 0;
+}
+
+/* ── Daily Reading (legacy v2.2.x — inert; .reading-moon still used in Vedic) ──── */
 .reading-card { display: flex; flex-direction: column; gap: 10px; }
 /* v2.2.2 — split Tropical / Vedic sub-sections inside the one Daily Reading card. */
 .reading-sub { display: flex; flex-direction: column; gap: 8px; }
@@ -469,7 +499,7 @@ body {
 .actions-card #actions-avoid li::before { content: "✗"; position: absolute; left: 0; color: var(--red);   font-weight: 700; }
 
 /* ── Upcoming Conditions (dot · day-count · label · proximity bar) ───────────── */
-#section-7-upcoming-conditions .card,
+#section-9-upcoming-conditions .card,
 .timeline-list { list-style: none; }
 .timeline-list { display: flex; flex-direction: column; }
 .timeline-row {
@@ -642,7 +672,7 @@ body {
    ROW 5 — Confidence (small, left-aligned meta card)
    ════════════════════════════════════════════════════════════════════════════ */
 .row--meta { max-width: 280px; }
-#section-13-confidence { margin: 0; }
+#section-15-confidence { margin: 0; }
 .confidence-card {
   display: grid;
   grid-template-columns: 56px 1fr;

@@ -187,6 +187,20 @@ blending. New `traditionalReading.{state, body}` field. Two dividers
 between subs, each toggling independently based on adjacent-sub presence.
 Moon Now footer unchanged.
 
+## v2.3 — Astrology page sections + Monthly readings ✅ SHIPPED (2026-06-08)
+
+Replaced the single combined Daily Reading card with three full-width
+page sections (Traditional → Modern → Vedic), each containing a Daily
+view (today) + Monthly view (this month). Engine now runs SIX Codex
+passes per run — three daily (preserved) + three monthly (new). Each
+system's monthly Codex prompt uses its native month framing: Modern =
+Sun-sign transit, Traditional = Profection month (lord-of-month), Vedic
+= Vimshottari sub-period + nakshatra cycle. State.json gains
+`tropicalMonthly`, `traditionalMonthly`, `vedicMonthly` fields. Section
+order reflects Alfie's "traditional first" preference. Moon Now footer
+moves into Vedic section. Cross-contamination guardrails preserved
+(programmatic scan).
+
 ## v1.3 — Metric Breakdowns (deferred)
 
 - Opportunity breakdown by life domain (career / money / relationships / home)

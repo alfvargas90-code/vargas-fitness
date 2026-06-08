@@ -1448,6 +1448,168 @@ def codex_reading(system, forecast, factors, moon_desc, context_block, mood, sna
     return state_label, body
 
 
+# --- v2.3: Monthly readings (this-month view per system) -----------------
+# Each system gets a SECOND Codex pass framed in its NATIVE month concept:
+#   Modern:      the Sun's current ~30-day sign transit (solar month).
+#   Traditional: the Hellenistic profection month (lord of the month + condition).
+#   Vedic:       the Vimshottari sub-period progression + transit-Moon nakshatra cycle.
+# Same per-system vocabulary isolation as the dailies (no cross-contamination).
+# All factors are pure-derived (PVR: never fabricated).
+_MONTHLY_FRAME = {
+    "tropical": "the Sun's current ~30-day sign transit (the modern solar month)",
+    "traditional": ("the Hellenistic profection month — the lord of the month and its "
+                    "condition over the next ~30 days"),
+    "vedic": ("the Vimshottari sub-period progression and the transit Moon's nakshatra "
+              "cycle across the sidereal lunar month"),
+}
+
+
+def tropical_monthly_factors(today, now_utc):
+    """Modern monthly frame: the Sun's current ~30-day sign transit. Pure ephemeris —
+    current Sun sign, degrees elapsed, and the next ingress date (forward-searched up
+    to 40 days). PVR: fully derived, never fabricated."""
+    jd = jd_now(now_utc)
+    try:
+        sun_lon = lon_of(jd, swe.SUN)
+    except Exception as e:
+        log(f"  tropical monthly: Sun longitude failed ({e}) — no factors")
+        return []
+    sun_sign = sign_of(sun_lon)
+    deg_in = round(sun_lon % 30, 1)
+    factors = [f"The Sun is transiting {sun_sign}, {deg_in}° in — the ~30-day solar month"]
+    next_sign, ingress_date = None, None
+    for d in range(1, 41):
+        if sign_of(lon_of(jd + d, swe.SUN)) != sun_sign:
+            next_sign = sign_of(lon_of(jd + d, swe.SUN))
+            ingress_date = today + timedelta(days=d)
+            break
+    if ingress_date:
+        factors.append(f"The Sun ingresses {next_sign} around {ingress_date.isoformat()}, "
+                       "shifting the month's tone partway through")
+    else:
+        factors.append(f"The Sun stays in {sun_sign} for the whole month ahead")
+    return factors
+
+
+def traditional_monthly_factors(today, natal, aspects):
+    """Traditional monthly frame: the profection month. Reuses traditional_profection
+    (which already covers the lord of the month for the next ~30 days) and appends the
+    next monthly-profection rotation date + the incoming lord, so the month body can
+    name when the time-lord hands off. PVR: derived from the profection math only."""
+    factors = list(traditional_profection(today, natal, aspects))
+    asc_i = SIGNS.index(ASC_SIGN)
+    by = today.year if (today.month, today.day) >= BIRTH_MONTH_DAY else today.year - 1
+    last_bd = date(by, *BIRTH_MONTH_DAY)
+    year_len = (date(by + 1, *BIRTH_MONTH_DAY) - last_bd).days
+    month_len = year_len / 12
+    month_index = min(12, int((today - last_bd).days // month_len) + 1)
+    annual_house = (by - 1990) % 12 + 1
+    if month_index < 12:
+        next_rot = last_bd + timedelta(days=int(round(month_index * month_len)))
+        next_house = ((annual_house - 1) + month_index) % 12 + 1
+        next_sign = SIGNS[(asc_i + next_house - 1) % 12]
+        next_lord = TRADITIONAL_RULERS[next_sign]
+        factors.append(f"The monthly profection rotates to the {ordinal(next_house)} whole-sign "
+                       f"house ({next_sign}, lord {next_lord}) around {next_rot.isoformat()} — the "
+                       "month's time-lord hands off then")
+    return factors
+
+
+def vedic_monthly_factors(today, now_utc):
+    """Vedic monthly frame: Vimshottari sub-period progression + the transit-Moon
+    nakshatra cycle for the month. Flags any sub-period (pratyantardasha) handoff in
+    the next 30 days, the Venus antardasha tail, the current transit-Moon nakshatra
+    (cycling all 27 over the ~27-day sidereal lunar month), and active Sade Sati.
+    PVR: every factor is looked up or computed, never fabricated."""
+    chain, _ = vedic_subperiod(today)
+    factors = [f"Current Vimshottari sub-period chain: {chain}"]
+    horizon = today + timedelta(days=30)
+    for w in VEDIC_SUBPERIODS:
+        if today < w["start"] <= horizon:
+            factors.append(f"The pratyantardasha shifts to {VEDIC_MAHADASHA}–{VEDIC_ANTARDASHA}–"
+                           f"{w['sub']} around {w['start'].isoformat()} — a sub-period handoff "
+                           "inside this month")
+    if today <= VENUS_ANTARDASHA[1] <= horizon:
+        factors.append(f"The {VEDIC_ANTARDASHA} antardasha runs out around "
+                       f"{VENUS_ANTARDASHA[1].isoformat()}")
+    try:
+        vt, _ = vedic_transits_at(now_utc)
+        if "moon" in vt:
+            factors.append(f"The transit Moon is in {nakshatra_of(vt['moon'])} now and will cycle "
+                           "through all 27 nakshatras over the ~27-day sidereal lunar month")
+    except Exception as e:
+        log(f"  vedic monthly: transit Moon nakshatra failed ({e}) — skipping that factor")
+    if SADE_SATI[0] <= today <= SADE_SATI[1]:
+        factors.append(f"Sade Sati ({SADE_SATI_PHASE}) stays active through "
+                       f"{SADE_SATI[1].isoformat()}")
+    return factors
+
+
+def codex_monthly_reading(system, forecast, factors, context_block, mood):
+    """ONE framework's MONTHLY reading (this month, next ~30 days) via ~/bin/llm
+    --model codex. Same per-system vocabulary isolation as codex_reading, but frames the
+    month through that system's NATIVE month concept (see _MONTHLY_FRAME) and runs a bit
+    longer (5-6 lines) so it can name specific dates inside the month. Sees ONLY its
+    system's context_block — no blending. Returns (state, body) or (None, None) on any
+    failure (PVR: that monthly side -> null; the daily for that system is unaffected)."""
+    cfg = _READING_SYSTEMS[system]
+    llm = os.path.expanduser("~/bin/llm")
+    if not os.path.exists(llm):
+        log(f"  ~/bin/llm not found — {system}Monthly null")
+        return None, None
+    facts = [f for f in list(factors) if f]
+    if not facts:
+        log(f"  no {system} monthly factors — {system}Monthly null")
+        return None, None
+    background = (
+        "Zoom out from today to the whole month ahead. This is a preparation-and-pipeline "
+        "phase: quiet leverage and building now, with weight-bearing commitments landing after "
+        "late August 2026 — name what this month sets up rather than any single day."
+    )
+    context_section = ("\n\n=== " + cfg["name"] + " CONTEXT (your ONLY source) ===\n"
+                       + context_block + "\n=== END CONTEXT ===") if context_block else ""
+    prompt = (
+        f"You are writing the {cfg['name']} MONTHLY reading (this month — the next ~30 days) for a "
+        f"personal astrology dashboard. Frame the month through {_MONTHLY_FRAME[system]}. "
+        f"USE {cfg['use']} "
+        f"Speak ONLY in the {cfg['name']} framework — do NOT use the OTHER tradition's terms "
+        f"(no {cfg['forbid']}). "
+        "Second person, ~5-6 lines (roughly 100-150 words). Name specific dates inside the month "
+        "where the factors give them. Be honest about BOTH the supports and the tensions. No event "
+        "predictions, no fortune-telling, no hype, no fluff.\n\n"
+        f"Headline weather mode: {forecast}.\n"
+        "Live monthly factors to weave in (interpret in your framework, do not just list): "
+        + "; ".join(facts) + ".\n"
+        f"Mood: {mood}\n"
+        f"Background: {background}"
+        + context_section + "\n\n"
+        "Output EXACTLY this shape and nothing else:\n"
+        "STATE: <one or two word state label for THIS framework's month, e.g. Expansion, "
+        "Consolidation, Pivot, Preparation>\n"
+        "BODY: <the second-person passage>"
+    )
+    try:
+        out = subprocess.run([llm, "--lane", "reasoning", "--model", "codex", prompt],
+                             capture_output=True, text=True, timeout=180, cwd=DASH)
+        if out.returncode != 0:
+            log(f"  codex {system} monthly exited {out.returncode}: {out.stderr.strip()[:200]}")
+            return None, None
+    except Exception as e:
+        log(f"  codex {system} monthly failed (non-fatal): {e}")
+        return None, None
+    raw = out.stdout
+    sm = re.search(r"(?im)^\s*STATE:\s*(.+?)\s*$", raw)
+    bm = re.search(r"(?is)BODY:\s*(.+)$", raw)
+    state_label = sm.group(1).strip().strip(".").strip() if sm else None
+    body = re.sub(r"\s+", " ", bm.group(1)).strip() if bm else re.sub(r"\s+", " ", raw).strip()
+    if not body:
+        log(f"  codex {system} monthly produced no body — null")
+        return None, None
+    if not state_label:
+        state_label = forecast.title()
+    return state_label, body
+
+
 # --- Section 10: Today's Insight (Codex one-liner) -----------------------
 def codex_todays_insight(forecast, dominant, daily_changes, phase):
     """<=2 imperative sentences via ~/bin/llm --model codex. No jargon. None on failure."""
@@ -1570,6 +1732,9 @@ def compute(now=None, with_codex=True):
     tropical_reading = None
     traditional_reading = None
     vedic_reading = None
+    tropical_monthly = None
+    traditional_monthly = None
+    vedic_monthly = None
     todays_insight = None
     if with_codex:
         recommendations, avoidances = codex_actions(forecast, dominant, pressure_src, phase_name)
@@ -1605,6 +1770,20 @@ def compute(now=None, with_codex=True):
         tropical_reading = {"state": ts, "body": tb} if tb else None
         traditional_reading = {"state": trs, "body": trb} if trb else None
         vedic_reading = {"state": vs, "body": vb} if vb else None
+        # v2.3 — three MONTHLY passes (this month), each in its native month frame.
+        # Independent of the dailies: a monthly failure leaves that system's daily intact.
+        trop_m_factors = tropical_monthly_factors(today, now_utc)
+        trad_m_factors = traditional_monthly_factors(today, natal, aspects)
+        ved_m_factors = vedic_monthly_factors(today, now_utc)
+        tms, tmb = codex_monthly_reading("tropical", forecast, trop_m_factors,
+                                         tropical_context_block(), reading_mood)
+        trms, trmb = codex_monthly_reading("traditional", forecast, trad_m_factors,
+                                           traditional_context_block(), reading_mood)
+        vms, vmb = codex_monthly_reading("vedic", forecast, ved_m_factors,
+                                         vedic_context_block(), reading_mood)
+        tropical_monthly = {"state": tms, "body": tmb} if tmb else None
+        traditional_monthly = {"state": trms, "body": trmb} if trmb else None
+        vedic_monthly = {"state": vms, "body": vmb} if vmb else None
         todays_insight = codex_todays_insight(forecast, dominant, daily_changes, phase_name)
 
     sources = [NATAL_MD, TROPICAL_MD, VEDIC_MD, COUNCIL_MD]
@@ -1642,6 +1821,10 @@ def compute(now=None, with_codex=True):
         "tropicalReading": tropical_reading,         # Modern Western — {state, body} or null
         "traditionalReading": traditional_reading,   # Hellenistic whole-sign — {state, body} or null
         "vedicReading": vedic_reading,               # sidereal Vedic — {state, body} or null
+        # --- v2.3: Monthly readings (this month, native month frame per system) ---
+        "tropicalMonthly": tropical_monthly,         # Modern — Sun-sign transit month
+        "traditionalMonthly": traditional_monthly,   # Traditional — profection month
+        "vedicMonthly": vedic_monthly,               # Vedic — Vimshottari sub-period + nakshatra cycle
         "dailyReading": None,                        # DEPRECATED — split into the three above
         # --- Section 9: What Changed (null on first day) ---
         "dailyChanges": daily_changes,
@@ -1709,6 +1892,9 @@ def main():
         f"reading=trop:{'yes' if state['tropicalReading'] else 'null'}/"
         f"trad:{'yes' if state['traditionalReading'] else 'null'}/"
         f"ved:{'yes' if state['vedicReading'] else 'null'}, "
+        f"monthly=trop:{'yes' if state['tropicalMonthly'] else 'null'}/"
+        f"trad:{'yes' if state['traditionalMonthly'] else 'null'}/"
+        f"ved:{'yes' if state['vedicMonthly'] else 'null'}, "
         f"insight={'yes' if state['todaysInsight'] else 'null'}, "
         f"next={nw['title'] if nw else None}) -> {out_path}")
     return 0
