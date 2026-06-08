@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-08T04:00:00-05:00",
-  "data_hash": "d1b1d042e8d8901d",
-  "slot": "sleep",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 1%\n\nRead\nLast night restored more than recent nights, leaving a fuller reserve without a sense of overreach. The day favors measured strength and steady intake over chasing extra output, with enough capacity for muscle support while the deficit remains secondary.\n\nQuiet strength.\n\nPerformance: Quiet strength.\n\nTransit: none",
+  "generated_at": "2026-06-08T07:00:00-05:00",
+  "data_hash": "b374859eec94d139",
+  "slot": "recovery",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 2%\n\nRead\nYou woke with a cleaner reserve than usual, after a slightly better night and no early strain in the system. For muscle gain with fat loss, the day favors measured output and enough protein before any deep deficit forms.\n\nSteady reserve.\n\nPerformance: Steady reserve.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 1%\n\nRead\nLast night restored more than recent nights, leaving a fuller reserve without a sense of overreach. The day favors measured strength and steady intake over chasing extra output, with enough capacity for muscle support while the deficit remains secondary.\n\nQuiet strength."
+      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 2%\n\nRead\nYou woke with a cleaner reserve than usual, after a slightly better night and no early strain in the system. For muscle gain with fat loss, the day favors measured output and enough protein before any deep deficit forms.\n\nSteady reserve."
     },
     {
       "label": "Performance",
-      "text": "Quiet strength."
+      "text": "Steady reserve."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 1%\n\nRead\nLast night restored more than recent nights, leaving a fuller reserve without a sense of overreach. The day favors measured strength and steady intake over chasing extra output, with enough capacity for muscle support while the deficit remains secondary.\n\nQuiet strength.",
-    "performance": "Quiet strength.",
+    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 2%\n\nRead\nYou woke with a cleaner reserve than usual, after a slightly better night and no early strain in the system. For muscle gain with fat loss, the day favors measured output and enough protein before any deep deficit forms.\n\nSteady reserve.",
+    "performance": "Steady reserve.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "On pace this morning; start breakfast with 35g protein and keep meals steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 64.7,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "14 steps so far, 0m active, 461 calories burned, \u2014 training load"
   }
 }
