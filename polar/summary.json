@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-08T15:00:00-05:00",
-  "data_hash": "97678f1b963e1d84",
-  "slot": "fuel-2",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nRecovery is quietly supportive, and output has run much lighter than your usual day, leaving the system fresh rather than taxed. The midday meal steadied energy, but protein still trails the evening window, so today favors measured strength work and muscle preservation over chasing volume.\n\nQuiet momentum.\n\nPerformance: Quiet momentum.\n\nTransit: none",
+  "generated_at": "2026-06-08T17:30:00-05:00",
+  "data_hash": "d8cbf4dcc52370e3",
+  "slot": "train-1",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 14%\n\nRead\nRecovery is muted despite a quieter-than-usual day, so the workout window opens with limited reserve rather than fresh capacity. For muscle retention, the main tension is a still-light protein base. Today favors disciplined resistance over intensity.\n\nMeasured strength.\n\nPerformance: Measured strength.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
-      "text": "Good"
+      "text": "Poor"
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nRecovery is quietly supportive, and output has run much lighter than your usual day, leaving the system fresh rather than taxed. The midday meal steadied energy, but protein still trails the evening window, so today favors measured strength work and muscle preservation over chasing volume.\n\nQuiet momentum."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 14%\n\nRead\nRecovery is muted despite a quieter-than-usual day, so the workout window opens with limited reserve rather than fresh capacity. For muscle retention, the main tension is a still-light protein base. Today favors disciplined resistance over intensity.\n\nMeasured strength."
     },
     {
       "label": "Performance",
-      "text": "Quiet momentum."
+      "text": "Measured strength."
     },
     {
       "label": "Transit",
@@ -22,20 +22,20 @@
     }
   ],
   "simple": {
-    "recovery": "Good",
-    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 5%\n\nRead\nRecovery is quietly supportive, and output has run much lighter than your usual day, leaving the system fresh rather than taxed. The midday meal steadied energy, but protein still trails the evening window, so today favors measured strength work and muscle preservation over chasing volume.\n\nQuiet momentum.",
-    "performance": "Quiet momentum.",
+    "recovery": "Poor",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 14%\n\nRead\nRecovery is muted despite a quieter-than-usual day, so the workout window opens with limited reserve rather than fresh capacity. For muscle retention, the main tension is a still-light protein base. Today favors disciplined resistance over intensity.\n\nMeasured strength.",
+    "performance": "Measured strength.",
     "transit": null
   },
-  "nutrition_nudge": "Fat budget is spent; keep remaining meals lean and skip oils, butter, nuts, and cheese.",
+  "nutrition_nudge": "Keep dinner lean: skip added oils and choose 50g protein with low-fat sides.",
   "transits": [],
   "data_basis": {
-    "recharge_today": 5,
-    "sleep_hours": 6.2,
-    "hrv_today": 65,
-    "hrv_7d_avg": 64.7,
+    "recharge_today": 1,
+    "sleep_hours": 6.9,
+    "hrv_today": 50,
+    "hrv_7d_avg": 61.6,
     "nutrition": "calories 1845 of 2574 goal, protein 63g of 138g goal, carbs 184g of 290g goal, fat 89g of 72g goal",
     "nutrition_detail": "calories 1845 of 2574 goal -> 729 left; protein 63g of 138g goal -> 75g gap; carbs 184g of 290g goal; fat 89g of 72g goal",
-    "activity_today": "118 steps so far, 18m active, 521 calories burned, \u2014 training load"
+    "activity_today": "1,206 steps so far, 36m active, 617 calories burned, Light training load"
   }
 }
