@@ -1,6 +1,6 @@
 {
   "date": "2026-06-08",
-  "synced_at": "2026-06-08T13:48:45+00:00",
+  "synced_at": "2026-06-08T14:19:28+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 250.0,
-    "protein_g": 4.0,
-    "carbs_g": 32.0,
-    "fat_g": 12.0
+    "calories": 1095.0,
+    "protein_g": 42.0,
+    "carbs_g": 114.0,
+    "fat_g": 54.0
   },
-  "meal_count": 1,
+  "meal_count": 2,
   "raw": {
     "date": "2026-06-08",
     "meals": [
@@ -26,13 +26,22 @@
         "fat": 12,
         "carbs": 32,
         "emoji": "\u00f0\u009f\u00a5\u00a8"
+      },
+      {
+        "title": "Breakfast: Eggs, Cheese, Sweet Potato & Sourdough",
+        "time": "09:15",
+        "calories": 845,
+        "protein": 38,
+        "fat": 42,
+        "carbs": 82,
+        "emoji": "\u00f0\u009f\u008d\u00b3"
       }
     ],
     "totals": {
-      "calories": 250,
-      "protein": 4,
-      "fat": 12,
-      "carbs": 32
+      "calories": 1095,
+      "protein": 42,
+      "fat": 54,
+      "carbs": 114
     },
     "targets": {
       "calories": 2574,
@@ -41,14 +50,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 2324,
+      "calories": 1479,
       "is_over": false
     },
-    "meal_count": 1,
+    "meal_count": 2,
     "labels": {
       "header": "Today",
-      "calories_remaining": "2324 kcal remaining today",
-      "meals_logged": "1 meals logged",
+      "calories_remaining": "1479 kcal remaining today",
+      "meals_logged": "2 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
