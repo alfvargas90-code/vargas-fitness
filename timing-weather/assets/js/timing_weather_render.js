@@ -121,10 +121,38 @@ function renderNowBar(s) {
   setText('now-next-event', nb.nextEventDays != null ? `${nb.nextEventDays} Days` : null);
 }
 
-function renderDailyReading(s) {
-  const dr = s.dailyReading || {};
-  setText('reading-state', (dr.state || s.forecast || '').toUpperCase());
-  setText('reading-body', dr.read || dr.body);
+/* v2.2.2 — Daily Reading is split into two independent sub-readings (Tropical on
+   top, Vedic below) inside the one card. Each reads its own state.json field and
+   populates its own #<sys>-state / #<sys>-body. PVR: a null field (Codex pass
+   failed) hides that whole sub-section; the divider only shows when BOTH render. */
+function hasReading(r) { return !!(r && (r.body || r.read || r.state)); }
+
+function applyReadingSub(r, prefix, fallbackState) {
+  const wrap = $(`reading-sub-${prefix}`);
+  if (!hasReading(r)) {
+    setText(`${prefix}-state`, '', '');
+    setText(`${prefix}-body`, '', '');
+    if (wrap) wrap.style.display = 'none';
+    return;
+  }
+  if (wrap) wrap.style.display = '';
+  setText(`${prefix}-state`, (r.state || fallbackState || '').toUpperCase());
+  setText(`${prefix}-body`, r.body || r.read);
+}
+
+function refreshReadingDivider(s) {
+  const d = $('reading-divider');
+  if (d) d.style.display = (hasReading(s.tropicalReading) && hasReading(s.vedicReading)) ? '' : 'none';
+}
+
+function renderTropicalReading(s) {
+  applyReadingSub(s.tropicalReading, 'tropical', s.forecast);
+  refreshReadingDivider(s);
+}
+
+function renderVedicReading(s) {
+  applyReadingSub(s.vedicReading, 'vedic', s.forecast);
+  refreshReadingDivider(s);
 }
 
 /* Live Moon position as a compact Daily Reading subtitle.
@@ -297,7 +325,8 @@ function renderAll(s) {
   renderHeaderDate(s);
   renderHero(s);
   renderNowBar(s);
-  renderDailyReading(s);
+  renderTropicalReading(s);
+  renderVedicReading(s);
   renderMoonNow(s);
   renderWhatChanged(s);
   renderTodaysInsight(s);

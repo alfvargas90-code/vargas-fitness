@@ -367,6 +367,23 @@ body {
 
 /* ── Daily Reading ───────────────────────────────────────────────────────────── */
 .reading-card { display: flex; flex-direction: column; gap: 10px; }
+/* v2.2.2 — split Tropical / Vedic sub-sections inside the one Daily Reading card. */
+.reading-sub { display: flex; flex-direction: column; gap: 8px; }
+.reading-sub:empty { display: none; }
+.reading-sub-label {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+/* The TROPICAL / VEDIC eyebrow replaces the generic "STATE" eyebrow within a sub. */
+.reading-sub .reading-state::before { content: none; }
+.reading-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 16px 0;
+}
 .reading-state {
   font-size: 26px;
   font-weight: 800;

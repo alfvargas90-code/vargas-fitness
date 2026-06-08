@@ -168,6 +168,15 @@ state.json (sign / degree / house in both systems + nakshatra + pada);
 render formats it as `Moon · <trop sign> <deg>° · <H>H trop / <H>H ved ·
 <nakshatra>`. PVR strict: null moonNow → empty line (CSS hides it).
 
+## v2.2.2 — Split Daily Reading: Tropical + Vedic ✅ SHIPPED (2026-06-08)
+
+Daily Reading card now contains TWO independent sub-sections (Tropical on
+top, Vedic below) with a 1px divider. Engine runs two Codex passes per
+run, each with its system's MDs only — frameworks don't blend. New
+state.json fields `tropicalReading.{state,body}` and
+`vedicReading.{state,body}`. Old `dailyReading` deprecated. Moon Now line
+stays as shared footer (already spans both systems).
+
 ## v1.3 — Metric Breakdowns (deferred)
 
 - Opportunity breakdown by life domain (career / money / relationships / home)

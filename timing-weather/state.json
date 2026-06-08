@@ -6,12 +6,12 @@
   "pressurePlanet": "Saturn",
   "volatilityPlanet": "Uranus",
   "confidence": null,
-  "durationDays": 84,
+  "durationDays": 83,
   "nowBar": {
     "forecast": "EXPANSION",
     "pressureLevel": "High",
-    "momentumDirection": "Falling",
-    "nextEventDays": 35
+    "momentumDirection": "Rising",
+    "nextEventDays": 34
   },
   "currentPhase": "Preparation Window",
   "currentPhaseStart": "2026-05-28",
@@ -20,27 +20,27 @@
     "near": [
       {
         "title": "Jupiter Return",
-        "days": 35
+        "days": 34
       }
     ],
     "mid": [
       {
         "title": "Saturn Year Begins",
-        "days": 66
+        "days": 65
       },
       {
         "title": "Jupiter–Venus Benefic",
-        "days": 122
+        "days": 121
       },
       {
         "title": "Contract Hinge",
-        "days": 144
+        "days": 143
       }
     ],
     "long": [
       {
         "title": "Saturn Checkpoint",
-        "days": 215
+        "days": 214
       }
     ]
   },
@@ -48,7 +48,7 @@
     {
       "planet": "Jupiter",
       "role": "Dominant",
-      "influence": 18,
+      "influence": 19,
       "summary": "Opens doors and widens the pipeline"
     },
     {
@@ -74,61 +74,66 @@
     {
       "title": "Jupiter Return",
       "theme": "Expansion",
-      "days": 35
+      "days": 34
     },
     {
       "title": "Saturn Year Begins",
       "theme": "Consolidation",
-      "days": 66
+      "days": 65
     },
     {
       "title": "Jupiter–Venus Benefic",
       "theme": "Expansion",
-      "days": 122
+      "days": 121
     }
   ],
-  "opportunity": 28,
+  "opportunity": 29,
   "pressure": 85,
   "volatility": 78,
-  "momentum": 39,
+  "momentum": 40,
   "moonNow": {
-    "timestamp": "2026-06-08T04:12:25Z",
+    "timestamp": "2026-06-08T12:45:35Z",
     "tropical": {
       "sign": "Pisces",
-      "degree": 14.52,
+      "degree": 19.13,
       "house": 2
     },
     "vedic": {
       "sign": "Aquarius",
-      "degree": 20.29,
+      "degree": 24.9,
       "nakshatra": "Purva Bhadrapada",
-      "nakshatra_pada": 1,
+      "nakshatra_pada": 2,
       "house": 3
     }
   },
-  "dailyReading": {
-    "state": "EXPANSION",
-    "read": "Today has an expansion feel, but it is not the clean, effortless kind. You may notice doors opening through conversation, follow-up, shared planning, or a person who can help move something forward, while your private baseline still feels pressured and uneven. This is a stretch for holding bigger possibilities without rushing them into fixed commitments. Your best use of the day is preparation: clarify the ask, refine the document, clean up the numbers, organize the property or home details, and strengthen the relationship before you lean on it. Work can benefit from visibility, but the advantage comes through thoughtful positioning, not force. Money and value questions may feel personal today, especially if you are comparing what you carry against what you are paid, credited, or trusted to own. Home and emotional foundations may be noisy in the background, so fewer, better moves matter. Do not mistake volatility for urgency. Speak clearly, but leave room for revision. Open the door, gather the proof, build the pipeline, and let weight-bearing decisions wait until the structure is stronger. Expansion is available now as leverage, not yet as final form."
+  "tropicalReading": {
+    "state": "Expansion",
+    "body": "With Capricorn Rising in a 12th-House annual profection, this is expansion through foundation work: quiet leverage, cleaner documents, and relationships that can carry weight later. Neptune square your natal Moon adds emotional fog and pressure beneath the surface, while Mercury opposing your Ascendant can make feedback feel personal. Still, Mercury sextile your Virgo Sun supports precise language and strategic repair. This is a valuation cycle, not destiny cycle: build structural leverage around the 2nd-House North Node self-valuation arc, then formalize when the ground is steadier."
   },
+  "vedicReading": {
+    "state": "Expansion",
+    "body": "From Sagittarius Lagna, the Vimshottari chain of Moon Mahadasha, Venus antardasha, and Jupiter sub-period supports relationship, value, and opportunity-building, but Sade Sati / Small Panoti keeps the background heavy. With transit Moon in Purva Bhadrapada in the 3rd, use this as a preparation phase: write, speak, document, and open doors. Sidereal Mercury opposite natal Moon and Neptune square Lagna ask for precision; build leverage now, with the External Manifestation Windows strongest Aug 12 – Sep 5 2026."
+  },
+  "dailyReading": null,
   "dailyChanges": {
-    "momentum": -32,
-    "opportunity": 0,
-    "pressure": 12,
+    "momentum": 1,
+    "opportunity": 1,
+    "pressure": 0,
     "volatility": 0,
-    "comparedTo": "2026-06-06",
-    "lastComparedAt": "2026-06-07T23:12:25-05:00"
+    "comparedTo": "2026-06-07",
+    "lastComparedAt": "2026-06-08T07:45:35-05:00"
   },
-  "todaysInsight": "Build the pipeline and tighten your terms. Delay final commitments until pressure exposes the real price.",
+  "todaysInsight": "Build leverage and widen the pipeline. Price your contribution before you lock terms.",
   "recommendations": [
     "Build pipeline",
     "Price contribution",
-    "Prepare property",
-    "Document systems"
+    "Secure property milestones",
+    "Schedule authority conversations"
   ],
   "avoidances": [
-    "Final commitments",
-    "Salary dependency",
-    "Romance fixation"
+    "Irreversible commitments",
+    "Fantasy timelines",
+    "Salary dependency"
   ],
   "drivers": [
     {
@@ -141,11 +146,11 @@
     },
     {
       "name": "Approaching Jupiter Return",
-      "score": 3
+      "score": 4
     }
   ],
   "evidence": {
-    "expansionScore": 28,
+    "expansionScore": 29,
     "contributors": [
       {
         "factor": "Jupiter Lord of Year",
@@ -157,7 +162,7 @@
       },
       {
         "factor": "Approaching Jupiter Return",
-        "score": 3
+        "score": 4
       }
     ],
     "reducers": [
@@ -186,32 +191,32 @@
   "nextWindow": {
     "title": "Jupiter Return",
     "date": "2026-07-12",
-    "daysRemaining": 35,
+    "daysRemaining": 34,
     "category": "Expansion",
     "strength": 9.2
   },
   "forecastTrend": [
     {
-      "date": "2026-05-11",
+      "date": "2026-05-12",
       "state": "EXPANSION"
     },
     {
-      "date": "2026-05-21",
+      "date": "2026-05-22",
       "state": "EXPANSION"
     },
     {
-      "date": "2026-06-02",
+      "date": "2026-06-03",
       "state": "EXPANSION"
     },
     {
-      "date": "2026-06-07",
+      "date": "2026-06-08",
       "state": "EXPANSION"
     }
   ],
   "trendDirection": "Stable",
-  "updatedAt": "2026-06-07T23:12:25-05:00",
+  "updatedAt": "2026-06-08T07:45:35-05:00",
   "sourceMode": "static",
-  "currentDate": "2026-06-07",
+  "currentDate": "2026-06-08",
   "sources": [
     "02_Astrology/Alfie/natal_context.md",
     "02_Astrology/Alfie/deep_research_tropical_2026-2027.md",
@@ -220,11 +225,11 @@
   ],
   "scoringDetail": {
     "dominanceScores": {
-      "jupiter": 10.26,
-      "saturn": 7.26,
-      "pluto": 6.85,
-      "uranus": 6.9,
-      "venus": 4.61
+      "jupiter": 10.2,
+      "saturn": 7.24,
+      "pluto": 6.86,
+      "uranus": 6.91,
+      "venus": 4.26
     },
     "corroboration": "High",
     "lordOfYear": "jupiter",
@@ -234,65 +239,71 @@
     "metricDetail": {
       "opportunity": [
         "Jupiter is lord of the year (benefic regime)",
-        "approaching benefic window: Jupiter return — chapter reset (35d)",
+        "approaching benefic window: Jupiter return — chapter reset (34d)",
         "Vedic Moon–Venus antardasha (relationship-positive)"
       ],
       "pressure": [
-        "Mars square natal venus (5.75°)",
-        "Saturn square natal neptune (0.89°)",
-        "Saturn square natal asc (4.47°)",
+        "Mars square natal venus (5.48°)",
+        "Saturn square natal neptune (0.91°)",
+        "Saturn square natal asc (4.5°)",
         "Sade Sati (Small Panoti) — pressure on foundations",
         "inside admin/clearing window: Late May–early June clearing"
       ],
       "volatility": [
-        "Uranus square natal sun (4.76°)",
-        "Uranus conjunction natal mars (2.78°)",
-        "Uranus sextile natal jupiter (0.12°)",
-        "Uranus trine natal north_node (4.51°)",
+        "Uranus square natal sun (4.74°)",
+        "Uranus conjunction natal mars (2.8°)",
+        "Uranus sextile natal jupiter (0.1°)",
+        "Uranus trine natal north_node (4.49°)",
         "pluto square natal mc (angular, 1.37°)"
       ],
       "momentum": [
         "4 fast transit(s) exact within 3°",
-        "approaching Jupiter return — chapter reset (35d)",
-        "BaZi Da Yun shift within 100 days"
+        "approaching Jupiter return — chapter reset (34d)",
+        "BaZi Da Yun shift within 99 days"
       ]
     },
     "transitSigns": {
-      "sun": "17.41° Gemini",
-      "moon": "14.52° Pisces",
-      "mercury": "10.25° Cancer",
-      "venus": "23.84° Cancer",
-      "mars": "15.05° Taurus",
-      "jupiter": "25.45° Cancer",
-      "saturn": "12.82° Aries",
-      "uranus": "2.48° Gemini",
+      "sun": "17.75° Gemini",
+      "moon": "19.13° Pisces",
+      "mercury": "10.74° Cancer",
+      "venus": "24.25° Cancer",
+      "mars": "15.32° Taurus",
+      "jupiter": "25.52° Cancer",
+      "saturn": "12.85° Aries",
+      "uranus": "2.5° Gemini",
       "neptune": "4.19° Aries",
       "pluto": "5.27° Aquarius"
     },
     "tightAspects": [
       {
-        "transit": "uranus",
-        "natal": "jupiter",
+        "transit": "moon",
+        "natal": "saturn",
         "aspect": "sextile",
-        "orb": 0.12
+        "orb": 0.0
       },
       {
         "transit": "mars",
         "natal": "pluto",
         "aspect": "opposition",
-        "orb": 0.26
+        "orb": 0.0
       },
       {
-        "transit": "moon",
-        "natal": "pluto",
-        "aspect": "trine",
-        "orb": 0.8
+        "transit": "uranus",
+        "natal": "jupiter",
+        "aspect": "sextile",
+        "orb": 0.1
       },
       {
         "transit": "saturn",
         "natal": "neptune",
         "aspect": "square",
-        "orb": 0.89
+        "orb": 0.91
+      },
+      {
+        "transit": "mercury",
+        "natal": "neptune",
+        "aspect": "opposition",
+        "orb": 1.19
       },
       {
         "transit": "neptune",
@@ -310,7 +321,7 @@
         "transit": "neptune",
         "natal": "uranus",
         "aspect": "square",
-        "orb": 1.5
+        "orb": 1.49
       },
       {
         "transit": "neptune",
@@ -319,28 +330,22 @@
         "orb": 1.59
       },
       {
-        "transit": "venus",
-        "natal": "mercury",
-        "aspect": "sextile",
-        "orb": 1.67
-      },
-      {
-        "transit": "mercury",
-        "natal": "neptune",
-        "aspect": "opposition",
-        "orb": 1.68
-      },
-      {
         "transit": "pluto",
         "natal": "north_node",
         "aspect": "conjunction",
         "orb": 1.71
       },
       {
+        "transit": "venus",
+        "natal": "mercury",
+        "aspect": "sextile",
+        "orb": 2.09
+      },
+      {
         "transit": "mercury",
         "natal": "asc",
         "aspect": "opposition",
-        "orb": 1.9
+        "orb": 2.39
       }
     ],
     "transitMissing": [],

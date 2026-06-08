@@ -7,9 +7,13 @@ convergence report, computes live geocentric tropical transits (Swiss Ephemeris)
 classifies the current "operational weather" and writes state.json in the v2
 camelCase contract.
 
+v2.2.2 splits the Daily Reading into TWO independent Codex passes — tropicalReading
+and vedicReading, each {state, body} — so the frameworks don't blend (each pass sees
+only its own system's MDs). dailyReading is deprecated (emitted null).
+
 v2 adds, on top of the v1.1 fields:
-  - dailyReading {state, read}  — ONE unified Tropical+Vedic synthesis (collapses
-    the two horoscope cards; tropicalHoroscope/vedicHoroscope fields removed)
+  - dailyReading {state, read}  — DEPRECATED in v2.2.2 (now null); was ONE unified
+    Tropical+Vedic synthesis (collapsed the two horoscope cards)
   - dailyChanges {momentum, opportunity, pressure, volatility, comparedTo,
     lastComparedAt} or null — real day-over-day deltas from polar/state_history/
   - todaysInsight  — Codex one-liner (<=2 imperative sentences)
@@ -683,6 +687,23 @@ def forecast_trend(today, natal):
 
 
 # --- High-priority dashboard framework (Codex narrative context) ---------
+_MD_CACHE = {}
+
+
+def read_md(path, cap_chars=None):
+    """Read a markdown source once (cached per run). Missing/unreadable -> '' (PVR:
+    never fabricate). Optional cap_chars trims very long reference docs so the Codex
+    prompt stays a sane size; the purpose-built dashboard MDs are passed uncapped."""
+    if path not in _MD_CACHE:
+        try:
+            _MD_CACHE[path] = open(path, encoding="utf-8").read().strip()
+        except Exception as e:
+            log(f"  could not read MD {path}: {e}")
+            _MD_CACHE[path] = ""
+    txt = _MD_CACHE[path]
+    return txt[:cap_chars] if cap_chars else txt
+
+
 def load_astrology_dashboards():
     """Load Alfie's two dashboard-purpose-built astrology MDs (Vedic + Tropical) from
     08_Drafts. Cached once per run in ASTRO_CONTEXT. A missing/unreadable file degrades
@@ -1155,60 +1176,141 @@ def tropical_key_factors(aspects, limit=3):
     return out
 
 
-# --- Section 8: Daily Reading (unified Tropical + Vedic synthesis) --------
-def codex_daily_reading(forecast, tropical_factors, vedic_factors, mood, snap=""):
-    """ONE unified ~200-word reading synthesizing BOTH tropical and Vedic factors via
-    ~/bin/llm --model codex (Cowork-safe). Plain language, NO jargon, and crucially NO
-    'according to Vedic / according to Tropical' callouts — just the merged takeaway.
-    Returns the body string, or None on failure (UI shows a placeholder)."""
+# --- Section 8: Daily Reading (split Tropical + Vedic sub-readings) -------
+# v2.2.2 — the single unified reading is split into TWO independent Codex passes,
+# one per framework. Each pass sees ONLY its system's MD context (no blending):
+#   Tropical: natal_context + deep_research_tropical + 2026-06-07_tropical_dashboard
+#   Vedic:    natal_context + deep_research_vedic    + 2026-06-07_vedic_dashboard
+# Each emits its OWN state label + body, framed in that tradition's own vocabulary.
+
+def tropical_context_block():
+    """Tropical-ONLY narrative context: natal chart + tropical deep-research + the
+    purpose-built Tropical dashboard MD. Frames Capricorn-Rising / 12th-House annual
+    profection / valuation-cycle / structural-leverage vocabulary. Returns '' if
+    nothing could be read (graceful degrade)."""
+    natal = read_md(NATAL_MD, cap_chars=4000)
+    dash = load_astrology_dashboards().get("tropical_dashboard", "")
+    deep = read_md(TROPICAL_MD, cap_chars=6000)
+    parts = []
+    if natal:
+        parts.append("--- NATAL CHART (authoritative, tropical longitudes) ---\n" + natal)
+    if dash:
+        parts.append("--- TROPICAL DASHBOARD (purpose-built, PRIMARY authority) ---\n" + dash)
+    if deep:
+        parts.append("--- TROPICAL DEEP RESEARCH 2026-2027 (reference) ---\n" + deep)
+    return "\n\n".join(parts)
+
+
+def vedic_context_block():
+    """Vedic-ONLY narrative context: natal chart + Vedic deep-research + the
+    purpose-built Vedic dashboard MD. Frames Moon-Venus Mahadasha/antardasha /
+    External Manifestation Windows / nakshatra / Sagittarius-Lagna / Sade-Sati
+    vocabulary. Returns '' if nothing could be read (graceful degrade)."""
+    natal = read_md(NATAL_MD, cap_chars=4000)
+    dash = load_astrology_dashboards().get("vedic_dashboard", "")
+    deep = read_md(VEDIC_MD, cap_chars=6000)
+    parts = []
+    if natal:
+        parts.append("--- NATAL CHART (authoritative; Vedic = sidereal Lahiri) ---\n" + natal)
+    if dash:
+        parts.append("--- VEDIC DASHBOARD (purpose-built, PRIMARY authority) ---\n" + dash)
+    if deep:
+        parts.append("--- VEDIC DEEP RESEARCH 2026 (reference) ---\n" + deep)
+    return "\n\n".join(parts)
+
+
+# Per-system framing vocabulary + the cross-contamination guardrail (each system
+# names ONLY its own tradition's terms, never the other's).
+_READING_SYSTEMS = {
+    "tropical": {
+        "name": "TROPICAL (Western)",
+        "use": ("Western/tropical structural vocabulary naturally — Capricorn Rising, "
+                "the 12th-House annual profection (a foundation/preparation year), the "
+                "'valuation cycle, not destiny cycle' framing, structural leverage, the "
+                "2nd-House North Node self-valuation arc, and natal aspects."),
+        "forbid": ("Mahadasha, antardasha, dasha, Vimshottari, nakshatra, pada, Lagna, "
+                   "Sade Sati, Panoti, or 'External Manifestation Windows'"),
+    },
+    "vedic": {
+        "name": "VEDIC (sidereal)",
+        "use": ("Vedic vocabulary naturally — the Moon Mahadasha with the Venus "
+                "antardasha (relationship/value-positive), the External Manifestation "
+                "Windows (strongest Aug 12 – Sep 5 2026), the transit Moon's nakshatra, "
+                "the Sagittarius Lagna, Sade Sati (Small Panoti), and the Vimshottari "
+                "sub-period chain."),
+        "forbid": ("annual profection, Capricorn Rising, the 'valuation cycle' phrase, "
+                   "tropical sign placements, or '12th-House profection'"),
+    },
+}
+
+
+def codex_reading(system, forecast, factors, moon_desc, context_block, mood, snap=""):
+    """ONE framework's daily reading via ~/bin/llm --model codex (Cowork-safe). `system`
+    is 'tropical' or 'vedic'; the prompt sees ONLY that system's context_block, speaks
+    in that tradition's vocabulary, and is forbidden the other tradition's terms (no
+    cross-contamination). Emits the framework's OWN state label + a ~3-4 line body.
+    Returns (state_label, body) or (None, None) on any failure (PVR: that side -> null)."""
+    cfg = _READING_SYSTEMS[system]
     llm = os.path.expanduser("~/bin/llm")
     if not os.path.exists(llm):
-        log("  ~/bin/llm not found — dailyReading body null")
-        return None
-    factors = [f for f in (list(tropical_factors) + list(vedic_factors)) if f]
-    if not factors:
-        log("  no tropical/vedic factors — dailyReading body null")
-        return None
+        log(f"  ~/bin/llm not found — {system}Reading null")
+        return None, None
+    facts = [f for f in list(factors) if f]
+    if moon_desc:
+        facts.append(moon_desc)
+    if not facts:
+        log(f"  no {system} factors — {system}Reading null")
+        return None, None
     background = (
         "This is a preparation-and-pipeline phase: quiet leverage, cleanup, building "
         "relationships and documents, opening doors that convert into weight-bearing "
         "commitments after late August 2026 — open doors now, sign and formalize later. "
         "Real background pressure and volatility on home and foundations ask for fewer, "
-        "better moves. Two independent traditions are pointing at the same behavioral "
-        "prescription; speak with ONE voice, never naming a tradition."
+        "better moves."
     )
     if snap:
         background += " Today's read from the morning snapshot: " + snap
-    framework = astro_framework_block()
-    framework_section = ("\n\n" + framework) if framework else ""
+    context_section = ("\n\n=== " + cfg["name"] + " CONTEXT (your ONLY source) ===\n"
+                       + context_block + "\n=== END CONTEXT ===") if context_block else ""
     prompt = (
-        "You are writing a single plain-English daily reading for a personal 'life weather' "
-        "dashboard. NO astrology jargon, NO Latin terms, NO aspect names, NO planet or sign "
-        "names, and NEVER say 'according to' any tradition or system. Speak with one unified "
-        "voice in observable themes — focus, relationships, work, money, home, decisions. "
-        "Roughly 180-200 words, second person. The subject is a high-output operator on a "
-        "known multi-month cycle; be honest about BOTH the supports and the tensions. No "
-        "predictions of specific events, no fortune-telling, no hype, no fluff.\n\n"
-        f"Headline mode (translate, do not echo the label): {forecast}.\n"
-        "Underlying factors to synthesize into one read (translate, do not quote): "
-        + "; ".join(factors) + ".\n"
+        f"You are writing the {cfg['name']} sub-reading for a personal astrology dashboard. "
+        f"This card has two clearly-labeled sub-sections; you write ONLY the {cfg['name']} one. "
+        f"USE {cfg['use']} "
+        f"Speak ONLY in the {cfg['name']} framework — do NOT use the OTHER tradition's terms "
+        f"(no {cfg['forbid']}). "
+        "Second person, ~3-4 lines (roughly 60-90 words). Be honest about BOTH the supports "
+        "and the tensions. No event predictions, no fortune-telling, no hype, no fluff.\n\n"
+        f"Headline weather mode: {forecast}.\n"
+        "Live factors to weave in (interpret in your framework, do not just list): "
+        + "; ".join(facts) + ".\n"
         f"Mood: {mood}\n"
         f"Background: {background}"
-        + framework_section + "\n\n"
-        "Output: ONE cohesive second-person passage (\"today you may notice\", \"this is a "
-        "stretch for\"). Output ONLY the passage — no heading, no preamble, no labels."
+        + context_section + "\n\n"
+        "Output EXACTLY this shape and nothing else:\n"
+        "STATE: <one or two word state label for THIS framework today, e.g. Expansion, "
+        "Consolidation, Pivot, Preparation>\n"
+        "BODY: <the second-person passage>"
     )
     try:
         out = subprocess.run([llm, "--lane", "reasoning", "--model", "codex", prompt],
                              capture_output=True, text=True, timeout=180, cwd=DASH)
         if out.returncode != 0:
-            log(f"  codex daily reading exited {out.returncode}: {out.stderr.strip()[:200]}")
-            return None
-        text = re.sub(r"\s+", " ", out.stdout).strip()
-        return text or None
+            log(f"  codex {system} reading exited {out.returncode}: {out.stderr.strip()[:200]}")
+            return None, None
     except Exception as e:
-        log(f"  codex daily reading failed (non-fatal): {e}")
-        return None
+        log(f"  codex {system} reading failed (non-fatal): {e}")
+        return None, None
+    raw = out.stdout
+    sm = re.search(r"(?im)^\s*STATE:\s*(.+?)\s*$", raw)
+    bm = re.search(r"(?is)BODY:\s*(.+)$", raw)
+    state_label = sm.group(1).strip().strip(".").strip() if sm else None
+    body = re.sub(r"\s+", " ", bm.group(1)).strip() if bm else re.sub(r"\s+", " ", raw).strip()
+    if not body:
+        log(f"  codex {system} reading produced no body — null")
+        return None, None
+    if not state_label:
+        state_label = forecast.title()
+    return state_label, body
 
 
 # --- Section 10: Today's Insight (Codex one-liner) -----------------------
@@ -1330,7 +1432,8 @@ def compute(now=None, with_codex=True):
 
     # --- Codex layers: Recommended Actions, Daily Reading, Today's Insight
     recommendations, avoidances = ([], [])
-    daily_read_body = None
+    tropical_reading = None
+    vedic_reading = None
     todays_insight = None
     if with_codex:
         recommendations, avoidances = codex_actions(forecast, dominant, pressure_src, phase_name)
@@ -1342,7 +1445,25 @@ def compute(now=None, with_codex=True):
         trop_factors = tropical_key_factors(aspects, limit=3)
         ved_factors = vedic_factor_list(today, natal, now_utc)
         snap = read_transit_snapshot(today)
-        daily_read_body = codex_daily_reading(forecast, trop_factors, ved_factors, reading_mood, snap)
+        # Moon legs — each system gets ONLY its own leg of moonNow (no blending).
+        trop_moon_desc, ved_moon_desc = "", ""
+        if moon:
+            tl = moon.get("tropical", {})
+            if tl:
+                trop_moon_desc = (f"Transit Moon in {tl.get('sign')} {tl.get('degree')}°, "
+                                  f"natal house {tl.get('house')}")
+            vl = moon.get("vedic", {})
+            if vl:
+                ved_moon_desc = (f"Sidereal Moon in {vl.get('sign')} {vl.get('degree')}°, "
+                                 f"nakshatra {vl.get('nakshatra')} pada {vl.get('nakshatra_pada')}, "
+                                 f"house {vl.get('house')}")
+        # Two independent passes — each sees ONLY its framework's MD context.
+        ts, tb = codex_reading("tropical", forecast, trop_factors, trop_moon_desc,
+                               tropical_context_block(), reading_mood, snap)
+        vs, vb = codex_reading("vedic", forecast, ved_factors, ved_moon_desc,
+                               vedic_context_block(), reading_mood)
+        tropical_reading = {"state": ts, "body": tb} if tb else None
+        vedic_reading = {"state": vs, "body": vb} if vb else None
         todays_insight = codex_todays_insight(forecast, dominant, daily_changes, phase_name)
 
     sources = [NATAL_MD, TROPICAL_MD, VEDIC_MD, COUNCIL_MD]
@@ -1376,8 +1497,10 @@ def compute(now=None, with_codex=True):
         "momentum": mom,
         # --- Moon Now (live Moon position, both systems; null on ephemeris failure) ---
         "moonNow": moon,
-        # --- Section 8: Daily Reading (unified Tropical + Vedic) ---
-        "dailyReading": {"state": forecast, "read": daily_read_body},
+        # --- Section 8: Daily Reading (v2.2.2 split: two independent sub-readings) ---
+        "tropicalReading": tropical_reading,   # {state, body} or null (Codex pass failed)
+        "vedicReading": vedic_reading,         # {state, body} or null (Codex pass failed)
+        "dailyReading": None,                  # DEPRECATED — split into the two above
         # --- Section 9: What Changed (null on first day) ---
         "dailyChanges": daily_changes,
         # --- Section 10: Today's Insight ---
@@ -1441,6 +1564,8 @@ def main():
     log(f"Timing Weather v2.0: {state['forecast']} (dominant={state['dominantPlanet']}, "
         f"conf={state['confidence']}, dur={state['durationDays']}d, phase={state['currentPhase']}, "
         f"changes={'tracking-begins' if dc is None else 'computed'}, "
+        f"reading=trop:{'yes' if state['tropicalReading'] else 'null'}/"
+        f"ved:{'yes' if state['vedicReading'] else 'null'}, "
         f"insight={'yes' if state['todaysInsight'] else 'null'}, "
         f"next={nw['title'] if nw else None}) -> {out_path}")
     return 0
