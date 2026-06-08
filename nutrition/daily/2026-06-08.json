@@ -1,6 +1,6 @@
 {
   "date": "2026-06-08",
-  "synced_at": "2026-06-08T13:18:39+00:00",
+  "synced_at": "2026-06-08T13:48:45+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,20 +9,30 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 0.0,
-    "protein_g": 0.0,
-    "carbs_g": 0.0,
-    "fat_g": 0.0
+    "calories": 250.0,
+    "protein_g": 4.0,
+    "carbs_g": 32.0,
+    "fat_g": 12.0
   },
-  "meal_count": 0,
+  "meal_count": 1,
   "raw": {
     "date": "2026-06-08",
-    "meals": [],
+    "meals": [
+      {
+        "title": "Club & Cheddar Crackers",
+        "time": "08:21",
+        "calories": 250,
+        "protein": 4,
+        "fat": 12,
+        "carbs": 32,
+        "emoji": "\u00f0\u009f\u00a5\u00a8"
+      }
+    ],
     "totals": {
-      "calories": 0,
-      "protein": 0,
-      "fat": 0,
-      "carbs": 0
+      "calories": 250,
+      "protein": 4,
+      "fat": 12,
+      "carbs": 32
     },
     "targets": {
       "calories": 2574,
@@ -31,14 +41,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 2574,
+      "calories": 2324,
       "is_over": false
     },
-    "meal_count": 0,
+    "meal_count": 1,
     "labels": {
       "header": "Today",
-      "calories_remaining": "2574 kcal remaining today",
-      "meals_logged": "0 meals logged",
+      "calories_remaining": "2324 kcal remaining today",
+      "meals_logged": "1 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
