@@ -91,9 +91,24 @@
   "pressure": 85,
   "volatility": 78,
   "momentum": 39,
+  "moonNow": {
+    "timestamp": "2026-06-08T04:12:25Z",
+    "tropical": {
+      "sign": "Pisces",
+      "degree": 14.52,
+      "house": 2
+    },
+    "vedic": {
+      "sign": "Aquarius",
+      "degree": 20.29,
+      "nakshatra": "Purva Bhadrapada",
+      "nakshatra_pada": 1,
+      "house": 3
+    }
+  },
   "dailyReading": {
     "state": "EXPANSION",
-    "read": "Today has an expansion tone, but it is not clean or effortless. You may notice more doors cracking open through conversations, documents, introductions, or quiet signs that your work is starting to travel further than your current title or setup. The useful move is to build leverage without rushing to lock everything in. Ask better questions, update the paper trail, clarify expectations, and keep relationships warm, especially with people who can later support a more formal step. The tension is that your foundations still feel loaded: home, money, family logistics, repairs, debt, shared resources, or emotional bandwidth may all demand more maturity than you would prefer. This is a stretch for your nervous system because the opportunity signal is real, but the background pressure is also real. Do not confuse movement with readiness. Work benefits from precise communication today. Say what you mean, but avoid forcing agreement before the structure is ready. Money decisions should be practical, not symbolic. Relationships may bring useful clarity, but not necessarily comfort. Fewer, cleaner moves beat big declarations. Open the door now; make it weight-bearing later."
+    "read": "Today has an expansion feel, but it is not the clean, effortless kind. You may notice doors opening through conversation, follow-up, shared planning, or a person who can help move something forward, while your private baseline still feels pressured and uneven. This is a stretch for holding bigger possibilities without rushing them into fixed commitments. Your best use of the day is preparation: clarify the ask, refine the document, clean up the numbers, organize the property or home details, and strengthen the relationship before you lean on it. Work can benefit from visibility, but the advantage comes through thoughtful positioning, not force. Money and value questions may feel personal today, especially if you are comparing what you carry against what you are paid, credited, or trusted to own. Home and emotional foundations may be noisy in the background, so fewer, better moves matter. Do not mistake volatility for urgency. Speak clearly, but leave room for revision. Open the door, gather the proof, build the pipeline, and let weight-bearing decisions wait until the structure is stronger. Expansion is available now as leverage, not yet as final form."
   },
   "dailyChanges": {
     "momentum": -32,
@@ -101,19 +116,19 @@
     "pressure": 12,
     "volatility": 0,
     "comparedTo": "2026-06-06",
-    "lastComparedAt": "2026-06-07T23:05:33-05:00"
+    "lastComparedAt": "2026-06-07T23:12:25-05:00"
   },
-  "todaysInsight": "Build the pipeline and price your contribution clearly. Delay final commitments until the pressure exposes better terms.",
+  "todaysInsight": "Build the pipeline and tighten your terms. Delay final commitments until pressure exposes the real price.",
   "recommendations": [
     "Build pipeline",
-    "Price your value",
-    "Document ownership",
-    "Schedule authority meetings"
+    "Price contribution",
+    "Prepare property",
+    "Document systems"
   ],
   "avoidances": [
-    "Irreversible commitments",
+    "Final commitments",
     "Salary dependency",
-    "Romance chasing"
+    "Romance fixation"
   ],
   "drivers": [
     {
@@ -194,7 +209,7 @@
     }
   ],
   "trendDirection": "Stable",
-  "updatedAt": "2026-06-07T23:05:33-05:00",
+  "updatedAt": "2026-06-07T23:12:25-05:00",
   "sourceMode": "static",
   "currentDate": "2026-06-07",
   "sources": [
@@ -243,10 +258,10 @@
       ]
     },
     "transitSigns": {
-      "sun": "17.4° Gemini",
-      "moon": "14.46° Pisces",
+      "sun": "17.41° Gemini",
+      "moon": "14.52° Pisces",
       "mercury": "10.25° Cancer",
-      "venus": "23.83° Cancer",
+      "venus": "23.84° Cancer",
       "mars": "15.05° Taurus",
       "jupiter": "25.45° Cancer",
       "saturn": "12.82° Aries",
@@ -265,13 +280,13 @@
         "transit": "mars",
         "natal": "pluto",
         "aspect": "opposition",
-        "orb": 0.27
+        "orb": 0.26
       },
       {
         "transit": "moon",
         "natal": "pluto",
         "aspect": "trine",
-        "orb": 0.86
+        "orb": 0.8
       },
       {
         "transit": "saturn",
@@ -307,13 +322,13 @@
         "transit": "venus",
         "natal": "mercury",
         "aspect": "sextile",
-        "orb": 1.66
+        "orb": 1.67
       },
       {
         "transit": "mercury",
         "natal": "neptune",
         "aspect": "opposition",
-        "orb": 1.69
+        "orb": 1.68
       },
       {
         "transit": "pluto",

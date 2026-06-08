@@ -999,6 +999,73 @@ def nakshatra_of(lon):
     return NAKSHATRAS[int(lon // (360.0 / 27)) % 27]
 
 
+def nakshatra_pada_of(lon):
+    """Pada (1–4) = which 3°20' quarter of the 13°20' nakshatra `lon` falls in."""
+    nak_len = 360.0 / 27          # 13.3333°
+    pada_len = nak_len / 4        # 3.3333°
+    return int((lon % nak_len) / pada_len) + 1
+
+
+# --- Moon Now (live Moon position, both systems) -------------------------
+def natal_placidus_cusps():
+    """Alfie's natal Placidus house cusps (tropical), house 1..12. Computed once from
+    the birth chart — a transiting body's natal-house placement is which cusp pair it
+    falls between. swe.houses returns tropical cusps regardless of sidereal mode."""
+    raw = swe.houses(birth_jd(), BIRTH_LAT, BIRTH_LON, b"P")[0]
+    return list(raw[1:13]) if len(raw) >= 13 else list(raw[:12])
+
+
+def house_of(cusps, lon):
+    """Which natal house (1..12) a longitude falls in, given ordered house cusps."""
+    lon %= 360
+    for i in range(12):
+        a = cusps[i] % 360
+        span = (cusps[(i + 1) % 12] - a) % 360
+        if (lon - a) % 360 < span:
+            return i + 1
+    return None
+
+
+def moon_now(now_utc, natal):
+    """Live Moon in BOTH systems for state.json `moonNow`. Tropical = geocentric
+    ecliptic (sign/degree + natal Placidus house). Vedic = Lahiri sidereal
+    (sign/degree/nakshatra/pada + whole-sign house from the sidereal Lagna).
+    PVR: returns None on any ephemeris failure — never fabricated."""
+    try:
+        jd = jd_now(now_utc)
+        # --- Tropical (compute houses before switching sidereal mode) ---
+        try:
+            cusps = natal_placidus_cusps()
+            trop_house = house_of(cusps, lon_of(jd, swe.MOON))
+        except Exception as e:
+            log(f"  moonNow: natal houses failed ({e}) — tropical house null")
+            trop_house = None
+        trop_lon = lon_of(jd, swe.MOON)
+        tropical = {"sign": sign_of(trop_lon), "degree": round(trop_lon % 30, 2),
+                    "house": trop_house}
+        # --- Vedic (Lahiri sidereal) ---
+        swe.set_sid_mode(swe.SIDM_LAHIRI, 0, 0)
+        sid_lon = swe.calc_ut(jd, swe.MOON, swe.FLG_SWIEPH | swe.FLG_SIDEREAL)[0][0]
+        # whole-sign house off the sidereal Lagna (derive from chart; MD says Sagittarius)
+        try:
+            lagna_idx = int(sidereal_natal(natal)["asc"] // 30) % 12
+        except Exception:
+            lagna_idx = SIGN_IDX["Sagittarius"]
+        moon_idx = int(sid_lon // 30) % 12
+        vedic = {"sign": sign_of(sid_lon), "degree": round(sid_lon % 30, 2),
+                 "nakshatra": nakshatra_of(sid_lon),
+                 "nakshatra_pada": nakshatra_pada_of(sid_lon),
+                 "house": (moon_idx - lagna_idx) % 12 + 1}
+        return {
+            "timestamp": now_utc.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "tropical": tropical,
+            "vedic": vedic,
+        }
+    except Exception as e:
+        log(f"  moonNow computation failed: {e} — emitting null")
+        return None
+
+
 # Natal points to weight when picking the strongest Vedic transit (Lagna/Moon/Sun
 # carry the chart in Vimshottari practice), then everything else.
 VEDIC_PRIORITY = {"moon": 3, "asc": 3, "sun": 2, "mc": 1}
@@ -1256,6 +1323,7 @@ def compute(now=None, with_codex=True):
     # --- Sections 2/4/5/6: derived structure (pure, no Codex) ------------
     radar = event_radar(today)
     upcoming = upcoming_events(today)
+    moon = moon_now(now_utc, natal)
     now_bar = build_now_bar(forecast, pre, daily_changes, trend_dir, nxt)
     influences = build_planet_influences(dominant, supporting, pressure_src, volatility_src,
                                          opp_c, pre_c, vol_c, metrics)
@@ -1306,6 +1374,8 @@ def compute(now=None, with_codex=True):
         "pressure": pre,
         "volatility": vol,
         "momentum": mom,
+        # --- Moon Now (live Moon position, both systems; null on ephemeris failure) ---
+        "moonNow": moon,
         # --- Section 8: Daily Reading (unified Tropical + Vedic) ---
         "dailyReading": {"state": forecast, "read": daily_read_body},
         # --- Section 9: What Changed (null on first day) ---
