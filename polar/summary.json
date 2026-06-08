@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-07T20:45:19-05:00",
-  "data_hash": "d5faa6e62069f6cd",
+  "generated_at": "2026-06-07T21:15:58-05:00",
+  "data_hash": "364f0588084f6c64",
   "slot": "macros-update",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe bread entry opened the intake window back up, but the day still reads underfed for the amount of heavy effort already spent. Protein is moving, not yet carrying the muscle-preservation side of the equation. This favors repair and steadiness over extra intensity.\n\nGradual gains.\n\nPerformance: Gradual gains.\n\nTransit: none",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe latest meal meaningfully changed the day: the energy window reopened and protein moved from light to more credible. Output is already on the heavier side, so this stretch favors muscle-preserving steadiness over extra strain.\n\nSteady, not depleted.\n\nPerformance: Steady, not depleted.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe bread entry opened the intake window back up, but the day still reads underfed for the amount of heavy effort already spent. Protein is moving, not yet carrying the muscle-preservation side of the equation. This favors repair and steadiness over extra intensity.\n\nGradual gains."
+      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe latest meal meaningfully changed the day: the energy window reopened and protein moved from light to more credible. Output is already on the heavier side, so this stretch favors muscle-preserving steadiness over extra strain.\n\nSteady, not depleted."
     },
     {
       "label": "Performance",
-      "text": "Gradual gains."
+      "text": "Steady, not depleted."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe bread entry opened the intake window back up, but the day still reads underfed for the amount of heavy effort already spent. Protein is moving, not yet carrying the muscle-preservation side of the equation. This favors repair and steadiness over extra intensity.\n\nGradual gains.",
-    "performance": "Gradual gains.",
+    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe latest meal meaningfully changed the day: the energy window reopened and protein moved from light to more credible. Output is already on the heavier side, so this stretch favors muscle-preserving steadiness over extra strain.\n\nSteady, not depleted.",
+    "performance": "Steady, not depleted.",
     "transit": null
   },
-  "nutrition_nudge": "Front-load protein into your next meal with 60g from lean meat, eggs, Greek yogurt, or tofu.",
+  "nutrition_nudge": "Keep dinner steady and include 40g protein to protect muscle while staying on pace.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
     "sleep_hours": 6.2,
     "hrv_today": 65,
     "hrv_7d_avg": 64.7,
-    "nutrition": "calories 1410 of 2574 goal, protein 59g of 138g goal, carbs 192g of 290g goal, fat 44g of 72g goal",
-    "nutrition_detail": "calories 1410 of 2574 goal -> 1164 left; protein 59g of 138g goal -> 79g gap; carbs 192g of 290g goal; fat 44g of 72g goal",
+    "nutrition": "calories 1975 of 2574 goal, protein 100g of 138g goal, carbs 249g of 290g goal, fat 61g of 72g goal",
+    "nutrition_detail": "calories 1975 of 2574 goal -> 599 left; protein 100g of 138g goal -> 38g gap; carbs 249g of 290g goal; fat 61g of 72g goal",
     "activity_today": "8,939 steps so far, 8h 15m active, 2,622 calories burned, Heavy training load"
   }
 }
