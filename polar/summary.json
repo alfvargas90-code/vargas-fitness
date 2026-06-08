@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-07T19:14:32-05:00",
-  "data_hash": "f249d851a666c577",
-  "slot": "macros-update",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe fresh log barely changes the nutrition picture: a light add-on, not a real catch-up, after a day that has already carried heavy output. Recovery looks supportive, but the intake gap still favors restraint over intensity, with muscle preservation depending on a stronger protein finish.\n\nUnderfed, but not depleted.\n\nPerformance: Underfed, but not depleted.\n\nTransit: none",
+  "generated_at": "2026-06-07T20:00:06-05:00",
+  "data_hash": "6b600a610ce61914",
+  "slot": "train-2",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe workout window closes on a day that spent a lot of reserve, with movement slightly above normal and recovery steadier than recent patterns. The body can absorb the load, but the large energy and protein gap makes tonight favor restoration and muscle preservation over more strain.\n\nRecovery takes the lead.\n\nPerformance: Recovery takes the lead.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe fresh log barely changes the nutrition picture: a light add-on, not a real catch-up, after a day that has already carried heavy output. Recovery looks supportive, but the intake gap still favors restraint over intensity, with muscle preservation depending on a stronger protein finish.\n\nUnderfed, but not depleted."
+      "text": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe workout window closes on a day that spent a lot of reserve, with movement slightly above normal and recovery steadier than recent patterns. The body can absorb the load, but the large energy and protein gap makes tonight favor restoration and muscle preservation over more strain.\n\nRecovery takes the lead."
     },
     {
       "label": "Performance",
-      "text": "Underfed, but not depleted."
+      "text": "Recovery takes the lead."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe fresh log barely changes the nutrition picture: a light add-on, not a real catch-up, after a day that has already carried heavy output. Recovery looks supportive, but the intake gap still favors restraint over intensity, with muscle preservation depending on a stronger protein finish.\n\nUnderfed, but not depleted.",
-    "performance": "Underfed, but not depleted.",
+    "reading": "State\nGood\nRecovery 81 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe workout window closes on a day that spent a lot of reserve, with movement slightly above normal and recovery steadier than recent patterns. The body can absorb the load, but the large energy and protein gap makes tonight favor restoration and muscle preservation over more strain.\n\nRecovery takes the lead.",
+    "performance": "Recovery takes the lead.",
     "transit": null
   },
-  "nutrition_nudge": "Protein is light; make dinner carry 85g and keep calories steady.",
+  "nutrition_nudge": "Front-load dinner with 60g protein now to close the gap and protect muscle.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 64.7,
     "nutrition": "calories 1230 of 2574 goal, protein 53g of 138g goal, carbs 156g of 290g goal, fat 43g of 72g goal",
     "nutrition_detail": "calories 1230 of 2574 goal -> 1344 left; protein 53g of 138g goal -> 85g gap; carbs 156g of 290g goal; fat 43g of 72g goal",
-    "activity_today": "8,745 steps so far, 7h 51m active, 2,540 calories burned, Heavy training load"
+    "activity_today": "8,939 steps so far, 8h 15m active, 2,622 calories burned, Heavy training load"
   }
 }
