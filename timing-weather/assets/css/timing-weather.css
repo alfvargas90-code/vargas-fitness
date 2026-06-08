@@ -386,6 +386,14 @@ body {
 .reading-state-label { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--dim); }
 .reading-state-value { font-size: 26px; font-weight: 800; color: var(--gold-bright); letter-spacing: 0.01em; }
 .reading-body { font-size: 14px; line-height: 1.6; color: var(--text); }
+.reading-moon {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.55);
+}
+.reading-moon:empty { display: none; }
 .reading-footnote {
   margin-top: auto;
   padding-top: 10px;

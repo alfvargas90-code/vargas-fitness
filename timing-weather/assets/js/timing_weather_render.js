@@ -127,6 +127,25 @@ function renderDailyReading(s) {
   setText('reading-body', dr.read || dr.body);
 }
 
+/* Live Moon position as a compact Daily Reading subtitle.
+   Format: "Moon · Pisces 14° · 2H trop / 3H ved · Purva Bhadrapada".
+   PVR: moonNow === null → empty content → CSS `.reading-moon:empty` hides it. */
+function renderMoonNow(s) {
+  const el = $('reading-moon');
+  if (!el) return;
+  const mn = s.moonNow;
+  if (!mn) { el.textContent = ''; return; }
+  const trop = mn.tropical || {};
+  const ved = mn.vedic || {};
+  const tropSign = trop.sign || '—';
+  const tropDeg = trop.degree != null ? Math.round(trop.degree) : '—';
+  const tropHouse = trop.house != null ? trop.house : '—';
+  const vedHouse = ved.house != null ? ved.house : '—';
+  const nak = ved.nakshatra || '—';
+  el.textContent =
+    `Moon · ${tropSign} ${tropDeg}° · ${tropHouse}H trop / ${vedHouse}H ved · ${nak}`;
+}
+
 function renderWhatChanged(s) {
   const card = $('changed-card');
   if (!card) return;
@@ -279,6 +298,7 @@ function renderAll(s) {
   renderHero(s);
   renderNowBar(s);
   renderDailyReading(s);
+  renderMoonNow(s);
   renderWhatChanged(s);
   renderTodaysInsight(s);
   renderRecommended(s);

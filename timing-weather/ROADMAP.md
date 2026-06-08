@@ -160,6 +160,14 @@ over flat sections couldn't reproduce the curated mockup composition.
   a fresh timestamp when index.html/app.js change (NOT a static semver — that
   file is gate-owned). This entry is the durable v2.2.0 release record.
 
+## v2.2.1 — Moon Now subtitle ✅ SHIPPED (2026-06-08)
+
+Live Moon position (tropical + vedic + nakshatra) surfaces as a compact
+subtitle line under the Daily Reading body. Engine emits `moonNow` in
+state.json (sign / degree / house in both systems + nakshatra + pada);
+render formats it as `Moon · <trop sign> <deg>° · <H>H trop / <H>H ved ·
+<nakshatra>`. PVR strict: null moonNow → empty line (CSS hides it).
+
 ## v1.3 — Metric Breakdowns (deferred)
 
 - Opportunity breakdown by life domain (career / money / relationships / home)
