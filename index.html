@@ -672,8 +672,18 @@
       </div>
     </section>
 
-    <!-- ════════════════ NOW — live / today section eyebrow ═══════ -->
-    <div class="text-[11px] uppercase tracking-[2px] font-bold mb-2 px-1" style="color:#9A6BFF;opacity:0.85" aria-hidden="true">Now</div>
+    <!-- ════════════════ NOW — live / today section eyebrow + Last Synced badge ═══════ -->
+    <div class="flex items-center justify-between mb-2 px-1">
+      <div class="text-[11px] uppercase tracking-[2px] font-bold" style="color:#9A6BFF;opacity:0.85" aria-hidden="true">Now</div>
+      <!-- Last Synced — relative freshness of the Polar pipeline (manifest.synced_at),
+           green <30m · yellow 30m–2h · red >2h. Tap re-fetches + re-renders. -->
+      <button type="button" id="last-synced" aria-label="Last synced — tap to refresh" title="Tap to refresh"
+              class="flex items-center gap-1.5 rounded-full px-2.5 py-1 focus:outline-none active:scale-95 transition-transform"
+              style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08)">
+        <span id="last-synced-dot" class="inline-block w-2 h-2 rounded-full" style="background:#8A90A6"></span>
+        <span id="last-synced-text" class="text-[11px] font-semibold stat-num" style="color:#8A90A6">checking sync…</span>
+      </button>
+    </div>
 
     <!-- ════════════════ TODAY'S READ — glass, prose + physiology rows ═══════ -->
     <section class="gradient-card p-3.5 mb-2.5" id="todays-read">
@@ -853,6 +863,11 @@
             <div class="space-y-1" id="polar-recharge-stack"></div>
             <div class="text-xs text-muted mt-3" id="polar-recharge-trend"></div>
             <div class="text-xs text-muted/80 mt-1" id="polar-recharge-note"></div>
+            <!-- Recharge components — ANS charge (value + status), Sleep charge,
+                 Nightly Recharge status. Real recharge/sleep fields surfaced as
+                 numbers + Polar's 1–6 qualitative words (the dot stack above only
+                 shows ans_charge_status). PVR-strict: null field → "—". -->
+            <div class="mt-4 pt-3 border-t border-line space-y-2.5" id="recharge-detail"></div>
           </div>
           <div class="space-y-6">
             <div id="polar-sleep-wrap"></div>
@@ -972,6 +987,6 @@
        style="height:env(safe-area-inset-bottom);background:#03050F"></div>
 
   <script src="data.js"></script>
-  <script src="app.js?v=redesign14"></script>
+  <script src="app.js?v=redesign15"></script>
 </body>
 </html>

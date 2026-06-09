@@ -64,6 +64,65 @@ function freshnessHTML(dateStr, nudge) {
   return `<span class="text-warn font-medium">⚠️ ${n} days stale — ${nudge}</span>`;
 }
 
+// ---------- Polar Nightly Recharge component status words (1–6 ladder) ----------
+// ans_charge_status, nightly_recharge_status, and sleep_charge all ride Polar's
+// 1–6 qualitative scale. Index 0 / null is the no-data placeholder.
+const POLAR_STATUS_WORD = ["—", "Very poor", "Poor", "Compromised", "OK", "Good", "Very good"];
+const polarStatusWord = s => (s == null ? "—" : (POLAR_STATUS_WORD[s] || "—"));
+// Status → semantic color (ascending red→amber→cyan→green), matching the dashboard
+// recovery palette so the word's hue matches its meaning.
+const POLAR_STATUS_COLOR = ["#8A90A6", "#FF5E62", "#FF5E62", "#FF8A3D", "#00C8FF", "#39D98A", "#39D98A"];
+const polarStatusColor = s => (s == null ? "#8A90A6" : (POLAR_STATUS_COLOR[s] || "#8A90A6"));
+
+// ---------- Last Synced badge (Now row) ----------
+// Reads polar/manifest.json `synced_at` (ISO, rewritten every polar/sync.py run) and
+// renders a relative "synced N ago" stamp + a freshness dot:
+//   <30 min → green · 30 min–2 h → yellow · >2 h → red + ⚠ prefix.
+// Pure client-side read; no pipeline touch. Tap re-fetches + re-renders (wireLastSynced).
+function relSyncPhrase(mins) {
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins} min ago`;
+  const h = Math.floor(mins / 60), m = mins % 60;
+  return m ? `${h} hr ${m} min ago` : `${h} hr ago`;
+}
+async function renderLastSynced() {
+  const dot = document.getElementById("last-synced-dot");
+  const txt = document.getElementById("last-synced-text");
+  if (!txt) return;
+  try {
+    const manifest = await fetchJSON("polar/manifest.json");
+    const t = manifest.synced_at ? new Date(manifest.synced_at).getTime() : NaN;
+    if (!isFinite(t)) {
+      txt.textContent = "sync time unknown"; txt.style.color = "#8A90A6";
+      if (dot) { dot.style.background = "#8A90A6"; dot.style.boxShadow = "none"; }
+      return;
+    }
+    const mins = Math.max(0, Math.floor((Date.now() - t) / 60000));  // clamp clock skew
+    let color, warn = "";
+    if (mins < 30)       color = "#39D98A";            // green — fresh
+    else if (mins < 120) color = "#FFC400";            // yellow — aging
+    else { color = "#FF5E62"; warn = "⚠ "; }           // red — stale
+    if (dot) { dot.style.background = color; dot.style.boxShadow = `0 0 6px ${color}`; }
+    txt.textContent = `${warn}synced ${relSyncPhrase(mins)}`;
+    txt.style.color = color;
+  } catch (e) {
+    txt.textContent = "sync offline"; txt.style.color = "#8A90A6";
+    if (dot) { dot.style.background = "#8A90A6"; dot.style.boxShadow = "none"; }
+  }
+}
+// Tap-to-refresh — re-fetch the freshness + the live data renderers (no full
+// renderAll, which would re-bind tap-through listeners). Bound once.
+function wireLastSynced() {
+  const btn = document.getElementById("last-synced");
+  if (!btn || btn._wired) return;
+  btn._wired = true;
+  btn.addEventListener("click", () => {
+    renderLastSynced();
+    renderRings(); renderActivity(); renderPolar();
+    renderSupportCards(); renderPhysiology(); renderTodaysRead();
+  });
+}
+
 function bfPercentileBand(age, bf) {
   const row = BF_PERCENTILES_MEN.find(r => {
     if (r.age === ">60") return age > 60;
@@ -202,6 +261,7 @@ async function renderPolar() {
     renderRechargeTrend(window7, recMap, rechargeDays.length);
     renderPolarSleep(sleepMap[sleepDates.at(-1)]);   // Block B — most recent date with sleep data
     renderHRV(recDates, recMap);
+    renderRechargeDetail(recMap[recDates.at(-1)], sleepMap[sleepDates.at(-1)]); // ANS/Sleep/Nightly
 
     const polarLatest = [recDates.at(-1), sleepDates.at(-1)].filter(Boolean).sort().at(-1) || null;
     document.getElementById("polar-sub").innerHTML = freshnessHTML(polarLatest, "wear the watch");
@@ -733,7 +793,7 @@ function renderRecoveryWindow(s) {
 async function renderPhysiology() {
   const grid = document.getElementById("physiology-grid");
   if (!grid) return;
-  let hrv = null, hrvDelta = null, rhr = null, rhrDelta = null, resp = null;
+  let hrv = null, hrvDelta = null, rhr = null, rhrDelta = null, resp = null, respDelta = null;
   try {
     const manifest = await fetchJSON("polar/manifest.json");
     const recDates = ((manifest.categories || {}).recharge || []).slice().sort();
@@ -752,6 +812,12 @@ async function renderPhysiology() {
       if (lunar.physiology.hrv_pct_baseline != null) hrvDelta = lunar.physiology.hrv_pct_baseline;
       if (lunar.physiology.rhr_delta_bpm != null) rhrDelta = lunar.physiology.rhr_delta_bpm;
     }
+    // Breathing-rate delta vs the history-export baseline (baseline.json) — Resp is
+    // the one physiology row without an LSI-supplied delta. Lower than baseline =
+    // calmer (good), so goodIsUp:false on the row keeps a downward arrow green.
+    const baseline = await loadBaseline();
+    const respBaseline = baseline?.nightly_recharge?.breathing_rate_avg ?? null;
+    if (resp != null && respBaseline != null) respDelta = +(resp - respBaseline).toFixed(1);
   } catch (e) { /* file:// / no sync → all em-dash */ }
 
   // Icon set — matches the mockup's row glyphs (heart, heart, lungs).
@@ -789,7 +855,7 @@ async function renderPhysiology() {
         hrvState(hrvDelta)) +
     row("heart",  "#FF5E62", "RHR",   rhr,  "", rhrDelta, "",    false,
         rhrState(rhrDelta)) +
-    row("lungs",  "#00C8FF", "Resp",  resp, "", null,     "",    false,
+    row("lungs",  "#00C8FF", "Resp",  resp, "", respDelta, "",   false,
         respState(resp));
 }
 
@@ -1008,6 +1074,43 @@ function renderPolarSleep(sleep) {
       <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#DCCBFF"></span> Light ${secsToHM(light)}</span>
       <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#7B4DE0"></span> REM ${secsToHM(rem)}</span>
     </div>`;
+}
+
+// Recharge components detail — surfaces ANS charge (numeric value + 1–6 status
+// word), Sleep charge (status), and Nightly Recharge (overall status). These are
+// real recharge/sleep fields the dot stack above never shows as numbers/words.
+// No historical baseline exists for these (the Polar history export carries no ANS
+// Charge — see baseline.json note), so the qualitative word is the qualifier, not a
+// delta arrow. PVR-strict: a missing field renders "—".
+function renderRechargeDetail(rec, sleep) {
+  const host = document.getElementById("recharge-detail");
+  if (!host) return;
+  const row = (label, valHTML, sub, subColor) => `
+    <div class="flex items-baseline justify-between gap-2">
+      <span class="text-[9px] uppercase tracking-wide text-muted font-semibold shrink-0">${label}</span>
+      <span class="flex items-baseline gap-1.5 min-w-0">
+        <span class="text-[13px] font-bold stat-num text-white whitespace-nowrap">${valHTML}</span>
+        ${sub ? `<span class="text-[10px] font-semibold whitespace-nowrap" style="color:${subColor || "#8A90A6"}">${sub}</span>` : ""}
+      </span>
+    </div>`;
+  const rows = [];
+  // ANS charge — the numeric value leads (signed), status word qualifies it.
+  if (rec && rec.ans_charge != null) {
+    const v = Number(rec.ans_charge);
+    rows.push(row("ANS charge", `${v > 0 ? "+" : ""}${v.toFixed(1)}`,
+      polarStatusWord(rec.ans_charge_status), polarStatusColor(rec.ans_charge_status)));
+  } else rows.push(row("ANS charge", "—", "", null));
+  // Sleep charge — ordinal only (last night's sleep vs your need); word leads, X/6 qualifies.
+  if (sleep && sleep.sleep_charge != null) {
+    rows.push(row("Sleep charge", polarStatusWord(sleep.sleep_charge),
+      `${sleep.sleep_charge}/6`, polarStatusColor(sleep.sleep_charge)));
+  } else rows.push(row("Sleep charge", "—", "", null));
+  // Nightly Recharge — overall status word (the dot stack above is its history).
+  if (rec && rec.nightly_recharge_status != null) {
+    rows.push(row("Nightly Recharge", polarStatusWord(rec.nightly_recharge_status),
+      `${rec.nightly_recharge_status}/6`, polarStatusColor(rec.nightly_recharge_status)));
+  } else rows.push(row("Nightly Recharge", "—", "", null));
+  host.innerHTML = rows.join("");
 }
 
 // Block C — HRV big number + inline 7-day SVG sparkline + 7d avg/delta.
@@ -1264,6 +1367,9 @@ function startCurrentsPolling() {
     .then(s => { _lastSummarySig = s.data_hash || s.generated_at || null; })
     .catch(() => {});
   setInterval(pollCurrents, 60000);
+  // Keep the Last Synced relative stamp ticking even between data-hash changes, so
+  // "synced N min ago" ages live and flips green→yellow→red on schedule.
+  setInterval(renderLastSynced, 60000);
 }
 
 // ---------- Lunar tracker (polar/lunar_stress.py `lunar` block) ----------
@@ -1890,6 +1996,8 @@ function renderAll() {
   wireRings();   // tap-through scroll on metric corners + card links
   renderActivity(); // async, Polar Loop Gen 2 daily activity (steps / active time / calories)
   renderPolar(); // async, live Polar Loop data
+  renderLastSynced(); // async, Last Synced freshness badge (manifest.synced_at)
+  wireLastSynced();   // tap-to-refresh on the Last Synced badge (bound once)
   renderPatternEngine(); // async, lunar-phase correlations (polar/patterns.json)
   renderDayReview(); // async, nightly Day-in-Review freeze (polar/day_review.json)
 }
