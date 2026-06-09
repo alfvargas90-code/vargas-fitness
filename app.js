@@ -905,6 +905,18 @@ async function renderSupportCards() {
         stat(activeHM || "—", "Active") +
         stat(activeCal != null ? activeCal.toLocaleString() : "—", "Active kcal");
     }
+
+    // ── Calories Burned tile — total daily kcal + active subscript (same feed) ──
+    const calTotalEl = document.getElementById("cal-total");
+    const calSubEl = document.getElementById("cal-sub");
+    if (calTotalEl) {
+      const total = a && a.calories != null ? Math.round(a.calories) : null;
+      calTotalEl.textContent = total != null ? total.toLocaleString() : "—";
+    }
+    if (calSubEl) {
+      const active = a && a["active-calories"] != null ? Math.round(a["active-calories"]) : null;
+      calSubEl.textContent = active != null ? `active ${active.toLocaleString()}` : "active —";
+    }
   } catch (e) {}
 }
 
