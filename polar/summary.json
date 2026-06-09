@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-09T04:00:01-05:00",
-  "data_hash": "d384202c2e7530ce",
-  "slot": "sleep",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 1%\n\nRead\nLast night gave you time in bed, but the deeper recovery signal is still muted, so the reserve is limited. This is a lower-ceiling day that favors steady output, modest strain, and enough protein to keep muscle from paying for the deficit.\n\nQuiet momentum.\n\nPerformance: Quiet momentum.\n\nTransit: none",
+  "generated_at": "2026-06-09T07:00:00-05:00",
+  "data_hash": "f6505c601e3a8327",
+  "slot": "recovery",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 3%\n\nRead\nThe day opens with more rest than usual, but recovery is still notably muted, so capacity feels narrow rather than charged. It favors muscle-preserving consistency over intensity, with protein and a modest energy gap carrying more weight than early movement.\n\nMeasured, not forceful.\n\nPerformance: Measured, not forceful.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 1%\n\nRead\nLast night gave you time in bed, but the deeper recovery signal is still muted, so the reserve is limited. This is a lower-ceiling day that favors steady output, modest strain, and enough protein to keep muscle from paying for the deficit.\n\nQuiet momentum."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 3%\n\nRead\nThe day opens with more rest than usual, but recovery is still notably muted, so capacity feels narrow rather than charged. It favors muscle-preserving consistency over intensity, with protein and a modest energy gap carrying more weight than early movement.\n\nMeasured, not forceful."
     },
     {
       "label": "Performance",
-      "text": "Quiet momentum."
+      "text": "Measured, not forceful."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 1%\n\nRead\nLast night gave you time in bed, but the deeper recovery signal is still muted, so the reserve is limited. This is a lower-ceiling day that favors steady output, modest strain, and enough protein to keep muscle from paying for the deficit.\n\nQuiet momentum.",
-    "performance": "Quiet momentum.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 3%\n\nRead\nThe day opens with more rest than usual, but recovery is still notably muted, so capacity feels narrow rather than charged. It favors muscle-preserving consistency over intensity, with protein and a modest energy gap carrying more weight than early movement.\n\nMeasured, not forceful.",
+    "performance": "Measured, not forceful.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Start steady: make breakfast protein-led and keep meals evenly paced today.",
   "transits": [],
   "data_basis": {
     "recharge_today": 1,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 61.6,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "4 steps so far, 4m active, 458 calories burned, \u2014 training load"
   }
 }
