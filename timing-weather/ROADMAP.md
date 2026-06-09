@@ -201,11 +201,16 @@ order reflects Alfie's "traditional first" preference. Moon Now footer
 moves into Vedic section. Cross-contamination guardrails preserved
 (programmatic scan).
 
-## v3.0 — Ambient Intelligence OS (in progress, 2026-06-09)
+## v3.0 — Ambient Intelligence OS ✅ SHIPPED (2026-06-09)
 
 Spec locked in `SPEC_V3.md` (2026-06-08). Transforms the dashboard from
-Report Viewer → Ambient Intelligence OS. Built in 4 chunks; each reviewed
-before the next.
+Report Viewer → Ambient Intelligence OS. References Oura / WHOOP / Apple
+Weather / Arc. Built in 4 chunks; each reviewed before the next.
+
+**Locked decisions (per `SPEC_V3.md`):**
+- Vedic hidden from Home (engine still emits; surfaces in Reports tab v3.2)
+- Drawer tabs: Today + Month active, Quarter + Year placeholders (v3.1)
+- Navigation: Home functional, Timeline / Reports / Profile placeholders (v3.1 / v3.2 / v3.3)
 
 ### Chunk 1 — Engine: Consensus + Snapshots ✅ (2026-06-08)
 Engine-only, additive, no UI. Adds three derived fields to `state.json`:
@@ -230,9 +235,35 @@ All existing readings/monthlies/moonNow fields preserved unchanged. POP + PVR
 compliant (Codex failure → that field null, run unaffected). No UI / no
 version.json bump (chunks 2–4 follow).
 
-### Chunk 2 — index.html structure (pending)
-### Chunk 3 — CSS rebuild for Ambient Intelligence aesthetic (pending)
-### Chunk 4 — render.js wiring + drawer interactions (pending)
+### Chunk 2 — index.html structure ✅ (2026-06-09)
+New section order replaces the v2.x combined-reading page: Hero → Consensus →
+Snapshots → Drawers → What Changed → Today's Insight → Recommended → Upcoming →
+Sky → Planet → Drivers → Why → Confidence → Footer (Coming-Soon nav). The old
+`tropicalReading`/`traditionalReading`/`vedicReading` page sections are dropped;
+their prose relocates into the Modern + Traditional drawers (Today + Month tabs).
+Consensus card, two snapshot `<dl>` cards with `View Analysis →` openers, and two
+`hidden` drawer modals (`#drawer-modern`, `#drawer-traditional`) added.
+
+### Chunk 3 — CSS rebuild for Ambient Intelligence aesthetic ✅ (2026-06-09)
+1032 lines. Consensus pills with `data-status` color logic (green agreement /
+yellow partial / red disagreement). Snapshot `<dl>` rows with Modern purple +
+Traditional gold top accents. Drawer = mobile bottom sheet + desktop centered
+modal with slide/fade transitions and a `::before` scrim. Premium gold-border
+Today's Insight. Hero photographic sun + 4 color-coded corner rings preserved.
+
+### Chunk 4 — render.js wiring + drawer interactions ✅ (2026-06-09)
+Rewrote `timing_weather_render.js` to wire every new ID: consensus
+(`modernState`/`traditionalState`/`agreementPct`/`status` pill via `data-status`/
+`primaryAction`), both snapshots (theme/driver/opportunity/pressure/action), and
+the four drawer panels (Modern ← `tropical{Reading,Monthly}`, Traditional ←
+`traditional{Reading,Monthly}`). Moon line moved to `#hero-moon`. Drawer modal
+interactions added: open/close, scrim outside-click, ESC, Tab focus-trap,
+`aria-modal` toggle, body scroll lock, opener-focus restore; tab switching with
+disabled Quarter/Year no-op. Footer Coming-Soon nav renders inert with a 2s
+toast. 60s `state.json?t=` polling + `updatedAt`-change re-render preserved.
+PVR strict throughout (null → `—`/empty). Cache bumped (timestamp schema).
+Live verified: HTTP 200, all new IDs present, consensus pill color-codes,
+drawers open/close/tab-switch, no console errors.
 
 ## v1.3 — Metric Breakdowns (deferred)
 

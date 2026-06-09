@@ -1,15 +1,20 @@
-/* timing_weather_render.js — v2.2 "Ambient Intelligence" renderer
- * Reads state.json (no-store), polls every 60s, re-renders only when updatedAt changes.
- * Bound to the v2.2 row-structure layout: header chrome (title + short date),
- * hero corner rings, photographic sun core, timeline proximity bars, compact
- * planet influences. Current Phase dropped (not in mockup). v2 engine/schema unchanged.
+/* timing_weather_render.js — v3.0 "Ambient Intelligence OS" renderer
+ * Reads state.json (no-store + ?t cache-bust), polls every 60s, re-renders only
+ * when updatedAt changes. Bound to the v3.0 DOM:
+ *   Hero → Consensus → Snapshots → Drawers → What Changed → Today's Insight →
+ *   Recommended → Upcoming → Sky → Planet → Drivers → Why → Confidence → Footer.
+ * The long-form essays moved from visible page sections into the Modern +
+ * Traditional Analysis Drawers (Today + Month tabs; Quarter + Year are placeholder
+ * "Coming Soon" tabs wired in v3.1). Vedic still emits in state.json but is not
+ * surfaced on Home (v3.2 Reports tab consumes it).
  * PVR: null fields degrade to "—" or an empty state — never fabricate values.
  */
 
 const State = { lastHash: null, polling: false };
 
 async function loadState() {
-  const r = await fetch('state.json', { cache: 'no-store' });
+  // Hard cache-bust — a home-screen PWA must never pin a stale state.json.
+  const r = await fetch(`state.json?t=${Date.now()}`, { cache: 'no-store' });
   if (!r.ok) return null;
   return await r.json();
 }
@@ -113,82 +118,11 @@ function renderHero(s) {
   bindCornerRing('next-event', (s.nowBar && s.nowBar.nextEventDays != null) ? s.nowBar.nextEventDays : null, 'Days');
 }
 
-function renderNowBar(s) {
-  const nb = s.nowBar || {};
-  setText('now-forecast', nb.forecast || s.forecast);
-  setText('now-pressure', nb.pressureLevel);
-  setText('now-momentum', nb.momentumDirection);
-  setText('now-next-event', nb.nextEventDays != null ? `${nb.nextEventDays} Days` : null);
-}
-
-/* v2.3 — Each astrology system (Traditional / Modern / Vedic) is its own full-width
-   page section holding a DAILY (today) view + a MONTHLY (this month) view. Six
-   independent state.json fields feed six #<sys>[-monthly]-state / -body hooks. PVR:
-   a null field (Codex pass failed) hides only that view, and the divider between
-   Daily and Monthly hides unless BOTH views render — so a failed monthly never
-   orphans a rule and a failed daily never breaks the monthly. The six render
-   functions stay independent and backward-compatible with the v2.2.x IDs. */
-function hasReading(r) { return !!(r && (r.body || r.read || r.state)); }
-
-/* Populate one view (daily or monthly). Returns true if it rendered, false if hidden. */
-function applyAstroView(r, viewId, stateId, bodyId, fallbackState) {
-  const view = $(viewId);
-  if (!hasReading(r)) {
-    setText(stateId, '', '');
-    setText(bodyId, '', '');
-    if (view) view.style.display = 'none';
-    return false;
-  }
-  if (view) view.style.display = '';
-  setText(stateId, (r.state || fallbackState || '').toUpperCase());
-  setText(bodyId, r.body || r.read);
-  return true;
-}
-
-/* The Daily↔Monthly hairline shows only when BOTH views are present. */
-function toggleAstroDivider(sys, dailyShown, monthlyShown) {
-  const d = $(`${sys}-view-divider`);
-  if (d) d.style.display = (dailyShown && monthlyShown) ? '' : 'none';
-}
-
-function renderTraditionalReading(s) {
-  const shown = applyAstroView(s.traditionalReading, 'traditional-daily-view',
-    'traditional-state', 'traditional-body', s.forecast);
-  toggleAstroDivider('traditional', shown, hasReading(s.traditionalMonthly));
-}
-function renderTraditionalMonthly(s) {
-  const shown = applyAstroView(s.traditionalMonthly, 'traditional-monthly-view',
-    'traditional-monthly-state', 'traditional-monthly-body', s.forecast);
-  toggleAstroDivider('traditional', hasReading(s.traditionalReading), shown);
-}
-
-function renderTropicalReading(s) {
-  const shown = applyAstroView(s.tropicalReading, 'tropical-daily-view',
-    'tropical-state', 'tropical-body', s.forecast);
-  toggleAstroDivider('tropical', shown, hasReading(s.tropicalMonthly));
-}
-function renderTropicalMonthly(s) {
-  const shown = applyAstroView(s.tropicalMonthly, 'tropical-monthly-view',
-    'tropical-monthly-state', 'tropical-monthly-body', s.forecast);
-  toggleAstroDivider('tropical', hasReading(s.tropicalReading), shown);
-}
-
-function renderVedicReading(s) {
-  const shown = applyAstroView(s.vedicReading, 'vedic-daily-view',
-    'vedic-state', 'vedic-body', s.forecast);
-  toggleAstroDivider('vedic', shown, hasReading(s.vedicMonthly));
-}
-function renderVedicMonthly(s) {
-  const shown = applyAstroView(s.vedicMonthly, 'vedic-monthly-view',
-    'vedic-monthly-state', 'vedic-monthly-body', s.forecast);
-  toggleAstroDivider('vedic', hasReading(s.vedicReading), shown);
-}
-
-/* Live Moon position as a compact Daily Reading subtitle.
-   Format: "Moon · Pisces 14° · 2H trop / 3H ved · Purva Bhadrapada".
-   PVR: moonNow === null → empty content → CSS `.reading-moon:empty` hides it. */
+/* Live Moon position as a compact hero subtitle line.
+   Format: "Moon · Pisces 25° · 2H trop / 4H ved · Purva Bhadrapada".
+   PVR: moonNow === null → empty content → CSS `.hero-moon:empty` hides it. */
 function renderMoonNow(s) {
-  const el = $('reading-moon');
+  const el = $('hero-moon');
   if (!el) return;
   const mn = s.moonNow;
   if (!mn) { el.textContent = ''; return; }
@@ -203,6 +137,56 @@ function renderMoonNow(s) {
     `Moon · ${tropSign} ${tropDeg}° · ${tropHouse}H trop / ${vedHouse}H ved · ${nak}`;
 }
 
+/* ── 2 · System Consensus — Modern | agreement% | Traditional + action ────────
+   data-status drives the pill color (CSS: .consensus-status[data-status=...]). */
+function renderConsensus(s) {
+  const c = s.consensus || {};
+  setText('consensus-modern-state', c.modernState);
+  setText('consensus-traditional-state', c.traditionalState);
+  setText('consensus-pct', c.agreementPct != null ? `${c.agreementPct}%` : null);
+  setText('consensus-action', c.primaryAction);
+
+  const pill = $('consensus-status');
+  if (pill) {
+    const status = c.status || '';
+    pill.textContent = status ? status.toUpperCase() : '—';
+    if (status) pill.setAttribute('data-status', status);
+    else pill.removeAttribute('data-status');
+  }
+}
+
+/* ── 3 · Intelligence Snapshots — Modern + Traditional compact <dl> rows ──────
+   PVR: any null field renders "—". */
+function renderSnapshots(s) {
+  const snaps = s.snapshots || {};
+  ['modern', 'traditional'].forEach(sys => {
+    const snap = snaps[sys] || {};
+    setText(`snap-${sys}-theme`, snap.theme);
+    setText(`snap-${sys}-driver`, snap.driver);
+    setText(`snap-${sys}-opportunity`, snap.opportunity);
+    setText(`snap-${sys}-pressure`, snap.pressure);
+    setText(`snap-${sys}-action`, snap.action);
+  });
+}
+
+/* ── 4 · Analysis Drawer panels ───────────────────────────────────────────────
+   Modern ← tropical{Reading,Monthly}; Traditional ← traditional{Reading,Monthly}.
+   PVR: a missing reading shows "—" for both state + body. */
+function applyDrawerPanel(reading, stateId, bodyId, fallbackState) {
+  const r = reading || {};
+  const stateVal = r.state ? String(r.state).toUpperCase() : (fallbackState ? String(fallbackState).toUpperCase() : null);
+  setText(stateId, stateVal);
+  setText(bodyId, r.body || r.read);
+}
+
+function renderDrawerContent(s) {
+  applyDrawerPanel(s.tropicalReading,    'drawer-modern-today-state',      'drawer-modern-today-body',      s.forecast);
+  applyDrawerPanel(s.tropicalMonthly,    'drawer-modern-month-state',      'drawer-modern-month-body',      s.forecast);
+  applyDrawerPanel(s.traditionalReading, 'drawer-traditional-today-state', 'drawer-traditional-today-body', s.forecast);
+  applyDrawerPanel(s.traditionalMonthly, 'drawer-traditional-month-state', 'drawer-traditional-month-body', s.forecast);
+}
+
+/* ── 5 · What Changed — delta rows ──────────────────────────────────────────── */
 function renderWhatChanged(s) {
   const card = $('changed-card');
   if (!card) return;
@@ -222,16 +206,19 @@ function renderWhatChanged(s) {
     if (r.val == null) {
       return `<div class="changed-row"><span class="changed-label">${r.label}</span><span class="changed-delta neutral">—</span></div>`;
     }
-    const sign = r.val > 0 ? '+' : '';
+    // The +/- sign is supplied by CSS ::before on .positive/.negative — emit the magnitude only.
     const cls = r.val > 0 ? 'positive' : (r.val < 0 ? 'negative' : 'neutral');
-    return `<div class="changed-row"><span class="changed-label">${r.label}</span><span class="changed-delta ${cls}">${sign}${r.val}</span></div>`;
+    const mag = r.val === 0 ? '0' : Math.abs(r.val);
+    return `<div class="changed-row"><span class="changed-label">${r.label}</span><span class="changed-delta ${cls}">${mag}</span></div>`;
   }).join('') + (compared ? `<div class="changed-footer">Updated vs ${String(compared).slice(0, 10)}</div>` : '');
 }
 
+/* ── 6 · Today's Insight ─────────────────────────────────────────────────────── */
 function renderTodaysInsight(s) {
   setText('insight-card', s.todaysInsight);
 }
 
+/* ── 7 · Recommended Actions — Do (max 4) / Avoid (max 3) ─────────────────────── */
 function renderRecommended(s) {
   const dos = $('actions-do');
   const avoids = $('actions-avoid');
@@ -239,7 +226,8 @@ function renderRecommended(s) {
   if (avoids) avoids.innerHTML = (s.avoidances || []).slice(0, 3).map(a => `<li>${a}</li>`).join('');
 }
 
-/* ── Upcoming Conditions — gold proximity bars (longer = sooner) ───────────── */
+/* ── 8 · Upcoming Conditions — proximity bars + importance tier ────────────────
+   Tier by rank: 1st = highest (gold), 2nd = medium (purple), 3rd = lower (blue). */
 function renderTimeline(s) {
   const ul = $('timeline-list');
   if (!ul) return;
@@ -258,26 +246,25 @@ function renderTimeline(s) {
 
   const dayOf = e => (e.daysRemaining != null ? e.daysRemaining : (e.days != null ? e.days : 365));
   const maxDays = Math.max(...top3.map(dayOf)) || 1;
+  const tiers = ['high', 'medium', 'low'];
 
-  ul.innerHTML = top3.map(e => {
+  ul.innerHTML = top3.map((e, i) => {
     const days = dayOf(e);
     const length = Math.max(15, 100 - (days / maxDays * 80)); // closer = fuller
     const title = e.title || e.name || '—';
+    const tier = tiers[i] || 'low';
     return `
       <li class="timeline-row">
         <div class="timeline-days">${days}<span class="unit">Days</span></div>
         <div class="timeline-main">
           <div class="timeline-event">${title}</div>
-          <div class="timeline-bar" style="--bar-length: ${length}%"></div>
+          <div class="timeline-bar timeline-bar--${tier}" style="--bar-length: ${length}%"></div>
         </div>
       </li>`;
   }).join('');
 }
 
-/* Current Phase section removed in v2.2 (not in mockup). The engine still emits
-   currentPhase / currentPhaseStart / currentPhaseEnd in state.json — intentionally
-   unread here; the DOM hooks (phase-name/range/progress/days) no longer exist. */
-
+/* ── 9 · Sky Conditions — labeled horizontal bars ─────────────────────────────── */
 function renderSkyConditions(s) {
   const card = $('sky-card');
   if (!card) return;
@@ -296,7 +283,7 @@ function renderSkyConditions(s) {
     </div>`).join('');
 }
 
-/* ── Planet Influences — compact rows (glyph · name · role · score) ─────────── */
+/* ── 10 · Planet Influences — compact rows (glyph · name · role · score) ─────── */
 function renderInfluences(s) {
   const ul = $('influences-grid');
   if (!ul) return;
@@ -319,20 +306,22 @@ function renderInfluences(s) {
   }).join('');
 }
 
+/* ── 11 · Top Drivers — top 3 ──────────────────────────────────────────────────── */
 function renderDrivers(s) {
   const ol = $('drivers-list');
   if (!ol) return;
   const items = (s.drivers || s.topDrivers || []).slice(0, 3);
   ol.innerHTML = items.map(d => {
     const sign = d.score > 0 ? '+' : '';
-    return `<li><span class="driver-name">${d.name || '—'}</span><span class="driver-score" style="float:right;color:var(--gold);font-weight:700;font-variant-numeric:tabular-nums">${sign}${d.score ?? '—'}</span></li>`;
+    return `<li><span class="driver-name">${d.name || '—'}</span><span class="driver-score" style="float:right;color:var(--color-gold);font-weight:700;font-variant-numeric:tabular-nums">${sign}${d.score ?? '—'}</span></li>`;
   }).join('');
 }
 
+/* ── 12 · Why This Forecast — score + top 5 contributors/reducers by magnitude ── */
 function renderWhy(s) {
   const ev = s.evidence || {};
   setText('expansion-score', ev.expansionScore);
-  // Inline-not-collapsed: open the <details> by default (per v2.1 spec).
+  // Inline-not-collapsed: open the <details> by default (per spec).
   const details = document.querySelector('.why-card');
   if (details && details.tagName === 'DETAILS') details.setAttribute('open', '');
 
@@ -350,17 +339,131 @@ function renderWhy(s) {
   ).join('');
 }
 
+/* ════════════════════════════════════════════════════════════════════════════
+   DRAWER INTERACTIONS — open/close + tab switching + body scroll lock + a11y.
+   The drawer is a modal: aria-modal="true" when open, focus moved inside, Tab is
+   trapped, ESC + scrim-click + close-button all dismiss and restore opener focus.
+   The scrim is a CSS ::before pseudo on the drawer, so an outside-click registers
+   as a click whose target IS the drawer element itself (dialog-backdrop pattern).
+   ════════════════════════════════════════════════════════════════════════════ */
+const Drawer = { open: null, opener: null };
+
+function focusables(root) {
+  return Array.from(root.querySelectorAll(
+    'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  )).filter(el => el.offsetParent !== null || el === document.activeElement);
+}
+
+function openDrawer(name, opener) {
+  const drawer = document.querySelector(`[data-drawer="${name}"]`);
+  if (!drawer) return;
+  if (Drawer.open && Drawer.open !== drawer) closeDrawer();
+  drawer.hidden = false;
+  drawer.setAttribute('aria-modal', 'true');
+  document.body.style.overflow = 'hidden';
+  Drawer.open = drawer;
+  Drawer.opener = opener || null;
+  const closeBtn = drawer.querySelector('[data-drawer-close]');
+  if (closeBtn) closeBtn.focus();
+}
+
+function closeDrawer() {
+  const drawer = Drawer.open;
+  if (!drawer) return;
+  drawer.hidden = true;
+  drawer.setAttribute('aria-modal', 'false');
+  document.body.style.overflow = '';
+  const opener = Drawer.opener;
+  Drawer.open = null;
+  Drawer.opener = null;
+  if (opener && typeof opener.focus === 'function') opener.focus();
+}
+
+function switchTab(drawer, tab) {
+  if (!drawer || !tab || tab.disabled || tab.getAttribute('aria-selected') === 'true') return;
+  const tablist = tab.closest('[role="tablist"]');
+  if (tablist) {
+    tablist.querySelectorAll('[role="tab"]').forEach(t =>
+      t.setAttribute('aria-selected', t === tab ? 'true' : 'false'));
+  }
+  const target = tab.getAttribute('data-tab');
+  drawer.querySelectorAll('[data-panel]').forEach(panel => {
+    panel.hidden = panel.getAttribute('data-panel') !== target;
+  });
+}
+
+function bindDrawerInteractions() {
+  // Open
+  document.querySelectorAll('[data-drawer-open]').forEach(btn => {
+    btn.addEventListener('click', () => openDrawer(btn.getAttribute('data-drawer-open'), btn));
+  });
+  // Per-drawer: close button, scrim outside-click, tab switching
+  document.querySelectorAll('[data-drawer]').forEach(drawer => {
+    drawer.querySelectorAll('[data-drawer-close]').forEach(btn =>
+      btn.addEventListener('click', closeDrawer));
+    // Scrim is the drawer's own ::before — clicking it lands on the drawer element.
+    drawer.addEventListener('click', e => { if (e.target === drawer) closeDrawer(); });
+    drawer.querySelectorAll('[role="tab"]').forEach(tab =>
+      tab.addEventListener('click', () => switchTab(drawer, tab)));
+  });
+  // Global key handling — ESC closes, Tab is trapped inside the open drawer.
+  document.addEventListener('keydown', e => {
+    if (!Drawer.open) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeDrawer(); return; }
+    if (e.key === 'Tab') {
+      const items = focusables(Drawer.open);
+      if (!items.length) return;
+      const first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+}
+
+/* ── Footer Coming-Soon nav — inert tap shows a 2s toast, no navigation ───────── */
+let toastTimer = null;
+function showToast(msg) {
+  let toast = $('tw-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'tw-toast';
+    toast.setAttribute('role', 'status');
+    toast.style.cssText = [
+      'position:fixed', 'left:50%', 'bottom:84px', 'transform:translateX(-50%)',
+      'z-index:200', 'padding:10px 18px', 'border-radius:999px',
+      'background:rgba(6,7,10,0.95)', 'border:1px solid rgba(212,168,87,0.35)',
+      'color:#e8c573', 'font:600 13px/1.2 -apple-system,BlinkMacSystemFont,system-ui,sans-serif',
+      'letter-spacing:0.02em', 'box-shadow:0 12px 40px rgba(0,0,0,0.5)',
+      'opacity:0', 'transition:opacity 0.2s ease', 'pointer-events:none'
+    ].join(';');
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  requestAnimationFrame(() => { toast.style.opacity = '1'; });
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+}
+
+function bindFooterNav() {
+  document.querySelectorAll('.nav-item--soon').forEach(item => {
+    item.addEventListener('click', e => {
+      e.preventDefault();
+      const label = (item.textContent || 'This view').trim();
+      showToast(`${label} · Coming in v3.1`);
+    });
+  });
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   RENDER + POLL
+   ════════════════════════════════════════════════════════════════════════════ */
 function renderAll(s) {
   renderHeaderDate(s);
   renderHero(s);
-  renderNowBar(s);
-  renderTraditionalReading(s);
-  renderTraditionalMonthly(s);
-  renderTropicalReading(s);
-  renderTropicalMonthly(s);
-  renderVedicReading(s);
-  renderVedicMonthly(s);
   renderMoonNow(s);
+  renderConsensus(s);
+  renderSnapshots(s);
+  renderDrawerContent(s);
   renderWhatChanged(s);
   renderTodaysInsight(s);
   renderRecommended(s);
@@ -384,6 +487,10 @@ async function tick() {
     renderAll(s);
   } finally { State.polling = false; }
 }
+
+// One-time interaction wiring (independent of state polling).
+bindDrawerInteractions();
+bindFooterNav();
 
 tick();
 setInterval(tick, 60000);
