@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-09T07:00:00-05:00",
-  "data_hash": "f6505c601e3a8327",
-  "slot": "recovery",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 3%\n\nRead\nThe day opens with more rest than usual, but recovery is still notably muted, so capacity feels narrow rather than charged. It favors muscle-preserving consistency over intensity, with protein and a modest energy gap carrying more weight than early movement.\n\nMeasured, not forceful.\n\nPerformance: Measured, not forceful.\n\nTransit: none",
+  "generated_at": "2026-06-09T11:30:00-05:00",
+  "data_hash": "2b3dc9ec8c2dd2b8",
+  "slot": "fuel-1",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 33%\n\nRead\nRecovery is muted despite adequate sleep, and output is still lighter than a usual day. With no food logged yet, the afternoon hinges on a protein-centered first plate with steady carbs; today favors muscle preservation and even pacing over intensity.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 3%\n\nRead\nThe day opens with more rest than usual, but recovery is still notably muted, so capacity feels narrow rather than charged. It favors muscle-preserving consistency over intensity, with protein and a modest energy gap carrying more weight than early movement.\n\nMeasured, not forceful."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 33%\n\nRead\nRecovery is muted despite adequate sleep, and output is still lighter than a usual day. With no food logged yet, the afternoon hinges on a protein-centered first plate with steady carbs; today favors muscle preservation and even pacing over intensity."
     },
     {
       "label": "Performance",
-      "text": "Measured, not forceful."
+      "text": ""
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 3%\n\nRead\nThe day opens with more rest than usual, but recovery is still notably muted, so capacity feels narrow rather than charged. It favors muscle-preserving consistency over intensity, with protein and a modest energy gap carrying more weight than early movement.\n\nMeasured, not forceful.",
-    "performance": "Measured, not forceful.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 33%\n\nRead\nRecovery is muted despite adequate sleep, and output is still lighter than a usual day. With no food logged yet, the afternoon hinges on a protein-centered first plate with steady carbs; today favors muscle preservation and even pacing over intensity.",
+    "performance": null,
     "transit": null
   },
-  "nutrition_nudge": "Start steady: make breakfast protein-led and keep meals evenly paced today.",
+  "nutrition_nudge": "Start the day with a 40g protein meal and keep meal pacing steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 1,
-    "sleep_hours": 6.9,
-    "hrv_today": 50,
-    "hrv_7d_avg": 61.6,
+    "sleep_hours": 7.2,
+    "hrv_today": 44,
+    "hrv_7d_avg": 58.4,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "4 steps so far, 4m active, 458 calories burned, \u2014 training load"
+    "activity_today": "2,572 steps so far, 1h 38m active, 1,048 calories burned, Light training load"
   }
 }
