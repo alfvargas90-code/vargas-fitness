@@ -1,6 +1,6 @@
 {
   "date": "2026-06-08",
-  "synced_at": "2026-06-09T01:23:49+00:00",
+  "synced_at": "2026-06-09T01:53:55+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 1845.0,
-    "protein_g": 63.0,
-    "carbs_g": 184.0,
-    "fat_g": 89.0
+    "calories": 3145.0,
+    "protein_g": 123.0,
+    "carbs_g": 334.0,
+    "fat_g": 139.0
   },
-  "meal_count": 3,
+  "meal_count": 4,
   "raw": {
     "date": "2026-06-08",
     "meals": [
@@ -44,13 +44,22 @@
         "fat": 35,
         "carbs": 70,
         "emoji": "\u00f0\u009f\u008d\u0097"
+      },
+      {
+        "title": "Chicken Biryani Lunch",
+        "time": "20:39",
+        "calories": 1300,
+        "protein": 60,
+        "fat": 50,
+        "carbs": 150,
+        "emoji": "\u00f0\u009f\u008d\u009b"
       }
     ],
     "totals": {
-      "calories": 1845,
-      "protein": 63,
-      "fat": 89,
-      "carbs": 184
+      "calories": 3145,
+      "protein": 123,
+      "fat": 139,
+      "carbs": 334
     },
     "targets": {
       "calories": 2574,
@@ -59,14 +68,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 729,
-      "is_over": false
+      "calories": -571,
+      "is_over": true
     },
-    "meal_count": 3,
+    "meal_count": 4,
     "labels": {
       "header": "Today",
-      "calories_remaining": "729 kcal remaining today",
-      "meals_logged": "3 meals logged",
+      "calories_remaining": "571 kcal over today",
+      "meals_logged": "4 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
