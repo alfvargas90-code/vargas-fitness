@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-09T22:17:32+00:00",
+  "generated_at": "2026-06-09T22:47:45+00:00",
   "current_phase": "Last Quarter",
   "phase_stats": {
     "New Moon": {
@@ -71,7 +71,7 @@
     "Last Quarter": {
       "sleep_delta_h": -0.2,
       "recovery_delta_pct": -26,
-      "strain_delta_pct": -17,
+      "strain_delta_pct": -16,
       "sample_size": 15,
       "metric_samples": {
         "sleep": 15,
@@ -94,6 +94,6 @@
   "overall_avg": {
     "sleep_h": 6.7,
     "recovery": 56,
-    "strain_kcal": 873
+    "strain_kcal": 878
   }
 }
