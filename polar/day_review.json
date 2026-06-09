@@ -1,19 +1,19 @@
 {
-  "date": "2026-06-07",
-  "generated_at": "2026-06-07T21:45:00-05:00",
-  "verdict": "Big",
+  "date": "2026-06-08",
+  "generated_at": "2026-06-08T21:45:00-05:00",
+  "verdict": "Easy",
   "stats": {
-    "steps": 8939,
-    "active_minutes": 495,
-    "active_time_display": "8h 15m",
-    "calories_burned": 2622,
-    "active_calories": 1218,
-    "calories_eaten": 1975,
-    "net_deficit": 647,
+    "steps": 1206,
+    "active_minutes": 36,
+    "active_time_display": "36m",
+    "calories_burned": 617,
+    "active_calories": 109,
+    "calories_eaten": 3145,
+    "net_deficit": -2528,
     "calorie_target": 2574,
-    "protein_g": 100,
+    "protein_g": 123,
     "protein_target_g": 138,
-    "protein_gap_g": 38
+    "protein_gap_g": 15
   },
-  "prose": "Big output day: about 9,000 steps, plenty of movement, and a 650-calorie deficit, which is solid for fat loss without getting reckless. The miss was protein, about 40 short, and that matters because big burn plus low protein can chip away at muscle instead of just fat. Push protein hard tomorrow."
+  "prose": "Easy day, and that\u2019s fine, but about 1,200 steps and no real training means the big miss was eating about 2,500 more than you burned while still landing 15 short on protein. For building muscle while leaning out, that\u2019s the wrong trade: plenty of food, not quite enough of the stuff that protects muscle. Push protein hard tomorrow and get some resistance work in."
 }
