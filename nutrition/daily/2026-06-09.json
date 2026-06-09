@@ -1,6 +1,6 @@
 {
   "date": "2026-06-09",
-  "synced_at": "2026-06-09T16:27:46+00:00",
+  "synced_at": "2026-06-09T16:57:52+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,20 +9,39 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 0.0,
-    "protein_g": 0.0,
-    "carbs_g": 0.0,
-    "fat_g": 0.0
+    "calories": 1850.0,
+    "protein_g": 115.0,
+    "carbs_g": 205.0,
+    "fat_g": 72.0
   },
-  "meal_count": 0,
+  "meal_count": 2,
   "raw": {
     "date": "2026-06-09",
-    "meals": [],
+    "meals": [
+      {
+        "title": "Tandoori Chicken Lunch",
+        "time": "11:37",
+        "calories": 1200,
+        "protein": 70,
+        "fat": 40,
+        "carbs": 150,
+        "emoji": "\u00f0\u009f\u008d\u0097"
+      },
+      {
+        "title": "Chicken Thighs and Sweet Potato",
+        "time": "11:39",
+        "calories": 650,
+        "protein": 45,
+        "fat": 32,
+        "carbs": 55,
+        "emoji": "\u00f0\u009f\u008d\u0097"
+      }
+    ],
     "totals": {
-      "calories": 0,
-      "protein": 0,
-      "fat": 0,
-      "carbs": 0
+      "calories": 1850,
+      "protein": 115,
+      "fat": 72,
+      "carbs": 205
     },
     "targets": {
       "calories": 2574,
@@ -31,14 +50,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 2574,
+      "calories": 724,
       "is_over": false
     },
-    "meal_count": 0,
+    "meal_count": 2,
     "labels": {
       "header": "Today",
-      "calories_remaining": "2574 kcal remaining today",
-      "meals_logged": "0 meals logged",
+      "calories_remaining": "724 kcal remaining today",
+      "meals_logged": "2 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
