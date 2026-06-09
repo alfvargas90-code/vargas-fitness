@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-09T15:00:00-05:00",
-  "data_hash": "955574c2b3048197",
-  "slot": "fuel-2",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 52%\n\nRead\nRecovery is running low despite a fuller night, so the system reads more taxed than refreshed. Midday intake has largely covered the muscle-support layer, but evening energy still looks somewhat open. Today favors measured resistance work over chasing volume.\n\nSteady pressure.\n\nPerformance: Steady pressure.\n\nTransit: none",
+  "generated_at": "2026-06-09T17:30:00-05:00",
+  "data_hash": "665d94eae0b42d51",
+  "slot": "train-1",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 63%\n\nRead\nRecovery is running low despite a fuller night of sleep, and the day has already carried a moderate cost while movement remains lighter than usual. For muscle preservation, this favors controlled resistance work and a modest deficit, with protein still carrying the day\u2019s hinge.\n\nMeasured strength, not strain.\n\nPerformance: Measured strength, not strain.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 52%\n\nRead\nRecovery is running low despite a fuller night, so the system reads more taxed than refreshed. Midday intake has largely covered the muscle-support layer, but evening energy still looks somewhat open. Today favors measured resistance work over chasing volume.\n\nSteady pressure."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 63%\n\nRead\nRecovery is running low despite a fuller night of sleep, and the day has already carried a moderate cost while movement remains lighter than usual. For muscle preservation, this favors controlled resistance work and a modest deficit, with protein still carrying the day\u2019s hinge.\n\nMeasured strength, not strain."
     },
     {
       "label": "Performance",
-      "text": "Steady pressure."
+      "text": "Measured strength, not strain."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 52%\n\nRead\nRecovery is running low despite a fuller night, so the system reads more taxed than refreshed. Midday intake has largely covered the muscle-support layer, but evening energy still looks somewhat open. Today favors measured resistance work over chasing volume.\n\nSteady pressure.",
-    "performance": "Steady pressure.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 63%\n\nRead\nRecovery is running low despite a fuller night of sleep, and the day has already carried a moderate cost while movement remains lighter than usual. For muscle preservation, this favors controlled resistance work and a modest deficit, with protein still carrying the day\u2019s hinge.\n\nMeasured strength, not strain.",
+    "performance": "Measured strength, not strain.",
     "transit": null
   },
-  "nutrition_nudge": "Keep meal pacing steady and make dinner protein-forward to cover the 23g gap.",
+  "nutrition_nudge": "Calories and protein are on pace, so anchor dinner with 25g protein and keep portions steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 1,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 58.4,
     "nutrition": "calories 1850 of 2574 goal, protein 115g of 138g goal, carbs 205g of 290g goal, fat 72g of 72g goal",
     "nutrition_detail": "calories 1850 of 2574 goal -> 724 left; protein 115g of 138g goal -> 23g gap; carbs 205g of 290g goal; fat 72g of 72g goal",
-    "activity_today": "3,654 steps so far, 2h 34m active, 1,481 calories burned, Moderate training load"
+    "activity_today": "4,328 steps so far, 3h 2m active, 1,729 calories burned, Moderate training load"
   }
 }
