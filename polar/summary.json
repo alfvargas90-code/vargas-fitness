@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-08T17:30:00-05:00",
-  "data_hash": "d8cbf4dcc52370e3",
-  "slot": "train-1",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 14%\n\nRead\nRecovery is muted despite a quieter-than-usual day, so the workout window opens with limited reserve rather than fresh capacity. For muscle retention, the main tension is a still-light protein base. Today favors disciplined resistance over intensity.\n\nMeasured strength.\n\nPerformance: Measured strength.\n\nTransit: none",
+  "generated_at": "2026-06-08T20:00:00-05:00",
+  "data_hash": "4e99858afbc55d9a",
+  "slot": "train-2",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 14%\n\nRead\nRecovery is running low despite a better night, and today\u2019s output landed much lighter than usual as the training window closes. The day favors restoration over intensity; muscle protection looks less secure with protein still thin and the deficit edging sharp.\n\nPreserve the base.\n\nPerformance: Preserve the base.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 14%\n\nRead\nRecovery is muted despite a quieter-than-usual day, so the workout window opens with limited reserve rather than fresh capacity. For muscle retention, the main tension is a still-light protein base. Today favors disciplined resistance over intensity.\n\nMeasured strength."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 14%\n\nRead\nRecovery is running low despite a better night, and today\u2019s output landed much lighter than usual as the training window closes. The day favors restoration over intensity; muscle protection looks less secure with protein still thin and the deficit edging sharp.\n\nPreserve the base."
     },
     {
       "label": "Performance",
-      "text": "Measured strength."
+      "text": "Preserve the base."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 14%\n\nRead\nRecovery is muted despite a quieter-than-usual day, so the workout window opens with limited reserve rather than fresh capacity. For muscle retention, the main tension is a still-light protein base. Today favors disciplined resistance over intensity.\n\nMeasured strength.",
-    "performance": "Measured strength.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 14%\n\nRead\nRecovery is running low despite a better night, and today\u2019s output landed much lighter than usual as the training window closes. The day favors restoration over intensity; muscle protection looks less secure with protein still thin and the deficit edging sharp.\n\nPreserve the base.",
+    "performance": "Preserve the base.",
     "transit": null
   },
-  "nutrition_nudge": "Keep dinner lean: skip added oils and choose 50g protein with low-fat sides.",
+  "nutrition_nudge": "Front-load dinner with 75g protein now to protect muscle while keeping the deficit modest.",
   "transits": [],
   "data_basis": {
     "recharge_today": 1,
