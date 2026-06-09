@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-09T14:13:32-05:00",
-  "score": 40,
+  "generated_at": "2026-06-09T14:43:50-05:00",
+  "score": 43,
   "band": "Mild Compression",
   "trigger": "Moon square natal Moon",
   "physiology": {
@@ -8,11 +8,11 @@
     "rhr_delta_bpm": 5,
     "sleep_score": 74
   },
-  "workout_intensity": "rest",
+  "workout_intensity": "moderate",
   "recommendation": "Keep the day structured and move work forward; no need to back off.",
   "lunar": {
     "sign": "Aries",
-    "degree": "5\u00b0 Ari 59'",
+    "degree": "6\u00b0 Ari 16'",
     "phase": "Waning Crescent",
     "next_sign_change": {
       "sign": "Taurus",
@@ -30,35 +30,36 @@
       "max": 55
     },
     "body": {
-      "filled": 5,
+      "filled": 6,
       "total": 10,
-      "points": 20,
+      "points": 23,
       "max": 40
     }
   },
   "transit_detail": {
-    "moon_longitude": 5.98,
+    "moon_longitude": 6.27,
     "moon_sign": "Aries",
     "moon_phase": "Waning Crescent",
     "moon_house_natal": 3,
-    "aspect_to_natal_moon": "square (0.5\u00b0 separating)",
+    "aspect_to_natal_moon": "square (0.7\u00b0 separating)",
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 40,
+    "raw_score": 43,
     "transit_points": 20,
-    "physiology_points": 20,
+    "physiology_points": 23,
     "breakdown": [
       "+20 Moon square natal Moon",
       "+10 HRV -25% below baseline",
       "+5 RHR +5 bpm vs baseline",
-      "+5 Sleep score 74 (70-80)"
+      "+5 Sleep score 74 (70-80)",
+      "+3 Moderate-intensity day"
     ],
     "baselines": {
       "hrv_7d": 58.4,
       "rhr_7d": 54.3
     },
-    "active_calories": 391,
+    "active_calories": 413,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
