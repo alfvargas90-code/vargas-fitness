@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-09T16:12:05+00:00",
+  "generated_at": "2026-06-09T16:42:20+00:00",
   "current_phase": "Last Quarter",
   "phase_stats": {
     "New Moon": {
@@ -60,7 +60,7 @@
     "Waning Gibbous": {
       "sleep_delta_h": 0.3,
       "recovery_delta_pct": 24,
-      "strain_delta_pct": 26,
+      "strain_delta_pct": 25,
       "sample_size": 10,
       "metric_samples": {
         "sleep": 10,
@@ -71,7 +71,7 @@
     "Last Quarter": {
       "sleep_delta_h": -0.2,
       "recovery_delta_pct": -26,
-      "strain_delta_pct": -22,
+      "strain_delta_pct": -21,
       "sample_size": 15,
       "metric_samples": {
         "sleep": 15,
@@ -94,6 +94,6 @@
   "overall_avg": {
     "sleep_h": 6.7,
     "recovery": 56,
-    "strain_kcal": 849
+    "strain_kcal": 852
   }
 }
