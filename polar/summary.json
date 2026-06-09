@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-08T20:53:58-05:00",
-  "data_hash": "944a86be3e4492c0",
-  "slot": "macros-update",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 14%\n\nRead\nThe new meal changed the shape of the day: a low-output, low-recovery pattern is now carrying a fuller intake, with protein much closer to muscle-support territory. It favors settling and repair over adding intensity.\n\nFuller tank, softer system.\n\nPerformance: Fuller tank, softer system.\n\nTransit: none",
+  "generated_at": "2026-06-09T04:00:01-05:00",
+  "data_hash": "d384202c2e7530ce",
+  "slot": "sleep",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 1%\n\nRead\nLast night gave you time in bed, but the deeper recovery signal is still muted, so the reserve is limited. This is a lower-ceiling day that favors steady output, modest strain, and enough protein to keep muscle from paying for the deficit.\n\nQuiet momentum.\n\nPerformance: Quiet momentum.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 14%\n\nRead\nThe new meal changed the shape of the day: a low-output, low-recovery pattern is now carrying a fuller intake, with protein much closer to muscle-support territory. It favors settling and repair over adding intensity.\n\nFuller tank, softer system."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 1%\n\nRead\nLast night gave you time in bed, but the deeper recovery signal is still muted, so the reserve is limited. This is a lower-ceiling day that favors steady output, modest strain, and enough protein to keep muscle from paying for the deficit.\n\nQuiet momentum."
     },
     {
       "label": "Performance",
-      "text": "Fuller tank, softer system."
+      "text": "Quiet momentum."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 14%\n\nRead\nThe new meal changed the shape of the day: a low-output, low-recovery pattern is now carrying a fuller intake, with protein much closer to muscle-support territory. It favors settling and repair over adding intensity.\n\nFuller tank, softer system.",
-    "performance": "Fuller tank, softer system.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 68 \u2022 Strain 1%\n\nRead\nLast night gave you time in bed, but the deeper recovery signal is still muted, so the reserve is limited. This is a lower-ceiling day that favors steady output, modest strain, and enough protein to keep muscle from paying for the deficit.\n\nQuiet momentum.",
+    "performance": "Quiet momentum.",
     "transit": null
   },
-  "nutrition_nudge": "Pull back oils and fatty add-ons tonight, and finish with 15g lean protein.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 1,
     "sleep_hours": 6.9,
     "hrv_today": 50,
     "hrv_7d_avg": 61.6,
-    "nutrition": "calories 3145 of 2574 goal, protein 123g of 138g goal, carbs 334g of 290g goal, fat 139g of 72g goal",
-    "nutrition_detail": "calories 3145 of 2574 goal -> 571 over; protein 123g of 138g goal -> 15g gap; carbs 334g of 290g goal; fat 139g of 72g goal",
-    "activity_today": "1,206 steps so far, 36m active, 617 calories burned, Light training load"
+    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
+    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
+    "activity_today": null
   }
 }
