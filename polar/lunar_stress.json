@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-09T13:12:57-05:00",
+  "generated_at": "2026-06-09T13:43:16-05:00",
   "score": 40,
   "band": "Mild Compression",
   "trigger": "Moon square natal Moon",
@@ -12,7 +12,7 @@
   "recommendation": "Keep the day structured and move work forward; no need to back off.",
   "lunar": {
     "sign": "Aries",
-    "degree": "5\u00b0 Ari 25'",
+    "degree": "5\u00b0 Ari 42'",
     "phase": "Waning Crescent",
     "next_sign_change": {
       "sign": "Taurus",
@@ -37,11 +37,11 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 5.41,
+    "moon_longitude": 5.7,
     "moon_sign": "Aries",
     "moon_phase": "Waning Crescent",
     "moon_house_natal": 3,
-    "aspect_to_natal_moon": "square (0.1\u00b0 separating)",
+    "aspect_to_natal_moon": "square (0.2\u00b0 separating)",
     "is_full_moon": false
   },
   "scoring_detail": {
