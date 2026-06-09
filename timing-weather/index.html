@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Timing" />
-  <link rel="stylesheet" href="assets/css/timing-weather.css?v=v2.3" />
+  <link rel="stylesheet" href="assets/css/timing-weather.css?v=v3.0.0" />
 
   <!-- ── Self-healing cache buster (Layers 1+3) ─────────────────────────────────
        Runs before any other JS. Compares this device's stored version against the
@@ -69,8 +69,8 @@
 <body>
   <div class="timing-weather-shell">
 
-    <!-- Row 0: Header chrome (full bleed) -->
-    <header class="row row--bleed header-chrome" data-section="Header">
+    <!-- Row 0: Header chrome (full bleed) — preserved per spec -->
+    <header class="row row--bleed header-chrome">
       <button class="header-menu" aria-label="Menu">≡</button>
       <div class="header-title-block">
         <h1 class="header-title">TIMING WEATHER</h1>
@@ -83,9 +83,8 @@
       </div>
     </header>
 
-    <!-- Row 1: Hero (full bleed) -->
+    <!-- 1: Hero Solar Intelligence (4 corner stats + solar core + forecast + moon line) -->
     <div class="row row--bleed">
-      <!-- 1: Hero Solar Intelligence (4 corner stats + solar core + forecast) -->
       <section id="section-1-hero" data-section="Hero Solar Intelligence">
         <div class="hero-shell">
           <!-- top-left -->
@@ -105,6 +104,7 @@
           <div class="sun-hero" id="sun-hero" aria-hidden="true"></div>
           <h1 class="forecast-title" id="forecast-title">—</h1>
           <p class="forecast-subtitle" id="forecast-subtitle">—</p>
+          <p class="hero-moon" id="hero-moon">—</p>
 
           <!-- bottom-left -->
           <div class="hero-corner hero-corner--bl">
@@ -122,136 +122,188 @@
       </section>
     </div>
 
-    <!-- Row 2: Now Bar (full-width strip) -->
-    <div class="row row--bleed row--strip">
-      <!-- 2: Now Bar -->
-      <section id="section-2-now-bar" data-section="Now Bar">
-        <div class="now-bar-card">
-          <div class="now-cell"><span class="label">Forecast</span><span class="value" id="now-forecast">—</span></div>
-          <div class="now-cell"><span class="label">Pressure</span><span class="value" id="now-pressure">—</span></div>
-          <div class="now-cell"><span class="label">Momentum</span><span class="value" id="now-momentum">—</span></div>
-          <div class="now-cell"><span class="label">Next Event</span><span class="value" id="now-next-event">—</span></div>
+    <!-- 2: System Consensus (Modern vs Traditional agreement) -->
+    <div class="row">
+      <section id="section-2-consensus" data-section="System Consensus">
+        <h2 class="section-heading">SYSTEM CONSENSUS</h2>
+        <div class="card consensus-card">
+          <div class="consensus-row">
+            <div class="consensus-side consensus-side--modern">
+              <div class="consensus-small-label">MODERN</div>
+              <span class="consensus-state" id="consensus-modern-state">—</span>
+            </div>
+            <div class="consensus-center">
+              <div class="consensus-pct" id="consensus-pct">—</div>
+              <div class="consensus-status" id="consensus-status">—</div>
+            </div>
+            <div class="consensus-side consensus-side--traditional">
+              <div class="consensus-small-label">TRADITIONAL</div>
+              <span class="consensus-state" id="consensus-traditional-state">—</span>
+            </div>
+          </div>
+          <p class="consensus-action" id="consensus-action">—</p>
         </div>
       </section>
     </div>
 
-    <!-- Rows 3–5: Astrology page sections (Traditional → Modern → Vedic),
-         stacked full-width. Each has a DAILY (today) + MONTHLY (this month) view. -->
-    <div class="row astro-sections">
-
-      <!-- 3: Traditional astrology page section -->
-      <section id="section-3-traditional" data-section="Traditional Astrology">
-        <h2 class="section-heading">TRADITIONAL <span class="ai-badge">✦</span></h2>
-        <div class="card astro-card">
-          <div class="astro-view astro-view--daily" id="traditional-daily-view">
-            <div class="astro-view-label">TODAY</div>
-            <div class="astro-state" id="traditional-state">—</div>
-            <p class="astro-body" id="traditional-body">—</p>
-          </div>
-          <div class="astro-view-divider" id="traditional-view-divider" aria-hidden="true"></div>
-          <div class="astro-view astro-view--monthly" id="traditional-monthly-view">
-            <div class="astro-view-label">THIS MONTH</div>
-            <div class="astro-state" id="traditional-monthly-state">—</div>
-            <p class="astro-body" id="traditional-monthly-body">—</p>
-          </div>
+    <!-- 3: Intelligence Snapshots (Modern + Traditional compact cards) -->
+    <div class="row">
+      <section id="section-3-snapshots" data-section="Intelligence Snapshots">
+        <h2 class="section-heading">INTELLIGENCE SNAPSHOTS</h2>
+        <div class="snapshots-grid">
+          <article class="snapshot snapshot--modern">
+            <h3 class="snapshot-label">MODERN</h3>
+            <dl class="snapshot-grid">
+              <div><dt>Theme</dt><dd id="snap-modern-theme">—</dd></div>
+              <div><dt>Driver</dt><dd id="snap-modern-driver">—</dd></div>
+              <div><dt>Opportunity</dt><dd id="snap-modern-opportunity">—</dd></div>
+              <div><dt>Pressure</dt><dd id="snap-modern-pressure">—</dd></div>
+              <div><dt>Action</dt><dd id="snap-modern-action">—</dd></div>
+            </dl>
+            <button type="button" class="snapshot-footer" data-drawer-open="modern">View Analysis →</button>
+          </article>
+          <article class="snapshot snapshot--traditional">
+            <h3 class="snapshot-label">TRADITIONAL</h3>
+            <dl class="snapshot-grid">
+              <div><dt>Theme</dt><dd id="snap-traditional-theme">—</dd></div>
+              <div><dt>Driver</dt><dd id="snap-traditional-driver">—</dd></div>
+              <div><dt>Opportunity</dt><dd id="snap-traditional-opportunity">—</dd></div>
+              <div><dt>Pressure</dt><dd id="snap-traditional-pressure">—</dd></div>
+              <div><dt>Action</dt><dd id="snap-traditional-action">—</dd></div>
+            </dl>
+            <button type="button" class="snapshot-footer" data-drawer-open="traditional">View Analysis →</button>
+          </article>
         </div>
       </section>
-
-      <!-- 4: Modern astrology page section -->
-      <section id="section-4-modern" data-section="Modern Astrology">
-        <h2 class="section-heading">MODERN <span class="ai-badge">✦</span></h2>
-        <div class="card astro-card">
-          <div class="astro-view astro-view--daily" id="tropical-daily-view">
-            <div class="astro-view-label">TODAY</div>
-            <div class="astro-state" id="tropical-state">—</div>
-            <p class="astro-body" id="tropical-body">—</p>
-          </div>
-          <div class="astro-view-divider" id="tropical-view-divider" aria-hidden="true"></div>
-          <div class="astro-view astro-view--monthly" id="tropical-monthly-view">
-            <div class="astro-view-label">THIS MONTH</div>
-            <div class="astro-state" id="tropical-monthly-state">—</div>
-            <p class="astro-body" id="tropical-monthly-body">—</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- 5: Vedic astrology page section -->
-      <section id="section-5-vedic" data-section="Vedic Astrology">
-        <h2 class="section-heading">VEDIC <span class="ai-badge">✦</span></h2>
-        <div class="card astro-card">
-          <div class="astro-view astro-view--daily" id="vedic-daily-view">
-            <div class="astro-view-label">TODAY</div>
-            <div class="astro-state" id="vedic-state">—</div>
-            <p class="astro-body" id="vedic-body">—</p>
-          </div>
-          <div class="astro-view-divider" id="vedic-view-divider" aria-hidden="true"></div>
-          <div class="astro-view astro-view--monthly" id="vedic-monthly-view">
-            <div class="astro-view-label">THIS MONTH</div>
-            <div class="astro-state" id="vedic-monthly-state">—</div>
-            <p class="astro-body" id="vedic-monthly-body">—</p>
-          </div>
-          <p class="reading-moon" id="reading-moon">—</p>
-        </div>
-      </section>
-
     </div>
 
-    <!-- Row 6: "Today" composition (named-areas grid) -->
-    <div class="row row--today">
-      <!-- 6: What Changed -->
-      <section id="section-6-what-changed" data-section="What Changed">
+    <!-- 4: Analysis Drawers (hidden by default; render.js manages open/close + tabs) -->
+    <div class="row">
+      <section id="section-4-drawers" data-section="Analysis Drawers">
+        <aside class="drawer" id="drawer-modern" data-drawer="modern" hidden aria-modal="false">
+          <header class="drawer-header">
+            <h3>Modern Analysis</h3>
+            <button type="button" class="drawer-close" data-drawer-close="modern" aria-label="Close">×</button>
+          </header>
+          <div class="drawer-tabs" role="tablist">
+            <button type="button" role="tab" aria-selected="true" data-tab="today">Today</button>
+            <button type="button" role="tab" aria-selected="false" data-tab="month">Month</button>
+            <button type="button" role="tab" aria-selected="false" disabled data-tab="quarter">Quarter (Coming Soon)</button>
+            <button type="button" role="tab" aria-selected="false" disabled data-tab="year">Year (Coming Soon)</button>
+          </div>
+          <div class="drawer-content">
+            <section class="drawer-panel" data-panel="today">
+              <div class="drawer-state" id="drawer-modern-today-state">—</div>
+              <p class="drawer-body" id="drawer-modern-today-body">—</p>
+            </section>
+            <section class="drawer-panel" data-panel="month" hidden>
+              <div class="drawer-state" id="drawer-modern-month-state">—</div>
+              <p class="drawer-body" id="drawer-modern-month-body">—</p>
+            </section>
+            <section class="drawer-panel drawer-panel--soon" data-panel="quarter" hidden>
+              <p class="drawer-placeholder">Coming Soon · Quarter forecast wires up in v3.1</p>
+            </section>
+            <section class="drawer-panel drawer-panel--soon" data-panel="year" hidden>
+              <p class="drawer-placeholder">Coming Soon · Year forecast wires up in v3.1</p>
+            </section>
+          </div>
+        </aside>
+
+        <aside class="drawer" id="drawer-traditional" data-drawer="traditional" hidden aria-modal="false">
+          <header class="drawer-header">
+            <h3>Traditional Analysis</h3>
+            <button type="button" class="drawer-close" data-drawer-close="traditional" aria-label="Close">×</button>
+          </header>
+          <div class="drawer-tabs" role="tablist">
+            <button type="button" role="tab" aria-selected="true" data-tab="today">Today</button>
+            <button type="button" role="tab" aria-selected="false" data-tab="month">Month</button>
+            <button type="button" role="tab" aria-selected="false" disabled data-tab="quarter">Quarter (Coming Soon)</button>
+            <button type="button" role="tab" aria-selected="false" disabled data-tab="year">Year (Coming Soon)</button>
+          </div>
+          <div class="drawer-content">
+            <section class="drawer-panel" data-panel="today">
+              <div class="drawer-state" id="drawer-traditional-today-state">—</div>
+              <p class="drawer-body" id="drawer-traditional-today-body">—</p>
+            </section>
+            <section class="drawer-panel" data-panel="month" hidden>
+              <div class="drawer-state" id="drawer-traditional-month-state">—</div>
+              <p class="drawer-body" id="drawer-traditional-month-body">—</p>
+            </section>
+            <section class="drawer-panel drawer-panel--soon" data-panel="quarter" hidden>
+              <p class="drawer-placeholder">Coming Soon · Quarter forecast wires up in v3.1</p>
+            </section>
+            <section class="drawer-panel drawer-panel--soon" data-panel="year" hidden>
+              <p class="drawer-placeholder">Coming Soon · Year forecast wires up in v3.1</p>
+            </section>
+          </div>
+        </aside>
+      </section>
+    </div>
+
+    <!-- 5: What Changed -->
+    <div class="row">
+      <section id="section-5-what-changed" data-section="What Changed">
         <h2 class="section-heading">WHAT CHANGED <span class="heading-sub">SINCE YESTERDAY</span></h2>
         <div class="card changed-card" id="changed-card"></div>
       </section>
+    </div>
 
-      <div class="rail">
-        <!-- 7: Today's Insight -->
-        <section id="section-7-todays-insight" data-section="Today's Insight">
-          <h2 class="section-heading">TODAY'S INSIGHT</h2>
-          <div class="card insight-card" id="insight-card">—</div>
-        </section>
+    <!-- 6: Today's Insight (premium gold-accent card) -->
+    <div class="row">
+      <section id="section-6-todays-insight" data-section="Today's Insight">
+        <h2 class="section-heading">TODAY'S INSIGHT</h2>
+        <div class="card insight-card insight-card--premium" id="insight-card">—</div>
+      </section>
+    </div>
 
-        <!-- 8: Recommended Actions -->
-        <section id="section-8-recommended" data-section="Recommended Actions">
-          <h2 class="section-heading">RECOMMENDED ACTIONS</h2>
-          <div class="card actions-card">
-            <h3>Do More Of</h3>
-            <ul id="actions-do"></ul>
-            <h3>Avoid</h3>
-            <ul id="actions-avoid"></ul>
-          </div>
-        </section>
-      </div>
+    <!-- 7: Recommended Actions (Do / Avoid) -->
+    <div class="row">
+      <section id="section-7-recommended" data-section="Recommended Actions">
+        <h2 class="section-heading">RECOMMENDED ACTIONS</h2>
+        <div class="card actions-card">
+          <h3>Do More Of</h3>
+          <ul id="actions-do"></ul>
+          <h3>Avoid</h3>
+          <ul id="actions-avoid"></ul>
+        </div>
+      </section>
+    </div>
 
-      <!-- 9: Upcoming Conditions (timeline bars, not radar) -->
-      <section id="section-9-upcoming-conditions" data-section="Upcoming Conditions">
+    <!-- 8: Upcoming Conditions (timeline bars) -->
+    <div class="row">
+      <section id="section-8-upcoming" data-section="Upcoming Conditions">
         <h2 class="section-heading">UPCOMING CONDITIONS</h2>
         <ul class="timeline-list" id="timeline-list"></ul>
       </section>
     </div>
 
-    <!-- Row 7: Analytics (4 equal cols) -->
-    <div class="row row--4col">
-      <!-- 11: Sky Conditions -->
-      <section id="section-11-sky-conditions" data-section="Sky Conditions">
+    <!-- 9: Sky Conditions -->
+    <div class="row">
+      <section id="section-9-sky" data-section="Sky Conditions">
         <h2 class="section-heading">SKY CONDITIONS</h2>
         <div class="card sky-card" id="sky-card"></div>
       </section>
+    </div>
 
-      <!-- 12: Planet Influences (compact grid) -->
-      <section id="section-12-planet-influences" data-section="Planet Influences">
+    <!-- 10: Planet Influences (compact list) -->
+    <div class="row">
+      <section id="section-10-planet-influences" data-section="Planet Influences">
         <h2 class="section-heading">PLANET INFLUENCES</h2>
         <ul class="influences-compact" id="influences-grid"></ul>
       </section>
+    </div>
 
-      <!-- 13: Top Drivers -->
-      <section id="section-13-top-drivers" data-section="Top Drivers">
+    <!-- 11: Top Drivers -->
+    <div class="row">
+      <section id="section-11-top-drivers" data-section="Top Drivers">
         <h2 class="section-heading">TOP DRIVERS</h2>
         <ol class="drivers-list" id="drivers-list"></ol>
       </section>
+    </div>
 
-      <!-- 14: Why This Forecast -->
-      <section id="section-14-why-forecast" data-section="Why This Forecast">
+    <!-- 12: Why This Forecast -->
+    <div class="row">
+      <section id="section-12-why-forecast" data-section="Why This Forecast">
         <h2 class="section-heading">WHY THIS FORECAST</h2>
         <details class="card why-card">
           <summary>Expansion Score: <span id="expansion-score">—</span></summary>
@@ -260,10 +312,9 @@
       </section>
     </div>
 
-    <!-- Row 8: Confidence (single card, mockup shows it bottom-left) -->
-    <div class="row row--meta">
-      <!-- 15: Confidence -->
-      <section id="section-15-confidence" data-section="Confidence">
+    <!-- 13: Confidence -->
+    <div class="row">
+      <section id="section-13-confidence" data-section="Confidence">
         <h2 class="section-heading">CONFIDENCE</h2>
         <div class="card confidence-card">
           <div class="confidence-ring confidence-ring--unrated" aria-hidden="true"></div>
@@ -273,15 +324,15 @@
       </section>
     </div>
 
-    <!-- Row 9: Footer Nav (full bleed) -->
-    <nav class="row row--bleed footer-nav" id="section-16-footer-nav" data-section="Footer Navigation">
+    <!-- 14: Footer Nav (full bleed) — Home functional, others Coming Soon -->
+    <nav class="row row--bleed footer-nav" id="section-14-footer-nav" data-section="Footer Navigation">
       <a class="nav-item active" href="#">Home</a>
-      <a class="nav-item" href="#">Timeline</a>
-      <a class="nav-item" href="#">Reports</a>
-      <a class="nav-item" href="#">Profile</a>
+      <a class="nav-item nav-item--soon" href="#" aria-disabled="true">Timeline</a>
+      <a class="nav-item nav-item--soon" href="#" aria-disabled="true">Reports</a>
+      <a class="nav-item nav-item--soon" href="#" aria-disabled="true">Profile</a>
     </nav>
   </div>
 
-  <script src="assets/js/timing_weather_render.js?v=v2.3"></script>
+  <script src="assets/js/timing_weather_render.js?v=v3.0.0"></script>
 </body>
 </html>
