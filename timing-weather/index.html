@@ -10,7 +10,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Timing" />
-  <link rel="stylesheet" href="assets/css/timing-weather.css?v=v3.0.0" />
+  <link rel="stylesheet" href="assets/css/timing-weather.css?v=v3.0.1" />
 
   <!-- ── Self-healing cache buster (Layers 1+3) ─────────────────────────────────
        Runs before any other JS. Compares this device's stored version against the
@@ -177,6 +177,13 @@
       </section>
     </div>
 
+    <!-- 3b: Vedic Access — subtle trigger below Snapshots; opens the Vedic drawer -->
+    <div class="row">
+      <section id="section-3b-vedic-link" data-section="Vedic Access">
+        <button type="button" class="vedic-link" data-drawer-open="vedic">VIEW VEDIC ANALYSIS →</button>
+      </section>
+    </div>
+
     <!-- 4: Analysis Drawers (hidden by default; render.js manages open/close + tabs) -->
     <div class="row">
       <section id="section-4-drawers" data-section="Analysis Drawers">
@@ -228,6 +235,35 @@
             <section class="drawer-panel" data-panel="month" hidden>
               <div class="drawer-state" id="drawer-traditional-month-state">—</div>
               <p class="drawer-body" id="drawer-traditional-month-body">—</p>
+            </section>
+            <section class="drawer-panel drawer-panel--soon" data-panel="quarter" hidden>
+              <p class="drawer-placeholder">Coming Soon · Quarter forecast wires up in v3.1</p>
+            </section>
+            <section class="drawer-panel drawer-panel--soon" data-panel="year" hidden>
+              <p class="drawer-placeholder">Coming Soon · Year forecast wires up in v3.1</p>
+            </section>
+          </div>
+        </aside>
+
+        <aside class="drawer" id="drawer-vedic" data-drawer="vedic" hidden aria-modal="false">
+          <header class="drawer-header">
+            <h3>Vedic Analysis</h3>
+            <button type="button" class="drawer-close" data-drawer-close="vedic" aria-label="Close">×</button>
+          </header>
+          <div class="drawer-tabs" role="tablist">
+            <button type="button" role="tab" aria-selected="true"  data-tab="today">Today</button>
+            <button type="button" role="tab" aria-selected="false" data-tab="month">Month</button>
+            <button type="button" role="tab" aria-selected="false" disabled data-tab="quarter">Quarter (Coming Soon)</button>
+            <button type="button" role="tab" aria-selected="false" disabled data-tab="year">Year (Coming Soon)</button>
+          </div>
+          <div class="drawer-content">
+            <section class="drawer-panel" data-panel="today">
+              <div class="drawer-state" id="drawer-vedic-today-state">—</div>
+              <p class="drawer-body" id="drawer-vedic-today-body">—</p>
+            </section>
+            <section class="drawer-panel" data-panel="month" hidden>
+              <div class="drawer-state" id="drawer-vedic-month-state">—</div>
+              <p class="drawer-body" id="drawer-vedic-month-body">—</p>
             </section>
             <section class="drawer-panel drawer-panel--soon" data-panel="quarter" hidden>
               <p class="drawer-placeholder">Coming Soon · Quarter forecast wires up in v3.1</p>
@@ -333,6 +369,6 @@
     </nav>
   </div>
 
-  <script src="assets/js/timing_weather_render.js?v=v3.0.0"></script>
+  <script src="assets/js/timing_weather_render.js?v=v3.0.1"></script>
 </body>
 </html>
