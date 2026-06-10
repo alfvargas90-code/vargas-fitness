@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-10T04:25:29-05:00",
+  "generated_at": "2026-06-10T04:55:42-05:00",
   "score": 20,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -12,7 +12,7 @@
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Aries",
-    "degree": "14\u00b0 Ari 05'",
+    "degree": "14\u00b0 Ari 23'",
     "phase": "Waning Crescent",
     "next_sign_change": {
       "sign": "Taurus",
@@ -37,7 +37,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 14.09,
+    "moon_longitude": 14.38,
     "moon_sign": "Aries",
     "moon_phase": "Waning Crescent",
     "moon_house_natal": 3,
@@ -57,7 +57,7 @@
       "hrv_7d": 58.4,
       "rhr_7d": 54.3
     },
-    "active_calories": 7,
+    "active_calories": 8,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
