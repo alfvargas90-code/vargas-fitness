@@ -463,6 +463,20 @@ body {
   color: var(--color-gold-bright);
 }
 
+/* ── 3b · Vedic access — subtle full-width trigger below the snapshots row ──────
+   Low-contrast on purpose: discoverable but never competes with the Modern /
+   Traditional snapshot cards. Opens #drawer-vedic via the generic [data-drawer-open]
+   handler — no new drawer styles needed (it shares the .drawer class). */
+.vedic-link {
+  display: block; width: 100%; max-width: 480px; margin: 8px auto 0;
+  padding: 12px 16px; background: transparent;
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+  color: rgba(255,255,255,0.55); font-size: 13px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer; transition: all .2s;
+}
+.vedic-link:hover { color: rgba(232,197,115,0.9); border-color: rgba(212,168,87,0.3); background: rgba(212,168,87,0.05); }
+
 /* ════════════════════════════════════════════════════════════════════════════
    4 · ANALYSIS DRAWERS — slide-up modal (bottom sheet on mobile)
    render.js toggles the [hidden] attribute (chunk 4); CSS owns the visual + motion.

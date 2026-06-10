@@ -265,6 +265,13 @@ PVR strict throughout (null → `—`/empty). Cache bumped (timestamp schema).
 Live verified: HTTP 200, all new IDs present, consensus pill color-codes,
 drawers open/close/tab-switch, no console errors.
 
+## v3.0.1 — Vedic drawer accessible from Home ✅ SHIPPED (2026-06-09)
+
+Hotfix to Decision 1. Vedic is still hidden from Consensus + Snapshots
+structure, but a subtle "VIEW VEDIC ANALYSIS →" button below the
+Snapshots row opens a third drawer (Today + Month active, Quarter +
+Year placeholders). No change to Modern / Traditional layout.
+
 ## v1.3 — Metric Breakdowns (deferred)
 
 - Opportunity breakdown by life domain (career / money / relationships / home)

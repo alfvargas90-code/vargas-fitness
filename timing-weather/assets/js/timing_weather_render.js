@@ -184,6 +184,9 @@ function renderDrawerContent(s) {
   applyDrawerPanel(s.tropicalMonthly,    'drawer-modern-month-state',      'drawer-modern-month-body',      s.forecast);
   applyDrawerPanel(s.traditionalReading, 'drawer-traditional-today-state', 'drawer-traditional-today-body', s.forecast);
   applyDrawerPanel(s.traditionalMonthly, 'drawer-traditional-month-state', 'drawer-traditional-month-body', s.forecast);
+  // Vedic drawer (surfaced from Home via the "VIEW VEDIC ANALYSIS →" trigger, v3.0.1).
+  applyDrawerPanel(s.vedicReading,       'drawer-vedic-today-state',       'drawer-vedic-today-body',       s.forecast);
+  applyDrawerPanel(s.vedicMonthly,       'drawer-vedic-month-state',       'drawer-vedic-month-body',       s.forecast);
 }
 
 /* ── 5 · What Changed — delta rows ──────────────────────────────────────────── */
