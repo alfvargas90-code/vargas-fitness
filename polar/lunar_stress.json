@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-10T17:01:10-05:00",
-  "score": 10,
+  "generated_at": "2026-06-10T17:31:22-05:00",
+  "score": 13,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
   "physiology": {
@@ -8,11 +8,11 @@
     "rhr_delta_bpm": 1,
     "sleep_score": 83
   },
-  "workout_intensity": "rest",
+  "workout_intensity": "moderate",
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Aries",
-    "degree": "21\u00b0 Ari 25'",
+    "degree": "21\u00b0 Ari 43'",
     "phase": "Waning Crescent",
     "next_sign_change": {
       "sign": "Taurus",
@@ -30,14 +30,14 @@
       "max": 55
     },
     "body": {
-      "filled": 2,
+      "filled": 3,
       "total": 10,
-      "points": 10,
+      "points": 13,
       "max": 40
     }
   },
   "transit_detail": {
-    "moon_longitude": 21.42,
+    "moon_longitude": 21.72,
     "moon_sign": "Aries",
     "moon_phase": "Waning Crescent",
     "moon_house_natal": 3,
@@ -45,17 +45,18 @@
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 10,
+    "raw_score": 13,
     "transit_points": 0,
-    "physiology_points": 10,
+    "physiology_points": 13,
     "breakdown": [
-      "+10 HRV -10% below baseline"
+      "+10 HRV -10% below baseline",
+      "+3 Moderate-intensity day"
     ],
     "baselines": {
       "hrv_7d": 55.6,
       "rhr_7d": 54.9
     },
-    "active_calories": 395,
+    "active_calories": 404,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
