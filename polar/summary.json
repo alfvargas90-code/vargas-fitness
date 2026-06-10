@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-10T04:00:00-05:00",
-  "data_hash": "372ae7f957adcb4f",
-  "slot": "sleep",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 1%\n\nRead\nSleep gave you more time offline than usual, but the system is still waking with a shallow reserve. For the muscle-preserving path, this is not an expansion day; it favors steady inputs, controlled output, and patience over intensity.\n\nQuiet capacity.\n\nPerformance: Quiet capacity.\n\nTransit: none",
+  "generated_at": "2026-06-10T07:00:00-05:00",
+  "data_hash": "8c24a021c2daed4c",
+  "slot": "recovery",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 2%\n\nRead\nYou woke with longer sleep in the bank, but the body\u2019s deeper recovery signals are still muted. With activity not yet underway and muscle retention sensitive to under-fueling, today favors measured consistency over intensity.\n\nMeasured, not maximal.\n\nPerformance: Measured, not maximal.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 1%\n\nRead\nSleep gave you more time offline than usual, but the system is still waking with a shallow reserve. For the muscle-preserving path, this is not an expansion day; it favors steady inputs, controlled output, and patience over intensity.\n\nQuiet capacity."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 2%\n\nRead\nYou woke with longer sleep in the bank, but the body\u2019s deeper recovery signals are still muted. With activity not yet underway and muscle retention sensitive to under-fueling, today favors measured consistency over intensity.\n\nMeasured, not maximal."
     },
     {
       "label": "Performance",
-      "text": "Quiet capacity."
+      "text": "Measured, not maximal."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 1%\n\nRead\nSleep gave you more time offline than usual, but the system is still waking with a shallow reserve. For the muscle-preserving path, this is not an expansion day; it favors steady inputs, controlled output, and patience over intensity.\n\nQuiet capacity.",
-    "performance": "Quiet capacity.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 2%\n\nRead\nYou woke with longer sleep in the bank, but the body\u2019s deeper recovery signals are still muted. With activity not yet underway and muscle retention sensitive to under-fueling, today favors measured consistency over intensity.\n\nMeasured, not maximal.",
+    "performance": "Measured, not maximal.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Start breakfast with 35g protein and keep meals evenly paced today.",
   "transits": [],
   "data_basis": {
     "recharge_today": 1,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 58.4,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "0m active, 451 calories burned, \u2014 training load"
   }
 }
