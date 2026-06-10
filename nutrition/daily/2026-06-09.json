@@ -1,6 +1,6 @@
 {
   "date": "2026-06-09",
-  "synced_at": "2026-06-10T03:00:30+00:00",
+  "synced_at": "2026-06-10T03:30:36+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 1850.0,
-    "protein_g": 115.0,
-    "carbs_g": 205.0,
-    "fat_g": 72.0
+    "calories": 2700.0,
+    "protein_g": 133.0,
+    "carbs_g": 340.0,
+    "fat_g": 102.0
   },
-  "meal_count": 2,
+  "meal_count": 3,
   "raw": {
     "date": "2026-06-09",
     "meals": [
@@ -35,13 +35,22 @@
         "fat": 32,
         "carbs": 55,
         "emoji": "\u00f0\u009f\u008d\u0097"
+      },
+      {
+        "title": "Ramen and Sprite",
+        "time": "22:08",
+        "calories": 850,
+        "protein": 18,
+        "fat": 30,
+        "carbs": 135,
+        "emoji": "\u00f0\u009f\u008d\u009c"
       }
     ],
     "totals": {
-      "calories": 1850,
-      "protein": 115,
-      "fat": 72,
-      "carbs": 205
+      "calories": 2700,
+      "protein": 133,
+      "fat": 102,
+      "carbs": 340
     },
     "targets": {
       "calories": 2574,
@@ -50,14 +59,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 724,
-      "is_over": false
+      "calories": -126,
+      "is_over": true
     },
-    "meal_count": 2,
+    "meal_count": 3,
     "labels": {
       "header": "Today",
-      "calories_remaining": "724 kcal remaining today",
-      "meals_logged": "2 meals logged",
+      "calories_remaining": "126 kcal over today",
+      "meals_logged": "3 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
