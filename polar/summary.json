@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-09T20:00:00-05:00",
-  "data_hash": "886e0bbf722db923",
-  "slot": "train-2",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 84%\n\nRead\nTonight reads like a lower-capacity close: sleep helped, but recovery stayed subdued and output ran lighter than your usual day. The session window favors restraint now, with muscle preservation depending more on finishing the day well-fed, especially on protein, than adding more strain.\n\nQuiet close.\n\nPerformance: Quiet close.\n\nTransit: none",
+  "generated_at": "2026-06-09T22:30:38-05:00",
+  "data_hash": "de0c7dccf3f73eca",
+  "slot": "macros-update",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 99%\n\nRead\nThe new meal turns a low-input day into a topped-off one: energy is now past the day\u2019s window, while protein is close enough to support muscle retention. With recovery still muted and output lighter than usual, today favors consolidation over intensity.\n\nConsolidation over push.\n\nPerformance: Consolidation over push.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 84%\n\nRead\nTonight reads like a lower-capacity close: sleep helped, but recovery stayed subdued and output ran lighter than your usual day. The session window favors restraint now, with muscle preservation depending more on finishing the day well-fed, especially on protein, than adding more strain.\n\nQuiet close."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 99%\n\nRead\nThe new meal turns a low-input day into a topped-off one: energy is now past the day\u2019s window, while protein is close enough to support muscle retention. With recovery still muted and output lighter than usual, today favors consolidation over intensity.\n\nConsolidation over push."
     },
     {
       "label": "Performance",
-      "text": "Quiet close."
+      "text": "Consolidation over push."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 84%\n\nRead\nTonight reads like a lower-capacity close: sleep helped, but recovery stayed subdued and output ran lighter than your usual day. The session window favors restraint now, with muscle preservation depending more on finishing the day well-fed, especially on protein, than adding more strain.\n\nQuiet close.",
-    "performance": "Quiet close.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 74 \u2022 Strain 99%\n\nRead\nThe new meal turns a low-input day into a topped-off one: energy is now past the day\u2019s window, while protein is close enough to support muscle retention. With recovery still muted and output lighter than usual, today favors consolidation over intensity.\n\nConsolidation over push.",
+    "performance": "Consolidation over push.",
     "transit": null
   },
-  "nutrition_nudge": "Keep dinner steady and include 25g protein to protect muscle while staying on pace.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 1,
     "sleep_hours": 7.2,
     "hrv_today": 44,
     "hrv_7d_avg": 58.4,
-    "nutrition": "calories 1850 of 2574 goal, protein 115g of 138g goal, carbs 205g of 290g goal, fat 72g of 72g goal",
-    "nutrition_detail": "calories 1850 of 2574 goal -> 724 left; protein 115g of 138g goal -> 23g gap; carbs 205g of 290g goal; fat 72g of 72g goal",
-    "activity_today": "5,428 steps so far, 3h 51m active, 2,090 calories burned, Moderate training load"
+    "nutrition": "calories 2700 of 2574 goal, protein 133g of 138g goal, carbs 340g of 290g goal, fat 102g of 72g goal",
+    "nutrition_detail": "calories 2700 of 2574 goal -> 126 over; protein 133g of 138g goal -> 5g gap; carbs 340g of 290g goal; fat 102g of 72g goal",
+    "activity_today": "5,900 steps so far, 4h 34m active, 2,365 calories burned, Moderate training load"
   }
 }
