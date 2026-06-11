@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-11T06:49:23-05:00",
-  "data_hash": "aef1c92d478a6f9c",
+  "generated_at": "2026-06-11T07:00:00-05:00",
+  "data_hash": "122304d7a8f9c6e2",
   "slot": "recovery",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 3%\n\nRead\nYou woke with enough sleep in the bank, but recovery is still running below your usual rhythm. The system looks functional, not fully charged, with a narrower margin for aggressive deficit or hard strain. Today favors muscle-preserving consistency over intensity.\n\nMeasured capacity.\n\nPerformance: Measured capacity.\n\nTransit: none",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 3%\n\nRead\nYou woke with fuller sleep, but recovery is still subdued, so the system is not offering a big surge. The day favors measured consistency over intensity, with muscle protection depending on whether the empty start becomes steady protein rather than a deep deficit.\n\nSteady before strong.\n\nPerformance: Steady before strong.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 3%\n\nRead\nYou woke with enough sleep in the bank, but recovery is still running below your usual rhythm. The system looks functional, not fully charged, with a narrower margin for aggressive deficit or hard strain. Today favors muscle-preserving consistency over intensity.\n\nMeasured capacity."
+      "text": "State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 3%\n\nRead\nYou woke with fuller sleep, but recovery is still subdued, so the system is not offering a big surge. The day favors measured consistency over intensity, with muscle protection depending on whether the empty start becomes steady protein rather than a deep deficit.\n\nSteady before strong."
     },
     {
       "label": "Performance",
-      "text": "Measured capacity."
+      "text": "Steady before strong."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 3%\n\nRead\nYou woke with enough sleep in the bank, but recovery is still running below your usual rhythm. The system looks functional, not fully charged, with a narrower margin for aggressive deficit or hard strain. Today favors muscle-preserving consistency over intensity.\n\nMeasured capacity.",
-    "performance": "Measured capacity.",
+    "reading": "State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 3%\n\nRead\nYou woke with fuller sleep, but recovery is still subdued, so the system is not offering a big surge. The day favors measured consistency over intensity, with muscle protection depending on whether the empty start becomes steady protein rather than a deep deficit.\n\nSteady before strong.",
+    "performance": "Steady before strong.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Start breakfast with 35g protein and keep meal pacing steady today.",
   "transits": [],
   "data_basis": {
     "recharge_today": 2,
     "sleep_hours": 7.0,
     "hrv_today": 50,
     "hrv_7d_avg": 55.6,
-    "nutrition": null,
-    "nutrition_detail": null,
-    "activity_today": null
+    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
+    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
+    "activity_today": "1m active, 465 calories burned, \u2014 training load"
   }
 }
