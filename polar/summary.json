@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-10T17:30:01-05:00",
-  "data_hash": "a51e19860d111bc0",
-  "slot": "train-1",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 49%\n\nRead\nRecovery is subdued, but the day has not spent much yet; output has run lighter than usual. This favors a controlled strength effort over intensity, with protein still the main unfinished piece for preserving muscle while the deficit stays meaningful.\n\nMeasured, not maximal.\n\nPerformance: Measured, not maximal.\n\nTransit: none",
+  "generated_at": "2026-06-10T20:00:00-05:00",
+  "data_hash": "21612b2bf41f41dd",
+  "slot": "train-2",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 64%\n\nRead\nSleep gave you a steadier base, but recovery still reads muted and output ran lighter than your usual day. With only moderate effort spent and a meaningful protein shortfall, the late window favors a quiet close and muscle preservation over added strain.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 49%\n\nRead\nRecovery is subdued, but the day has not spent much yet; output has run lighter than usual. This favors a controlled strength effort over intensity, with protein still the main unfinished piece for preserving muscle while the deficit stays meaningful.\n\nMeasured, not maximal."
+      "text": "State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 64%\n\nRead\nSleep gave you a steadier base, but recovery still reads muted and output ran lighter than your usual day. With only moderate effort spent and a meaningful protein shortfall, the late window favors a quiet close and muscle preservation over added strain.\n\nSteady, not forceful."
     },
     {
       "label": "Performance",
-      "text": "Measured, not maximal."
+      "text": "Steady, not forceful."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 49%\n\nRead\nRecovery is subdued, but the day has not spent much yet; output has run lighter than usual. This favors a controlled strength effort over intensity, with protein still the main unfinished piece for preserving muscle while the deficit stays meaningful.\n\nMeasured, not maximal.",
-    "performance": "Measured, not maximal.",
+    "reading": "State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 64%\n\nRead\nSleep gave you a steadier base, but recovery still reads muted and output ran lighter than your usual day. With only moderate effort spent and a meaningful protein shortfall, the late window favors a quiet close and muscle preservation over added strain.\n\nSteady, not forceful.",
+    "performance": "Steady, not forceful.",
     "transit": null
   },
-  "nutrition_nudge": "Keep dinner steady and anchor it with 50g protein to protect muscle while the deficit stays modest.",
+  "nutrition_nudge": "Load your next meal with 60g protein to protect muscle while keeping tonight's deficit modest.",
   "transits": [],
   "data_basis": {
     "recharge_today": 2,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 55.6,
     "nutrition": "calories 1300 of 2574 goal, protein 62g of 138g goal, carbs 160g of 290g goal, fat 42g of 72g goal",
     "nutrition_detail": "calories 1300 of 2574 goal -> 1274 left; protein 62g of 138g goal -> 76g gap; carbs 160g of 290g goal; fat 42g of 72g goal",
-    "activity_today": "3,408 steps so far, 1h 55m active, 1,608 calories burned, Light training load"
+    "activity_today": "4,272 steps so far, 2h 35m active, 1,924 calories burned, Moderate training load"
   }
 }
