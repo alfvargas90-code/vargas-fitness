@@ -307,6 +307,32 @@
             </section>
           </div>
         </aside>
+
+        <aside class="drawer" id="drawer-bazi" data-drawer="bazi" hidden aria-modal="false">
+          <header class="drawer-header">
+            <h3>BaZi Analysis</h3>
+            <button type="button" class="drawer-close" data-drawer-close="bazi" aria-label="Close">×</button>
+          </header>
+          <div class="drawer-tabs" role="tablist">
+            <button type="button" role="tab" aria-selected="true"  data-tab="today">Today</button>
+            <button type="button" role="tab" aria-selected="false" data-tab="month">Month</button>
+            <button type="button" role="tab" aria-selected="false" data-tab="strategic">10-Year</button>
+          </div>
+          <div class="drawer-content">
+            <section class="drawer-panel" data-panel="today">
+              <div class="drawer-state" id="drawer-bazi-today-state">—</div>
+              <p class="drawer-body" id="drawer-bazi-today-body">—</p>
+            </section>
+            <section class="drawer-panel" data-panel="month" hidden>
+              <div class="drawer-state" id="drawer-bazi-month-state">—</div>
+              <p class="drawer-body" id="drawer-bazi-month-body">—</p>
+            </section>
+            <section class="drawer-panel" data-panel="strategic" hidden>
+              <div class="drawer-state" id="drawer-bazi-dayun">—</div>
+              <p class="drawer-body" id="drawer-bazi-dayun-body">—</p>
+            </section>
+          </div>
+        </aside>
       </section>
     </div>
 
