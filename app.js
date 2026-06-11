@@ -321,7 +321,7 @@ function strainPresenceColor(pct) {
 // ring stays data-honest. Each part falls back if its metric is missing.
 function computeRecoveryScore(rec, sleep, hrvBaseline) {
   const rechargePart = rec?.ans_charge_status != null ? (rec.ans_charge_status / 6) * 50 : 25;
-  const sleepPart    = sleep?.sleep_score != null ? (sleep.sleep_score / 100) * 30 : 15;
+  const sleepPart    = sleep?.sleep_score > 0 ? (sleep.sleep_score / 100) * 30 : 15;
   const hrvPart      = (rec?.heart_rate_variability_avg != null && hrvBaseline)
     ? Math.min(rec.heart_rate_variability_avg / hrvBaseline, 1) * 20 : 10;
   return Math.round(Math.min(rechargePart + sleepPart + hrvPart, 100));
@@ -617,8 +617,7 @@ async function renderRings() {
     const sleepDate = sleepDates.at(-1) || null;
     const sleepFresh = sleepDate && (daysSinceDate(sleepDate) ?? 99) <= 1;
     const sleepData = sleepDate ? await fetchJSON(`polar/sleep/${sleepDate}.json`).catch(() => null) : null;
-    if (sleepFresh && sleepData?.sleep_score != null) {
-      sleepScore = Math.round(sleepData.sleep_score);
+    if (sleepFresh && sleepData) {
       // Duration = sleep_start → sleep_end SPAN (time in bed), matching the Polar
       // app exactly. NOT the sum of light+deep+rem stages — that excludes
       // interruptions and reads short (e.g. 5h 34m vs the real 6h 10m span).
@@ -630,7 +629,14 @@ async function renderRings() {
         durSecs = stages || null;
       }
       sleepDur = durSecs ? secsToHM(durSecs) : null;
-      sleep = { pct: sleepScore, color: LPI.sleep };
+      // Polar sometimes publishes a night with no finalized Sleep Score (0 + null
+      // charge) — e.g. very low continuity, or SleepWise-only data. Treat 0 as
+      // "not scored": still show the duration, but no false number, and let the
+      // recovery ring use its neutral sleep fallback instead of being dragged to 0.
+      if (sleepData.sleep_score > 0) {
+        sleepScore = Math.round(sleepData.sleep_score);
+        sleep = { pct: sleepScore, color: LPI.sleep };
+      }
     }
 
     // --- RECOVERY — lifted overnight recovery score ---
@@ -1105,6 +1111,13 @@ function renderRechargeDetail(rec, sleep) {
     rows.push(row("Sleep charge", polarStatusWord(sleep.sleep_charge),
       `${sleep.sleep_charge}/6`, polarStatusColor(sleep.sleep_charge)));
   } else rows.push(row("Sleep charge", "—", "", null));
+  // Boost from sleep — Polar SleepWise alertness boost (0–10). A DIFFERENT metric
+  // from the 1–6 Nightly Recharge "Sleep charge" above. Only present when bridged
+  // from the app (source-tagged) on nights AccessLink didn't finalize a Sleep Score.
+  if (sleep && sleep.sleep_boost != null) {
+    rows.push(row("Boost from sleep", `${sleep.sleep_boost}/10`,
+      sleep.sleep_boost_status || "", "#39D98A"));
+  }
   // Nightly Recharge — overall status word (the dot stack above is its history).
   if (rec && rec.nightly_recharge_status != null) {
     rows.push(row("Nightly Recharge", polarStatusWord(rec.nightly_recharge_status),

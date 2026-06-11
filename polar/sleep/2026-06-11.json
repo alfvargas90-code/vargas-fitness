@@ -16,6 +16,12 @@
   "short_interruption_duration": 1260,
   "long_interruption_duration": 1530,
   "sleep_goal": 25200,
+  "sleep_boost": 9.3,
+  "sleep_boost_status": "Good",
+  "sleep_boost_scale": "0-10 Polar SleepWise",
+  "structure_feedback": "Preferred amount of sleep, poor quality",
+  "boost_source": "polar_app_screenshot",
+  "boost_captured_at": "2026-06-11",
   "hypnogram": {
     "23:46": 0,
     "23:47": 4,
