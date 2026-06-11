@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-11T11:30:00-05:00",
-  "data_hash": "78bed68e8c676153",
-  "slot": "fuel-1",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 26%\n\nRead\nRecovery is still muted, and the first meal left the afternoon under-supported for muscle retention. Output has been light, so the gap is less urgent than on a heavier day, but this still favors steady refueling over intensity.\n\nGradual, not aggressive.\n\nPerformance: Gradual, not aggressive.\n\nTransit: none",
+  "generated_at": "2026-06-11T13:51:27-05:00",
+  "data_hash": "ff4db321f82a94e6",
+  "slot": "macros-update",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 42%\n\nRead\nThe new meal turns a low-input start into a nearly covered day, with protein now doing most of the muscle-preserving work. Output is still lighter than usual, so the read favors steady maintenance over intensity.\n\nMomentum restored.\n\nPerformance: Momentum restored.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 26%\n\nRead\nRecovery is still muted, and the first meal left the afternoon under-supported for muscle retention. Output has been light, so the gap is less urgent than on a heavier day, but this still favors steady refueling over intensity.\n\nGradual, not aggressive."
+      "text": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 42%\n\nRead\nThe new meal turns a low-input start into a nearly covered day, with protein now doing most of the muscle-preserving work. Output is still lighter than usual, so the read favors steady maintenance over intensity.\n\nMomentum restored."
     },
     {
       "label": "Performance",
-      "text": "Gradual, not aggressive."
+      "text": "Momentum restored."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 26%\n\nRead\nRecovery is still muted, and the first meal left the afternoon under-supported for muscle retention. Output has been light, so the gap is less urgent than on a heavier day, but this still favors steady refueling over intensity.\n\nGradual, not aggressive.",
-    "performance": "Gradual, not aggressive.",
+    "reading": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 42%\n\nRead\nThe new meal turns a low-input start into a nearly covered day, with protein now doing most of the muscle-preserving work. Output is still lighter than usual, so the read favors steady maintenance over intensity.\n\nMomentum restored.",
+    "performance": "Momentum restored.",
     "transit": null
   },
-  "nutrition_nudge": "You're on pace; make lunch steady with lean protein and keep calories measured.",
+  "nutrition_nudge": "Fat budget is gone; keep remaining meals lean and use no added oils.",
   "transits": [],
   "data_basis": {
     "recharge_today": 2,
     "sleep_hours": 6.8,
     "hrv_today": 89,
     "hrv_7d_avg": 59.7,
-    "nutrition": "calories 600 of 2574 goal, protein 25g of 138g goal, carbs 50g of 290g goal, fat 35g of 72g goal",
-    "nutrition_detail": "calories 600 of 2574 goal -> 1974 left; protein 25g of 138g goal -> 113g gap; carbs 50g of 290g goal; fat 35g of 72g goal",
-    "activity_today": "1,768 steps so far, 1h 3m active, 960 calories burned, Light training load"
+    "nutrition": "calories 2050 of 2574 goal, protein 120g of 138g goal, carbs 210g of 290g goal, fat 80g of 72g goal",
+    "nutrition_detail": "calories 2050 of 2574 goal -> 524 left; protein 120g of 138g goal -> 18g gap; carbs 210g of 290g goal; fat 80g of 72g goal",
+    "activity_today": "2,728 steps so far, 1h 50m active, 1,277 calories burned, Light training load"
   }
 }
