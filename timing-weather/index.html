@@ -146,41 +146,75 @@
       </section>
     </div>
 
-    <!-- 3: Intelligence Snapshots (Modern + Traditional compact cards) -->
+    <!-- 3: Daily Horoscope — four always-visible reading cards (v2.4 redesign).
+         Order per Alfie: Vedic → Modern → Traditional → BaZi. Each card surfaces the
+         day's reading prose directly; the "This Month" footer opens that system's
+         drawer for the monthly (+ BaZi 10-Year) deep dive. -->
     <div class="row">
-      <section id="section-3-snapshots" data-section="Intelligence Snapshots">
-        <h2 class="section-heading">INTELLIGENCE SNAPSHOTS</h2>
-        <div class="snapshots-grid">
-          <article class="snapshot snapshot--modern">
-            <h3 class="snapshot-label">MODERN</h3>
-            <dl class="snapshot-grid">
-              <div><dt>Theme</dt><dd id="snap-modern-theme">—</dd></div>
-              <div><dt>Driver</dt><dd id="snap-modern-driver">—</dd></div>
-              <div><dt>Opportunity</dt><dd id="snap-modern-opportunity">—</dd></div>
-              <div><dt>Pressure</dt><dd id="snap-modern-pressure">—</dd></div>
-              <div><dt>Action</dt><dd id="snap-modern-action">—</dd></div>
-            </dl>
-            <button type="button" class="snapshot-footer" data-drawer-open="modern">View Analysis →</button>
-          </article>
-          <article class="snapshot snapshot--traditional">
-            <h3 class="snapshot-label">TRADITIONAL</h3>
-            <dl class="snapshot-grid">
-              <div><dt>Theme</dt><dd id="snap-traditional-theme">—</dd></div>
-              <div><dt>Driver</dt><dd id="snap-traditional-driver">—</dd></div>
-              <div><dt>Opportunity</dt><dd id="snap-traditional-opportunity">—</dd></div>
-              <div><dt>Pressure</dt><dd id="snap-traditional-pressure">—</dd></div>
-              <div><dt>Action</dt><dd id="snap-traditional-action">—</dd></div>
-            </dl>
-            <button type="button" class="snapshot-footer" data-drawer-open="traditional">View Analysis →</button>
-          </article>
-        </div>
-      </section>
-    </div>
+      <section id="section-3-daily-horoscope" data-section="Daily Horoscope">
+        <h2 class="section-heading">DAILY HOROSCOPE</h2>
+        <div class="readings-stack">
 
-    <!-- 3b: Vedic Access — subtle trigger below Snapshots; opens the Vedic drawer -->
-    <div class="row">
-      <section id="section-3b-vedic-link" data-section="Vedic Access">
-        <button type="button" class="vedic-link" data-drawer-open="vedic">VIEW VEDIC ANALYSIS →</button>
+          <article class="reading-card" data-reading="vedic">
+            <header class="reading-card__head">
+              <div class="reading-card__titles">
+                <h3 class="reading-card__label">VEDIC</h3>
+                <span class="reading-card__sub">Sidereal · Vimshottari</span>
+              </div>
+              <span class="reading-card__state" id="reading-vedic-state">—</span>
+            </header>
+            <p class="reading-card__body" id="reading-vedic-body">—</p>
+            <button type="button" class="reading-card__more" data-drawer-open="vedic">This Month →</button>
+          </article>
+
+          <article class="reading-card" data-reading="modern">
+            <header class="reading-card__head">
+              <div class="reading-card__titles">
+                <h3 class="reading-card__label">MODERN</h3>
+                <span class="reading-card__sub">Western · Tropical</span>
+              </div>
+              <span class="reading-card__state" id="reading-modern-state">—</span>
+            </header>
+            <p class="reading-card__body" id="reading-modern-body">—</p>
+            <button type="button" class="reading-card__more" data-drawer-open="modern">This Month →</button>
+          </article>
+
+          <article class="reading-card" data-reading="traditional">
+            <header class="reading-card__head">
+              <div class="reading-card__titles">
+                <h3 class="reading-card__label">TRADITIONAL</h3>
+                <span class="reading-card__sub">Hellenistic · 7 classical planets</span>
+              </div>
+              <span class="reading-card__state" id="reading-traditional-state">—</span>
+            </header>
+            <p class="reading-card__body" id="reading-traditional-body">—</p>
+            <button type="button" class="reading-card__more" data-drawer-open="traditional">This Month →</button>
+          </article>
+
+          <article class="reading-card reading-card--bazi" data-reading="bazi">
+            <header class="reading-card__head">
+              <div class="reading-card__titles">
+                <h3 class="reading-card__label">BAZI</h3>
+                <span class="reading-card__sub">Eastern · Four Pillars</span>
+              </div>
+              <span class="reading-card__state" id="reading-bazi-state">—</span>
+            </header>
+            <!-- Layer 1 · Core Animal -->
+            <div class="bazi-core">
+              <div class="bazi-core__animal">
+                <span class="bazi-core__animal-name" id="bazi-core-animal">—</span>
+                <span class="bazi-core__daymaster" id="bazi-daymaster">—</span>
+              </div>
+              <div class="bazi-core__pillars" id="bazi-pillars"></div>
+            </div>
+            <!-- Layer 2 · Daily Tactical (animal slots) -->
+            <ul class="bazi-slots" id="bazi-slots"></ul>
+            <!-- Tactical prose -->
+            <p class="reading-card__body" id="reading-bazi-body">—</p>
+            <button type="button" class="reading-card__more" data-drawer-open="bazi">Month · 10-Year →</button>
+          </article>
+
+        </div>
       </section>
     </div>
 
