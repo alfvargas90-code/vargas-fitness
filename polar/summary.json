@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-11T10:50:16-05:00",
-  "data_hash": "21fda883c2225e49",
-  "slot": "macros-update",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 24%\n\nRead\nYour first real intake has opened the day back up. Protein has begun to climb, but the day still skews underfed for muscle protection, with output running lighter than usual and effort still light. This favors a measured catch-up over intensity.\n\nMeasured catch-up.\n\nPerformance: Measured catch-up.\n\nTransit: none",
+  "generated_at": "2026-06-11T11:30:00-05:00",
+  "data_hash": "78bed68e8c676153",
+  "slot": "fuel-1",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 26%\n\nRead\nRecovery is still muted, and the first meal left the afternoon under-supported for muscle retention. Output has been light, so the gap is less urgent than on a heavier day, but this still favors steady refueling over intensity.\n\nGradual, not aggressive.\n\nPerformance: Gradual, not aggressive.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 24%\n\nRead\nYour first real intake has opened the day back up. Protein has begun to climb, but the day still skews underfed for muscle protection, with output running lighter than usual and effort still light. This favors a measured catch-up over intensity.\n\nMeasured catch-up."
+      "text": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 26%\n\nRead\nRecovery is still muted, and the first meal left the afternoon under-supported for muscle retention. Output has been light, so the gap is less urgent than on a heavier day, but this still favors steady refueling over intensity.\n\nGradual, not aggressive."
     },
     {
       "label": "Performance",
-      "text": "Measured catch-up."
+      "text": "Gradual, not aggressive."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 24%\n\nRead\nYour first real intake has opened the day back up. Protein has begun to climb, but the day still skews underfed for muscle protection, with output running lighter than usual and effort still light. This favors a measured catch-up over intensity.\n\nMeasured catch-up.",
-    "performance": "Measured catch-up.",
+    "reading": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 26%\n\nRead\nRecovery is still muted, and the first meal left the afternoon under-supported for muscle retention. Output has been light, so the gap is less urgent than on a heavier day, but this still favors steady refueling over intensity.\n\nGradual, not aggressive.",
+    "performance": "Gradual, not aggressive.",
     "transit": null
   },
-  "nutrition_nudge": "Stay steady: make lunch protein-forward with 45g to protect muscle while calories stay on pace.",
+  "nutrition_nudge": "You're on pace; make lunch steady with lean protein and keep calories measured.",
   "transits": [],
   "data_basis": {
     "recharge_today": 2,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 59.7,
     "nutrition": "calories 600 of 2574 goal, protein 25g of 138g goal, carbs 50g of 290g goal, fat 35g of 72g goal",
     "nutrition_detail": "calories 600 of 2574 goal -> 1974 left; protein 25g of 138g goal -> 113g gap; carbs 50g of 290g goal; fat 35g of 72g goal",
-    "activity_today": "1,612 steps so far, 56m active, 899 calories burned, Light training load"
+    "activity_today": "1,768 steps so far, 1h 3m active, 960 calories burned, Light training load"
   }
 }
