@@ -20,6 +20,9 @@ polar/next_steps.md
 dashboard_preview.png
 .DS_Store
 
+# one-shot throwaway recheck scripts (disposable, local-only)
+polar/recheck_sleep_*.py
+
 # --- nutrition secrets (recordo MCP tokens) ---
 nutrition/.env
 nutrition/.env.*
