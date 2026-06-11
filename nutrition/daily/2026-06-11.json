@@ -1,6 +1,6 @@
 {
   "date": "2026-06-11",
-  "synced_at": "2026-06-11T14:50:03+00:00",
+  "synced_at": "2026-06-11T15:50:12+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,20 +9,30 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 0.0,
-    "protein_g": 0.0,
-    "carbs_g": 0.0,
-    "fat_g": 0.0
+    "calories": 600.0,
+    "protein_g": 25.0,
+    "carbs_g": 50.0,
+    "fat_g": 35.0
   },
-  "meal_count": 0,
+  "meal_count": 1,
   "raw": {
     "date": "2026-06-11",
-    "meals": [],
+    "meals": [
+      {
+        "title": "Sausage McMuffin and Iced Coffee",
+        "time": "10:35",
+        "calories": 600,
+        "protein": 25,
+        "fat": 35,
+        "carbs": 50,
+        "emoji": "\u00e2\u0098\u0095"
+      }
+    ],
     "totals": {
-      "calories": 0,
-      "protein": 0,
-      "fat": 0,
-      "carbs": 0
+      "calories": 600,
+      "protein": 25,
+      "fat": 35,
+      "carbs": 50
     },
     "targets": {
       "calories": 2574,
@@ -31,14 +41,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 2574,
+      "calories": 1974,
       "is_over": false
     },
-    "meal_count": 0,
+    "meal_count": 1,
     "labels": {
       "header": "Today",
-      "calories_remaining": "2574 kcal remaining today",
-      "meals_logged": "0 meals logged",
+      "calories_remaining": "1974 kcal remaining today",
+      "meals_logged": "1 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
