@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-11T17:54:21-05:00",
-  "score": 3,
+  "generated_at": "2026-06-11T18:24:34-05:00",
+  "score": 18,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
   "physiology": {
@@ -12,7 +12,7 @@
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Taurus",
-    "degree": "6\u00b0 Tau 18'",
+    "degree": "6\u00b0 Tau 36'",
     "phase": "Waning Crescent",
     "next_sign_change": {
       "sign": "Gemini",
@@ -26,7 +26,7 @@
     "transit": {
       "filled": 0,
       "total": 10,
-      "points": -15,
+      "points": 0,
       "max": 55
     },
     "body": {
@@ -37,19 +37,18 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 36.3,
+    "moon_longitude": 36.61,
     "moon_sign": "Taurus",
     "moon_phase": "Waning Crescent",
     "moon_house_natal": 4,
-    "aspect_to_natal_moon": "trine (0.8\u00b0 separating)",
+    "aspect_to_natal_moon": null,
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 3,
-    "transit_points": -15,
+    "raw_score": 18,
+    "transit_points": 0,
     "physiology_points": 18,
     "breakdown": [
-      "-15 Moon trine natal Moon",
       "-5 HRV 49% above baseline",
       "+10 RHR +6 bpm vs baseline",
       "+10 Sleep score 0 (<70)",
@@ -59,7 +58,7 @@
       "hrv_7d": 59.7,
       "rhr_7d": 56
     },
-    "active_calories": 545,
+    "active_calories": 575,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
