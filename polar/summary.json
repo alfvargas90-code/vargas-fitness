@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-11T07:00:00-05:00",
-  "data_hash": "122304d7a8f9c6e2",
-  "slot": "recovery",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 3%\n\nRead\nYou woke with fuller sleep, but recovery is still subdued, so the system is not offering a big surge. The day favors measured consistency over intensity, with muscle protection depending on whether the empty start becomes steady protein rather than a deep deficit.\n\nSteady before strong.\n\nPerformance: Steady before strong.\n\nTransit: none",
+  "generated_at": "2026-06-11T10:50:16-05:00",
+  "data_hash": "21fda883c2225e49",
+  "slot": "macros-update",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 24%\n\nRead\nYour first real intake has opened the day back up. Protein has begun to climb, but the day still skews underfed for muscle protection, with output running lighter than usual and effort still light. This favors a measured catch-up over intensity.\n\nMeasured catch-up.\n\nPerformance: Measured catch-up.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 3%\n\nRead\nYou woke with fuller sleep, but recovery is still subdued, so the system is not offering a big surge. The day favors measured consistency over intensity, with muscle protection depending on whether the empty start becomes steady protein rather than a deep deficit.\n\nSteady before strong."
+      "text": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 24%\n\nRead\nYour first real intake has opened the day back up. Protein has begun to climb, but the day still skews underfed for muscle protection, with output running lighter than usual and effort still light. This favors a measured catch-up over intensity.\n\nMeasured catch-up."
     },
     {
       "label": "Performance",
-      "text": "Steady before strong."
+      "text": "Measured catch-up."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 3%\n\nRead\nYou woke with fuller sleep, but recovery is still subdued, so the system is not offering a big surge. The day favors measured consistency over intensity, with muscle protection depending on whether the empty start becomes steady protein rather than a deep deficit.\n\nSteady before strong.",
-    "performance": "Steady before strong.",
+    "reading": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 24%\n\nRead\nYour first real intake has opened the day back up. Protein has begun to climb, but the day still skews underfed for muscle protection, with output running lighter than usual and effort still light. This favors a measured catch-up over intensity.\n\nMeasured catch-up.",
+    "performance": "Measured catch-up.",
     "transit": null
   },
-  "nutrition_nudge": "Start breakfast with 35g protein and keep meal pacing steady today.",
+  "nutrition_nudge": "Stay steady: make lunch protein-forward with 45g to protect muscle while calories stay on pace.",
   "transits": [],
   "data_basis": {
     "recharge_today": 2,
-    "sleep_hours": 7.0,
-    "hrv_today": 50,
-    "hrv_7d_avg": 55.6,
-    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
-    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "1m active, 465 calories burned, \u2014 training load"
+    "sleep_hours": 6.8,
+    "hrv_today": 89,
+    "hrv_7d_avg": 59.7,
+    "nutrition": "calories 600 of 2574 goal, protein 25g of 138g goal, carbs 50g of 290g goal, fat 35g of 72g goal",
+    "nutrition_detail": "calories 600 of 2574 goal -> 1974 left; protein 25g of 138g goal -> 113g gap; carbs 50g of 290g goal; fat 35g of 72g goal",
+    "activity_today": "1,612 steps so far, 56m active, 899 calories burned, Light training load"
   }
 }
