@@ -155,18 +155,59 @@ function renderConsensus(s) {
   }
 }
 
-/* ── 3 · Intelligence Snapshots — Modern + Traditional compact <dl> rows ──────
-   PVR: any null field renders "—". */
-function renderSnapshots(s) {
-  const snaps = s.snapshots || {};
-  ['modern', 'traditional'].forEach(sys => {
-    const snap = snaps[sys] || {};
-    setText(`snap-${sys}-theme`, snap.theme);
-    setText(`snap-${sys}-driver`, snap.driver);
-    setText(`snap-${sys}-opportunity`, snap.opportunity);
-    setText(`snap-${sys}-pressure`, snap.pressure);
-    setText(`snap-${sys}-action`, snap.action);
-  });
+/* ── 3 · Daily Horoscope — four always-visible reading cards (v2.4) ────────────
+   Vedic ← vedicReading · Modern ← tropicalReading · Traditional ← traditionalReading
+   · BaZi ← baziReading + baziCore. Each card shows the day's prose directly; the
+   monthly stays in the drawer. PVR: null reading → "—" body + fallback state. */
+function fillReadingCard(reading, stateId, bodyId, fallbackState) {
+  const r = reading || {};
+  const st = r.state ? String(r.state).toUpperCase()
+    : (fallbackState ? String(fallbackState).toUpperCase() : null);
+  setText(stateId, st);
+  setText(bodyId, r.body || r.read);
+}
+
+function renderDailyHoroscope(s) {
+  fillReadingCard(s.vedicReading,       'reading-vedic-state',       'reading-vedic-body',       s.forecast);
+  fillReadingCard(s.tropicalReading,    'reading-modern-state',      'reading-modern-body',      s.forecast);
+  fillReadingCard(s.traditionalReading, 'reading-traditional-state', 'reading-traditional-body', s.forecast);
+  fillReadingCard(s.baziReading,        'reading-bazi-state',        'reading-bazi-body',        s.forecast);
+  renderBaziCore(s);
+}
+
+/* BaZi Layer 1 (Core Animal) + Layer 2 (Daily Tactical slots) — pure-computed
+   from state.baziCore (no Codex). PVR: absent baziCore → cards/lists stay "—"/empty. */
+function renderBaziCore(s) {
+  const c = s.baziCore || {};
+  setText('bazi-core-animal', c.coreAnimal ? `${c.coreAnimal} 🐇` : null);
+  setText('bazi-daymaster', c.dayMaster);
+
+  const pillars = $('bazi-pillars');
+  if (pillars) {
+    const cy = c.currentYear || {}, cm = c.currentMonth || {}, cd = c.currentDay || {};
+    const chips = [
+      ['Year', cy.pillar, cy.animal],
+      ['Month', cm.pillar, cm.solarTerm],
+      ['Day', cd.pillar, cd.animal]
+    ].filter(([, p]) => p);
+    pillars.innerHTML = chips.map(([k, p, sub]) =>
+      `<span class="bazi-pillar"><span class="bazi-pillar__k">${k}</span>` +
+      `<span class="bazi-pillar__v">${p}</span>` +
+      `<span class="bazi-pillar__s">${sub || ''}</span></span>`).join('');
+  }
+
+  const slots = $('bazi-slots');
+  if (slots) {
+    const items = c.tacticalSlots || [];
+    slots.innerHTML = items.map(sl => {
+      const isSelf = /self|illuminate/i.test(sl.slot || '');
+      const isMnem = /mnemonic/i.test(sl.note || '');
+      return `<li class="bazi-slot${isSelf ? ' bazi-slot--self' : ''}${isMnem ? ' bazi-slot--mnemonic' : ''}">` +
+        `<span class="bazi-slot__animal">${sl.animal || '—'}</span>` +
+        `<span class="bazi-slot__role">${sl.slot || ''}</span>` +
+        `<span class="bazi-slot__note">${sl.note || ''}</span></li>`;
+    }).join('');
+  }
 }
 
 /* ── 4 · Analysis Drawer panels ───────────────────────────────────────────────
@@ -184,9 +225,27 @@ function renderDrawerContent(s) {
   applyDrawerPanel(s.tropicalMonthly,    'drawer-modern-month-state',      'drawer-modern-month-body',      s.forecast);
   applyDrawerPanel(s.traditionalReading, 'drawer-traditional-today-state', 'drawer-traditional-today-body', s.forecast);
   applyDrawerPanel(s.traditionalMonthly, 'drawer-traditional-month-state', 'drawer-traditional-month-body', s.forecast);
-  // Vedic drawer (surfaced from Home via the "VIEW VEDIC ANALYSIS →" trigger, v3.0.1).
   applyDrawerPanel(s.vedicReading,       'drawer-vedic-today-state',       'drawer-vedic-today-body',       s.forecast);
   applyDrawerPanel(s.vedicMonthly,       'drawer-vedic-month-state',       'drawer-vedic-month-body',       s.forecast);
+  // BaZi drawer — Today + Month from Codex; 10-Year Strategic from the Da Yun pillar.
+  applyDrawerPanel(s.baziReading,        'drawer-bazi-today-state',        'drawer-bazi-today-body',        s.forecast);
+  applyDrawerPanel(s.baziMonthly,        'drawer-bazi-month-state',        'drawer-bazi-month-body',        s.forecast);
+  renderBaziStrategic(s);
+}
+
+/* BaZi Layer 4 · 10-Year Strategic — the current Da Yun (luck pillar). v1: the
+   pillar is computed; its reading is a derived, non-fabricated structural note. */
+function renderBaziStrategic(s) {
+  const c = s.baziCore || {};
+  const dayun = c.daYun || null;
+  setText('drawer-bazi-dayun', dayun ? `DA YUN · ${dayun}` : null);
+  setText('drawer-bazi-dayun-body', dayun
+    ? 'The current 10-year luck pillar is 戊子 Wu-Zi — Yang Earth (Output) sitting over '
+      + 'Rat Water (Power/Officer) for a Ding Fire day master. The decade favors producing '
+      + 'and expressing visible work in service of structure, career, and standing — output '
+      + 'channeled into authority rather than scattered. Pair it with the 2026 Ben Ming (Horse) '
+      + 'fire field: high visibility, but guard against overcommitment and heat/burnout.'
+    : null);
 }
 
 /* ── 5 · What Changed — delta rows ──────────────────────────────────────────── */
@@ -465,7 +524,7 @@ function renderAll(s) {
   renderHero(s);
   renderMoonNow(s);
   renderConsensus(s);
-  renderSnapshots(s);
+  renderDailyHoroscope(s);
   renderDrawerContent(s);
   renderWhatChanged(s);
   renderTodaysInsight(s);

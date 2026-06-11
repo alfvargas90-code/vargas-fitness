@@ -1342,6 +1342,217 @@ def traditional_context_block():
     return "\n\n".join(parts)
 
 
+# --- BaZi (Eastern / Chinese Four Pillars) layer (v2.4) ------------------
+# A FOURTH reading framework, fully independent of the three Western/Vedic passes.
+# Natal pillars are CANONICAL (verified by sexagenary-day + solar-term calc against
+# 1990-08-30 16:22 CDT; confirmed by Alfie 2026-06-11, superseding the old Dog chart):
+#   Year 庚午 Geng-Wu (Horse) · Month 甲申 Jia-Shen (Monkey) ·
+#   Day 丁卯 Ding-Mao (RABBIT, Day Master Ding Fire) · Hour 戊申 Wu-Shen (Monkey).
+# Sources: 02_Astrology/Alfie/natal_context.md (canonical YAML) +
+#          02_Astrology/Alfie/bazi_verification_2026_activation_report.md (timing layer).
+BAZI_STEMS = ["Jia", "Yi", "Bing", "Ding", "Wu", "Ji", "Geng", "Xin", "Ren", "Gui"]
+BAZI_STEM_ELEM = {  # stem -> (element, Ten-God role relative to a DING FIRE day master)
+    "Jia": ("Yang Wood", "Resource"), "Yi": ("Yin Wood", "Resource"),
+    "Bing": ("Yang Fire", "Companion (Rob Wealth)"), "Ding": ("Yin Fire", "Companion (peer)"),
+    "Wu": ("Yang Earth", "Output"), "Ji": ("Yin Earth", "Output"),
+    "Geng": ("Yang Metal", "Wealth"), "Xin": ("Yin Metal", "Wealth"),
+    "Ren": ("Yang Water", "Power/Officer"), "Gui": ("Yin Water", "Power/Officer"),
+}
+BAZI_BRANCHES = ["Zi", "Chou", "Yin", "Mao", "Chen", "Si",
+                 "Wu", "Wei", "Shen", "You", "Xu", "Hai"]
+BAZI_ANIMALS = ["Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake",
+                "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig"]
+# Sectional solar terms (jié) that BEGIN each BaZi month, indexed from the Yin (Tiger)
+# month at ecliptic longitude 315°, then every +30°.
+BAZI_JIE = ["Li Chun", "Jing Zhe", "Qing Ming", "Li Xia", "Mang Zhong", "Xiao Shu",
+            "Li Qiu", "Bai Lu", "Han Lu", "Li Dong", "Da Xue", "Xiao Han"]
+# Five-Tigers: year stem -> stem INDEX of the FIRST (Yin) month.
+#   Jia/Ji→Bing(2) · Yi/Geng→Wu(4) · Bing/Xin→Geng(6) · Ding/Ren→Ren(8) · Wu/Gui→Jia(0)
+_BAZI_YIN_STEM = {"Jia": 2, "Ji": 2, "Yi": 4, "Geng": 4, "Bing": 6, "Xin": 6,
+                  "Ding": 8, "Ren": 8, "Wu": 0, "Gui": 0}
+
+# Canonical natal facts (do NOT recompute — verified + Alfie-confirmed).
+BAZI_NATAL = {
+    "dayMaster": "Ding Fire (丁火) — Yin Fire",
+    "coreAnimal": "Rabbit",
+    "coreAnimalBranch": "Mao (卯)",
+    "pillars": {"year": "Geng-Wu", "month": "Jia-Shen", "day": "Ding-Mao", "hour": "Wu-Shen"},
+    "animalStack": ["Horse", "Monkey", "Rabbit", "Monkey"],
+    "elements": {"Wood": 2, "Fire": 2, "Earth": 4, "Metal": 3, "Water": 2},
+    "daYun": "Wu-Zi (戊子)",          # current decade luck pillar (Yang-year male, forward)
+    "benMingYear": 2026,             # classical: birth-year branch (Horse) repeats in 2026 Bing-Wu
+}
+
+
+def _greg_jdn(y, m, d):
+    """Julian Day Number for a Gregorian civil date (noon-agnostic, integer)."""
+    a = (14 - m) // 12
+    yy = y + 4800 - a
+    mm = m + 12 * a - 3
+    return d + (153 * mm + 2) // 5 + 365 * yy + yy // 4 - yy // 100 + yy // 400 - 32045
+
+
+def bazi_day_pillar(today):
+    """Sexagenary DAY pillar for a civil date. Calibrated so 2000-01-07 = Jia-Zi
+    (JDN 2451551). Returns (stem, branch, animal)."""
+    j = _greg_jdn(today.year, today.month, today.day)
+    return BAZI_STEMS[(j + 9) % 10], BAZI_BRANCHES[(j + 1) % 12], BAZI_ANIMALS[(j + 1) % 12]
+
+
+def bazi_year_pillar(today):
+    """Solar BaZi YEAR pillar. The year rolls at Li Chun (~Feb 4), not Jan 1."""
+    y = today.year if (today.month, today.day) >= (2, 4) else today.year - 1
+    i = (y - 4) % 10
+    b = (y - 4) % 12
+    return BAZI_STEMS[i], BAZI_BRANCHES[b], BAZI_ANIMALS[b]
+
+
+def bazi_month_pillar(today, sun_lon, year_stem):
+    """Solar BaZi MONTH pillar from the Sun's tropical longitude. Month branch advances
+    one sign per 30° of solar longitude from the Yin (Tiger) month at 315°; the stem
+    follows the Five-Tigers rule off the year stem. Returns (stem, branch, animal, jie)."""
+    idx = int(((sun_lon - 315) % 360) // 30)          # 0 = Yin month (Li Chun)
+    branch_i = (2 + idx) % 12                          # Yin = branch index 2
+    stem_i = (_BAZI_YIN_STEM[year_stem] + idx) % 10
+    return (BAZI_STEMS[stem_i], BAZI_BRANCHES[branch_i],
+            BAZI_ANIMALS[branch_i], BAZI_JIE[idx])
+
+
+def _bazi_sun_lon(now_utc):
+    """Sun's tropical longitude now, or None on ephemeris failure (graceful degrade)."""
+    try:
+        return lon_of(jd_now(now_utc), swe.SUN)
+    except Exception as e:
+        log(f"  bazi: Sun longitude failed ({e}) — month pillar degraded")
+        return None
+
+
+def bazi_core(today, now_utc):
+    """Structured, pure-computed BaZi facts for the dashboard card's Core Animal +
+    Daily Tactical layers (no Codex). Live year/month/day pillars + the natal animal
+    stack + the user mnemonic overlay (Rooster 'payoff' is a mnemonic, NOT a pillar)."""
+    ys, yb, ya = bazi_year_pillar(today)
+    ds, db, da = bazi_day_pillar(today)
+    sun_lon = _bazi_sun_lon(now_utc)
+    if sun_lon is not None:
+        ms, mb, ma, jie = bazi_month_pillar(today, sun_lon, ys)
+        month = {"pillar": f"{ms}-{mb}", "animal": ma, "solarTerm": jie}
+    else:
+        month = None
+    # Daily tactical slots — the user's Horse/Monkey/Rabbit/Rooster mnemonic overlay.
+    slots = [
+        {"slot": "Drive", "animal": "Horse",
+         "note": "Year branch repeats in 2026 — drive and visibility run hot"},
+        {"slot": "Pressure", "animal": "Monkey",
+         "note": "Natal month AND hour branch — structural pressure is real"},
+        {"slot": "Self / Illuminate", "animal": "Rabbit",
+         "note": "Your true core branch — finesse, curation, clean expression over force"},
+        {"slot": "Payoff", "animal": "Rooster",
+         "note": "Mnemonic overlay only — not a natal pillar (literal hour branch is Monkey)"},
+    ]
+    return {
+        "dayMaster": BAZI_NATAL["dayMaster"],
+        "coreAnimal": BAZI_NATAL["coreAnimal"],
+        "coreAnimalBranch": BAZI_NATAL["coreAnimalBranch"],
+        "animalStack": BAZI_NATAL["animalStack"],
+        "elements": BAZI_NATAL["elements"],
+        "daYun": BAZI_NATAL["daYun"],
+        "benMingYear": BAZI_NATAL["benMingYear"],
+        "currentYear": {"pillar": f"{ys}-{yb}", "animal": ya},
+        "currentMonth": month,
+        "currentDay": {"pillar": f"{ds}-{db}", "animal": da},
+        "tacticalSlots": slots,
+    }
+
+
+def _bazi_stem_role(stem):
+    elem, role = BAZI_STEM_ELEM.get(stem, ("", ""))
+    return f"{elem} ({role} for Ding Fire)"
+
+
+def bazi_factors(today, now_utc):
+    """Live DAILY factors for the BaZi Codex pass — current year/month/day pillars read
+    as Ten-Gods relative to the Ding Fire day master. PVR: fully computed, never faked."""
+    ys, yb, ya = bazi_year_pillar(today)
+    ds, db, da = bazi_day_pillar(today)
+    facts = [
+        f"Day Master Ding Fire (Yin Fire); core branch Rabbit (Mao). Earth-heavy chart "
+        f"(Wood2/Fire2/Earth4/Metal3/Water2) — Output is the dominant element.",
+        f"Current Da Yun (10-year luck pillar): Wu-Zi — Yang Earth Output over Rat Water "
+        f"Power/Officer.",
+        f"BaZi year {ys}-{yb} ({ya}): {ys} stem is {_bazi_stem_role(ys)}; 2026 repeats your "
+        f"natal Horse year branch (Ben Ming year) — peer-fire amplification, visibility, "
+        f"and heat/burnout risk.",
+        f"Today's day pillar {ds}-{db} ({da}): {ds} stem is {_bazi_stem_role(ds)}.",
+    ]
+    sun_lon = _bazi_sun_lon(now_utc)
+    if sun_lon is not None:
+        ms, mb, ma, jie = bazi_month_pillar(today, sun_lon, ys)
+        facts.insert(3, f"Current BaZi month {ms}-{mb} ({ma}), solar term {jie}: {ms} stem is "
+                        f"{_bazi_stem_role(ms)}.")
+    return facts
+
+
+def bazi_monthly_factors(today, now_utc):
+    """Live MONTHLY factors for the BaZi monthly Codex pass — the current solar-term month,
+    the next jié handoff date, and the year's stacking window. PVR: derived from ephemeris
+    + the verification report's fixed solar-term calendar."""
+    ys, yb, ya = bazi_year_pillar(today)
+    sun_lon = _bazi_sun_lon(now_utc)
+    if sun_lon is None:
+        return [f"BaZi year {ys}-{yb} ({ya}) — Ben Ming Horse year, peer-fire and visibility high."]
+    ms, mb, ma, jie = bazi_month_pillar(today, sun_lon, ys)
+    facts = [
+        f"Current BaZi month {ms}-{mb} ({ma}), opened by solar term {jie}; {ms} stem is "
+        f"{_bazi_stem_role(ms)} and {ma} branch sets the month's element field.",
+    ]
+    # Forward-search the next 30°-boundary (next jié / month change).
+    try:
+        jd = jd_now(now_utc)
+        cur_idx = int(((sun_lon - 315) % 360) // 30)
+        for d in range(1, 41):
+            nl = lon_of(jd + d, swe.SUN)
+            if int(((nl - 315) % 360) // 30) != cur_idx:
+                nxt = (cur_idx + 1) % 12
+                nms, nmb, nma, njie = bazi_month_pillar(today + timedelta(days=d), nl, ys)
+                facts.append(f"The month rolls to {nms}-{nmb} ({nma}) at solar term {njie} around "
+                             f"{(today + timedelta(days=d)).isoformat()} — the element field shifts then.")
+                break
+    except Exception as e:
+        log(f"  bazi monthly: next-term search failed ({e}) — skipping handoff factor")
+    facts.append("2026's tightest stacking window is Jul 7 – Sep 7 (Yi-Wei and Bing-Shen months, "
+                 "holding the ~Jul 12 Jupiter return) — the year's center of gravity for the visible move.")
+    return facts
+
+
+def bazi_context_block():
+    """BaZi-ONLY narrative context: canonical natal pillars + Five-Element / Ten-Gods
+    framing for a Ding Fire day master + the 2026 activation layer. Pulls the canonical
+    natal YAML and the verification report; never blends Western/Vedic vocabulary."""
+    natal = read_md(NATAL_MD, cap_chars=3500)
+    verify = read_md(os.path.join(ASTRO, "bazi_verification_2026_activation_report.md"),
+                     cap_chars=3500)
+    methodology = (
+        "--- BAZI (FOUR PILLARS) METHODOLOGY (your framework) ---\n"
+        "Day Master = Ding Fire (Yin Fire). Read everything as a Ten-Gods relationship to "
+        "Ding: Wood = Resource (fuel), Fire = Companion/peer (Bing = Rob Wealth), Earth = "
+        "Output (what the fire produces), Metal = Wealth, Water = Power/Officer. Natal pillars "
+        "(CANONICAL — do not recompute): Year 庚午 Geng-Wu (Horse), Month 甲申 Jia-Shen (Monkey), "
+        "Day 丁卯 Ding-Mao (RABBIT — the true core animal), Hour 戊申 Wu-Shen (Monkey). Literal "
+        "natal animal stack: Horse / Monkey / Rabbit / Monkey. Element inventory Wood2 / Fire2 / "
+        "Earth4 / Metal3 / Water2 — Earth (Output) dominant, nothing absent. Current Da Yun "
+        "(10-year luck pillar) = 戊子 Wu-Zi. 2026 is the Ben Ming year (natal Horse year branch "
+        "repeats in Bing-Wu). The Horse/Monkey/Rabbit/Rooster 'drive/pressure/self/payoff' "
+        "labels are a USER MNEMONIC overlay — 'Rooster payoff' is NOT a natal pillar."
+    )
+    parts = [methodology]
+    if natal:
+        parts.append("--- NATAL CONTEXT (canonical; use only the bazi: block) ---\n" + natal)
+    if verify:
+        parts.append("--- 2026 BAZI ACTIVATION + MONTHLY TIMING (verification report) ---\n" + verify)
+    return "\n\n".join(parts)
+
+
 # Per-system framing vocabulary + the cross-contamination guardrail (each system
 # names ONLY its own tradition's terms, never the other's).
 _READING_SYSTEMS = {
@@ -1375,6 +1586,19 @@ _READING_SYSTEMS = {
                 "sub-period chain."),
         "forbid": ("annual profection, Capricorn Rising, the 'valuation cycle' phrase, "
                    "tropical sign placements, or '12th-House profection'"),
+    },
+    "bazi": {
+        "name": "BAZI (Eastern · Four Pillars)",
+        "use": ("BaZi / Chinese Four Pillars vocabulary naturally — the Ding Fire day master, "
+                "the Five Elements and their Ten-Gods roles (Resource / Companion / Output / "
+                "Wealth / Power), the core animal Rabbit, the current solar-term month and its "
+                "stem-branch, the 戊子 Wu-Zi Da Yun (10-year luck pillar), and the 2026 Ben Ming "
+                "(Horse-year) peer-fire field. Name today's element field and what it favors, "
+                "then the standing warning: move visibly but do not turn competition into "
+                "compulsion or scatter into too many parallel fires (heat/burnout)."),
+        "forbid": ("Mahadasha, antardasha, dasha, Vimshottari, nakshatra, pada, Lagna, Sade "
+                   "Sati, Panoti, annual profection, lord of the year/month, Capricorn Rising, "
+                   "houses, Ascendant, Pluto, Neptune, Uranus, or any tropical/sidereal zodiac sign"),
     },
 }
 
@@ -1461,6 +1685,8 @@ _MONTHLY_FRAME = {
                     "condition over the next ~30 days"),
     "vedic": ("the Vimshottari sub-period progression and the transit Moon's nakshatra "
               "cycle across the sidereal lunar month"),
+    "bazi": ("the current BaZi solar-term month (its stem-branch and element field) and "
+             "the next jié handoff over the ~30 days ahead"),
 }
 
 
@@ -1937,7 +2163,11 @@ def compute(now=None, with_codex=True):
     tropical_monthly = None
     traditional_monthly = None
     vedic_monthly = None
+    bazi_reading = None
+    bazi_monthly = None
     todays_insight = None
+    # BaZi core facts (Core Animal + Daily Tactical layers) — pure-computed, Codex-independent.
+    bazi_core_data = bazi_core(today, now_utc)
     if with_codex:
         recommendations, avoidances = codex_actions(forecast, dominant, pressure_src, phase_name)
         reading_mood = (
@@ -1969,9 +2199,12 @@ def compute(now=None, with_codex=True):
                                  traditional_context_block(), reading_mood)
         vs, vb = codex_reading("vedic", forecast, ved_factors, ved_moon_desc,
                                vedic_context_block(), reading_mood)
+        bzs, bzb = codex_reading("bazi", forecast, bazi_factors(today, now_utc), "",
+                                 bazi_context_block(), reading_mood)
         tropical_reading = {"state": ts, "body": tb} if tb else None
         traditional_reading = {"state": trs, "body": trb} if trb else None
         vedic_reading = {"state": vs, "body": vb} if vb else None
+        bazi_reading = {"state": bzs, "body": bzb} if bzb else None
         # v2.3 — three MONTHLY passes (this month), each in its native month frame.
         # Independent of the dailies: a monthly failure leaves that system's daily intact.
         trop_m_factors = tropical_monthly_factors(today, now_utc)
@@ -1983,9 +2216,12 @@ def compute(now=None, with_codex=True):
                                            traditional_context_block(), reading_mood)
         vms, vmb = codex_monthly_reading("vedic", forecast, ved_m_factors,
                                          vedic_context_block(), reading_mood)
+        bzms, bzmb = codex_monthly_reading("bazi", forecast, bazi_monthly_factors(today, now_utc),
+                                           bazi_context_block(), reading_mood)
         tropical_monthly = {"state": tms, "body": tmb} if tmb else None
         traditional_monthly = {"state": trms, "body": trmb} if trmb else None
         vedic_monthly = {"state": vms, "body": vmb} if vmb else None
+        bazi_monthly = {"state": bzms, "body": bzmb} if bzmb else None
         todays_insight = codex_todays_insight(forecast, dominant, daily_changes, phase_name)
 
     # --- v3.0 Home: Consensus + Snapshots (additive; Vedic excluded per Decision 1)
@@ -2034,10 +2270,14 @@ def compute(now=None, with_codex=True):
         "tropicalReading": tropical_reading,         # Modern Western — {state, body} or null
         "traditionalReading": traditional_reading,   # Hellenistic whole-sign — {state, body} or null
         "vedicReading": vedic_reading,               # sidereal Vedic — {state, body} or null
+        "baziReading": bazi_reading,                 # Eastern Four Pillars — {state, body} or null
         # --- v2.3: Monthly readings (this month, native month frame per system) ---
         "tropicalMonthly": tropical_monthly,         # Modern — Sun-sign transit month
         "traditionalMonthly": traditional_monthly,   # Traditional — profection month
         "vedicMonthly": vedic_monthly,               # Vedic — Vimshottari sub-period + nakshatra cycle
+        "baziMonthly": bazi_monthly,                 # BaZi — current solar-term month + next jié handoff
+        # --- v2.4: BaZi core facts (Core Animal + Daily Tactical layers; pure-computed) ---
+        "baziCore": bazi_core_data,                  # {dayMaster, coreAnimal, animalStack, current*, daYun, tacticalSlots}
         # --- v3.0 Home Screen: Consensus + Snapshots (additive; Vedic excluded) ---
         "consensus": consensus,                      # Modern-vs-Traditional agreement or null
         "snapshots": snapshots,                      # {modern, traditional} compact 5-field summaries
