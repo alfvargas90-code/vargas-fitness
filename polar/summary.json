@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-10T21:06:50-05:00",
-  "data_hash": "6bf353e1b8684afd",
-  "slot": "macros-update",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 66%\n\nRead\nThe late protein hit changes the shape of the day: lighter output and a muted system now have better muscle support, and the deficit feels less sharp. It favors quiet consistency, with effort already moderate and the calorie window still open enough to soften strain.\n\nMomentum without strain.\n\nPerformance: Momentum without strain.\n\nTransit: none",
+  "generated_at": "2026-06-11T06:49:23-05:00",
+  "data_hash": "aef1c92d478a6f9c",
+  "slot": "recovery",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 3%\n\nRead\nYou woke with enough sleep in the bank, but recovery is still running below your usual rhythm. The system looks functional, not fully charged, with a narrower margin for aggressive deficit or hard strain. Today favors muscle-preserving consistency over intensity.\n\nMeasured capacity.\n\nPerformance: Measured capacity.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 66%\n\nRead\nThe late protein hit changes the shape of the day: lighter output and a muted system now have better muscle support, and the deficit feels less sharp. It favors quiet consistency, with effort already moderate and the calorie window still open enough to soften strain.\n\nMomentum without strain."
+      "text": "State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 3%\n\nRead\nYou woke with enough sleep in the bank, but recovery is still running below your usual rhythm. The system looks functional, not fully charged, with a narrower margin for aggressive deficit or hard strain. Today favors muscle-preserving consistency over intensity.\n\nMeasured capacity."
     },
     {
       "label": "Performance",
-      "text": "Momentum without strain."
+      "text": "Measured capacity."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 66%\n\nRead\nThe late protein hit changes the shape of the day: lighter output and a muted system now have better muscle support, and the deficit feels less sharp. It favors quiet consistency, with effort already moderate and the calorie window still open enough to soften strain.\n\nMomentum without strain.",
-    "performance": "Momentum without strain.",
+    "reading": "State\nPoor\nRecovery 59 \u2022 Sleep 83 \u2022 Strain 3%\n\nRead\nYou woke with enough sleep in the bank, but recovery is still running below your usual rhythm. The system looks functional, not fully charged, with a narrower margin for aggressive deficit or hard strain. Today favors muscle-preserving consistency over intensity.\n\nMeasured capacity.",
+    "performance": "Measured capacity.",
     "transit": null
   },
-  "nutrition_nudge": "On pace tonight \u2014 add 22g protein with a steady snack to protect muscle.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 2,
     "sleep_hours": 7.0,
     "hrv_today": 50,
     "hrv_7d_avg": 55.6,
-    "nutrition": "calories 1660 of 2574 goal, protein 116g of 138g goal, carbs 178g of 290g goal, fat 56g of 72g goal",
-    "nutrition_detail": "calories 1660 of 2574 goal -> 914 left; protein 116g of 138g goal -> 22g gap; carbs 178g of 290g goal; fat 56g of 72g goal",
-    "activity_today": "4,282 steps so far, 2h 37m active, 1,987 calories burned, Moderate training load"
+    "nutrition": null,
+    "nutrition_detail": null,
+    "activity_today": null
   }
 }
