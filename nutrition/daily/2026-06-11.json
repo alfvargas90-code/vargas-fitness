@@ -1,6 +1,6 @@
 {
   "date": "2026-06-11",
-  "synced_at": "2026-06-11T18:21:17+00:00",
+  "synced_at": "2026-06-11T18:51:24+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 600.0,
-    "protein_g": 25.0,
-    "carbs_g": 50.0,
-    "fat_g": 35.0
+    "calories": 2050.0,
+    "protein_g": 120.0,
+    "carbs_g": 210.0,
+    "fat_g": 80.0
   },
-  "meal_count": 1,
+  "meal_count": 2,
   "raw": {
     "date": "2026-06-11",
     "meals": [
@@ -26,13 +26,22 @@
         "fat": 35,
         "carbs": 50,
         "emoji": "\u00e2\u0098\u0095"
+      },
+      {
+        "title": "Costco Chicken and Rice Bowls",
+        "time": "13:28",
+        "calories": 1450,
+        "protein": 95,
+        "fat": 45,
+        "carbs": 160,
+        "emoji": "\u00f0\u009f\u008d\u0097"
       }
     ],
     "totals": {
-      "calories": 600,
-      "protein": 25,
-      "fat": 35,
-      "carbs": 50
+      "calories": 2050,
+      "protein": 120,
+      "fat": 80,
+      "carbs": 210
     },
     "targets": {
       "calories": 2574,
@@ -41,14 +50,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 1974,
+      "calories": 524,
       "is_over": false
     },
-    "meal_count": 1,
+    "meal_count": 2,
     "labels": {
       "header": "Today",
-      "calories_remaining": "1974 kcal remaining today",
-      "meals_logged": "1 meals logged",
+      "calories_remaining": "524 kcal remaining today",
+      "meals_logged": "2 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
