@@ -1,19 +1,19 @@
 {
-  "date": "2026-06-09",
-  "generated_at": "2026-06-09T21:45:00-05:00",
+  "date": "2026-06-10",
+  "generated_at": "2026-06-10T21:45:00-05:00",
   "verdict": "Solid",
   "stats": {
-    "steps": 5900,
-    "active_minutes": 274,
-    "active_time_display": "4h 34m",
-    "calories_burned": 2365,
-    "active_calories": 791,
-    "calories_eaten": 1850,
-    "net_deficit": 515,
+    "steps": 4694,
+    "active_minutes": 180,
+    "active_time_display": "3h",
+    "calories_burned": 2151,
+    "active_calories": 584,
+    "calories_eaten": 1660,
+    "net_deficit": 491,
     "calorie_target": 2574,
-    "protein_g": 115,
+    "protein_g": 116,
     "protein_target_g": 138,
-    "protein_gap_g": 23
+    "protein_gap_g": 22
   },
-  "prose": "Solid day for leaning out without digging too deep: about 5,900 steps, plenty of active time, and a roughly 515-calorie deficit is controlled enough to protect muscle. The main miss was protein, coming in about 20 short, and that matters more than extra steps when you\u2019re trying to hold onto lean mass. Push protein hard tomorrow."
+  "prose": "Solid day for leaning out without digging too deep: about 4,700 steps, plenty of active time, and a roughly 500-calorie deficit that\u2019s right in the muscle-friendly zone. The only real miss was protein, coming in about 20 short, and that matters more than extra steps when you\u2019re trying to keep muscle while dropping fat. Push protein hard tomorrow."
 }
