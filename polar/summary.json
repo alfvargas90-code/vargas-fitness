@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-11T15:00:00-05:00",
-  "data_hash": "5c6fddf2d99b4777",
-  "slot": "fuel-2",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 49%\n\nRead\nThe large midday meal has mostly matched a lighter-than-usual output, leaving the evening window adequately supported but not overbuilt. Recovery still reads subdued, so the day favors measured resistance work, protein completion, and a modest deficit over intensity.\n\nMeasured strength.\n\nPerformance: Measured strength.\n\nTransit: none",
+  "generated_at": "2026-06-11T17:30:00-05:00",
+  "data_hash": "1601bc1294f8a3a5",
+  "slot": "train-1",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 59%\n\nRead\nYour system is carrying a muted recovery signal, while output has run lighter than a typical day and effort already feels moderate. The open training window favors measured resistance work over intensity, with muscle protection still hinging on a cleaner protein finish.\n\nMeasured strength.\n\nPerformance: Measured strength.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,7 +10,7 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 49%\n\nRead\nThe large midday meal has mostly matched a lighter-than-usual output, leaving the evening window adequately supported but not overbuilt. Recovery still reads subdued, so the day favors measured resistance work, protein completion, and a modest deficit over intensity.\n\nMeasured strength."
+      "text": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 59%\n\nRead\nYour system is carrying a muted recovery signal, while output has run lighter than a typical day and effort already feels moderate. The open training window favors measured resistance work over intensity, with muscle protection still hinging on a cleaner protein finish.\n\nMeasured strength."
     },
     {
       "label": "Performance",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 49%\n\nRead\nThe large midday meal has mostly matched a lighter-than-usual output, leaving the evening window adequately supported but not overbuilt. Recovery still reads subdued, so the day favors measured resistance work, protein completion, and a modest deficit over intensity.\n\nMeasured strength.",
+    "reading": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 59%\n\nRead\nYour system is carrying a muted recovery signal, while output has run lighter than a typical day and effort already feels moderate. The open training window favors measured resistance work over intensity, with muscle protection still hinging on a cleaner protein finish.\n\nMeasured strength.",
     "performance": "Measured strength.",
     "transit": null
   },
-  "nutrition_nudge": "Fat budget is spent, so keep dinner lean and skip oils, cheese, and nuts.",
+  "nutrition_nudge": "Pull back oils and fats tonight, and use lean protein to close the 18g gap.",
   "transits": [],
   "data_basis": {
     "recharge_today": 2,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 59.7,
     "nutrition": "calories 2050 of 2574 goal, protein 120g of 138g goal, carbs 210g of 290g goal, fat 80g of 72g goal",
     "nutrition_detail": "calories 2050 of 2574 goal -> 524 left; protein 120g of 138g goal -> 18g gap; carbs 210g of 290g goal; fat 80g of 72g goal",
-    "activity_today": "3,022 steps so far, 2h 8m active, 1,448 calories burned, Light training load"
+    "activity_today": "3,528 steps so far, 2h 32m active, 1,671 calories burned, Moderate training load"
   }
 }
