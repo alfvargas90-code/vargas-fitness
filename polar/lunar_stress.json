@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-11T16:23:43-05:00",
+  "generated_at": "2026-06-11T16:53:56-05:00",
   "score": 3,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -12,7 +12,7 @@
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Taurus",
-    "degree": "5\u00b0 Tau 23'",
+    "degree": "5\u00b0 Tau 41'",
     "phase": "Waning Crescent",
     "next_sign_change": {
       "sign": "Gemini",
@@ -37,11 +37,11 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 35.38,
+    "moon_longitude": 35.69,
     "moon_sign": "Taurus",
     "moon_phase": "Waning Crescent",
     "moon_house_natal": 4,
-    "aspect_to_natal_moon": "trine (0.1\u00b0 applying)",
+    "aspect_to_natal_moon": "trine (0.2\u00b0 separating)",
     "is_full_moon": false
   },
   "scoring_detail": {
@@ -59,7 +59,7 @@
       "hrv_7d": 59.7,
       "rhr_7d": 56
     },
-    "active_calories": 428,
+    "active_calories": 470,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
