@@ -35,6 +35,13 @@ DAILY_DIR = os.path.join(HERE, "daily")
 GIT_PUSH_PATHS = (
     "vesync/sync.py", "vesync/requirements.txt",
     "vesync/manifest.json", "vesync/daily",
+    # The dashboard reads snapshot.json + history.json directly (app.js
+    # renderScaleSnapshot/renderScaleHistory). These are written manually
+    # (screenshot OCR — the ESF-551 is BT-only, no usable cloud reading), so
+    # this sync NEVER writes them and can't clobber them. Include them here so
+    # a manual weigh-in actually reaches GitHub Pages on the next hourly run
+    # instead of sitting uncommitted and serving stale data. (2026-06-11)
+    "vesync/snapshot.json", "vesync/history.json",
 )
 
 # --- VeSync API (constants mirror pyvesync.helpers) -----------------------
