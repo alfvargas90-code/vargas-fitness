@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=375, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Day Arc — June 12</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:375px; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+    color:#F2F5FA;
+    font-variant-numeric: tabular-nums;
+    background:
+      radial-gradient(118% 60% at 50% 28%, rgba(88,62,205,.40), transparent 62%),
+      radial-gradient(circle at 2% 42%, rgba(0,200,255,.10), transparent 46%),
+      radial-gradient(circle at 98% 42%, rgba(255,94,98,.10), transparent 46%),
+      radial-gradient(circle at 86% 70%, rgba(255,138,61,.09), transparent 46%),
+      radial-gradient(circle at 14% 72%, rgba(138,92,255,.12), transparent 46%),
+      linear-gradient(180deg, #03050F 0%, #04061a 50%, #03040E 100%);
+    background-color:#03050F;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { width:375px; padding:20px 16px 40px; }
+
+  .glass {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0) 42%),
+      rgba(20,26,54,0.68);
+    border: 1px solid rgba(255,255,255,0.11);
+    -webkit-backdrop-filter: blur(24px) saturate(1.24);
+    backdrop-filter: blur(24px) saturate(1.24);
+    border-radius: 22px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.16), inset 0 -1px 0 rgba(0,0,0,.35), 0 22px 50px rgba(0,0,0,.5);
+  }
+
+  /* ---- top header ---- */
+  .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .topbar .date { font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#8A90A6; }
+  .topbar .day { font-size:18px; font-weight:800; letter-spacing:.2px; margin-top:2px; }
+  .sync-pill {
+    display:inline-flex; align-items:center; gap:6px;
+    border-radius:999px; padding:5px 11px;
+    font-size:10px; font-weight:700; letter-spacing:.3px;
+    background:rgba(0,200,255,0.10); border:1px solid rgba(0,200,255,0.28); color:#9FE9FF;
+  }
+  .sync-dot { width:6px; height:6px; border-radius:50%; background:#00C8FF; box-shadow:0 0 8px #00C8FF; }
+
+  /* ---- ARC hero ---- */
+  .arc-card { padding:14px 14px 10px; position:relative; overflow:hidden; }
+  .arc-eyebrow { font-size:11px; text-transform:uppercase; letter-spacing:2px; font-weight:700; color:#9A6BFF; opacity:.9; }
+  .arc-svg-wrap { position:relative; width:100%; }
+  .arc-labels { display:flex; justify-content:space-between; margin-top:-2px; padding:0 6px; }
+  .arc-labels span { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#8A90A6; }
+  .now-chip {
+    position:absolute; top:6px; left:50%; transform:translateX(-50%);
+    border-radius:999px; padding:3px 11px; font-size:10px; font-weight:800; letter-spacing:1px;
+    background:rgba(255,138,61,0.14); border:1px solid rgba(255,138,61,0.40); color:#FFC79A;
+    text-shadow:0 0 8px rgba(255,138,61,.5);
+  }
+
+  /* ---- timeline spine ---- */
+  .timeline { position:relative; margin-top:18px; padding-left:30px; }
+  .timeline::before {
+    content:""; position:absolute; left:8px; top:6px; bottom:14px; width:2px;
+    background:linear-gradient(180deg,#00C8FF 0%, #FF8A3D 34%, #39D98A 64%, #8A5CFF 100%);
+    opacity:.55; border-radius:2px;
+  }
+  .node { position:relative; margin-bottom:16px; }
+  .node:last-child { margin-bottom:0; }
+  .node-dot {
+    position:absolute; left:-29px; top:18px; width:16px; height:16px; border-radius:50%;
+    border:2px solid #03050F;
+  }
+  .node-dot::after { content:""; position:absolute; inset:3px; border-radius:50%; }
+
+  .card { padding:14px 15px; }
+  .node-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+  .time-stamp { font-size:11px; font-weight:800; letter-spacing:1.5px; }
+  .phase-eyebrow { font-size:11px; text-transform:uppercase; letter-spacing:2px; font-weight:700; }
+  .read-label { font-size:11px; color:#8A90A6; font-weight:600; margin-top:1px; }
+
+  /* metric rows */
+  .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px 12px; margin-top:4px; }
+  .stat { }
+  .stat .v { font-size:20px; font-weight:800; line-height:1; font-variant-numeric:tabular-nums; }
+  .stat .v small { font-size:12px; font-weight:700; color:#8A90A6; }
+  .stat .k { font-size:10px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:#8A90A6; margin-top:5px; }
+
+  .chip {
+    display:inline-block; border-radius:999px; padding:2px 9px; font-size:10px; font-weight:700; letter-spacing:.3px;
+  }
+
+  /* progress bars (fuel) */
+  .bar { height:6px; border-radius:999px; background:rgba(255,255,255,0.08); overflow:hidden; margin-top:6px; }
+  .bar > i { display:block; height:100%; border-radius:999px; }
+
+  .prose { font-style:italic; font-size:13px; line-height:1.7; color:#E9EDF5; margin-top:11px; }
+  .prose-closing { font-style:italic; font-weight:600; color:#FF7FA0; text-shadow:0 0 12px rgba(255,94,138,0.45); }
+
+  /* night moon */
+  .moon-wrap { position:relative; width:118px; height:118px; margin:6px auto 4px; filter:saturate(1.12) contrast(1.04); }
+  .night-row { display:flex; align-items:center; gap:14px; }
+  .night-text { flex:1; }
+  .night-stat { font-size:24px; font-weight:800; line-height:1; }
+  .night-k { font-size:10px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:#8A90A6; margin-top:4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="topbar">
+    <div>
+      <div class="date">Thursday</div>
+      <div class="day">June 12 · The Day</div>
+    </div>
+    <div class="sync-pill"><span class="sync-dot"></span>Synced 12:30</div>
+  </div>
+
+  <!-- DAY ARC HERO -->
+  <div class="glass arc-card">
+    <div class="arc-eyebrow">Today, dawn → night</div>
+    <div class="arc-svg-wrap">
+      <div class="now-chip">● NOW · 12:30</div>
+      <svg viewBox="0 0 343 150" width="100%" height="150" xmlns="http://www.w3.org/2000/svg" style="display:block;overflow:visible">
+        <defs>
+          <linearGradient id="arcGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0"   stop-color="#00C8FF"/>
+            <stop offset="0.42" stop-color="#FF8A3D"/>
+            <stop offset="0.66" stop-color="#39D98A"/>
+            <stop offset="1"   stop-color="#8A5CFF"/>
+          </linearGradient>
+          <radialGradient id="sunG" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stop-color="#FFE9B0"/>
+            <stop offset="0.5" stop-color="#FFB020"/>
+            <stop offset="1" stop-color="#FF8A3D" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="nowG" cx="50%" cy="50%" r="50%">
+            <stop offset="0" stop-color="#FFFFFF"/>
+            <stop offset="0.4" stop-color="#FFC79A"/>
+            <stop offset="1" stop-color="#FF8A3D" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3"/></filter>
+        </defs>
+
+        <!-- arc track + glowing stroke -->
+        <path d="M 22 128 A 150 150 0 0 1 321 128" fill="none" stroke="#243056" stroke-opacity="0.5" stroke-width="7" stroke-linecap="round"/>
+        <path d="M 22 128 A 150 150 0 0 1 321 128" fill="none" stroke="url(#arcGrad)" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 9" opacity="0.9" style="filter:drop-shadow(0 0 6px rgba(138,92,255,.6))"/>
+
+        <!-- SUN, left / morning end -->
+        <circle cx="22" cy="128" r="26" fill="url(#sunG)" opacity="0.9"/>
+        <circle cx="22" cy="128" r="11" fill="#FFD37A" style="filter:drop-shadow(0 0 10px #FFB020)"/>
+        <g stroke="#FFD37A" stroke-width="2" stroke-linecap="round" opacity="0.8">
+          <line x1="22" y1="105" x2="22" y2="99"/>
+          <line x1="3"  y1="119" x2="-2" y2="116"/>
+          <line x1="41" y1="119" x2="46" y2="116"/>
+        </g>
+
+        <!-- NOW marker on arc (~12:30, just past midday/apex) -->
+        <!-- apex of arc at x=171; place slightly right -->
+        <circle cx="196" cy="35" r="16" fill="url(#nowG)" filter="url(#soft)"/>
+        <circle cx="196" cy="35" r="5.5" fill="#FFFFFF" style="filter:drop-shadow(0 0 8px #FFC79A)"/>
+        <line x1="196" y1="40" x2="196" y2="58" stroke="#FFC79A" stroke-width="1.4" stroke-dasharray="2 3" opacity="0.7"/>
+      </svg>
+
+      <!-- MOON seated at night/right end of the arc -->
+      <div class="moon-wrap" style="position:absolute; right:-6px; top:6px; width:104px; height:104px; margin:0;">
+<svg viewBox="0 0 260 260" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" style="overflow:visible" aria-label="Orbit rings around moon">
+    <defs>
+  <linearGradient id="gSleep" x1="0.15" y1="0" x2="0.85" y2="1">
+    <stop offset="0" stop-color="#6E3FD6"></stop><stop offset="1" stop-color="#B58CFF"></stop>
+  </linearGradient>
+  <linearGradient id="gRecov" x1="0" y1="0.2" x2="1" y2="0.9">
+    <stop offset="0" stop-color="#5CEBFF"></stop><stop offset="1" stop-color="#00B4FF"></stop>
+  </linearGradient>
+  <linearGradient id="gStrain" x1="0.1" y1="0" x2="0.95" y2="1">
+    <stop offset="0" stop-color="#FF9A3D"></stop><stop offset="0.55" stop-color="#FF5E62"></stop><stop offset="1" stop-color="#FF2E55"></stop>
+  </linearGradient>
+</defs>
+    <circle cx="130" cy="130" r="104" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="#FF5E62" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.16" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 33px #FF5E62)"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="#FF5E62" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.34" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 21px #FF5E62)"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="url(#gStrain)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 15px #FF5E62)"></circle>
+    <circle cx="130" cy="130" r="90" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="#00C8FF" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.13" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 27px #00C8FF)"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="#00C8FF" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.28" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 17px #00C8FF)"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="url(#gRecov)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 12px #00C8FF)"></circle>
+    <circle cx="130" cy="130" r="76" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="#8A5CFF" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.13" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 27px #8A5CFF)"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="#8A5CFF" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.28" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 17px #8A5CFF)"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="url(#gSleep)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 12px #8A5CFF)"></circle>
+    <g transform="translate(130 130)"><defs>
+      <clipPath id="moonClip"><circle cx="0" cy="0" r="62"></circle></clipPath>
+      <radialGradient id="moonOuterHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#E4ECFF" stop-opacity="0.22"></stop>
+        <stop offset="38%" stop-color="#C8D8FF" stop-opacity="0.14"></stop>
+        <stop offset="72%" stop-color="#AAC3F0" stop-opacity="0.045"></stop>
+        <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"></stop>
+      </radialGradient>
+      <radialGradient id="moonHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#E4ECFF" stop-opacity="0.34"></stop>
+        <stop offset="42%" stop-color="#C8D8FF" stop-opacity="0.22"></stop>
+        <stop offset="70%" stop-color="#AAC3F0" stop-opacity="0.11"></stop>
+        <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"></stop>
+      </radialGradient>
+      <radialGradient id="moonInnerHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#F4F8FF" stop-opacity="0.36"></stop>
+        <stop offset="46%" stop-color="#E4ECFF" stop-opacity="0.24"></stop>
+        <stop offset="78%" stop-color="#C8D8FF" stop-opacity="0.09"></stop>
+        <stop offset="100%" stop-color="#AAC3F0" stop-opacity="0"></stop>
+      </radialGradient>
+      <radialGradient id="moonLimb" cx="42%" cy="38%" r="62%">
+        <stop offset="0%" stop-color="#FFFCF4" stop-opacity="0.10"></stop>
+        <stop offset="55%" stop-color="#FFFFFF" stop-opacity="0"></stop>
+        <stop offset="82%" stop-color="#000000" stop-opacity="0"></stop>
+        <stop offset="100%" stop-color="#08080E" stop-opacity="0.50"></stop>
+      </radialGradient>
+      <radialGradient id="moonSpec" cx="34%" cy="28%" r="50%">
+        <stop offset="0%" stop-color="#FFFDF6" stop-opacity="0.20"></stop>
+        <stop offset="45%" stop-color="#EAF1FF" stop-opacity="0.07"></stop>
+        <stop offset="100%" stop-color="#EAF1FF" stop-opacity="0"></stop>
+      </radialGradient>
+      <filter id="moonRimBlur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stddev="3.1"></feGaussianBlur></filter>
+      <filter id="moonOuterHaloBlur" x="-120%" y="-120%" width="340%" height="340%">
+        <feGaussianBlur stddev="21.08"></feGaussianBlur></filter>
+      <filter id="moonHaloBlur" x="-90%" y="-90%" width="280%" height="280%">
+        <feGaussianBlur stddev="13.64"></feGaussianBlur></filter>
+      <filter id="moonInnerHaloBlur" x="-70%" y="-70%" width="240%" height="240%">
+        <feGaussianBlur stddev="7.44"></feGaussianBlur></filter>
+      <filter id="moonTerm" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stddev="4.34"></feGaussianBlur></filter>
+      <filter id="moonCast" x="-140%" y="-140%" width="380%" height="380%">
+        <feGaussianBlur stddev="9.92"></feGaussianBlur></filter>
+    </defs>
+    <ellipse cx="0" cy="19.84" rx="70.68" ry="26.04" fill="#02030A" opacity="0.44" filter="url(#moonCast)"></ellipse>
+    <circle cx="0" cy="0" r="195.3" fill="url(#moonOuterHalo)" filter="url(#moonOuterHalo)"></circle>
+    <circle cx="0" cy="0" r="127.1" fill="url(#moonHalo)" filter="url(#moonHaloBlur)"></circle>
+    <circle cx="0" cy="0" r="84.32" fill="url(#moonInnerHalo)" filter="url(#moonInnerHalo)"></circle>
+    <g clip-path="url(#moonClip)">
+      <image href="../assets/moon-lro.webp" x="-62" y="-62" width="124" height="124" preserveAspectRatio="xMidYMid slice" style="filter:brightness(1.12)"></image>
+      <circle cx="0" cy="0" r="62" fill="url(#moonLimb)"></circle>
+      <circle cx="0" cy="0" r="62" fill="url(#moonSpec)"></circle>
+      <path d="M 0 -62 A 62 62 0 0 1 0 62 A 27.28 62 0 0 1 0 -62 Z" fill="#070B16" opacity="0.86" filter="url(#moonTerm)"></path>
+    </g>
+    <circle cx="0" cy="0" r="62" fill="none" stroke="#CFE0FF" stroke-opacity="0.50" stroke-width="2.79" filter="url(#moonRimBlur)"></circle>
+    <circle cx="0" cy="0" r="62" fill="none" stroke="#EAF1FF" stroke-opacity="0.60" stroke-width="1.12"></circle></g>
+  </svg>
+      </div>
+    </div>
+    <div class="arc-labels">
+      <span>06:40 · Dawn</span>
+      <span>Night ·</span>
+    </div>
+  </div>
+
+  <!-- VERTICAL TIMELINE -->
+  <div class="timeline">
+
+    <!-- MORNING -->
+    <div class="node">
+      <div class="node-dot" style="background:#00C8FF; box-shadow:0 0 12px #00C8FF;"></div>
+      <div class="glass card">
+        <div class="node-head">
+          <div>
+            <div class="phase-eyebrow" style="color:#00C8FF; text-shadow:0 0 14px rgba(0,200,255,.5)">Morning · Recovery</div>
+            <div class="read-label">how you woke up</div>
+          </div>
+          <div class="time-stamp" style="color:#9FE9FF;">06:40</div>
+        </div>
+        <div style="margin-bottom:8px;">
+          <span class="chip" style="background:rgba(255,94,138,0.13); border:1px solid rgba(255,94,138,0.34); color:#FFB3C8;">ANS −4.2 · Compromised</span>
+        </div>
+        <div class="stat-grid">
+          <div class="stat">
+            <div class="v" style="color:#E9F7FF; text-shadow:0 0 17px rgba(0,200,255,0.55);">6h46<small>m</small></div>
+            <div class="k">Sleep · score 72</div>
+          </div>
+          <div class="stat">
+            <div class="v" style="color:#E9F7FF; text-shadow:0 0 17px rgba(0,200,255,0.55);">62<small> ms</small></div>
+            <div class="k">HRV · 7d avg 68</div>
+          </div>
+          <div class="stat">
+            <div class="v" style="color:#E9F7FF; text-shadow:0 0 17px rgba(0,200,255,0.55);">54<small> bpm</small></div>
+            <div class="k">Resting HR</div>
+          </div>
+          <div class="stat">
+            <div class="v" style="color:#FFB3C8;">41<small> /100</small></div>
+            <div class="k">Recovery · low</div>
+          </div>
+        </div>
+        <div class="prose">Your nervous system slipped below baseline overnight. <span class="prose-closing">The numbers aren't asking for effort today — they're asking for restraint.</span></div>
+      </div>
+    </div>
+
+    <!-- MIDDAY / NOW -->
+    <div class="node">
+      <div class="node-dot" style="background:#FF8A3D; box-shadow:0 0 16px #FF8A3D; left:-31px; width:20px; height:20px; top:16px;"></div>
+      <div class="glass card" style="border:1px solid rgba(255,138,61,0.42); box-shadow:inset 0 1px 0 rgba(255,255,255,.16), inset 0 -1px 0 rgba(0,0,0,.35), 0 0 26px rgba(255,138,61,0.22), 0 22px 50px rgba(0,0,0,.5);">
+        <div class="node-head">
+          <div>
+            <div class="phase-eyebrow" style="color:#FF8A3D; text-shadow:0 0 12px rgba(255,138,61,.55)">Midday · Strain</div>
+            <div class="read-label">where you are now</div>
+          </div>
+          <div class="time-stamp" style="color:#FFC79A;">● NOW 12:30</div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat">
+            <div class="v" style="color:#FFC79A; text-shadow:0 0 11px rgba(255,138,61,0.55);">7,840</div>
+            <div class="k">Steps · goal 10k</div>
+          </div>
+          <div class="stat">
+            <div class="v" style="color:#FFC79A; text-shadow:0 0 11px rgba(255,138,61,0.55);">612<small> kcal</small></div>
+            <div class="k">Active burn</div>
+          </div>
+          <div class="stat">
+            <div class="v" style="color:#FF8E8E; text-shadow:0 0 18px rgba(255,94,98,0.55);">11.4</div>
+            <div class="k">Exertion</div>
+          </div>
+          <div class="stat">
+            <div class="v" style="color:#FFC79A; text-shadow:0 0 11px rgba(255,138,61,0.55);">2,340<small> kcal</small></div>
+            <div class="k">Total burn</div>
+          </div>
+        </div>
+        <div class="bar"><i style="width:78.4%; background:linear-gradient(90deg,#FF8A3D,#FF5E62); box-shadow:0 0 10px rgba(255,138,61,.6);"></i></div>
+      </div>
+    </div>
+
+    <!-- EVENING / FUEL -->
+    <div class="node">
+      <div class="node-dot" style="background:#39D98A; box-shadow:0 0 12px #39D98A;"></div>
+      <div class="glass card">
+        <div class="node-head">
+          <div>
+            <div class="phase-eyebrow" style="color:#39D98A; text-shadow:0 0 12px rgba(57,217,138,.5)">Evening · Fuel</div>
+            <div class="read-label">eat enough, eat clean</div>
+          </div>
+          <div class="time-stamp" style="color:#9FF0C6;">~18:00</div>
+        </div>
+        <div style="display:flex; align-items:baseline; gap:8px; margin-bottom:2px;">
+          <span class="v" style="font-size:26px; font-weight:800; color:#9FF0C6; text-shadow:0 0 11px rgba(57,217,138,0.55);">1,850</span>
+          <span style="font-size:13px; font-weight:700; color:#8A90A6;">/ 2,100 kcal</span>
+          <span class="chip" style="margin-left:auto; background:rgba(57,217,138,0.13); border:1px solid rgba(57,217,138,0.34); color:#9FF0C6;">250 left</span>
+        </div>
+        <div class="bar"><i style="width:88%; background:linear-gradient(90deg,#39D98A,#5CEBB0); box-shadow:0 0 10px rgba(57,217,138,.6);"></i></div>
+
+        <div class="stat-grid" style="margin-top:12px;">
+          <div class="stat">
+            <div class="v" style="font-size:18px; color:#9FF0C6;">142<small> /180g</small></div>
+            <div class="k">Protein</div>
+            <div class="bar" style="margin-top:5px;"><i style="width:79%; background:#39D98A;"></i></div>
+          </div>
+          <div class="stat">
+            <div class="v" style="font-size:18px; color:#E9EDF5;">168<small> g</small></div>
+            <div class="k">Carbs</div>
+            <div class="bar" style="margin-top:5px;"><i style="width:60%; background:rgba(57,217,138,.55);"></i></div>
+          </div>
+          <div class="stat">
+            <div class="v" style="font-size:18px; color:#E9EDF5;">61<small> g</small></div>
+            <div class="k">Fat</div>
+            <div class="bar" style="margin-top:5px;"><i style="width:48%; background:rgba(57,217,138,.4);"></i></div>
+          </div>
+          <div class="stat">
+            <div class="v" style="font-size:18px; color:#9FF0C6;">250</div>
+            <div class="k">Cal remaining</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NIGHT / REST -->
+    <div class="node">
+      <div class="node-dot" style="background:#8A5CFF; box-shadow:0 0 12px #8A5CFF;"></div>
+      <div class="glass card">
+        <div class="node-head">
+          <div>
+            <div class="phase-eyebrow" style="color:#9A6BFF; text-shadow:0 0 12px rgba(138,92,255,.5)">Night · Rest ahead</div>
+            <div class="read-label">let the charge come back</div>
+          </div>
+          <div class="time-stamp" style="color:#C9B8FF;">~22:30</div>
+        </div>
+
+        <div class="night-row">
+          <div class="moon-wrap">
+<svg viewBox="0 0 260 260" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" style="overflow:visible" aria-label="Orbit rings around moon">
+    <defs>
+  <linearGradient id="gSleep2" x1="0.15" y1="0" x2="0.85" y2="1">
+    <stop offset="0" stop-color="#6E3FD6"></stop><stop offset="1" stop-color="#B58CFF"></stop>
+  </linearGradient>
+  <linearGradient id="gRecov2" x1="0" y1="0.2" x2="1" y2="0.9">
+    <stop offset="0" stop-color="#5CEBFF"></stop><stop offset="1" stop-color="#00B4FF"></stop>
+  </linearGradient>
+  <linearGradient id="gStrain2" x1="0.1" y1="0" x2="0.95" y2="1">
+    <stop offset="0" stop-color="#FF9A3D"></stop><stop offset="0.55" stop-color="#FF5E62"></stop><stop offset="1" stop-color="#FF2E55"></stop>
+  </linearGradient>
+</defs>
+    <circle cx="130" cy="130" r="104" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="#FF5E62" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.16" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 33px #FF5E62)"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="#FF5E62" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.34" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 21px #FF5E62)"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="url(#gStrain2)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 15px #FF5E62)"></circle>
+    <circle cx="130" cy="130" r="90" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="#00C8FF" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.13" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 27px #00C8FF)"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="#00C8FF" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.28" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 17px #00C8FF)"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="url(#gRecov2)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 12px #00C8FF)"></circle>
+    <circle cx="130" cy="130" r="76" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="#8A5CFF" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.13" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 27px #8A5CFF)"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="#8A5CFF" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.28" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 17px #8A5CFF)"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="url(#gSleep2)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 12px #8A5CFF)"></circle>
+    <g transform="translate(130 130)"><defs>
+      <clipPath id="moonClip2"><circle cx="0" cy="0" r="62"></circle></clipPath>
+      <radialGradient id="moonOuterHalo2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#E4ECFF" stop-opacity="0.22"></stop>
+        <stop offset="38%" stop-color="#C8D8FF" stop-opacity="0.14"></stop>
+        <stop offset="72%" stop-color="#AAC3F0" stop-opacity="0.045"></stop>
+        <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"></stop>
+      </radialGradient>
+      <radialGradient id="moonHalo2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#E4ECFF" stop-opacity="0.34"></stop>
+        <stop offset="42%" stop-color="#C8D8FF" stop-opacity="0.22"></stop>
+        <stop offset="70%" stop-color="#AAC3F0" stop-opacity="0.11"></stop>
+        <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"></stop>
+      </radialGradient>
+      <radialGradient id="moonInnerHalo2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#F4F8FF" stop-opacity="0.36"></stop>
+        <stop offset="46%" stop-color="#E4ECFF" stop-opacity="0.24"></stop>
+        <stop offset="78%" stop-color="#C8D8FF" stop-opacity="0.09"></stop>
+        <stop offset="100%" stop-color="#AAC3F0" stop-opacity="0"></stop>
+      </radialGradient>
+      <radialGradient id="moonLimb2" cx="42%" cy="38%" r="62%">
+        <stop offset="0%" stop-color="#FFFCF4" stop-opacity="0.10"></stop>
+        <stop offset="55%" stop-color="#FFFFFF" stop-opacity="0"></stop>
+        <stop offset="82%" stop-color="#000000" stop-opacity="0"></stop>
+        <stop offset="100%" stop-color="#08080E" stop-opacity="0.50"></stop>
+      </radialGradient>
+      <radialGradient id="moonSpec2" cx="34%" cy="28%" r="50%">
+        <stop offset="0%" stop-color="#FFFDF6" stop-opacity="0.20"></stop>
+        <stop offset="45%" stop-color="#EAF1FF" stop-opacity="0.07"></stop>
+        <stop offset="100%" stop-color="#EAF1FF" stop-opacity="0"></stop>
+      </radialGradient>
+      <filter id="moonRimBlur2" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stddev="3.1"></feGaussianBlur></filter>
+      <filter id="moonOuterHaloBlur2" x="-120%" y="-120%" width="340%" height="340%">
+        <feGaussianBlur stddev="21.08"></feGaussianBlur></filter>
+      <filter id="moonHaloBlur2" x="-90%" y="-90%" width="280%" height="280%">
+        <feGaussianBlur stddev="13.64"></feGaussianBlur></filter>
+      <filter id="moonInnerHaloBlur2" x="-70%" y="-70%" width="240%" height="240%">
+        <feGaussianBlur stddev="7.44"></feGaussianBlur></filter>
+      <filter id="moonTerm2" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stddev="4.34"></feGaussianBlur></filter>
+      <filter id="moonCast2" x="-140%" y="-140%" width="380%" height="380%">
+        <feGaussianBlur stddev="9.92"></feGaussianBlur></filter>
+    </defs>
+    <ellipse cx="0" cy="19.84" rx="70.68" ry="26.04" fill="#02030A" opacity="0.44" filter="url(#moonCast2)"></ellipse>
+    <circle cx="0" cy="0" r="195.3" fill="url(#moonOuterHalo2)" filter="url(#moonOuterHaloBlur2)"></circle>
+    <circle cx="0" cy="0" r="127.1" fill="url(#moonHalo2)" filter="url(#moonHaloBlur2)"></circle>
+    <circle cx="0" cy="0" r="84.32" fill="url(#moonInnerHalo2)" filter="url(#moonInnerHaloBlur2)"></circle>
+    <g clip-path="url(#moonClip2)">
+      <image href="../assets/moon-lro.webp" x="-62" y="-62" width="124" height="124" preserveAspectRatio="xMidYMid slice" style="filter:brightness(1.12)"></image>
+      <circle cx="0" cy="0" r="62" fill="url(#moonLimb2)"></circle>
+      <circle cx="0" cy="0" r="62" fill="url(#moonSpec2)"></circle>
+      <path d="M 0 -62 A 62 62 0 0 1 0 62 A 27.28 62 0 0 1 0 -62 Z" fill="#070B16" opacity="0.86" filter="url(#moonTerm2)"></path>
+    </g>
+    <circle cx="0" cy="0" r="62" fill="none" stroke="#CFE0FF" stroke-opacity="0.50" stroke-width="2.79" filter="url(#moonRimBlur2)"></circle>
+    <circle cx="0" cy="0" r="62" fill="none" stroke="#EAF1FF" stroke-opacity="0.60" stroke-width="1.12"></circle></g>
+  </svg>
+          </div>
+          <div class="night-text">
+            <div class="night-stat" style="color:#C9B8FF; text-shadow:0 0 17px rgba(138,92,255,0.6);">8h<small style="font-size:13px;font-weight:700;color:#8A90A6;"> target</small></div>
+            <div class="night-k">Tonight's sleep goal</div>
+            <div style="margin-top:10px; font-size:11.5px; line-height:1.5; color:#B7BECE;">Cool, dark, screens down by 21:30 — give the recharge a clean runway.</div>
+          </div>
+        </div>
+        <div class="prose" style="margin-top:12px;">Move easy, eat enough, and <span class="prose-closing">let the charge come back on its own.</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
