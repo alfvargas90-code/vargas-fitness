@@ -1,6 +1,6 @@
 {
   "date": "2026-06-11",
-  "synced_at": "2026-06-12T02:23:45+00:00",
+  "synced_at": "2026-06-12T02:54:01+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 2050.0,
-    "protein_g": 120.0,
-    "carbs_g": 210.0,
-    "fat_g": 80.0
+    "calories": 2290.0,
+    "protein_g": 170.0,
+    "carbs_g": 216.0,
+    "fat_g": 83.0
   },
-  "meal_count": 2,
+  "meal_count": 3,
   "raw": {
     "date": "2026-06-11",
     "meals": [
@@ -35,13 +35,22 @@
         "fat": 45,
         "carbs": 160,
         "emoji": "\u00f0\u009f\u008d\u0097"
+      },
+      {
+        "title": "Kirkland Milk Protein Powder",
+        "time": "21:46",
+        "calories": 240,
+        "protein": 50,
+        "fat": 3,
+        "carbs": 6,
+        "emoji": "\u00f0\u009f\u00a5\u009b"
       }
     ],
     "totals": {
-      "calories": 2050,
-      "protein": 120,
-      "fat": 80,
-      "carbs": 210
+      "calories": 2290,
+      "protein": 170,
+      "fat": 83,
+      "carbs": 216
     },
     "targets": {
       "calories": 2574,
@@ -50,14 +59,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 524,
+      "calories": 284,
       "is_over": false
     },
-    "meal_count": 2,
+    "meal_count": 3,
     "labels": {
       "header": "Today",
-      "calories_remaining": "524 kcal remaining today",
-      "meals_logged": "2 meals logged",
+      "calories_remaining": "284 kcal remaining today",
+      "meals_logged": "3 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
