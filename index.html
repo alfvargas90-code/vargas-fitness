@@ -340,9 +340,46 @@
   .big3-cap { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; color: #8A90A6; }
   .big3-val { font-size: 21px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.05; margin-top: 5px; }
   .big3-sub { font-size: 10px; font-weight: 600; margin-top: 3px; line-height: 1.2; min-height: 12px; }
+
+  /* ── Cinematic hero — entrance (once per load) + ambient life ───────────────
+     Entrance is gated by body.hero-intro (set in markup, removed ~4.2s after load
+     by a small inline script) so it plays once and does NOT replay on tab return.
+     Ambient moon-float runs always. Everything disabled under reduced-motion.
+     The moon SVG renders into #rings-orbit-svg (no base transform) — animating it
+     is safe; #moon-context-hero keeps its -translate-x-1/2 via a dedicated frame. */
+  #rings-orbit-svg { animation: heroMoonFloat 12s ease-in-out 1.4s infinite alternate; will-change: transform; }
+  body.hero-intro #rings-orbit-svg {
+    animation: heroMoonRise 1.9s cubic-bezier(.16,.84,.3,1) .2s both,
+               heroMoonFloat 12s ease-in-out 2.2s infinite alternate;
+  }
+  body.hero-intro .hero-metrics-overlay .ring-corner { animation: heroCornerIn .85s ease-out both; }
+  body.hero-intro .ring-corner[data-target="todays-read"] { animation-delay: 1.35s; }
+  body.hero-intro .ring-corner[data-target="polar-panel"] { animation-delay: 1.55s; }
+  body.hero-intro .ring-corner[data-target="activity"]    { animation-delay: 1.75s; }
+  body.hero-intro #moon-context-hero { animation: heroCtxIn 1s ease-out 1.95s both; }
+  .hero-flare {
+    position: absolute; left: 50%; top: 138px; width: 300px; height: 3px; z-index: 4;
+    transform: translate(-50%,-50%) scaleX(0); transform-origin: 50% 50%;
+    background: linear-gradient(90deg, transparent, rgba(190,239,255,.8) 38%, #fff 50%, rgba(216,203,255,.8) 62%, transparent);
+    filter: blur(1.4px); opacity: 0; pointer-events: none;
+  }
+  body.hero-intro .hero-flare { animation: heroFlare 1.5s ease-out 1.25s both; }
+  @keyframes heroMoonRise { from { opacity: 0; transform: translateY(30px) scale(.9); filter: brightness(.5); }
+                            to   { opacity: 1; transform: translateY(0) scale(1); filter: brightness(1); } }
+  @keyframes heroMoonFloat { from { transform: translateY(0) scale(1); } to { transform: translateY(-5px) scale(1.012); } }
+  @keyframes heroCornerIn { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes heroCtxIn { from { opacity: 0; transform: translate(-50%,9px); } to { opacity: 1; transform: translate(-50%,0); } }
+  @keyframes heroFlare { 0% { opacity: 0; transform: translate(-50%,-50%) scaleX(0); }
+                         35% { opacity: .85; }
+                         100% { opacity: 0; transform: translate(-50%,-50%) scaleX(1); } }
+  @media (prefers-reduced-motion: reduce) {
+    #rings-orbit-svg, body.hero-intro #rings-orbit-svg,
+    body.hero-intro .hero-metrics-overlay .ring-corner,
+    body.hero-intro #moon-context-hero, body.hero-intro .hero-flare { animation: none !important; }
+  }
 </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen hero-intro">
   <!-- Layer 2/3 background — gradient ribbons converging on the moon + stars -->
   <div class="bg-fx" aria-hidden="true">
     <svg id="bg-waves" viewBox="0 0 390 844" preserveAspectRatio="xMidYMin slice" fill="none">
@@ -702,6 +739,7 @@
         </svg>
       </div>
       <div class="hero-metrics-overlay">
+        <div class="hero-flare" aria-hidden="true"></div>
         <div class="hero-sleep-scrim" aria-hidden="true"></div>
         <div class="hero-strain-scrim" aria-hidden="true"></div>
         <!-- Recovery — top left -->
@@ -1149,6 +1187,18 @@
   <div aria-hidden="true" class="fixed bottom-0 inset-x-0 z-20"
        style="height:env(safe-area-inset-bottom);background:#03050F"></div>
 
+  <!-- Cinematic hero intro — play the entrance once per load, then release the
+       gate so switching back to the Active tab doesn't replay it. Degrades safe:
+       if JS never runs, the entrance animations are fill:both and hold visible. -->
+  <script>
+    (function () { try {
+      var release = function () { setTimeout(function () {
+        document.body.classList.remove('hero-intro');
+      }, 4200); };
+      if (document.readyState === 'loading') addEventListener('DOMContentLoaded', release);
+      else release();
+    } catch (e) {} })();
+  </script>
   <script src="data.js"></script>
   <script src="app.js?v=redesign15"></script>
 </body>
