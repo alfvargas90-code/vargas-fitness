@@ -1,64 +1,56 @@
-# Timing Weather — Astrology Design Exploration · Round 1 · 2026-06-12
+# Timing Weather — Astrology Dashboard Exploration · 2026-06-12
 
-Four layout directions for the **timing-weather astrology PWA**, all built in the canonical
-**solar-intelligence aesthetic** from Alfredo's two reference dashboards: glowing gold sun
-hero, near-black gradient, "EXPANSION" phase headline, four corner stat rings, dense glassy
-cards (Sky Conditions bars, Planet Influences, What Changed, Recommended Actions, Confidence).
-One aesthetic, four different hierarchies for surfacing the Modern · Traditional · Vedic ·
-BaZi daily horoscopes.
+Four layout directions for the **timing-weather astrology PWA**, all modeled on **both**
+reference screenshots (`design_references/timing-weather-ref-1.png` + `-ref-2.png`) — the
+dense, multi-column dashboard: glowing gold sun, corner gauges, NOW row, Sky Conditions bars,
+Planet Influences, Event Radar. One visual world, four different hierarchies. Built for
+iPad/desktop width (the references are 1024px).
 
-> **Rebuilt 2026-06-12 (v3)** — all four now **link the live dashboard's real stylesheet**
-> (`dashboard.css`, a verbatim copy of `assets/css/timing-weather.css`) and use its real
-> classes, so the sun, corner gauges, cards and type are **pixel-identical** to Alfredo's
-> dashboard. Earlier passes approximated the look from scratch and missed (a moon/pink pass,
-> then a from-scratch solar pass). This version IS the dashboard, re-arranged four ways.
+> The key correction (round 4): the references are **dense single-screen dashboards**, not
+> phone scrolls. Earlier rounds built tall single-column mobile layouts — same components,
+> wrong canvas. These four match the references' density and section composition.
 
 ## View it
-- **Comparison gallery:** `index.html` (live iframes of all four + rationale + the pick)
-- Live preview: `http://localhost:8766/design_exploration_2026-06-12/`
+- **Comparison gallery:** `index.html` (all four + full-page screenshots)
 - GH Pages: `https://alfvargas90-code.github.io/vargas-fitness/timing-weather/design_exploration_2026-06-12/`
 
 ## The four directions
-| # | Name | Modeled on | One-line | Best for |
-|---|------|-----------|----------|----------|
-| 1 ★ | **Expansion Hero** | ref-1 | Sun + 4 corner rings + auto-surfaced reading + dense cards | The morning glance — instant dashboard read, one committed call |
-| 2 | **System Carousel** | solar skin | Sun + consensus, four swipeable system panels | Sitting inside one system at a time |
-| 3 | **Orbital Sky** | ref-2 | Sun with labeled orbiting planets, full instrument panel | "Feel the whole sky at once" |
-| 4 | **Narrative Day-Flow** | solar skin | Sun on a day-arc + morning→night timeline | The daily ritual |
+| # | Name | Hero | Best for |
+|---|------|------|----------|
+| 1 ★ | **Solar Dashboard** (ref-1) | Sun + 4 corner gauges | Metrics-forward read; closest to ref-1 |
+| 2 | **Reading-Led Dashboard** | Compact sun + gauge chips | The four horoscopes as the centerpiece (2×2 cards) |
+| 3 | **Orbital Dashboard** (ref-2) | Sun + orbiting planets + radar | "See the whole sky"; closest to ref-2 |
+| 4 | **Command Center** | Gauges **and** orbit fused | Maximalist single-screen "mission control" |
 
-> Filenames keep their original slugs (`direction-2-carousel`, `direction-3-sky-first`) so the
-> deployed URLs stay stable; the displayed names are above.
+> Filenames keep their original slugs (`direction-2-carousel`, `direction-3-sky-first`,
+> `direction-4-day-flow`) so deployed URLs stay stable; displayed names are above.
 
 ## Claude's recommendation
-**Direction 1 — Expansion Hero**, if shipping today. Closest match to the reference
-dashboards; gives the full dashboard read at a glance, then commits to one auto-surfaced
-reading instead of four to weigh — the right antidote to the overanalysis loop. **Close
-second: Direction 3 — Orbital Sky**, the most visually striking (sun with labeled orbiting
-planets); pick it for "feel the whole sky" over a single verdict.
-
-(Not equal-weighted: 1 for converge-fast utility + closest aesthetic match, 3 for the
-structure-lover who wants every influence, 4 for emotional daily ritual, 2 for the deliberate
-explorer.)
+**Direction 1 — Solar Dashboard**, if shipping today: the cleanest, closest match to
+reference 1, and the easiest to wire to your real `state.json`. **Direction 2 — Reading-Led**
+is the one I'd push for if the daily *use* is reading horoscopes rather than scanning metrics,
+since it puts the four systems' prose front and center. 3 and 4 are the orbital and maximalist
+options.
 
 ## Aesthetic source-of-truth
-- `design_references/timing-weather-ref-1.png` + `timing-weather-ref-2.png` — the canonical
-  visual targets (gold sun hero, EXPANSION headline, corner rings, dense cards).
-- Live `timing-weather/index.html` + CSS — the solar-intelligence design tokens.
+Both reference screenshots (dense multi-column dashboard · gold sun hero · corner gauges ·
+orbital planets · Sky Conditions bars · Planet Influences · Event Radar) + the live
+timing-weather solar design tokens.
 
 ## Personalization (today's real chart, Jun 12 2026)
 12th-house Sagittarius profection (lord Jupiter) · Jupiter return ~Jul 12 · SA Jupiter→Virgo
-Sun (exact Mar 2027) · Moon Mahadasha / Venus antardasha (first relationship-warm sub-period)
-· Sade Sati on foundations · Ding Fire day master / Rabbit operating self · Bing-Wu peer-fire
-visibility+burnout year · Capricorn/Saturn embodiment year opens Aug 30.
+Sun (exact Mar 2027) · Moon Mahadasha / Venus antardasha · Sade Sati · Ding Fire / Rabbit ·
+Bing-Wu peer-fire year · Capricorn/Saturn embodiment year opens Aug 30.
 
 ## Files
 ```
 index.html                          comparison gallery
-direction-1-hero-first.html         Expansion Hero      + _README.md
-direction-2-carousel.html           System Carousel     + _README.md
-direction-3-sky-first.html          Orbital Sky         + _README.md
-direction-4-day-flow.html           Narrative Day-Flow  + _README.md
-screenshots/*.png                   375x812 @2x
+direction-1-hero-first.html         Solar Dashboard (ref-1)   + _README.md
+direction-2-carousel.html           Reading-Led Dashboard     + _README.md
+direction-3-sky-first.html          Orbital Dashboard (ref-2) + _README.md
+direction-4-day-flow.html           Command Center            + _README.md
+dashboard.css                       verbatim copy of the live timing-weather.css (tokens)
+screenshots/*.png                   full-page @2x
 ```
 
 ## Constraints honored

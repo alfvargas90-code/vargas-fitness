@@ -2,134 +2,172 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Timing Weather · System Carousel</title>
-<!-- DIRECTION 2 — SYSTEM CAROUSEL
-     Same real stylesheet + real hero/cards. The hierarchy change: the four
-     systems become a full-width swipeable rail of the dashboard's own
-     reading-cards (one system per swipe), each expanded with a stat row. -->
-<link rel="stylesheet" href="dashboard.css" />
+<meta name="viewport" content="width=1024, initial-scale=1" />
+<title>Timing Weather · Reading-Led Dashboard</title>
+<!-- DIRECTION 2 — READING-LED DASHBOARD
+     Same dense dashboard language as ref-1 / ref-2, but the four astrology
+     SYSTEMS lead: a compact sun + gauge hero, a System Consensus bar, then a
+     2x2 grid of the Vedic / Modern / Traditional / BaZi reading cards as the
+     centerpiece, with a supporting metric rail (Sky · Planet · Upcoming ·
+     Insight). Surfaces the actual horoscopes the references underplay. -->
 <style>
-  .carousel-mask{overflow:hidden}
-  .carousel-rail{display:flex;transition:transform .42s cubic-bezier(.4,0,.2,1)}
-  .carousel-slide{flex:0 0 100%;padding:0 1px}
-  /* let the reading-card fill the slide and grow */
-  .carousel-slide .reading-card{min-height:330px;display:flex;flex-direction:column}
-  .carousel-slide .reading-card__body{font-size:15px;flex:1}
-  .sys-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
-  .sys-stats .st{background:var(--card-strong);border:1px solid var(--line-soft);border-radius:var(--radius-sm);padding:10px 6px;text-align:center}
-  .sys-stats .sk{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-muted)}
-  .sys-stats .sv{font-size:17px;font-weight:800;margin-top:3px;font-variant-numeric:tabular-nums}
-  .lean{margin-top:13px;padding-top:12px;border-top:1px solid var(--line-soft);font-size:13px;color:var(--color-gold-bright);font-style:italic}
-  /* dots */
-  .dots{display:flex;justify-content:center;gap:16px;margin-top:18px}
-  .dot-item{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
-  .dot-item .bar{width:7px;height:7px;border-radius:50%;background:var(--color-text-muted);transition:all .3s}
-  .dot-item.on .bar{width:26px;background:var(--color-gold)}
-  .dot-item .lbl{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-muted)}
-  .dot-item.on .lbl{color:var(--color-gold)}
-  .swipe-hint{text-align:center;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--color-text-muted);margin-top:8px}
+:root{
+  --bg:#06070a;--bg2:#0a0c14;
+  --card:rgba(255,255,255,.035);--card2:rgba(255,255,255,.055);--border:rgba(255,255,255,.08);--line:rgba(255,255,255,.05);
+  --gold:#d4a857;--gold-br:#e8c573;--gold-deep:#7a5a18;
+  --green:#4ade80;--orange:#f59e0b;--cyan:#67e8f9;--red:#f87171;--violet:#a78bfa;--pink:#f472b6;--coral:#fb7185;
+  --t:rgba(255,255,255,.92);--t2:rgba(255,255,255,.55);--t3:rgba(255,255,255,.34);
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;
+  --mono:"SF Mono",ui-monospace,Menlo,monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;min-height:100vh;
+  background:radial-gradient(1100px 560px at 25% -6%,rgba(212,168,87,.13),transparent 55%),
+    linear-gradient(180deg,var(--bg),var(--bg2));background-attachment:fixed}
+.dash{max-width:1000px;margin:0 auto;padding:20px 26px 40px}
+.hdr{display:flex;align-items:center;gap:14px;padding:6px 0 14px}
+.hdr .menu{font-size:20px;color:var(--t2);width:40px}
+.hdr .tt{flex:1;text-align:center;font-size:14px;letter-spacing:.36em;font-weight:700}
+.hdr .tt::before{content:"☼ ";color:var(--gold);letter-spacing:0}
+.hdr .r{width:60px;text-align:right;font-size:11px;color:var(--t2)}
+
+/* compact hero: sun left + EXPANSION + gauge chips right */
+.hero{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center;padding:6px 0 16px}
+.hero .left{display:flex;align-items:center;gap:20px}
+.sun{width:118px;height:118px;border-radius:50%;flex:0 0 auto;
+  background:radial-gradient(circle at 40% 38%,#FFFCEA,#FFF1B3 12%,#FFD659 30%,#E8A93A 55%,#8A4D0B 100%);
+  box-shadow:0 0 56px rgba(255,218,109,.55),0 0 120px rgba(212,168,87,.3),inset -16px -22px 44px rgba(180,80,0,.55),inset 7px 7px 22px rgba(255,250,200,.5);animation:pulse 6s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+.hero .ti .f-title{font-size:44px;font-weight:800;letter-spacing:.04em;color:var(--gold);text-transform:uppercase;text-shadow:0 0 28px rgba(212,168,87,.4);line-height:1}
+.hero .ti .f-sub{font-size:14px;color:rgba(255,255,255,.8);margin-top:6px}
+.hero .ti .moon{font-size:11.5px;color:var(--t2);margin-top:6px}
+.gauges{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.gw{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.gw .lbl{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
+.ring{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(var(--rc) calc(var(--pct)*1%),rgba(255,255,255,.07) 0)}
+.ring::before{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--bg)}
+.ring .v{position:relative;font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
+.gw .tag{font-size:10px;color:var(--t2);margin-top:6px}
+.g1 .ring{--rc:var(--green)}.g2 .ring{--rc:var(--orange)}.g3 .ring{--rc:var(--cyan)}.g4 .ring{--rc:var(--gold)}
+
+/* consensus bar */
+.consensus{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 22px;margin-bottom:18px}
+.consensus .side{text-align:center}
+.consensus .side .k{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3)}
+.consensus .side .v{font-size:18px;font-weight:800;color:var(--gold-br);margin-top:3px}
+.consensus .mid{text-align:center}
+.consensus .mid .p{font-size:30px;font-weight:800;line-height:1}
+.consensus .mid .pill{display:inline-block;margin-top:5px;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#06120a;background:var(--green);border-radius:12px;padding:3px 10px}
+
+.sh{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.sh .sub{margin-left:auto;font-size:9.5px;color:var(--t3)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;backdrop-filter:blur(14px);box-shadow:0 16px 44px rgba(0,0,0,.4)}
+
+/* 2x2 reading cards */
+.readings{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px}
+.rc{position:relative;border-radius:16px;padding:16px 18px;background:var(--card);border:1px solid var(--border);overflow:hidden}
+.rc::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ac)}
+.rc.vedic{--ac:var(--cyan)}.rc.modern{--ac:var(--violet)}.rc.trad{--ac:var(--gold)}.rc.bazi{--ac:var(--coral)}
+.rc-head{display:flex;align-items:baseline;gap:8px;margin-bottom:9px}
+.rc-label{font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ac)}
+.rc-sub{font-size:10px;color:var(--t3)}
+.rc-state{margin-left:auto;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ac);border:1px solid;border-color:color-mix(in srgb,var(--ac) 45%,transparent);border-radius:12px;padding:3px 9px}
+.rc-body{font-size:13px;line-height:1.6;color:rgba(255,255,255,.82)}
+
+/* supporting metric rail (4-up) */
+.rail{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.sky-row{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;margin-bottom:10px}
+.sky-row:last-child{margin-bottom:0}.sky-row .n{font-size:12px;color:var(--t2)}.sky-row .val{font-size:12px;font-weight:700}
+.sky-row .track{grid-column:1/-1;height:6px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden;margin-top:-3px}
+.sky-row .track i{display:block;height:100%;border-radius:3px}
+.inf{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.inf:last-child{border-bottom:none}.inf .g{font-size:15px;color:var(--gold);width:20px}.inf .nm{flex:1;margin-left:5px}
+.inf .sc{font-weight:700;font-family:var(--mono)}.inf .sc.p{color:var(--green)}.inf .sc.n{color:var(--red)}
+.upc{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.upc:last-child{border-bottom:none}.upc .dd{font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums}
+.insight{font-size:13.5px;line-height:1.55;color:var(--gold-br);font-style:italic}
+.insight b{display:block;font-style:normal;font-weight:700;margin-bottom:4px}
 </style>
 </head>
 <body>
-  <div class="timing-weather-shell">
+  <div class="dash">
 
-    <header class="row row--bleed header-chrome">
-      <button class="header-menu" aria-label="Menu">≡</button>
-      <div class="header-title-block">
-        <h1 class="header-title">TIMING WEATHER</h1>
-        <p class="header-date">Friday, June 12, 2026</p>
+    <div class="hdr"><span class="menu">≡</span><span class="tt">TIMING WEATHER</span><span class="r">Jun 12</span></div>
+
+    <!-- compact hero -->
+    <div class="hero">
+      <div class="left">
+        <div class="sun"></div>
+        <div class="ti">
+          <div class="f-title">EXPANSION</div>
+          <div class="f-sub">Doors opening — build before the August turn.</div>
+          <div class="moon">☽ Moon · Taurus 14° · Waning Crescent · New Moon in 3 days</div>
+        </div>
       </div>
-      <div class="header-status" aria-hidden="true"><span class="status-dot"></span><span class="status-dot"></span><span class="status-dot"></span></div>
-    </header>
-
-    <!-- HERO (real) -->
-    <div class="row row--bleed">
-      <section id="section-1-hero">
-        <div class="hero-shell">
-          <div class="hero-corner hero-corner--tl"><div class="corner-label">Opportunity</div><div class="corner-ring" style="--ring-pct:84"><span class="corner-value">84</span></div><div class="corner-tag">High ↗</div></div>
-          <div class="hero-corner hero-corner--tr"><div class="corner-label">Pressure</div><div class="corner-ring" style="--ring-pct:48"><span class="corner-value">48</span></div><div class="corner-tag">Medium</div></div>
-          <div class="sun-hero" aria-hidden="true"></div>
-          <h1 class="forecast-title">EXPANSION</h1>
-          <p class="forecast-subtitle">Doors opening — build before the August turn.</p>
-          <p class="hero-moon">Moon · Taurus 14° · New Moon in 3 days</p>
-          <div class="hero-corner hero-corner--bl"><div class="corner-label">Momentum</div><div class="corner-ring" style="--ring-pct:71"><span class="corner-value">71</span></div><div class="corner-tag">Rising ↗</div></div>
-          <div class="hero-corner hero-corner--br"><div class="corner-label">Next Event</div><div class="corner-ring" style="--ring-pct:90"><span class="corner-value">30</span></div><div class="corner-tag">Days</div></div>
-        </div>
-      </section>
+      <div class="gauges">
+        <div class="gw g1"><div class="lbl">Opportunity</div><div class="ring" style="--pct:84"><span class="v" style="color:var(--green)">84</span></div><div class="tag">High</div></div>
+        <div class="gw g2"><div class="lbl">Pressure</div><div class="ring" style="--pct:48"><span class="v" style="color:var(--orange)">48</span></div><div class="tag">Medium</div></div>
+        <div class="gw g3"><div class="lbl">Momentum</div><div class="ring" style="--pct:71"><span class="v" style="color:var(--cyan)">71</span></div><div class="tag">Rising</div></div>
+        <div class="gw g4"><div class="lbl">Next</div><div class="ring" style="--pct:90"><span class="v" style="color:var(--gold)">30</span></div><div class="tag">Days</div></div>
+      </div>
     </div>
 
-    <!-- CAROUSEL of the dashboard's own reading-cards -->
-    <div class="row">
-      <section>
-        <h2 class="section-heading">DAILY HOROSCOPE <span class="heading-sub">SWIPE BY SYSTEM</span></h2>
-        <div class="carousel-mask">
-          <div class="carousel-rail" id="rail">
-
-            <div class="carousel-slide">
-              <article class="reading-card" data-reading="vedic">
-                <header class="reading-card__head"><div class="reading-card__titles"><h3 class="reading-card__label">VEDIC</h3><span class="reading-card__sub">Sidereal · Moon Mahadasha / Venus</span></div><span class="reading-card__state">EXPANSION</span></header>
-                <p class="reading-card__body">Exalted in Cancer, Jupiter walks back toward its own return — re-lighting the hidden 8th-house grace, the Jupiter-Venus weave your navamsa was built on. Venus sub-period keeps the weather relationship-warm; Sade Sati still leans on your foundations, so build slow, build real.</p>
-                <div class="sys-stats"><div class="st"><div class="sk">Opportunity</div><div class="sv" style="color:var(--color-green)">88</div></div><div class="st"><div class="sk">Pressure</div><div class="sv" style="color:var(--color-orange)">44</div></div><div class="st"><div class="sk">Return</div><div class="sv" style="color:var(--color-gold)">30d</div></div></div>
-                <div class="lean">Lean in: tend the quiet 8th-house gift — it's almost ripe.</div>
-              </article>
-            </div>
-
-            <div class="carousel-slide">
-              <article class="reading-card" data-reading="modern">
-                <header class="reading-card__head"><div class="reading-card__titles"><h3 class="reading-card__label">MODERN</h3><span class="reading-card__sub">Tropical · Capricorn rising · Virgo Sun</span></div><span class="reading-card__state">SUPPORTED</span></header>
-                <p class="reading-card__body">Solar-arc Jupiter is still creeping toward your 8th-house Sun — a year-long expansion of identity on a slow fuse, exact next March. A 12th-house profection keeps the work preparation and refinement, assembled off-stage before any recognition shows.</p>
-                <div class="sys-stats"><div class="st"><div class="sk">Opportunity</div><div class="sv" style="color:var(--color-green)">79</div></div><div class="st"><div class="sk">Pressure</div><div class="sv" style="color:var(--color-orange)">40</div></div><div class="st"><div class="sk">Exact</div><div class="sv" style="color:var(--color-gold)">Mar</div></div></div>
-                <div class="lean">Lean in: refine the draft no one's seen yet.</div>
-              </article>
-            </div>
-
-            <div class="carousel-slide">
-              <article class="reading-card" data-reading="traditional">
-                <header class="reading-card__head"><div class="reading-card__titles"><h3 class="reading-card__label">TRADITIONAL</h3><span class="reading-card__sub">Hellenistic · 7 classical planets</span></div><span class="reading-card__state">HOLD</span></header>
-                <p class="reading-card__body">The year's lord is Jupiter — your benefic — but he rules from the 12th: retreat, preparation, work behind the curtain. The Moon is void-of-course until 2:40 PM, so finish and tidy; begin nothing you need to endure before the afternoon.</p>
-                <div class="sys-stats"><div class="st"><div class="sk">Opportunity</div><div class="sv" style="color:var(--color-green)">61</div></div><div class="st"><div class="sk">Pressure</div><div class="sv" style="color:var(--color-orange)">55</div></div><div class="st"><div class="sk">Void till</div><div class="sv" style="color:var(--color-gold)">2:40</div></div></div>
-                <div class="lean">Lean in: close loops. Begin nothing binding before noon.</div>
-              </article>
-            </div>
-
-            <div class="carousel-slide">
-              <article class="reading-card" data-reading="bazi">
-                <header class="reading-card__head"><div class="reading-card__titles"><h3 class="reading-card__label">BAZI</h3><span class="reading-card__sub">Ding Fire · Rabbit operating self</span></div><span class="reading-card__state">HIGH-OUTPUT</span></header>
-                <p class="reading-card__body">A Bing-Wu peer-fire year doubles the Fire around your Ding flame — visibility, competition, and a real risk of burning the wick at both ends. Your Rabbit core wins through refinement and diplomacy, never force. The Jupiter return in July stacks onto this fire month.</p>
-                <div class="sys-stats"><div class="st"><div class="sk">Output</div><div class="sv" style="color:var(--color-green)">86</div></div><div class="st"><div class="sk">Burnout</div><div class="sv" style="color:var(--color-red)">62</div></div><div class="st"><div class="sk">Peak</div><div class="sv" style="color:var(--color-gold)">Jul</div></div></div>
-                <div class="lean">Lean in: one elegant move beats three loud ones.</div>
-              </article>
-            </div>
-
-          </div>
-        </div>
-
-        <div class="dots" id="dots">
-          <div class="dot-item on" data-i="0"><span class="bar"></span><span class="lbl">Vedic</span></div>
-          <div class="dot-item" data-i="1"><span class="bar"></span><span class="lbl">Modern</span></div>
-          <div class="dot-item" data-i="2"><span class="bar"></span><span class="lbl">Trad</span></div>
-          <div class="dot-item" data-i="3"><span class="bar"></span><span class="lbl">BaZi</span></div>
-        </div>
-        <div class="swipe-hint">‹ swipe to change system ›</div>
-      </section>
+    <!-- consensus -->
+    <div class="consensus">
+      <div class="side"><div class="k">Modern</div><div class="v">Expansion</div></div>
+      <div class="mid"><div class="p">78%</div><div class="pill">Agreement</div></div>
+      <div class="side"><div class="k">Traditional</div><div class="v">Preparation</div></div>
     </div>
 
-    <nav class="row row--bleed footer-nav">
-      <a class="nav-item active" href="#">Home</a>
-      <a class="nav-item nav-item--soon" href="#" aria-disabled="true">Timeline</a>
-      <a class="nav-item nav-item--soon" href="#" aria-disabled="true">Reports</a>
-      <a class="nav-item nav-item--soon" href="#" aria-disabled="true">Profile</a>
-    </nav>
+    <!-- 2x2 readings -->
+    <div class="sh">Daily Horoscope <span class="sub">all four systems</span></div>
+    <div class="readings">
+      <div class="rc vedic">
+        <div class="rc-head"><span class="rc-label">Vedic</span><span class="rc-sub">Moon MD / Venus</span><span class="rc-state">Expansion</span></div>
+        <p class="rc-body">Exalted Jupiter walks back toward Cancer and its own return — re-lighting the hidden 8th-house grace your navamsa was built on. Venus sub-period keeps the weather relationship-warm; Sade Sati still leans on your foundations, so build slow, build real.</p>
+      </div>
+      <div class="rc modern">
+        <div class="rc-head"><span class="rc-label">Modern</span><span class="rc-sub">Capricorn rising</span><span class="rc-state">Supported</span></div>
+        <p class="rc-body">Solar-arc Jupiter creeps toward your 8th-house Virgo Sun — a year-long expansion of identity on a slow fuse, exact next March. A 12th-house profection keeps the work preparation and refinement, assembled off-stage before recognition shows.</p>
+      </div>
+      <div class="rc trad">
+        <div class="rc-head"><span class="rc-label">Traditional</span><span class="rc-sub">12th profection</span><span class="rc-state">Hold</span></div>
+        <p class="rc-body">The year's lord is Jupiter — your benefic — but he rules from the 12th: retreat and preparation. The Moon is void-of-course until 2:40 PM, so finish and tidy; begin nothing you need to endure before the afternoon.</p>
+      </div>
+      <div class="rc bazi">
+        <div class="rc-head"><span class="rc-label">BaZi</span><span class="rc-sub">Ding Fire · Rabbit</span><span class="rc-state">High-output</span></div>
+        <p class="rc-body">A Bing-Wu peer-fire year doubles the Fire around your Ding flame — visibility, competition, real burnout risk. Your Rabbit core wins through refinement, never force. The Jupiter return in July stacks onto this fire month.</p>
+      </div>
+    </div>
+
+    <!-- supporting metric rail -->
+    <div class="rail">
+      <div class="card">
+        <div class="sh">Sky Conditions</div>
+        <div class="sky-row"><span class="n">Expansion</span><span class="val" style="color:var(--gold)">78%</span><span class="track"><i style="width:78%;background:var(--gold)"></i></span></div>
+        <div class="sky-row"><span class="n">Pressure</span><span class="val" style="color:var(--orange)">52%</span><span class="track"><i style="width:52%;background:var(--orange)"></i></span></div>
+        <div class="sky-row"><span class="n">Volatility</span><span class="val" style="color:var(--red)">41%</span><span class="track"><i style="width:41%;background:var(--red)"></i></span></div>
+        <div class="sky-row"><span class="n">Support</span><span class="val" style="color:var(--cyan)">71%</span><span class="track"><i style="width:71%;background:var(--cyan)"></i></span></div>
+      </div>
+      <div class="card">
+        <div class="sh">Planet Influences</div>
+        <div class="inf"><span class="g">♃</span><span class="nm">Jupiter</span><span class="sc p">+19</span></div>
+        <div class="inf"><span class="g">♀</span><span class="nm">Venus</span><span class="sc p">+9</span></div>
+        <div class="inf"><span class="g">♇</span><span class="nm">Pluto</span><span class="sc p">+11</span></div>
+        <div class="inf"><span class="g">♄</span><span class="nm">Saturn</span><span class="sc n">−12</span></div>
+      </div>
+      <div class="card">
+        <div class="sh">Upcoming</div>
+        <div class="upc"><span>New Moon</span><span class="dd">3d</span></div>
+        <div class="upc"><span>Jupiter Return</span><span class="dd">30d</span></div>
+        <div class="upc"><span>Capricorn Year</span><span class="dd">79d</span></div>
+      </div>
+      <div class="card">
+        <div class="sh">Today's Insight</div>
+        <div class="insight"><b>Build leverage.</b>Refine quietly — don't finalize anything binding before the Capricorn year opens Aug 30.</div>
+      </div>
+    </div>
+
   </div>
-
-<script>
-  const rail=document.getElementById('rail'),dots=[...document.querySelectorAll('.dot-item')];
-  let i=0;function go(n){i=Math.max(0,Math.min(3,n));rail.style.transform=`translateX(${-100*i}%)`;dots.forEach((d,k)=>d.classList.toggle('on',k===i))}
-  dots.forEach(d=>d.addEventListener('click',()=>go(+d.dataset.i)));
-  let sx=0;const m=document.querySelector('.carousel-mask');
-  m.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
-  m.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>40)go(i+(dx<0?1:-1))});
-</script>
 </body>
 </html>

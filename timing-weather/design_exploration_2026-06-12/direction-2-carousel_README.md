@@ -1,37 +1,26 @@
-# Direction 2 — System Carousel  (solar aesthetic)
+# Direction 2 — Reading-Led Dashboard
 
-**File:** `direction-2-carousel.html`
+**File:** `direction-2-carousel.html` · best viewed at iPad/desktop width (~1024px)
 
-## The user moment it serves
-The **explorer.** The glowing sun + EXPANSION phase + a four-system consensus strip stay
-pinned at the top. Below, each astrology system — Vedic · Modern · Traditional · BaZi —
-becomes a full-width swipeable panel: its own accent orb, a per-system forecast phase, a
-state pill (Expansion / Supported / Hold / High-output), the reading, and a three-stat row
-(Opportunity / Pressure / a system-specific metric). Swipe to consult the next advisor.
+## What it is
+Same dense dashboard language as both references, but the **four astrology systems lead**.
+A compact hero (sun + EXPANSION on the left, the four gauge chips on the right), a System
+Consensus bar (Modern / 78% Agreement / Traditional), then the centerpiece: a **2×2 grid of
+the Vedic · Modern · Traditional · BaZi reading cards**, each accent-edged and carrying its
+state pill and prose. A supporting 4-up rail (Sky Conditions · Planet Influences · Upcoming ·
+Today's Insight) sits beneath.
 
-## Why it fits Alfredo specifically
-- He's a **parallel tab-thinker** — but tabs are sequential, not simultaneous. The carousel
-  gives full attention to one frame, deliberate swipe to the next.
-- All four systems keep equal weight (no auto-pick), honoring that the **cross-system
-  convergence** is itself the insight — and the consensus strip up top shows agreement at a
-  glance (3 of 4 agree · 74%).
-- Per-system accent orbs (Vedic pink, Modern cyan, Traditional violet, BaZi coral) over the
-  gold sun build a fast visual vocabulary.
+## Why it exists
+The two references are metrics-forward (gauges, scores, radar) and underplay the actual
+horoscope text. This direction keeps the exact dashboard aesthetic but puts the **readings**
+— the thing astrology is actually for — at the center, so all four systems are legible at a
+glance without a tap.
 
-## Interaction
-Touch-swipe or tap the labeled dots. The sun + consensus header stay fixed; only the system
-panel slides. 0.42s snap.
+## Aesthetic
+Gold sun, conic gauge chips, gold EXPANSION title, green consensus pill, glassy reading cards
+with colored left-edges (Vedic cyan, Modern violet, Traditional gold, BaZi coral), colored
+stat bars — same tokens as the other three.
 
-## Aesthetic notes
-Canonical solar look — near-black gold-glow gradient, pulsing sun, glassy per-system cards
-with tinted gradients + glowing accent orbs, gold per-system forecast headline, gold italic
-"lean in" footer line, animated gold dot-bar indicator.
-
-## Chart data surfaced
-Vedic: Jupiter return + Venus antardasha · Modern: solar-arc Jupiter→Sun + 12th profection ·
-Traditional: Jupiter-year-from-the-12th + Moon void · BaZi: Bing-Wu peer-fire + Rabbit
-operating self + Jupiter-return July stack. Each with its own Opportunity/Pressure stats.
-
-## Tradeoff
-Requires interaction to see everything — three of four systems are always one swipe away,
-not visible at once. Best for a daily deep-read, weaker for a 2-second glance.
+## Chart data
+All four systems' current reads (Jupiter return / 12th profection / Moon void / Bing-Wu
+peer-fire), consensus 78%, plus the Sky / Planet / Upcoming / Insight rail.
