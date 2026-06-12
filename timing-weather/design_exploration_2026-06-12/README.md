@@ -8,7 +8,7 @@ One aesthetic, four different hierarchies for surfacing the Modern · Traditiona
 BaZi daily horoscopes.
 
 > **Rebuilt 2026-06-12 (v3)** — all four now **link the live dashboard's real stylesheet**
-> (`_dashboard.css`, a verbatim copy of `assets/css/timing-weather.css`) and use its real
+> (`dashboard.css`, a verbatim copy of `assets/css/timing-weather.css`) and use its real
 > classes, so the sun, corner gauges, cards and type are **pixel-identical** to Alfredo's
 > dashboard. Earlier passes approximated the look from scratch and missed (a moon/pink pass,
 > then a from-scratch solar pass). This version IS the dashboard, re-arranged four ways.
