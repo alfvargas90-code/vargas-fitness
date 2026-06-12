@@ -773,39 +773,6 @@
       </div>
     </section>
 
-    <!-- ════════════════ COACH — trainer read: synthesized note + 3 trainer-grade metrics ═══════
-         Warm gold accent (#FFB020) sets it apart from cyan ACTIVE / purple RECOVERY.
-         Coach's Note = rule-based template engine (renderCoach in app.js), zero LLM cost. -->
-    <section class="coach-card p-3.5 mb-2.5" id="coach-card" aria-label="This week">
-      <div class="flex items-center justify-between mb-2">
-        <h2 class="font-bold text-[14px]" style="color:#FFB020;letter-spacing:0.3px">This week</h2>
-        <span class="text-[10.5px] text-muted stat-num" id="coach-ts"></span>
-      </div>
-      <!-- Coach's Note — styled like a text from your trainer: emphasized, italic-ish bubble -->
-      <div class="coach-note" id="coach-note">Reading your week…</div>
-      <!-- Three trainer-grade metrics, compact horizontal row -->
-      <div class="coach-metrics" id="coach-metrics">
-        <div class="coach-metric">
-          <div class="coach-m-cap">Recomp · 7d</div>
-          <div class="coach-m-val" id="coach-recomp-val">—</div>
-          <div class="coach-m-sub" id="coach-recomp-sub"></div>
-          <div class="coach-m-tag" id="coach-recomp-tag"></div>
-        </div>
-        <div class="coach-metric">
-          <div class="coach-m-cap">Sleep Debt · 7d</div>
-          <div class="coach-m-val" id="coach-sleep-val">—</div>
-          <div class="coach-m-sub" id="coach-sleep-sub">vs 7h target</div>
-          <div class="coach-m-tag" id="coach-sleep-tag"></div>
-        </div>
-        <div class="coach-metric">
-          <div class="coach-m-cap">Recovery · 14d</div>
-          <div class="coach-m-val" id="coach-reserve-val">—</div>
-          <div class="coach-m-sub" id="coach-reserve-sub">ANS reserve</div>
-          <div class="coach-m-tag" id="coach-reserve-tag"></div>
-        </div>
-      </div>
-    </section>
-
     <!-- ════════════════ NOW — live / today section eyebrow + Last Synced badge ═══════ -->
     <div class="flex items-center justify-between mb-2 px-1">
       <div class="text-[11px] uppercase tracking-[2px] font-bold" style="color:#9A6BFF;opacity:0.85" aria-hidden="true">Now</div>
@@ -963,6 +930,38 @@
           <div class="big3-cap">HRV</div>
           <div class="big3-val" id="rb-hrv-val" style="color:#FFB3C8">—</div>
           <div class="big3-sub" id="rb-hrv-sub" style="color:#FF5E8A"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════ THIS WEEK — weekly trainer read (synthesized note + 3 trend metrics) ═══════
+         renderCoach() in app.js; gold accent. Lives on the Recovery tab (moved from Active). -->
+    <section class="coach-card p-3.5 mb-2.5" id="coach-card" aria-label="This week">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="font-bold text-[14px]" style="color:#FFB020;letter-spacing:0.3px">This week</h2>
+        <span class="text-[10.5px] text-muted stat-num" id="coach-ts"></span>
+      </div>
+      <!-- synthesized read — styled like a text from your trainer: emphasized, italic-ish bubble -->
+      <div class="coach-note" id="coach-note">Reading your week…</div>
+      <!-- Three trainer-grade metrics, compact horizontal row -->
+      <div class="coach-metrics" id="coach-metrics">
+        <div class="coach-metric">
+          <div class="coach-m-cap">Recomp · 7d</div>
+          <div class="coach-m-val" id="coach-recomp-val">—</div>
+          <div class="coach-m-sub" id="coach-recomp-sub"></div>
+          <div class="coach-m-tag" id="coach-recomp-tag"></div>
+        </div>
+        <div class="coach-metric">
+          <div class="coach-m-cap">Sleep Debt · 7d</div>
+          <div class="coach-m-val" id="coach-sleep-val">—</div>
+          <div class="coach-m-sub" id="coach-sleep-sub">vs 7h target</div>
+          <div class="coach-m-tag" id="coach-sleep-tag"></div>
+        </div>
+        <div class="coach-metric">
+          <div class="coach-m-cap">Recovery · 14d</div>
+          <div class="coach-m-val" id="coach-reserve-val">—</div>
+          <div class="coach-m-sub" id="coach-reserve-sub">ANS reserve</div>
+          <div class="coach-m-tag" id="coach-reserve-tag"></div>
         </div>
       </div>
     </section>
