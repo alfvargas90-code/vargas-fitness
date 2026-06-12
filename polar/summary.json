@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-11T20:00:01-05:00",
-  "data_hash": "73bedb4cdb288d5d",
-  "slot": "train-2",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 76%\n\nRead\nThe session window is closing on a lighter-than-usual output day, with recovery still subdued despite steadier sleep. Effort landed in a moderate zone; tonight favors quiet consolidation, with protein still the main unfinished support for preserving muscle.\n\nQuiet consolidation.\n\nPerformance: Quiet consolidation.\n\nTransit: none",
+  "generated_at": "2026-06-11T21:54:04-05:00",
+  "data_hash": "9139c704634686c8",
+  "slot": "macros-update",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 100%\n\nRead\nAfter the new log, the day\u2019s intake looks much more supportive: protein is now carrying the muscle-preservation side, while the remaining food window is narrow. Effort has already run heavy on a still-muted recovery base, so the day favors consolidation over added strain.\n\nConsolidation, not escalation.\n\nPerformance: Consolidation, not escalation.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 76%\n\nRead\nThe session window is closing on a lighter-than-usual output day, with recovery still subdued despite steadier sleep. Effort landed in a moderate zone; tonight favors quiet consolidation, with protein still the main unfinished support for preserving muscle.\n\nQuiet consolidation."
+      "text": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 100%\n\nRead\nAfter the new log, the day\u2019s intake looks much more supportive: protein is now carrying the muscle-preservation side, while the remaining food window is narrow. Effort has already run heavy on a still-muted recovery base, so the day favors consolidation over added strain.\n\nConsolidation, not escalation."
     },
     {
       "label": "Performance",
-      "text": "Quiet consolidation."
+      "text": "Consolidation, not escalation."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 76%\n\nRead\nThe session window is closing on a lighter-than-usual output day, with recovery still subdued despite steadier sleep. Effort landed in a moderate zone; tonight favors quiet consolidation, with protein still the main unfinished support for preserving muscle.\n\nQuiet consolidation.",
-    "performance": "Quiet consolidation.",
+    "reading": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 100%\n\nRead\nAfter the new log, the day\u2019s intake looks much more supportive: protein is now carrying the muscle-preservation side, while the remaining food window is narrow. Effort has already run heavy on a still-muted recovery base, so the day favors consolidation over added strain.\n\nConsolidation, not escalation.",
+    "performance": "Consolidation, not escalation.",
     "transit": null
   },
-  "nutrition_nudge": "Fat budget is spent; keep remaining food lean and skip oils while closing the 18g protein gap.",
+  "nutrition_nudge": "Fat budget is spent \u2014 keep any remaining food lean and skip oils tonight.",
   "transits": [],
   "data_basis": {
     "recharge_today": 2,
     "sleep_hours": 6.8,
     "hrv_today": 89,
     "hrv_7d_avg": 59.7,
-    "nutrition": "calories 2050 of 2574 goal, protein 120g of 138g goal, carbs 210g of 290g goal, fat 80g of 72g goal",
-    "nutrition_detail": "calories 2050 of 2574 goal -> 524 left; protein 120g of 138g goal -> 18g gap; carbs 210g of 290g goal; fat 80g of 72g goal",
-    "activity_today": "4,540 steps so far, 3h 53m active, 1,965 calories burned, Moderate training load"
+    "nutrition": "calories 2290 of 2574 goal, protein 170g of 138g goal, carbs 216g of 290g goal, fat 83g of 72g goal",
+    "nutrition_detail": "calories 2290 of 2574 goal -> 284 left; protein 170g of 138g goal -> 32g over; carbs 216g of 290g goal; fat 83g of 72g goal",
+    "activity_today": "8,329 steps so far, 6h 46m active, 2,749 calories burned, Heavy training load"
   }
 }
