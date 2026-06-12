@@ -1,38 +1,40 @@
-# Direction 3 — Sky-First
+# Direction 3 — Orbital Sky  (Claude's close second)
 
-**File:** `direction-3-sky-first.html`
+**File:** `direction-3-sky-first.html` · modeled on **ref-2**
 
 ## The user moment it serves
-The **"what's happening up there right now"** feel. Instead of leading with prose, this
-layout leads with the *picture*: a live transit wheel — transiting planets laid over
-Alfredo's natal ring, today's hottest aspect drawn as a line (Jupiter applying to his
-8th-house Virgo Sun), the moon rendered at the center. The four system readings sit
-underneath, as interpretation of what the wheel already showed.
+The **"what's happening up there right now"** feel. The sun hero gains a live orbital
+system: each transiting planet rides one of two rings, labeled with its name and influence
+value (Jupiter +19 Outreach, Venus +9 Support, Saturn −12 Pressure, Moon +4, Mars +6,
+Uranus +3, Pluto +11). The sky itself is the centerpiece. Below it the dense intelligence
+stack: Current Phase (Preparation Window, 79 days remaining) · Event Radar · Planet
+Influences (3-col) · Upcoming Events · Sky Conditions · Top Drivers · Why · Confidence 74%.
 
 ## Why it fits Alfredo specifically
-- He's a **System Architect** who thinks in structure and mechanism. The wheel shows the
-  *machinery* — the actual geometry driving the day — before the narrative. He'll trust a
-  reading more when he can see the transit that generated it.
-- Mirrors the **kids-astro dashboard's live-sky strip + wheel**, which he already built and
-  loves — this is that idea promoted to the hero slot.
-- The "applying · 1.4°" precision tag rewards his demand that numbers be real.
+- He's a **System Architect** who thinks in structure and mechanism. The orbital hero shows
+  the *machinery* — which planets are pushing and pulling, and how hard — before any prose.
+- It's the most direct realization of **ref-2**, the busier of his two reference dashboards,
+  so it matches the "I want to see all the influences" mood.
+- The +/− influence values and Confidence ring reward his demand that numbers be real and
+  legible.
 
-## The wheel (mock but structurally honest)
-SVG zodiac ring with Capricorn rising on the ascendant, 12 sign glyphs, transiting Sun /
-Moon / Mercury / Venus / Mars / Jupiter / Saturn placed by ecliptic longitude, a dashed
-pink aspect line from transiting Jupiter to natal Sun, and a gradient moon disc at center
-with phase label. In production this binds to the existing lunar/transit engine.
+## The orbital hero (mock but structurally honest)
+Two concentric rings around the pulsing sun; seven transiting bodies placed by angle, each a
+glyph + name + signed influence (green positive, red negative). In production this binds to
+the existing transit/influence engine — angle by ecliptic longitude, value by the scoring
+model.
 
 ## Aesthetic notes
-Deep blue/purple gradient, "LIVE SKY" pulse dot, glassy wheel card with radial core glow,
-planet legend strip, pink "hot aspect" banner with coral italic prose, violet section
-divider, per-system reading rows with state dots.
+Canonical solar look — near-black gold-glow gradient, pulsing sun with corona, faint orbital
+rings, glowing planet glyphs, gold EXPANSION headline, glassy cards, progress bars, 3-col
+planet-influence tiles, numbered driver list, green confidence ring.
 
 ## Chart data surfaced
-Live transit positions (mock for Jun 12) · applying Jupiter→Sun · Moon void-of-course note ·
-the four systems' one-line reads beneath.
+Live transit influences (mock for Jun 12) · Preparation Window phase · Jupiter Return 30d /
+Capricorn Year 79d / Venus Return 112d · top drivers (Jupiter return, Venus antardasha, 12th
+profection) · Expansion Score 78 · Confidence 74%.
 
 ## Tradeoff
-The wheel is gorgeous but information-dense — more to parse than a single headline. Best for
-someone who *wants* the chart, not just the verdict. The most technically ambitious to wire
-to real ephemeris data.
+The richest, busiest screen — gorgeous, but the most to parse and the most ambitious to wire
+to real ephemeris + scoring data. Best for someone who *wants* the full instrument panel,
+not just the verdict.

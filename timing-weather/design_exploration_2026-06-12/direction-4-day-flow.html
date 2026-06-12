@@ -6,115 +6,108 @@
 <title>Timing Weather · Day-Flow</title>
 <style>
 /* ════════════════════════════════════════════════════════════════════
-   DIRECTION 4 — NARRATIVE DAY-FLOW
-   One long, time-of-day scroll: morning Moon void → midday transit →
-   afternoon profection → evening Mars/Venus → night Saturn. A vertical
-   timeline you read top-to-bottom like the day itself. Same world:
-   deep blue/purple · glass · pink italic prose · pill labels · moon hero.
+   DIRECTION 4 — NARRATIVE DAY-FLOW  (solar aesthetic)
+   One vertical timeline read like the day itself: morning Moon-void →
+   midday Jupiter → afternoon profection → evening Venus → night Saturn.
+   The sun rides a day-arc at the top (dawn → now → dusk). Beat cards use
+   the canonical solar glass style with a "you are here" gold pulse.
    ════════════════════════════════════════════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --pink:#f472b6;--coral:#fb7185;--cyan:#67e8f9;--violet:#a78bfa;--gold:#f0b429;--green:#5be3a7;
-  --text:#e7e3f7;--muted:#8b86b8;--faint:#5d588a;
-  --card:rgba(255,255,255,0.045);--border:rgba(167,139,250,0.20);
-  --serif:Georgia,'Times New Roman',serif;
-  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --bg:#06070a;--bg2:#0a0c14;
+  --gold:#d4a857;--gold-br:#e8c573;--gold-deep:#7a5a18;
+  --green:#4ade80;--orange:#f59e0b;--cyan:#67e8f9;--red:#f87171;
+  --violet:#a78bfa;--yellow:#facc15;--pink:#f472b6;--coral:#fb7185;
+  --text:rgba(255,255,255,.92);--muted:rgba(255,255,255,.55);--faint:rgba(255,255,255,.32);
+  --card:rgba(255,255,255,.04);--card2:rgba(255,255,255,.06);--border:rgba(255,255,255,.09);
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;
 }
 html,body{width:375px}
-body{font-family:var(--serif);color:var(--text);overflow-x:hidden;min-height:812px;
+body{font-family:var(--sans);color:var(--text);min-height:812px;overflow-x:hidden;-webkit-font-smoothing:antialiased;
   background:
-    radial-gradient(620px 360px at 50% -4%, rgba(244,114,182,0.14), transparent 58%),
-    radial-gradient(560px 460px at 88% 30%, rgba(103,232,249,0.09), transparent 60%),
-    radial-gradient(680px 560px at 6% 60%, rgba(167,139,250,0.14), transparent 64%),
-    linear-gradient(180deg,#0b0720 0%,#140a30 40%,#0a0a22 75%,#070512 100%);
-  background-attachment:fixed}
-#stars{position:fixed;inset:0;z-index:-1}
-.wrap{padding:14px 16px 40px}
-.hdr{text-align:center;padding:6px 0 6px}
-.brand{font-family:var(--sans);font-size:11px;letter-spacing:.32em;text-transform:uppercase;font-weight:700}
-.brand b{color:var(--pink)}
-.sub{font-family:var(--sans);font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:.04em}
-.sub em{font-style:italic;color:var(--violet);font-family:var(--serif)}
+    radial-gradient(1000px 480px at 50% -8%, rgba(212,168,87,.13), transparent 54%),
+    radial-gradient(800px 600px at 50% 70%, rgba(40,30,70,.25), transparent 60%),
+    linear-gradient(180deg,var(--bg) 0%,#0a0c14 55%,#070510 100%);
+  background-attachment:fixed;padding-bottom:40px}
+.wrap{padding:0 14px}
+.hdr{display:flex;align-items:center;gap:10px;padding:13px 2px 8px;justify-content:center}
+.hdr .tt{font-size:12px;letter-spacing:.32em;font-weight:700}
+.hdr .tt::before{content:"☼ ";color:var(--gold);letter-spacing:0}
+.sub-line{text-align:center;font-size:10px;color:var(--muted);margin-top:2px}
+.sub-line b{color:var(--gold)}
 
-/* moon hero, smaller — sets the day's tone */
-.moon-hero{position:relative;height:120px;display:flex;align-items:center;justify-content:center;margin:4px 0 2px}
-.orbit{position:absolute;border:1px solid rgba(167,139,250,.2);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%)}
-.orbit.o1{width:108px;height:108px;animation:spin 28s linear infinite}
-.orbit.o2{width:150px;height:96px;border-color:rgba(103,232,249,.16);animation:spin 44s linear infinite reverse}
-.orbit .sat{position:absolute;width:6px;height:6px;border-radius:50%;top:-3px;left:50%;margin-left:-3px;box-shadow:0 0 9px currentColor}
-.o1 .sat{background:var(--cyan);color:var(--cyan)} .o2 .sat{background:var(--pink);color:var(--pink)}
-@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
-.moon{width:74px;height:74px;border-radius:50%;position:relative;
-  background:radial-gradient(circle at 38% 34%,#fdfbff,#e9e3ff 22%,#c8bff0 50%,#8d83c4 76%,#4b416f 100%);
-  box-shadow:0 0 28px rgba(199,191,240,.42),0 0 70px rgba(167,139,250,.26),inset -10px -12px 24px rgba(40,28,70,.6),inset 6px 6px 16px rgba(255,255,255,.3)}
+/* day-arc sun */
+.arc-wrap{position:relative;height:118px;margin:6px 0 2px}
+.arc-path{position:absolute;left:8%;right:8%;top:60px;height:80px;border:1.5px solid rgba(255,255,255,.06);border-bottom:none;border-radius:200px 200px 0 0}
+.sun-arc{position:absolute;width:42px;height:42px;border-radius:50%;left:42%;top:18px;
+  background:radial-gradient(circle at 40% 38%,#FFFCEA,#FFF1B3 12%,#FFD659 30%,#E8A93A 55%,#8A4D0B 100%);
+  box-shadow:0 0 34px rgba(255,218,109,.6),0 0 70px rgba(212,168,87,.32),inset -6px -8px 16px rgba(180,80,0,.55),inset 3px 3px 10px rgba(255,250,200,.5);animation:pulse 6s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.arc-ends{position:absolute;left:8%;right:8%;top:96px;display:flex;justify-content:space-between;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.arc-now{position:absolute;left:0;right:0;top:0;text-align:center;font-size:11px;color:var(--gold);font-weight:700;letter-spacing:.04em}
 
-/* day arc progress */
-.arc{display:flex;align-items:center;gap:6px;justify-content:center;margin:2px 0 16px;font-family:var(--sans);font-size:9px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase}
-.arc .now{color:var(--pink)}
-.arc .track{flex:0 0 120px;height:3px;border-radius:2px;background:rgba(167,139,250,.18);position:relative;margin:0 6px}
-.arc .fill{position:absolute;left:0;top:0;bottom:0;width:42%;border-radius:2px;background:linear-gradient(90deg,var(--violet),var(--pink))}
-.arc .fill::after{content:"";position:absolute;right:-3px;top:-2.5px;width:8px;height:8px;border-radius:50%;background:var(--pink);box-shadow:0 0 10px var(--pink)}
+/* phase headline */
+.f-band{text-align:center;margin:2px 0 6px}
+.f-title{font-size:26px;font-weight:800;letter-spacing:.04em;color:var(--gold);text-transform:uppercase;text-shadow:0 0 22px rgba(212,168,87,.4)}
+.f-sub{font-size:11px;color:rgba(255,255,255,.78);margin-top:3px}
 
 /* timeline */
-.tl{position:relative;margin-top:4px;padding-left:30px}
-.tl::before{content:"";position:absolute;left:9px;top:6px;bottom:20px;width:2px;background:linear-gradient(180deg,var(--cyan),var(--violet) 30%,var(--pink) 62%,var(--coral) 82%,var(--muted))}
-.beat{position:relative;margin-bottom:16px}
+.tl{position:relative;margin-top:14px;padding-left:30px}
+.tl::before{content:"";position:absolute;left:9px;top:6px;bottom:24px;width:2px;
+  background:linear-gradient(180deg,var(--cyan),var(--gold) 28%,var(--orange) 56%,var(--coral) 78%,var(--violet))}
+.beat{position:relative;margin-bottom:14px}
 .beat .node{position:absolute;left:-30px;top:2px;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:11px;
-  background:rgba(11,7,28,.9);border:2px solid var(--violet);box-shadow:0 0 12px rgba(167,139,250,.5)}
-.beat.now .node{border-color:var(--pink);box-shadow:0 0 16px rgba(244,114,182,.7);animation:np 2.4s infinite}
-@keyframes np{0%,100%{box-shadow:0 0 16px rgba(244,114,182,.7)}50%{box-shadow:0 0 6px rgba(244,114,182,.3)}}
-.beat .time{font-family:var(--sans);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:5px;display:flex;align-items:center;gap:8px}
-.beat.now .time{color:var(--pink)}
-.beat .now-pill{font-size:8px;letter-spacing:.1em;padding:2px 7px;border-radius:10px;background:rgba(244,114,182,.16);color:var(--pink);border:1px solid rgba(244,114,182,.4)}
+  background:var(--bg);border:2px solid rgba(255,255,255,.2)}
+.beat.now .node{border-color:var(--gold);box-shadow:0 0 14px rgba(212,168,87,.7);animation:np 2.4s infinite}
+@keyframes np{0%,100%{box-shadow:0 0 14px rgba(212,168,87,.7)}50%{box-shadow:0 0 4px rgba(212,168,87,.3)}}
+.beat .time{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:5px;display:flex;align-items:center;gap:8px}
+.beat.now .time{color:var(--gold)}
+.beat .now-pill{font-size:8px;letter-spacing:.08em;padding:2px 7px;border-radius:10px;background:rgba(212,168,87,.16);color:var(--gold);border:1px solid rgba(212,168,87,.4)}
 
-.beat-card{border:1px solid var(--border);border-radius:16px;padding:13px 15px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 12px 32px rgba(0,0,0,.36);background:var(--card)}
-.beat.now .beat-card{background:linear-gradient(160deg,rgba(244,114,182,.10),rgba(167,139,250,.05));border-color:rgba(244,114,182,.30)}
-.bc-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.bc-glyph{font-size:17px}
-.bc-title{font-size:15px;line-height:1.25;color:var(--text)}
-.bc-title em{font-style:italic;color:var(--coral)}
-.bc-sys{font-family:var(--sans);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-left:auto;text-align:right;white-space:nowrap}
-.bc-p{font-size:12.5px;line-height:1.72;font-style:italic;color:var(--coral)}
-.beat:not(.now) .bc-p{color:#bcb6dd}
-.bc-do{margin-top:9px;padding-top:9px;border-top:1px solid var(--border);font-family:var(--sans);font-size:11px;color:var(--muted);display:flex;align-items:flex-start;gap:7px;line-height:1.5}
-.bc-do b{color:var(--gold);font-family:var(--serif);font-style:italic;font-weight:400}
+.bc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:13px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.beat.now .bc{background:linear-gradient(160deg,rgba(212,168,87,.12),rgba(255,255,255,.03));border-color:rgba(212,168,87,.32)}
+.bc-top{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.bc-g{font-size:16px}
+.bc-h{font-size:15px;font-weight:800;color:var(--gold-br);line-height:1.2}
+.bc-sys{font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-left:auto;text-align:right;white-space:nowrap}
+.bc-p{font-size:12.5px;line-height:1.62;color:rgba(255,255,255,.82)}
+.bc-p .em{color:var(--coral);font-style:italic}
+.bc-do{margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;gap:7px;line-height:1.45}
+.bc-do b{color:var(--gold-br);font-style:italic;font-weight:600}
 .bc-do .k{color:var(--green);flex:0 0 auto}
 
-/* closing whisper */
-.whisper{text-align:center;margin:18px 10px 0;font-size:13px;font-style:italic;color:var(--gold);opacity:.9;line-height:1.7}
-.whisper .s{font-family:var(--sans);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:6px;font-style:normal}
+.whisper{text-align:center;margin:14px 12px 0;font-size:12px;color:var(--gold-br);font-style:italic;line-height:1.6}
+.whisper .s{display:block;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);margin-bottom:6px;font-style:normal}
 </style>
 </head>
 <body>
-<canvas id="stars"></canvas>
 <div class="wrap">
 
-  <div class="hdr">
-    <div class="brand">TIMING <b>WEATHER</b></div>
-    <div class="sub">Friday, June 12 · <em>a 12th-house Sagittarius day</em></div>
+  <div class="hdr"><span class="tt">TIMING WEATHER</span></div>
+  <div class="sub-line">Friday, June 12 · a <b>12th-house Sagittarius</b> day</div>
+
+  <!-- day-arc -->
+  <div class="arc-wrap">
+    <div class="arc-now">Now · 1:18 PM</div>
+    <div class="arc-path"></div>
+    <div class="sun-arc"></div>
+    <div class="arc-ends"><span>Dawn</span><span>Dusk</span></div>
   </div>
 
-  <div class="moon-hero">
-    <div class="orbit o2"><span class="sat"></span></div>
-    <div class="orbit o1"><span class="sat"></span></div>
-    <div class="moon"></div>
+  <div class="f-band">
+    <div class="f-title">EXPANSION</div>
+    <div class="f-sub">Doors opening — build before the August turn.</div>
   </div>
 
-  <div class="arc">
-    <span>Dawn</span>
-    <span class="track"><span class="fill"></span></span>
-    <span class="now">Now · 1:18 PM</span>
-  </div>
-
-  <!-- TIMELINE OF THE DAY -->
+  <!-- timeline -->
   <div class="tl">
 
     <div class="beat">
       <div class="node">☽</div>
       <div class="time">Morning · until 2:40 PM</div>
-      <div class="beat-card">
-        <div class="bc-top"><span class="bc-glyph" style="color:var(--cyan)">☽</span><span class="bc-title">The Moon is <em>void.</em></span><span class="bc-sys">Traditional</span></div>
-        <p class="bc-p">She drifts through late Taurus making no more aspects — a held breath. Things begun now tend to wander or come to nothing.</p>
+      <div class="bc">
+        <div class="bc-top"><span class="bc-g" style="color:var(--cyan)">☽</span><span class="bc-h">The Moon is void.</span><span class="bc-sys">Traditional</span></div>
+        <p class="bc-p">She drifts through late Taurus making no more aspects — a held breath. Things begun now tend to <span class="em">wander or come to nothing.</span></p>
         <div class="bc-do"><span class="k">↳</span><b>Don't launch. Finish, file, and tidy what's already moving.</b></div>
       </div>
     </div>
@@ -122,19 +115,19 @@ body{font-family:var(--serif);color:var(--text);overflow-x:hidden;min-height:812
     <div class="beat now">
       <div class="node">♃</div>
       <div class="time">Midday · right now <span class="now-pill">YOU ARE HERE</span></div>
-      <div class="beat-card">
-        <div class="bc-top"><span class="bc-glyph" style="color:var(--pink)">♃</span><span class="bc-title">Jupiter leans toward <em>your Sun.</em></span><span class="bc-sys">Modern · Vedic</span></div>
-        <p class="bc-p">The benefic is applying to your 8th-house Virgo Sun — the slow climb toward recognition you've felt since winter, and 30 days from its own return in Cancer. It doesn't peak today. It hums.</p>
+      <div class="bc">
+        <div class="bc-top"><span class="bc-g" style="color:var(--gold)">♃</span><span class="bc-h">Jupiter leans toward your Sun.</span><span class="bc-sys">Modern · Vedic</span></div>
+        <p class="bc-p">The benefic is applying to your 8th-house Virgo Sun — the slow climb toward recognition you've felt since winter, and <span class="em">30 days from its own return</span> in Cancer. It doesn't peak today. It hums.</p>
         <div class="bc-do"><span class="k">↳</span><b>Refine one private thing you'd be proud to reveal in August.</b></div>
       </div>
     </div>
 
     <div class="beat">
-      <div class="node">⌂</div>
+      <div class="node">♐</div>
       <div class="time">Afternoon · the year's frame</div>
-      <div class="beat-card">
-        <div class="bc-top"><span class="bc-glyph" style="color:var(--violet)">♐</span><span class="bc-title">A 12th-house <em>profection year.</em></span><span class="bc-sys">Traditional</span></div>
-        <p class="bc-p">Jupiter rules your year from the house of retreat and preparation. This is the inhale before the Capricorn year of embodiment that opens August 30.</p>
+      <div class="bc">
+        <div class="bc-top"><span class="bc-g" style="color:var(--violet)">♐</span><span class="bc-h">A 12th-house profection year.</span><span class="bc-sys">Traditional</span></div>
+        <p class="bc-p">Jupiter rules your year from the house of retreat and preparation — the <span class="em">inhale</span> before the Capricorn year of embodiment that opens August 30.</p>
         <div class="bc-do"><span class="k">↳</span><b>Curate, don't perform. Off-stage work is the work.</b></div>
       </div>
     </div>
@@ -142,9 +135,9 @@ body{font-family:var(--serif);color:var(--text);overflow-x:hidden;min-height:812
     <div class="beat">
       <div class="node">♀</div>
       <div class="time">Evening · the heart's weather</div>
-      <div class="beat-card">
-        <div class="bc-top"><span class="bc-glyph" style="color:var(--coral)">♀</span><span class="bc-title">Venus warms the <em>relationship axis.</em></span><span class="bc-sys">Vedic · Venus antardasha</span></div>
-        <p class="bc-p">You're in the first Venus sub-period in years — the self-sufficient posture can soften tonight. Mars in Leo says approach warmly, not defensively.</p>
+      <div class="bc">
+        <div class="bc-top"><span class="bc-g" style="color:var(--pink)">♀</span><span class="bc-h">Venus warms the relationship axis.</span><span class="bc-sys">Vedic · Venus AD</span></div>
+        <p class="bc-p">You're in the first Venus sub-period in years — the self-sufficient posture can <span class="em">soften tonight.</span> Mars in Leo says approach warmly, not defensively.</p>
         <div class="bc-do"><span class="k">↳</span><b>Reach out to one person. Let the guard down a notch.</b></div>
       </div>
     </div>
@@ -152,9 +145,9 @@ body{font-family:var(--serif);color:var(--text);overflow-x:hidden;min-height:812
     <div class="beat">
       <div class="node">♄</div>
       <div class="time">Night · the long teacher</div>
-      <div class="beat-card">
-        <div class="bc-top"><span class="bc-glyph" style="color:var(--muted)">♄</span><span class="bc-title">Saturn, and the <em>Sade Sati</em> weight.</span><span class="bc-sys">BaZi · Vedic</span></div>
-        <p class="bc-p">Foundations are under quiet pressure through next summer; your Ding flame burned bright in a peer-fire year. Night is for banking the fire, not spending it.</p>
+      <div class="bc">
+        <div class="bc-top"><span class="bc-g" style="color:var(--muted)">♄</span><span class="bc-h">Saturn, and the Sade Sati weight.</span><span class="bc-sys">BaZi · Vedic</span></div>
+        <p class="bc-p">Foundations are under quiet pressure through next summer; your Ding flame burned bright in a peer-fire year. Night is for <span class="em">banking the fire</span>, not spending it.</p>
         <div class="bc-do"><span class="k">↳</span><b>Rest deliberately. Burnout is the real risk this year, not laziness.</b></div>
       </div>
     </div>
@@ -163,14 +156,9 @@ body{font-family:var(--serif);color:var(--text);overflow-x:hidden;min-height:812
 
   <div class="whisper">
     <span class="s">Tomorrow's first signal</span>
-    The New Moon in three days resets the 12th-house lunar cycle — a clean page for the quiet build.
+    The New Moon in three days resets the 12th-house cycle — a clean page for the quiet build.
   </div>
 
 </div>
-
-<script>
-const c=document.getElementById('stars'),x=c.getContext('2d');c.width=375;c.height=900;
-Array.from({length:100}).forEach(()=>{const o=Math.random()*.6+.2;x.beginPath();x.arc(Math.random()*375,Math.random()*900,Math.random()*1.3+.2,0,7);x.fillStyle=`rgba(231,227,247,${o})`;x.fill()});
-</script>
 </body>
 </html>
