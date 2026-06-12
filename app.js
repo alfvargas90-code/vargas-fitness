@@ -262,6 +262,7 @@ async function renderPolar() {
     renderPolarSleep(sleepMap[sleepDates.at(-1)]);   // Block B — most recent date with sleep data
     renderHRV(recDates, recMap);
     renderRechargeDetail(recMap[recDates.at(-1)], sleepMap[sleepDates.at(-1)]); // ANS/Sleep/Nightly
+    fillRecoveryHeader(recMap[recDates.at(-1)], sleepMap[sleepDates.at(-1)], recDates, recMap); // Recovery-tab 3-col header
 
     const polarLatest = [recDates.at(-1), sleepDates.at(-1)].filter(Boolean).sort().at(-1) || null;
     document.getElementById("polar-sub").innerHTML = freshnessHTML(polarLatest, "wear the watch");
@@ -997,10 +998,49 @@ function scrollToId(id) {
   const t = document.getElementById(id);
   if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
 }
+
+// ---------- Bottom tab navigation (Active / Recovery / Body) ----------
+// Single-page: views swap via show/hide (.tab-view.active), no route change. The
+// selected tab persists in sessionStorage so refresh/return remembers it.
+const TAB_KEY = "fd.activeTab.v1";
+const TAB_IDS = ["active", "recovery", "body"];
+function setTab(tab) {
+  if (!TAB_IDS.includes(tab)) tab = "active";
+  TAB_IDS.forEach(t => {
+    const view = document.getElementById("tab-" + t);
+    if (view) view.classList.toggle("active", t === tab);
+    document.querySelectorAll(`#tab-bar .tabnav-item[data-tab="${t}"]`)
+      .forEach(b => b.classList.toggle("active", t === tab));
+  });
+  try { sessionStorage.setItem(TAB_KEY, tab); } catch (e) {}
+  window.scrollTo({ top: 0 });
+}
+// Which tab owns a given element id (so cross-tab tap-throughs jump correctly).
+function tabOfElement(id) {
+  const el = document.getElementById(id);
+  const view = el && el.closest(".tab-view");
+  return view ? view.id.replace("tab-", "") : null;
+}
+function goToTarget(id) {
+  const tab = tabOfElement(id);
+  if (tab) setTab(tab);
+  // wait a frame so the now-visible section has layout before we scroll to it
+  requestAnimationFrame(() => requestAnimationFrame(() => scrollToId(id)));
+}
+function wireTabs() {
+  document.querySelectorAll("#tab-bar .tabnav-item").forEach(btn => {
+    btn.addEventListener("click", () => setTab(btn.dataset.tab));
+  });
+  let initial = "active";
+  try { const s = sessionStorage.getItem(TAB_KEY); if (s && TAB_IDS.includes(s)) initial = s; } catch (e) {}
+  setTab(initial);
+}
+
 function wireRings() {
-  // Any element with data-target scrolls to that section (hero corners + card links).
+  // Any element with data-target jumps to that section — switching to its owning
+  // tab first (sections now live across Active / Recovery / Body views).
   document.querySelectorAll("[data-target]").forEach(btn => {
-    btn.addEventListener("click", () => scrollToId(btn.dataset.target));
+    btn.addEventListener("click", () => goToTarget(btn.dataset.target));
   });
 }
 
@@ -1145,6 +1185,45 @@ function renderHRV(recDates, recMap) {
     sub += ` · ${d > 0 ? "↑" : d < 0 ? "↓" : "="} ${Math.abs(d)} vs prior 7d`;
   }
   subEl.textContent = sub;
+}
+
+// Recovery-tab 3-col header (SLEEP · ANS CHARGE · HRV). Reuses the data already
+// loaded by renderPolar — no extra fetch, no divergent source. PVR-strict: any
+// missing field stays "—". Mirrors the kids dashboard SUN/MOON/RISING column row.
+function fillRecoveryHeader(rec, sleep, recDates, recMap) {
+  const set = (id, txt, sub, subColor) => {
+    const v = document.getElementById(id), s = document.getElementById(id.replace("-val", "-sub"));
+    if (v) v.textContent = txt;
+    if (s) { s.textContent = sub || ""; if (subColor) s.style.color = subColor; }
+  };
+  // SLEEP — total duration + quality word (sleep charge 1–6)
+  if (sleep) {
+    const dur = (sleep.light_sleep || 0) + (sleep.deep_sleep || 0) + (sleep.rem_sleep || 0);
+    set("rb-sleep-val", dur ? secsToHM(dur) : "—",
+        sleep.sleep_charge != null ? `${polarStatusWord(sleep.sleep_charge)} · ${sleep.sleep_charge}/6` : "",
+        sleep.sleep_charge != null ? polarStatusColor(sleep.sleep_charge) : null);
+  } else { set("rb-sleep-val", "—", "", null); }
+  // ANS CHARGE — signed value + recharging / depleting read
+  if (rec && rec.ans_charge != null) {
+    const a = Number(rec.ans_charge);
+    const word = a > 0.1 ? "Recharging" : (a < -0.1 ? "Depleting" : "Steady");
+    const wc = a > 0.1 ? "#39D98A" : (a < -0.1 ? "#FF8A3D" : "#8A90A6");
+    set("rb-ans-val", `${a > 0 ? "+" : ""}${a.toFixed(1)}`,
+        rec.ans_charge_status != null ? `${word} · ${polarStatusWord(rec.ans_charge_status)}` : word, wc);
+  } else { set("rb-ans-val", "—", "", null); }
+  // HRV — latest value + 7-day delta vs prior 7 days (same math as renderHRV)
+  const hrvs = (recDates || []).map(d => recMap[d]?.heart_rate_variability_avg).filter(v => v != null);
+  if (hrvs.length) {
+    const last7 = hrvs.slice(-7), prior7 = hrvs.slice(-14, -7);
+    const avg = a => a.reduce((x, y) => x + y, 0) / a.length;
+    let sub = "", sc = "#FF5E8A";
+    if (prior7.length) {
+      const d = Math.round(avg(last7) - avg(prior7));
+      sub = `${d > 0 ? "▲" : d < 0 ? "▼" : "="}${Math.abs(d)} vs 7d`;
+      sc = d > 0 ? "#39D98A" : d < 0 ? "#FF8A3D" : "#8A90A6";
+    }
+    set("rb-hrv-val", `${hrvs.at(-1)} ms`, sub, sc);
+  } else { set("rb-hrv-val", "—", "", null); }
 }
 
 // Inline SVG sparkline — 100×24 viewBox, normalized polyline, stroke=currentColor.
@@ -1628,8 +1707,30 @@ async function renderScaleSnapshot() {
     empty.classList.add("hidden");
     content.classList.remove("hidden");
     if (sub) sub.textContent = s.captured_at ? "Last update: " + formatSnapshotTS(s.captured_at) : "";
+    fillBodyHero(s); // Body-tab prominent latest reading
   } catch (e) {
     showEmpty(); // file missing / file://
+  }
+}
+
+// Body-tab hero — prominent latest scale reading. Reuses vesync/snapshot.json
+// already loaded by renderScaleSnapshot (carries bmi + weight_change_lb directly,
+// so nothing is computed/fabricated). Weight loss reads green, gain reads coral.
+function fillBodyHero(s) {
+  const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+  set("bh-weight", s.weight_lb != null ? fmt(s.weight_lb, 1) : "—");
+  set("bh-bf", s.body_fat_pct != null ? fmt(s.body_fat_pct, 1) + "%" : "—");
+  set("bh-muscle", s.muscle_mass_lb != null ? fmt(s.muscle_mass_lb, 1) : "—");
+  set("bh-bmi", s.bmi != null ? fmt(s.bmi, 1) : "—");
+  set("bh-stamp", s.captured_at ? formatSnapshotTS(s.captured_at) : "");
+  const dEl = document.getElementById("bh-delta");
+  if (dEl) {
+    const d = s.weight_change_lb;
+    if (d == null || d === 0) { dEl.textContent = ""; }
+    else {
+      dEl.textContent = `${d > 0 ? "+" : "−"}${Math.abs(d).toFixed(1)} lb`;
+      dEl.style.color = d < 0 ? "#39D98A" : "#FF8A3D"; // down = progress (green)
+    }
   }
 }
 
@@ -2007,6 +2108,7 @@ function renderAll() {
   renderPhysiology(); // async, Recovery Window physiology strip (HRV/RHR/Resp)
   renderSupportCards(); // async, Nutrition / Scale / Activity summary cards
   wireRings();   // tap-through scroll on metric corners + card links
+  wireTabs();    // bottom tab bar: Active / Recovery / Body (sessionStorage-persisted)
   renderActivity(); // async, Polar Loop Gen 2 daily activity (steps / active time / calories)
   renderPolar(); // async, live Polar Loop data
   renderLastSynced(); // async, Last Synced freshness badge (manifest.synced_at)
