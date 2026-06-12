@@ -2306,27 +2306,27 @@ async function renderCoach() {
   const note = (() => {
     // 1 · under-recovery — the cardinal trainer rule
     if (S.sleepDebtH != null && S.sleepDebtH > 2 && S.todayAns != null && S.todayAns < 0)
-      return `ANS is at ${ansStr} and you're ${f1(S.sleepDebtH)}h down on sleep this week. You can't out-train under-recovery — tonight, 9 PM wind-down, no exceptions.`;
+      return `Your recovery is low right now (charge ${ansStr}) and you're ${f1(S.sleepDebtH)} hours short on sleep this week. You can't train your way out of being this run-down — tonight, rest is the real work. Wind down by 9 PM.`;
     // 2 · heavy load on a flat nervous system
     if (S.activeCal != null && S.activeCal >= 1000 && S.todayAns != null && S.todayAns < 0)
-      return `Today's load ran hot (${S.activeCal.toLocaleString()} active kcal) and ANS is flat at ${ansStr}. Tomorrow: Z2 only or a pure walk — no intensity.`;
+      return `You burned a lot today (${S.activeCal.toLocaleString()} calories) but your recovery is flat (charge ${ansStr}). Keep tomorrow easy — a walk or light cardio, nothing hard.`;
     // 3 · reserve sliding
     if (S.negStreak >= 3)
-      return `ANS has slid ${S.negStreak} days straight. The reserve's still there but you're spending it fast — bank one real recovery day before the next hard session.`;
+      return `Your recovery has dropped ${S.negStreak} days in a row. You're not empty yet, but it's draining fast — take one full rest day before your next hard workout.`;
     // 4 · losing muscle + protein under goal
     if (S.m7 != null && S.m7 < 0 && Math.abs(S.m7) >= Math.abs(S.w7 || 0) && S.proteinGoal != null && S.proteinG != null && S.proteinG < S.proteinGoal)
-      return `Muscle's slipping (${coachSign(S.m7, " lb")}) and protein came in under goal. Hit ${S.proteinGoal}g+ tomorrow before anything else.`;
+      return `You're losing a little muscle (${coachSign(S.m7, " lb")}) and came up short on protein. Make hitting ${S.proteinGoal}g of protein tomorrow your first priority.`;
     // 5 · green light
     if (S.todayAns != null && S.todayAns > 0 && S.proteinGoal != null && S.proteinG != null && S.proteinG >= S.proteinGoal && S.sleepDebtH != null && S.sleepDebtH < 1)
-      return `Reserve's healthy and fueling's clean (${S.proteinG}g protein). Tomorrow's a green-light day — go earn a hard session.`;
+      return `Recovery's healthy and you're eating well (${S.proteinG}g protein). Tomorrow's a green light — you've earned a hard session.`;
     // 6 · recomp win
     if (S.w7 != null && S.w7 < 0 && (S.m7 == null || S.m7 >= -0.3))
-      return `Down ${f1(S.w7)}lb with muscle holding — that's textbook recomp. Keep protein high and don't chase the scale.`;
+      return `Down ${f1(S.w7)} lb while keeping your muscle — that's exactly the goal: losing fat, not muscle. Keep protein high and don't sweat the daily scale.`;
     // 7 · fueling locked, recovery is the bottleneck
     if (S.proteinGoal != null && S.proteinG != null && S.proteinG >= S.proteinGoal && ((S.sleepDebtH != null && S.sleepDebtH > 1) || (S.todayAns != null && S.todayAns < 1)))
-      return `Fueling's locked (${S.proteinG}g protein) — recovery's the bottleneck now. Protect sleep tonight and the rest follows.`;
+      return `Your eating's on point (${S.proteinG}g protein) — recovery is the one thing holding you back now. Protect your sleep tonight and the rest follows.`;
     // 8 · default
-    return `Steady day. Hold the line — consistency is the whole game.`;
+    return `Steady day, nothing to chase. Keep showing up — consistency is what moves the needle.`;
   })();
   noteEl.textContent = note;
   if (tsEl) tsEl.textContent = labelMD(lastN(1)[0]);
