@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-11T21:54:04-05:00",
-  "data_hash": "9139c704634686c8",
+  "generated_at": "2026-06-11T22:25:20-05:00",
+  "data_hash": "775dbbcd5a25c500",
   "slot": "macros-update",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 100%\n\nRead\nAfter the new log, the day\u2019s intake looks much more supportive: protein is now carrying the muscle-preservation side, while the remaining food window is narrow. Effort has already run heavy on a still-muted recovery base, so the day favors consolidation over added strain.\n\nConsolidation, not escalation.\n\nPerformance: Consolidation, not escalation.\n\nTransit: none",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 100%\n\nRead\nThe latest snack pushes intake past the day\u2019s energy lane, while protein is already carrying the muscle-preservation side. With heavy effort spent and recovery still muted, this now reads as a topped-off day that favors repair and composure over more strain.\n\nFed, loaded, steady.\n\nPerformance: Fed, loaded, steady.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 100%\n\nRead\nAfter the new log, the day\u2019s intake looks much more supportive: protein is now carrying the muscle-preservation side, while the remaining food window is narrow. Effort has already run heavy on a still-muted recovery base, so the day favors consolidation over added strain.\n\nConsolidation, not escalation."
+      "text": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 100%\n\nRead\nThe latest snack pushes intake past the day\u2019s energy lane, while protein is already carrying the muscle-preservation side. With heavy effort spent and recovery still muted, this now reads as a topped-off day that favors repair and composure over more strain.\n\nFed, loaded, steady."
     },
     {
       "label": "Performance",
-      "text": "Consolidation, not escalation."
+      "text": "Fed, loaded, steady."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 100%\n\nRead\nAfter the new log, the day\u2019s intake looks much more supportive: protein is now carrying the muscle-preservation side, while the remaining food window is narrow. Effort has already run heavy on a still-muted recovery base, so the day favors consolidation over added strain.\n\nConsolidation, not escalation.",
-    "performance": "Consolidation, not escalation.",
+    "reading": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 100%\n\nRead\nThe latest snack pushes intake past the day\u2019s energy lane, while protein is already carrying the muscle-preservation side. With heavy effort spent and recovery still muted, this now reads as a topped-off day that favors repair and composure over more strain.\n\nFed, loaded, steady.",
+    "performance": "Fed, loaded, steady.",
     "transit": null
   },
-  "nutrition_nudge": "Fat budget is spent \u2014 keep any remaining food lean and skip oils tonight.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 2,
     "sleep_hours": 6.8,
     "hrv_today": 89,
     "hrv_7d_avg": 59.7,
-    "nutrition": "calories 2290 of 2574 goal, protein 170g of 138g goal, carbs 216g of 290g goal, fat 83g of 72g goal",
-    "nutrition_detail": "calories 2290 of 2574 goal -> 284 left; protein 170g of 138g goal -> 32g over; carbs 216g of 290g goal; fat 83g of 72g goal",
-    "activity_today": "8,329 steps so far, 6h 46m active, 2,749 calories burned, Heavy training load"
+    "nutrition": "calories 2760 of 2574 goal, protein 175g of 138g goal, carbs 276g of 290g goal, fat 103g of 72g goal",
+    "nutrition_detail": "calories 2760 of 2574 goal -> 186 over; protein 175g of 138g goal -> 37g over; carbs 276g of 290g goal; fat 103g of 72g goal",
+    "activity_today": "8,329 steps so far, 6h 54m active, 2,782 calories burned, Heavy training load"
   }
 }
