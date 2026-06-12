@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-12T07:00:03-05:00",
-  "data_hash": "ef50c9b449eb42c8",
-  "slot": "recovery",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 2%\n\nRead\nYou woke with a thin reserve: sleep was ordinary, but the deeper recovery signal is softened. With the day still untouched, it favors low-friction consistency over intensity, with muscle protection depending on steady protein and a modest deficit.\n\nMeasured capacity.\n\nPerformance: Measured capacity.\n\nTransit: none",
+  "generated_at": "2026-06-12T09:59:25-05:00",
+  "data_hash": "72b6d53c60faa403",
+  "slot": "macros-update",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 26%\n\nRead\nThe new meal moved the day out of low-input territory, but protein is still trailing the muscle-preserving side of the equation. With recovery muted and output lighter than usual, today favors steady coverage over intensity.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 2%\n\nRead\nYou woke with a thin reserve: sleep was ordinary, but the deeper recovery signal is softened. With the day still untouched, it favors low-friction consistency over intensity, with muscle protection depending on steady protein and a modest deficit.\n\nMeasured capacity."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 26%\n\nRead\nThe new meal moved the day out of low-input territory, but protein is still trailing the muscle-preserving side of the equation. With recovery muted and output lighter than usual, today favors steady coverage over intensity.\n\nSteady, not forceful."
     },
     {
       "label": "Performance",
-      "text": "Measured capacity."
+      "text": "Steady, not forceful."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 2%\n\nRead\nYou woke with a thin reserve: sleep was ordinary, but the deeper recovery signal is softened. With the day still untouched, it favors low-friction consistency over intensity, with muscle protection depending on steady protein and a modest deficit.\n\nMeasured capacity.",
-    "performance": "Measured capacity.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 26%\n\nRead\nThe new meal moved the day out of low-input territory, but protein is still trailing the muscle-preserving side of the equation. With recovery muted and output lighter than usual, today favors steady coverage over intensity.\n\nSteady, not forceful.",
+    "performance": "Steady, not forceful.",
     "transit": null
   },
-  "nutrition_nudge": "Start steady with a protein-led breakfast to protect muscle and keep today's meal pacing on track.",
+  "nutrition_nudge": "Stay on pace by making lunch protein-forward and keeping meal rhythm steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 1,
     "sleep_hours": 6.6,
     "hrv_today": 46,
     "hrv_7d_avg": 59.1,
-    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
-    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "2 steps so far, 0m active, 430 calories burned, \u2014 training load"
+    "nutrition": "calories 950 of 2574 goal, protein 32g of 138g goal, carbs 95g of 290g goal, fat 52g of 72g goal",
+    "nutrition_detail": "calories 950 of 2574 goal -> 1624 left; protein 32g of 138g goal -> 106g gap; carbs 95g of 290g goal; fat 52g of 72g goal",
+    "activity_today": "1,815 steps so far, 1h 33m active, 855 calories burned, Light training load"
   }
 }
