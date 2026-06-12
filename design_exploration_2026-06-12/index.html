@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fitness Dashboard · Design Exploration · 2026-06-12</title>
+<style>
+  :root{
+    --bg:#0b0d12; --panel:#13161d; --line:#222732; --ink:#e9edf4;
+    --dim:#8b93a3; --accent:#3dd7c6; --gold:#f2c14e;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:ui-sans-serif,-apple-system,"SF Pro Text",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:430px;margin:0 auto;padding:18px 0 40px}
+  header{padding:0 18px 14px}
+  .kicker{font:600 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--accent)}
+  h1{margin:8px 0 4px;font-size:23px;line-height:1.15;font-weight:700;letter-spacing:-.01em}
+  .sub{color:var(--dim);font-size:13px;line-height:1.5}
+  .sub b{color:var(--ink);font-weight:600}
+
+  .rail{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;
+    padding:6px 18px 8px;scrollbar-width:none}
+  .rail::-webkit-scrollbar{display:none}
+  .card{flex:0 0 88%;scroll-snap-align:center;background:var(--panel);
+    border:1px solid var(--line);border-radius:20px;overflow:hidden;
+    display:flex;flex-direction:column;text-decoration:none;color:inherit;
+    position:relative}
+  .badge{position:absolute;top:12px;right:12px;z-index:2;
+    background:var(--gold);color:#16130a;font:700 10px/1 ui-monospace,monospace;
+    letter-spacing:.06em;padding:6px 9px;border-radius:999px}
+  .num{position:absolute;top:12px;left:14px;z-index:2;
+    font:700 12px/1 ui-monospace,monospace;color:#fff;
+    background:rgba(0,0,0,.45);padding:6px 9px;border-radius:999px;backdrop-filter:blur(4px)}
+  .shot{width:100%;aspect-ratio:375/520;object-fit:cover;object-position:top center;
+    display:block;background:#000;border-bottom:1px solid var(--line)}
+  .meta{padding:14px 16px 16px}
+  .name{font-size:17px;font-weight:700;margin:0 0 5px;letter-spacing:-.01em}
+  .pov{font-size:13px;line-height:1.5;color:var(--dim);margin:0 0 12px}
+  .open{display:inline-flex;align-items:center;gap:6px;font:600 12px/1 ui-monospace,monospace;
+    letter-spacing:.04em;color:var(--accent)}
+  .open svg{width:13px;height:13px}
+
+  .dots{display:flex;gap:7px;justify-content:center;padding:14px 0 6px}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--line)}
+  .hint{text-align:center;color:var(--dim);font:500 11px/1 ui-monospace,monospace;
+    letter-spacing:.08em;text-transform:uppercase;padding-bottom:18px}
+
+  .rec{margin:8px 18px 0;padding:16px;border:1px solid var(--line);
+    border-radius:16px;background:linear-gradient(180deg,#14201e,#11151b)}
+  .rec .tag{font:700 10px/1 ui-monospace,monospace;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--gold)}
+  .rec h3{margin:9px 0 6px;font-size:15px}
+  .rec p{margin:0;font-size:13px;line-height:1.55;color:var(--dim)}
+  .rec p b{color:var(--ink)}
+  footer{padding:22px 18px 0;color:var(--dim);font:500 11px/1.6 ui-monospace,monospace}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">Design Exploration · Jun 12 2026</div>
+    <h1>Four ways to read your body</h1>
+    <p class="sub">Same data — <b>167.5 lb</b>, sleep <b>6h 46m</b>, ANS Charge <b>−4.2</b>, HRV <b>62</b> — four design points of view. Swipe, then tap a card to open it full-screen.</p>
+  </header>
+
+  <div class="rail" id="rail">
+
+    <a class="card" href="01_editorial.html">
+      <span class="num">01</span>
+      <img class="shot" src="01_editorial.png" alt="Editorial direction">
+      <div class="meta">
+        <p class="name">Editorial · "The Daily Charge"</p>
+        <p class="pov">One headline metric on cream paper — your recovery as a morning newspaper that tells you how to live today.</p>
+        <span class="open">OPEN FULL
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card" href="02_whoop.html">
+      <span class="num">02</span>
+      <img class="shot" src="02_whoop.png" alt="Whoop direction">
+      <div class="meta">
+        <p class="name">Whoop Clone · "Recovery"</p>
+        <p class="pov">Three rings, one verdict. A red recovery score that tells you go/no-go before you read a single number.</p>
+        <span class="open">OPEN FULL
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card" href="03_hud.html">
+      <span class="num">03</span>
+      <img class="shot" src="03_hud.png" alt="HUD direction">
+      <div class="meta">
+        <p class="name">Cockpit HUD · "RDY.HUD"</p>
+        <p class="pov">Your body as a glass cockpit — every system on one panel, with a master-caution lamp lit red on low recovery.</p>
+        <span class="open">OPEN FULL
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+      </div>
+    </a>
+
+    <a class="card" href="04_system_architect.html">
+      <span class="badge">★ Claude's pick</span>
+      <span class="num">04</span>
+      <img class="shot" src="04_system_architect.png" alt="System Architect direction">
+      <div class="meta">
+        <p class="name">System Architect · "Observability Console"</p>
+        <p class="pov">The machine behind the metrics — every number carries its source, sync time, freshness, and MEASURED-vs-DERIVED label.</p>
+        <span class="open">OPEN FULL
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="dots" id="dots"></div>
+  <div class="hint">← swipe to compare →</div>
+
+  <div class="rec">
+    <div class="tag">★ Claude's recommendation</div>
+    <h3>Direction 04 — System Architect's View</h3>
+    <p>It's the only one that's <b>yours</b>, not the category's. It encodes a rule you already hold — never trust a fabricated number — directly into the interface, and it's the most defensible product story if this is ever monetized. Pair its <b>provenance + lineage</b> backbone with Direction 01's <b>one-line morning verdict</b> as the top card, and you get a console that's honest <i>and</i> calm.</p>
+  </div>
+
+  <footer>
+    branch&nbsp;·&nbsp;design-exploration-2026-06-12<br>
+    mockups only — live dashboard untouched · mock data
+  </footer>
+</div>
+
+<script>
+  // build dots + active-state on scroll
+  const rail = document.getElementById('rail');
+  const cards = [...rail.querySelectorAll('.card')];
+  const dots = document.getElementById('dots');
+  cards.forEach((_,i)=>{const d=document.createElement('span');d.className='dot';dots.appendChild(d);});
+  const dotEls=[...dots.children];
+  function active(){
+    const c = rail.scrollLeft + rail.clientWidth/2;
+    let best=0,bd=1e9;
+    cards.forEach((card,i)=>{const x=card.offsetLeft+card.clientWidth/2;const dd=Math.abs(x-c);if(dd<bd){bd=dd;best=i;}});
+    dotEls.forEach((d,i)=>d.style.background = i===best ? 'var(--accent)' : 'var(--line)');
+  }
+  rail.addEventListener('scroll',active,{passive:true});
+  active();
+</script>
+</body>
+</html>

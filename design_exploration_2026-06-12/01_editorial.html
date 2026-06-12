@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>The Daily Charge — June 12, 2026</title>
+<style>
+  :root{
+    --paper:#f4f0e7;
+    --paper-deep:#ece6d8;
+    --ink:#1a1714;
+    --ink-soft:#4a443c;
+    --ink-faint:#8a8073;
+    --rule:#cfc7b6;
+    --rule-soft:#ded7c7;
+    --accent:#7a1320;      /* oxblood */
+    --accent-ink:#23304a;  /* deep ink-blue */
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html,body{
+    background:#2b2824;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  body{
+    display:flex;
+    justify-content:center;
+    min-height:100vh;
+    padding:0;
+    font-family: Georgia, "Times New Roman", Times, serif;
+  }
+
+  .paper{
+    width:375px;
+    min-height:812px;
+    background:var(--paper);
+    color:var(--ink);
+    position:relative;
+    overflow:hidden;
+    background-image:
+      radial-gradient(circle at 18% 12%, rgba(0,0,0,0.014) 0, transparent 60%),
+      radial-gradient(circle at 82% 78%, rgba(0,0,0,0.018) 0, transparent 55%);
+  }
+
+  /* ---------- shared type ---------- */
+  .smallcaps{
+    font-family:Georgia, serif;
+    font-variant:small-caps;
+    letter-spacing:.16em;
+    text-transform:lowercase;
+    font-size:10.5px;
+    color:var(--ink-faint);
+    font-weight:400;
+  }
+  .label{
+    font-family:Georgia, serif;
+    text-transform:uppercase;
+    letter-spacing:.22em;
+    font-size:9.5px;
+    color:var(--ink-faint);
+    font-weight:700;
+  }
+  .num{ font-variant-numeric:tabular-nums lining-nums; }
+
+  /* ---------- masthead ---------- */
+  .masthead{
+    padding:22px 24px 0;
+    text-align:center;
+  }
+  .masthead .pre{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:8px;
+    margin-bottom:12px;
+  }
+  .masthead .pre .smallcaps{ font-size:9px; letter-spacing:.13em; }
+  .title{
+    font-size:33px;
+    line-height:1;
+    letter-spacing:-0.4px;
+    font-weight:700;
+    color:var(--ink);
+    font-style:italic;
+  }
+  .title b{ font-style:normal; }
+  .dateline{
+    margin-top:11px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:9px;
+    border-top:3px double var(--ink);
+    border-bottom:1px solid var(--ink);
+    padding:6px 0 7px;
+  }
+  .dateline span{ font-size:10px; letter-spacing:.1em; color:var(--ink-soft); text-transform:uppercase; }
+  .dateline .dot{ color:var(--accent); font-size:10px; }
+
+  /* ---------- cover headline ---------- */
+  .cover{
+    padding:24px 24px 26px;
+    border-bottom:1px solid var(--rule);
+  }
+  .cover .kicker{
+    color:var(--accent);
+    text-transform:uppercase;
+    letter-spacing:.24em;
+    font-size:10px;
+    font-weight:700;
+    margin-bottom:14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .cover .kicker:before{
+    content:"";
+    width:18px;height:1.5px;background:var(--accent);display:inline-block;
+  }
+  .cover .figure{
+    font-size:108px;
+    line-height:.82;
+    font-weight:700;
+    letter-spacing:-3px;
+    color:var(--ink);
+    font-style:italic;
+  }
+  .cover .figure .sign{ color:var(--accent); font-style:normal; }
+  .cover .unit{
+    font-size:14px;
+    letter-spacing:.06em;
+    color:var(--ink-faint);
+    text-transform:uppercase;
+    margin:6px 0 16px;
+  }
+  .cover .unit b{ color:var(--accent); font-weight:700; font-variant:small-caps; letter-spacing:.05em; }
+  .cover .deck{
+    font-size:20px;
+    line-height:1.32;
+    font-style:italic;
+    color:var(--ink);
+    max-width:300px;
+  }
+  .cover .deck .drop{
+    float:left;
+    font-size:52px;
+    line-height:.74;
+    font-style:normal;
+    font-weight:700;
+    padding:6px 8px 0 0;
+    color:var(--accent);
+  }
+  .cover .byline{
+    margin-top:16px;
+    font-size:10.5px;
+    color:var(--ink-faint);
+    letter-spacing:.04em;
+  }
+  .cover .byline em{ color:var(--ink-soft); }
+
+  /* ---------- recovery sub-figures ---------- */
+  .stat-row{
+    display:flex;
+    border-bottom:1px solid var(--rule);
+  }
+  .stat-row .cell{
+    flex:1;
+    padding:16px 0 17px;
+    text-align:center;
+    position:relative;
+  }
+  .stat-row .cell + .cell:before{
+    content:"";
+    position:absolute; left:0; top:14px; bottom:14px;
+    width:1px; background:var(--rule);
+  }
+  .stat-row .cell .label{ margin-bottom:7px; }
+  .stat-row .cell .v{
+    font-size:30px; line-height:1; font-weight:700; color:var(--ink);
+  }
+  .stat-row .cell .v small{ font-size:12px; color:var(--ink-faint); font-weight:400; }
+  .stat-row .cell .sub{
+    margin-top:5px; font-size:10px; color:var(--ink-faint); font-style:italic;
+  }
+
+  /* ---------- section ---------- */
+  .section{
+    padding:22px 24px 24px;
+    border-bottom:1px solid var(--rule);
+  }
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:6px;
+    margin-bottom:16px;
+  }
+  .section-head h2{
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.2em;
+    font-weight:700;
+    color:var(--ink);
+  }
+  .section-head .pg{ font-size:10px; color:var(--ink-faint); letter-spacing:.1em; }
+
+  /* weight feature */
+  .weight-feature{ display:flex; align-items:flex-end; gap:16px; }
+  .weight-feature .big{
+    font-size:46px; line-height:.9; font-weight:700; color:var(--ink); letter-spacing:-1px;
+  }
+  .weight-feature .big small{ font-size:15px; color:var(--ink-faint); font-weight:400; }
+  .weight-feature .meta{ flex:1; padding-bottom:4px; }
+  .weight-feature .meta .line{
+    font-size:11.5px; color:var(--ink-soft); line-height:1.5; display:flex; justify-content:space-between;
+  }
+  .weight-feature .meta .line b{ color:var(--ink); font-weight:700; }
+  .weight-feature .meta .down{ color:var(--accent-ink); font-weight:700; }
+  .spark-wrap{
+    margin-top:16px;
+    border-top:1px solid var(--rule-soft);
+    padding-top:12px;
+  }
+  .spark-wrap .caption{
+    display:flex; justify-content:space-between;
+    font-size:9px; color:var(--ink-faint); letter-spacing:.08em; text-transform:uppercase;
+    margin-top:6px;
+  }
+
+  /* two-up body comp */
+  .twoup{ display:flex; gap:0; margin-top:18px; }
+  .twoup .col{ flex:1; }
+  .twoup .col + .col{ border-left:1px solid var(--rule); padding-left:16px; }
+  .twoup .col:first-child{ padding-right:16px; }
+  .twoup .col .label{ margin-bottom:6px; }
+  .twoup .col .v{ font-size:26px; font-weight:700; color:var(--ink); line-height:1; }
+  .twoup .col .v small{ font-size:12px; color:var(--ink-faint); font-weight:400; }
+  .twoup .col .note{ font-size:10px; color:var(--ink-faint); font-style:italic; margin-top:5px; }
+
+  /* sleep */
+  .sleep-lead{
+    font-size:15px; line-height:1.5; color:var(--ink); font-style:italic; margin-bottom:16px;
+  }
+  .sleep-lead .num-em{ font-style:normal; font-weight:700; }
+  .sleep-bar-wrap{ margin-top:4px; }
+  .sleep-bar-meta{
+    display:flex; justify-content:space-between; align-items:baseline; margin-bottom:7px;
+  }
+  .sleep-bar-meta .l{ font-size:11px; color:var(--ink-soft); }
+  .sleep-bar-meta .score{ font-size:13px; font-weight:700; color:var(--ink); }
+  .sleep-bar-meta .score small{ font-size:10px; color:var(--ink-faint); font-weight:400; }
+  .track{
+    height:7px; background:var(--paper-deep);
+    border:1px solid var(--rule); position:relative; overflow:hidden;
+  }
+  .track .fill{ position:absolute; left:0; top:0; bottom:0; background:var(--accent-ink); }
+  .track .target{
+    position:absolute; top:-3px; bottom:-3px; width:1.5px; background:var(--ink);
+  }
+  .track-legend{
+    display:flex; justify-content:space-between; margin-top:6px;
+    font-size:9px; color:var(--ink-faint); letter-spacing:.06em; text-transform:uppercase;
+  }
+
+  /* energy ledger */
+  .ledger{ }
+  .ledger .row{
+    display:flex; align-items:baseline; justify-content:space-between;
+    padding:9px 0;
+    border-bottom:1px dotted var(--rule);
+  }
+  .ledger .row:last-child{ border-bottom:none; }
+  .ledger .row .name{ font-size:12.5px; color:var(--ink-soft); }
+  .ledger .row .name .label{ display:block; margin-bottom:1px; }
+  .ledger .row .val{ font-size:22px; font-weight:700; color:var(--ink); }
+  .ledger .row .val small{ font-size:11px; color:var(--ink-faint); font-weight:400; }
+  .ledger .row.feature .val{ color:var(--accent); }
+
+  /* nutrition */
+  .macro-cal{
+    display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:18px;
+  }
+  .macro-cal .eaten{ font-size:40px; font-weight:700; line-height:.9; color:var(--ink); letter-spacing:-1px; }
+  .macro-cal .eaten small{ font-size:13px; color:var(--ink-faint); font-weight:400; }
+  .macro-cal .remain{ text-align:right; }
+  .macro-cal .remain .n{ font-size:18px; font-weight:700; color:var(--accent-ink); }
+  .macro-cal .remain .lbl{ font-size:9px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.12em; }
+
+  .macros{ display:flex; gap:14px; }
+  .macros .m{ flex:1; }
+  .macros .m .top{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:6px; }
+  .macros .m .mname{ font-size:10px; text-transform:uppercase; letter-spacing:.14em; color:var(--ink-faint); font-weight:700; }
+  .macros .m .mval{ font-size:14px; font-weight:700; color:var(--ink); }
+  .macros .m .mval small{ font-size:9px; color:var(--ink-faint); font-weight:400; }
+  .mtrack{ height:4px; background:var(--paper-deep); border:1px solid var(--rule); position:relative; }
+  .mtrack .mf{ position:absolute; left:0; top:0; bottom:0; }
+  .macros .protein .mf{ background:var(--accent); }
+  .macros .carbs .mf{ background:var(--accent-ink); }
+  .macros .fat .mf{ background:var(--ink-faint); }
+
+  /* colophon / sources */
+  .colophon{
+    padding:20px 24px 30px;
+    background:var(--paper-deep);
+  }
+  .colophon h3{
+    font-size:9.5px; text-transform:uppercase; letter-spacing:.22em; color:var(--ink-faint);
+    text-align:center; font-weight:700; margin-bottom:14px;
+    position:relative;
+  }
+  .colophon h3:before, .colophon h3:after{
+    content:""; position:absolute; top:50%; width:60px; height:1px; background:var(--rule);
+  }
+  .colophon h3:before{ left:0; }
+  .colophon h3:after{ right:0; }
+  .src{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:6px 0; font-size:11px;
+  }
+  .src .who{ color:var(--ink); font-style:italic; }
+  .src .who b{ font-style:normal; font-weight:700; }
+  .src .when{ color:var(--ink-faint); letter-spacing:.04em; }
+  .src .when .num{ color:var(--ink-soft); font-weight:700; }
+  .colophon .foot{
+    text-align:center; margin-top:16px; padding-top:13px; border-top:1px solid var(--rule);
+    font-size:9px; color:var(--ink-faint); font-style:italic; letter-spacing:.06em; line-height:1.6;
+  }
+  .colophon .foot .mark{ font-style:normal; font-variant:small-caps; letter-spacing:.14em; color:var(--ink-soft); }
+</style>
+</head>
+<body>
+<div class="paper">
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div class="pre">
+      <span class="smallcaps">Vol. IV · No. 163</span>
+      <span class="smallcaps">Morning Edition</span>
+    </div>
+    <div class="title"><b>The</b> Daily <i>Charge</i></div>
+    <div class="dateline">
+      <span>Thursday</span><span class="dot">◆</span>
+      <span>June 12, 2026</span><span class="dot">◆</span>
+      <span>DFW</span>
+    </div>
+  </header>
+
+  <!-- COVER HEADLINE: ANS CHARGE -->
+  <section class="cover">
+    <div class="kicker">Today's Reading · Autonomic Recovery</div>
+    <div class="figure"><span class="sign">–</span>4.2</div>
+    <div class="unit">ANS Charge · <b>Compromised</b></div>
+    <p class="deck">
+      <span class="drop">Y</span>our body is asking for a lighter day. The
+      nervous system slipped below baseline overnight — honor it, and let
+      ambition wait until tomorrow.
+    </p>
+    <div class="byline">
+      Filed <em>06:40</em> from Polar · recovery desk
+    </div>
+  </section>
+
+  <!-- RECOVERY SUB-FIGURES -->
+  <div class="stat-row">
+    <div class="cell">
+      <div class="label">HRV</div>
+      <div class="v num">62<small> ms</small></div>
+      <div class="sub">7-day avg 68</div>
+    </div>
+    <div class="cell">
+      <div class="label">Resting HR</div>
+      <div class="v num">54<small> bpm</small></div>
+      <div class="sub">steady &amp; low</div>
+    </div>
+    <div class="cell">
+      <div class="label">Recharge</div>
+      <div class="v" style="font-size:18px;color:var(--accent);font-style:italic;padding-top:7px;">Hold</div>
+      <div class="sub">ease the load</div>
+    </div>
+  </div>
+
+  <!-- THE SCALE -->
+  <section class="section">
+    <div class="section-head">
+      <h2>On the Scale</h2>
+      <span class="pg">Body · I</span>
+    </div>
+    <div class="weight-feature">
+      <div class="big num">167.5<small> lb</small></div>
+      <div class="meta">
+        <div class="line"><span>vs. yesterday</span><b class="down num">▼ 0.3 lb</b></div>
+        <div class="line"><span>over seven days</span><b class="down num">▼ 1.8 lb</b></div>
+      </div>
+    </div>
+
+    <div class="spark-wrap">
+      <!-- 7-day weight hairline trend -->
+      <svg width="327" height="58" viewBox="0 0 327 58" xmlns="http://www.w3.org/2000/svg">
+        <!-- baseline hairline -->
+        <line x1="0" y1="50" x2="327" y2="50" stroke="#ded7c7" stroke-width="1"/>
+        <!-- trend line: 169.3 -> 167.5 across 7 days -->
+        <polyline fill="none" stroke="#23304a" stroke-width="1.5"
+          stroke-linejoin="round" stroke-linecap="round"
+          points="6,12 59,18 112,15 165,26 218,30 271,38 321,44"/>
+        <!-- soft fill under -->
+        <polyline fill="rgba(35,48,74,0.06)" stroke="none"
+          points="6,12 59,18 112,15 165,26 218,30 271,38 321,44 321,50 6,50"/>
+        <!-- endpoint dots -->
+        <circle cx="6" cy="12" r="2.4" fill="#f4f0e7" stroke="#23304a" stroke-width="1.4"/>
+        <circle cx="321" cy="44" r="3" fill="#7a1320"/>
+      </svg>
+      <div class="caption">
+        <span>Jun 6 — 169.3</span>
+        <span>seven-day trend</span>
+        <span>Jun 12 — 167.5</span>
+      </div>
+    </div>
+
+    <div class="twoup">
+      <div class="col">
+        <div class="label">Body Fat</div>
+        <div class="v num">18.2<small> %</small></div>
+        <div class="note">composition holding lean</div>
+      </div>
+      <div class="col">
+        <div class="label">Lean Mass</div>
+        <div class="v num">137.0<small> lb</small></div>
+        <div class="note">the part worth keeping</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLEEP -->
+  <section class="section">
+    <div class="section-head">
+      <h2>The Night Before</h2>
+      <span class="pg">Sleep · II</span>
+    </div>
+    <p class="sleep-lead">
+      <span class="num-em">6h 46m</span> of rest against an eight-hour
+      target — an hour and change short of full repair.
+    </p>
+    <div class="sleep-bar-wrap">
+      <div class="sleep-bar-meta">
+        <span class="l">Duration vs. 8h goal</span>
+        <span class="score num">72<small>/100</small></span>
+      </div>
+      <div class="track">
+        <!-- 6h46m of 8h = 84.6% fill; target marker at 8h edge -->
+        <div class="fill" style="width:84.5%;"></div>
+        <div class="target" style="right:0;"></div>
+      </div>
+      <div class="track-legend">
+        <span>6h 46m logged</span>
+        <span>target 8h 00m</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENERGY -->
+  <section class="section">
+    <div class="section-head">
+      <h2>The Day's Output</h2>
+      <span class="pg">Energy · III</span>
+    </div>
+    <div class="ledger">
+      <div class="row feature">
+        <div class="name"><span class="label">Active Calories</span>movement, on purpose</div>
+        <div class="val num">612<small> kcal</small></div>
+      </div>
+      <div class="row">
+        <div class="name"><span class="label">Total Burn</span>everything, all day</div>
+        <div class="val num">2,340<small> kcal</small></div>
+      </div>
+      <div class="row">
+        <div class="name"><span class="label">Steps</span>distance covered</div>
+        <div class="val num">7,840</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NUTRITION -->
+  <section class="section">
+    <div class="section-head">
+      <h2>At the Table</h2>
+      <span class="pg">Fuel · IV</span>
+    </div>
+    <div class="macro-cal">
+      <div class="eaten num">1,850<small> / 2,100 kcal</small></div>
+      <div class="remain">
+        <div class="n num">250</div>
+        <div class="lbl">left to eat</div>
+      </div>
+    </div>
+
+    <div class="macros">
+      <div class="m protein">
+        <div class="top">
+          <span class="mname">Protein</span>
+          <span class="mval num">142<small> / 180g</small></span>
+        </div>
+        <div class="mtrack"><div class="mf" style="width:78.9%;"></div></div>
+      </div>
+      <div class="m carbs">
+        <div class="top">
+          <span class="mname">Carbs</span>
+          <span class="mval num">168<small> g</small></span>
+        </div>
+        <div class="mtrack"><div class="mf" style="width:64%;"></div></div>
+      </div>
+      <div class="m fat">
+        <div class="top">
+          <span class="mname">Fat</span>
+          <span class="mval num">61<small> g</small></span>
+        </div>
+        <div class="mtrack"><div class="mf" style="width:55%;"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLOPHON / SOURCES -->
+  <footer class="colophon">
+    <h3>Sources &amp; Sync</h3>
+    <div class="src">
+      <span class="who"><b>Polar</b> — recovery · sleep · HRV</span>
+      <span class="when">last synced <span class="num">06:40</span></span>
+    </div>
+    <div class="src">
+      <span class="who"><b>VeSync</b> — scale · body composition</span>
+      <span class="when">last synced <span class="num">07:05</span></span>
+    </div>
+    <div class="src">
+      <span class="who"><b>Nutrition</b> — intake · macros</span>
+      <span class="when">last synced <span class="num">12:30</span></span>
+    </div>
+    <div class="foot">
+      <span class="mark">The Daily Charge</span> — printed each morning for an
+      audience of one.<br>All figures as recorded; no estimates fabricated.
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

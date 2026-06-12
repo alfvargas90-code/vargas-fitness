@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=375, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Recovery — Jun 12</title>
+<style>
+  :root{
+    --bg:#0a0a0c;
+    --ink:#f4f5f7;
+    --ink-2:#8b8e96;
+    --ink-3:#54565d;
+    --line:#1c1d22;
+    --line-2:#26272e;
+    /* recovery = LOW today → red/amber accent drives the whole accent system */
+    --acc:#ff3b47;       /* low/compromised red */
+    --acc-amber:#ff8a3d;
+    --acc-soft:rgba(255,59,71,.16);
+    --track:#1a1b20;
+    --green:#16e07a;
+    --yellow:#ffc043;
+    --red:#ff3b47;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{background:#000;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    display:flex;justify-content:center;
+    color:var(--ink);
+  }
+  .phone{
+    width:375px;min-height:812px;
+    background:var(--bg);
+    position:relative;
+    overflow:hidden;
+    padding:0 0 30px;
+  }
+
+  /* ---------- top bar ---------- */
+  .status{
+    height:44px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 22px;font-size:13px;font-weight:600;color:var(--ink);letter-spacing:.2px;
+  }
+  .status .dots{display:flex;gap:3px;align-items:center}
+  .status .dots i{display:block;width:4px;height:4px;border-radius:50%;background:var(--ink)}
+  .status .batt{width:22px;height:11px;border:1.4px solid var(--ink);border-radius:3px;position:relative;opacity:.9}
+  .status .batt::after{content:"";position:absolute;right:-3px;top:3px;width:2px;height:5px;background:var(--ink);border-radius:0 1px 1px 0}
+  .status .batt i{position:absolute;left:1.5px;top:1.5px;bottom:1.5px;width:70%;background:var(--ink);border-radius:1px}
+
+  /* ---------- header ---------- */
+  header{padding:8px 22px 4px;display:flex;align-items:flex-start;justify-content:space-between}
+  .h-day{font-size:11px;font-weight:700;letter-spacing:2.4px;color:var(--ink-2);text-transform:uppercase}
+  .h-title{font-size:26px;font-weight:300;letter-spacing:-.5px;margin-top:3px;color:var(--ink)}
+  .h-title b{font-weight:700}
+  .h-badge{
+    margin-top:6px;display:inline-flex;align-items:center;gap:6px;
+    padding:4px 9px;border:1px solid var(--acc);border-radius:2px;
+    font-size:10px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--acc);
+  }
+  .h-badge::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--acc);box-shadow:0 0 8px var(--acc)}
+  .menu{display:flex;flex-direction:column;gap:4px;padding-top:6px}
+  .menu i{display:block;width:18px;height:1.5px;background:var(--ink-2)}
+
+  /* ---------- hero rings ---------- */
+  .hero{padding:14px 0 6px;text-align:center}
+  .ring-main{position:relative;width:230px;height:230px;margin:0 auto}
+  .ring-main svg{transform:rotate(-90deg)}
+  .ring-main .center{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .ring-main .center .lab{font-size:10px;font-weight:700;letter-spacing:2.6px;color:var(--ink-2);text-transform:uppercase}
+  .ring-main .center .val{font-size:62px;font-weight:300;line-height:.9;letter-spacing:-2px;color:var(--acc);margin-top:6px;font-variant-numeric:tabular-nums}
+  .ring-main .center .val sup{font-size:22px;font-weight:400;vertical-align:super;margin-left:1px}
+  .ring-main .center .sub{margin-top:7px;font-size:11px;font-weight:600;letter-spacing:.4px;color:var(--ink-2)}
+  .ring-main .center .sub b{color:var(--acc)}
+
+  /* recovery legend */
+  .legend{display:flex;justify-content:center;gap:18px;margin:16px 0 2px}
+  .legend div{display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.6px;color:var(--ink-3);text-transform:uppercase;font-weight:600}
+  .legend div.on{color:var(--ink)}
+  .legend span{width:7px;height:7px;border-radius:50%}
+  .legend .g{background:var(--green)} .legend .y{background:var(--yellow)} .legend .r{background:var(--red)}
+  .legend div.on .r{box-shadow:0 0 9px var(--red)}
+
+  /* ---------- secondary rings row ---------- */
+  .rings2{display:flex;justify-content:center;gap:14px;padding:18px 22px 8px}
+  .mini{flex:1;display:flex;flex-direction:column;align-items:center}
+  .mini .ring{position:relative;width:96px;height:96px}
+  .mini .ring svg{transform:rotate(-90deg)}
+  .mini .ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .mini .ring .c .n{font-size:24px;font-weight:300;letter-spacing:-1px;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1}
+  .mini .ring .c .n sup{font-size:11px;font-weight:400}
+  .mini .ring .c .u{font-size:8.5px;font-weight:700;letter-spacing:1.2px;color:var(--ink-3);margin-top:3px;text-transform:uppercase}
+  .mini .lbl{margin-top:11px;font-size:10px;font-weight:700;letter-spacing:1.6px;color:var(--ink-2);text-transform:uppercase}
+  .mini .meta{margin-top:3px;font-size:10px;color:var(--ink-3);letter-spacing:.2px}
+
+  /* ---------- divider ---------- */
+  .div{height:1px;background:var(--line);margin:16px 22px}
+
+  /* ---------- section label ---------- */
+  .slab{padding:4px 22px 0;display:flex;align-items:baseline;justify-content:space-between}
+  .slab .t{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--ink-2);text-transform:uppercase}
+  .slab .t2{font-size:10px;color:var(--ink-3);letter-spacing:.4px}
+
+  /* ---------- stat rows w/ sparklines ---------- */
+  .rows{padding:10px 22px 0}
+  .row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line)}
+  .row:last-child{border-bottom:none}
+  .row .lft{display:flex;flex-direction:column;gap:3px;min-width:104px}
+  .row .lft .k{font-size:13px;font-weight:600;letter-spacing:.2px;color:var(--ink)}
+  .row .lft .d{font-size:10px;color:var(--ink-3);letter-spacing:.3px}
+  .row .spark{flex:1;display:flex;justify-content:center;padding:0 12px}
+  .row .rgt{text-align:right;min-width:74px}
+  .row .rgt .v{font-size:19px;font-weight:300;letter-spacing:-.5px;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1}
+  .row .rgt .v sup{font-size:10px;font-weight:400;color:var(--ink-2)}
+  .row .rgt .delta{font-size:10px;font-weight:600;letter-spacing:.3px;margin-top:4px}
+  .delta.dn{color:var(--acc)} .delta.up{color:var(--green)} .delta.flat{color:var(--ink-3)}
+
+  /* ---------- sleep stages bar ---------- */
+  .sleep{padding:14px 22px 0}
+  .sleep .topline{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:11px}
+  .sleep .topline .big{font-size:21px;font-weight:300;letter-spacing:-.5px}
+  .sleep .topline .big b{font-weight:600}
+  .sleep .topline .sc{font-size:11px;color:var(--ink-2);letter-spacing:.3px}
+  .sleep .topline .sc b{color:var(--ink);font-weight:600}
+  .stagebar{display:flex;height:14px;border-radius:2px;overflow:hidden;background:var(--track)}
+  .stagebar i{display:block;height:100%}
+  .stagebar .awake{background:#3a3b42} .stagebar .rem{background:#5b6cff}
+  .stagebar .light{background:#2f7bff} .stagebar .deep{background:#0b3aa3}
+  .stagekeys{display:flex;justify-content:space-between;margin-top:9px}
+  .stagekeys div{display:flex;align-items:center;gap:5px;font-size:9.5px;color:var(--ink-3);letter-spacing:.4px;text-transform:uppercase;font-weight:600}
+  .stagekeys span{width:7px;height:7px;border-radius:2px}
+  .k-awake{background:#3a3b42} .k-rem{background:#5b6cff} .k-light{background:#2f7bff} .k-deep{background:#0b3aa3}
+
+  /* ---------- body + nutrition compact grid ---------- */
+  .grid2{display:flex;padding:6px 22px 0;gap:0}
+  .gcol{flex:1;padding:14px 0}
+  .gcol+.gcol{border-left:1px solid var(--line);padding-left:18px}
+  .gcol:first-child{padding-right:18px}
+  .gcol .gl{font-size:10px;font-weight:700;letter-spacing:1.6px;color:var(--ink-2);text-transform:uppercase;margin-bottom:12px}
+  .stat{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:11px}
+  .stat:last-child{margin-bottom:0}
+  .stat .sk{font-size:11.5px;color:var(--ink-2);letter-spacing:.2px}
+  .stat .sv{font-size:14px;font-weight:400;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.2px}
+  .stat .sv small{font-size:9.5px;color:var(--ink-3)}
+  .stat .sv .dn{color:var(--acc);font-size:10px;font-weight:600;margin-left:4px}
+
+  /* macro mini bars */
+  .macro{margin-bottom:11px}
+  .macro:last-child{margin-bottom:0}
+  .macro .ml{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-2);margin-bottom:5px;letter-spacing:.2px}
+  .macro .ml b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
+  .macro .bar{height:4px;background:var(--track);border-radius:2px;overflow:hidden}
+  .macro .bar i{display:block;height:100%;border-radius:2px}
+  .macro .bar .p{background:var(--ink)} .macro .bar .c{background:#6a6c74} .macro .bar .f{background:#46474e}
+
+  /* ---------- sources footer ---------- */
+  .sources{padding:18px 22px 6px;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+  .sources .src{display:flex;align-items:center;gap:6px;font-size:9.5px;color:var(--ink-3);letter-spacing:.4px}
+  .sources .src b{color:var(--ink-2);font-weight:600;text-transform:uppercase;letter-spacing:.8px}
+  .sources .src i{width:5px;height:5px;border-radius:50%;background:var(--ink-3)}
+  .sources .src.live i{background:var(--green)}
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- status bar -->
+  <div class="status">
+    <span>9:41</span>
+    <div class="dots">
+      <i></i><i></i><i></i>
+      <svg width="16" height="11" viewBox="0 0 16 11" style="margin-left:4px"><path d="M8 2.2c2 0 3.8.8 5.1 2l1-1.1C12.5 1.4 10.4.5 8 .5S3.5 1.4 1.9 3.1l1 1.1C4.2 3 6 2.2 8 2.2zm0 3c1.1 0 2.2.5 3 1.2l1-1.1C11.9 4.2 10 3.4 8 3.4s-3.9.8-4.9 1.9l1 1.1c.7-.7 1.8-1.2 2.9-1.2zM8 8.1c.6 0 1.1.3 1.5.6L8 10.5 6.5 8.7c.4-.3.9-.6 1.5-.6z" fill="#f4f5f7"/></svg>
+      <span class="batt"><i></i></span>
+    </div>
+  </div>
+
+  <!-- header -->
+  <header>
+    <div>
+      <div class="h-day">Thursday · Jun 12</div>
+      <div class="h-title"><b>Recovery</b></div>
+      <div class="h-badge">Compromised</div>
+    </div>
+    <div class="menu"><i></i><i></i><i></i></div>
+  </header>
+
+  <!-- HERO RECOVERY RING -->
+  <div class="hero">
+    <div class="ring-main">
+      <!-- r=100, circumference = 628.3; 41% => offset 370.7 -->
+      <svg width="230" height="230" viewBox="0 0 230 230">
+        <circle cx="115" cy="115" r="100" fill="none" stroke="var(--track)" stroke-width="14"/>
+        <circle cx="115" cy="115" r="100" fill="none" stroke="var(--acc)" stroke-width="14"
+                stroke-linecap="round" stroke-dasharray="628.3"
+                stroke-dashoffset="370.7"
+                style="filter:drop-shadow(0 0 6px rgba(255,59,71,.45))"/>
+      </svg>
+      <div class="center">
+        <div class="lab">Recovery</div>
+        <div class="val">41<sup>%</sup></div>
+        <div class="sub">ANS Charge <b>−4.2</b> · below baseline</div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div><span class="g"></span>Recovered</div>
+      <div><span class="y"></span>Adequate</div>
+      <div class="on"><span class="r"></span>Low</div>
+    </div>
+  </div>
+
+  <!-- secondary rings: SLEEP + STRAIN -->
+  <div class="rings2">
+    <div class="mini">
+      <div class="ring">
+        <!-- r=42, c=263.9 ; sleep 85% => offset 39.6 -->
+        <svg width="96" height="96" viewBox="0 0 96 96">
+          <circle cx="48" cy="48" r="42" fill="none" stroke="var(--track)" stroke-width="7"/>
+          <circle cx="48" cy="48" r="42" fill="none" stroke="#2f7bff" stroke-width="7"
+                  stroke-linecap="round" stroke-dasharray="263.9" stroke-dashoffset="39.6"/>
+        </svg>
+        <div class="c"><div class="n">85<sup>%</sup></div><div class="u">of 8h</div></div>
+      </div>
+      <div class="lbl">Sleep</div>
+      <div class="meta">6h 46m · score 72</div>
+    </div>
+
+    <div class="mini">
+      <div class="ring">
+        <!-- strain/exertion from calories: 612 active vs ~1000 target ≈ 61% -->
+        <svg width="96" height="96" viewBox="0 0 96 96">
+          <circle cx="48" cy="48" r="42" fill="none" stroke="var(--track)" stroke-width="7"/>
+          <circle cx="48" cy="48" r="42" fill="none" stroke="var(--acc-amber)" stroke-width="7"
+                  stroke-linecap="round" stroke-dasharray="263.9" stroke-dashoffset="103.0"/>
+        </svg>
+        <div class="c"><div class="n">11.4</div><div class="u">strain</div></div>
+      </div>
+      <div class="lbl">Exertion</div>
+      <div class="meta">612 act · 7,840 steps</div>
+    </div>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- VITALS sparklines -->
+  <div class="slab"><span class="t">Vitals</span><span class="t2">7-day trend</span></div>
+  <div class="rows">
+
+    <!-- HRV -->
+    <div class="row">
+      <div class="lft"><span class="k">HRV</span><span class="d">7-day avg 68 ms</span></div>
+      <div class="spark">
+        <svg width="120" height="34" viewBox="0 0 120 34">
+          <polyline fill="none" stroke="var(--acc)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
+            points="2,9 19,7 36,14 53,11 70,18 87,15 104,24 118,21"/>
+          <circle cx="118" cy="21" r="2.6" fill="var(--acc)"/>
+        </svg>
+      </div>
+      <div class="rgt"><div class="v">62<sup> ms</sup></div><div class="delta dn">▾ 6 vs avg</div></div>
+    </div>
+
+    <!-- Resting HR -->
+    <div class="row">
+      <div class="lft"><span class="k">Resting HR</span><span class="d">7-day avg 52 bpm</span></div>
+      <div class="spark">
+        <svg width="120" height="34" viewBox="0 0 120 34">
+          <polyline fill="none" stroke="var(--ink-2)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
+            points="2,22 19,20 36,21 53,18 70,19 87,16 104,13 118,12"/>
+          <circle cx="118" cy="12" r="2.6" fill="var(--acc-amber)"/>
+        </svg>
+      </div>
+      <div class="rgt"><div class="v">54<sup> bpm</sup></div><div class="delta dn">▴ 2 vs avg</div></div>
+    </div>
+
+    <!-- ANS charge -->
+    <div class="row">
+      <div class="lft"><span class="k">ANS Charge</span><span class="d">Recharge · compromised</span></div>
+      <div class="spark">
+        <svg width="120" height="34" viewBox="0 0 120 34">
+          <line x1="2" y1="17" x2="118" y2="17" stroke="var(--line-2)" stroke-width="1" stroke-dasharray="2 3"/>
+          <polyline fill="none" stroke="var(--acc)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
+            points="2,10 19,8 36,13 53,12 70,16 87,21 104,26 118,28"/>
+          <circle cx="118" cy="28" r="2.6" fill="var(--acc)"/>
+        </svg>
+      </div>
+      <div class="rgt"><div class="v">−4.2</div><div class="delta dn">below baseline</div></div>
+    </div>
+  </div>
+
+  <!-- SLEEP STAGES -->
+  <div class="slab" style="margin-top:18px"><span class="t">Sleep Stages</span><span class="t2">target 8h 00m</span></div>
+  <div class="sleep">
+    <div class="topline">
+      <div class="big"><b>6h 46m</b> asleep</div>
+      <div class="sc">Score <b>72</b>/100</div>
+    </div>
+    <!-- widths from a plausible split of 6h46: awake 6%, rem 22%, light 52%, deep 20% -->
+    <div class="stagebar">
+      <i class="awake" style="width:6%"></i>
+      <i class="rem" style="width:22%"></i>
+      <i class="light" style="width:52%"></i>
+      <i class="deep" style="width:20%"></i>
+    </div>
+    <div class="stagekeys">
+      <div><span class="k-awake"></span>Awake</div>
+      <div><span class="k-rem"></span>REM 1h29</div>
+      <div><span class="k-light"></span>Light 3h31</div>
+      <div><span class="k-deep"></span>Deep 1h21</div>
+    </div>
+  </div>
+
+  <!-- BODY + NUTRITION -->
+  <div class="grid2">
+    <div class="gcol">
+      <div class="gl">Body</div>
+      <div class="stat"><span class="sk">Weight</span><span class="sv">167.5<small> lb</small><span class="dn">−0.3</span></span></div>
+      <div class="stat"><span class="sk">7-day</span><span class="sv">−1.8<small> lb</small></span></div>
+      <div class="stat"><span class="sk">Body fat</span><span class="sv">18.2<small> %</small></span></div>
+      <div class="stat"><span class="sk">Lean mass</span><span class="sv">137.0<small> lb</small></span></div>
+      <div class="stat"><span class="sk">Total burn</span><span class="sv">2,340<small> kcal</small></span></div>
+    </div>
+
+    <div class="gcol">
+      <div class="gl">Nutrition</div>
+      <div class="stat" style="margin-bottom:14px">
+        <span class="sk">Energy</span><span class="sv">1,850<small> / 2,100</small></span>
+      </div>
+      <div class="macro">
+        <div class="ml"><span>Protein</span><b>142 / 180 g</b></div>
+        <div class="bar"><i class="p" style="width:79%"></i></div>
+      </div>
+      <div class="macro">
+        <div class="ml"><span>Carbs</span><b>168 g</b></div>
+        <div class="bar"><i class="c" style="width:62%"></i></div>
+      </div>
+      <div class="macro">
+        <div class="ml"><span>Fat</span><b>61 g</b></div>
+        <div class="bar"><i class="f" style="width:48%"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOURCES -->
+  <div class="sources">
+    <div class="src live"><i></i><b>Polar</b> 06:40</div>
+    <div class="src live"><i></i><b>VeSync</b> 07:05</div>
+    <div class="src live"><i></i><b>Nutrition</b> 12:30</div>
+  </div>
+
+</div>
+</body>
+</html>

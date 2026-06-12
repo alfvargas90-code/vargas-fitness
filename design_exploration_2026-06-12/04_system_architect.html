@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SYSTEM ARCHITECT // Fitness Console</title>
+<style>
+  :root{
+    --bg:#0b0f14;
+    --panel:#10161d;
+    --panel-2:#0d131a;
+    --line:#1c2630;
+    --line-soft:#161f28;
+    --txt:#c6d2dd;
+    --txt-dim:#7d8b98;
+    --txt-faint:#566472;
+    --accent:#33d6e0;
+    --accent-dim:#1b6e74;
+    --fresh:#3fd07a;
+    --aging:#e3b23c;
+    --stale:#5a6672;
+    --warn:#e2603f;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono","Roboto Mono",Menlo,monospace;
+    --sans:ui-sans-serif,"Inter",-apple-system,"Segoe UI",Roboto,system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#05080b;}
+  body{
+    font-family:var(--sans);
+    color:var(--txt);
+    display:flex;
+    justify-content:center;
+    -webkit-font-smoothing:antialiased;
+  }
+  .device{
+    width:375px;
+    min-height:812px;
+    background:
+      linear-gradient(180deg,#0c1119 0%,#0a0e14 100%);
+    position:relative;
+    overflow:hidden;
+    border-left:1px solid #11181f;
+    border-right:1px solid #11181f;
+  }
+  /* faint grid texture */
+  .device::before{
+    content:"";
+    position:absolute;inset:0;
+    background-image:
+      linear-gradient(var(--line-soft) 1px,transparent 1px),
+      linear-gradient(90deg,var(--line-soft) 1px,transparent 1px);
+    background-size:25px 25px;
+    opacity:.18;
+    pointer-events:none;
+    z-index:0;
+  }
+  .wrap{position:relative;z-index:1;padding:0 0 26px;}
+
+  .mono{font-family:var(--mono);}
+  .num{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.2px;}
+
+  /* ---------- HEADER ---------- */
+  header{
+    padding:14px 16px 12px;
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(51,214,224,.04),transparent);
+  }
+  .hdr-top{display:flex;align-items:center;justify-content:space-between;}
+  .brand{display:flex;align-items:center;gap:8px;}
+  .brand .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 8px var(--accent);
+  }
+  .brand h1{
+    font-size:11px;font-weight:600;letter-spacing:2.4px;
+    text-transform:uppercase;color:var(--txt);
+  }
+  .brand .sub{
+    font-family:var(--mono);font-size:8.5px;letter-spacing:1px;
+    color:var(--txt-faint);text-transform:uppercase;margin-top:2px;
+  }
+  .hdr-clock{text-align:right;}
+  .hdr-clock .d{font-family:var(--mono);font-size:10px;color:var(--txt-dim);letter-spacing:.5px;}
+  .hdr-clock .t{font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:.5px;margin-top:2px;}
+
+  /* health strip */
+  .health{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:1px;margin-top:12px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:5px;overflow:hidden;
+  }
+  .health .cell{
+    background:var(--panel);
+    padding:7px 9px;
+  }
+  .health .lbl{
+    font-family:var(--mono);font-size:7.5px;letter-spacing:.8px;
+    color:var(--txt-faint);text-transform:uppercase;
+  }
+  .health .val{
+    font-family:var(--mono);font-size:13px;color:var(--txt);
+    margin-top:3px;display:flex;align-items:center;gap:5px;
+    font-variant-numeric:tabular-nums;
+  }
+  .health .val.ok{color:var(--fresh);}
+  .health .val .pulse{
+    width:6px;height:6px;border-radius:50%;background:var(--fresh);
+    box-shadow:0 0 6px var(--fresh);
+  }
+
+  /* ---------- SECTION TITLES ---------- */
+  .sec-hd{
+    display:flex;align-items:center;gap:8px;
+    padding:16px 16px 8px;
+  }
+  .sec-hd .tick{width:10px;height:1px;background:var(--accent-dim);}
+  .sec-hd h2{
+    font-family:var(--mono);font-size:9px;letter-spacing:2px;
+    text-transform:uppercase;color:var(--txt-dim);font-weight:500;
+  }
+  .sec-hd .meta{
+    margin-left:auto;font-family:var(--mono);font-size:8px;
+    color:var(--txt-faint);letter-spacing:.5px;
+  }
+
+  /* ---------- PIPELINE DIAGRAM ---------- */
+  .pipe{
+    margin:0 16px;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:7px;
+    padding:12px 10px 10px;
+  }
+  .pipe svg{display:block;width:100%;height:auto;}
+  .pipe-legend{
+    display:flex;gap:14px;margin-top:8px;padding-top:9px;
+    border-top:1px solid var(--line-soft);
+    font-family:var(--mono);font-size:8px;color:var(--txt-faint);
+    letter-spacing:.4px;
+  }
+  .pipe-legend span{display:flex;align-items:center;gap:4px;}
+  .lg-dot{width:6px;height:6px;border-radius:50%;}
+
+  /* ---------- METRIC GRID ---------- */
+  .grid-head{
+    display:grid;
+    grid-template-columns:1fr 64px 50px 14px;
+    gap:6px;
+    padding:0 16px 5px;
+    font-family:var(--mono);font-size:7.5px;letter-spacing:.8px;
+    color:var(--txt-faint);text-transform:uppercase;
+  }
+  .grid-head span:nth-child(2),
+  .grid-head span:nth-child(3){text-align:right;}
+  .grid-head span:nth-child(4){text-align:center;}
+
+  .mrow{
+    display:grid;
+    grid-template-columns:1fr 64px 50px 14px;
+    gap:6px;align-items:center;
+    padding:9px 16px;
+    border-top:1px solid var(--line-soft);
+  }
+  .mrow:last-child{border-bottom:1px solid var(--line-soft);}
+  .m-name{display:flex;flex-direction:column;gap:3px;min-width:0;}
+  .m-label{font-size:11px;color:var(--txt);font-weight:500;line-height:1.1;}
+  .m-tags{display:flex;gap:4px;align-items:center;flex-wrap:wrap;}
+  .badge{
+    font-family:var(--mono);font-size:7px;letter-spacing:.5px;
+    padding:1.5px 4px;border-radius:3px;text-transform:uppercase;
+    border:1px solid var(--line);color:var(--txt-dim);
+    background:var(--panel);line-height:1;
+  }
+  .badge.src{color:var(--accent);border-color:var(--accent-dim);}
+  .badge.derived{
+    color:var(--aging);border-color:#5e4d1f;background:rgba(227,178,60,.06);
+  }
+  .badge.measured{color:var(--txt-faint);}
+  .m-val{
+    text-align:right;font-family:var(--mono);font-size:14px;
+    color:var(--txt);font-variant-numeric:tabular-nums;
+    letter-spacing:-.4px;line-height:1;
+  }
+  .m-val .u{font-size:8px;color:var(--txt-faint);margin-left:1px;}
+  .m-val .delta{
+    display:block;font-size:8px;margin-top:3px;letter-spacing:0;
+  }
+  .delta.down{color:var(--fresh);}
+  .delta.up{color:var(--warn);}
+  .delta.flat{color:var(--txt-faint);}
+  .m-sync{
+    text-align:right;font-family:var(--mono);font-size:9px;
+    color:var(--txt-faint);font-variant-numeric:tabular-nums;line-height:1.2;
+  }
+  .m-fresh{display:flex;justify-content:center;}
+  .fdot{width:7px;height:7px;border-radius:50%;position:relative;}
+  .fdot.fresh{background:var(--fresh);box-shadow:0 0 6px rgba(63,208,122,.6);}
+  .fdot.aging{background:var(--aging);box-shadow:0 0 6px rgba(227,178,60,.5);}
+  .fdot.stale{background:var(--stale);}
+
+  /* warning row accent */
+  .mrow.alert{background:linear-gradient(90deg,rgba(226,96,63,.07),transparent);}
+  .m-val.warn{color:var(--warn);}
+
+  /* progress meters (nutrition) */
+  .meter-card{
+    margin:0 16px;padding:11px 13px;
+    background:var(--panel-2);border:1px solid var(--line);
+    border-radius:7px;
+  }
+  .meter-top{display:flex;justify-content:space-between;align-items:baseline;}
+  .meter-top .kcal{font-family:var(--mono);font-size:18px;color:var(--txt);font-variant-numeric:tabular-nums;}
+  .meter-top .kcal .of{font-size:10px;color:var(--txt-faint);}
+  .meter-top .src{font-family:var(--mono);font-size:8px;color:var(--txt-faint);letter-spacing:.5px;}
+  .bar{height:5px;background:#0a0f14;border:1px solid var(--line);border-radius:3px;overflow:hidden;margin-top:8px;}
+  .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent-dim),var(--accent));}
+  .macros{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:11px;background:var(--line);border:1px solid var(--line);border-radius:5px;overflow:hidden;}
+  .macro{background:var(--panel);padding:7px 8px;}
+  .macro .mk{font-family:var(--mono);font-size:7.5px;letter-spacing:.7px;color:var(--txt-faint);text-transform:uppercase;}
+  .macro .mv{font-family:var(--mono);font-size:13px;color:var(--txt);margin-top:3px;font-variant-numeric:tabular-nums;}
+  .macro .mv .tg{font-size:8px;color:var(--txt-faint);}
+  .macro .mbar{height:3px;background:#0a0f14;border-radius:2px;margin-top:5px;overflow:hidden;}
+  .macro .mbar > i{display:block;height:100%;background:var(--accent);}
+  .macro .mbar > i.short{background:var(--aging);}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    margin:16px 16px 0;padding-top:11px;
+    border-top:1px solid var(--line);
+    font-family:var(--mono);font-size:8px;color:var(--txt-faint);
+    letter-spacing:.4px;line-height:1.7;
+  }
+  footer .frow{display:flex;justify-content:space-between;}
+  footer b{color:var(--txt-dim);font-weight:500;}
+</style>
+</head>
+<body>
+<div class="device">
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header>
+    <div class="hdr-top">
+      <div class="brand">
+        <div class="dot"></div>
+        <div>
+          <h1>System&nbsp;Architect</h1>
+          <div class="sub">fitness · observability console</div>
+        </div>
+      </div>
+      <div class="hdr-clock">
+        <div class="d">THU 2026·06·12</div>
+        <div class="t">▲ LIVE 12:30 CST</div>
+      </div>
+    </div>
+
+    <div class="health">
+      <div class="cell">
+        <div class="lbl">Pipelines</div>
+        <div class="val ok"><span class="pulse"></span>3/3 OK</div>
+      </div>
+      <div class="cell">
+        <div class="lbl">Last full sync</div>
+        <div class="val">12:30</div>
+      </div>
+      <div class="cell">
+        <div class="lbl">Completeness</div>
+        <div class="val">96<span style="font-size:9px;color:var(--txt-faint)">%</span></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- PIPELINE DIAGRAM -->
+  <div class="sec-hd">
+    <span class="tick"></span>
+    <h2>Data Lineage</h2>
+    <span class="meta">sources → ingest → derived</span>
+  </div>
+  <div class="pipe">
+    <svg viewBox="0 0 343 168" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arw" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#33d6e0"/>
+        </marker>
+        <marker id="arwd" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#2c3a45"/>
+        </marker>
+      </defs>
+
+      <!-- column rails / labels -->
+      <text x="10"  y="12" fill="#566472" font-family="ui-monospace,monospace" font-size="7" letter-spacing="1">SOURCES</text>
+      <text x="150" y="12" fill="#566472" font-family="ui-monospace,monospace" font-size="7" letter-spacing="1">INGEST</text>
+      <text x="250" y="12" fill="#566472" font-family="ui-monospace,monospace" font-size="7" letter-spacing="1">DERIVED</text>
+
+      <!-- EDGES (drawn first, under nodes) -->
+      <!-- polar -> ingest -->
+      <path d="M92,40 C120,40 122,72 148,72" fill="none" stroke="#1f6c70" stroke-width="1.3" marker-end="url(#arw)"/>
+      <!-- vesync -> ingest -->
+      <path d="M92,82 C118,82 124,80 148,80" fill="none" stroke="#1f6c70" stroke-width="1.3" marker-end="url(#arw)"/>
+      <!-- nutrition -> ingest -->
+      <path d="M92,124 C120,124 122,90 148,88" fill="none" stroke="#2c3a45" stroke-width="1.3" marker-end="url(#arwd)"/>
+      <!-- ingest -> derived metrics -->
+      <path d="M220,72 C238,68 240,52 250,50" fill="none" stroke="#1f6c70" stroke-width="1.3" marker-end="url(#arw)"/>
+      <path d="M220,80 C238,84 242,108 250,112" fill="none" stroke="#1f6c70" stroke-width="1.3" marker-end="url(#arw)"/>
+
+      <!-- edge timestamps -->
+      <text x="100" y="34" fill="#566472" font-family="ui-monospace,monospace" font-size="6">06:40</text>
+      <text x="100" y="100" fill="#566472" font-family="ui-monospace,monospace" font-size="6">07:05</text>
+      <text x="100" y="138" fill="#566472" font-family="ui-monospace,monospace" font-size="6">12:30</text>
+
+      <!-- SOURCE NODES -->
+      <!-- Polar -->
+      <g>
+        <rect x="10" y="28" width="82" height="24" rx="4" fill="#10161d" stroke="#243039"/>
+        <circle cx="20" cy="40" r="3" fill="#3fd07a"/>
+        <text x="28" y="38" fill="#c6d2dd" font-family="ui-monospace,monospace" font-size="8.5">POLAR</text>
+        <text x="28" y="47" fill="#566472" font-family="ui-monospace,monospace" font-size="6">hr·sleep·ans</text>
+      </g>
+      <!-- VeSync -->
+      <g>
+        <rect x="10" y="70" width="82" height="24" rx="4" fill="#10161d" stroke="#243039"/>
+        <circle cx="20" cy="82" r="3" fill="#3fd07a"/>
+        <text x="28" y="80" fill="#c6d2dd" font-family="ui-monospace,monospace" font-size="8.5">VESYNC</text>
+        <text x="28" y="89" fill="#566472" font-family="ui-monospace,monospace" font-size="6">scale·body</text>
+      </g>
+      <!-- Nutrition -->
+      <g>
+        <rect x="10" y="112" width="82" height="24" rx="4" fill="#10161d" stroke="#243039"/>
+        <circle cx="20" cy="124" r="3" fill="#e3b23c"/>
+        <text x="28" y="122" fill="#c6d2dd" font-family="ui-monospace,monospace" font-size="8.5">NUTRI</text>
+        <text x="28" y="131" fill="#566472" font-family="ui-monospace,monospace" font-size="6">manual log</text>
+      </g>
+
+      <!-- INGEST NODE -->
+      <g>
+        <rect x="148" y="60" width="72" height="40" rx="5" fill="#0c1219" stroke="#1f4d52"/>
+        <circle cx="158" cy="73" r="3" fill="#33d6e0"/>
+        <text x="165" y="76" fill="#c6d2dd" font-family="ui-monospace,monospace" font-size="8">INGEST</text>
+        <text x="156" y="90" fill="#566472" font-family="ui-monospace,monospace" font-size="6">normalize</text>
+        <text x="156" y="97" fill="#566472" font-family="ui-monospace,monospace" font-size="6">·dedupe·stamp</text>
+      </g>
+
+      <!-- DERIVED NODES -->
+      <g>
+        <rect x="250" y="38" width="84" height="24" rx="4" fill="#10161d" stroke="#5e4d1f"/>
+        <circle cx="260" cy="50" r="3" fill="#e3b23c"/>
+        <text x="267" y="48" fill="#e3b23c" font-family="ui-monospace,monospace" font-size="7.5">ACTIVE KCAL</text>
+        <text x="267" y="57" fill="#566472" font-family="ui-monospace,monospace" font-size="6">Δ cumulative</text>
+      </g>
+      <g>
+        <rect x="250" y="100" width="84" height="24" rx="4" fill="#10161d" stroke="#243039"/>
+        <circle cx="260" cy="112" r="3" fill="#3fd07a"/>
+        <text x="267" y="110" fill="#c6d2dd" font-family="ui-monospace,monospace" font-size="7.5">TOTAL BURN</text>
+        <text x="267" y="119" fill="#566472" font-family="ui-monospace,monospace" font-size="6">measured roll</text>
+      </g>
+
+      <!-- baseline rail -->
+      <line x1="10" y1="156" x2="334" y2="156" stroke="#161f28" stroke-width="1"/>
+      <text x="10" y="166" fill="#566472" font-family="ui-monospace,monospace" font-size="6.5">PIPE_RUN 12:30:04 · 0 errors · 1 source aging (nutri)</text>
+    </svg>
+    <div class="pipe-legend">
+      <span><i class="lg-dot" style="background:var(--fresh)"></i>fresh</span>
+      <span><i class="lg-dot" style="background:var(--aging)"></i>aging</span>
+      <span><i class="lg-dot" style="background:var(--stale)"></i>stale</span>
+      <span style="margin-left:auto">▲ derived node</span>
+    </div>
+  </div>
+
+  <!-- BODY COMPOSITION -->
+  <div class="sec-hd">
+    <span class="tick"></span>
+    <h2>Body Composition</h2>
+    <span class="meta">vesync · 07:05</span>
+  </div>
+  <div class="grid-head">
+    <span>metric / source</span><span>value</span><span>sync</span><span>·</span>
+  </div>
+
+  <div class="mrow">
+    <div class="m-name">
+      <span class="m-label">Weight</span>
+      <span class="m-tags"><span class="badge src">VeSync</span><span class="badge measured">measured</span></span>
+    </div>
+    <div class="m-val">167.5<span class="u">lb</span>
+      <span class="delta down">▼0.3 d · ▼1.8 7d</span></div>
+    <div class="m-sync">07:05</div>
+    <div class="m-fresh"><span class="fdot fresh"></span></div>
+  </div>
+
+  <div class="mrow">
+    <div class="m-name">
+      <span class="m-label">Body Fat</span>
+      <span class="m-tags"><span class="badge src">VeSync</span><span class="badge measured">measured</span></span>
+    </div>
+    <div class="m-val">18.2<span class="u">%</span></div>
+    <div class="m-sync">07:05</div>
+    <div class="m-fresh"><span class="fdot fresh"></span></div>
+  </div>
+
+  <div class="mrow">
+    <div class="m-name">
+      <span class="m-label">Lean Mass</span>
+      <span class="m-tags"><span class="badge src">VeSync</span><span class="badge measured">measured</span></span>
+    </div>
+    <div class="m-val">137.0<span class="u">lb</span></div>
+    <div class="m-sync">07:05</div>
+    <div class="m-fresh"><span class="fdot fresh"></span></div>
+  </div>
+
+  <!-- RECOVERY / ANS -->
+  <div class="sec-hd">
+    <span class="tick"></span>
+    <h2>Recovery · ANS</h2>
+    <span class="meta">polar · 06:40</span>
+  </div>
+  <div class="grid-head">
+    <span>metric / source</span><span>value</span><span>sync</span><span>·</span>
+  </div>
+
+  <div class="mrow">
+    <div class="m-name">
+      <span class="m-label">Sleep</span>
+      <span class="m-tags"><span class="badge src">Polar</span><span class="badge">score 72/100</span></span>
+    </div>
+    <div class="m-val">6:46<span class="u">/8:00</span>
+      <span class="delta flat">−1:14 vs target</span></div>
+    <div class="m-sync">06:40</div>
+    <div class="m-fresh"><span class="fdot fresh"></span></div>
+  </div>
+
+  <div class="mrow alert">
+    <div class="m-name">
+      <span class="m-label">ANS Charge</span>
+      <span class="m-tags"><span class="badge src">Polar·Recharge</span><span class="badge" style="color:var(--warn);border-color:#5a2b21">Compromised</span></span>
+    </div>
+    <div class="m-val warn">−4.2<span class="u">σ</span>
+      <span class="delta up">below baseline</span></div>
+    <div class="m-sync">06:40</div>
+    <div class="m-fresh"><span class="fdot fresh"></span></div>
+  </div>
+
+  <div class="mrow">
+    <div class="m-name">
+      <span class="m-label">HRV</span>
+      <span class="m-tags"><span class="badge src">Polar</span><span class="badge measured">measured</span></span>
+    </div>
+    <div class="m-val">62<span class="u">ms</span>
+      <span class="delta up">7d avg 68</span></div>
+    <div class="m-sync">06:40</div>
+    <div class="m-fresh"><span class="fdot fresh"></span></div>
+  </div>
+
+  <div class="mrow">
+    <div class="m-name">
+      <span class="m-label">Resting HR</span>
+      <span class="m-tags"><span class="badge src">Polar</span><span class="badge measured">measured</span></span>
+    </div>
+    <div class="m-val">54<span class="u">bpm</span></div>
+    <div class="m-sync">06:40</div>
+    <div class="m-fresh"><span class="fdot fresh"></span></div>
+  </div>
+
+  <!-- ENERGY / ACTIVITY -->
+  <div class="sec-hd">
+    <span class="tick"></span>
+    <h2>Energy · Activity</h2>
+    <span class="meta">polar live slots</span>
+  </div>
+  <div class="grid-head">
+    <span>metric / source</span><span>value</span><span>sync</span><span>·</span>
+  </div>
+
+  <div class="mrow">
+    <div class="m-name">
+      <span class="m-label">Active Calories</span>
+      <span class="m-tags"><span class="badge src">Polar</span><span class="badge derived">▲ derived</span></span>
+    </div>
+    <div class="m-val">612<span class="u">kcal</span>
+      <span class="delta flat" style="color:var(--aging)">Δ cumulative slots</span></div>
+    <div class="m-sync">12:30</div>
+    <div class="m-fresh"><span class="fdot fresh"></span></div>
+  </div>
+
+  <div class="mrow">
+    <div class="m-name">
+      <span class="m-label">Total Burn</span>
+      <span class="m-tags"><span class="badge src">Polar</span><span class="badge measured">measured</span></span>
+    </div>
+    <div class="m-val">2,340<span class="u">kcal</span></div>
+    <div class="m-sync">12:30</div>
+    <div class="m-fresh"><span class="fdot fresh"></span></div>
+  </div>
+
+  <div class="mrow">
+    <div class="m-name">
+      <span class="m-label">Steps</span>
+      <span class="m-tags"><span class="badge src">Polar</span><span class="badge measured">measured</span></span>
+    </div>
+    <div class="m-val">7,840</div>
+    <div class="m-sync">12:30</div>
+    <div class="m-fresh"><span class="fdot fresh"></span></div>
+  </div>
+
+  <!-- NUTRITION -->
+  <div class="sec-hd">
+    <span class="tick"></span>
+    <h2>Nutrition Intake</h2>
+    <span class="meta">manual · 12:30 · aging</span>
+  </div>
+  <div class="meter-card">
+    <div class="meter-top">
+      <div class="kcal">1,850 <span class="of">/ 2,100 kcal</span></div>
+      <div class="src">SRC: MANUAL LOG<br><span style="color:var(--aging)">● updated 12:30</span></div>
+    </div>
+    <div class="bar"><i style="width:88%"></i></div>
+    <div class="macros">
+      <div class="macro">
+        <div class="mk">Protein</div>
+        <div class="mv">142<span class="tg">/180g</span></div>
+        <div class="mbar"><i class="short" style="width:79%"></i></div>
+      </div>
+      <div class="macro">
+        <div class="mk">Carbs</div>
+        <div class="mv">168<span class="tg">g</span></div>
+        <div class="mbar"><i style="width:70%"></i></div>
+      </div>
+      <div class="macro">
+        <div class="mk">Fat</div>
+        <div class="mv">61<span class="tg">g</span></div>
+        <div class="mbar"><i style="width:65%"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENERGY BALANCE NOTE -->
+  <div class="sec-hd">
+    <span class="tick"></span>
+    <h2>Derived · Balance</h2>
+    <span class="meta">computed</span>
+  </div>
+  <div class="meter-card" style="display:flex;justify-content:space-between;align-items:center;">
+    <div>
+      <div style="font-family:var(--mono);font-size:8px;color:var(--txt-faint);letter-spacing:.6px;">NET ENERGY · in − out</div>
+      <div class="num" style="font-size:18px;color:var(--fresh);margin-top:4px;">−490 <span style="font-size:9px;color:var(--txt-faint)">kcal</span></div>
+    </div>
+    <div style="text-align:right;font-family:var(--mono);font-size:8px;color:var(--txt-faint);line-height:1.6;">
+      <span class="badge derived" style="margin-bottom:4px;display:inline-block">▲ derived</span><br>
+      1,850 in · 2,340 out<br>
+      deficit ✓ trend-aligned
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="frow"><span>PIPELINE_STATUS</span><b>3/3 NOMINAL</b></div>
+    <div class="frow"><span>SOURCES</span><b>polar · vesync · nutrition</b></div>
+    <div class="frow"><span>LAST_RUN</span><b>2026-06-12 12:30:04 CST</b></div>
+    <div class="frow"><span>COMPLETENESS</span><b>96% · 1 field aging</b></div>
+    <div class="frow"><span>INTEGRITY</span><b>measured ≠ derived · no fabrication</b></div>
+  </footer>
+
+</div>
+</div>
+</body>
+</html>

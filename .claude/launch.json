@@ -6,6 +6,18 @@
       "runtimeExecutable": "polar/.venv/bin/python3",
       "runtimeArgs": ["serve.py"],
       "port": 8765
+    },
+    {
+      "name": "timing-weather",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8766", "--directory", "timing-weather"],
+      "port": 8766
+    },
+    {
+      "name": "design-exploration",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8767", "--directory", "design_exploration_2026-06-12"],
+      "port": 8767
     }
   ]
 }

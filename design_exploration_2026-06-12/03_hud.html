@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=375, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>HUD // READINESS</title>
+<style>
+  :root{
+    --bg:#03060a;
+    --panel:#070d14;
+    --panel2:#0a131d;
+    --line:#10202b;
+    --grid:rgba(0,229,200,0.05);
+    --cy:#19e6cf;          /* primary cyan */
+    --cy-dim:#0c8f81;
+    --cy-faint:rgba(25,230,207,0.22);
+    --amber:#ffb43a;
+    --amber-dim:#a8721f;
+    --red:#ff4d4d;
+    --red-dim:#a82c2c;
+    --green:#3dffa0;
+    --green-dim:#1f9c63;
+    --txt:#bfeee8;
+    --txt-dim:#5d7a78;
+    --txt-faint:#34514f;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Roboto Mono",monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:#000;}
+  body{
+    font-family:var(--mono);
+    display:flex;justify-content:center;
+    -webkit-font-smoothing:antialiased;
+    color:var(--txt);
+  }
+  .device{
+    width:375px;min-height:812px;
+    background:
+      radial-gradient(120% 80% at 50% -10%, rgba(25,230,207,0.07), transparent 60%),
+      linear-gradient(180deg,#04080d 0%,#02050a 100%);
+    position:relative;overflow:hidden;
+  }
+  /* scanline + grid texture */
+  .device::before{
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:50;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,0.22) 3px,rgba(0,0,0,0) 4px);
+    mix-blend-mode:multiply;opacity:.55;
+  }
+  .device::after{
+    content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+    background-image:
+      linear-gradient(var(--grid) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:25px 25px;
+  }
+  .wrap{position:relative;z-index:3;padding:0 9px 26px;}
+
+  /* ---------- top status bar ---------- */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:7px 4px 6px;border-bottom:1px solid var(--cy-faint);
+    font-size:9px;letter-spacing:.12em;color:var(--cy-dim);
+  }
+  .topbar .l,.topbar .r{display:flex;gap:9px;align-items:center;}
+  .topbar b{color:var(--cy);}
+  .blink{animation:bl 1.4s steps(1) infinite;}
+  @keyframes bl{50%{opacity:.25;}}
+
+  /* corner bracket frame */
+  .frame{position:relative;margin-top:8px;}
+  .frame>.bk{position:absolute;width:13px;height:13px;border:1.5px solid var(--cy-dim);z-index:4;}
+  .bk.tl{top:-3px;left:-3px;border-right:none;border-bottom:none;}
+  .bk.tr{top:-3px;right:-3px;border-left:none;border-bottom:none;}
+  .bk.bl{bottom:-3px;left:-3px;border-right:none;border-top:none;}
+  .bk.br{bottom:-3px;right:-3px;border-left:none;border-top:none;}
+
+  /* ---------- master caution ---------- */
+  .caution{
+    margin-top:10px;border:1px solid var(--red);
+    background:linear-gradient(180deg,rgba(255,77,77,0.16),rgba(255,77,77,0.04));
+    padding:8px 9px;display:flex;align-items:center;gap:9px;position:relative;
+    box-shadow:0 0 14px rgba(255,77,77,0.18) inset;
+  }
+  .caution .lamp{
+    width:13px;height:13px;border-radius:50%;flex:0 0 auto;
+    background:var(--red);box-shadow:0 0 9px var(--red),0 0 3px #fff inset;
+    animation:pulse 1.1s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+  .caution .ctxt{flex:1;}
+  .caution .ctxt .h{font-size:11px;letter-spacing:.16em;color:#ffd0d0;font-weight:700;}
+  .caution .ctxt .s{font-size:9px;letter-spacing:.08em;color:#ff9a9a;margin-top:2px;}
+  .caution .cval{text-align:right;}
+  .caution .cval .n{font-size:20px;color:var(--red);letter-spacing:.02em;line-height:1;font-weight:700;text-shadow:0 0 8px rgba(255,77,77,.5);}
+  .caution .cval .u{font-size:8px;color:#ff9a9a;letter-spacing:.1em;}
+
+  /* ---------- section header ---------- */
+  .sh{
+    display:flex;align-items:center;gap:7px;margin:13px 2px 6px;
+    font-size:9px;letter-spacing:.22em;color:var(--cy-dim);
+  }
+  .sh::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--cy-faint),transparent);}
+  .sh .dot{width:5px;height:5px;background:var(--cy);box-shadow:0 0 6px var(--cy);}
+
+  /* ---------- generic panel ---------- */
+  .panel{
+    background:linear-gradient(180deg,var(--panel2),var(--panel));
+    border:1px solid var(--cy-faint);position:relative;
+  }
+  .panel .ph{
+    font-size:8px;letter-spacing:.16em;color:var(--txt-dim);
+    padding:5px 7px 4px;border-bottom:1px solid rgba(25,230,207,0.12);
+    display:flex;justify-content:space-between;align-items:center;
+  }
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
+
+  /* readout row */
+  .row{display:flex;justify-content:space-between;align-items:baseline;padding:4px 7px;font-size:10px;}
+  .row+.row{border-top:1px solid rgba(25,230,207,0.07);}
+  .row .lab{color:var(--txt-dim);letter-spacing:.08em;}
+  .row .val{color:var(--txt);font-variant-numeric:tabular-nums;letter-spacing:.02em;}
+  .row .val b{color:var(--cy);font-weight:700;}
+  .pos{color:var(--green)!important;}
+  .neg{color:var(--amber)!important;}
+
+  /* big stat block */
+  .stat{padding:8px 9px;}
+  .stat .k{font-size:8px;letter-spacing:.14em;color:var(--txt-dim);}
+  .stat .big{font-size:26px;line-height:1;color:var(--cy);margin-top:5px;font-variant-numeric:tabular-nums;text-shadow:0 0 10px rgba(25,230,207,.35);font-weight:700;}
+  .stat .sub{font-size:9px;color:var(--txt-dim);margin-top:4px;letter-spacing:.05em;}
+  .stat .sub .dn{color:var(--green);}
+  .stat .unit{font-size:11px;color:var(--cy-dim);margin-left:2px;}
+
+  /* status light pill */
+  .pill{display:inline-flex;align-items:center;gap:5px;font-size:8px;letter-spacing:.12em;}
+  .pill .d{width:7px;height:7px;border-radius:50%;}
+  .d-g{background:var(--green);box-shadow:0 0 6px var(--green);}
+  .d-a{background:var(--amber);box-shadow:0 0 6px var(--amber);}
+  .d-r{background:var(--red);box-shadow:0 0 6px var(--red);}
+  .t-g{color:var(--green);} .t-a{color:var(--amber);} .t-r{color:var(--red);}
+
+  /* bar meter */
+  .meter{padding:6px 8px;}
+  .meter .ml{display:flex;justify-content:space-between;font-size:9px;color:var(--txt-dim);letter-spacing:.06em;margin-bottom:4px;}
+  .meter .ml .v{color:var(--txt);}
+  .track{height:9px;background:rgba(25,230,207,0.08);border:1px solid rgba(25,230,207,0.15);position:relative;overflow:hidden;}
+  .track .fill{height:100%;position:relative;}
+  .fill-cy{background:linear-gradient(90deg,var(--cy-dim),var(--cy));box-shadow:0 0 8px rgba(25,230,207,.5);}
+  .fill-am{background:linear-gradient(90deg,var(--amber-dim),var(--amber));box-shadow:0 0 8px rgba(255,180,58,.4);}
+  .fill-gr{background:linear-gradient(90deg,var(--green-dim),var(--green));box-shadow:0 0 8px rgba(61,255,160,.4);}
+  .fill-rd{background:linear-gradient(90deg,var(--red-dim),var(--red));box-shadow:0 0 8px rgba(255,77,77,.4);}
+  /* target tick on track */
+  .tick{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--amber);box-shadow:0 0 4px var(--amber);}
+  .tick::after{content:"";position:absolute;top:-3px;left:-2px;border-left:3px solid transparent;border-right:3px solid transparent;border-top:3px solid var(--amber);}
+
+  /* ALL SYSTEMS column */
+  .sys{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;font-size:9px;letter-spacing:.08em;}
+  .sys+.sys{border-top:1px solid rgba(25,230,207,0.07);}
+  .sys .sn{color:var(--txt-dim);}
+  .sys .sv{display:flex;align-items:center;gap:6px;}
+  .sys .sv .stxt{font-size:8px;letter-spacing:.1em;}
+
+  .center{display:flex;flex-direction:column;align-items:center;}
+  svg{display:block;}
+  .gcap{font-size:8px;letter-spacing:.12em;color:var(--txt-dim);margin-top:2px;}
+
+  .foot{margin-top:14px;text-align:center;font-size:8px;letter-spacing:.18em;color:var(--txt-faint);}
+</style>
+</head>
+<body>
+<div class="device">
+<div class="wrap">
+
+  <!-- TOP STATUS BAR -->
+  <div class="topbar">
+    <div class="l"><span class="blink">●</span> <b>RDY.HUD</b> <span>v2.6</span></div>
+    <div class="r"><span>THU 12 JUN 2026</span> <b>07:05</b></div>
+  </div>
+
+  <div class="frame">
+    <span class="bk tl"></span><span class="bk tr"></span><span class="bk bl"></span><span class="bk br"></span>
+
+    <!-- MASTER CAUTION -->
+    <div class="caution">
+      <span class="lamp"></span>
+      <div class="ctxt">
+        <div class="h">MASTER CAUTION</div>
+        <div class="s">RECHARGE COMPROMISED · ANS BELOW BASELINE</div>
+      </div>
+      <div class="cval">
+        <div class="n">-4.2</div>
+        <div class="u">ANS CHG</div>
+      </div>
+    </div>
+
+    <!-- READINESS GAUGE STRIP -->
+    <div class="sh"><span class="dot"></span>PRIMARY FLIGHT DISPLAY</div>
+    <div class="panel" style="padding:10px 8px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+
+        <!-- HORIZON / READINESS GAUGE -->
+        <div class="center">
+          <svg width="118" height="118" viewBox="0 0 118 118">
+            <defs>
+              <linearGradient id="arc" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#ff4d4d"/><stop offset="1" stop-color="#ffb43a"/>
+              </linearGradient>
+            </defs>
+            <!-- outer ticks -->
+            <g stroke="#0c8f81" stroke-width="1">
+              <line x1="59" y1="6" x2="59" y2="13"/>
+              <line x1="112" y1="59" x2="105" y2="59"/>
+              <line x1="59" y1="112" x2="59" y2="105"/>
+              <line x1="6" y1="59" x2="13" y2="59"/>
+            </g>
+            <!-- track ring -->
+            <circle cx="59" cy="59" r="46" fill="none" stroke="rgba(25,230,207,0.12)" stroke-width="7"/>
+            <!-- value arc ~ 36% (compromised) : circumference 289, dash 104 -->
+            <circle cx="59" cy="59" r="46" fill="none" stroke="url(#arc)" stroke-width="7"
+                    stroke-dasharray="104 289" stroke-linecap="round"
+                    transform="rotate(-90 59 59)"/>
+            <!-- horizon line inside -->
+            <line x1="22" y1="59" x2="96" y2="59" stroke="rgba(255,180,58,0.4)" stroke-width="1"/>
+            <line x1="59" y1="44" x2="59" y2="74" stroke="rgba(255,180,58,0.25)" stroke-width="1"/>
+            <text x="59" y="52" text-anchor="middle" fill="#5d7a78" font-size="7" font-family="ui-monospace,monospace" letter-spacing="1.5">READINESS</text>
+            <text x="59" y="70" text-anchor="middle" fill="#ffb43a" font-size="22" font-family="ui-monospace,monospace" font-weight="700">36%</text>
+            <text x="59" y="82" text-anchor="middle" fill="#a8721f" font-size="7" font-family="ui-monospace,monospace" letter-spacing="2">LOW</text>
+          </svg>
+          <div class="gcap">SYSTEM STATE</div>
+        </div>
+
+        <!-- vertical bar cluster -->
+        <div style="flex:1;padding-left:11px;">
+          <div class="meter" style="padding:4px 0;">
+            <div class="ml"><span>HRV</span><span class="v t-a">62 ms</span></div>
+            <div class="track"><div class="fill fill-am" style="width:62%"></div><span class="tick" style="left:68%"></span></div>
+          </div>
+          <div class="meter" style="padding:6px 0 4px;">
+            <div class="ml"><span>RESTING HR</span><span class="v t-g">54 bpm</span></div>
+            <div class="track"><div class="fill fill-gr" style="width:48%"></div></div>
+          </div>
+          <div class="meter" style="padding:6px 0 4px;">
+            <div class="ml"><span>SLEEP</span><span class="v t-a">6:46 / 8:00</span></div>
+            <div class="track"><div class="fill fill-am" style="width:84%"></div><span class="tick" style="left:100%"></span></div>
+          </div>
+          <div class="meter" style="padding:6px 0 0;">
+            <div class="ml"><span>SLEEP SCORE</span><span class="v t-a">72/100</span></div>
+            <div class="track"><div class="fill fill-am" style="width:72%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HRV sparkline strip -->
+      <div style="border-top:1px solid rgba(25,230,207,0.12);margin-top:8px;padding-top:7px;display:flex;align-items:center;gap:8px;">
+        <span style="font-size:8px;letter-spacing:.12em;color:var(--txt-dim);">HRV 7D</span>
+        <svg width="220" height="26" viewBox="0 0 220 26" style="flex:1;">
+          <!-- baseline 68 -->
+          <line x1="0" y1="9" x2="220" y2="9" stroke="rgba(255,180,58,0.35)" stroke-width="1" stroke-dasharray="3 3"/>
+          <polyline fill="none" stroke="#19e6cf" stroke-width="1.5"
+            points="0,7 31,5 62,11 94,8 125,14 157,12 188,17 220,18"/>
+          <circle cx="220" cy="18" r="2.4" fill="#ffb43a"/>
+        </svg>
+        <span style="font-size:8px;color:var(--amber);">AVG 68</span>
+      </div>
+    </div>
+
+    <!-- BODY COMPOSITION -->
+    <div class="sh"><span class="dot"></span>AIRFRAME · BODY COMP</div>
+    <div class="grid2">
+      <div class="panel stat">
+        <div class="k">WEIGHT</div>
+        <div class="big">167.5<span class="unit">lb</span></div>
+        <div class="sub"><span class="dn">▼0.3</span> 24H · <span class="dn">▼1.8</span> 7D</div>
+      </div>
+      <div class="panel" style="padding:0;">
+        <div class="row"><span class="lab">BODY FAT</span><span class="val"><b>18.2</b>%</span></div>
+        <div class="row"><span class="lab">LEAN MASS</span><span class="val"><b>137.0</b> lb</span></div>
+        <div class="row"><span class="lab">FAT MASS</span><span class="val">30.5 lb</span></div>
+        <div class="row"><span class="lab">TREND</span><span class="val pos">▼ CUTTING</span></div>
+      </div>
+    </div>
+
+    <!-- ENERGY / OUTPUT -->
+    <div class="sh"><span class="dot"></span>POWERPLANT · ENERGY OUT</div>
+    <div class="panel">
+      <div class="ph"><span>BURN TELEMETRY</span><span class="pill"><span class="d d-g"></span><span class="t-g">ACTIVE</span></span></div>
+      <div class="grid3" style="padding:8px;gap:0;">
+        <div style="text-align:center;border-right:1px solid rgba(25,230,207,0.1);">
+          <div style="font-size:8px;color:var(--txt-dim);letter-spacing:.1em;">ACTIVE</div>
+          <div style="font-size:18px;color:var(--cy);font-weight:700;margin-top:3px;">612</div>
+          <div style="font-size:8px;color:var(--txt-faint);">kcal</div>
+        </div>
+        <div style="text-align:center;border-right:1px solid rgba(25,230,207,0.1);">
+          <div style="font-size:8px;color:var(--txt-dim);letter-spacing:.1em;">TOTAL</div>
+          <div style="font-size:18px;color:var(--cy);font-weight:700;margin-top:3px;">2,340</div>
+          <div style="font-size:8px;color:var(--txt-faint);">kcal</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:8px;color:var(--txt-dim);letter-spacing:.1em;">STEPS</div>
+          <div style="font-size:18px;color:var(--cy);font-weight:700;margin-top:3px;">7,840</div>
+          <div style="font-size:8px;color:var(--txt-faint);">cnt</div>
+        </div>
+      </div>
+      <div class="meter" style="border-top:1px solid rgba(25,230,207,0.1);">
+        <div class="ml"><span>STEP GOAL</span><span class="v">7,840 / 10,000</span></div>
+        <div class="track"><div class="fill fill-cy" style="width:78%"></div></div>
+      </div>
+    </div>
+
+    <!-- FUEL / NUTRITION -->
+    <div class="sh"><span class="dot"></span>FUEL SYSTEM · INTAKE</div>
+    <div class="panel">
+      <div class="ph"><span>MACRO LOADOUT</span><span class="pill"><span class="d d-a"></span><span class="t-a">UNDER TARGET</span></span></div>
+
+      <div class="meter">
+        <div class="ml"><span>CALORIES</span><span class="v"><b style="color:var(--cy)">1,850</b> / 2,100 kcal</span></div>
+        <div class="track"><div class="fill fill-cy" style="width:88%"></div><span class="tick" style="left:100%"></span></div>
+      </div>
+      <div class="meter">
+        <div class="ml"><span>PROTEIN</span><span class="v t-a">142 / 180 g</span></div>
+        <div class="track"><div class="fill fill-am" style="width:79%"></div><span class="tick" style="left:100%"></span></div>
+      </div>
+      <div class="grid2" style="padding:0 8px 8px;gap:8px;">
+        <div class="meter" style="padding:6px 0 0;">
+          <div class="ml"><span>CARBS</span><span class="v">168 g</span></div>
+          <div class="track"><div class="fill fill-cy" style="width:66%"></div></div>
+        </div>
+        <div class="meter" style="padding:6px 0 0;">
+          <div class="ml"><span>FAT</span><span class="v">61 g</span></div>
+          <div class="track"><div class="fill fill-cy" style="width:54%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALL SYSTEMS STATUS COLUMN -->
+    <div class="sh"><span class="dot"></span>ALL SYSTEMS · STATUS</div>
+    <div class="panel">
+      <div class="sys"><span class="sn">RECOVERY / ANS</span><span class="sv"><span class="stxt t-r">COMPROMISED</span><span class="d d-r"></span></span></div>
+      <div class="sys"><span class="sn">SLEEP DEBT</span><span class="sv"><span class="stxt t-a">-1:14 CAUTION</span><span class="d d-a"></span></span></div>
+      <div class="sys"><span class="sn">HRV vs BASELINE</span><span class="sv"><span class="stxt t-a">-6 ms CAUTION</span><span class="d d-a"></span></span></div>
+      <div class="sys"><span class="sn">RESTING HR</span><span class="sv"><span class="stxt t-g">NOMINAL</span><span class="d d-g"></span></span></div>
+      <div class="sys"><span class="sn">BODY COMP TREND</span><span class="sv"><span class="stxt t-g">ON TRACK</span><span class="d d-g"></span></span></div>
+      <div class="sys"><span class="sn">FUEL / PROTEIN</span><span class="sv"><span class="stxt t-a">DEFICIT</span><span class="d d-a"></span></span></div>
+      <div class="sys"><span class="sn">ACTIVITY OUTPUT</span><span class="sv"><span class="stxt t-g">NOMINAL</span><span class="d d-g"></span></span></div>
+    </div>
+
+    <!-- DATA SOURCES / SYNC -->
+    <div class="sh"><span class="dot"></span>DATALINK · SYNC FEEDS</div>
+    <div class="panel">
+      <div class="sys"><span class="sn"><span class="t-g">●</span> POLAR FLOW</span><span class="sv"><span class="stxt" style="color:var(--txt-dim)">LINK OK · 06:40</span></span></div>
+      <div class="sys"><span class="sn"><span class="t-g">●</span> VESYNC SCALE</span><span class="sv"><span class="stxt" style="color:var(--txt-dim)">LINK OK · 07:05</span></span></div>
+      <div class="sys"><span class="sn"><span class="t-g">●</span> NUTRITION LOG</span><span class="sv"><span class="stxt" style="color:var(--txt-dim)">LINK OK · 12:30</span></span></div>
+    </div>
+
+  </div><!-- /frame -->
+
+  <div class="foot">— END TELEMETRY · RDY.HUD //  03 —</div>
+
+</div>
+</div>
+</body>
+</html>
