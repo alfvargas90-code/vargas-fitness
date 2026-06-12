@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Timing Weather · Hero-First Reading</title>
+<style>
+/* ════════════════════════════════════════════════════════════════════
+   DIRECTION 1 — HERO-FIRST READING
+   The day's primary horoscope is auto-surfaced as a giant top card.
+   Engine picks the strongest current signal (here: Jupiter approaching
+   its return → Vedic Jupiter-into-Cancer). Other systems collapse below.
+   Aesthetic = Alfredo's world: deep blue/purple gradient · moon orbital
+   hero · glassy frosted cards · pink/coral italic prose · pill labels.
+   ════════════════════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#f472b6; --coral:#fb7185; --cyan:#67e8f9; --violet:#a78bfa;
+  --gold:#f0b429; --green:#5be3a7;
+  --text:#e7e3f7; --muted:#8b86b8; --faint:#5d588a;
+  --card:rgba(255,255,255,0.045);
+  --card-2:rgba(255,255,255,0.07);
+  --border:rgba(167,139,250,0.20);
+  --violet-dim:rgba(167,139,250,0.14);
+  --pink-dim:rgba(244,114,182,0.14);
+  --cyan-dim:rgba(103,232,249,0.12);
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+}
+html,body{width:375px;height:812px}
+body{
+  font-family:var(--serif); color:var(--text); overflow-x:hidden;
+  background:
+    radial-gradient(620px 380px at 50% -6%, rgba(244,114,182,0.16), transparent 60%),
+    radial-gradient(560px 420px at 88% 12%, rgba(103,232,249,0.10), transparent 62%),
+    radial-gradient(640px 520px at 8% 30%, rgba(167,139,250,0.16), transparent 64%),
+    linear-gradient(180deg,#0b0720 0%,#140a30 46%,#0a0820 100%);
+  background-attachment:fixed;
+}
+#stars{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.wrap{padding:14px 16px 40px}
+
+/* ── Header ── */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 14px}
+.hdr .brand{font-family:var(--sans);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--text);font-weight:700}
+.hdr .brand b{color:var(--pink);font-weight:700}
+.hdr .date{font-family:var(--sans);font-size:10px;color:var(--muted);letter-spacing:.04em;text-align:right;line-height:1.5}
+
+/* ── Moon orbital hero ── */
+.moon-hero{position:relative;height:172px;display:flex;align-items:center;justify-content:center;margin:2px 0 4px}
+.orbit{position:absolute;border:1px solid rgba(167,139,250,.22);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%)}
+.orbit.o1{width:150px;height:150px;animation:spin 26s linear infinite}
+.orbit.o2{width:200px;height:120px;border-color:rgba(103,232,249,.18);animation:spin 38s linear infinite reverse}
+.orbit.o3{width:250px;height:158px;border-color:rgba(244,114,182,.14);animation:spin 52s linear infinite}
+.orbit .sat{position:absolute;width:7px;height:7px;border-radius:50%;top:-3.5px;left:50%;margin-left:-3.5px;box-shadow:0 0 10px currentColor}
+.o1 .sat{background:var(--cyan);color:var(--cyan)}
+.o2 .sat{background:var(--pink);color:var(--pink)}
+.o3 .sat{background:var(--gold);color:var(--gold)}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.moon{width:104px;height:104px;border-radius:50%;position:relative;
+  background:radial-gradient(circle at 38% 34%, #fdfbff 0%,#e9e3ff 22%,#c8bff0 48%,#8d83c4 74%,#4b416f 100%);
+  box-shadow:0 0 36px rgba(199,191,240,.45),0 0 90px rgba(167,139,250,.30),inset -14px -16px 34px rgba(40,28,70,.6),inset 8px 8px 22px rgba(255,255,255,.32);}
+.moon::after{content:"";position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 64% 60%,rgba(60,46,96,.5) 0 7%,transparent 8%),
+             radial-gradient(circle at 40% 70%,rgba(60,46,96,.4) 0 5%,transparent 6%),
+             radial-gradient(circle at 56% 30%,rgba(60,46,96,.35) 0 4%,transparent 5%);}
+.moon-cap{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-family:var(--sans);font-size:10px;letter-spacing:.06em;color:var(--muted)}
+.moon-cap b{color:var(--cyan);font-weight:600}
+
+/* ── Pills ── */
+.pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--sans);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;border-radius:20px;padding:4px 11px;border:1px solid var(--border)}
+.pill--violet{background:var(--violet-dim);color:var(--violet);border-color:rgba(167,139,250,.34)}
+.pill--pink{background:var(--pink-dim);color:var(--pink);border-color:rgba(244,114,182,.34)}
+.pill--cyan{background:var(--cyan-dim);color:var(--cyan);border-color:rgba(103,232,249,.30)}
+.pill--gold{background:rgba(240,180,41,.13);color:var(--gold);border-color:rgba(240,180,41,.32)}
+
+/* ── HERO reading card (the auto-surfaced primary) ── */
+.hero-card{background:linear-gradient(165deg,rgba(244,114,182,.10),rgba(167,139,250,.06) 60%,rgba(255,255,255,.03));
+  border:1px solid rgba(244,114,182,.28);border-radius:20px;padding:18px 18px 20px;margin-top:6px;
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.03) inset;position:relative;overflow:hidden}
+.hero-card::before{content:"";position:absolute;top:-40px;right:-30px;width:140px;height:140px;border-radius:50%;
+  background:radial-gradient(circle,rgba(244,114,182,.22),transparent 70%);pointer-events:none}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;position:relative}
+.hero-why{font-family:var(--sans);font-size:9px;color:var(--faint);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;flex:0 0 auto;text-align:right;line-height:1.35}
+.hero-system{font-family:var(--sans);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--pink);font-weight:700;margin:14px 0 4px;position:relative}
+.hero-h1{font-size:25px;line-height:1.12;color:var(--text);letter-spacing:.01em;margin-bottom:10px;position:relative}
+.hero-h1 em{font-style:italic;color:var(--coral)}
+.hero-prose{font-size:14px;line-height:1.74;font-style:italic;color:var(--coral);position:relative;margin-bottom:12px}
+.hero-prose+.hero-prose{font-style:normal;color:#c5bfe6;font-size:13px}
+.hero-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px;position:relative}
+.hero-foot{margin-top:14px;padding-top:13px;border-top:1px solid var(--border);font-size:12.5px;font-style:italic;color:var(--gold);opacity:.92;line-height:1.6;position:relative}
+
+/* ── Section label ── */
+.sec-label{font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--violet);margin:24px 2px 11px;display:flex;align-items:center;gap:8px}
+.sec-label::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+
+/* ── Collapsed system rows ── */
+.sys-row{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:13px 15px;margin-bottom:10px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.sys-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sys-name{font-family:var(--sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--text);font-weight:700}
+.sys-name .g{font-size:14px;margin-right:6px;opacity:.85}
+.sys-state{font-family:var(--sans);font-size:9.5px;letter-spacing:.08em;color:var(--muted);display:flex;align-items:center;gap:5px}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.sys-prose{font-size:12.5px;line-height:1.68;color:#b9b3da;margin-top:9px;font-style:italic}
+.sys-row .arrow{font-family:var(--sans);font-size:11px;color:var(--faint);float:right;margin-top:9px}
+
+/* ── Bottom nav ── */
+.nav{position:fixed;left:0;right:0;bottom:0;width:375px;margin:0 auto;display:flex;justify-content:space-around;
+  background:rgba(11,7,28,.92);border-top:1px solid var(--border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:9px 0 16px}
+.nav a{font-family:var(--sans);font-size:10px;letter-spacing:.08em;color:var(--faint);text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:4px}
+.nav a .ic{font-size:15px}
+.nav a.on{color:var(--pink)}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="wrap">
+
+  <div class="hdr">
+    <div class="brand">TIMING <b>WEATHER</b></div>
+    <div class="date">Fri · Jun 12 2026<br>12th-house Sagittarius year</div>
+  </div>
+
+  <!-- Moon orbital hero -->
+  <div class="moon-hero">
+    <div class="orbit o3"><span class="sat"></span></div>
+    <div class="orbit o2"><span class="sat"></span></div>
+    <div class="orbit o1"><span class="sat"></span></div>
+    <div class="moon"></div>
+    <div class="moon-cap">Waning Crescent · 9% · <b>New Moon in 3 days</b></div>
+  </div>
+
+  <!-- AUTO-SURFACED PRIMARY READING -->
+  <div class="hero-card">
+    <div class="hero-top">
+      <span class="pill pill--pink">★ Strongest signal</span>
+      <span class="hero-why">auto-picked<br>· jupiter return ·</span>
+    </div>
+    <div class="hero-system">Vedic · Moon Mahadasha / Venus</div>
+    <h1 class="hero-h1">Jupiter is walking back<br>toward <em>your return.</em></h1>
+    <p class="hero-prose">Thirty days out, exalted Jupiter moves through Cancer and lights up the hidden 8th-house grace in your chart — the same Jupiter-Venus weave your D9 was built around. This is the slow inhale before the gift.</p>
+    <p class="hero-prose">You are still inside the 12th-house Sagittarius year: preparation, not performance. Refine quietly. What you curate now is what the Capricorn year embodies after August.</p>
+    <div class="hero-meta">
+      <span class="pill pill--violet">Jupiter return · Jul 12</span>
+      <span class="pill pill--cyan">Venus antardasha</span>
+      <span class="pill pill--gold">Sade Sati · foundations</span>
+    </div>
+    <p class="hero-foot">Today's move: tend one thing you'd be proud to hand the version of you that arrives in August.</p>
+  </div>
+
+  <!-- COLLAPSED OTHER SYSTEMS -->
+  <div class="sec-label">The other three systems</div>
+
+  <div class="sys-row">
+    <div class="sys-head">
+      <div class="sys-name"><span class="g">☉</span>MODERN</div>
+      <div class="sys-state"><span class="dot" style="background:var(--cyan)"></span>Supported</div>
+    </div>
+    <p class="sys-prose">SA Jupiter still creeping toward your Virgo Sun — identity expansion on a long fuse, exact next March. Today reads quiet and constructive.</p>
+    <span class="arrow">Open →</span>
+  </div>
+
+  <div class="sys-row">
+    <div class="sys-head">
+      <div class="sys-name"><span class="g">♄</span>TRADITIONAL</div>
+      <div class="sys-state"><span class="dot" style="background:var(--violet)"></span>Neutral</div>
+    </div>
+    <p class="sys-prose">A 12th-house profection hands the year to Jupiter, your benefic — but the Moon void this morning says start nothing you need to stick.</p>
+    <span class="arrow">Open →</span>
+  </div>
+
+  <div class="sys-row">
+    <div class="sys-head">
+      <div class="sys-name"><span class="g">火</span>BAZI</div>
+      <div class="sys-state"><span class="dot" style="background:var(--coral)"></span>High-output</div>
+    </div>
+    <p class="sys-prose">Ding Fire in a Bing-Wu peer-fire year — visibility is up but so is burnout. Your Rabbit operating self prefers precision over force today.</p>
+    <span class="arrow">Open →</span>
+  </div>
+
+</div>
+
+<nav class="nav">
+  <a class="on"><span class="ic">☾</span>Today</a>
+  <a><span class="ic">◷</span>Timeline</a>
+  <a><span class="ic">✦</span>Sky</a>
+  <a><span class="ic">❖</span>Profile</a>
+</nav>
+
+<script>
+// lightweight starfield
+const c=document.getElementById('stars'),x=c.getContext('2d');
+function rs(){c.width=375;c.height=812}
+rs();
+const st=Array.from({length:90},()=>({x:Math.random()*375,y:Math.random()*812,r:Math.random()*1.3+.2,o:Math.random()*.6+.2}));
+st.forEach(s=>{x.beginPath();x.arc(s.x,s.y,s.r,0,7);x.fillStyle=`rgba(231,227,247,${s.o})`;x.fill()});
+</script>
+</body>
+</html>

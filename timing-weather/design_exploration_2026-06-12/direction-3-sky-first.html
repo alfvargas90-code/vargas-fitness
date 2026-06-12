@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Timing Weather · Sky-First</title>
+<style>
+/* ════════════════════════════════════════════════════════════════════
+   DIRECTION 3 — SKY-FIRST
+   A live transit wheel is the main visual — "what's happening in the
+   heavens right now," natal ring + transiting planets + today's hot
+   aspect. Readings sit underneath. Same world: deep blue/purple · glass
+   · pink italic prose · pill labels. Moon lives inside the wheel.
+   ════════════════════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#f472b6;--coral:#fb7185;--cyan:#67e8f9;--violet:#a78bfa;--gold:#f0b429;--green:#5be3a7;
+  --text:#e7e3f7;--muted:#8b86b8;--faint:#5d588a;
+  --card:rgba(255,255,255,0.045);--border:rgba(167,139,250,0.20);
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+}
+html,body{width:375px;height:812px}
+body{font-family:var(--serif);color:var(--text);overflow-x:hidden;
+  background:
+    radial-gradient(600px 380px at 50% -4%, rgba(103,232,249,0.13), transparent 60%),
+    radial-gradient(560px 440px at 86% 18%, rgba(244,114,182,0.12), transparent 62%),
+    radial-gradient(660px 540px at 8% 36%, rgba(167,139,250,0.15), transparent 64%),
+    linear-gradient(180deg,#0a0820 0%,#120a2c 46%,#0a0820 100%);
+  background-attachment:fixed}
+#stars{position:fixed;inset:0;z-index:-1}
+.wrap{padding:14px 16px 96px}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:4px 2px 8px}
+.brand{font-family:var(--sans);font-size:11px;letter-spacing:.32em;text-transform:uppercase;font-weight:700}
+.brand b{color:var(--cyan)}
+.date{font-family:var(--sans);font-size:10px;color:var(--muted);text-align:right;line-height:1.5}
+.live{display:inline-flex;align-items:center;gap:5px;font-family:var(--sans);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--green)}
+.live .blip{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* WHEEL */
+.wheel-card{position:relative;border-radius:22px;padding:8px;background:radial-gradient(circle at 50% 42%,rgba(167,139,250,.08),rgba(255,255,255,.02) 70%);
+  border:1px solid var(--border);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 22px 60px rgba(0,0,0,.5);margin-top:4px}
+.wheel-label{display:flex;align-items:center;justify-content:space-between;padding:8px 10px 2px}
+.wl-title{font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan)}
+svg.wheel{display:block;width:100%;height:auto}
+.glow{filter:drop-shadow(0 0 4px currentColor)}
+
+/* hot aspect banner */
+.hot{margin-top:12px;background:linear-gradient(120deg,rgba(244,114,182,.14),rgba(167,139,250,.06));border:1px solid rgba(244,114,182,.30);border-radius:16px;padding:13px 15px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.hot-top{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.hot-sym{font-size:18px;color:var(--pink)}
+.hot-name{font-family:var(--sans);font-size:11px;letter-spacing:.06em;color:var(--text);font-weight:700}
+.hot-meta{font-family:var(--sans);font-size:9px;color:var(--faint);letter-spacing:.06em;margin-left:auto;text-transform:uppercase}
+.hot-p{font-size:13px;line-height:1.7;font-style:italic;color:var(--coral)}
+
+/* reading rows below */
+.sec-label{font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--violet);margin:22px 2px 11px;display:flex;align-items:center;gap:8px}
+.sec-label::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+.read{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:13px 15px;margin-bottom:10px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 10px 28px rgba(0,0,0,.32)}
+.read-head{display:flex;align-items:center;justify-content:space-between}
+.read-name{font-family:var(--sans);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;display:flex;align-items:center;gap:7px}
+.read-name .g{font-size:14px}
+.r-v{color:var(--pink)} .r-m{color:var(--cyan)} .r-t{color:var(--violet)} .r-b{color:var(--coral)}
+.state{font-family:var(--sans);font-size:9px;letter-spacing:.06em;color:var(--muted);display:flex;align-items:center;gap:5px}
+.dot{width:7px;height:7px;border-radius:50%}
+.read-p{font-size:12.5px;line-height:1.68;font-style:italic;color:#bcb6dd;margin-top:8px}
+
+/* planet legend strip */
+.legend{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;padding:0 4px}
+.lg{font-family:var(--sans);font-size:9px;letter-spacing:.04em;color:var(--muted);display:flex;align-items:center;gap:4px}
+.lg b{font-family:var(--serif);font-size:13px;font-weight:400}
+
+.nav{position:fixed;left:0;right:0;bottom:0;width:375px;margin:0 auto;display:flex;justify-content:space-around;
+  background:rgba(10,8,32,.92);border-top:1px solid var(--border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:9px 0 16px}
+.nav a{font-family:var(--sans);font-size:10px;color:var(--faint);text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:4px}
+.nav a .ic{font-size:15px}
+.nav a.on{color:var(--cyan)}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="wrap">
+
+  <div class="hdr">
+    <div class="brand">TIMING <b>WEATHER</b></div>
+    <div class="date"><span class="live"><span class="blip"></span>Live sky</span><br>Jun 12 2026 · 1:18 PM</div>
+  </div>
+
+  <!-- TRANSIT WHEEL -->
+  <div class="wheel-card">
+    <div class="wheel-label"><span class="wl-title">Sky now · over your natal chart</span><span class="wl-title" style="color:var(--faint)">Cap rising</span></div>
+    <svg class="wheel" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="core" cx="50%" cy="42%" r="60%">
+          <stop offset="0%" stop-color="rgba(167,139,250,0.16)"/>
+          <stop offset="100%" stop-color="rgba(10,8,32,0)"/>
+        </radialGradient>
+      </defs>
+      <circle cx="170" cy="170" r="160" fill="url(#core)"/>
+      <!-- zodiac rings -->
+      <circle cx="170" cy="170" r="150" fill="none" stroke="rgba(167,139,250,0.28)" stroke-width="1"/>
+      <circle cx="170" cy="170" r="124" fill="none" stroke="rgba(167,139,250,0.18)" stroke-width="1"/>
+      <circle cx="170" cy="170" r="74" fill="none" stroke="rgba(103,232,249,0.22)" stroke-width="1" stroke-dasharray="3 5"/>
+      <!-- 12 sign spokes + glyphs -->
+      <g id="spokes" font-family="serif" font-size="13" fill="#8b86b8" text-anchor="middle"></g>
+      <!-- transiting planets on outer band -->
+      <g id="planets"></g>
+      <!-- today's hot aspect line: Jupiter(trans)→Sun(natal) -->
+      <line id="aspline" stroke="var(--pink)" stroke-width="1.4" stroke-dasharray="2 4" opacity="0.85"/>
+      <!-- center moon -->
+      <g id="cmoon"></g>
+    </svg>
+    <div class="legend">
+      <span class="lg"><b style="color:var(--gold)">☉</b>Sun 21°Gem</span>
+      <span class="lg"><b style="color:var(--cyan)">☽</b>Moon 14°Tau</span>
+      <span class="lg"><b style="color:var(--violet)">♀</b>Venus 9°Can</span>
+      <span class="lg"><b style="color:var(--coral)">♂</b>Mars 2°Leo</span>
+      <span class="lg"><b style="color:var(--pink)">♃</b>Jup 28°Gem</span>
+      <span class="lg"><b style="color:var(--muted)">♄</b>Sat 1°Ari</span>
+    </div>
+  </div>
+
+  <!-- HOT ASPECT -->
+  <div class="hot">
+    <div class="hot-top"><span class="hot-sym">△</span><span class="hot-name">Transiting Jupiter → your natal Sun</span><span class="hot-meta">applying · 1.4°</span></div>
+    <p class="hot-p">The benefic is closing on your 8th-house Virgo Sun — the long arc toward recognition you've felt building since winter. It exacts next spring; today it just hums.</p>
+  </div>
+
+  <!-- READINGS UNDER THE SKY -->
+  <div class="sec-label">What the systems read into it</div>
+
+  <div class="read">
+    <div class="read-head"><div class="read-name r-v"><span class="g">♃</span>VEDIC</div><div class="state"><span class="dot" style="background:var(--pink)"></span>Opening</div></div>
+    <p class="read-p">Jupiter nears Cancer and its own return — re-lighting the hidden 8th-house grace. Venus sub-period keeps the weather relationship-warm.</p>
+  </div>
+  <div class="read">
+    <div class="read-head"><div class="read-name r-m"><span class="g">☉</span>MODERN</div><div class="state"><span class="dot" style="background:var(--cyan)"></span>Supported</div></div>
+    <p class="read-p">That applying trine is solar-arc Jupiter on a slow fuse. 12th-house year: assemble quietly, reveal later.</p>
+  </div>
+  <div class="read">
+    <div class="read-head"><div class="read-name r-t"><span class="g">♄</span>TRADITIONAL</div><div class="state"><span class="dot" style="background:var(--violet)"></span>Neutral</div></div>
+    <p class="read-p">Moon void-of-course until 2:40 PM — the heavens say finish, don't begin. Jupiter rules the year from behind the curtain.</p>
+  </div>
+  <div class="read">
+    <div class="read-head"><div class="read-name r-b"><span class="g">火</span>BAZI</div><div class="state"><span class="dot" style="background:var(--coral)"></span>High-output</div></div>
+    <p class="read-p">Peer-fire year doubles the heat on your Ding flame. The Rabbit wins by precision — one elegant move, not three loud ones.</p>
+  </div>
+
+</div>
+
+<nav class="nav">
+  <a><span class="ic">☾</span>Today</a>
+  <a><span class="ic">◷</span>Timeline</a>
+  <a class="on"><span class="ic">✦</span>Sky</a>
+  <a><span class="ic">❖</span>Profile</a>
+</nav>
+
+<script>
+const c=document.getElementById('stars'),x=c.getContext('2d');c.width=375;c.height=812;
+Array.from({length:80}).forEach(()=>{const o=Math.random()*.6+.2;x.beginPath();x.arc(Math.random()*375,Math.random()*812,Math.random()*1.3+.2,0,7);x.fillStyle=`rgba(231,227,247,${o})`;x.fill()});
+
+const NS='http://www.w3.org/2000/svg', cx=170, cy=170;
+const SIGNS=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+const spokes=document.getElementById('spokes');
+// Cap rising → put ♑(index9) on the left ascendant. Standard: sign boundaries every 30°.
+for(let i=0;i<12;i++){
+  const a=(i*30+15-90)*Math.PI/180;       // glyph at sign mid
+  const gx=cx+137*Math.cos(a), gy=cy+137*Math.sin(a)+4;
+  const t=document.createElementNS(NS,'text');t.setAttribute('x',gx);t.setAttribute('y',gy);t.textContent=SIGNS[i];spokes.appendChild(t);
+  const a2=(i*30-90)*Math.PI/180;
+  const ln=document.createElementNS(NS,'line');
+  ln.setAttribute('x1',cx+124*Math.cos(a2));ln.setAttribute('y1',cy+124*Math.sin(a2));
+  ln.setAttribute('x2',cx+150*Math.cos(a2));ln.setAttribute('y2',cy+150*Math.sin(a2));
+  ln.setAttribute('stroke','rgba(167,139,250,0.16)');spokes.appendChild(ln);
+}
+// transiting planets: [glyph, eclipticDeg(0=Aries), color]
+const P=[['☉',81,'#f0b429'],['☽',44,'#67e8f9'],['☿',76,'#a78bfa'],['♀',99,'#a78bfa'],['♂',122,'#fb7185'],['♃',88,'#f472b6'],['♄',1,'#8b86b8']];
+const pg=document.getElementById('planets');
+function ptXY(deg,r){const a=(deg-90)*Math.PI/180;return[cx+r*Math.cos(a),cy+r*Math.sin(a)];}
+P.forEach(([g,d,col])=>{const[px,py]=ptXY(d,100);
+  const t=document.createElementNS(NS,'text');t.setAttribute('x',px);t.setAttribute('y',py+5);t.setAttribute('text-anchor','middle');
+  t.setAttribute('font-size','16');t.setAttribute('fill',col);t.setAttribute('class','glow');t.style.color=col;t.textContent=g;pg.appendChild(t);
+  const dotp=ptXY(d,150);const dd=document.createElementNS(NS,'circle');dd.setAttribute('cx',dotp[0]);dd.setAttribute('cy',dotp[1]);dd.setAttribute('r','2');dd.setAttribute('fill',col);pg.appendChild(dd);
+});
+// hot aspect line: Jupiter(88) → natal Sun. Natal Virgo Sun ≈ 157° ecliptic.
+const [jx,jy]=ptXY(88,100), [sx2,sy2]=ptXY(157,74);
+const al=document.getElementById('aspline');al.setAttribute('x1',jx);al.setAttribute('y1',jy);al.setAttribute('x2',sx2);al.setAttribute('y2',sy2);al.style.stroke='#f472b6';
+// natal Sun marker
+const sun=document.createElementNS(NS,'text');sun.setAttribute('x',sx2);sun.setAttribute('y',sy2+5);sun.setAttribute('text-anchor','middle');sun.setAttribute('font-size','13');sun.setAttribute('fill','#f0b429');sun.setAttribute('opacity','.8');sun.textContent='☉';document.getElementById('cmoon').appendChild(sun);
+// center moon disc
+const m=document.createElementNS(NS,'circle');m.setAttribute('cx',cx);m.setAttribute('cy',cy);m.setAttribute('r','26');
+const grad=document.createElementNS(NS,'radialGradient');grad.id='mg';grad.setAttribute('cx','38%');grad.setAttribute('cy','34%');grad.setAttribute('r','70%');
+grad.innerHTML='<stop offset="0%" stop-color="#fdfbff"/><stop offset="50%" stop-color="#c8bff0"/><stop offset="100%" stop-color="#4b416f"/>';
+document.querySelector('svg.wheel defs').appendChild(grad);
+m.setAttribute('fill','url(#mg)');m.setAttribute('opacity','.95');document.getElementById('cmoon').appendChild(m);
+const mt=document.createElementNS(NS,'text');mt.setAttribute('x',cx);mt.setAttribute('y',cy+44);mt.setAttribute('text-anchor','middle');mt.setAttribute('font-size','9');mt.setAttribute('fill','#8b86b8');mt.setAttribute('font-family','sans-serif');mt.textContent='9% · waning';document.getElementById('cmoon').appendChild(mt);
+</script>
+</body>
+</html>

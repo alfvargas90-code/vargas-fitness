@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Timing Weather · Astro Design Exploration · 2026-06-12</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#f472b6;--coral:#fb7185;--cyan:#67e8f9;--violet:#a78bfa;--gold:#f0b429;--green:#5be3a7;
+  --text:#e7e3f7;--muted:#8b86b8;--faint:#5d588a;
+  --card:rgba(255,255,255,0.045);--border:rgba(167,139,250,0.20);
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+}
+body{font-family:var(--sans);color:var(--text);min-height:100vh;
+  background:
+    radial-gradient(900px 500px at 50% -6%, rgba(244,114,182,0.12), transparent 60%),
+    radial-gradient(800px 600px at 90% 16%, rgba(103,232,249,0.08), transparent 62%),
+    radial-gradient(900px 700px at 6% 40%, rgba(167,139,250,0.12), transparent 64%),
+    linear-gradient(180deg,#0b0720 0%,#140a30 50%,#0a0820 100%);
+  background-attachment:fixed;padding:40px 24px 80px}
+.head{max-width:1180px;margin:0 auto 12px;text-align:center}
+.kicker{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--pink);font-weight:700}
+.head h1{font-family:var(--serif);font-size:34px;font-weight:400;margin:10px 0 6px;letter-spacing:.01em}
+.head h1 em{font-style:italic;color:var(--coral)}
+.head p{font-size:13px;color:var(--muted);max-width:680px;margin:0 auto;line-height:1.7}
+.head .meta{font-size:11px;color:var(--faint);margin-top:10px;letter-spacing:.04em}
+
+/* recommendation banner */
+.rec{max-width:1180px;margin:26px auto;background:linear-gradient(120deg,rgba(244,114,182,.12),rgba(167,139,250,.06));
+  border:1px solid rgba(244,114,182,.30);border-radius:18px;padding:18px 22px;display:flex;gap:16px;align-items:flex-start;
+  backdrop-filter:blur(12px)}
+.rec .star{font-size:26px;line-height:1;color:var(--pink);flex:0 0 auto;margin-top:2px}
+.rec h3{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--pink);margin-bottom:6px}
+.rec p{font-size:13.5px;line-height:1.7;color:var(--text)}
+.rec p b{color:var(--coral);font-family:var(--serif);font-style:italic;font-weight:400}
+.rec .second{color:var(--muted);font-size:12.5px;margin-top:7px}
+
+/* grid */
+.grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:28px}
+@media(max-width:880px){.grid{grid-template-columns:1fr}}
+.col{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:20px;backdrop-filter:blur(12px);position:relative;overflow:hidden}
+.col.pick{border-color:rgba(244,114,182,.42);box-shadow:0 0 0 1px rgba(244,114,182,.25),0 24px 60px rgba(0,0,0,.45)}
+.col.pick::before{content:"★ Claude's pick";position:absolute;top:16px;right:-34px;transform:rotate(45deg);background:var(--pink);color:#1a0a18;font-size:10px;font-weight:800;letter-spacing:.08em;padding:5px 40px;text-transform:uppercase}
+.col-head{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+.col-num{font-family:var(--serif);font-size:30px;color:var(--violet);line-height:1;font-style:italic}
+.col-name{font-size:17px;font-weight:700;letter-spacing:.01em}
+.col-tag{font-size:11px;color:var(--faint);letter-spacing:.04em;margin-bottom:14px}
+.frame-wrap{width:375px;max-width:100%;margin:0 auto;border-radius:18px;overflow:hidden;border:1px solid var(--border);box-shadow:0 18px 50px rgba(0,0,0,.5);background:#0b0720}
+iframe{width:375px;height:640px;border:0;display:block}
+.col-why{margin-top:16px}
+.col-why .lbl{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:6px}
+.col-why p{font-size:13px;line-height:1.7;color:#cdc7e8}
+.col-why p em{font-style:italic;color:var(--coral)}
+.col-links{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+.col-links a{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--violet);text-decoration:none;border:1px solid var(--border);border-radius:20px;padding:6px 13px;transition:all .2s}
+.col-links a:hover{background:var(--violet);color:#0b0720;border-color:var(--violet)}
+.foot{max-width:1180px;margin:40px auto 0;text-align:center;font-size:11px;color:var(--faint);line-height:1.8;border-top:1px solid var(--border);padding-top:24px}
+.foot b{color:var(--muted)}
+.note{max-width:1180px;margin:0 auto 26px;font-size:12px;color:var(--muted);text-align:center;line-height:1.7;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:13px 18px}
+.note b{color:var(--cyan)}
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div class="kicker">Timing Weather · Astrology · Round 1</div>
+  <h1>Four ways to read <em>the same sky.</em></h1>
+  <p>One aesthetic — deep blue/purple gradient, moon orbital hero, glassy frosted cards, pink/coral italic prose, pill labels — four different hierarchies for surfacing Alfredo's Modern · Traditional · Vedic · BaZi daily horoscopes.</p>
+  <div class="meta">Mock data uses today's real chart · Fri Jun 12 2026 · 12th-house Sagittarius profection · Jupiter return ~Jul 12 · Moon Mahadasha / Venus antardasha · Ding Fire / Rabbit</div>
+</div>
+
+<div class="note">
+  These are <b>live, interactive mockups</b> — swipe Direction 2, scroll Direction 4, watch the orbital rings turn. Best viewed on a phone; on desktop each frame is a 375px mobile viewport. Mockups only — the live PWA is untouched.
+</div>
+
+<div class="rec">
+  <div class="star">★</div>
+  <div>
+    <h3>If shipping today, Claude picks Direction 1 — Hero-First</h3>
+    <p>It answers <b>"what matters today"</b> in a single glance and surfaces <b>one</b> call instead of four parallel readings to weigh — which is the right antidote to the overanalysis loop. The engine auto-picks the strongest current signal (right now: the approaching Jupiter return), keeps the moon orbital hero front and center, and demotes the other three systems to one-line rows you can still open. Maximum signal, minimum decisions.</p>
+    <p class="second">Close second: <b>Direction 4 — Day-Flow</b>, the most emotionally on-brand for "timing <em>weather</em>" — it grounds the chart in the actual hours of the day. Pick it if the goal is daily ritual over quick check-in.</p>
+  </div>
+</div>
+
+<div class="grid">
+
+  <div class="col pick">
+    <div class="col-head"><span class="col-num">1</span><span class="col-name">Hero-First Reading</span></div>
+    <div class="col-tag">Auto-surfaced primary · others collapse below</div>
+    <div class="frame-wrap"><iframe src="direction-1-hero-first.html" title="Direction 1" loading="lazy"></iframe></div>
+    <div class="col-why">
+      <div class="lbl">The moment it serves</div>
+      <p>The morning glance. You open it, the app has already decided <em>what matters most today</em> and says it once, big. The other systems are there if you want them — but you don't have to read four cards to know your move.</p>
+    </div>
+    <div class="col-links"><a href="direction-1-hero-first.html" target="_blank">Open full</a><a href="direction-1-hero-first_README.md" target="_blank">Rationale →</a></div>
+  </div>
+
+  <div class="col">
+    <div class="col-head"><span class="col-num">2</span><span class="col-name">System Carousel</span></div>
+    <div class="col-tag">Four full-width swipe cards · one lens at a time</div>
+    <div class="frame-wrap"><iframe src="direction-2-carousel.html" title="Direction 2" loading="lazy"></iframe></div>
+    <div class="col-why">
+      <div class="lbl">The moment it serves</div>
+      <p>The explorer. When you want to <em>sit inside</em> one system at a time — each lens gets the whole screen and its own accent color. Swipe Vedic → Modern → Traditional → BaZi like flipping between trusted advisors.</p>
+    </div>
+    <div class="col-links"><a href="direction-2-carousel.html" target="_blank">Open full</a><a href="direction-2-carousel_README.md" target="_blank">Rationale →</a></div>
+  </div>
+
+  <div class="col">
+    <div class="col-head"><span class="col-num">3</span><span class="col-name">Sky-First</span></div>
+    <div class="col-tag">Live transit wheel as the main object · readings beneath</div>
+    <div class="frame-wrap"><iframe src="direction-3-sky-first.html" title="Direction 3" loading="lazy"></iframe></div>
+    <div class="col-why">
+      <div class="lbl">The moment it serves</div>
+      <p>The "what's happening up there <em>right now</em>" feel. The wheel leads — transiting planets over your natal ring, today's hot aspect drawn in pink (Jupiter→Sun), moon at the center. For when you want the picture before the prose.</p>
+    </div>
+    <div class="col-links"><a href="direction-3-sky-first.html" target="_blank">Open full</a><a href="direction-3-sky-first_README.md" target="_blank">Rationale →</a></div>
+  </div>
+
+  <div class="col">
+    <div class="col-head"><span class="col-num">4</span><span class="col-name">Narrative Day-Flow</span></div>
+    <div class="col-tag">Vertical timeline · morning → night</div>
+    <div class="frame-wrap"><iframe src="direction-4-day-flow.html" title="Direction 4" loading="lazy"></iframe></div>
+    <div class="col-why">
+      <div class="lbl">The moment it serves</div>
+      <p>The daily ritual. You read it top-to-bottom like the day itself — morning Moon-void → midday Jupiter → afternoon profection → evening Venus → night Saturn — with a "you are here" pulse. Timing, grounded in time.</p>
+    </div>
+    <div class="col-links"><a href="direction-4-day-flow.html" target="_blank">Open full</a><a href="direction-4-day-flow_README.md" target="_blank">Rationale →</a></div>
+  </div>
+
+</div>
+
+<div class="foot">
+  <b>Aesthetic source-of-truth:</b> current timing-weather PWA + the Suri kids astrology page (glassy cards · moon hero · pink/coral italic prose · pill labels).<br>
+  Round 1 · 2026-06-12 · built mockup-only, live dashboard untouched · personalized to Alfredo's natal chart.
+</div>
+
+</body>
+</html>
