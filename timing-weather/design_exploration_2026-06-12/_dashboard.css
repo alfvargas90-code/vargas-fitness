@@ -1,0 +1,1141 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   TIMING WEATHER — v3.0.0  "Ambient Intelligence OS"
+   Hero solar intelligence → System Consensus → Intelligence Snapshots → Analysis
+   Drawers → What Changed → Today's Insight → Recommended → Upcoming → Sky →
+   Planet → Drivers → Why → Confidence → Footer Nav.
+   References: Oura · WHOOP · Apple Weather · Arc Browser.
+   Deep-navy near-black field · photographic sun · gold forecast typography · glass
+   cards. DOM authored mobile-first; CSS is mobile-first with desktop overrides.
+   Data binds via render.js (chunk 4) — CSS owns visuals + drawer transitions only.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Design tokens ───────────────────────────────────────────────────────────── */
+:root {
+  /* surfaces / field */
+  --color-bg: #06070a;                   /* deep navy / near-black */
+  --bg-2: #090c12;
+  --color-card: rgba(255,255,255,0.04);
+  --card-strong: rgba(255,255,255,0.06);
+  --color-card-border: rgba(255,255,255,0.08);
+  --line-soft: rgba(255,255,255,0.05);
+
+  /* text */
+  --color-text: rgba(255,255,255,0.92);
+  --color-text-secondary: rgba(255,255,255,0.55);
+  --color-text-muted: rgba(255,255,255,0.35);
+  --text-85: rgba(255,255,255,0.85);
+  --text-45: rgba(255,255,255,0.45);
+
+  /* accents */
+  --color-gold: #d4a857;                 /* Forecast / headlines */
+  --color-gold-bright: #e8c573;
+  --gold-deep: #7a5a18;
+  --color-green: #4ade80;                /* Opportunity / Agreement */
+  --color-orange: #f59e0b;               /* Pressure */
+  --color-blue: #67e8f9;                 /* Support / Momentum */
+  --color-red: #f87171;                  /* Volatility / Disagreement */
+  --color-purple: #a78bfa;               /* Jupiter Events / accent */
+  --color-yellow: #facc15;               /* Partial agreement */
+
+  /* layout */
+  --shell-max: 1280px;
+  --gutter: 16px;                        /* mobile gutter */
+  --row-gap: 24px;                       /* mobile section rhythm */
+  --grid-gap: 16px;
+  --radius: 16px;
+  --radius-sm: 12px;
+
+  /* spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* type */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, Menlo, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background:
+    radial-gradient(1200px 600px at 50% -8%, rgba(212,168,87,0.10), transparent 55%),
+    radial-gradient(900px 500px at 50% 4%, rgba(212,168,87,0.06), transparent 60%),
+    linear-gradient(180deg, var(--color-bg) 0%, var(--bg-2) 100%);
+  background-attachment: fixed;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: hidden;                    /* full-bleed rows must not spawn a scrollbar */
+  padding-bottom: 76px;                  /* mobile fixed footer clearance */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── Shell + row system ──────────────────────────────────────────────────────── */
+.timing-weather-shell {
+  max-width: var(--shell-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter) 48px;
+}
+
+.row { width: 100%; margin-bottom: var(--row-gap); }
+.row:last-child { margin-bottom: 0; }
+
+/* Full-bleed: span the viewport, re-inset inner content to the centered column. */
+.row--bleed {
+  position: relative;
+  left: 50%;
+  right: 50%;
+  width: 100vw;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  padding-inline: max(var(--gutter), calc(50vw - var(--shell-max) / 2 + var(--gutter)));
+}
+
+/* ── Reusable glass card ─────────────────────────────────────────────────────── */
+.card {
+  background: var(--color-card);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius);
+  padding: 20px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 16px 44px rgba(0,0,0,0.45);
+}
+
+/* ── Section heading (small-caps tracked label) ──────────────────────────────── */
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 12px;
+}
+.heading-sub {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  color: var(--color-text-muted);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   HEADER CHROME — menu · centered title block · status dots
+   ════════════════════════════════════════════════════════════════════════════ */
+.header-chrome {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  padding-block: 12px;
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: 24px;
+}
+.header-menu {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--color-text-secondary);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.header-menu:hover { color: var(--color-text); background: var(--color-card); }
+.header-title-block { flex: 1 1 auto; text-align: center; min-width: 0; }
+.header-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+.header-title::before { content: "☼ "; color: var(--color-gold); letter-spacing: 0; }
+.header-date {
+  margin-top: 2px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+}
+.header-status { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; width: 52px; justify-content: flex-end; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-text-muted); }
+.status-dot:nth-child(1) { background: var(--color-green);  box-shadow: 0 0 6px rgba(74,222,128,0.5); }
+.status-dot:nth-child(2) { background: var(--color-gold);   box-shadow: 0 0 6px rgba(212,168,87,0.5); }
+.status-dot:nth-child(3) { background: var(--color-blue);   box-shadow: 0 0 6px rgba(103,232,249,0.5); }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   1 · HERO — photographic sun core + 4 corner rings + forecast + moon line
+   (v2.x sun + conic rings PRESERVED; 4th grid row added for the moon line)
+   ════════════════════════════════════════════════════════════════════════════ */
+#section-1-hero { margin: 0; }
+.hero-shell {
+  display: grid;
+  grid-template-columns: 1fr minmax(180px, 1.6fr) 1fr;
+  grid-template-rows: auto auto auto auto;
+  align-items: center;
+  justify-items: center;
+  gap: 6px 12px;
+  min-height: 380px;
+  position: relative;
+}
+
+/* Corner stat blocks pinned to the four outer cells (top row 1, bottom row 4) */
+.hero-corner { display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; }
+.hero-corner--tl { grid-column: 1; grid-row: 1; align-self: start; }
+.hero-corner--tr { grid-column: 3; grid-row: 1; align-self: start; }
+.hero-corner--bl { grid-column: 1; grid-row: 4; align-self: end; }
+.hero-corner--br { grid-column: 3; grid-row: 4; align-self: end; }
+
+.corner-label {
+  font-size: 10px;
+  letter-spacing: 0.20em;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+/* Apple-Watch ring — render.js wraps .corner-value in .corner-ring + sets --ring-pct.
+   The conic arc reads as progress; ::before punches the dark hub. PRESERVE. */
+.corner-ring {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--ring-color, var(--color-gold)) calc(var(--ring-pct, 60) * 1%),
+    rgba(255,255,255,0.07) 0
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 0 18px rgba(0,0,0,0.5), 0 0 22px var(--ring-glow, transparent);
+}
+.corner-ring::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: var(--color-bg);
+}
+.corner-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+  position: relative;
+  z-index: 1;
+}
+/* corner accent mapping: Opportunity green · Pressure orange · Momentum blue · Next gold */
+.hero-corner--tl .corner-ring { --ring-color: var(--color-green);  --ring-glow: rgba(74,222,128,0.22); }
+.hero-corner--tr .corner-ring { --ring-color: var(--color-orange); --ring-glow: rgba(245,158,11,0.22); }
+.hero-corner--bl .corner-ring { --ring-color: var(--color-blue);   --ring-glow: rgba(103,232,249,0.22); }
+.hero-corner--br .corner-ring { --ring-color: var(--color-gold);   --ring-glow: rgba(212,168,87,0.22); }
+.corner-tag { font-size: 11px; color: var(--color-text-secondary); margin-top: 7px; }
+
+/* SUN — layered radial gradient sphere + volumetric corona + pulse. PRESERVE. */
+.sun-hero {
+  grid-column: 2;
+  grid-row: 1;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  margin: 0 auto;
+  background:
+    radial-gradient(circle at 40% 38%,
+      #FFFCEA 0%, #FFF1B3 12%, #FFD659 30%, #E8A93A 55%, #8A4D0B 100%);
+  box-shadow:
+    0 0 60px rgba(255, 218, 109, 0.55),
+    0 0 140px rgba(232, 197, 115, 0.42),
+    0 0 240px rgba(212, 168, 87, 0.28),
+    inset -20px -30px 60px rgba(180, 80, 0, 0.55),
+    inset 8px 8px 30px rgba(255, 250, 200, 0.50);
+  animation: sun-pulse 6s ease-in-out infinite;
+  position: relative;
+}
+.sun-hero::after {
+  content: "";
+  position: absolute;
+  inset: -44px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,210,80,0.20) 0%, transparent 62%);
+  filter: blur(10px);
+  z-index: -1;
+}
+@keyframes sun-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.025); }
+}
+
+.forecast-title {
+  grid-column: 2;
+  grid-row: 2;
+  margin-top: 14px;
+  font-size: clamp(32px, 5.5vw, 48px);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1.0;
+  color: var(--color-gold);
+  text-transform: uppercase;
+  text-align: center;
+  text-shadow: 0 0 30px rgba(212,168,87,0.35);
+}
+.forecast-subtitle {
+  grid-column: 2;
+  grid-row: 3;
+  margin-top: 8px;
+  font-size: 16px;
+  color: var(--text-85);
+  text-align: center;
+  max-width: 460px;
+  line-height: 1.45;
+}
+.hero-moon {
+  grid-column: 2;
+  grid-row: 4;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+.hero-moon:empty { display: none; }    /* hide moon line when render.js leaves it blank */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   2 · SYSTEM CONSENSUS — Modern | agreement % | Traditional + action line
+   ════════════════════════════════════════════════════════════════════════════ */
+.consensus-card { padding: 24px 20px; }
+.consensus-row {
+  display: grid;
+  grid-template-columns: 1fr;            /* mobile: stack */
+  gap: 20px;
+  align-items: center;
+  text-align: center;
+}
+.consensus-side { display: flex; flex-direction: column; gap: 6px; }
+.consensus-small-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.consensus-state {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--color-gold);            /* Expansion gold; render.js may recolor */
+  text-transform: uppercase;
+}
+.consensus-center { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.consensus-pct {
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+/* status pill — render.js sets data-status on #consensus-status (chunk 4) */
+.consensus-status {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  background: rgba(255,255,255,0.08);
+}
+.consensus-status[data-status="agreement"]    { background: var(--color-green);  color: #06120a; }
+.consensus-status[data-status="partial"]       { background: var(--color-yellow); color: #1a1500; }
+.consensus-status[data-status="disagreement"]  { background: var(--color-red);    color: #1a0606; }
+.consensus-action {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line-soft);
+  font-size: 16px;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--text-85);
+  text-align: center;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   3 · INTELLIGENCE SNAPSHOTS — Modern + Traditional compact cards
+   ════════════════════════════════════════════════════════════════════════════ */
+.snapshots-grid {
+  display: grid;
+  grid-template-columns: 1fr;            /* mobile: stack */
+  gap: var(--grid-gap);
+}
+.snapshot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-card);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius);
+  padding: 22px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 16px 44px rgba(0,0,0,0.45);
+  overflow: hidden;
+}
+/* top accent hairline — Modern purple/Jupiter hint, Traditional gold hint */
+.snapshot::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--snap-accent, var(--color-gold));
+  opacity: 0.7;
+}
+.snapshot--modern      { --snap-accent: var(--color-purple); }
+.snapshot--traditional { --snap-accent: var(--color-gold); }
+
+.snapshot-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  margin-bottom: 14px;
+}
+.snapshot--modern .snapshot-label      { color: var(--color-purple); }
+.snapshot--traditional .snapshot-label { color: var(--color-gold); }
+
+/* the <dl> — 2-col definition list, hairline between rows */
+.snapshot-grid { display: flex; flex-direction: column; }
+.snapshot-grid > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: baseline;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.snapshot-grid > div:last-of-type { border-bottom: none; }
+.snapshot-grid dt {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+}
+.snapshot-grid dd {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: right;
+}
+.snapshot-footer {
+  margin-top: 16px;
+  align-self: stretch;
+  padding: 10px 12px;
+  background: transparent;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  color: var(--color-gold);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.snapshot-footer:hover {
+  background: rgba(212,168,87,0.08);
+  border-color: rgba(212,168,87,0.30);
+  color: var(--color-gold-bright);
+}
+
+/* ── 3b · Vedic access — subtle full-width trigger below the snapshots row ──────
+   Low-contrast on purpose: discoverable but never competes with the Modern /
+   Traditional snapshot cards. Opens #drawer-vedic via the generic [data-drawer-open]
+   handler — no new drawer styles needed (it shares the .drawer class). */
+.vedic-link {
+  display: block; width: 100%; max-width: 480px; margin: 8px auto 0;
+  padding: 12px 16px; background: transparent;
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+  color: rgba(255,255,255,0.55); font-size: 13px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer; transition: all .2s;
+}
+.vedic-link:hover { color: rgba(232,197,115,0.9); border-color: rgba(212,168,87,0.3); background: rgba(212,168,87,0.05); }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   3 · DAILY HOROSCOPE — four always-visible reading cards (v2.4 redesign)
+   Vedic (blue) · Modern (purple) · Traditional (gold) · BaZi (jade). Each card
+   surfaces the day's prose directly; "This Month →" opens the system's drawer.
+   ════════════════════════════════════════════════════════════════════════════ */
+.readings-stack { display: flex; flex-direction: column; gap: var(--grid-gap); }
+
+.reading-card {
+  position: relative;
+  display: flex; flex-direction: column;
+  background: var(--color-card);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 16px 44px rgba(0,0,0,0.45);
+  overflow: hidden;
+  --rc-accent: var(--color-gold);
+}
+.reading-card::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--rc-accent); opacity: 0.72;
+}
+.reading-card[data-reading="vedic"]       { --rc-accent: var(--color-blue); }
+.reading-card[data-reading="modern"]      { --rc-accent: var(--color-purple); }
+.reading-card[data-reading="traditional"] { --rc-accent: var(--color-gold); }
+.reading-card[data-reading="bazi"]        { --rc-accent: var(--color-green); }
+
+.reading-card__head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 12px; margin-bottom: 12px;
+}
+.reading-card__titles { display: flex; flex-direction: column; gap: 2px; }
+.reading-card__label {
+  font-size: 12px; font-weight: 700; letter-spacing: 0.20em; text-transform: uppercase;
+  color: var(--rc-accent); margin: 0;
+}
+.reading-card__sub { font-size: 11px; letter-spacing: 0.04em; color: var(--color-text-muted); }
+.reading-card__state {
+  flex-shrink: 0; padding: 4px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--rc-accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--rc-accent) 35%, transparent);
+  color: var(--rc-accent);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  white-space: nowrap;
+}
+.reading-card__body { font-size: 14.5px; line-height: 1.62; color: var(--text-85); margin: 0; }
+.reading-card__more {
+  margin-top: 16px; align-self: flex-start;
+  padding: 9px 14px; background: transparent;
+  border: 1px solid var(--line-soft); border-radius: var(--radius-sm);
+  color: var(--rc-accent); font-size: 13px; font-weight: 600; letter-spacing: 0.02em;
+  cursor: pointer; transition: background .2s ease, border-color .2s ease, color .2s ease;
+}
+.reading-card__more:hover {
+  background: color-mix(in srgb, var(--rc-accent) 8%, transparent);
+  border-color: color-mix(in srgb, var(--rc-accent) 30%, transparent);
+}
+
+/* ── BaZi card · Layer 1 (Core Animal) + Layer 2 (Daily Tactical) ─────────────── */
+.bazi-core {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  flex-wrap: wrap; margin-bottom: 14px; padding-bottom: 14px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.bazi-core__animal { display: flex; flex-direction: column; gap: 2px; }
+.bazi-core__animal-name { font-size: 22px; font-weight: 700; color: var(--color-text); }
+.bazi-core__daymaster { font-size: 12px; color: var(--color-text-secondary); }
+.bazi-core__pillars { display: flex; gap: 8px; flex-wrap: wrap; }
+.bazi-pillar {
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  padding: 6px 10px; border-radius: 10px; min-width: 58px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--line-soft);
+}
+.bazi-pillar__k { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-muted); }
+.bazi-pillar__v { font-size: 13px; font-weight: 700; color: var(--color-green); }
+.bazi-pillar__s { font-size: 10px; color: var(--color-text-secondary); }
+
+.bazi-slots { list-style: none; margin: 0 0 14px; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.bazi-slot {
+  display: flex; flex-wrap: wrap; gap: 3px 10px; align-items: baseline;
+  padding: 8px 0; border-bottom: 1px solid var(--line-soft);
+}
+.bazi-slot:last-child { border-bottom: none; }
+.bazi-slot__animal { flex: 0 0 auto; font-size: 13px; font-weight: 700; color: var(--text-85); }
+.bazi-slot__role {
+  flex: 0 0 auto; font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+.bazi-slot__note { flex: 1 1 100%; font-size: 12px; color: var(--color-text-muted); line-height: 1.45; }
+.bazi-slot--self .bazi-slot__animal { color: var(--color-green); }
+.bazi-slot--mnemonic .bazi-slot__animal,
+.bazi-slot--mnemonic .bazi-slot__role { opacity: 0.5; }
+.bazi-slot--mnemonic .bazi-slot__note { font-style: italic; }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   4 · ANALYSIS DRAWERS — slide-up modal (bottom sheet on mobile)
+   render.js toggles the [hidden] attribute (chunk 4); CSS owns the visual + motion.
+   ════════════════════════════════════════════════════════════════════════════ */
+#section-4-drawers { margin: 0; }
+
+.drawer {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 110;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #0d1018 0%, var(--color-bg) 100%);
+  border: 1px solid var(--color-card-border);
+  border-bottom: none;
+  border-radius: 16px 16px 0 0;          /* mobile: top corners only (bottom sheet) */
+  box-shadow: 0 -20px 60px rgba(0,0,0,0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 20px;
+  /* slide-up transition — visible state is the absence of [hidden] */
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 0.32s cubic-bezier(0.22,1,0.36,1), opacity 0.24s ease;
+}
+/* [hidden] is respected as the closed state, but we still want it to animate down.
+   render.js removes [hidden] to open. When present, push off-screen + transparent. */
+.drawer[hidden] {
+  display: block;                        /* override UA display:none so it can animate */
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: transform 0.3s cubic-bezier(0.4,0,1,1), opacity 0.2s ease, visibility 0s linear 0.3s;
+}
+/* dark scrim behind an open drawer */
+.drawer:not([hidden])::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.drawer-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--color-gold);
+}
+.drawer-close {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 1px solid var(--line-soft);
+  border-radius: 50%;
+  color: var(--color-text-secondary);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.drawer-close:hover { color: var(--color-text); border-color: var(--color-card-border); }
+
+.drawer-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: 18px;
+  overflow-x: auto;
+}
+.drawer-tabs button {
+  flex: 0 0 auto;
+  position: relative;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+.drawer-tabs button:hover:not([disabled]) { color: var(--color-text); }
+.drawer-tabs button[aria-selected="true"] { color: var(--color-gold-bright); }
+.drawer-tabs button[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  left: 14px; right: 14px;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--color-gold-bright);
+  box-shadow: 0 0 8px rgba(232,197,115,0.6);
+}
+.drawer-tabs button[disabled] {
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+.drawer-content { min-height: 80px; }
+.drawer-panel { animation: drawer-fade 0.3s ease; }
+.drawer-panel[hidden] { display: none; }
+@keyframes drawer-fade {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.drawer-state {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: var(--color-gold-bright);
+  margin-bottom: 10px;
+}
+.drawer-body {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-85);
+}
+.drawer-panel--soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 36px 16px;
+}
+.drawer-placeholder {
+  font-style: italic;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   5 · WHAT CHANGED — delta rows
+   ════════════════════════════════════════════════════════════════════════════ */
+.changed-card { display: flex; flex-direction: column; gap: 0; }
+.changed-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 2px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--line-soft);
+}
+.changed-row:last-of-type { border-bottom: none; }
+.changed-label { color: var(--color-text-secondary); }
+.changed-delta {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+.changed-delta.positive { color: var(--color-green); background: rgba(74,222,128,0.12); }
+.changed-delta.positive::before { content: "+"; }
+.changed-delta.negative { color: var(--color-red);   background: rgba(248,113,113,0.12); }
+.changed-delta.neutral  { color: var(--color-text-muted); background: rgba(255,255,255,0.05); }
+.changed-footer, .changed-empty {
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   6 · TODAY'S INSIGHT — premium gold-accent card
+   ════════════════════════════════════════════════════════════════════════════ */
+.insight-card {
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--color-text);
+}
+.insight-card--premium {
+  border: 1px solid var(--color-gold);
+  background:
+    linear-gradient(135deg, rgba(212,168,87,0.12), rgba(255,255,255,0.02));
+  box-shadow:
+    0 0 0 1px rgba(212,168,87,0.10),
+    0 0 28px rgba(212,168,87,0.20),
+    0 16px 44px rgba(0,0,0,0.45);
+  color: var(--color-gold-bright);
+  padding: 24px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   7 · RECOMMENDED ACTIONS — Do More Of (✓ green) | Avoid (✗ red), 2-col desktop
+   ════════════════════════════════════════════════════════════════════════════ */
+.actions-card {
+  display: grid;
+  grid-template-columns: 1fr;            /* mobile: stack */
+  gap: 8px 28px;
+}
+.actions-card h3 {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 2px 0 8px;
+}
+.actions-card h3:nth-of-type(2) { margin-top: 16px; }
+.actions-card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.actions-card li {
+  position: relative;
+  padding-left: 26px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--color-text);
+}
+.actions-card #actions-do li::before {
+  content: "✓"; position: absolute; left: 0; top: 0;
+  color: var(--color-green); font-weight: 700;
+}
+.actions-card #actions-avoid li::before {
+  content: "✗"; position: absolute; left: 0; top: 0;
+  color: var(--color-red); font-weight: 700;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   8 · UPCOMING CONDITIONS — timeline bars (day-count · event · importance bar)
+   ════════════════════════════════════════════════════════════════════════════ */
+.timeline-list { list-style: none; display: flex; flex-direction: column; }
+.timeline-row {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.timeline-row:last-child { border-bottom: none; }
+.timeline-days {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-gold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.0;
+}
+.timeline-days .unit {
+  display: block;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+.timeline-main { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.timeline-event { font-size: 14px; color: var(--color-text); }
+/* importance bar — render.js sets --bar-length + a tier class (gold/purple/blue) */
+.timeline-bar {
+  height: 7px;
+  border-radius: 4px;
+  width: var(--bar-length, 50%);
+  background: var(--bar-color, var(--color-gold));
+  box-shadow: 0 0 12px var(--bar-glow, rgba(212,168,87,0.28));
+}
+.timeline-bar--high   { --bar-color: var(--color-gold);   --bar-glow: rgba(232,197,115,0.30); }
+.timeline-bar--medium { --bar-color: var(--color-purple); --bar-glow: rgba(167,139,250,0.30); }
+.timeline-bar--low    { --bar-color: var(--color-blue);   --bar-glow: rgba(103,232,249,0.28); }
+.timeline-empty { color: var(--color-text-muted); font-size: 13px; padding: 8px 0; }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   9 · SKY CONDITIONS — labeled horizontal bars
+   ════════════════════════════════════════════════════════════════════════════ */
+.sky-card { display: flex; flex-direction: column; gap: 16px; }
+.sky-row { display: grid; grid-template-columns: 92px 1fr 46px; align-items: center; gap: 12px; }
+.sky-name { font-size: 13px; color: var(--color-text-secondary); letter-spacing: 0.02em; }
+.sky-bar { background: var(--color-card-border); border-radius: 6px; height: 7px; overflow: hidden; }
+.sky-fill { height: 100%; border-radius: 6px; width: 0%; transition: width 0.8s cubic-bezier(0.22,1,0.36,1); }
+/* metric-matched colors: Expansion gold · Pressure orange · Volatility red · Support blue */
+.sky-fill--expansion  { background: var(--color-gold); }
+.sky-fill--positive   { background: var(--color-gold); }
+.sky-fill--pressure   { background: var(--color-orange); }
+.sky-fill--warning    { background: var(--color-orange); }
+.sky-fill--volatility { background: var(--color-red); }
+.sky-fill--danger     { background: var(--color-red); }
+.sky-fill--support    { background: var(--color-blue); }
+.sky-fill--info       { background: var(--color-blue); }
+.sky-value { font-size: 13px; font-weight: 700; color: var(--color-text); text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   10 · PLANET INFLUENCES — single compact list card (no scrolling card stack)
+   ════════════════════════════════════════════════════════════════════════════ */
+.influences-compact {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-card);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius);
+  padding: 6px 20px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 16px 44px rgba(0,0,0,0.45);
+}
+.influence-row {
+  display: grid;
+  grid-template-columns: 26px 1fr auto 48px;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 14px;
+}
+.influence-row:last-child { border-bottom: none; }
+.influence-glyph { font-size: 18px; color: var(--color-gold); text-align: center; }
+.influence-name { color: var(--color-text); }
+.influence-role {
+  font-size: 10px;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  text-align: right;
+}
+.influence-score {
+  text-align: right;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.influence-score.positive { color: var(--color-green); }
+.influence-score.negative { color: var(--color-red); }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   11 · TOP DRIVERS — numbered list (top 3)
+   ════════════════════════════════════════════════════════════════════════════ */
+.drivers-list { list-style: none; counter-reset: driver; display: flex; flex-direction: column; gap: 8px; }
+.drivers-list li {
+  counter-increment: driver;
+  position: relative;
+  padding: 12px 14px 12px 46px;
+  background: var(--card-strong);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--color-text);
+}
+.drivers-list li::before {
+  content: counter(driver);
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(212,168,87,0.45);
+  color: var(--color-gold);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.driver-name { display: inline-block; padding-right: 8px; }
+.driver-score { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--color-green); }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   12 · WHY THIS FORECAST — inline <details open>, score + pos/neg mini-lists
+   ════════════════════════════════════════════════════════════════════════════ */
+.why-card { background: var(--color-card); }
+.why-card summary {
+  list-style: none;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 14px;
+  cursor: default;                       /* inline view — no toggle */
+}
+.why-card summary::-webkit-details-marker { display: none; }
+.why-card summary span#expansion-score {
+  color: var(--color-gold-bright);
+  font-weight: 800;
+  font-size: 32px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.why-rows { display: flex; flex-direction: column; gap: 4px; }
+.why-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  font-size: 13px;
+  padding: 6px 0;
+  border-top: 1px solid var(--line-soft);
+  color: var(--color-text);
+}
+.why-weight { font-weight: 700; font-variant-numeric: tabular-nums; padding-left: 12px; }
+.why-row--pos .why-weight { color: var(--color-green); }
+.why-row--neg .why-weight { color: var(--color-red); }
+.why-group-label {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 12px 0 2px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   13 · CONFIDENCE — small left-aligned meta card, neutral ring
+   ════════════════════════════════════════════════════════════════════════════ */
+#section-13-confidence { max-width: 280px; }
+.confidence-card {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 14px;
+  background: var(--color-card);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.confidence-ring {
+  grid-row: 1 / span 2;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  justify-self: center;
+}
+.confidence-ring--unrated { border: 6px solid rgba(255,255,255,0.08); background: transparent; }
+.confidence-label { font-size: 15px; font-weight: 600; color: var(--color-text); align-self: end; }
+.confidence-sub { font-size: 11px; color: var(--color-text-muted); align-self: start; margin-top: 2px; }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   14 · FOOTER NAV — fixed bottom strip (mobile) → static full-width bar (desktop)
+   ════════════════════════════════════════════════════════════════════════════ */
+.footer-nav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  width: 100%;
+  margin: 0;
+  background: rgba(6,7,10,0.94);
+  border-top: 1px solid var(--color-card-border);
+  padding: 10px 0 calc(10px + env(safe-area-inset-bottom, 0px));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 100;
+}
+.nav-item {
+  position: relative;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  padding: 4px 0;
+  transition: color 0.2s ease;
+}
+.nav-item:hover { color: var(--color-text); }
+.nav-item.active { color: var(--color-gold-bright); }
+.nav-item.active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--color-gold-bright);
+  box-shadow: 0 0 8px rgba(232,197,115,0.6);
+}
+/* Coming-Soon tabs — muted, not-allowed, no hover, small "Soon" badge */
+.nav-item--soon { color: var(--color-text-muted); cursor: not-allowed; }
+.nav-item--soon:hover { color: var(--color-text-muted); }
+.nav-item--soon::after {
+  content: "SOON";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--color-text-muted);
+  background: rgba(255,255,255,0.06);
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   TABLET / DESKTOP  ≥ 769px
+   ════════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 769px) {
+  :root { --gutter: 28px; --row-gap: 32px; }
+
+  body { padding-bottom: 24px; }
+
+  .timing-weather-shell { padding-bottom: 48px; }
+
+  .hero-shell { min-height: 460px; gap: 8px 16px; }
+  .sun-hero { width: 200px; height: 200px; }
+
+  /* Consensus → 3-col: Modern | center | Traditional */
+  .consensus-row { grid-template-columns: 1fr auto 1fr; gap: 24px; }
+
+  /* Snapshots → 2-col */
+  .snapshots-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Recommended Actions → 2-col (Do left, Avoid right) */
+  .actions-card { grid-template-columns: 1fr 1fr; }
+  .actions-card h3:nth-of-type(2) { margin-top: 2px; }
+
+  /* Drawer → centered modal card (not a full-width bottom sheet) */
+  .drawer {
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    top: 50%;
+    width: min(720px, calc(100vw - 48px));
+    max-height: 82vh;
+    border: 1px solid var(--color-card-border);
+    border-radius: 16px;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  }
+  .drawer[hidden] {
+    transform: translate(-50%, calc(-50% + 24px));
+    transition: transform 0.28s cubic-bezier(0.4,0,1,1), opacity 0.2s ease, visibility 0s linear 0.3s;
+  }
+
+  /* footer drops into the page flow */
+  .footer-nav {
+    position: static;
+    width: 100vw;
+    border-radius: 0;
+    padding: 18px 0;
+    background: rgba(255,255,255,0.02);
+    border-top: 1px solid var(--color-card-border);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   ACCESSIBILITY — honor reduced-motion
+   ════════════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .sun-hero { animation: none; }
+  .drawer, .drawer-panel, .sky-fill { transition: none; animation: none; }
+  * { transition: none !important; }
+}

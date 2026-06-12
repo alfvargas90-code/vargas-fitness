@@ -4,251 +4,136 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Timing Weather · Orbital Sky</title>
+<!-- DIRECTION 3 — ORBITAL SKY
+     Same real stylesheet. The dashboard's real sun-hero gains an orbital
+     system: each transiting planet rides a ring, labeled with its influence.
+     Below it, the real dashboard cards (Planet Influences, Sky Conditions,
+     Upcoming, Confidence). -->
+<link rel="stylesheet" href="_dashboard.css" />
 <style>
-/* ════════════════════════════════════════════════════════════════════
-   DIRECTION 3 — ORBITAL SKY  (modeled on ref-2)
-   The sun hero gains a live orbital system: each transiting planet rides
-   a ring, labeled with its name + influence value. The sky itself is the
-   centerpiece. Below: Current Phase · Event Radar · Planet Influences ·
-   Upcoming Events · Sky Conditions · Top Drivers · Why · Confidence.
-   Same canonical solar aesthetic (near-black, gold sun, glass cards).
-   ════════════════════════════════════════════════════════════════════ */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#06070a;--bg2:#0a0c14;
-  --gold:#d4a857;--gold-br:#e8c573;--gold-deep:#7a5a18;
-  --green:#4ade80;--orange:#f59e0b;--cyan:#67e8f9;--red:#f87171;
-  --violet:#a78bfa;--yellow:#facc15;--pink:#f472b6;--coral:#fb7185;
-  --text:rgba(255,255,255,.92);--muted:rgba(255,255,255,.55);--faint:rgba(255,255,255,.32);
-  --card:rgba(255,255,255,.04);--card2:rgba(255,255,255,.06);--border:rgba(255,255,255,.09);
-  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;
-}
-html,body{width:375px}
-body{font-family:var(--sans);color:var(--text);min-height:812px;overflow-x:hidden;-webkit-font-smoothing:antialiased;
-  background:
-    radial-gradient(1000px 560px at 50% -6%, rgba(212,168,87,.14), transparent 56%),
-    radial-gradient(700px 420px at 50% 4%, rgba(232,197,115,.05), transparent 60%),
-    linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);
-  background-attachment:fixed;padding-bottom:72px}
-.wrap{padding:0 14px}
-.hdr{display:flex;align-items:center;gap:10px;padding:13px 2px 8px}
-.hdr .t{font-size:10px;color:var(--muted);width:42px}
-.hdr .tt{flex:1;text-align:center;font-size:12px;letter-spacing:.32em;font-weight:700}
-.hdr .tt::before{content:"☼ ";color:var(--gold);letter-spacing:0}
-.hdr .r{width:42px;text-align:right;font-size:10px;color:var(--muted)}
-
-/* ORBITAL HERO */
-.orbit-hero{position:relative;height:300px;margin-top:2px}
-.osun{position:absolute;left:50%;top:142px;transform:translate(-50%,-50%);width:96px;height:96px;border-radius:50%;
-  background:radial-gradient(circle at 40% 38%,#FFFCEA,#FFF1B3 12%,#FFD659 30%,#E8A93A 55%,#8A4D0B 100%);
-  box-shadow:0 0 50px rgba(255,218,109,.55),0 0 110px rgba(232,197,115,.4),0 0 200px rgba(212,168,87,.24),
-    inset -14px -20px 40px rgba(180,80,0,.55),inset 6px 6px 20px rgba(255,250,200,.5);animation:pulse 6s ease-in-out infinite}
-@keyframes pulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.03)}}
-.ring-e{position:absolute;left:50%;top:142px;border:1px solid rgba(255,255,255,.07);border-radius:50%;transform:translate(-50%,-50%)}
-.re1{width:188px;height:188px} .re2{width:262px;height:262px;border-color:rgba(255,255,255,.05)}
-.planet{position:absolute;display:flex;flex-direction:column;align-items:center;width:60px;transform:translate(-50%,-50%);text-align:center}
-.planet .g{font-size:17px;line-height:1;filter:drop-shadow(0 0 5px currentColor)}
-.planet .nm{font-size:8.5px;letter-spacing:.04em;color:var(--muted);margin-top:2px;text-transform:uppercase}
-.planet .iv{font-size:9px;font-weight:700;margin-top:1px;font-variant-numeric:tabular-nums}
-
-.f-band{text-align:center;margin-top:2px}
-.f-title{font-size:30px;font-weight:800;letter-spacing:.05em;color:var(--gold);text-transform:uppercase;text-shadow:0 0 26px rgba(212,168,87,.4)}
-.f-sub{font-size:12px;color:rgba(255,255,255,.8);margin-top:5px}
-
-/* NOW row */
-.now{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:14px}
-.now .cell{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:8px 6px;text-align:center}
-.now .k{font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:3px}
-.now .v{font-size:12px;font-weight:700}
-.now .v.g{color:var(--gold)} .now .v.o{color:var(--orange)} .now .v.c{color:var(--cyan)}
-
-.sh{display:flex;align-items:baseline;gap:8px;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin:18px 2px 9px}
-.sh .sub{margin-left:auto;font-size:9px;font-weight:600;color:var(--faint)}
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 12px 34px rgba(0,0,0,.4)}
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-
-/* current phase */
-.phase-h{font-size:16px;font-weight:800;color:var(--gold-br)}
-.phase-r{font-size:10px;color:var(--muted);margin:3px 0 9px}
-.prog{height:6px;border-radius:3px;background:rgba(255,255,255,.07);overflow:hidden}
-.prog i{display:block;height:100%;background:linear-gradient(90deg,var(--gold-deep),var(--gold));border-radius:3px}
-.prog-cap{font-size:9.5px;color:var(--faint);margin-top:5px;text-align:right}
-
-/* event radar */
-.radar div{display:flex;justify-content:space-between;font-size:11px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)}
-.radar div:last-child{border:none}
-.radar .nm{color:var(--muted)} .radar .vv{font-weight:700;color:var(--gold)}
-
-/* planet influences 3-col */
-.pinf{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.pinf .p{background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:10px 6px;text-align:center}
-.pinf .pg{font-size:18px;margin-bottom:3px;display:block}
-.pinf .pn{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
-.pinf .pr{font-size:8.5px;color:var(--faint);margin:2px 0 4px}
-.pinf .pv{font-size:13px;font-weight:800;font-variant-numeric:tabular-nums}
-
-/* upcoming events */
-.ue{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-.ue:last-child{border:none}
-.ue .nm{font-size:12px;font-weight:600}
-.ue .sub{font-size:9px;color:var(--faint)}
-.ue .dd{font-size:16px;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums}
-
-/* sky bars */
-.bar-row{display:flex;align-items:center;gap:9px;margin-bottom:8px}
-.bar-row:last-child{margin-bottom:0}
-.bar-row .bl{font-size:9.5px;color:var(--muted);width:74px;text-transform:uppercase;letter-spacing:.03em}
-.bar-row .bt{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.07);overflow:hidden}
-.bar-row .bt i{display:block;height:100%;border-radius:3px}
-.bar-row .bv{font-size:9.5px;font-weight:700;width:30px;text-align:right}
-
-/* top drivers */
-.drv{display:flex;align-items:center;gap:10px;padding:6px 0}
-.drv .n{width:18px;height:18px;border-radius:50%;background:rgba(212,168,87,.16);color:var(--gold);font-size:10px;font-weight:800;display:grid;place-items:center;flex:0 0 auto}
-.drv .nm{font-size:12px}
-.drv .nm small{display:block;color:var(--faint);font-size:9px}
-
-/* confidence */
-.conf{display:flex;align-items:center;gap:14px}
-.conf-ring{width:62px;height:62px;border-radius:50%;background:conic-gradient(var(--green) 92%,rgba(255,255,255,.08) 0);display:grid;place-items:center;flex:0 0 auto;box-shadow:0 0 16px rgba(74,222,128,.25)}
-.conf-ring::before{content:"";position:absolute;width:48px;height:48px;border-radius:50%;background:var(--bg)}
-.conf-ring span{position:relative;font-size:14px;font-weight:800;color:var(--green)}
-.conf .lbl{font-size:13px;font-weight:700;color:var(--green)}
-.conf .sub{font-size:10px;color:var(--muted);margin-top:2px}
-
-.insight{font-size:12px;line-height:1.55;color:var(--gold-br);font-style:italic}
-.insight .lead{display:block;font-style:normal;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
-
-.nav{position:fixed;left:0;right:0;bottom:0;width:375px;margin:0 auto;display:flex;justify-content:space-around;
-  background:rgba(6,7,10,.94);border-top:1px solid var(--border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:9px 0 15px}
-.nav a{font-size:9.5px;color:var(--faint);text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:3px}
-.nav a .ic{font-size:14px}
-.nav a.on{color:var(--gold)}
+  .orbital{position:relative;height:300px;margin:6px 0 2px}
+  /* center with margins, NOT translate — the sun's pulse animation uses transform:scale
+     and would otherwise wipe a translate(-50%) and shove the disc off-center */
+  .orbital .sun-hero{position:absolute;left:50%;top:150px;width:120px;height:120px;margin:-60px 0 0 -60px}
+  .orbit-ring{position:absolute;left:50%;top:150px;transform:translate(-50%,-50%);border:1px solid rgba(255,255,255,.07);border-radius:50%}
+  .orbit-ring.r1{width:200px;height:200px}
+  .orbit-ring.r2{width:280px;height:280px;border-color:rgba(255,255,255,.05)}
+  .oplanet{position:absolute;display:flex;flex-direction:column;align-items:center;width:62px;transform:translate(-50%,-50%);text-align:center}
+  .oplanet .g{font-size:18px;line-height:1;filter:drop-shadow(0 0 5px currentColor)}
+  .oplanet .nm{font-size:8.5px;letter-spacing:.04em;color:var(--color-text-secondary);margin-top:2px;text-transform:uppercase}
+  .oplanet .iv{font-size:10px;font-weight:700;margin-top:1px;font-variant-numeric:tabular-nums;font-family:var(--font-mono)}
+  .forecast-title.standalone{display:block;text-align:center;margin-top:2px}
+  .forecast-subtitle.standalone{display:block;text-align:center;max-width:260px;margin:6px auto 0}
+  /* event radar inline list reusing card */
+  .radar-list{display:flex;flex-direction:column}
+  .radar-list .r{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--line-soft);font-size:14px}
+  .radar-list .r:last-child{border-bottom:none}
+  .radar-list .r .nm{color:var(--color-text)} .radar-list .r .sub{font-size:10px;color:var(--color-text-muted);display:block}
+  .radar-list .r .dd{font-size:18px;font-weight:800;color:var(--color-gold);font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body>
-<div class="wrap">
+  <div class="timing-weather-shell">
 
-  <div class="hdr"><span class="t">1:18 PM</span><span class="tt">TIMING WEATHER</span><span class="r">Jun 12</span></div>
+    <header class="row row--bleed header-chrome">
+      <button class="header-menu" aria-label="Menu">≡</button>
+      <div class="header-title-block"><h1 class="header-title">TIMING WEATHER</h1><p class="header-date">Friday, June 12, 2026 · Live Sky</p></div>
+      <div class="header-status" aria-hidden="true"><span class="status-dot"></span><span class="status-dot"></span><span class="status-dot"></span></div>
+    </header>
 
-  <!-- ORBITAL HERO -->
-  <div class="orbit-hero" id="orbit">
-    <div class="ring-e re1"></div>
-    <div class="ring-e re2"></div>
-    <div class="osun"></div>
-    <!-- planets positioned via JS -->
-  </div>
-
-  <div class="f-band">
-    <div class="f-title">EXPANSION</div>
-    <div class="f-sub">Doors opening — build before the August turn.</div>
-  </div>
-
-  <div class="now">
-    <div class="cell"><div class="k">Forecast</div><div class="v g">Expansion</div></div>
-    <div class="cell"><div class="k">Pressure</div><div class="v o">Medium</div></div>
-    <div class="cell"><div class="k">Momentum</div><div class="v c">Rising</div></div>
-    <div class="cell"><div class="k">Next</div><div class="v">30 Days</div></div>
-  </div>
-
-  <!-- CURRENT PHASE + EVENT RADAR -->
-  <div class="duo">
-    <div style="display:flex;flex-direction:column;gap:9px">
-      <div class="sh" style="margin:8px 2px 0">Current Phase</div>
-      <div class="card">
-        <div class="phase-h">Preparation Window</div>
-        <div class="phase-r">Mar 1 – Aug 30, 2026</div>
-        <div class="prog"><i style="width:62%"></i></div>
-        <div class="prog-cap">79 days remaining</div>
-      </div>
+    <!-- ORBITAL HERO (real sun-hero + orbiting planets) -->
+    <div class="row">
+      <section id="section-1-hero">
+        <div class="orbital" id="orbital">
+          <div class="orbit-ring r1"></div>
+          <div class="orbit-ring r2"></div>
+          <div class="sun-hero" aria-hidden="true"></div>
+        </div>
+        <h1 class="forecast-title standalone">EXPANSION</h1>
+        <p class="forecast-subtitle standalone">Doors opening — build before the August turn.</p>
+      </section>
     </div>
-    <div style="display:flex;flex-direction:column;gap:9px">
-      <div class="sh" style="margin:8px 2px 0">Event Radar</div>
-      <div class="card radar">
-        <div><span class="nm">New Moon</span><span class="vv">3 d</span></div>
-        <div><span class="nm">Jupiter Return</span><span class="vv">30 d</span></div>
-        <div><span class="nm">Capricorn Year</span><span class="vv">79 d</span></div>
-      </div>
+
+    <!-- PLANET INFLUENCES (real) -->
+    <div class="row">
+      <section id="section-10-planet-influences">
+        <h2 class="section-heading">PLANET INFLUENCES <span class="heading-sub">TODAY</span></h2>
+        <ul class="influences-compact">
+          <li class="influence-row"><span class="influence-glyph">♃</span><span class="influence-name">Jupiter</span><span class="influence-role">Outreach</span><span class="influence-score positive">+19</span></li>
+          <li class="influence-row"><span class="influence-glyph">♀</span><span class="influence-name">Venus</span><span class="influence-role">Support</span><span class="influence-score positive">+9</span></li>
+          <li class="influence-row"><span class="influence-glyph">♇</span><span class="influence-name">Pluto</span><span class="influence-role">Depth</span><span class="influence-score positive">+11</span></li>
+          <li class="influence-row"><span class="influence-glyph">♄</span><span class="influence-name">Saturn</span><span class="influence-role">Pressure</span><span class="influence-score negative">−12</span></li>
+          <li class="influence-row"><span class="influence-glyph">☽</span><span class="influence-name">Moon</span><span class="influence-role">Void</span><span class="influence-score positive">+4</span></li>
+        </ul>
+      </section>
     </div>
-  </div>
 
-  <!-- PLANET INFLUENCES -->
-  <div class="sh">PLANET INFLUENCES <span class="sub">today</span></div>
-  <div class="card">
-    <div class="pinf">
-      <div class="p"><span class="pg" style="color:var(--pink)">♃</span><div class="pn">Jupiter</div><div class="pr">Outreach</div><div class="pv" style="color:var(--green)">+19</div></div>
-      <div class="p"><span class="pg" style="color:var(--violet)">♀</span><div class="pn">Venus</div><div class="pr">Support</div><div class="pv" style="color:var(--green)">+9</div></div>
-      <div class="p"><span class="pg" style="color:var(--muted)">♄</span><div class="pn">Saturn</div><div class="pr">Pressure</div><div class="pv" style="color:var(--red)">−12</div></div>
+    <!-- EVENT RADAR (real card) -->
+    <div class="row">
+      <section>
+        <h2 class="section-heading">EVENT RADAR</h2>
+        <div class="card">
+          <div class="radar-list">
+            <div class="r"><span><span class="nm">New Moon</span><span class="sub">12th-house reset</span></span><span class="dd">3</span></div>
+            <div class="r"><span><span class="nm">Jupiter Return</span><span class="sub">exalted in Cancer</span></span><span class="dd">30</span></div>
+            <div class="r"><span><span class="nm">Profection → Capricorn</span><span class="sub">Saturn becomes Lord of Year</span></span><span class="dd">79</span></div>
+          </div>
+        </div>
+      </section>
     </div>
-  </div>
 
-  <!-- UPCOMING + SKY -->
-  <div class="sh">UPCOMING EVENTS</div>
-  <div class="card">
-    <div class="ue"><div><div class="nm">Jupiter Return</div><div class="sub">exalted in Cancer</div></div><div class="dd">30</div></div>
-    <div class="ue"><div><div class="nm">Profection → Capricorn</div><div class="sub">Saturn becomes Lord of Year</div></div><div class="dd">79</div></div>
-    <div class="ue"><div><div class="nm">Venus Return</div><div class="sub">relationship axis</div></div><div class="dd">112</div></div>
-  </div>
-
-  <div class="sh">SKY CONDITIONS <span class="sub">since yesterday ↑</span></div>
-  <div class="card">
-    <div class="bar-row"><span class="bl">Opportunity</span><span class="bt"><i style="width:84%;background:var(--green)"></i></span><span class="bv" style="color:var(--green)">+4</span></div>
-    <div class="bar-row"><span class="bl">Pressure</span><span class="bt"><i style="width:48%;background:var(--orange)"></i></span><span class="bv" style="color:var(--green)">−2</span></div>
-    <div class="bar-row"><span class="bl">Momentum</span><span class="bt"><i style="width:71%;background:var(--cyan)"></i></span><span class="bv" style="color:var(--green)">+3</span></div>
-    <div class="bar-row"><span class="bl">Support</span><span class="bt"><i style="width:66%;background:var(--violet)"></i></span><span class="bv" style="color:var(--green)">+1</span></div>
-  </div>
-
-  <!-- TOP DRIVERS + WHY/CONFIDENCE -->
-  <div class="sh">TOP DRIVERS</div>
-  <div class="card">
-    <div class="drv"><span class="n">1</span><span class="nm">Jupiter Return window<small>30 days out · once / 12 yrs</small></span></div>
-    <div class="drv"><span class="n">2</span><span class="nm">Venus antardasha<small>first relationship-warm sub-period</small></span></div>
-    <div class="drv"><span class="n">3</span><span class="nm">12th-house profection<small>preparation before the Capricorn year</small></span></div>
-  </div>
-
-  <div class="duo">
-    <div style="display:flex;flex-direction:column;gap:9px">
-      <div class="sh" style="margin:6px 2px 0">Why</div>
-      <div class="card"><div class="insight"><span class="lead">Expansion Score 78</span>Three independent systems converge on build-before-reward.</div></div>
+    <!-- SKY CONDITIONS (real) -->
+    <div class="row">
+      <section id="section-9-sky">
+        <h2 class="section-heading">SKY CONDITIONS <span class="heading-sub">SINCE YESTERDAY ↑</span></h2>
+        <div class="card sky-card">
+          <div class="sky-row"><span class="sky-name">Opportunity</span><div class="sky-bar"><div class="sky-fill sky-fill--expansion" style="width:84%"></div></div><span class="sky-value">84</span></div>
+          <div class="sky-row"><span class="sky-name">Pressure</span><div class="sky-bar"><div class="sky-fill sky-fill--pressure" style="width:48%"></div></div><span class="sky-value">48</span></div>
+          <div class="sky-row"><span class="sky-name">Momentum</span><div class="sky-bar"><div class="sky-fill sky-fill--support" style="width:71%"></div></div><span class="sky-value">71</span></div>
+          <div class="sky-row"><span class="sky-name">Support</span><div class="sky-bar"><div class="sky-fill sky-fill--support" style="width:66%"></div></div><span class="sky-value">66</span></div>
+        </div>
+      </section>
     </div>
-    <div style="display:flex;flex-direction:column;gap:9px">
-      <div class="sh" style="margin:6px 2px 0">Confidence</div>
-      <div class="card"><div class="conf"><div class="conf-ring"><span>74%</span></div><div><div class="lbl">Building</div><div class="sub">3 of 4 systems agree</div></div></div></div>
+
+    <!-- TOP DRIVERS (real) + CONFIDENCE -->
+    <div class="row">
+      <section id="section-11-top-drivers">
+        <h2 class="section-heading">TOP DRIVERS</h2>
+        <ol class="drivers-list">
+          <li><span class="driver-name">Jupiter Return window — 30 days out</span><span class="driver-score">+19</span></li>
+          <li><span class="driver-name">Venus antardasha — relationship-warm</span><span class="driver-score">+9</span></li>
+          <li><span class="driver-name">12th-house profection — preparation</span><span class="driver-score">+7</span></li>
+        </ol>
+      </section>
     </div>
+
+    <div class="row">
+      <section id="section-13-confidence">
+        <h2 class="section-heading">CONFIDENCE</h2>
+        <div class="card confidence-card">
+          <div class="confidence-ring" aria-hidden="true" style="background:conic-gradient(var(--color-green) 74%, rgba(255,255,255,0.08) 0)"></div>
+          <div class="confidence-label">Building</div>
+          <div class="confidence-sub">3 of 4 systems agree · 74%</div>
+        </div>
+      </section>
+    </div>
+
+    <nav class="row row--bleed footer-nav">
+      <a class="nav-item" href="#">Home</a>
+      <a class="nav-item nav-item--soon" href="#" aria-disabled="true">Timeline</a>
+      <a class="nav-item active" href="#">Sky</a>
+      <a class="nav-item nav-item--soon" href="#" aria-disabled="true">Profile</a>
+    </nav>
   </div>
-
-</div>
-
-<nav class="nav">
-  <a><span class="ic">☼</span>Home</a>
-  <a><span class="ic">◷</span>Timeline</a>
-  <a class="on"><span class="ic">✦</span>Sky</a>
-  <a><span class="ic">❖</span>Profile</a>
-</nav>
 
 <script>
-// Place planets around the sun. Each: glyph, name, influence, color, ring(1|2), angle(deg, 0=top, cw)
-const PLANETS=[
-  ['♃','Jupiter','+19','#f472b6',1,-58],
-  ['♀','Venus','+9','#a78bfa',1,18],
-  ['♄','Saturn','−12','#8b86b8',1,128],
-  ['☽','Moon','+4','#67e8f9',1,205],
-  ['♂','Mars','+6','#fb7185',2,62],
-  ['♅','Uranus','+3','#7dd3fc',2,-128],
-  ['♇','Pluto','+11','#c084fc',2,158],
-];
-const cx=187.5, cy=142, R1=94, R2=131;
-const host=document.getElementById('orbit');
-PLANETS.forEach(([g,n,iv,c,ring,ang])=>{
-  const r=ring===1?R1:R2;
-  const a=(ang-90)*Math.PI/180;
-  const x=cx+r*Math.cos(a), y=cy+r*Math.sin(a);
-  const el=document.createElement('div');el.className='planet';
-  el.style.left=x+'px';el.style.top=y+'px';
-  const pos=iv.startsWith('−');
-  el.innerHTML=`<span class="g" style="color:${c}">${g}</span><span class="nm">${n}</span><span class="iv" style="color:${pos?'#f87171':'#4ade80'}">${iv}</span>`;
-  host.appendChild(el);
-});
+  const P=[['♃','Jupiter','+19','#f472b6',1,-58],['♀','Venus','+9','#a78bfa',1,18],['♄','Saturn','−12','#9aa0b4',1,128],['☽','Moon','+4','#67e8f9',1,205],['♂','Mars','+6','#fb7185',2,62],['♅','Uranus','+3','#7dd3fc',2,-128],['♇','Pluto','+11','#c084fc',2,158]];
+  const host=document.getElementById('orbital');
+  const cx=host.clientWidth/2,cy=150,R1=104,R2=146;   // center on the sun dynamically
+  P.forEach(([g,n,iv,c,ring,ang])=>{const r=ring===1?R1:R2,a=(ang-90)*Math.PI/180;
+    const x=cx+r*Math.cos(a),y=cy+r*Math.sin(a);const el=document.createElement('div');el.className='oplanet';
+    el.style.left=x+'px';el.style.top=y+'px';const neg=iv.startsWith('−');
+    el.innerHTML=`<span class="g" style="color:${c}">${g}</span><span class="nm">${n}</span><span class="iv" style="color:${neg?'#f87171':'#4ade80'}">${iv}</span>`;host.appendChild(el);});
 </script>
 </body>
 </html>

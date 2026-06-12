@@ -7,9 +7,11 @@ cards (Sky Conditions bars, Planet Influences, What Changed, Recommended Actions
 One aesthetic, four different hierarchies for surfacing the Modern · Traditional · Vedic ·
 BaZi daily horoscopes.
 
-> **Rebuilt 2026-06-12** against `design_references/timing-weather-ref-1.png` (sun-only hero)
-> and `timing-weather-ref-2.png` (sun with orbital planets). The first pass used a moon/pink
-> aesthetic and was corrected to this gold-sun direction.
+> **Rebuilt 2026-06-12 (v3)** — all four now **link the live dashboard's real stylesheet**
+> (`_dashboard.css`, a verbatim copy of `assets/css/timing-weather.css`) and use its real
+> classes, so the sun, corner gauges, cards and type are **pixel-identical** to Alfredo's
+> dashboard. Earlier passes approximated the look from scratch and missed (a moon/pink pass,
+> then a from-scratch solar pass). This version IS the dashboard, re-arranged four ways.
 
 ## View it
 - **Comparison gallery:** `index.html` (live iframes of all four + rationale + the pick)
