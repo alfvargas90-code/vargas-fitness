@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-12T17:30:00-05:00",
-  "data_hash": "84a3458831cc59c3",
-  "slot": "train-1",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 60%\n\nRead\nRecovery is running thin while the day\u2019s output has only reached a moderate spend, so the workout window opens with limited margin rather than clear readiness. Intake is still light for muscle retention, making this a day that favors controlled resistance work over intensity.\n\nMeasured, not muted.\n\nPerformance: Measured, not muted.\n\nTransit: none",
+  "generated_at": "2026-06-12T17:32:21-05:00",
+  "data_hash": "25a2c40927a12254",
+  "slot": "macros-update",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 60%\n\nRead\nThe latest meal moves the day out of a low-input pattern and back into a workable fueling range, with protein now meaningfully closer to supporting lean mass. Recovery still reads constrained and output is lighter than usual, so the day favors repair-minded consistency over intensity.\n\nQuiet consolidation.\n\nPerformance: Quiet consolidation.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 60%\n\nRead\nRecovery is running thin while the day\u2019s output has only reached a moderate spend, so the workout window opens with limited margin rather than clear readiness. Intake is still light for muscle retention, making this a day that favors controlled resistance work over intensity.\n\nMeasured, not muted."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 60%\n\nRead\nThe latest meal moves the day out of a low-input pattern and back into a workable fueling range, with protein now meaningfully closer to supporting lean mass. Recovery still reads constrained and output is lighter than usual, so the day favors repair-minded consistency over intensity.\n\nQuiet consolidation."
     },
     {
       "label": "Performance",
-      "text": "Measured, not muted."
+      "text": "Quiet consolidation."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 60%\n\nRead\nRecovery is running thin while the day\u2019s output has only reached a moderate spend, so the workout window opens with limited margin rather than clear readiness. Intake is still light for muscle retention, making this a day that favors controlled resistance work over intensity.\n\nMeasured, not muted.",
-    "performance": "Measured, not muted.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 60%\n\nRead\nThe latest meal moves the day out of a low-input pattern and back into a workable fueling range, with protein now meaningfully closer to supporting lean mass. Recovery still reads constrained and output is lighter than usual, so the day favors repair-minded consistency over intensity.\n\nQuiet consolidation.",
+    "performance": "Quiet consolidation.",
     "transit": null
   },
-  "nutrition_nudge": "Make dinner protein-heavy now with at least 60g to protect muscle while keeping the calorie deficit modest.",
+  "nutrition_nudge": "Fat is already over, so keep dinner lean, skip oils, and add 44g protein.",
   "transits": [],
   "data_basis": {
     "recharge_today": 1,
     "sleep_hours": 6.6,
     "hrv_today": 46,
     "hrv_7d_avg": 59.1,
-    "nutrition": "calories 950 of 2574 goal, protein 32g of 138g goal, carbs 95g of 290g goal, fat 52g of 72g goal",
-    "nutrition_detail": "calories 950 of 2574 goal -> 1624 left; protein 32g of 138g goal -> 106g gap; carbs 95g of 290g goal; fat 52g of 72g goal",
+    "nutrition": "calories 2100 of 2574 goal, protein 94g of 138g goal, carbs 235g of 290g goal, fat 77g of 72g goal",
+    "nutrition_detail": "calories 2100 of 2574 goal -> 474 left; protein 94g of 138g goal -> 44g gap; carbs 235g of 290g goal; fat 77g of 72g goal",
     "activity_today": "3,591 steps so far, 3h 2m active, 1,708 calories burned, Moderate training load"
   }
 }
