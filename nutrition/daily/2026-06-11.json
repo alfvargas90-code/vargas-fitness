@@ -1,6 +1,6 @@
 {
   "date": "2026-06-11",
-  "synced_at": "2026-06-12T03:56:14+00:00",
+  "synced_at": "2026-06-12T04:26:21+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 2760.0,
-    "protein_g": 175.0,
-    "carbs_g": 276.0,
-    "fat_g": 103.0
+    "calories": 2940.0,
+    "protein_g": 181.0,
+    "carbs_g": 312.0,
+    "fat_g": 104.0
   },
-  "meal_count": 4,
+  "meal_count": 5,
   "raw": {
     "date": "2026-06-11",
     "meals": [
@@ -53,13 +53,22 @@
         "fat": 20,
         "carbs": 60,
         "emoji": "\u00f0\u009f\u00a5\u00a8"
+      },
+      {
+        "title": "Sourdough Bread",
+        "time": "23:12",
+        "calories": 180,
+        "protein": 6,
+        "fat": 1,
+        "carbs": 36,
+        "emoji": "\u00f0\u009f\u008d\u009e"
       }
     ],
     "totals": {
-      "calories": 2760,
-      "protein": 175,
-      "fat": 103,
-      "carbs": 276
+      "calories": 2940,
+      "protein": 181,
+      "fat": 104,
+      "carbs": 312
     },
     "targets": {
       "calories": 2574,
@@ -68,14 +77,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": -186,
+      "calories": -366,
       "is_over": true
     },
-    "meal_count": 4,
+    "meal_count": 5,
     "labels": {
       "header": "Today",
-      "calories_remaining": "186 kcal over today",
-      "meals_logged": "4 meals logged",
+      "calories_remaining": "366 kcal over today",
+      "meals_logged": "5 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
