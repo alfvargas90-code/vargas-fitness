@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=375, initial-scale=1, maximum-scale=1">
+<title>Pillar Columns — Fitness</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --ink:#03050F; --panel:#080B1C; --surface:#10183A;
+    --cyan:#00C8FF; --cyan-lt:#E9F7FF;
+    --purple:#8A5CFF; --purple-lt:#C9B8FF;
+    --coral:#FF5E62;
+    --orange:#FF8A3D;
+    --green:#39D98A;
+    --pink:#FF5E8A; --pink-lt:#FFB3C8;
+    --violet:#9B5CFF;
+    --muted:#8A90A6;
+    --gold:#FFB020;
+    --text:#F2F5FA;
+  }
+  html,body{ width:375px; }
+  body{
+    font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+    color:var(--text);
+    font-variant-numeric:tabular-nums;
+    background:
+      radial-gradient(118% 60% at 50% 28%, rgba(88,62,205,.40), transparent 62%),
+      radial-gradient(circle at 2% 42%, rgba(0,200,255,.10), transparent 46%),
+      radial-gradient(circle at 98% 42%, rgba(255,94,98,.10), transparent 46%),
+      radial-gradient(circle at 86% 70%, rgba(255,138,61,.09), transparent 46%),
+      radial-gradient(circle at 14% 72%, rgba(138,92,255,.12), transparent 46%),
+      linear-gradient(180deg, #03050F 0%, #04061a 50%, #03040E 100%);
+    background-color:#03050F;
+    min-height:812px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ width:375px; padding:14px 14px 28px; }
+
+  .glass{
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0) 42%),
+      rgba(20,26,54,0.68);
+    border:1px solid rgba(255,255,255,0.11);
+    -webkit-backdrop-filter:blur(24px) saturate(1.24);
+    backdrop-filter:blur(24px) saturate(1.24);
+    border-radius:22px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16), inset 0 -1px 0 rgba(0,0,0,.35), 0 22px 50px rgba(0,0,0,.5);
+  }
+
+  /* ── Top bar ── */
+  .topbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; padding:0 2px; }
+  .date{ font-size:12px; font-weight:700; letter-spacing:.4px; color:#D7DEEC; }
+  .date span{ color:var(--muted); font-weight:600; }
+  .sync-pill{
+    display:inline-flex; align-items:center; gap:5px;
+    border-radius:999px; padding:4px 10px;
+    font-size:9.5px; font-weight:700; letter-spacing:.3px;
+    background:rgba(57,217,138,0.10); border:1px solid rgba(57,217,138,0.28); color:#A7F0CF;
+  }
+  .sync-pill .dot{ width:6px; height:6px; border-radius:50%; background:var(--green); box-shadow:0 0 8px rgba(57,217,138,.9); }
+
+  /* ── Moon crown ── */
+  .crown{
+    position:relative; padding:6px 0 4px; margin-bottom:14px;
+    overflow:hidden;
+  }
+  .moon-stage{
+    position:relative; width:220px; height:208px; margin:0 auto;
+    filter:saturate(1.12) contrast(1.04);
+  }
+  .moon-stage svg{ position:absolute; inset:0; width:100%; height:100%; }
+  /* floating metric corners */
+  .corner{ position:absolute; z-index:3; }
+  .metric-cap{ font-size:9.5px; font-weight:700; letter-spacing:1.3px; text-transform:uppercase; }
+  .metric-num{ font-size:27px; font-weight:800; line-height:1; font-variant-numeric:tabular-nums; }
+  .metric-word{ font-size:11px; font-weight:700; margin-top:2px; }
+  .c-recov{ top:2px; left:2px; text-align:left; }
+  .c-recov .metric-cap{ color:var(--cyan); }
+  .c-recov .metric-num{ color:var(--cyan-lt); text-shadow:0 0 17px rgba(0,200,255,0.78); }
+  .c-recov .metric-word{ color:var(--cyan); }
+  .c-sleep{ top:2px; right:2px; text-align:right; }
+  .c-sleep .metric-cap{ color:var(--purple); }
+  .c-sleep .metric-num{ color:var(--purple-lt); text-shadow:0 0 17px rgba(138,92,255,0.78); }
+  .c-sleep .metric-word{ color:var(--purple); }
+  .c-strain{ bottom:4px; right:2px; text-align:right; }
+  .c-strain .metric-cap{ color:var(--coral); }
+  .c-strain .metric-num{ color:#FFC2C4; text-shadow:0 0 18px rgba(255,94,98,0.85); }
+  .c-strain .metric-word{ color:var(--coral); }
+
+  /* ── Three pillar columns ── */
+  .pillars{ display:flex; gap:9px; margin-bottom:14px; }
+  .col{ flex:1 1 0; min-width:0; padding:13px 10px 14px; position:relative; overflow:hidden; }
+  .col::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:3px;
+    border-radius:22px 22px 0 0;
+  }
+  .col.recovery::before{ background:linear-gradient(90deg,var(--pink),var(--cyan)); box-shadow:0 0 14px rgba(255,94,138,.5); }
+  .col.activity::before{ background:linear-gradient(90deg,#FF9A3D,var(--orange)); box-shadow:0 0 14px rgba(255,138,61,.5); }
+  .col.body::before{ background:linear-gradient(90deg,#B58CFF,var(--violet)); box-shadow:0 0 14px rgba(155,92,255,.5); }
+
+  .eyebrow{
+    font-size:10px; text-transform:uppercase; letter-spacing:1.6px; font-weight:700;
+    opacity:.92; margin-bottom:11px; display:flex; align-items:center; gap:5px;
+  }
+  .eyebrow .ic{ width:6px; height:6px; border-radius:50%; }
+  .recovery .eyebrow{ color:var(--pink); } .recovery .eyebrow .ic{ background:var(--pink); box-shadow:0 0 8px var(--pink); }
+  .activity .eyebrow{ color:var(--orange); } .activity .eyebrow .ic{ background:var(--orange); box-shadow:0 0 8px var(--orange); }
+  .body .eyebrow{ color:var(--violet); } .body .eyebrow .ic{ background:var(--violet); box-shadow:0 0 8px var(--violet); }
+
+  /* metric row */
+  .row{ margin-bottom:11px; }
+  .row:last-child{ margin-bottom:0; }
+  .row .lbl{ font-size:9px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:var(--muted); }
+  .row .val{ font-size:21px; font-weight:800; line-height:1.05; font-variant-numeric:tabular-nums; margin-top:1px; }
+  .row .unit{ font-size:10px; font-weight:700; color:#B7BECE; margin-left:1px; }
+  .row .sub{ font-size:9.5px; font-weight:600; color:var(--muted); margin-top:1px; }
+  .val.cyan{ color:var(--cyan-lt); text-shadow:0 0 14px rgba(0,200,255,0.6); }
+  .val.pink{ color:var(--pink-lt); text-shadow:0 0 14px rgba(255,94,138,0.55); }
+  .val.orange{ color:#FFD0A8; text-shadow:0 0 11px rgba(255,138,61,0.55); }
+  .val.violet{ color:var(--purple-lt); text-shadow:0 0 14px rgba(155,92,255,0.55); }
+
+  .chip{
+    display:inline-block; border-radius:999px; padding:2px 8px;
+    font-size:9px; font-weight:700; letter-spacing:.3px; margin-top:3px;
+  }
+  .chip.compromised{ background:rgba(255,94,138,0.13); border:1px solid rgba(255,94,138,0.32); color:var(--pink-lt); }
+
+  /* mini progress bar */
+  .bar{ height:5px; border-radius:999px; background:rgba(255,255,255,0.10); overflow:hidden; margin-top:5px; }
+  .bar > i{ display:block; height:100%; border-radius:999px; }
+  .bar.orange > i{ background:linear-gradient(90deg,#FF9A3D,var(--orange)); box-shadow:0 0 8px rgba(255,138,61,.7); }
+
+  /* sparkline */
+  .spark{ display:block; margin-top:4px; width:100%; height:16px; }
+
+  .delta-down{ color:var(--green); font-weight:800; }
+  .delta-up{ color:var(--coral); font-weight:800; }
+
+  /* divider line between rows inside a column */
+  .rule{ height:1px; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent); margin:11px 0; }
+
+  /* ── Narrative card ── */
+  .narr{ padding:16px 17px 17px; }
+  .narr .eyebrow{ color:var(--pink); margin-bottom:9px; }
+  .narr .eyebrow .ic{ background:var(--pink); box-shadow:0 0 8px var(--pink); }
+  .prose{ font-style:italic; font-size:13.5px; line-height:1.75; color:#E9EDF5; }
+  .prose-closing{ font-style:italic; font-weight:600; color:#FF7FA0; text-shadow:0 0 12px rgba(255,94,138,0.45); }
+
+  .footstamps{ display:flex; gap:6px; margin-top:13px; flex-wrap:wrap; }
+  .stamp{
+    font-size:9px; font-weight:700; letter-spacing:.3px; color:#9AA2B6;
+    border-radius:999px; padding:3px 9px;
+    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.09);
+  }
+  .stamp b{ color:#D7DEEC; font-weight:800; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="date">Thursday, June 12 <span>· 2026</span></div>
+    <div class="sync-pill"><span class="dot"></span>SYNCED 12:30</div>
+  </div>
+
+  <!-- Moon crown -->
+  <div class="crown">
+    <div class="moon-stage">
+      <svg viewBox="0 0 260 260" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" style="overflow:visible" aria-label="Orbit rings around moon">
+    <defs>
+  <linearGradient id="gSleep" x1="0.15" y1="0" x2="0.85" y2="1">
+    <stop offset="0" stop-color="#6E3FD6"></stop><stop offset="1" stop-color="#B58CFF"></stop>
+  </linearGradient>
+  <linearGradient id="gRecov" x1="0" y1="0.2" x2="1" y2="0.9">
+    <stop offset="0" stop-color="#5CEBFF"></stop><stop offset="1" stop-color="#00B4FF"></stop>
+  </linearGradient>
+  <linearGradient id="gStrain" x1="0.1" y1="0" x2="0.95" y2="1">
+    <stop offset="0" stop-color="#FF9A3D"></stop><stop offset="0.55" stop-color="#FF5E62"></stop><stop offset="1" stop-color="#FF2E55"></stop>
+  </linearGradient>
+</defs>
+    <circle cx="130" cy="130" r="104" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="#FF5E62" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.16" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 33px #FF5E62)"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="#FF5E62" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.34" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 21px #FF5E62)"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="url(#gStrain)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 15px #FF5E62)"></circle>
+    <circle cx="130" cy="130" r="90" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="#00C8FF" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.13" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 27px #00C8FF)"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="#00C8FF" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.28" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 17px #00C8FF)"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="url(#gRecov)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 12px #00C8FF)"></circle>
+    <circle cx="130" cy="130" r="76" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="#8A5CFF" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.13" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 27px #8A5CFF)"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="#8A5CFF" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.28" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 17px #8A5CFF)"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="url(#gSleep)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 12px #8A5CFF)"></circle>
+    <g transform="translate(130 130)"><defs>
+      <clipPath id="moonClip"><circle cx="0" cy="0" r="62"></circle></clipPath>
+      <radialGradient id="moonOuterHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#E4ECFF" stop-opacity="0.22"></stop>
+        <stop offset="38%" stop-color="#C8D8FF" stop-opacity="0.14"></stop>
+        <stop offset="72%" stop-color="#AAC3F0" stop-opacity="0.045"></stop>
+        <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"></stop>
+      </radialGradient>
+      <radialGradient id="moonHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#E4ECFF" stop-opacity="0.34"></stop>
+        <stop offset="42%" stop-color="#C8D8FF" stop-opacity="0.22"></stop>
+        <stop offset="70%" stop-color="#AAC3F0" stop-opacity="0.11"></stop>
+        <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"></stop>
+      </radialGradient>
+      <radialGradient id="moonInnerHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#F4F8FF" stop-opacity="0.36"></stop>
+        <stop offset="46%" stop-color="#E4ECFF" stop-opacity="0.24"></stop>
+        <stop offset="78%" stop-color="#C8D8FF" stop-opacity="0.09"></stop>
+        <stop offset="100%" stop-color="#AAC3F0" stop-opacity="0"></stop>
+      </radialGradient>
+      <radialGradient id="moonLimb" cx="42%" cy="38%" r="62%">
+        <stop offset="0%" stop-color="#FFFCF4" stop-opacity="0.10"></stop>
+        <stop offset="55%" stop-color="#FFFFFF" stop-opacity="0"></stop>
+        <stop offset="82%" stop-color="#000000" stop-opacity="0"></stop>
+        <stop offset="100%" stop-color="#08080E" stop-opacity="0.50"></stop>
+      </radialGradient>
+      <radialGradient id="moonSpec" cx="34%" cy="28%" r="50%">
+        <stop offset="0%" stop-color="#FFFDF6" stop-opacity="0.20"></stop>
+        <stop offset="45%" stop-color="#EAF1FF" stop-opacity="0.07"></stop>
+        <stop offset="100%" stop-color="#EAF1FF" stop-opacity="0"></stop>
+      </radialGradient>
+      <filter id="moonRimBlur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stddev="3.1"></feGaussianBlur></filter>
+      <filter id="moonOuterHaloBlur" x="-120%" y="-120%" width="340%" height="340%">
+        <feGaussianBlur stddev="21.08"></feGaussianBlur></filter>
+      <filter id="moonHaloBlur" x="-90%" y="-90%" width="280%" height="280%">
+        <feGaussianBlur stddev="13.64"></feGaussianBlur></filter>
+      <filter id="moonInnerHaloBlur" x="-70%" y="-70%" width="240%" height="240%">
+        <feGaussianBlur stddev="7.44"></feGaussianBlur></filter>
+      <filter id="moonTerm" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stddev="4.34"></feGaussianBlur></filter>
+      <filter id="moonCast" x="-140%" y="-140%" width="380%" height="380%">
+        <feGaussianBlur stddev="9.92"></feGaussianBlur></filter>
+    </defs>
+    <ellipse cx="0" cy="19.84" rx="70.68" ry="26.04" fill="#02030A" opacity="0.44" filter="url(#moonCast)"></ellipse>
+    <circle cx="0" cy="0" r="195.3" fill="url(#moonOuterHalo)" filter="url(#moonOuterHalo)"></circle>
+    <circle cx="0" cy="0" r="127.1" fill="url(#moonHalo)" filter="url(#moonHaloBlur)"></circle>
+    <circle cx="0" cy="0" r="84.32" fill="url(#moonInnerHalo)" filter="url(#moonInnerHalo)"></circle>
+    <g clip-path="url(#moonClip)">
+      <image href="../assets/moon-lro.webp" x="-62" y="-62" width="124" height="124" preserveAspectRatio="xMidYMid slice" style="filter:brightness(1.12)"></image>
+      <circle cx="0" cy="0" r="62" fill="url(#moonLimb)"></circle>
+      <circle cx="0" cy="0" r="62" fill="url(#moonSpec)"></circle>
+      <path d="M 0 -62 A 62 62 0 0 1 0 62 A 27.28 62 0 0 1 0 -62 Z" fill="#070B16" opacity="0.86" filter="url(#moonTerm)"></path>
+    </g>
+    <circle cx="0" cy="0" r="62" fill="none" stroke="#CFE0FF" stroke-opacity="0.50" stroke-width="2.79" filter="url(#moonRimBlur)"></circle>
+    <circle cx="0" cy="0" r="62" fill="none" stroke="#EAF1FF" stroke-opacity="0.60" stroke-width="1.12"></circle></g>
+  </svg>
+
+      <!-- floating corners -->
+      <div class="corner c-recov">
+        <div class="metric-cap">Recovery</div>
+        <div class="metric-num">41</div>
+        <div class="metric-word">Compromised</div>
+      </div>
+      <div class="corner c-sleep">
+        <div class="metric-cap">Sleep</div>
+        <div class="metric-num">72</div>
+        <div class="metric-word">6h 46m</div>
+      </div>
+      <div class="corner c-strain">
+        <div class="metric-cap">Strain</div>
+        <div class="metric-num">11.4</div>
+        <div class="metric-word">Exertion</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three pillar columns -->
+  <div class="pillars">
+
+    <!-- RECOVERY -->
+    <div class="col recovery glass">
+      <div class="eyebrow"><span class="ic"></span>Recovery</div>
+
+      <div class="row">
+        <div class="lbl">ANS Charge</div>
+        <div class="val pink">&minus;4.2</div>
+        <span class="chip compromised">Compromised</span>
+      </div>
+      <div class="rule"></div>
+      <div class="row">
+        <div class="lbl">Sleep</div>
+        <div class="val cyan">6:46<span class="unit">h</span></div>
+        <div class="sub">score 72</div>
+      </div>
+      <div class="row">
+        <div class="lbl">HRV</div>
+        <div class="val cyan">62<span class="unit">ms</span></div>
+        <div class="sub">7-day 68</div>
+      </div>
+      <div class="row">
+        <div class="lbl">Resting HR</div>
+        <div class="val cyan">54<span class="unit">bpm</span></div>
+      </div>
+    </div>
+
+    <!-- ACTIVITY -->
+    <div class="col activity glass">
+      <div class="eyebrow"><span class="ic"></span>Activity</div>
+
+      <div class="row">
+        <div class="lbl">Steps</div>
+        <div class="val orange">7,840</div>
+        <div class="sub">of 10,000</div>
+        <div class="bar orange"><i style="width:78%"></i></div>
+      </div>
+      <div class="rule"></div>
+      <div class="row">
+        <div class="lbl">Active</div>
+        <div class="val orange">612<span class="unit">kcal</span></div>
+        <svg class="spark" viewBox="0 0 92 16" preserveAspectRatio="none">
+          <polyline points="0,13 14,12 28,10 42,11 56,7 70,8 92,3" fill="none" stroke="#FF8A3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 4px rgba(255,138,61,.8))"/>
+        </svg>
+      </div>
+      <div class="row">
+        <div class="lbl">Total Burn</div>
+        <div class="val orange">2,340<span class="unit">kcal</span></div>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="col body glass">
+      <div class="eyebrow"><span class="ic"></span>Body</div>
+
+      <div class="row">
+        <div class="lbl">Weight</div>
+        <div class="val violet">167.5<span class="unit">lb</span></div>
+        <div class="sub"><span class="delta-down">&#9660;0.3</span> vs yest</div>
+      </div>
+      <div class="rule"></div>
+      <div class="row">
+        <div class="lbl">Body Fat</div>
+        <div class="val violet">18.2<span class="unit">%</span></div>
+      </div>
+      <div class="row">
+        <div class="lbl">Muscle</div>
+        <div class="val violet">137.0<span class="unit">lb</span></div>
+      </div>
+      <div class="row">
+        <div class="lbl">BMI</div>
+        <div class="val violet">23.4</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Narrative -->
+  <div class="narr glass">
+    <div class="eyebrow"><span class="ic"></span>Today&rsquo;s Read</div>
+    <p class="prose">
+      Your nervous system slipped below baseline overnight. The numbers aren&rsquo;t asking
+      for effort today &mdash; they&rsquo;re asking for restraint.
+      <span class="prose-closing">Move easy, eat enough, and let the charge come back on its own.</span>
+    </p>
+    <div class="footstamps">
+      <span class="stamp">Polar <b>06:40</b></span>
+      <span class="stamp">VeSync <b>07:05</b></span>
+      <span class="stamp">Nutrition <b>12:30</b></span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

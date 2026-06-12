@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero-First · Fitness</title>
+<style>
+  :root{
+    --ink:#03050F; --panel:#080B1C; --surface:#10183A;
+    --cyan:#00C8FF; --cyan-text:#E9F7FF;
+    --purple:#8A5CFF; --purple-light:#C9B8FF;
+    --coral:#FF5E62; --orange:#FF8A3D; --green:#39D98A;
+    --pink:#FF5E8A; --pink-light:#FFB3C8; --violet:#9B5CFF;
+    --muted:#8A90A6; --gold:#FFB020;
+    --text:#F2F5FA;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{ width:100%; }
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(118% 60% at 50% 28%, rgba(88,62,205,.40), transparent 62%),
+      radial-gradient(circle at 2% 42%, rgba(0,200,255,.10), transparent 46%),
+      radial-gradient(circle at 98% 42%, rgba(255,94,98,.10), transparent 46%),
+      radial-gradient(circle at 86% 70%, rgba(255,138,61,.09), transparent 46%),
+      radial-gradient(circle at 14% 72%, rgba(138,92,255,.12), transparent 46%),
+      linear-gradient(180deg, #03050F 0%, #04061a 50%, #03040E 100%);
+    background-color:#03050F;
+    min-height:100vh;
+    display:flex; justify-content:center;
+  }
+  .app{ width:375px; min-height:812px; padding:18px 16px 30px; position:relative; }
+
+  .glass{
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0) 42%),
+      rgba(20,26,54,0.68);
+    border:1px solid rgba(255,255,255,0.11);
+    -webkit-backdrop-filter:blur(24px) saturate(1.24);
+    backdrop-filter:blur(24px) saturate(1.24);
+    border-radius:22px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16), inset 0 -1px 0 rgba(0,0,0,.35), 0 22px 50px rgba(0,0,0,.5);
+  }
+  .num{ font-variant-numeric:tabular-nums; }
+
+  /* ---- top bar ---- */
+  .topbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .eyebrow{
+    font-size:11px; text-transform:uppercase; letter-spacing:2px; font-weight:700;
+    color:var(--cyan); opacity:.85;
+  }
+  .eyebrow .date{ color:var(--muted); margin-left:8px; letter-spacing:1.4px; }
+  .sync-pill{
+    display:flex; align-items:center; gap:6px;
+    border-radius:999px; padding:4px 10px; font-size:10px; font-weight:700;
+    background:rgba(57,217,138,0.10); border:1px solid rgba(57,217,138,0.30);
+    color:var(--green); font-variant-numeric:tabular-nums;
+  }
+  .sync-dot{ width:6px; height:6px; border-radius:50%; background:var(--green);
+    box-shadow:0 0 8px rgba(57,217,138,.9); }
+
+  /* ---- HERO ---- */
+  .hero{
+    position:relative; padding:18px 20px 22px; margin-bottom:16px; overflow:hidden;
+    text-align:center;
+  }
+  .hero-moon{
+    position:absolute; top:-26px; right:-30px;
+    width:172px; height:172px; opacity:.92;
+    filter:saturate(1.12) contrast(1.04);
+    pointer-events:none;
+  }
+  .hero-tag{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:10px; text-transform:uppercase; letter-spacing:1.8px; font-weight:700;
+    color:var(--coral);
+    border-radius:999px; padding:3px 10px;
+    background:rgba(255,94,98,0.12); border:1px solid rgba(255,94,98,0.30);
+    position:relative; z-index:2;
+  }
+  .hero-cap{
+    margin-top:14px; font-size:11px; font-weight:700; letter-spacing:1.6px;
+    text-transform:uppercase; color:var(--cyan); opacity:.9; position:relative; z-index:2;
+  }
+  .hero-num{
+    position:relative; z-index:2;
+    font-size:96px; font-weight:800; line-height:.9; letter-spacing:-3px;
+    color:var(--cyan-text); font-variant-numeric:tabular-nums;
+    text-shadow:0 0 17px rgba(0,200,255,0.78), 0 0 46px rgba(0,200,255,0.40);
+    margin-top:4px;
+  }
+  .hero-unit{ font-size:30px; font-weight:700; color:var(--cyan); opacity:.7; }
+  .hero-word{
+    position:relative; z-index:2;
+    margin-top:6px; font-size:21px; font-weight:800; letter-spacing:.3px;
+    color:var(--coral); text-shadow:0 0 18px rgba(255,94,98,0.55);
+  }
+  .hero-sub{
+    position:relative; z-index:2;
+    margin-top:3px; font-size:11px; font-weight:600; color:var(--muted);
+    font-variant-numeric:tabular-nums;
+  }
+  .hero-prose{
+    position:relative; z-index:2;
+    margin-top:14px; text-align:left;
+    font-style:italic; font-size:13px; line-height:1.7; color:#E9EDF5;
+    border-top:1px solid rgba(255,255,255,0.08); padding-top:13px;
+  }
+  .hero-prose b{
+    font-style:italic; font-weight:600; color:#FF7FA0;
+    text-shadow:0 0 12px rgba(255,94,138,0.45);
+  }
+
+  /* mini ring snapshot row under hero */
+  .rings{ display:flex; gap:8px; margin-bottom:16px; }
+  .ring-chip{ flex:1; padding:11px 10px 12px; text-align:center; }
+  .ring-cap{ font-size:9.5px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; }
+  .ring-num{ font-size:24px; font-weight:800; line-height:1; margin-top:5px; font-variant-numeric:tabular-nums; }
+  .ring-word{ font-size:10px; font-weight:700; margin-top:3px; color:var(--muted); }
+
+  /* ---- compact ledger ---- */
+  .ledger-head{
+    font-size:11px; text-transform:uppercase; letter-spacing:2px; font-weight:700;
+    color:var(--muted); margin:2px 4px 9px;
+  }
+  .ledger{ padding:4px 4px; }
+  .row{
+    display:flex; align-items:center; gap:12px;
+    padding:11px 14px; border-bottom:1px solid rgba(255,255,255,0.055);
+  }
+  .row:last-child{ border-bottom:none; }
+  .row-ico{
+    width:34px; height:34px; border-radius:11px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:15px;
+  }
+  .row-body{ flex:1; min-width:0; }
+  .row-label{ font-size:10px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:var(--muted); }
+  .row-sub{ font-size:11px; color:var(--muted); margin-top:1px; opacity:.85; }
+  .row-val{ text-align:right; flex-shrink:0; }
+  .row-num{ font-size:19px; font-weight:800; line-height:1; font-variant-numeric:tabular-nums; }
+  .row-num small{ font-size:11px; font-weight:600; color:var(--muted); }
+  .pill{
+    display:inline-block; border-radius:999px; padding:2px 8px;
+    font-size:9px; font-weight:700; margin-top:3px; letter-spacing:.3px;
+  }
+  /* track bar */
+  .track{ height:4px; border-radius:999px; background:rgba(255,255,255,0.08); margin-top:6px; overflow:hidden; }
+  .track > i{ display:block; height:100%; border-radius:999px; }
+
+  .footer{ text-align:center; margin-top:16px; font-size:9.5px; color:var(--muted);
+    letter-spacing:1.3px; text-transform:uppercase; opacity:.6;
+    font-variant-numeric:tabular-nums; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- top bar -->
+  <div class="topbar">
+    <div class="eyebrow">Now<span class="date">Thu · Jun 12</span></div>
+    <div class="sync-pill"><span class="sync-dot"></span>synced 12:30</div>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero glass">
+    <!-- real moon, reduced & tucked into the corner so it stays the signature -->
+    <div class="hero-moon">
+      <svg viewBox="0 0 260 260" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" style="overflow:visible" aria-label="Orbit rings around moon">
+    <defs>
+  <linearGradient id="gSleep" x1="0.15" y1="0" x2="0.85" y2="1">
+    <stop offset="0" stop-color="#6E3FD6"></stop><stop offset="1" stop-color="#B58CFF"></stop>
+  </linearGradient>
+  <linearGradient id="gRecov" x1="0" y1="0.2" x2="1" y2="0.9">
+    <stop offset="0" stop-color="#5CEBFF"></stop><stop offset="1" stop-color="#00B4FF"></stop>
+  </linearGradient>
+  <linearGradient id="gStrain" x1="0.1" y1="0" x2="0.95" y2="1">
+    <stop offset="0" stop-color="#FF9A3D"></stop><stop offset="0.55" stop-color="#FF5E62"></stop><stop offset="1" stop-color="#FF2E55"></stop>
+  </linearGradient>
+</defs>
+    <circle cx="130" cy="130" r="104" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="#FF5E62" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.16" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 33px #FF5E62)"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="#FF5E62" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.34" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 21px #FF5E62)"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="url(#gStrain)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 15px #FF5E62)"></circle>
+    <circle cx="130" cy="130" r="90" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="#00C8FF" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.13" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 27px #00C8FF)"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="#00C8FF" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.28" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 17px #00C8FF)"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="url(#gRecov)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 12px #00C8FF)"></circle>
+    <circle cx="130" cy="130" r="76" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="#8A5CFF" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.13" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 27px #8A5CFF)"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="#8A5CFF" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.28" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 17px #8A5CFF)"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="url(#gSleep)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 12px #8A5CFF)"></circle>
+    <g transform="translate(130 130)"><defs>
+      <clipPath id="moonClip"><circle cx="0" cy="0" r="62"></circle></clipPath>
+      <radialGradient id="moonOuterHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#E4ECFF" stop-opacity="0.22"></stop>
+        <stop offset="38%" stop-color="#C8D8FF" stop-opacity="0.14"></stop>
+        <stop offset="72%" stop-color="#AAC3F0" stop-opacity="0.045"></stop>
+        <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"></stop>
+      </radialGradient>
+      <radialGradient id="moonHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#E4ECFF" stop-opacity="0.34"></stop>
+        <stop offset="42%" stop-color="#C8D8FF" stop-opacity="0.22"></stop>
+        <stop offset="70%" stop-color="#AAC3F0" stop-opacity="0.11"></stop>
+        <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"></stop>
+      </radialGradient>
+      <radialGradient id="moonInnerHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#F4F8FF" stop-opacity="0.36"></stop>
+        <stop offset="46%" stop-color="#E4ECFF" stop-opacity="0.24"></stop>
+        <stop offset="78%" stop-color="#C8D8FF" stop-opacity="0.09"></stop>
+        <stop offset="100%" stop-color="#AAC3F0" stop-opacity="0"></stop>
+      </radialGradient>
+      <radialGradient id="moonLimb" cx="42%" cy="38%" r="62%">
+        <stop offset="0%" stop-color="#FFFCF4" stop-opacity="0.10"></stop>
+        <stop offset="55%" stop-color="#FFFFFF" stop-opacity="0"></stop>
+        <stop offset="82%" stop-color="#000000" stop-opacity="0"></stop>
+        <stop offset="100%" stop-color="#08080E" stop-opacity="0.50"></stop>
+      </radialGradient>
+      <radialGradient id="moonSpec" cx="34%" cy="28%" r="50%">
+        <stop offset="0%" stop-color="#FFFDF6" stop-opacity="0.20"></stop>
+        <stop offset="45%" stop-color="#EAF1FF" stop-opacity="0.07"></stop>
+        <stop offset="100%" stop-color="#EAF1FF" stop-opacity="0"></stop>
+      </radialGradient>
+      <filter id="moonRimBlur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stddev="3.1"></feGaussianBlur></filter>
+      <filter id="moonOuterHaloBlur" x="-120%" y="-120%" width="340%" height="340%">
+        <feGaussianBlur stddev="21.08"></feGaussianBlur></filter>
+      <filter id="moonHaloBlur" x="-90%" y="-90%" width="280%" height="280%">
+        <feGaussianBlur stddev="13.64"></feGaussianBlur></filter>
+      <filter id="moonInnerHaloBlur" x="-70%" y="-70%" width="240%" height="240%">
+        <feGaussianBlur stddev="7.44"></feGaussianBlur></filter>
+      <filter id="moonTerm" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stddev="4.34"></feGaussianBlur></filter>
+      <filter id="moonCast" x="-140%" y="-140%" width="380%" height="380%">
+        <feGaussianBlur stddev="9.92"></feGaussianBlur></filter>
+    </defs>
+    <ellipse cx="0" cy="19.84" rx="70.68" ry="26.04" fill="#02030A" opacity="0.44" filter="url(#moonCast)"></ellipse>
+    <circle cx="0" cy="0" r="195.3" fill="url(#moonOuterHalo)" filter="url(#moonOuterHalo)"></circle>
+    <circle cx="0" cy="0" r="127.1" fill="url(#moonHalo)" filter="url(#moonHaloBlur)"></circle>
+    <circle cx="0" cy="0" r="84.32" fill="url(#moonInnerHalo)" filter="url(#moonInnerHalo)"></circle>
+    <g clip-path="url(#moonClip)">
+      <image href="../assets/moon-lro.webp" x="-62" y="-62" width="124" height="124" preserveAspectRatio="xMidYMid slice" style="filter:brightness(1.12)"></image>
+      <circle cx="0" cy="0" r="62" fill="url(#moonLimb)"></circle>
+      <circle cx="0" cy="0" r="62" fill="url(#moonSpec)"></circle>
+      <path d="M 0 -62 A 62 62 0 0 1 0 62 A 27.28 62 0 0 1 0 -62 Z" fill="#070B16" opacity="0.86" filter="url(#moonTerm)"></path>
+    </g>
+    <circle cx="0" cy="0" r="62" fill="none" stroke="#CFE0FF" stroke-opacity="0.50" stroke-width="2.79" filter="url(#moonRimBlur)"></circle>
+    <circle cx="0" cy="0" r="62" fill="none" stroke="#EAF1FF" stroke-opacity="0.60" stroke-width="1.12"></circle></g>
+  </svg>
+    </div>
+
+    <div class="hero-tag">● Metric of the day · Recovery</div>
+    <div class="hero-cap">ANS Charge</div>
+    <div class="hero-num num">&minus;4.2</div>
+    <div class="hero-word">Compromised</div>
+    <div class="hero-sub num">Below baseline · HRV 62 · RHR 54 · Recovery 41</div>
+
+    <p class="hero-prose">
+      Your nervous system slipped below baseline overnight. The numbers aren't
+      asking for effort today &mdash; they're asking for restraint.
+      <b>Move easy, eat enough, and let the charge come back on its own.</b>
+    </p>
+  </section>
+
+  <!-- mini ring snapshot -->
+  <div class="rings">
+    <div class="ring-chip glass">
+      <div class="ring-cap" style="color:var(--cyan)">Recovery</div>
+      <div class="ring-num num" style="color:var(--cyan-text);text-shadow:0 0 14px rgba(0,200,255,.7)">41</div>
+      <div class="ring-word">Compromised</div>
+    </div>
+    <div class="ring-chip glass">
+      <div class="ring-cap" style="color:var(--purple-light)">Sleep</div>
+      <div class="ring-num num" style="color:#C9B8FF;text-shadow:0 0 14px rgba(138,92,255,.7)">72</div>
+      <div class="ring-word">6h 46m</div>
+    </div>
+    <div class="ring-chip glass">
+      <div class="ring-cap" style="color:var(--coral)">Strain</div>
+      <div class="ring-num num" style="color:#FFC2C4;text-shadow:0 0 14px rgba(255,94,98,.7)">11.4</div>
+      <div class="ring-word">Moderate</div>
+    </div>
+  </div>
+
+  <!-- ===== compact ledger ===== -->
+  <div class="ledger-head">The rest of today</div>
+  <section class="ledger glass">
+
+    <!-- Sleep -->
+    <div class="row">
+      <div class="row-ico" style="background:rgba(138,92,255,.14);color:#C9B8FF">☾</div>
+      <div class="row-body">
+        <div class="row-label">Sleep</div>
+        <div class="row-sub">Score 72 · target 8h</div>
+      </div>
+      <div class="row-val">
+        <div class="row-num num" style="color:#C9B8FF">6<small>h</small>46<small>m</small></div>
+        <span class="pill" style="background:rgba(138,92,255,.12);border:1px solid rgba(138,92,255,.3);color:#C9B8FF">−1h14m</span>
+      </div>
+    </div>
+
+    <!-- HRV -->
+    <div class="row">
+      <div class="row-ico" style="background:rgba(0,200,255,.14);color:var(--cyan)">∿</div>
+      <div class="row-body">
+        <div class="row-label">HRV</div>
+        <div class="row-sub">7-day avg 68 ms</div>
+      </div>
+      <div class="row-val">
+        <div class="row-num num" style="color:var(--cyan-text)">62<small> ms</small></div>
+        <span class="pill" style="background:rgba(255,94,98,.12);border:1px solid rgba(255,94,98,.3);color:#FF9AA0">▼ 6</span>
+      </div>
+    </div>
+
+    <!-- RHR -->
+    <div class="row">
+      <div class="row-ico" style="background:rgba(255,94,98,.14);color:var(--coral)">♥</div>
+      <div class="row-body">
+        <div class="row-label">Resting HR</div>
+        <div class="row-sub">Steady overnight</div>
+      </div>
+      <div class="row-val">
+        <div class="row-num num" style="color:#FFC2C4">54<small> bpm</small></div>
+      </div>
+    </div>
+
+    <!-- Weight -->
+    <div class="row">
+      <div class="row-ico" style="background:rgba(155,92,255,.14);color:var(--violet)">⚖</div>
+      <div class="row-body">
+        <div class="row-label">Weight</div>
+        <div class="row-sub">18.2% BF · 137.0 lb lean</div>
+      </div>
+      <div class="row-val">
+        <div class="row-num num" style="color:#CBB8FF">167.5<small> lb</small></div>
+        <span class="pill" style="background:rgba(57,217,138,.12);border:1px solid rgba(57,217,138,.3);color:var(--green)">▼ 1.8 / 7d</span>
+      </div>
+    </div>
+
+    <!-- Activity -->
+    <div class="row">
+      <div class="row-ico" style="background:rgba(255,138,61,.14);color:var(--orange)">⚡</div>
+      <div class="row-body">
+        <div class="row-label">Activity</div>
+        <div class="row-sub">612 active · 2,340 total kcal</div>
+        <div class="track"><i style="width:78%;background:linear-gradient(90deg,#FF8A3D,#FF5E62)"></i></div>
+      </div>
+      <div class="row-val">
+        <div class="row-num num" style="color:#FFC79A">7,840</div>
+        <div class="row-sub" style="margin-top:2px">of 10k steps</div>
+      </div>
+    </div>
+
+    <!-- Nutrition -->
+    <div class="row">
+      <div class="row-ico" style="background:rgba(57,217,138,.14);color:var(--green)">🍽</div>
+      <div class="row-body">
+        <div class="row-label">Nutrition</div>
+        <div class="row-sub">P 142/180 · C 168 · F 61 g</div>
+        <div class="track"><i style="width:88%;background:linear-gradient(90deg,#39D98A,#2bb673)"></i></div>
+      </div>
+      <div class="row-val">
+        <div class="row-num num" style="color:#8DF0BE">1,850</div>
+        <div class="row-sub" style="margin-top:2px">250 left of 2,100</div>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="footer">Polar 06:40 · VeSync 07:05 · Nutrition 12:30</div>
+
+</div>
+</body>
+</html>
