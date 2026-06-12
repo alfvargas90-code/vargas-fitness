@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-11T17:30:00-05:00",
-  "data_hash": "1601bc1294f8a3a5",
-  "slot": "train-1",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 59%\n\nRead\nYour system is carrying a muted recovery signal, while output has run lighter than a typical day and effort already feels moderate. The open training window favors measured resistance work over intensity, with muscle protection still hinging on a cleaner protein finish.\n\nMeasured strength.\n\nPerformance: Measured strength.\n\nTransit: none",
+  "generated_at": "2026-06-11T20:00:01-05:00",
+  "data_hash": "73bedb4cdb288d5d",
+  "slot": "train-2",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 76%\n\nRead\nThe session window is closing on a lighter-than-usual output day, with recovery still subdued despite steadier sleep. Effort landed in a moderate zone; tonight favors quiet consolidation, with protein still the main unfinished support for preserving muscle.\n\nQuiet consolidation.\n\nPerformance: Quiet consolidation.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 59%\n\nRead\nYour system is carrying a muted recovery signal, while output has run lighter than a typical day and effort already feels moderate. The open training window favors measured resistance work over intensity, with muscle protection still hinging on a cleaner protein finish.\n\nMeasured strength."
+      "text": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 76%\n\nRead\nThe session window is closing on a lighter-than-usual output day, with recovery still subdued despite steadier sleep. Effort landed in a moderate zone; tonight favors quiet consolidation, with protein still the main unfinished support for preserving muscle.\n\nQuiet consolidation."
     },
     {
       "label": "Performance",
-      "text": "Measured strength."
+      "text": "Quiet consolidation."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 59%\n\nRead\nYour system is carrying a muted recovery signal, while output has run lighter than a typical day and effort already feels moderate. The open training window favors measured resistance work over intensity, with muscle protection still hinging on a cleaner protein finish.\n\nMeasured strength.",
-    "performance": "Measured strength.",
+    "reading": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 76%\n\nRead\nThe session window is closing on a lighter-than-usual output day, with recovery still subdued despite steadier sleep. Effort landed in a moderate zone; tonight favors quiet consolidation, with protein still the main unfinished support for preserving muscle.\n\nQuiet consolidation.",
+    "performance": "Quiet consolidation.",
     "transit": null
   },
-  "nutrition_nudge": "Pull back oils and fats tonight, and use lean protein to close the 18g gap.",
+  "nutrition_nudge": "Fat budget is spent; keep remaining food lean and skip oils while closing the 18g protein gap.",
   "transits": [],
   "data_basis": {
     "recharge_today": 2,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 59.7,
     "nutrition": "calories 2050 of 2574 goal, protein 120g of 138g goal, carbs 210g of 290g goal, fat 80g of 72g goal",
     "nutrition_detail": "calories 2050 of 2574 goal -> 524 left; protein 120g of 138g goal -> 18g gap; carbs 210g of 290g goal; fat 80g of 72g goal",
-    "activity_today": "3,528 steps so far, 2h 32m active, 1,671 calories burned, Moderate training load"
+    "activity_today": "4,540 steps so far, 3h 53m active, 1,965 calories burned, Moderate training load"
   }
 }
