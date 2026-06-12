@@ -1,39 +1,36 @@
-# Direction 1 — Expansion Hero  ★ Claude's pick
+# Direction 1 — Solar Dashboard  ★ (faithful to reference 1)
 
-**File:** `direction-1-hero-first.html` · modeled on **ref-1**
+**File:** `direction-1-hero-first.html` · best viewed at iPad/desktop width (~1024px)
 
-## The user moment it serves
-The **morning glance.** This is the closest match to the reference dashboards: glowing gold
-sun hero, "EXPANSION" phase headline, the four corner stat rings (Opportunity 84 / Pressure
-48 / Momentum 71 / Next Event 30), and the NOW row. The instant read is fully visual. Then
-the app **commits to one auto-surfaced reading** — today the strongest live signal is the
-approaching Jupiter return (Vedic / Moon Mahadasha–Venus) — instead of showing four parallel
-horoscopes to compare. Everything else is one scroll down: What Changed, Today's Insight,
-Recommended Actions, Upcoming Conditions, Sky Conditions.
+## What it is
+A working rebuild of **your reference screenshot 1** — the dense, multi-column "everything
+on one screen" dashboard, not a mobile scroll. The glowing gold sun sits center with four
+corner gauges (Opportunity / Pressure / Momentum / Next Event), the EXPANSION phase headline,
+and the moon line. Below: the NOW strip, then the card grid exactly as the reference lays it
+out:
 
-## Why it fits Alfredo specifically
-- His documented #1 growth area is **overanalysis / delayed execution.** Four parallel system
-  cards invite the comparison-shopping that stalls him. Expansion Hero gives the dashboard
-  read at a glance, then one committed reading + one "Today's Insight" call.
-- It *is* the canonical solar-intelligence language he already built and loves — sun hero,
-  gold EXPANSION headline, corner rings, dense glass cards.
-- The accent system (green Opportunity / orange Pressure / cyan Momentum / violet Next) carries
-  meaning instantly without reading a word.
+- **Row A (3-col):** Daily Reading · What Changed · Today's Insight
+- **Row B (2-col):** Upcoming Conditions · Recommended Actions
+- **Row C (4-col):** Sky Conditions · Planet Influences · Top Drivers · Why This Forecast
+- **Confidence** card
 
-## How the auto-pick works (mock logic)
-Surfaces whichever system has the most time-sensitive live trigger. Priority order used here:
-imminent return/ingress (Jupiter return ~Jul 12) > dasha/Da Yun shift > exact transit >
-profection change > lunar phase. A small "Vedic surfaced" badge shows *why*.
+## Why this is the pick
+It's the closest match to what you actually showed me. The earlier rounds failed because
+they were tall single-column **mobile** layouts; the reference is a **dense iPad/desktop
+grid** where the whole picture is legible at once. This reproduces that density and section
+order, in your gold solar aesthetic.
 
-## Aesthetic notes
-Near-black gold-glow gradient, photographic sun with corona + pulse, conic corner rings with
-hub punch, gold forecast title with glow, glassy cards (blur 14), section headings in tracked
-gold caps, progress/timeline bars, do/avoid check lists. Straight from the live CSS + refs.
+## Aesthetic
+Near-black gold-glow gradient, photographic sun (radial gradient + corona + pulse), open-arc
+conic corner gauges, gold EXPANSION title with glow, glassy cards, tracked-caps gold section
+headings, colored stat bars and deltas — all matched to your timing-weather design tokens.
 
-## Chart data surfaced
+## Chart data (today, Jun 12 2026)
 12th-house Sagittarius profection · Jupiter return ~Jul 12 · Venus antardasha · Sade Sati ·
-New Moon in 3 days · Capricorn/Saturn year opening Aug 30.
+New Moon in 3 days · Capricorn/Saturn year opens Aug 30 · planet influences + scores derived
+from those.
 
-## Tradeoff
-Hides the other three systems' detail by default (they're implied in the dashboard scores,
-not spelled out). If Alfredo wants to *read* all four every day, Direction 2 or 4 serve that.
+## Note
+The viewport is set to 1024 so it renders as the dense grid the reference shows. Production
+would make the same grid responsive (collapsing to one column on phones), reusing the live
+dashboard's CSS.

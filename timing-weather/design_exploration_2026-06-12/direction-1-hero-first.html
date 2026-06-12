@@ -2,251 +2,261 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Timing Weather · Expansion Hero</title>
-<!-- DIRECTION 1 — EXPANSION HERO
-     Faithful to the live dashboard: it links the REAL stylesheet (dashboard.css,
-     a verbatim copy of assets/css/timing-weather.css) and uses the real classes —
-     so the sun, corner gauges, cards and type are pixel-identical to Alfredo's
-     dashboard. The "direction" is hierarchy: the auto-surfaced Vedic reading leads
-     the Daily Horoscope stack (★), everything else is the genuine section order. -->
-<link rel="stylesheet" href="dashboard.css" />
+<meta name="viewport" content="width=1024, initial-scale=1" />
+<title>Timing Weather · Solar Dashboard (ref-1)</title>
+<!-- DIRECTION 1 — SOLAR DASHBOARD · faithful to reference 1
+     Dense multi-column dashboard: sun hero + 4 corner gauges, NOW row, then
+     DAILY READING | WHAT CHANGED | TODAY'S INSIGHT, UPCOMING | RECOMMENDED,
+     and a 4-up SKY | PLANET INFLUENCES | TOP DRIVERS | WHY row + CONFIDENCE.
+     Tuned for iPad/desktop width (the reference is 1024px). -->
 <style>
-  /* tiny per-direction touch only — the star marker on the surfaced reading */
-  .reading-card.is-surfaced{box-shadow:0 0 0 1px rgba(244,114,182,.35),0 16px 44px rgba(0,0,0,.45)}
-  .surfaced-tag{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
-    color:#f472b6;border:1px solid rgba(244,114,182,.4);background:rgba(244,114,182,.1);border-radius:20px;padding:3px 9px;margin-left:auto}
+:root{
+  --bg:#06070a;--bg2:#0a0c14;
+  --card:rgba(255,255,255,.035);--card2:rgba(255,255,255,.055);--border:rgba(255,255,255,.08);--line:rgba(255,255,255,.05);
+  --gold:#d4a857;--gold-br:#e8c573;--gold-deep:#7a5a18;
+  --green:#4ade80;--orange:#f59e0b;--cyan:#67e8f9;--red:#f87171;--violet:#a78bfa;--yellow:#facc15;
+  --t:rgba(255,255,255,.92);--t2:rgba(255,255,255,.55);--t3:rgba(255,255,255,.34);
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;
+  --mono:"SF Mono",ui-monospace,Menlo,monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;min-height:100vh;
+  background:radial-gradient(1200px 620px at 50% -6%,rgba(212,168,87,.13),transparent 55%),
+    radial-gradient(800px 460px at 50% 2%,rgba(232,197,115,.05),transparent 60%),
+    linear-gradient(180deg,var(--bg),var(--bg2));background-attachment:fixed}
+.dash{max-width:1000px;margin:0 auto;padding:22px 26px 40px}
+
+/* header */
+.hdr{display:flex;align-items:center;gap:14px;padding:6px 0 18px}
+.hdr .menu{font-size:22px;color:var(--t2);width:36px}
+.hdr .tt{flex:1;text-align:center}
+.hdr .tt h1{font-size:15px;letter-spacing:.36em;font-weight:700}
+.hdr .tt h1::before{content:"☼ ";color:var(--gold);letter-spacing:0}
+.hdr .tt .d{font-size:11px;color:var(--t2);margin-top:3px;letter-spacing:.04em}
+.hdr .dots{display:flex;gap:6px;width:60px;justify-content:flex-end}
+.hdr .dots i{width:7px;height:7px;border-radius:50%}
+.hdr .dots i:nth-child(1){background:var(--green);box-shadow:0 0 7px rgba(74,222,128,.6)}
+.hdr .dots i:nth-child(2){background:var(--gold);box-shadow:0 0 7px rgba(212,168,87,.6)}
+.hdr .dots i:nth-child(3){background:var(--cyan);box-shadow:0 0 7px rgba(103,232,249,.6)}
+
+/* HERO — 4 corner gauges around the sun */
+.hero{display:grid;grid-template-columns:200px 1fr 200px;grid-template-rows:auto auto auto auto;align-items:center;justify-items:center;gap:2px 0;padding:8px 0 18px;position:relative}
+.gauge{display:flex;flex-direction:column;align-items:center;text-align:center}
+.gauge .lbl{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--t2);margin-bottom:10px}
+.ring{width:90px;height:90px;border-radius:50%;display:grid;place-items:center;position:relative;
+  background:conic-gradient(var(--rc) calc(var(--pct)*1%),rgba(255,255,255,.07) 0);box-shadow:0 0 18px var(--rg,transparent)}
+.ring::before{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--bg)}
+.ring .v{position:relative;font-size:28px;font-weight:800;font-variant-numeric:tabular-nums}
+.gauge .tag{font-size:12px;color:var(--t2);margin-top:8px}
+.g-tl{grid-column:1;grid-row:1;align-self:start}.g-tr{grid-column:3;grid-row:1;align-self:start}
+.g-bl{grid-column:1;grid-row:3;align-self:end}.g-br{grid-column:3;grid-row:3;align-self:end}
+.g-tl .ring{--rc:var(--green);--rg:rgba(74,222,128,.22)}.g-tr .ring{--rc:var(--orange);--rg:rgba(245,158,11,.22)}
+.g-bl .ring{--rc:var(--cyan);--rg:rgba(103,232,249,.22)}.g-br .ring{--rc:var(--gold);--rg:rgba(212,168,87,.22)}
+.sun{grid-column:2;grid-row:1;width:230px;height:230px;border-radius:50%;
+  background:radial-gradient(circle at 40% 38%,#FFFCEA 0%,#FFF1B3 12%,#FFD659 30%,#E8A93A 55%,#8A4D0B 100%);
+  box-shadow:0 0 70px rgba(255,218,109,.55),0 0 160px rgba(232,197,115,.4),0 0 260px rgba(212,168,87,.24),
+    inset -24px -34px 64px rgba(180,80,0,.55),inset 10px 10px 34px rgba(255,250,200,.5);animation:pulse 6s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+.f-title{grid-column:2;grid-row:2;font-size:54px;font-weight:800;letter-spacing:.05em;color:var(--gold);text-transform:uppercase;text-shadow:0 0 34px rgba(212,168,87,.4);margin-top:-6px}
+.f-sub{grid-column:2;grid-row:3;font-size:16px;color:rgba(255,255,255,.82);margin-top:4px}
+.f-moon{grid-column:2;grid-row:4;font-size:12.5px;color:var(--t2);margin-top:8px}
+
+/* NOW row */
+.now{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:6px 0 22px}
+.now .cell{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:13px;text-align:center}
+.now .k{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:5px}
+.now .v{font-size:16px;font-weight:700}
+.now .v.g{color:var(--gold)}.now .v.o{color:var(--orange)}.now .v.c{color:var(--cyan)}
+
+/* card + headings */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;backdrop-filter:blur(14px);box-shadow:0 16px 44px rgba(0,0,0,.4)}
+.sh{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:13px}
+.sh .sub{margin-left:auto;font-size:9.5px;font-weight:600;letter-spacing:.06em;color:var(--t3)}
+.sh .ai{font-size:9px;letter-spacing:.08em;color:var(--cyan);border:1px solid rgba(103,232,249,.3);border-radius:10px;padding:2px 7px;margin-left:auto}
+
+/* grids */
+.grid{display:grid;gap:16px;margin-bottom:16px}
+.g-3{grid-template-columns:1.5fr 1fr 1.1fr}
+.g-2{grid-template-columns:1.6fr 1fr}
+.g-4{grid-template-columns:repeat(4,1fr)}
+.stack{display:flex;flex-direction:column;gap:16px}
+
+/* daily reading */
+.dr-state{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
+.dr-h{font-size:26px;font-weight:800;color:var(--gold-br);margin-bottom:9px}
+.dr-p{font-size:14px;line-height:1.62;color:rgba(255,255,255,.82)}
+.dr-foot{margin-top:12px;font-size:11px;color:var(--t3);font-style:italic}
+
+/* what changed */
+.chg{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.chg:last-child{border-bottom:none}
+.chg .nm{color:var(--t2)}
+.chg .d{font-weight:800;font-variant-numeric:tabular-nums}
+.up{color:var(--green)}.down{color:var(--red)}.flat{color:var(--t3)}
+
+/* insight */
+.insight{font-size:15px;line-height:1.55;color:var(--gold-br);font-style:italic}
+.insight b{display:block;font-style:normal;font-weight:700;margin-bottom:4px}
+
+/* recommended */
+.rec{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rec h4{font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:9px}
+.rec .do h4{color:var(--green)}.rec .av h4{color:var(--red)}
+.rec ul{list-style:none}
+.rec li{font-size:13px;line-height:1.5;padding:5px 0 5px 20px;position:relative;color:rgba(255,255,255,.82)}
+.rec .do li::before{content:"✓";position:absolute;left:0;color:var(--green)}
+.rec .av li::before{content:"✕";position:absolute;left:0;color:var(--red);font-size:11px}
+
+/* upcoming timeline */
+.tl{display:flex;flex-direction:column;gap:4px}
+.tl-row{display:flex;align-items:center;gap:16px;padding:11px 0;border-bottom:1px solid var(--line)}
+.tl-row:last-child{border-bottom:none}
+.tl-d{width:54px;text-align:center;flex:0 0 auto}
+.tl-d b{font-size:22px;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums;display:block;line-height:1}
+.tl-d span{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)}
+.tl-main{flex:1}
+.tl-ev{font-size:14px;margin-bottom:7px}
+.tl-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden}
+.tl-bar i{display:block;height:100%;border-radius:3px}
+
+/* sky / influences / drivers / why */
+.sky-row{display:grid;grid-template-columns:1fr 60px;gap:8px;align-items:center;margin-bottom:11px}
+.sky-row:last-child{margin-bottom:0}
+.sky-row .n{font-size:12px;color:var(--t2)}
+.sky-row .track{grid-column:1/-1;height:6px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden;margin-top:-4px}
+.sky-row .track i{display:block;height:100%;border-radius:3px}
+.sky-row .val{font-size:12px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.inf{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}
+.inf:last-child{border-bottom:none}
+.inf .g{font-size:16px;color:var(--gold);width:22px}
+.inf .nm{flex:1;margin-left:6px}
+.inf .role{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-right:10px}
+.inf .sc{font-weight:700;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.inf .sc.p{color:var(--green)}.inf .sc.n{color:var(--red)}
+.drv{display:flex;align-items:center;gap:11px;padding:8px 0;font-size:13px}
+.drv .n{width:24px;height:24px;border-radius:50%;border:1px solid rgba(212,168,87,.45);color:var(--gold);font-size:12px;font-weight:700;display:grid;place-items:center;flex:0 0 auto}
+.drv .sc{margin-left:auto;color:var(--green);font-weight:700}
+.why-score{font-size:42px;font-weight:800;color:var(--gold-br);line-height:1;font-variant-numeric:tabular-nums}
+.why-row{display:flex;justify-content:space-between;font-size:12px;padding:6px 0;border-top:1px solid var(--line);color:var(--t2)}
+.why-row .w{font-weight:700}.why-row.pos .w{color:var(--green)}.why-row.neg .w{color:var(--red)}
+
+/* confidence */
+.conf{display:flex;align-items:center;gap:16px}
+.conf-ring{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(var(--green) 74%,rgba(255,255,255,.08) 0)}
+.conf-ring::before{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--bg)}
+.conf-ring span{position:relative;font-size:16px;font-weight:800;color:var(--green)}
+.conf .lbl{font-size:14px;font-weight:700;color:var(--green)}
+.conf .s{font-size:11px;color:var(--t2);margin-top:3px}
 </style>
 </head>
 <body>
-  <div class="timing-weather-shell">
+  <div class="dash">
 
-    <!-- Header -->
-    <header class="row row--bleed header-chrome">
-      <button class="header-menu" aria-label="Menu">≡</button>
-      <div class="header-title-block">
-        <h1 class="header-title">TIMING WEATHER</h1>
-        <p class="header-date">Friday, June 12, 2026</p>
-      </div>
-      <div class="header-status" aria-hidden="true">
-        <span class="status-dot"></span><span class="status-dot"></span><span class="status-dot"></span>
-      </div>
+    <header class="hdr">
+      <div class="menu">≡</div>
+      <div class="tt"><h1>TIMING WEATHER</h1><div class="d">Friday, June 12, 2026</div></div>
+      <div class="dots"><i></i><i></i><i></i></div>
     </header>
 
-    <!-- 1 · HERO -->
-    <div class="row row--bleed">
-      <section id="section-1-hero">
-        <div class="hero-shell">
-          <div class="hero-corner hero-corner--tl">
-            <div class="corner-label">Opportunity</div>
-            <div class="corner-ring" style="--ring-pct:84"><span class="corner-value">84</span></div>
-            <div class="corner-tag">High ↗</div>
-          </div>
-          <div class="hero-corner hero-corner--tr">
-            <div class="corner-label">Pressure</div>
-            <div class="corner-ring" style="--ring-pct:48"><span class="corner-value">48</span></div>
-            <div class="corner-tag">Medium</div>
-          </div>
+    <!-- HERO -->
+    <div class="hero">
+      <div class="gauge g-tl"><div class="lbl">Opportunity</div><div class="ring" style="--pct:84"><span class="v" style="color:var(--green)">84</span></div><div class="tag">High ↗</div></div>
+      <div class="gauge g-tr"><div class="lbl">Pressure</div><div class="ring" style="--pct:48"><span class="v" style="color:var(--orange)">48</span></div><div class="tag">Medium</div></div>
+      <div class="sun"></div>
+      <div class="f-title">EXPANSION</div>
+      <div class="f-sub">Doors opening — build before the August turn.</div>
+      <div class="f-moon">☽ Moon · Taurus 14° · Waning Crescent · New Moon in 3 days</div>
+      <div class="gauge g-bl"><div class="lbl">Momentum</div><div class="ring" style="--pct:71"><span class="v" style="color:var(--cyan)">71</span></div><div class="tag">Rising ↗</div></div>
+      <div class="gauge g-br"><div class="lbl">Next Event</div><div class="ring" style="--pct:90"><span class="v" style="color:var(--gold)">30</span></div><div class="tag">Days</div></div>
+    </div>
 
-          <div class="sun-hero" aria-hidden="true"></div>
-          <h1 class="forecast-title">EXPANSION</h1>
-          <p class="forecast-subtitle">Doors opening — build before the August turn.</p>
-          <p class="hero-moon">Moon · Taurus 14° · Waning Crescent · New Moon in 3 days</p>
+    <!-- NOW -->
+    <div class="now">
+      <div class="cell"><div class="k">Forecast</div><div class="v g">Expansion</div></div>
+      <div class="cell"><div class="k">Pressure</div><div class="v o">Medium</div></div>
+      <div class="cell"><div class="k">Momentum</div><div class="v c">Rising</div></div>
+      <div class="cell"><div class="k">Next Event</div><div class="v">30 Days</div></div>
+    </div>
 
-          <div class="hero-corner hero-corner--bl">
-            <div class="corner-label">Momentum</div>
-            <div class="corner-ring" style="--ring-pct:71"><span class="corner-value">71</span></div>
-            <div class="corner-tag">Rising ↗</div>
-          </div>
-          <div class="hero-corner hero-corner--br">
-            <div class="corner-label">Next Event</div>
-            <div class="corner-ring" style="--ring-pct:90"><span class="corner-value">30</span></div>
-            <div class="corner-tag">Days</div>
-          </div>
+    <!-- Row A: DAILY READING | WHAT CHANGED | TODAY'S INSIGHT -->
+    <div class="grid g-3">
+      <div class="card">
+        <div class="sh">Daily Reading <span class="ai">★ Vedic</span></div>
+        <div class="dr-state">State · Moon Mahadasha / Venus</div>
+        <div class="dr-h">Expansion</div>
+        <p class="dr-p">Thirty days out, exalted Jupiter walks back toward Cancer and its own return — re-lighting the hidden 8th-house grace your navamsa was built on. You're still inside the 12th-house Sagittarius year: preparation, not performance. Build leverage and relationships now; refine quietly before the Capricorn year.</p>
+        <div class="dr-foot">The field supports growth through alignment.</div>
+      </div>
+      <div class="card">
+        <div class="sh">What Changed <span class="sub">since yesterday</span></div>
+        <div class="chg"><span class="nm">Opportunity</span><span class="d up">+4</span></div>
+        <div class="chg"><span class="nm">Momentum</span><span class="d up">+3</span></div>
+        <div class="chg"><span class="nm">Pressure</span><span class="d up">−2</span></div>
+        <div class="chg"><span class="nm">Volatility</span><span class="d flat">0</span></div>
+      </div>
+      <div class="card">
+        <div class="sh">Today's Insight</div>
+        <div class="insight"><b>Build leverage.</b>Refine quietly — don't finalize anything binding before the Capricorn year opens August 30.</div>
+      </div>
+    </div>
+
+    <!-- Row B: UPCOMING | RECOMMENDED -->
+    <div class="grid g-2">
+      <div class="card">
+        <div class="sh">Upcoming Conditions</div>
+        <div class="tl">
+          <div class="tl-row"><div class="tl-d"><b>3</b><span>Days</span></div><div class="tl-main"><div class="tl-ev">New Moon · 12th-house reset</div><div class="tl-bar"><i style="width:92%;background:var(--cyan)"></i></div></div></div>
+          <div class="tl-row"><div class="tl-d"><b>30</b><span>Days</span></div><div class="tl-main"><div class="tl-ev">Jupiter Return · exalted in Cancer</div><div class="tl-bar"><i style="width:78%;background:var(--violet)"></i></div></div></div>
+          <div class="tl-row"><div class="tl-d"><b>79</b><span>Days</span></div><div class="tl-main"><div class="tl-ev">Profection → Capricorn (Saturn Lord of Year)</div><div class="tl-bar"><i style="width:46%;background:var(--orange)"></i></div></div></div>
         </div>
-      </section>
-    </div>
-
-    <!-- 2 · SYSTEM CONSENSUS -->
-    <div class="row">
-      <section id="section-2-consensus">
-        <h2 class="section-heading">SYSTEM CONSENSUS</h2>
-        <div class="card consensus-card">
-          <div class="consensus-row">
-            <div class="consensus-side consensus-side--modern">
-              <div class="consensus-small-label">MODERN</div>
-              <span class="consensus-state">Expansion</span>
-            </div>
-            <div class="consensus-center">
-              <div class="consensus-pct">78%</div>
-              <div class="consensus-status" data-status="agreement">Agreement</div>
-            </div>
-            <div class="consensus-side consensus-side--traditional">
-              <div class="consensus-small-label">TRADITIONAL</div>
-              <span class="consensus-state">Preparation</span>
-            </div>
-          </div>
-          <p class="consensus-action">Three systems point the same way: build and position now, commit after August.</p>
+      </div>
+      <div class="card">
+        <div class="sh">Recommended Actions</div>
+        <div class="rec">
+          <div class="do"><h4>Do More Of</h4><ul><li>Refine the unseen draft</li><li>Tend the 8th-house gift</li><li>Soften the guard (Venus)</li><li>Bank the fire — rest</li></ul></div>
+          <div class="av"><h4>Avoid</h4><ul><li>Void-Moon launches</li><li>Loud, forced moves</li><li>Bets before Aug 30</li></ul></div>
         </div>
-      </section>
+      </div>
     </div>
 
-    <!-- 3 · DAILY HOROSCOPE (auto-surfaced reading leads) -->
-    <div class="row">
-      <section id="section-3-daily-horoscope">
-        <h2 class="section-heading">DAILY HOROSCOPE <span class="heading-sub">VEDIC SURFACED</span></h2>
-        <div class="readings-stack">
-
-          <article class="reading-card is-surfaced" data-reading="vedic">
-            <header class="reading-card__head">
-              <div class="reading-card__titles">
-                <h3 class="reading-card__label">VEDIC</h3>
-                <span class="reading-card__sub">Sidereal · Moon Mahadasha / Venus</span>
-              </div>
-              <span class="surfaced-tag">★ Strongest signal</span>
-            </header>
-            <p class="reading-card__body">Thirty days out, exalted Jupiter walks back toward Cancer and its own return — re-lighting the hidden 8th-house grace, the Jupiter-Venus weave your navamsa was built on. You're still inside the 12th-house Sagittarius year: preparation, not performance. Refine quietly; what you curate now is what the Capricorn year embodies after August.</p>
-            <button type="button" class="reading-card__more">This Month →</button>
-          </article>
-
-          <article class="reading-card" data-reading="modern">
-            <header class="reading-card__head">
-              <div class="reading-card__titles">
-                <h3 class="reading-card__label">MODERN</h3>
-                <span class="reading-card__sub">Tropical · Capricorn rising · Virgo Sun</span>
-              </div>
-              <span class="reading-card__state">SUPPORTED</span>
-            </header>
-            <p class="reading-card__body">Solar-arc Jupiter is still creeping toward your 8th-house Sun — a year-long expansion of identity on a slow fuse, exact next March. Today reads quiet and constructive; the 12th-house profection keeps the work off-stage.</p>
-            <button type="button" class="reading-card__more">This Month →</button>
-          </article>
-
-          <article class="reading-card" data-reading="traditional">
-            <header class="reading-card__head">
-              <div class="reading-card__titles">
-                <h3 class="reading-card__label">TRADITIONAL</h3>
-                <span class="reading-card__sub">Hellenistic · 7 classical planets</span>
-              </div>
-              <span class="reading-card__state">HOLD</span>
-            </header>
-            <p class="reading-card__body">A 12th-house profection hands the year to Jupiter, your benefic — but the Moon is void-of-course until 2:40 PM. Finish and tidy; begin nothing you need to stick before afternoon.</p>
-            <button type="button" class="reading-card__more">This Month →</button>
-          </article>
-
-          <article class="reading-card" data-reading="bazi">
-            <header class="reading-card__head">
-              <div class="reading-card__titles">
-                <h3 class="reading-card__label">BAZI</h3>
-                <span class="reading-card__sub">Ding Fire · Rabbit operating self</span>
-              </div>
-              <span class="reading-card__state">HIGH-OUTPUT</span>
-            </header>
-            <p class="reading-card__body">A Bing-Wu peer-fire year doubles the heat on your Ding flame — visibility up, burnout risk up. Your Rabbit core wins through precision and diplomacy, never force. The Jupiter return in July stacks onto this fire month.</p>
-            <button type="button" class="reading-card__more">Month · 10-Year →</button>
-          </article>
-
-        </div>
-      </section>
+    <!-- Row C: SKY | PLANET INFLUENCES | TOP DRIVERS | WHY -->
+    <div class="grid g-4">
+      <div class="card">
+        <div class="sh">Sky Conditions</div>
+        <div class="sky-row"><span class="n">Expansion</span><span class="val" style="color:var(--gold)">78</span><span class="track"><i style="width:78%;background:var(--gold)"></i></span></div>
+        <div class="sky-row"><span class="n">Pressure</span><span class="val" style="color:var(--orange)">48</span><span class="track"><i style="width:48%;background:var(--orange)"></i></span></div>
+        <div class="sky-row"><span class="n">Volatility</span><span class="val" style="color:var(--red)">35</span><span class="track"><i style="width:35%;background:var(--red)"></i></span></div>
+        <div class="sky-row"><span class="n">Support</span><span class="val" style="color:var(--cyan)">66</span><span class="track"><i style="width:66%;background:var(--cyan)"></i></span></div>
+      </div>
+      <div class="card">
+        <div class="sh">Planet Influences</div>
+        <div class="inf"><span class="g">♃</span><span class="nm">Jupiter</span><span class="role">Outreach</span><span class="sc p">+19</span></div>
+        <div class="inf"><span class="g">♀</span><span class="nm">Venus</span><span class="role">Support</span><span class="sc p">+9</span></div>
+        <div class="inf"><span class="g">♇</span><span class="nm">Pluto</span><span class="role">Depth</span><span class="sc p">+11</span></div>
+        <div class="inf"><span class="g">♄</span><span class="nm">Saturn</span><span class="role">Pressure</span><span class="sc n">−12</span></div>
+      </div>
+      <div class="card">
+        <div class="sh">Top Drivers</div>
+        <div class="drv"><span class="n">1</span><span>Jupiter Return window</span><span class="sc">+19</span></div>
+        <div class="drv"><span class="n">2</span><span>Venus antardasha</span><span class="sc">+9</span></div>
+        <div class="drv"><span class="n">3</span><span>12th-house profection</span><span class="sc">+7</span></div>
+      </div>
+      <div class="card">
+        <div class="sh">Why This Forecast</div>
+        <div class="why-score">78</div>
+        <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin:2px 0 10px">Expansion Score</div>
+        <div class="why-row pos"><span>Jupiter return</span><span class="w">+19</span></div>
+        <div class="why-row pos"><span>Venus support</span><span class="w">+9</span></div>
+        <div class="why-row neg"><span>Sade Sati</span><span class="w">−12</span></div>
+      </div>
     </div>
 
-    <!-- 5 · WHAT CHANGED -->
-    <div class="row">
-      <section id="section-5-what-changed">
-        <h2 class="section-heading">WHAT CHANGED <span class="heading-sub">SINCE YESTERDAY</span></h2>
-        <div class="card changed-card">
-          <div class="changed-row"><span class="changed-label">Opportunity</span><span class="changed-delta positive">4</span></div>
-          <div class="changed-row"><span class="changed-label">Pressure</span><span class="changed-delta negative">2</span></div>
-          <div class="changed-row"><span class="changed-label">Momentum</span><span class="changed-delta positive">3</span></div>
-          <div class="changed-row"><span class="changed-label">Volatility</span><span class="changed-delta neutral">0</span></div>
-          <div class="changed-footer">Updated vs 2026-06-11</div>
-        </div>
-      </section>
+    <!-- CONFIDENCE -->
+    <div style="max-width:320px">
+      <div class="sh">Confidence</div>
+      <div class="card"><div class="conf"><div class="conf-ring"><span>74%</span></div><div><div class="lbl">Building</div><div class="s">3 of 4 systems agree</div></div></div></div>
     </div>
 
-    <!-- 6 · TODAY'S INSIGHT -->
-    <div class="row">
-      <section id="section-6-todays-insight">
-        <h2 class="section-heading">TODAY'S INSIGHT</h2>
-        <div class="card insight-card insight-card--premium">Build leverage. Refine quietly — don't finalize anything binding before the Capricorn year opens.</div>
-      </section>
-    </div>
-
-    <!-- 7 · RECOMMENDED ACTIONS -->
-    <div class="row">
-      <section id="section-7-recommended">
-        <h2 class="section-heading">RECOMMENDED ACTIONS</h2>
-        <div class="card actions-card">
-          <h3>Do More Of</h3>
-          <ul id="actions-do">
-            <li>Refine the draft no one's seen yet</li>
-            <li>Tend the quiet 8th-house gift</li>
-            <li>Soften the guard — Venus sub-period</li>
-            <li>Bank the fire, rest deliberately</li>
-          </ul>
-          <h3>Avoid</h3>
-          <ul id="actions-avoid">
-            <li>Launching on a void Moon</li>
-            <li>Loud, forced moves</li>
-            <li>Irreversible bets before Aug 30</li>
-          </ul>
-        </div>
-      </section>
-    </div>
-
-    <!-- 8 · UPCOMING CONDITIONS -->
-    <div class="row">
-      <section id="section-8-upcoming">
-        <h2 class="section-heading">UPCOMING CONDITIONS</h2>
-        <ul class="timeline-list">
-          <li class="timeline-row">
-            <div class="timeline-days">3<span class="unit">days</span></div>
-            <div class="timeline-main"><div class="timeline-event">New Moon · 12th-house reset</div><div class="timeline-bar timeline-bar--low" style="--bar-pct:92%"></div></div>
-          </li>
-          <li class="timeline-row">
-            <div class="timeline-days">30<span class="unit">days</span></div>
-            <div class="timeline-main"><div class="timeline-event">Jupiter Return · exalted in Cancer</div><div class="timeline-bar timeline-bar--high" style="--bar-pct:78%"></div></div>
-          </li>
-          <li class="timeline-row">
-            <div class="timeline-days">79<span class="unit">days</span></div>
-            <div class="timeline-main"><div class="timeline-event">Profection → Capricorn (Saturn LoY)</div><div class="timeline-bar timeline-bar--medium" style="--bar-pct:46%"></div></div>
-          </li>
-        </ul>
-      </section>
-    </div>
-
-    <!-- 9 · SKY CONDITIONS -->
-    <div class="row">
-      <section id="section-9-sky">
-        <h2 class="section-heading">SKY CONDITIONS</h2>
-        <div class="card sky-card">
-          <div class="sky-row"><span class="sky-name">Opportunity</span><div class="sky-bar"><div class="sky-fill sky-fill--expansion" style="width:84%"></div></div><span class="sky-value">84</span></div>
-          <div class="sky-row"><span class="sky-name">Pressure</span><div class="sky-bar"><div class="sky-fill sky-fill--pressure" style="width:48%"></div></div><span class="sky-value">48</span></div>
-          <div class="sky-row"><span class="sky-name">Momentum</span><div class="sky-bar"><div class="sky-fill sky-fill--support" style="width:71%"></div></div><span class="sky-value">71</span></div>
-          <div class="sky-row"><span class="sky-name">Support</span><div class="sky-bar"><div class="sky-fill sky-fill--support" style="width:66%"></div></div><span class="sky-value">66</span></div>
-        </div>
-      </section>
-    </div>
-
-    <!-- 10 · PLANET INFLUENCES -->
-    <div class="row">
-      <section id="section-10-planet-influences">
-        <h2 class="section-heading">PLANET INFLUENCES</h2>
-        <ul class="influences-compact">
-          <li class="influence-row"><span class="influence-glyph">♃</span><span class="influence-name">Jupiter</span><span class="influence-role">Outreach</span><span class="influence-score positive">+19</span></li>
-          <li class="influence-row"><span class="influence-glyph">♀</span><span class="influence-name">Venus</span><span class="influence-role">Support</span><span class="influence-score positive">+9</span></li>
-          <li class="influence-row"><span class="influence-glyph">♄</span><span class="influence-name">Saturn</span><span class="influence-role">Pressure</span><span class="influence-score negative">−12</span></li>
-          <li class="influence-row"><span class="influence-glyph">☽</span><span class="influence-name">Moon</span><span class="influence-role">Void</span><span class="influence-score positive">+4</span></li>
-        </ul>
-      </section>
-    </div>
-
-    <!-- Footer nav -->
-    <nav class="row row--bleed footer-nav">
-      <a class="nav-item active" href="#">Home</a>
-      <a class="nav-item nav-item--soon" href="#" aria-disabled="true">Timeline</a>
-      <a class="nav-item nav-item--soon" href="#" aria-disabled="true">Reports</a>
-      <a class="nav-item nav-item--soon" href="#" aria-disabled="true">Profile</a>
-    </nav>
   </div>
 </body>
 </html>

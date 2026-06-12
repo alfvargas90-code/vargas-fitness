@@ -3,136 +3,95 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Timing Weather · Astro Design Exploration · 2026-06-12</title>
+<title>Timing Weather · Astro Dashboard Exploration · 2026-06-12</title>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#06070a;--bg2:#0a0c14;
-  --gold:#d4a857;--gold-br:#e8c573;
-  --green:#4ade80;--orange:#f59e0b;--cyan:#67e8f9;--red:#f87171;
-  --violet:#a78bfa;--pink:#f472b6;--coral:#fb7185;
-  --text:rgba(255,255,255,.92);--muted:rgba(255,255,255,.55);--faint:rgba(255,255,255,.34);
-  --card:rgba(255,255,255,.04);--border:rgba(255,255,255,.09);
+  --bg:#06070a;--bg2:#0a0c14;--gold:#d4a857;--gold-br:#e8c573;
+  --green:#4ade80;--cyan:#67e8f9;--violet:#a78bfa;--coral:#fb7185;
+  --t:rgba(255,255,255,.92);--t2:rgba(255,255,255,.55);--t3:rgba(255,255,255,.34);
+  --card:rgba(255,255,255,.035);--border:rgba(255,255,255,.08);
   --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;
 }
-body{font-family:var(--sans);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;
-  background:
-    radial-gradient(1100px 560px at 50% -6%, rgba(212,168,87,.13), transparent 56%),
-    radial-gradient(800px 600px at 88% 18%, rgba(167,139,250,.06), transparent 60%),
-    linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);
-  background-attachment:fixed;padding:40px 24px 80px}
-.head{max-width:1180px;margin:0 auto 12px;text-align:center}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;min-height:100vh;
+  background:radial-gradient(1100px 560px at 50% -6%,rgba(212,168,87,.12),transparent 56%),linear-gradient(180deg,var(--bg),var(--bg2));
+  background-attachment:fixed;padding:42px 24px 80px}
+.head{max-width:1180px;margin:0 auto 8px;text-align:center}
 .kicker{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:700}
-.head h1{font-size:34px;font-weight:800;margin:12px 0 8px;letter-spacing:.02em;color:var(--gold-br);text-shadow:0 0 26px rgba(212,168,87,.3)}
-.head p{font-size:13px;color:var(--muted);max-width:700px;margin:0 auto;line-height:1.7}
-.head .meta{font-size:11px;color:var(--faint);margin-top:10px;letter-spacing:.03em}
-
-.note{max-width:1180px;margin:24px auto 0;font-size:12px;color:var(--muted);text-align:center;line-height:1.7;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:13px 18px}
+.head h1{font-size:34px;font-weight:800;margin:12px 0 8px;color:var(--gold-br);text-shadow:0 0 26px rgba(212,168,87,.3)}
+.head p{font-size:13.5px;color:var(--t2);max-width:720px;margin:0 auto;line-height:1.7}
+.head .meta{font-size:11px;color:var(--t3);margin-top:10px}
+.note{max-width:1180px;margin:22px auto 0;font-size:12.5px;color:var(--t2);text-align:center;line-height:1.7;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 18px}
 .note b{color:var(--gold)}
-
-.rec{max-width:1180px;margin:24px auto;background:linear-gradient(120deg,rgba(212,168,87,.12),rgba(167,139,250,.05));
-  border:1px solid rgba(212,168,87,.30);border-radius:18px;padding:18px 22px;display:flex;gap:16px;align-items:flex-start;backdrop-filter:blur(12px)}
-.rec .star{font-size:26px;line-height:1;color:var(--gold);flex:0 0 auto;margin-top:2px}
-.rec h3{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
-.rec p{font-size:13.5px;line-height:1.7;color:var(--text)}
-.rec p b{color:var(--gold-br)}
-.rec .second{color:var(--muted);font-size:12.5px;margin-top:7px}
-
-.grid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:28px}
-@media(max-width:880px){.grid{grid-template-columns:1fr}}
-.col{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:20px;backdrop-filter:blur(12px);position:relative;overflow:hidden}
-.col.pick{border-color:rgba(212,168,87,.42);box-shadow:0 0 0 1px rgba(212,168,87,.25),0 24px 60px rgba(0,0,0,.45)}
-.col.pick::before{content:"★ Claude's pick";position:absolute;top:16px;right:-34px;transform:rotate(45deg);background:var(--gold);color:#1a1206;font-size:10px;font-weight:800;letter-spacing:.08em;padding:5px 40px;text-transform:uppercase}
-.col-head{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
-.col-num{font-size:28px;color:var(--gold);line-height:1;font-weight:800}
-.col-name{font-size:17px;font-weight:700}
-.col-tag{font-size:11px;color:var(--faint);margin-bottom:14px}
-.frame-wrap{width:375px;max-width:100%;margin:0 auto;border-radius:18px;overflow:hidden;border:1px solid var(--border);box-shadow:0 18px 50px rgba(0,0,0,.5);background:var(--bg)}
-iframe{width:375px;height:640px;border:0;display:block}
-.col-why{margin-top:16px}
+.grid{max-width:1180px;margin:26px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:26px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.col{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;position:relative;overflow:hidden}
+.col.pick{border-color:rgba(212,168,87,.42);box-shadow:0 0 0 1px rgba(212,168,87,.22),0 24px 60px rgba(0,0,0,.45)}
+.col.pick::before{content:"★ Claude's pick";position:absolute;top:18px;right:-34px;transform:rotate(45deg);background:var(--gold);color:#1a1206;font-size:10px;font-weight:800;letter-spacing:.07em;padding:5px 40px;text-transform:uppercase;z-index:2}
+.col-head{display:flex;align-items:baseline;gap:10px;margin-bottom:3px}
+.col-num{font-size:26px;color:var(--gold);font-weight:800;line-height:1}
+.col-name{font-size:18px;font-weight:700}
+.col-tag{font-size:11px;color:var(--t3);margin-bottom:14px}
+.shot{display:block;width:100%;border-radius:12px;border:1px solid var(--border);box-shadow:0 18px 50px rgba(0,0,0,.5)}
+.col-why{margin-top:15px}
 .col-why .lbl{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:6px}
-.col-why p{font-size:13px;line-height:1.7;color:#cdc7d8}
-.col-why p em{font-style:italic;color:var(--coral)}
+.col-why p{font-size:13px;line-height:1.7;color:#cdc7d0}
 .col-links{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
-.col-links a{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid var(--border);border-radius:20px;padding:6px 13px;transition:all .2s}
+.col-links a{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid var(--border);border-radius:20px;padding:6px 13px;transition:.2s}
 .col-links a:hover{background:var(--gold);color:var(--bg);border-color:var(--gold)}
-.foot{max-width:1180px;margin:40px auto 0;text-align:center;font-size:11px;color:var(--faint);line-height:1.8;border-top:1px solid var(--border);padding-top:24px}
-.foot b{color:var(--muted)}
+.alt{max-width:1180px;margin:30px auto 0;font-size:12px;color:var(--t2);text-align:center;line-height:1.7}
+.alt a{color:var(--violet);text-decoration:none}.alt a:hover{text-decoration:underline}
+.foot{max-width:1180px;margin:34px auto 0;text-align:center;font-size:11px;color:var(--t3);line-height:1.8;border-top:1px solid var(--border);padding-top:22px}
+.foot b{color:var(--t2)}
 </style>
 </head>
 <body>
 
 <div class="head">
-  <div class="kicker">Timing Weather · Astrology · Round 1</div>
-  <h1>EXPANSION — four ways to read it</h1>
-  <p>All four are built on the <b style="color:var(--gold-br)">live dashboard's real stylesheet</b> — the same sun, corner gauges, cards and type as your dashboard, pixel-identical — re-arranged into four hierarchies for surfacing the Modern · Traditional · Vedic · BaZi daily horoscopes.</p>
-  <div class="meta">Mock data uses today's real chart · Fri Jun 12 2026 · 12th-house Sagittarius profection · Jupiter return ~Jul 12 · Moon Mahadasha / Venus antardasha · Ding Fire / Rabbit</div>
+  <div class="kicker">Timing Weather · Astrology · Dense dashboards</div>
+  <h1>EXPANSION — your reference, two ways</h1>
+  <p>Both are faithful to the reference screenshots you showed: the dense, multi-column dashboard — sun hero, corner gauges, NOW row, then DAILY READING / WHAT CHANGED / INSIGHT, UPCOMING / RECOMMENDED, and a 4-up SKY / PLANET INFLUENCES / TOP DRIVERS / WHY row. Built for iPad/desktop width (the references are 1024px), in your gold solar aesthetic, with your real chart data.</p>
+  <div class="meta">Fri Jun 12 2026 · 12th-house Sagittarius profection · Jupiter return ~Jul 12 · Moon Mahadasha / Venus antardasha · Ding Fire / Rabbit</div>
 </div>
 
 <div class="note">
-  <b>Live, interactive mockups</b> — swipe Direction 2, watch the sun pulse, the planets orbit. Best on a phone; on desktop each frame is a 375px mobile viewport. Mockups only — the live PWA is untouched.
-</div>
-
-<div class="rec">
-  <div class="star">★</div>
-  <div>
-    <h3>If shipping today, Claude picks Direction 1 — Expansion Hero</h3>
-    <p>It's the closest match to the reference dashboards and answers <b>"what matters today"</b> in a single glance: the glowing sun + EXPANSION phase + four corner stat rings give the instant read, then one auto-surfaced reading commits to a single call instead of four to weigh — the right antidote to the overanalysis loop. Everything else (What Changed, Insight, Recommended) is one scroll down.</p>
-    <p class="second">Close second: <b>Direction 3 — Orbital Sky</b>, the most visually striking (the sun with labeled orbiting planets) — pick it if the goal is "feel the whole sky at once" over a single verdict.</p>
-  </div>
+  Open each one full-screen on an iPad or desktop browser. <b>These are the dense dashboards from your reference</b> — not the mobile single-column versions from earlier rounds. Mockups only; the live PWA is untouched.
 </div>
 
 <div class="grid">
 
   <div class="col pick">
-    <div class="col-head"><span class="col-num">1</span><span class="col-name">Expansion Hero</span></div>
-    <div class="col-tag">Sun + 4 corner rings + auto-surfaced reading · modeled on ref-1</div>
-    <div class="frame-wrap"><iframe src="direction-1-hero-first.html" title="Direction 1" loading="lazy"></iframe></div>
+    <div class="col-head"><span class="col-num">1</span><span class="col-name">Solar Dashboard</span></div>
+    <div class="col-tag">Faithful to reference 1 · sun hero + dense card grid</div>
+    <a href="direction-1-hero-first.html" target="_blank"><img class="shot" src="screenshots/direction-1-hero-first.png" alt="Solar Dashboard" /></a>
     <div class="col-why">
-      <div class="lbl">The moment it serves</div>
-      <p>The morning glance. The sun + EXPANSION + corner rings give the instant read; the app then <em>commits to one reading</em> (today: Vedic / Jupiter return) instead of making you compare four. Dense cards below: What Changed, Insight, Recommended, Sky Conditions.</p>
+      <div class="lbl">What it is</div>
+      <p>Reference 1, rebuilt as a working dashboard: glowing sun + four corner gauges (Opportunity / Pressure / Momentum / Next Event), the NOW strip, then everything visible on one screen — Daily Reading, What Changed, Today's Insight, Upcoming Conditions, Recommended Actions, Sky Conditions, Planet Influences, Top Drivers, Why, Confidence.</p>
     </div>
-    <div class="col-links"><a href="direction-1-hero-first.html" target="_blank">Open full</a><a href="direction-1-hero-first_README.md" target="_blank">Rationale →</a></div>
+    <div class="col-links"><a href="direction-1-hero-first.html" target="_blank">Open full</a><a href="direction-1-hero-first_README.md" target="_blank">Notes →</a></div>
   </div>
 
   <div class="col">
-    <div class="col-head"><span class="col-num">2</span><span class="col-name">System Carousel</span></div>
-    <div class="col-tag">Sun + consensus, four swipeable system panels</div>
-    <div class="frame-wrap"><iframe src="direction-2-carousel.html" title="Direction 2" loading="lazy"></iframe></div>
+    <div class="col-head"><span class="col-num">2</span><span class="col-name">Orbital Dashboard</span></div>
+    <div class="col-tag">Faithful to reference 2 · orbital hero + 2-col grid</div>
+    <a href="direction-3-sky-first.html" target="_blank"><img class="shot" src="screenshots/direction-3-sky-first.png" alt="Orbital Dashboard" /></a>
     <div class="col-why">
-      <div class="lbl">The moment it serves</div>
-      <p>The explorer. Sun + consensus stay pinned; each system — Vedic/Modern/Traditional/BaZi — gets a full panel with its own accent orb, forecast phase, reading, and stat row. <em>Sit inside one lens at a time</em>, swipe to the next.</p>
+      <div class="lbl">What it is</div>
+      <p>Reference 2, rebuilt: the sun with its transiting planets orbiting on rings (each labeled with its influence — Jupiter +19, Saturn −12…), then a dense two-column grid — Current Phase + Event Radar, Planet Influences + Upcoming Events, Sky Conditions + Since Yesterday + Insight, and Why + Confidence.</p>
     </div>
-    <div class="col-links"><a href="direction-2-carousel.html" target="_blank">Open full</a><a href="direction-2-carousel_README.md" target="_blank">Rationale →</a></div>
-  </div>
-
-  <div class="col">
-    <div class="col-head"><span class="col-num">3</span><span class="col-name">Orbital Sky</span></div>
-    <div class="col-tag">Sun with labeled orbiting planets · modeled on ref-2</div>
-    <div class="frame-wrap"><iframe src="direction-3-sky-first.html" title="Direction 3" loading="lazy"></iframe></div>
-    <div class="col-why">
-      <div class="lbl">The moment it serves</div>
-      <p>"What's happening up there <em>right now.</em>" The sun gains a live orbital system — each transiting planet on a ring, labeled with its influence (Jupiter +19, Saturn −12). Then Current Phase, Event Radar, Planet Influences, Confidence. The most visually striking.</p>
-    </div>
-    <div class="col-links"><a href="direction-3-sky-first.html" target="_blank">Open full</a><a href="direction-3-sky-first_README.md" target="_blank">Rationale →</a></div>
-  </div>
-
-  <div class="col">
-    <div class="col-head"><span class="col-num">4</span><span class="col-name">Narrative Day-Flow</span></div>
-    <div class="col-tag">Sun on a day-arc + vertical morning→night timeline</div>
-    <div class="frame-wrap"><iframe src="direction-4-day-flow.html" title="Direction 4" loading="lazy"></iframe></div>
-    <div class="col-why">
-      <div class="lbl">The moment it serves</div>
-      <p>The daily ritual. The sun rides a dawn→dusk arc; below, the day reads top-to-bottom — morning Moon-void → midday Jupiter → afternoon profection → evening Venus → night Saturn — with a "you are here" gold pulse and one concrete <em>do</em> per beat.</p>
-    </div>
-    <div class="col-links"><a href="direction-4-day-flow.html" target="_blank">Open full</a><a href="direction-4-day-flow_README.md" target="_blank">Rationale →</a></div>
+    <div class="col-links"><a href="direction-3-sky-first.html" target="_blank">Open full</a><a href="direction-3-sky-first_README.md" target="_blank">Notes →</a></div>
   </div>
 
 </div>
 
+<div class="alt">
+  Earlier mobile single-column concepts are still in the folder if useful:
+  <a href="direction-2-carousel.html" target="_blank">System Carousel</a> · <a href="direction-4-day-flow.html" target="_blank">Day-Flow timeline</a>.
+</div>
+
 <div class="foot">
-  <b>Aesthetic source-of-truth:</b> the two reference dashboards (glowing gold sun hero · EXPANSION phase headline · 4 corner stat rings · dense glassy cards · Sky Conditions bars · Planet Influences) + the live timing-weather PWA's solar-intelligence CSS.<br>
-  Round 1 · 2026-06-12 · mockup-only, live dashboard untouched · personalized to Alfredo's natal chart.
+  <b>Modeled on:</b> your two reference screenshots (dense multi-column dashboard · gold sun hero · corner gauges · Sky Conditions bars · Planet Influences · radar).<br>
+  2026-06-12 · mockup-only, live dashboard untouched · personalized to your natal chart.
 </div>
 
 </body>
