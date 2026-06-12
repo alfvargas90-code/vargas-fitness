@@ -990,7 +990,55 @@ async function renderSupportCards() {
       const active = a && a["active-calories"] != null ? Math.round(a["active-calories"]) : null;
       calSubEl.textContent = active != null ? `active ${active.toLocaleString()}` : "active —";
     }
+
+    // ── Recent-burn badge — honest derivation from metrics_history.jsonl ──
+    // Polar's live feed has no discrete workouts, only a cumulative daily active-cal
+    // sampled at fixed clock-slots. So we surface the REAL active-cal rise over the
+    // trailing ~4h, anchored to actual reading times — never a fabricated session.
+    // Hidden unless that rise clears a workout-sized threshold.
+    renderRecentBurnBadge().catch(() => {});
   } catch (e) {}
+}
+
+// Derive "active calories burned in the trailing ~4h" from polar/metrics_history.jsonl
+// (timestamped cumulative active_cal snapshots). Shows e.g. "↑ +412 active since 3:00 PM".
+// Honest by construction: the number is the delta between two real readings and the
+// time is a real reading's timestamp — no per-workout claim, no invented "minutes ago".
+const RECENT_BURN_WINDOW_H = 4;   // trailing window the rise is measured over
+const RECENT_BURN_THRESHOLD = 150; // kcal — workout-sized rise required to show the badge
+async function renderRecentBurnBadge() {
+  const el = document.getElementById("cal-workout");
+  if (!el) return;
+  const hide = () => { el.style.display = "none"; el.textContent = ""; };
+  let rows;
+  try {
+    const txt = await fetch("polar/metrics_history.jsonl", { cache: "no-store" }).then(r => r.ok ? r.text() : "");
+    rows = txt.split("\n").map(l => l.trim()).filter(Boolean).map(l => { try { return JSON.parse(l); } catch { return null; } })
+      .filter(r => r && r.ts && r.active_cal != null)
+      .map(r => ({ t: new Date(r.ts), cal: +r.active_cal }))
+      .filter(r => !isNaN(r.t) && !isNaN(r.cal))
+      .sort((a, b) => a.t - b.t);
+  } catch { return hide(); }
+  if (rows.length < 2) return hide();
+
+  const now = new Date();
+  const winMs = RECENT_BURN_WINDOW_H * 3600 * 1000;
+  const cur = rows[rows.length - 1];
+  // Latest reading must itself be fresh, else "recent burn" no longer applies.
+  if (now - cur.t > winMs || cur.t > now) return hide();
+  // Base = the reading at/just-before the 4h-ago mark (measures the trailing-4h rise).
+  const cutoff = new Date(now - winMs);
+  let base = null;
+  for (const r of rows) { if (r.t <= cutoff) base = r; else break; }
+  if (!base) base = rows[0]; // data starts <4h ago — measure from the earliest reading
+  const rise = Math.round(cur.cal - base.cal);
+  // Cumulative active_cal resets overnight (~4am); a cross-reset window yields a
+  // negative/garbage delta — the threshold below naturally suppresses it.
+  if (rise < RECENT_BURN_THRESHOLD) return hide();
+
+  const since = base.t.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  el.textContent = `↑ +${rise.toLocaleString()} active since ${since}`;
+  el.style.display = "";
 }
 
 // Tap-through: hero metric corners scroll to their section.
