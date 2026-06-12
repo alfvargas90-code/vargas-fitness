@@ -278,6 +278,32 @@
   .phys-sub { margin-left: 20px; font-size: 10.5px; line-height: 1.25; color: rgba(255,255,255,0.38);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .phys-row + .phys-row { border-top: 1px solid rgba(255,255,255,0.05); }
+
+  /* ── 3-tab views + bottom tab bar (mirrors kids astro footer pattern) ─────── */
+  .tab-view { display: none; }
+  .tab-view.active { display: block; }
+  #tab-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-around; align-items: flex-start;
+    background: rgba(4,5,16,0.92); border-top: 1px solid rgba(255,255,255,0.08);
+    -webkit-backdrop-filter: blur(22px) saturate(1.2); backdrop-filter: blur(22px) saturate(1.2);
+    padding: 9px 0 max(env(safe-area-inset-bottom, 0px), 9px);
+  }
+  .tabnav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;
+    cursor: pointer; padding: 3px 8px; background: none; border: none;
+    -webkit-tap-highlight-color: transparent; transition: transform 0.15s; }
+  .tabnav-item:active { transform: scale(0.94); }
+  .tabnav-bar { height: 3px; width: 18px; border-radius: 2px; background: #3A4163; transition: all 0.25s; }
+  .tabnav-item.active .tabnav-bar { width: 30px; background: var(--tc); box-shadow: 0 0 10px var(--tc); }
+  .tabnav-name { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+    color: #6A7090; transition: color 0.2s; }
+  .tabnav-item.active .tabnav-name { color: var(--tc); text-shadow: 0 0 12px var(--tc); }
+  /* Recovery 3-col header + Body hero (SUN/MOON/RISING column pattern) */
+  .big3-row { display: flex; gap: 8px; }
+  .big3-cell { flex: 1; min-width: 0; text-align: center; padding: 12px 6px; border-radius: 16px; }
+  .big3-cap { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; color: #8A90A6; }
+  .big3-val { font-size: 21px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.05; margin-top: 5px; }
+  .big3-sub { font-size: 10px; font-weight: 600; margin-top: 3px; line-height: 1.2; min-height: 12px; }
 </style>
 </head>
 <body class="min-h-screen">
@@ -470,7 +496,8 @@
     </svg>
   </div>
 
-  <div class="mx-auto w-full max-w-[440px] px-3.5" style="padding-top:max(2px, env(safe-area-inset-top))">
+  <div class="mx-auto w-full max-w-[440px] px-3.5" style="padding-top:max(2px, env(safe-area-inset-top));padding-bottom:calc(76px + env(safe-area-inset-bottom))">
+    <div id="tab-active" class="tab-view active">
     <!-- ════════════════ HERO — moon + 3 orbital rings + metric corners ═══════ -->
     <section id="lpi-hero" class="relative w-full" style="height:330px" aria-label="Lunar performance hero">
       <div class="hero-stack" aria-hidden="true">
@@ -710,6 +737,126 @@
       </div>
     </section>
 
+    <!-- ════════ SUPPORTING CARDS — Nutrition / Scale / Activity / Calories ════ -->
+    <section class="grid grid-cols-3 gap-2.5 mb-2.5" id="support-cards" aria-label="Supporting metrics">
+      <!-- Nutrition -->
+      <button type="button" data-target="nutrition-panel" class="lpi-card p-2.5 text-left focus:outline-none">
+        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#39D98A">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v7a3 3 0 006 0V3M7 3v18M17 3c-1.5 0-2.5 2-2.5 5s1 4 2.5 4 2.5-1 2.5-4-1-5-2.5-5zM17 16v5"/></svg>
+          Nutrition
+        </div>
+        <div class="flex items-center justify-between mt-1.5 gap-1">
+          <div class="min-w-0">
+            <div class="text-[20px] font-bold stat-num leading-none text-white" id="sc-nutrition-val">—</div>
+            <div class="text-[10px] text-muted mt-0.5" id="sc-nutrition-unit">cal left</div>
+          </div>
+          <div id="sc-nutrition-ring" class="shrink-0"></div>
+        </div>
+        <div class="text-[9px] text-muted mt-2 leading-tight whitespace-nowrap" id="sc-nutrition-macros"></div>
+        <div class="text-[10px] font-semibold mt-2 flex items-center gap-0.5 whitespace-nowrap" style="color:#39D98A">View details
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      </button>
+      <!-- Activity -->
+      <button type="button" data-target="activity" class="lpi-card p-2.5 text-left focus:outline-none">
+        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#FF8A3D">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13H11l-1 9 8.5-11H12z"/></svg>
+          Activity
+        </div>
+        <div class="flex items-center justify-between mt-1.5 gap-1">
+          <div class="min-w-0">
+            <div class="text-[20px] font-bold stat-num leading-none text-white" id="sc-activity-val">—</div>
+            <div class="text-[10px] text-muted mt-0.5">steps</div>
+          </div>
+          <div id="sc-activity-ring" class="shrink-0"></div>
+        </div>
+        <div class="flex justify-between text-[9px] mt-2 gap-1" id="sc-activity-stats"></div>
+        <div class="text-[10px] font-semibold mt-2 flex items-center gap-0.5 whitespace-nowrap" style="color:#FF8A3D">View activity
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      </button>
+      <!-- Calories Burned (display-only; no detail panel) -->
+      <article class="lpi-card p-2.5" aria-label="Calories burned today">
+        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#FF5E62">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3 3 4 3 7a3 3 0 01-6 0c0-1.5.5-2.5 1-3M12 22a6 6 0 006-6c0-4-3-5-3-8 0 0-2 2-3 5-1-1.5-1-3-1-3-2 1.5-4 4-4 6a6 6 0 004 6z"/></svg>
+          Calories Burned
+        </div>
+        <div class="text-[20px] font-bold stat-num leading-none mt-1.5 text-white" id="cal-total">—</div>
+        <div class="text-[10px] text-muted mt-0.5">kcal today</div>
+        <div class="text-[10px] mt-2 leading-tight whitespace-nowrap" id="cal-sub" style="color:#FF5E62">active —</div>
+      </article>
+    </section>
+
+    <!-- ═══════════ DETAIL MODULES (linked from cards above; below the fold) ═══════ -->
+
+    <!-- Nutrition detail -->
+    <section class="gradient-card p-4 mb-4" id="nutrition-panel">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-semibold text-neutral-300">Nutrition · today</h2>
+        <span class="text-xs text-neutral-400" id="nutrition-sub"></span>
+      </div>
+      <div id="nutrition-empty" class="text-sm text-muted">
+        No nutrition data yet — run <code class="text-electric">nutrition/sync.py</code> to pull today's macros from Calories Club.
+      </div>
+      <div id="nutrition-content" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+    </section>
+    <div id="nutrition-nudge" class="hidden -mt-2 mb-4 px-1 text-sm italic text-cobalt/80"></div>
+
+    <!-- Activity detail -->
+    <section class="gradient-card p-4 mb-4" id="activity">
+      <div class="flex items-start justify-between mb-4 flex-wrap gap-2">
+        <div>
+          <h2 class="font-semibold text-neutral-300">Activity · today <span class="text-xs text-neutral-400 font-normal">· Polar Loop</span></h2>
+          <span class="text-xs text-muted" id="activity-updated"></span>
+        </div>
+        <span class="text-xs text-neutral-400" id="activity-sub"></span>
+      </div>
+      <div id="activity-empty" class="text-sm text-muted">
+        No activity data yet — run <code class="text-electric">polar/sync.py</code> to pull today's steps, active time &amp; calories.
+      </div>
+      <div id="activity-content" class="hidden">
+        <div class="grid grid-cols-3 gap-3" id="activity-tiles"></div>
+        <p class="text-xs text-muted mt-4" id="activity-footer"></p>
+      </div>
+    </section>
+
+    <!-- Day in review detail -->
+    <section class="gradient-card p-4 mb-4" id="day-review">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <h2 class="font-semibold text-neutral-300">Day in review <span class="text-xs text-neutral-400 font-normal" id="day-review-date"></span></h2>
+        <span class="text-xs text-neutral-400" id="day-review-sub"></span>
+      </div>
+      <div id="day-review-empty" class="text-sm text-muted">
+        Tonight's wrap-up drops at 9:45 PM — steps, deficit, protein &amp; an AI read on how the day went.
+      </div>
+      <div id="day-review-content" class="hidden">
+        <div id="day-review-badge" class="mb-4"></div>
+        <p class="text-base leading-relaxed text-neutral-200 mb-1" id="day-review-stats" style="font-size:15px;"></p>
+        <p class="text-base leading-relaxed text-neutral-200 mt-4" id="day-review-prose" style="font-size:15px;"></p>
+      </div>
+    </section>
+
+    </div><!-- /tab-active -->
+    <div id="tab-recovery" class="tab-view">
+    <!-- Recovery view eyebrow + 3-col summary header (SLEEP · ANS · HRV) -->
+    <div class="text-[11px] uppercase tracking-[2px] font-bold mb-2 px-1 mt-1" style="color:#FF5E8A;opacity:0.9" aria-hidden="true">Recovery</div>
+    <section class="gradient-card p-3 mb-2.5" id="recovery-big3" aria-label="Recovery summary">
+      <div class="big3-row">
+        <div class="big3-cell" style="background:rgba(155,92,255,0.10);border:1px solid rgba(155,92,255,0.22)">
+          <div class="big3-cap">Sleep</div>
+          <div class="big3-val" id="rb-sleep-val" style="color:#C9B8FF">—</div>
+          <div class="big3-sub" id="rb-sleep-sub" style="color:#9B5CFF"></div>
+        </div>
+        <div class="big3-cell" style="background:rgba(0,200,255,0.10);border:1px solid rgba(0,200,255,0.22)">
+          <div class="big3-cap">ANS Charge</div>
+          <div class="big3-val" id="rb-ans-val" style="color:#7FE9FF">—</div>
+          <div class="big3-sub" id="rb-ans-sub" style="color:#00C8FF"></div>
+        </div>
+        <div class="big3-cell" style="background:rgba(255,94,138,0.10);border:1px solid rgba(255,94,138,0.22)">
+          <div class="big3-cap">HRV</div>
+          <div class="big3-val" id="rb-hrv-val" style="color:#FFB3C8">—</div>
+          <div class="big3-sub" id="rb-hrv-sub" style="color:#FF5E8A"></div>
+        </div>
+      </div>
+    </section>
     <!-- ════════════════ MONTHLY HISTORY — static monthly retrospective (polar/history/) ═══════ -->
     <!-- ════════════════ RECOVERY WINDOW (full-width; now hosts System Conditions inline) ═══════════════ -->
     <section class="lpi-card p-3 mb-3" id="recovery-window">
@@ -757,96 +904,6 @@
       <span class="hidden" id="rw-status-dot"></span><span class="hidden" id="rw-status-chip"></span>
     </section>
 
-    <!-- ════════ SUPPORTING CARDS — Nutrition / Scale / Activity / Calories ════ -->
-    <section class="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-2.5" id="support-cards" aria-label="Supporting metrics">
-      <!-- Nutrition -->
-      <button type="button" data-target="nutrition-panel" class="lpi-card p-2.5 text-left focus:outline-none">
-        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#39D98A">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v7a3 3 0 006 0V3M7 3v18M17 3c-1.5 0-2.5 2-2.5 5s1 4 2.5 4 2.5-1 2.5-4-1-5-2.5-5zM17 16v5"/></svg>
-          Nutrition
-        </div>
-        <div class="flex items-center justify-between mt-1.5 gap-1">
-          <div class="min-w-0">
-            <div class="text-[20px] font-bold stat-num leading-none text-white" id="sc-nutrition-val">—</div>
-            <div class="text-[10px] text-muted mt-0.5" id="sc-nutrition-unit">cal left</div>
-          </div>
-          <div id="sc-nutrition-ring" class="shrink-0"></div>
-        </div>
-        <div class="text-[9px] text-muted mt-2 leading-tight whitespace-nowrap" id="sc-nutrition-macros"></div>
-        <div class="text-[10px] font-semibold mt-2 flex items-center gap-0.5 whitespace-nowrap" style="color:#39D98A">View details
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-      </button>
-      <!-- Scale -->
-      <button type="button" data-target="snapshot-panel" class="lpi-card p-2.5 text-left focus:outline-none">
-        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#8A5CFF">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M5 21V9l7-3 7 3v12M5 13h14"/></svg>
-          Scale
-        </div>
-        <div class="text-[20px] font-bold stat-num leading-none mt-1.5 text-white" id="sc-scale-val">—</div>
-        <div class="text-[10px] text-muted mt-0.5">lbs</div>
-        <div id="sc-scale-spark" class="mt-2 h-6" style="color:#8A5CFF"></div>
-        <div class="text-[9px] mt-1" id="sc-scale-detail"></div>
-        <div class="text-[10px] font-semibold mt-1.5 flex items-center gap-0.5 whitespace-nowrap" style="color:#8A5CFF">View progress
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-      </button>
-      <!-- Activity -->
-      <button type="button" data-target="activity" class="lpi-card p-2.5 text-left focus:outline-none">
-        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#FF8A3D">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13H11l-1 9 8.5-11H12z"/></svg>
-          Activity
-        </div>
-        <div class="flex items-center justify-between mt-1.5 gap-1">
-          <div class="min-w-0">
-            <div class="text-[20px] font-bold stat-num leading-none text-white" id="sc-activity-val">—</div>
-            <div class="text-[10px] text-muted mt-0.5">steps</div>
-          </div>
-          <div id="sc-activity-ring" class="shrink-0"></div>
-        </div>
-        <div class="flex justify-between text-[9px] mt-2 gap-1" id="sc-activity-stats"></div>
-        <div class="text-[10px] font-semibold mt-2 flex items-center gap-0.5 whitespace-nowrap" style="color:#FF8A3D">View activity
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-      </button>
-      <!-- Calories Burned (display-only; no detail panel) -->
-      <article class="lpi-card p-2.5" aria-label="Calories burned today">
-        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#FF5E62">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3 3 4 3 7a3 3 0 01-6 0c0-1.5.5-2.5 1-3M12 22a6 6 0 006-6c0-4-3-5-3-8 0 0-2 2-3 5-1-1.5-1-3-1-3-2 1.5-4 4-4 6a6 6 0 004 6z"/></svg>
-          Calories Burned
-        </div>
-        <div class="text-[20px] font-bold stat-num leading-none mt-1.5 text-white" id="cal-total">—</div>
-        <div class="text-[10px] text-muted mt-0.5">kcal today</div>
-        <div class="text-[10px] mt-2 leading-tight whitespace-nowrap" id="cal-sub" style="color:#FF5E62">active —</div>
-      </article>
-    </section>
-
-    <!-- ═══════════ DETAIL MODULES (linked from cards above; below the fold) ═══════ -->
-
-    <!-- Nutrition detail -->
-    <section class="gradient-card p-4 mb-4" id="nutrition-panel">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="font-semibold text-neutral-300">Nutrition · today</h2>
-        <span class="text-xs text-neutral-400" id="nutrition-sub"></span>
-      </div>
-      <div id="nutrition-empty" class="text-sm text-muted">
-        No nutrition data yet — run <code class="text-electric">nutrition/sync.py</code> to pull today's macros from Calories Club.
-      </div>
-      <div id="nutrition-content" class="hidden grid grid-cols-2 md:grid-cols-4 gap-4"></div>
-    </section>
-    <div id="nutrition-nudge" class="hidden -mt-2 mb-4 px-1 text-sm italic text-cobalt/80"></div>
-
-    <!-- Scale snapshot detail -->
-    <section class="gradient-card p-4 mb-4" id="snapshot-panel">
-      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h2 class="font-semibold text-neutral-300">Latest scale snapshot <span class="text-xs text-neutral-400 font-normal">· VeSync</span></h2>
-        <span class="text-xs text-neutral-400" id="snapshot-sub"></span>
-      </div>
-      <div id="snapshot-empty" class="text-sm text-muted">
-        No fresh scale reading yet.<br>
-        To update: send a screenshot of your VeSync app to Penny in your Dispatch chat. She'll OCR + push the update within ~2 min.
-        <span class="block text-xs mt-1 text-muted/80">(BT-only ESF-551 doesn't expose body comp via API — manual fallback.)</span>
-      </div>
-      <div id="snapshot-content" class="hidden grid grid-cols-3 md:grid-cols-6 gap-4"></div>
-    </section>
-
     <!-- Training & Recovery detail -->
     <section class="gradient-card p-4 mb-4" id="polar-panel">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
@@ -884,22 +941,6 @@
       </div>
     </section>
 
-    <!-- Day in review detail -->
-    <section class="gradient-card p-4 mb-4" id="day-review">
-      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h2 class="font-semibold text-neutral-300">Day in review <span class="text-xs text-neutral-400 font-normal" id="day-review-date"></span></h2>
-        <span class="text-xs text-neutral-400" id="day-review-sub"></span>
-      </div>
-      <div id="day-review-empty" class="text-sm text-muted">
-        Tonight's wrap-up drops at 9:45 PM — steps, deficit, protein &amp; an AI read on how the day went.
-      </div>
-      <div id="day-review-content" class="hidden">
-        <div id="day-review-badge" class="mb-4"></div>
-        <p class="text-base leading-relaxed text-neutral-200 mb-1" id="day-review-stats" style="font-size:15px;"></p>
-        <p class="text-base leading-relaxed text-neutral-200 mt-4" id="day-review-prose" style="font-size:15px;"></p>
-      </div>
-    </section>
-
     <!-- ════════════════ TRENDS — historical / analytical section eyebrow ═══════ -->
     <div class="text-[11px] uppercase tracking-[2px] font-bold mt-6 mb-2 px-1" style="color:#9A6BFF;opacity:0.85" aria-hidden="true">Trends</div>
 
@@ -929,22 +970,56 @@
       </div>
     </section>
 
-    <!-- Activity detail -->
-    <section class="gradient-card p-4 mb-4" id="activity">
-      <div class="flex items-start justify-between mb-4 flex-wrap gap-2">
-        <div>
-          <h2 class="font-semibold text-neutral-300">Activity · today <span class="text-xs text-neutral-400 font-normal">· Polar Loop</span></h2>
-          <span class="text-xs text-muted" id="activity-updated"></span>
+    </div><!-- /tab-recovery -->
+    <div id="tab-body" class="tab-view">
+    <!-- Body view eyebrow + prominent latest scale reading -->
+    <div class="text-[11px] uppercase tracking-[2px] font-bold mb-2 px-1 mt-1" style="color:#9B5CFF;opacity:0.9" aria-hidden="true">Body</div>
+    <section class="gradient-card p-4 mb-2.5" id="body-hero" aria-label="Latest body composition">
+      <div class="flex items-end justify-between gap-3 flex-wrap">
+        <div class="min-w-0">
+          <div class="text-[10px] uppercase tracking-wider text-muted font-semibold">Weight</div>
+          <div class="flex items-baseline gap-2 mt-1">
+            <span class="text-[40px] font-extrabold stat-num leading-none" id="bh-weight" style="color:#FFFFFF">—</span>
+            <span class="text-[13px] text-muted font-semibold">lbs</span>
+            <span class="text-[13px] font-bold stat-num" id="bh-delta"></span>
+          </div>
+          <div class="text-[11px] text-muted mt-1.5" id="bh-stamp"></div>
         </div>
-        <span class="text-xs text-neutral-400" id="activity-sub"></span>
+        <div class="flex gap-4 text-right shrink-0">
+          <div><div class="text-[9px] uppercase tracking-wide text-muted font-semibold">Body fat</div>
+            <div class="text-[18px] font-bold stat-num mt-0.5" id="bh-bf" style="color:#FF8A3D">—</div></div>
+          <div><div class="text-[9px] uppercase tracking-wide text-muted font-semibold">Muscle</div>
+            <div class="text-[18px] font-bold stat-num mt-0.5" id="bh-muscle" style="color:#39D98A">—</div></div>
+          <div><div class="text-[9px] uppercase tracking-wide text-muted font-semibold">BMI</div>
+            <div class="text-[18px] font-bold stat-num mt-0.5" id="bh-bmi" style="color:#9B5CFF">—</div></div>
+        </div>
       </div>
-      <div id="activity-empty" class="text-sm text-muted">
-        No activity data yet — run <code class="text-electric">polar/sync.py</code> to pull today's steps, active time &amp; calories.
+    </section>
+      <!-- Scale -->
+      <button type="button" data-target="snapshot-panel" class="lpi-card p-2.5 text-left focus:outline-none block w-full mb-2.5">
+        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#8A5CFF">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M5 21V9l7-3 7 3v12M5 13h14"/></svg>
+          Scale
+        </div>
+        <div class="text-[20px] font-bold stat-num leading-none mt-1.5 text-white" id="sc-scale-val">—</div>
+        <div class="text-[10px] text-muted mt-0.5">lbs</div>
+        <div id="sc-scale-spark" class="mt-2 h-6" style="color:#8A5CFF"></div>
+        <div class="text-[9px] mt-1" id="sc-scale-detail"></div>
+        <div class="text-[10px] font-semibold mt-1.5 flex items-center gap-0.5 whitespace-nowrap" style="color:#8A5CFF">View progress
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      </button>
+    <!-- Scale snapshot detail -->
+    <section class="gradient-card p-4 mb-4" id="snapshot-panel">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <h2 class="font-semibold text-neutral-300">Latest scale snapshot <span class="text-xs text-neutral-400 font-normal">· VeSync</span></h2>
+        <span class="text-xs text-neutral-400" id="snapshot-sub"></span>
       </div>
-      <div id="activity-content" class="hidden">
-        <div class="grid grid-cols-3 gap-3" id="activity-tiles"></div>
-        <p class="text-xs text-muted mt-4" id="activity-footer"></p>
+      <div id="snapshot-empty" class="text-sm text-muted">
+        No fresh scale reading yet.<br>
+        To update: send a screenshot of your VeSync app to Penny in your Dispatch chat. She'll OCR + push the update within ~2 min.
+        <span class="block text-xs mt-1 text-muted/80">(BT-only ESF-551 doesn't expose body comp via API — manual fallback.)</span>
       </div>
+      <div id="snapshot-content" class="hidden grid grid-cols-3 md:grid-cols-6 gap-4"></div>
     </section>
 
     <!-- Scale history detail -->
@@ -974,10 +1049,24 @@
       <p class="text-xs text-muted mt-4" id="scale-history-caption"></p>
     </section>
 
+    </div><!-- /tab-body -->
     <footer class="text-xs text-muted text-center py-4">
       Data stored locally in your browser (localStorage). <code class="text-electric">localStorage.clear()</code> to reset.
     </footer>
   </div>
+
+  <!-- ════════════════ BOTTOM TAB BAR — Active / Recovery / Body ═══════ -->
+  <nav id="tab-bar" aria-label="Dashboard views">
+    <button type="button" class="tabnav-item active" data-tab="active" style="--tc:#00C8FF" aria-label="Active view">
+      <span class="tabnav-bar"></span><span class="tabnav-name">Active</span>
+    </button>
+    <button type="button" class="tabnav-item" data-tab="recovery" style="--tc:#FF5E8A" aria-label="Recovery view">
+      <span class="tabnav-bar"></span><span class="tabnav-name">Recovery</span>
+    </button>
+    <button type="button" class="tabnav-item" data-tab="body" style="--tc:#9B5CFF" aria-label="Body view">
+      <span class="tabnav-bar"></span><span class="tabnav-name">Body</span>
+    </button>
+  </nav>
 
   <!-- Safe-area filler: solid deep-navy strip pinned to the very bottom.
        Guarantees the home-indicator safe-area is painted #03050F on iOS so the
