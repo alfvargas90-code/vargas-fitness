@@ -119,7 +119,7 @@ function wireLastSynced() {
   btn.addEventListener("click", () => {
     renderLastSynced();
     renderRings(); renderActivity(); renderPolar();
-    renderSupportCards(); renderPhysiology(); renderTodaysRead();
+    renderSupportCards(); renderPhysiology(); renderTodaysRead(); renderCoach();
   });
 }
 
@@ -2142,7 +2142,198 @@ async function renderPatternEngine() {
   }
 }
 
+// ───────────────────────── COACH — trainer read ─────────────────────────
+// Rule-based personal-trainer card. Three trainer-grade metrics derived purely
+// from data we already sync (no new sources, no LLM, zero ongoing cost) plus one
+// synthesized Coach's Note picked from ~8 contextual templates by today's real
+// data state. All fetches fail gracefully → the default note still renders.
+const CG_GREEN = ["#9BE6BE", "rgba(57,217,138,0.15)"];   // healthy / holding
+const CG_AMBER = ["#FFD27A", "rgba(255,176,32,0.16)"];   // watch / cooling
+const CG_RED   = ["#FF7A7D", "rgba(255,94,98,0.16)"];    // problem / debt
+const CG_NEU   = ["#C2C8D4", "rgba(255,255,255,0.07)"];  // neutral
+// signed number with a real minus glyph: −1.8, +24.7, 0.0
+function coachSign(n, unit = "", dp = 1) {
+  if (n == null || isNaN(n)) return "—";
+  return (n > 0 ? "+" : n < 0 ? "−" : "") + Math.abs(n).toFixed(dp) + unit;
+}
+function coachTag(el, text, pair) {
+  if (!el) return;
+  if (!text || !pair) { el.style.display = "none"; el.textContent = ""; return; }
+  el.style.display = "inline-block";
+  el.textContent = text;
+  el.style.color = pair[0];
+  el.style.background = pair[1];
+}
+
+async function renderCoach() {
+  const noteEl = document.getElementById("coach-note");
+  if (!noteEl) return;
+  const tsEl = document.getElementById("coach-ts");
+
+  // state bag — every field optional; missing data leaves it null (graceful)
+  const S = { w7: null, m7: null, w30: null, m30: null,
+              sleepDebtH: null, lastNightMin: null,
+              reserve14: null, negStreak: 0, todayAns: null,
+              proteinG: null, proteinGoal: null, activeCal: null };
+
+  // ── RECOMP — weight vs muscle deltas (vesync/history.json, newest-first array).
+  // Weigh-ins are sparse, so match the reading nearest to the 7d / 30d target. ──
+  try {
+    const hist = await fetchJSON("vesync/history.json");
+    const rows = (hist || []).filter(r => r && r.date && r.weight_lb != null)
+      .sort((a, b) => a.date < b.date ? 1 : -1); // newest first
+    if (rows.length >= 2) {
+      const latest = rows[0];
+      const dayNum = d => Math.round(new Date(d + "T00:00:00").getTime() / 864e5);
+      const t0 = dayNum(latest.date);
+      const nearest = back => {
+        let best = null, bestDist = Infinity;
+        for (const r of rows.slice(1)) {
+          const dist = Math.abs((t0 - dayNum(r.date)) - back);
+          if (dist < bestDist) { bestDist = dist; best = r; }
+        }
+        return best;
+      };
+      const delta = (a, b, k) => (a[k] != null && b[k] != null) ? +(a[k] - b[k]).toFixed(1) : null;
+      const r7 = nearest(7), r30 = nearest(30);
+      if (r7)  { S.w7  = delta(latest, r7,  "weight_lb"); S.m7  = delta(latest, r7,  "muscle_mass_lb"); }
+      if (r30) { S.w30 = delta(latest, r30, "weight_lb"); S.m30 = delta(latest, r30, "muscle_mass_lb"); }
+    }
+  } catch {}
+
+  // ── SLEEP DEBT — sum of nightly shortfalls vs 420 min (7h) over last 7 nights.
+  // Total sleep = light+deep+rem (seconds → min); shortfall-only, never credited. ──
+  try {
+    const dates = lastN(7); // oldest → newest
+    const files = await Promise.all(dates.map(d => fetchJSON(`polar/sleep/${d}.json`).catch(() => null)));
+    let debtMin = 0, have = 0, lastMin = null;
+    files.forEach(f => {
+      if (!f) return;
+      const tot = ((f.light_sleep || 0) + (f.deep_sleep || 0) + (f.rem_sleep || 0)) / 60;
+      if (tot <= 0) return;
+      debtMin += Math.max(0, 420 - tot);
+      have++; lastMin = tot; // last non-empty = most recent night
+    });
+    if (have) { S.sleepDebtH = +(debtMin / 60).toFixed(1); S.lastNightMin = Math.round(lastMin); }
+  } catch {}
+
+  // ── RECOVERY RESERVE — 14d sum of ANS Charge + consecutive net-negative streak. ──
+  try {
+    const dates = lastN(14);
+    const files = await Promise.all(dates.map(d => fetchJSON(`polar/recharge/${d}.json`).catch(() => null)));
+    const vals = [];
+    files.forEach(f => { if (f && f.ans_charge != null) vals.push(f.ans_charge); });
+    if (vals.length) {
+      S.reserve14 = +vals.reduce((a, b) => a + b, 0).toFixed(1);
+      S.todayAns = vals[vals.length - 1];
+      let streak = 0;
+      for (let i = vals.length - 1; i >= 0; i--) { if (vals[i] < 0) streak++; else break; }
+      S.negStreak = streak;
+    }
+  } catch {}
+
+  // ── today's protein (nutrition) + active calories (Polar) — for note templates ──
+  try {
+    for (const day of lastN(3).slice().reverse()) {
+      try {
+        const n = await fetchJSON(`nutrition/daily/${day}.json`);
+        const t = n.totals || {}, g = n.goals || {};
+        if (t.protein_g != null) {
+          S.proteinG = Math.round(t.protein_g);
+          S.proteinGoal = g.protein_g != null ? Math.round(g.protein_g) : null;
+          break;
+        }
+      } catch {}
+    }
+  } catch {}
+  try {
+    for (const day of lastN(2).slice().reverse()) {
+      try {
+        const a = await fetchJSON(`polar/daily_activity/${day}.json`);
+        if (a["active-calories"] != null) { S.activeCal = Math.round(a["active-calories"]); break; }
+      } catch {}
+    }
+  } catch {}
+
+  // ── paint the three metric tiles ──
+  const $ = id => document.getElementById(id);
+  // RECOMP
+  const rv = $("coach-recomp-val"), rs = $("coach-recomp-sub"), rt = $("coach-recomp-tag");
+  if (rv) {
+    if (S.w7 != null) {
+      rv.textContent = coachSign(S.w7, " lb");
+      if (rs) rs.textContent = S.m7 != null ? `muscle ${coachSign(S.m7, " lb")}` : "muscle —";
+      if (S.w30 != null) rv.title = `30d: weight ${coachSign(S.w30, " lb")}${S.m30 != null ? ` · muscle ${coachSign(S.m30, " lb")}` : ""}`;
+      let tag, pair;
+      if (S.w7 < 0 && (S.m7 == null || S.m7 >= -0.3))                                  { tag = "recomp win";  pair = CG_GREEN; }
+      else if (S.m7 != null && S.m7 < 0 && Math.abs(S.m7) >= Math.abs(S.w7))           { tag = "losing muscle"; pair = CG_RED; }
+      else if (S.w7 > 0 && S.m7 != null && S.m7 > 0)                                    { tag = "gaining";     pair = CG_NEU; }
+      else                                                                             { tag = "mixed";       pair = CG_AMBER; }
+      coachTag(rt, tag, pair);
+    } else { rv.textContent = "—"; if (rs) rs.textContent = "need 2 weigh-ins"; coachTag(rt, "", null); }
+  }
+  // SLEEP DEBT
+  const sv = $("coach-sleep-val"), stag = $("coach-sleep-tag");
+  if (sv) {
+    if (S.sleepDebtH != null) {
+      sv.textContent = "−" + S.sleepDebtH.toFixed(1) + " h";
+      let pair = CG_GREEN, lbl = "on target";
+      if (S.sleepDebtH > 3)      { pair = CG_RED;   lbl = "deep debt"; }
+      else if (S.sleepDebtH > 1) { pair = CG_AMBER; lbl = "behind"; }
+      sv.style.color = pair[0];
+      coachTag(stag, lbl, pair);
+    } else { sv.textContent = "—"; coachTag(stag, "", null); }
+  }
+  // RECOVERY RESERVE
+  const cv = $("coach-reserve-val"), csub = $("coach-reserve-sub"), ctag = $("coach-reserve-tag");
+  if (cv) {
+    if (S.reserve14 != null) {
+      cv.textContent = coachSign(S.reserve14, " ANS");
+      let pair, lbl, sub = "ANS reserve";
+      if (S.negStreak >= 5)      { pair = CG_RED;   lbl = "deload near";  sub = `${S.negStreak}d slide`; }
+      else if (S.negStreak >= 3) { pair = CG_AMBER; lbl = "cooling fast"; sub = `${S.negStreak}d slide`; }
+      else if (S.reserve14 < 0)  { pair = CG_AMBER; lbl = "running low"; }
+      else                       { pair = CG_GREEN; lbl = "banked"; }
+      cv.style.color = pair[0];
+      coachTag(ctag, lbl, pair);
+      if (csub) csub.textContent = sub;
+    } else { cv.textContent = "—"; coachTag(ctag, "", null); }
+  }
+
+  // ── Coach's Note — one template, chosen by priority cascade over today's state ──
+  const f1 = n => Math.abs(n).toFixed(1);
+  const ansStr = S.todayAns != null ? coachSign(S.todayAns) : null;
+  const note = (() => {
+    // 1 · under-recovery — the cardinal trainer rule
+    if (S.sleepDebtH != null && S.sleepDebtH > 2 && S.todayAns != null && S.todayAns < 0)
+      return `ANS is at ${ansStr} and you're ${f1(S.sleepDebtH)}h down on sleep this week. You can't out-train under-recovery — tonight, 9 PM wind-down, no exceptions.`;
+    // 2 · heavy load on a flat nervous system
+    if (S.activeCal != null && S.activeCal >= 1000 && S.todayAns != null && S.todayAns < 0)
+      return `Today's load ran hot (${S.activeCal.toLocaleString()} active kcal) and ANS is flat at ${ansStr}. Tomorrow: Z2 only or a pure walk — no intensity.`;
+    // 3 · reserve sliding
+    if (S.negStreak >= 3)
+      return `ANS has slid ${S.negStreak} days straight. The reserve's still there but you're spending it fast — bank one real recovery day before the next hard session.`;
+    // 4 · losing muscle + protein under goal
+    if (S.m7 != null && S.m7 < 0 && Math.abs(S.m7) >= Math.abs(S.w7 || 0) && S.proteinGoal != null && S.proteinG != null && S.proteinG < S.proteinGoal)
+      return `Muscle's slipping (${coachSign(S.m7, " lb")}) and protein came in under goal. Hit ${S.proteinGoal}g+ tomorrow before anything else.`;
+    // 5 · green light
+    if (S.todayAns != null && S.todayAns > 0 && S.proteinGoal != null && S.proteinG != null && S.proteinG >= S.proteinGoal && S.sleepDebtH != null && S.sleepDebtH < 1)
+      return `Reserve's healthy and fueling's clean (${S.proteinG}g protein). Tomorrow's a green-light day — go earn a hard session.`;
+    // 6 · recomp win
+    if (S.w7 != null && S.w7 < 0 && (S.m7 == null || S.m7 >= -0.3))
+      return `Down ${f1(S.w7)}lb with muscle holding — that's textbook recomp. Keep protein high and don't chase the scale.`;
+    // 7 · fueling locked, recovery is the bottleneck
+    if (S.proteinGoal != null && S.proteinG != null && S.proteinG >= S.proteinGoal && ((S.sleepDebtH != null && S.sleepDebtH > 1) || (S.todayAns != null && S.todayAns < 1)))
+      return `Fueling's locked (${S.proteinG}g protein) — recovery's the bottleneck now. Protect sleep tonight and the rest follows.`;
+    // 8 · default
+    return `Steady day. Hold the line — consistency is the whole game.`;
+  })();
+  noteEl.textContent = note;
+  if (tsEl) tsEl.textContent = labelMD(lastN(1)[0]);
+}
+
 function renderAll() {
+  renderCoach();      // async, trainer read: 3 metrics + synthesized Coach's Note
   renderTodaysRead(); // async, AI health summary
   renderMonthlyHistory(); // static monthly retrospective card (polar/history/2026-05.json)
   renderLunarStress(); // async, Lunar Stress Index (polar/lunar_stress.py)
