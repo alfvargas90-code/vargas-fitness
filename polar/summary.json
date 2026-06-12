@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-12T04:00:02-05:00",
-  "data_hash": "46bfd90828f88d81",
-  "slot": "sleep",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 1%\n\nRead\nYou woke from a better night of sleep, but the deeper recovery signal is still subdued, so the reserve is usable rather than expansive. For muscle retention, this is a day that favors steady resistance rhythm and adequate protein over aggressive deficit or strain.\n\nMeasured, not depleted.\n\nPerformance: Measured, not depleted.\n\nTransit: none",
+  "generated_at": "2026-06-12T07:00:03-05:00",
+  "data_hash": "ef50c9b449eb42c8",
+  "slot": "recovery",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 2%\n\nRead\nYou woke with a thin reserve: sleep was ordinary, but the deeper recovery signal is softened. With the day still untouched, it favors low-friction consistency over intensity, with muscle protection depending on steady protein and a modest deficit.\n\nMeasured capacity.\n\nPerformance: Measured capacity.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 1%\n\nRead\nYou woke from a better night of sleep, but the deeper recovery signal is still subdued, so the reserve is usable rather than expansive. For muscle retention, this is a day that favors steady resistance rhythm and adequate protein over aggressive deficit or strain.\n\nMeasured, not depleted."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 2%\n\nRead\nYou woke with a thin reserve: sleep was ordinary, but the deeper recovery signal is softened. With the day still untouched, it favors low-friction consistency over intensity, with muscle protection depending on steady protein and a modest deficit.\n\nMeasured capacity."
     },
     {
       "label": "Performance",
-      "text": "Measured, not depleted."
+      "text": "Measured capacity."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 37 \u2022 Sleep 0 \u2022 Strain 1%\n\nRead\nYou woke from a better night of sleep, but the deeper recovery signal is still subdued, so the reserve is usable rather than expansive. For muscle retention, this is a day that favors steady resistance rhythm and adequate protein over aggressive deficit or strain.\n\nMeasured, not depleted.",
-    "performance": "Measured, not depleted.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 2%\n\nRead\nYou woke with a thin reserve: sleep was ordinary, but the deeper recovery signal is softened. With the day still untouched, it favors low-friction consistency over intensity, with muscle protection depending on steady protein and a modest deficit.\n\nMeasured capacity.",
+    "performance": "Measured capacity.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Start steady with a protein-led breakfast to protect muscle and keep today's meal pacing on track.",
   "transits": [],
   "data_basis": {
-    "recharge_today": 2,
-    "sleep_hours": 6.8,
-    "hrv_today": 89,
-    "hrv_7d_avg": 59.7,
+    "recharge_today": 1,
+    "sleep_hours": 6.6,
+    "hrv_today": 46,
+    "hrv_7d_avg": 59.1,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "2 steps so far, 0m active, 430 calories burned, \u2014 training load"
   }
 }
