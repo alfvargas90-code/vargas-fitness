@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Time × Domain Matrix — June 12</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  :root{
+    --ink:#03050F; --panel:#080B1C; --surface:#10183A;
+    --cyan:#00C8FF; --cyan-lt:#E9F7FF;
+    --purple:#8A5CFF; --purple-lt:#C9B8FF;
+    --coral:#FF5E62; --orange:#FF8A3D; --green:#39D98A;
+    --pink:#FF5E8A; --pink-lt:#FFB3C8; --violet:#9B5CFF;
+    --muted:#8A90A6; --gold:#FFB020;
+    --text:#F2F5FA;
+  }
+  html,body{background-color:var(--ink);}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;
+    color:var(--text);
+    font-variant-numeric:tabular-nums;
+    background:
+      radial-gradient(118% 60% at 50% 28%, rgba(88,62,205,.40), transparent 62%),
+      radial-gradient(circle at 2% 42%, rgba(0,200,255,.10), transparent 46%),
+      radial-gradient(circle at 98% 42%, rgba(255,94,98,.10), transparent 46%),
+      radial-gradient(circle at 86% 70%, rgba(255,138,61,.09), transparent 46%),
+      radial-gradient(circle at 14% 72%, rgba(138,92,255,.12), transparent 46%),
+      linear-gradient(180deg, #03050F 0%, #04061a 50%, #03040E 100%);
+    background-attachment:fixed;
+  }
+  .frame{width:375px;margin:0 auto;min-height:812px;padding:0 0 40px;position:relative;overflow:hidden;}
+
+  .glass{
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0) 42%),
+      rgba(20,26,54,0.68);
+    border:1px solid rgba(255,255,255,0.11);
+    -webkit-backdrop-filter:blur(24px) saturate(1.24);
+    backdrop-filter:blur(24px) saturate(1.24);
+    border-radius:22px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16), inset 0 -1px 0 rgba(0,0,0,.35), 0 22px 50px rgba(0,0,0,.5);
+  }
+  .num{font-variant-numeric:tabular-nums;}
+
+  /* ───────── HEADER ───────── */
+  header{padding:18px 18px 10px;}
+  .head-top{display:flex;align-items:baseline;justify-content:space-between;}
+  .dow{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+  .date{font-size:21px;font-weight:800;letter-spacing:.2px;margin-top:1px;}
+  .sync-pill{
+    display:inline-flex;align-items:center;gap:5px;
+    border-radius:999px;padding:3px 9px;font-size:9.5px;font-weight:700;letter-spacing:.4px;
+    background:rgba(0,200,255,.10);border:1px solid rgba(0,200,255,.30);color:var(--cyan-lt);
+  }
+  .sync-dot{width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);}
+
+  /* day-progress strip */
+  .day-strip{margin-top:13px;position:relative;height:6px;border-radius:999px;
+    background:linear-gradient(90deg,#0b1230 0%,#101a40 100%);
+    border:1px solid rgba(255,255,255,.07);overflow:visible;}
+  .day-fill{position:absolute;top:0;left:0;height:100%;width:53%;border-radius:999px;
+    background:linear-gradient(90deg,rgba(138,92,255,.65),var(--cyan) 70%,rgba(255,138,61,.9));
+    box-shadow:0 0 14px rgba(0,200,255,.55);}
+  .day-now{position:absolute;top:50%;left:53%;width:9px;height:9px;border-radius:50%;
+    transform:translate(-50%,-50%);background:#fff;
+    box-shadow:0 0 0 3px rgba(0,200,255,.35),0 0 12px var(--cyan);}
+  .strip-legend{display:flex;justify-content:space-between;margin-top:6px;
+    font-size:8.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+
+  /* ───────── COLUMN HEADERS ───────── */
+  .matrix{padding:0 14px;}
+  .col-head{display:grid;grid-template-columns:30px repeat(3,1fr);gap:7px;
+    margin:16px 0 9px;align-items:end;}
+  .col-head .spine-cap{}
+  .col-title{text-align:center;font-size:10px;font-weight:800;letter-spacing:1.3px;
+    text-transform:uppercase;padding-bottom:3px;position:relative;}
+  .col-title span{display:block;font-size:7.5px;font-weight:700;letter-spacing:.6px;
+    color:var(--muted);margin-top:2px;}
+  .col-rec{color:var(--pink-lt);}
+  .col-act{color:var(--orange);}
+  .col-body{color:var(--violet);}
+  .col-title::after{content:"";position:absolute;bottom:0;left:18%;right:18%;height:2px;border-radius:2px;}
+  .col-rec::after{background:linear-gradient(90deg,var(--pink),var(--cyan));box-shadow:0 0 8px rgba(255,94,138,.6);}
+  .col-act::after{background:var(--orange);box-shadow:0 0 8px rgba(255,138,61,.6);}
+  .col-body::after{background:var(--violet);box-shadow:0 0 8px rgba(155,92,255,.6);}
+
+  /* ───────── ROWS ───────── */
+  .row{display:grid;grid-template-columns:30px repeat(3,1fr);gap:7px;
+    margin-bottom:8px;align-items:stretch;position:relative;}
+
+  /* time spine */
+  .spine{position:relative;display:flex;flex-direction:column;align-items:center;padding-top:6px;}
+  .spine::before{content:"";position:absolute;top:0;bottom:-8px;left:50%;width:2px;
+    transform:translateX(-50%);background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.05));}
+  .row:last-child .spine::before{bottom:50%;}
+  .spine-dot{width:11px;height:11px;border-radius:50%;position:relative;z-index:2;
+    background:#0a1130;border:2px solid rgba(255,255,255,.28);}
+  .spine-time{font-size:8px;font-weight:800;letter-spacing:.3px;color:var(--muted);
+    margin-top:5px;writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);
+    white-space:nowrap;}
+  .spine-label{font-size:7px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+    color:#5d6478;margin-top:3px;}
+
+  /* cells */
+  .cell{border-radius:14px;padding:9px 9px 10px;min-height:78px;position:relative;
+    display:flex;flex-direction:column;
+    background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,0) 50%),rgba(16,22,48,.55);
+    border:1px solid rgba(255,255,255,.07);}
+  .cell.quiet{background:rgba(10,14,34,.40);border:1px dashed rgba(255,255,255,.08);
+    align-items:center;justify-content:center;min-height:78px;}
+  .cell.empty{background:rgba(8,11,28,.32);border:1px dashed rgba(255,255,255,.06);
+    align-items:center;justify-content:center;}
+
+  .cell-cap{font-size:8px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;
+    opacity:.78;margin-bottom:5px;}
+  .big{font-size:21px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;}
+  .big-sub{font-size:9px;font-weight:700;color:var(--muted);margin-left:2px;}
+  .lab{font-size:8px;font-weight:700;color:var(--muted);letter-spacing:.3px;}
+  .stat-line{display:flex;align-items:baseline;gap:3px;margin-top:5px;}
+  .stat-line .k{font-size:8px;font-weight:700;color:var(--muted);letter-spacing:.2px;}
+  .stat-line .v{font-size:11px;font-weight:800;font-variant-numeric:tabular-nums;margin-left:auto;}
+  .chip{display:inline-block;border-radius:999px;padding:1.5px 7px;font-size:8px;font-weight:800;
+    letter-spacing:.3px;margin-top:5px;align-self:flex-start;}
+  .quiet-txt{font-size:9px;font-weight:700;color:var(--muted);text-align:center;line-height:1.5;letter-spacing:.3px;}
+  .dash{font-size:20px;font-weight:800;color:rgba(255,255,255,.22);}
+
+  /* accent tints */
+  .t-cyan .big{color:var(--cyan-lt);text-shadow:0 0 17px rgba(0,200,255,.78);}
+  .t-cyan .cell-cap{color:var(--cyan);}
+  .t-pink .big{color:var(--pink-lt);text-shadow:0 0 14px rgba(255,94,138,.6);}
+  .t-pink .cell-cap{color:var(--pink);}
+  .t-orange .big{color:var(--orange);text-shadow:0 0 11px rgba(255,138,61,.55);}
+  .t-orange .cell-cap{color:var(--orange);}
+  .t-violet .big{color:var(--purple-lt);text-shadow:0 0 14px rgba(155,92,255,.6);}
+  .t-violet .cell-cap{color:var(--violet);}
+  .t-coral .big{color:#FFB9B6;text-shadow:0 0 14px rgba(255,94,98,.7);}
+  .t-coral .cell-cap{color:var(--coral);}
+
+  .chip-warn{background:rgba(255,94,98,.14);border:1px solid rgba(255,94,98,.35);color:#FFB0AE;}
+  .chip-cyan{background:rgba(0,200,255,.12);border:1px solid rgba(0,200,255,.30);color:var(--cyan-lt);}
+  .chip-orange{background:rgba(255,138,61,.12);border:1px solid rgba(255,138,61,.32);color:#FFC79A;}
+  .chip-good{background:rgba(57,217,138,.13);border:1px solid rgba(57,217,138,.32);color:#9DEFC4;}
+  .chip-violet{background:rgba(155,92,255,.13);border:1px solid rgba(155,92,255,.33);color:var(--purple-lt);}
+
+  .down{color:var(--green);font-size:9px;font-weight:800;}
+
+  /* NOW row highlight */
+  .row.now{}
+  .row.now .spine-dot{background:var(--cyan);border-color:#bdeeff;
+    box-shadow:0 0 0 3px rgba(0,200,255,.22),0 0 16px var(--cyan);width:13px;height:13px;}
+  .row.now .spine-time{color:var(--cyan-lt);}
+  .row.now .cell{
+    background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,0) 48%),rgba(20,28,60,.72);
+    border:1px solid rgba(0,200,255,.30);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 22px rgba(0,200,255,.10);}
+  .now-tag{position:absolute;top:-7px;left:50%;transform:translateX(-50%);
+    font-size:7.5px;font-weight:800;letter-spacing:1.5px;color:#03050F;
+    background:var(--cyan);padding:1.5px 9px;border-radius:999px;z-index:5;
+    box-shadow:0 0 12px rgba(0,200,255,.6);}
+
+  /* read line near NOW */
+  .read{margin:10px 14px 4px;padding:13px 15px;}
+  .read .eye{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+    color:var(--pink);opacity:.9;margin-bottom:6px;}
+  .prose{font-style:italic;font-size:12.5px;line-height:1.7;color:#E9EDF5;}
+  .prose b{font-style:italic;font-weight:600;color:#FF7FA0;text-shadow:0 0 12px rgba(255,94,138,.45);}
+
+  /* night row special — moon */
+  .night-cell{grid-column:span 1;}
+  .moon-cell{display:flex;align-items:center;justify-content:center;padding:4px;
+    background:radial-gradient(circle at 50% 42%,rgba(138,92,255,.10),transparent 70%);
+    border:1px solid rgba(255,255,255,.06);border-radius:14px;min-height:78px;overflow:visible;}
+  .moon-wrap{position:relative;width:78px;height:78px;filter:saturate(1.12) contrast(1.04);}
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <!-- ───────── HEADER ───────── -->
+  <header>
+    <div class="head-top">
+      <div>
+        <div class="dow">Thursday</div>
+        <div class="date">June 12</div>
+      </div>
+      <div class="sync-pill"><span class="sync-dot"></span>SYNCED 12:30</div>
+    </div>
+
+    <div class="day-strip">
+      <div class="day-fill"></div>
+      <div class="day-now"></div>
+    </div>
+    <div class="strip-legend">
+      <span>Dawn</span><span style="color:var(--cyan-lt)">Now</span><span>Night</span>
+    </div>
+  </header>
+
+  <!-- ───────── MATRIX ───────── -->
+  <div class="matrix">
+
+    <!-- column headers -->
+    <div class="col-head">
+      <div class="spine-cap"></div>
+      <div class="col-title col-rec">Recovery<span>ANS · Sleep</span></div>
+      <div class="col-title col-act">Activity<span>Move · Burn</span></div>
+      <div class="col-title col-body">Body<span>Scale</span></div>
+    </div>
+
+    <!-- ===== MORNING ===== -->
+    <div class="row">
+      <div class="spine">
+        <div class="spine-dot"></div>
+        <div class="spine-time">MORNING · 06:40</div>
+      </div>
+
+      <!-- Recovery: rich -->
+      <div class="cell t-pink">
+        <div class="cell-cap">ANS Charge</div>
+        <div><span class="big">−4.2</span></div>
+        <span class="chip chip-warn">COMPROMISED</span>
+        <div class="stat-line"><span class="k">Sleep</span><span class="v">6h46m</span></div>
+        <div class="stat-line"><span class="k">HRV</span><span class="v">62</span></div>
+        <div class="stat-line"><span class="k">RHR</span><span class="v">54</span></div>
+      </div>
+
+      <!-- Activity: light -->
+      <div class="cell t-orange">
+        <div class="cell-cap">Early</div>
+        <div><span class="big">Light</span></div>
+        <span class="chip chip-orange">EASY START</span>
+        <div class="stat-line"><span class="k">Steps</span><span class="v">~900</span></div>
+        <div class="lab" style="margin-top:auto;padding-top:6px">Day just<br>waking up</div>
+      </div>
+
+      <!-- Body: rich (07:05 scale) -->
+      <div class="cell t-violet">
+        <div class="cell-cap">Weight · 07:05</div>
+        <div><span class="big">167.5</span><span class="big-sub">lb</span></div>
+        <span class="down">▼0.3 · ▼1.8 / 7d</span>
+        <div class="stat-line"><span class="k">Fat</span><span class="v">18.2%</span></div>
+        <div class="stat-line"><span class="k">Muscle</span><span class="v">137.0</span></div>
+        <div class="stat-line"><span class="k">BMI</span><span class="v">23.4</span></div>
+      </div>
+    </div>
+
+    <!-- ===== MIDDAY · NOW ===== -->
+    <div class="row now">
+      <div class="spine">
+        <div class="spine-dot"></div>
+        <div class="spine-time">MIDDAY · 12:30</div>
+      </div>
+
+      <div class="now-tag">NOW</div>
+
+      <!-- Recovery: holding -->
+      <div class="cell quiet">
+        <div class="quiet-txt">Recovery is<br>a morning<br>truth —<br><span style="color:var(--pink-lt)">holding</span></div>
+      </div>
+
+      <!-- Activity: rich -->
+      <div class="cell t-orange">
+        <div class="cell-cap">Active kcal</div>
+        <div><span class="big">612</span></div>
+        <div class="stat-line"><span class="k">Steps</span><span class="v">7,840</span></div>
+        <div class="stat-line"><span class="k">Goal</span><span class="v">10k</span></div>
+        <div class="stat-line"><span class="k">Exert</span><span class="v">11.4</span></div>
+      </div>
+
+      <!-- Body: empty (no midday reading) -->
+      <div class="cell empty">
+        <div class="dash">—</div>
+        <div class="quiet-txt" style="margin-top:4px">no midday<br>reading</div>
+      </div>
+    </div>
+
+    <!-- ===== EVENING ===== -->
+    <div class="row">
+      <div class="spine">
+        <div class="spine-dot"></div>
+        <div class="spine-time">EVENING · ~18:00</div>
+      </div>
+
+      <!-- Recovery: quiet -->
+      <div class="cell quiet">
+        <div class="quiet-txt">no new ANS<br>until sleep<br><span style="color:var(--pink-lt)">quiet</span></div>
+      </div>
+
+      <!-- Activity: total burn -->
+      <div class="cell t-coral">
+        <div class="cell-cap">Total Burn</div>
+        <div><span class="big">2,340</span></div>
+        <span class="chip chip-warn">PROJECTED</span>
+        <div class="lab" style="margin-top:auto;padding-top:6px">Day's full<br>energy out</div>
+      </div>
+
+      <!-- Body: empty -->
+      <div class="cell empty">
+        <div class="dash">—</div>
+        <div class="quiet-txt" style="margin-top:4px">once-daily<br>reading</div>
+      </div>
+    </div>
+
+    <!-- ===== NIGHT ===== -->
+    <div class="row">
+      <div class="spine">
+        <div class="spine-dot"></div>
+        <div class="spine-time">NIGHT</div>
+      </div>
+
+      <!-- Recovery: forecast -->
+      <div class="cell t-cyan">
+        <div class="cell-cap">Tonight's Target</div>
+        <div><span class="big">8h</span><span class="big-sub">aim</span></div>
+        <span class="chip chip-cyan">REBUILD CHARGE</span>
+        <div class="lab" style="margin-top:auto;padding-top:6px">Let HRV<br>climb back</div>
+      </div>
+
+      <!-- Activity: quiet -->
+      <div class="cell quiet">
+        <div class="quiet-txt">winding<br>down<br><span style="color:var(--orange)">rest</span></div>
+      </div>
+
+      <!-- Body: the MOON anchor -->
+      <div class="moon-cell">
+        <div class="moon-wrap">
+          <svg viewBox="0 0 260 260" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" style="overflow:visible" aria-label="Orbit rings around moon">
+            <defs>
+              <linearGradient id="gSleep" x1="0.15" y1="0" x2="0.85" y2="1">
+                <stop offset="0" stop-color="#6E3FD6"></stop><stop offset="1" stop-color="#B58CFF"></stop>
+              </linearGradient>
+              <linearGradient id="gRecov" x1="0" y1="0.2" x2="1" y2="0.9">
+                <stop offset="0" stop-color="#5CEBFF"></stop><stop offset="1" stop-color="#00B4FF"></stop>
+              </linearGradient>
+              <linearGradient id="gStrain" x1="0.1" y1="0" x2="0.95" y2="1">
+                <stop offset="0" stop-color="#FF9A3D"></stop><stop offset="0.55" stop-color="#FF5E62"></stop><stop offset="1" stop-color="#FF2E55"></stop>
+              </linearGradient>
+            </defs>
+            <circle cx="130" cy="130" r="104" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="#FF5E62" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.16" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 33px #FF5E62)"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="#FF5E62" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.34" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 21px #FF5E62)"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="url(#gStrain)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 15px #FF5E62)"></circle>
+            <circle cx="130" cy="130" r="90" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="#00C8FF" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.13" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 27px #00C8FF)"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="#00C8FF" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.28" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 17px #00C8FF)"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="url(#gRecov)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 12px #00C8FF)"></circle>
+            <circle cx="130" cy="130" r="76" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="#8A5CFF" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.13" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 27px #8A5CFF)"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="#8A5CFF" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.28" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 17px #8A5CFF)"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="url(#gSleep)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 12px #8A5CFF)"></circle>
+            <g transform="translate(130 130)"><defs>
+              <clipPath id="moonClip"><circle cx="0" cy="0" r="62"></circle></clipPath>
+              <radialGradient id="moonOuterHalo" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#E4ECFF" stop-opacity="0.22"></stop>
+                <stop offset="38%" stop-color="#C8D8FF" stop-opacity="0.14"></stop>
+                <stop offset="72%" stop-color="#AAC3F0" stop-opacity="0.045"></stop>
+                <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"></stop>
+              </radialGradient>
+              <radialGradient id="moonHalo" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#E4ECFF" stop-opacity="0.34"></stop>
+                <stop offset="42%" stop-color="#C8D8FF" stop-opacity="0.22"></stop>
+                <stop offset="70%" stop-color="#AAC3F0" stop-opacity="0.11"></stop>
+                <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"></stop>
+              </radialGradient>
+              <radialGradient id="moonInnerHalo" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#F4F8FF" stop-opacity="0.36"></stop>
+                <stop offset="46%" stop-color="#E4ECFF" stop-opacity="0.24"></stop>
+                <stop offset="78%" stop-color="#C8D8FF" stop-opacity="0.09"></stop>
+                <stop offset="100%" stop-color="#AAC3F0" stop-opacity="0"></stop>
+              </radialGradient>
+              <radialGradient id="moonLimb" cx="42%" cy="38%" r="62%">
+                <stop offset="0%" stop-color="#FFFCF4" stop-opacity="0.10"></stop>
+                <stop offset="55%" stop-color="#FFFFFF" stop-opacity="0"></stop>
+                <stop offset="82%" stop-color="#000000" stop-opacity="0"></stop>
+                <stop offset="100%" stop-color="#08080E" stop-opacity="0.50"></stop>
+              </radialGradient>
+              <radialGradient id="moonSpec" cx="34%" cy="28%" r="50%">
+                <stop offset="0%" stop-color="#FFFDF6" stop-opacity="0.20"></stop>
+                <stop offset="45%" stop-color="#EAF1FF" stop-opacity="0.07"></stop>
+                <stop offset="100%" stop-color="#EAF1FF" stop-opacity="0"></stop>
+              </radialGradient>
+              <filter id="moonRimBlur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stddev="3.1"></feGaussianBlur></filter>
+              <filter id="moonOuterHaloBlur" x="-120%" y="-120%" width="340%" height="340%">
+                <feGaussianBlur stddev="21.08"></feGaussianBlur></filter>
+              <filter id="moonHaloBlur" x="-90%" y="-90%" width="280%" height="280%">
+                <feGaussianBlur stddev="13.64"></feGaussianBlur></filter>
+              <filter id="moonInnerHaloBlur" x="-70%" y="-70%" width="240%" height="240%">
+                <feGaussianBlur stddev="7.44"></feGaussianBlur></filter>
+              <filter id="moonTerm" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stddev="4.34"></feGaussianBlur></filter>
+              <filter id="moonCast" x="-140%" y="-140%" width="380%" height="380%">
+                <feGaussianBlur stddev="9.92"></feGaussianBlur></filter>
+            </defs>
+            <ellipse cx="0" cy="19.84" rx="70.68" ry="26.04" fill="#02030A" opacity="0.44" filter="url(#moonCast)"></ellipse>
+            <circle cx="0" cy="0" r="195.3" fill="url(#moonOuterHalo)" filter="url(#moonOuterHalo)"></circle>
+            <circle cx="0" cy="0" r="127.1" fill="url(#moonHalo)" filter="url(#moonHaloBlur)"></circle>
+            <circle cx="0" cy="0" r="84.32" fill="url(#moonInnerHalo)" filter="url(#moonInnerHalo)"></circle>
+            <g clip-path="url(#moonClip)">
+              <image href="../assets/moon-lro.webp" x="-62" y="-62" width="124" height="124" preserveAspectRatio="xMidYMid slice" style="filter:brightness(1.12)"></image>
+              <circle cx="0" cy="0" r="62" fill="url(#moonLimb)"></circle>
+              <circle cx="0" cy="0" r="62" fill="url(#moonSpec)"></circle>
+              <path d="M 0 -62 A 62 62 0 0 1 0 62 A 27.28 62 0 0 1 0 -62 Z" fill="#070B16" opacity="0.86" filter="url(#moonTerm)"></path>
+            </g>
+            <circle cx="0" cy="0" r="62" fill="none" stroke="#CFE0FF" stroke-opacity="0.50" stroke-width="2.79" filter="url(#moonRimBlur)"></circle>
+            <circle cx="0" cy="0" r="62" fill="none" stroke="#EAF1FF" stroke-opacity="0.60" stroke-width="1.12"></circle></g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /matrix -->
+
+  <!-- ───────── READ LINE (ties NOW together) ───────── -->
+  <div class="read glass">
+    <div class="eye">Today's Read</div>
+    <div class="prose">
+      Your nervous system slipped below baseline overnight. The numbers aren't asking for
+      effort today — they're asking for restraint. <b>Move easy, eat enough, and let the
+      charge come back on its own.</b>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

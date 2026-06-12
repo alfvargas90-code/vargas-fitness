@@ -1,0 +1,71 @@
+<svg viewBox="0 0 260 260" width="100%" height="100%" class="block" preserveAspectRatio="xMidYMid meet" style="overflow:visible" aria-label="Orbit rings around moon">
+    <defs>
+  <linearGradient id="gSleep" x1="0.15" y1="0" x2="0.85" y2="1">
+    <stop offset="0" stop-color="#6E3FD6"></stop><stop offset="1" stop-color="#B58CFF"></stop>
+  </linearGradient>
+  <linearGradient id="gRecov" x1="0" y1="0.2" x2="1" y2="0.9">
+    <stop offset="0" stop-color="#5CEBFF"></stop><stop offset="1" stop-color="#00B4FF"></stop>
+  </linearGradient>
+  <linearGradient id="gStrain" x1="0.1" y1="0" x2="0.95" y2="1">
+    <stop offset="0" stop-color="#FF9A3D"></stop><stop offset="0.55" stop-color="#FF5E62"></stop><stop offset="1" stop-color="#FF2E55"></stop>
+  </linearGradient>
+</defs>
+    <circle cx="130" cy="130" r="104" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="#FF5E62" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.16" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 33px #FF5E62)"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="#FF5E62" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.34" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 21px #FF5E62)"></circle><circle cx="130" cy="130" r="104" fill="none" stroke="url(#gStrain)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="218.91 434.55" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 15px #FF5E62)"></circle>
+    <circle cx="130" cy="130" r="90" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="#00C8FF" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.13" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 27px #00C8FF)"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="#00C8FF" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.28" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 17px #00C8FF)"></circle><circle cx="130" cy="130" r="90" fill="none" stroke="url(#gRecov)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="260.12 305.36" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 12px #00C8FF)"></circle>
+    <circle cx="130" cy="130" r="76" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="6.5"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="#8A5CFF" stroke-width="14.5" stroke-linecap="round" stroke-opacity="0.13" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 27px #8A5CFF)"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="#8A5CFF" stroke-width="9.5" stroke-linecap="round" stroke-opacity="0.28" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 17px #8A5CFF)"></circle><circle cx="130" cy="130" r="76" fill="none" stroke="url(#gSleep)" stroke-width="6.5" stroke-linecap="round" stroke-opacity="0.97" stroke-dasharray="343.82 133.71" transform="rotate(-90 130 130)" style="filter:drop-shadow(0 0 12px #8A5CFF)"></circle>
+    <g transform="translate(130 130)"><defs>
+      <clipPath id="moonClip"><circle cx="0" cy="0" r="62"></circle></clipPath>
+      <radialGradient id="moonOuterHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#E4ECFF" stop-opacity="0.22"></stop>
+        <stop offset="38%" stop-color="#C8D8FF" stop-opacity="0.14"></stop>
+        <stop offset="72%" stop-color="#AAC3F0" stop-opacity="0.045"></stop>
+        <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"></stop>
+      </radialGradient>
+      <radialGradient id="moonHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#E4ECFF" stop-opacity="0.34"></stop>
+        <stop offset="42%" stop-color="#C8D8FF" stop-opacity="0.22"></stop>
+        <stop offset="70%" stop-color="#AAC3F0" stop-opacity="0.11"></stop>
+        <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"></stop>
+      </radialGradient>
+      <radialGradient id="moonInnerHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#F4F8FF" stop-opacity="0.36"></stop>
+        <stop offset="46%" stop-color="#E4ECFF" stop-opacity="0.24"></stop>
+        <stop offset="78%" stop-color="#C8D8FF" stop-opacity="0.09"></stop>
+        <stop offset="100%" stop-color="#AAC3F0" stop-opacity="0"></stop>
+      </radialGradient>
+      <radialGradient id="moonLimb" cx="42%" cy="38%" r="62%">
+        <stop offset="0%" stop-color="#FFFCF4" stop-opacity="0.10"></stop>
+        <stop offset="55%" stop-color="#FFFFFF" stop-opacity="0"></stop>
+        <stop offset="82%" stop-color="#000000" stop-opacity="0"></stop>
+        <stop offset="100%" stop-color="#08080E" stop-opacity="0.50"></stop>
+      </radialGradient>
+      <radialGradient id="moonSpec" cx="34%" cy="28%" r="50%">
+        <stop offset="0%" stop-color="#FFFDF6" stop-opacity="0.20"></stop>
+        <stop offset="45%" stop-color="#EAF1FF" stop-opacity="0.07"></stop>
+        <stop offset="100%" stop-color="#EAF1FF" stop-opacity="0"></stop>
+      </radialGradient>
+      <filter id="moonRimBlur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stddev="3.1"></feGaussianBlur></filter>
+      <filter id="moonOuterHaloBlur" x="-120%" y="-120%" width="340%" height="340%">
+        <feGaussianBlur stddev="21.08"></feGaussianBlur></filter>
+      <filter id="moonHaloBlur" x="-90%" y="-90%" width="280%" height="280%">
+        <feGaussianBlur stddev="13.64"></feGaussianBlur></filter>
+      <filter id="moonInnerHaloBlur" x="-70%" y="-70%" width="240%" height="240%">
+        <feGaussianBlur stddev="7.44"></feGaussianBlur></filter>
+      <filter id="moonTerm" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stddev="4.34"></feGaussianBlur></filter>
+      <filter id="moonCast" x="-140%" y="-140%" width="380%" height="380%">
+        <feGaussianBlur stddev="9.92"></feGaussianBlur></filter>
+    </defs>
+    <ellipse cx="0" cy="19.84" rx="70.68" ry="26.04" fill="#02030A" opacity="0.44" filter="url(#moonCast)"></ellipse>
+    <circle cx="0" cy="0" r="195.3" fill="url(#moonOuterHalo)" filter="url(#moonOuterHalo)"></circle>
+    <circle cx="0" cy="0" r="127.1" fill="url(#moonHalo)" filter="url(#moonHaloBlur)"></circle>
+    <circle cx="0" cy="0" r="84.32" fill="url(#moonInnerHalo)" filter="url(#moonInnerHalo)"></circle>
+    <g clip-path="url(#moonClip)">
+      <image href="../assets/moon-lro.webp" x="-62" y="-62" width="124" height="124" preserveAspectRatio="xMidYMid slice" style="filter:brightness(1.12)"></image>
+      <circle cx="0" cy="0" r="62" fill="url(#moonLimb)"></circle>
+      <circle cx="0" cy="0" r="62" fill="url(#moonSpec)"></circle>
+      <path d="M 0 -62 A 62 62 0 0 1 0 62 A 27.28 62 0 0 1 0 -62 Z" fill="#070B16" opacity="0.86" filter="url(#moonTerm)"></path>
+    </g>
+    <circle cx="0" cy="0" r="62" fill="none" stroke="#CFE0FF" stroke-opacity="0.50" stroke-width="2.79" filter="url(#moonRimBlur)"></circle>
+    <circle cx="0" cy="0" r="62" fill="none" stroke="#EAF1FF" stroke-opacity="0.60" stroke-width="1.12"></circle></g>
+  </svg>
