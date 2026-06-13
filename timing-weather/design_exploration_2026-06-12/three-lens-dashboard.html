@@ -4,6 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Timing Weather · Three Lenses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<!-- monochrome TEXT glyphs for zodiac/planets/symbols → never falls back to Apple color emoji -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Symbols:wght@400;700&family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet" />
 <!-- THREE-LENS DASHBOARD (v1)
      Animated solar-system hero spanning the top, then three swipeable lenses:
      Traditional (transits/aspects + profection wheel + Hellenistic Lots),
@@ -19,7 +23,7 @@
   --t:rgba(255,255,255,.92);--t2:rgba(255,255,255,.55);--t3:rgba(255,255,255,.34);
   /* "Apple Symbols" / "Segoe UI Symbol" supply MONOCHROME text glyphs for zodiac + planets,
      so the browser uses those instead of falling back to the color-emoji font. */
-  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,"Apple Symbols","Segoe UI Symbol","Noto Sans Symbols2",sans-serif;
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,"Noto Sans Symbols","Noto Sans Symbols 2","Apple Symbols","Segoe UI Symbol",sans-serif;
   --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
   --mono:"SF Mono",ui-monospace,Menlo,monospace;
 }
@@ -154,7 +158,7 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
 /* legend for wheel */
 .legend{display:grid;grid-template-columns:repeat(2,1fr);gap:5px 14px;margin-top:12px}
 .legend .li{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--t2)}
-.legend .li b{font-family:var(--serif);font-size:14px;font-weight:400;width:18px;text-align:center}
+.legend .li b{font-family:var(--sans);font-size:14px;font-weight:400;width:18px;text-align:center}
 .legend .li .pp{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--t3);font-size:10px}
 
 /* forecast list */
