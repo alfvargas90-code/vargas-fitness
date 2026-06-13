@@ -73,8 +73,8 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
 
 /* lens nav */
 .lensnav{display:flex;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:5px;margin:6px 0 16px}
-.lensnav button{flex:1;background:transparent;border:0;color:var(--t2);font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.04em;padding:9px 6px;border-radius:10px;cursor:pointer;transition:.2s}
-.lensnav button .sm{display:block;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-top:2px}
+.lensnav button{flex:1;background:transparent;border:0;color:var(--t2);font-family:var(--sans);font-size:12.5px;font-weight:600;letter-spacing:.02em;padding:9px 4px;border-radius:10px;cursor:pointer;transition:.2s}
+.lensnav button .sm{display:block;font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-top:2px}
 .lensnav button.on{background:linear-gradient(180deg,rgba(212,168,87,.18),rgba(212,168,87,.08));color:var(--gold-br);box-shadow:inset 0 0 0 1px rgba(212,168,87,.3)}
 .lensnav button.on .sm{color:var(--gold)}
 
@@ -168,6 +168,29 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
 
 .foot-tag{text-align:center;font-size:10px;color:var(--t3);margin-top:8px;letter-spacing:.03em}
 
+/* BaZi — four pillars */
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pillar{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:11px 6px 10px;text-align:center;position:relative}
+.pillar.self{border-color:rgba(212,168,87,.5);box-shadow:0 0 0 1px rgba(212,168,87,.25),0 0 18px rgba(212,168,87,.12)}
+.pillar .self-tag{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:7.5px;letter-spacing:.05em;text-transform:uppercase;background:var(--gold);color:#1a1206;border-radius:8px;padding:2px 7px;font-weight:700;white-space:nowrap}
+.pillar .plab{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
+.pillar.self .plab{color:var(--gold)}
+.pillar .han{font-size:30px;line-height:1.05;font-family:var(--serif)}
+.pillar .pinyin{font-size:10px;color:var(--t2);margin-top:1px}
+.pillar .elem{font-size:8px;letter-spacing:.03em;text-transform:uppercase;margin-top:2px}
+.pillar .branch{margin-top:9px;padding-top:9px;border-top:1px solid var(--line)}
+.pillar .animal{font-size:11px;color:var(--t);font-weight:600;margin-top:3px}
+.pillar .hidden{font-size:8.5px;color:var(--t3);margin-top:8px}
+.el-wood{color:#5be3a7}.el-fire{color:#fb7185}.el-earth{color:#e8c573}.el-metal{color:#cbd5e1}.el-water{color:#7dd3fc}
+/* five elements */
+.elbars{display:flex;flex-direction:column;gap:10px}
+.elbar{display:grid;grid-template-columns:118px 1fr 18px;align-items:center;gap:9px;font-size:11px}
+.elbar .en{display:flex;align-items:center;gap:7px;color:var(--t2)}
+.elbar .en .han{font-family:var(--serif);font-size:15px}
+.elbar .tr{height:7px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden}
+.elbar .tr i{display:block;height:100%;border-radius:4px}
+.elbar .ct{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+
 /* moon phase + current sky (hero) */
 .skybar{position:absolute;left:0;right:0;top:8px;z-index:5;display:flex;justify-content:center;gap:14px;font-size:10px;color:var(--t2);text-shadow:0 1px 6px rgba(0,0,0,.9)}
 .skybar .it{display:inline-flex;align-items:center;gap:6px}
@@ -238,6 +261,7 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
     <button data-lens="trad" class="on">Traditional<span class="sm">Hellenistic</span></button>
     <button data-lens="vedic">Vedic<span class="sm">Sidereal</span></button>
     <button data-lens="modern">Modern<span class="sm">Tropical</span></button>
+    <button data-lens="bazi">BaZi<span class="sm">Four Pillars</span></button>
   </div>
 
   <div class="slides" id="slides">
@@ -367,9 +391,74 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
       </div>
     </section>
 
+    <!-- ══ BAZI ══ -->
+    <section class="slide" data-lens="bazi">
+      <div class="card">
+        <div class="sh">Four Pillars <span class="sub">八字 · Ding Fire day master</span></div>
+        <div class="pillars">
+          <div class="pillar">
+            <div class="plab">Year</div>
+            <div class="han el-metal">庚</div><div class="pinyin">Gēng</div><div class="elem el-metal">Yang Metal</div>
+            <div class="branch"><div class="han el-fire">午</div><div class="animal">Horse</div></div>
+            <div class="hidden">Ding · Ji</div>
+          </div>
+          <div class="pillar">
+            <div class="plab">Month</div>
+            <div class="han el-wood">甲</div><div class="pinyin">Jiǎ</div><div class="elem el-wood">Yang Wood</div>
+            <div class="branch"><div class="han el-metal">申</div><div class="animal">Monkey</div></div>
+            <div class="hidden">Geng · Ren · Wu</div>
+          </div>
+          <div class="pillar self">
+            <div class="self-tag">Day Master</div>
+            <div class="plab">Day</div>
+            <div class="han el-fire">丁</div><div class="pinyin">Dīng</div><div class="elem el-fire">Yin Fire</div>
+            <div class="branch"><div class="han el-wood">卯</div><div class="animal">Rabbit</div></div>
+            <div class="hidden">Yi</div>
+          </div>
+          <div class="pillar">
+            <div class="plab">Hour</div>
+            <div class="han el-earth">戊</div><div class="pinyin">Wù</div><div class="elem el-earth">Yang Earth</div>
+            <div class="branch"><div class="han el-metal">申</div><div class="animal">Monkey</div></div>
+            <div class="hidden">Geng · Ren · Wu</div>
+          </div>
+        </div>
+        <p class="prose muted" style="font-size:11.5px;margin-top:11px">Public identity reads as the <span style="color:var(--gold-br)">Horse</span> (year branch), but your true operating self is the <span style="color:var(--gold-br)">Rabbit</span> (day branch) — precision, diplomacy, refinement over force. The day master is <span style="color:var(--coral)">Ding</span>: a candle flame, not a bonfire.</p>
+      </div>
+
+      <div class="cols2">
+        <div class="card">
+          <div class="sh">Day Master · Ding Fire</div>
+          <div class="focus"><div class="big" style="color:var(--coral)">丁</div><div class="b"><div class="h" style="color:var(--coral)">A candle flame</div><div class="sub">Yin Fire · 火</div><p>Warm, precise, illuminating — the steady light that guides rather than the bonfire that consumes. Strength comes from refinement and the right company; the risk is being blown out by overwork or scattered demands.</p></div></div>
+        </div>
+        <div class="card">
+          <div class="sh">Five Elements <span class="sub">balance · function</span></div>
+          <div class="elbars">
+            <div class="elbar"><span class="en"><span class="han el-earth">土</span>Earth · Output</span><span class="tr"><i style="width:80%;background:#e8c573"></i></span><span class="ct">4</span></div>
+            <div class="elbar"><span class="en"><span class="han el-metal">金</span>Metal · Wealth</span><span class="tr"><i style="width:60%;background:#cbd5e1"></i></span><span class="ct">3</span></div>
+            <div class="elbar"><span class="en"><span class="han el-fire">火</span>Fire · Self</span><span class="tr"><i style="width:40%;background:#fb7185"></i></span><span class="ct">2</span></div>
+            <div class="elbar"><span class="en"><span class="han el-water">水</span>Water · Power</span><span class="tr"><i style="width:40%;background:#7dd3fc"></i></span><span class="ct">2</span></div>
+            <div class="elbar"><span class="en"><span class="han el-wood">木</span>Wood · Resource</span><span class="tr"><i style="width:40%;background:#5be3a7"></i></span><span class="ct">2</span></div>
+          </div>
+          <p class="prose muted" style="font-size:11px;margin-top:10px">Output-heavy: you produce and express a lot — but Output drains the Fire. Guard the flame; let Wood (study, rest, mentors) feed it.</p>
+        </div>
+      </div>
+
+      <div class="cols2">
+        <div class="card">
+          <div class="sh">Current Luck <span class="sub">Da Yun · year</span></div>
+          <div class="trow"><div class="g" style="color:#e8c573;font-family:var(--serif)">戊</div><div class="b"><div class="h">Da Yun · Wu-Zi 戊子</div><div class="x">The decade pillar: Earth Output over Water Power — producing under pressure, building structure.</div></div></div>
+          <div class="trow"><div class="g" style="color:#fb7185;font-family:var(--serif)">丙</div><div class="b"><div class="h">2026 · Bing-Wu 丙午 — peer fire</div><div class="x">Yang Fire "Rob Wealth" beside your Ding: visibility and competition spike, and so does burnout. A bright, contested year.</div></div></div>
+        </div>
+        <div class="card">
+          <div class="sh">Strategy</div>
+          <p class="prose">This is a <span class="em">peer-fire year</span> — burn precise, not hot. Your Rabbit core wins through elegance and relationships, never brute force. The Jupiter return (~Jul 12) stacks onto this fire month for a real late-June-through-September visibility window. <span style="color:var(--gold-br)">Bank the fire; one refined move beats three loud ones.</span></p>
+        </div>
+      </div>
+    </section>
+
   </div>
 
-  <div class="foot-tag">Three lenses · one chart · mock prototype — not the live PWA</div>
+  <div class="foot-tag">Four lenses · one chart · mock prototype — not the live PWA</div>
 </div>
 
 <script>
@@ -482,8 +571,8 @@ function noEmoji(root){
   let sx=0;const sl=document.getElementById('slides');
   sl.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
   sl.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)<50)return;
-    const order=['trad','vedic','modern'];const cur=order.indexOf(document.querySelector('.slide.on').dataset.lens);
-    const ni=Math.max(0,Math.min(2,cur+(dx<0?1:-1)));nav.children[ni].click();});
+    const order=['trad','vedic','modern','bazi'];const cur=order.indexOf(document.querySelector('.slide.on').dataset.lens);
+    const ni=Math.max(0,Math.min(3,cur+(dx<0?1:-1)));nav.children[ni].click();});
 })();
 
 /* ---- LIVE ASTRO COMPUTE — derived client-side from natal constants + today ---- */
