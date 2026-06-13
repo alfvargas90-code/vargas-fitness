@@ -1,6 +1,6 @@
 {
   "date": "2026-06-12",
-  "synced_at": "2026-06-13T02:33:44+00:00",
+  "synced_at": "2026-06-13T03:03:55+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 2100.0,
-    "protein_g": 94.0,
-    "carbs_g": 235.0,
-    "fat_g": 77.0
+    "calories": 3550.0,
+    "protein_g": 149.0,
+    "carbs_g": 400.0,
+    "fat_g": 162.0
   },
-  "meal_count": 2,
+  "meal_count": 3,
   "raw": {
     "date": "2026-06-12",
     "meals": [
@@ -35,13 +35,22 @@
         "fat": 25,
         "carbs": 140,
         "emoji": "\u00f0\u009f\u008d\u0097"
+      },
+      {
+        "title": "Texas Double Whopper, Onion Rings, and Hot Cheetos",
+        "time": "22:02",
+        "calories": 1450,
+        "protein": 55,
+        "fat": 85,
+        "carbs": 165,
+        "emoji": "\u00f0\u009f\u008d\u0094"
       }
     ],
     "totals": {
-      "calories": 2100,
-      "protein": 94,
-      "fat": 77,
-      "carbs": 235
+      "calories": 3550,
+      "protein": 149,
+      "fat": 162,
+      "carbs": 400
     },
     "targets": {
       "calories": 2574,
@@ -50,14 +59,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 474,
-      "is_over": false
+      "calories": -976,
+      "is_over": true
     },
-    "meal_count": 2,
+    "meal_count": 3,
     "labels": {
       "header": "Today",
-      "calories_remaining": "474 kcal remaining today",
-      "meals_logged": "2 meals logged",
+      "calories_remaining": "976 kcal over today",
+      "meals_logged": "3 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
