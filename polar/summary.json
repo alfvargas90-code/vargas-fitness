@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-13T11:30:00-05:00",
-  "data_hash": "96ebe74d04e9f0cc",
-  "slot": "fuel-1",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is soft and first fuel is still light, with a long gap behind it and the afternoon starting underfed. For muscle retention, the next meal reads best as protein-led with real carbs, not a prolonged deficit. Today favors steady output over intensity.\n\nMeasured, not forceful.\n\nPerformance: Measured, not forceful.\n\nTransit: none",
+  "generated_at": "2026-06-13T14:08:38-05:00",
+  "data_hash": "ced91b7f40aa13ca",
+  "slot": "macros-update",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new meal pulls a low-input day back into range, with protein finally moving in the right direction. Recovery is still subdued, so the day favors steady muscle protection over intensity while the remaining intake window matters.\n\nMomentum with restraint.\n\nPerformance: Momentum with restraint.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is soft and first fuel is still light, with a long gap behind it and the afternoon starting underfed. For muscle retention, the next meal reads best as protein-led with real carbs, not a prolonged deficit. Today favors steady output over intensity.\n\nMeasured, not forceful."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new meal pulls a low-input day back into range, with protein finally moving in the right direction. Recovery is still subdued, so the day favors steady muscle protection over intensity while the remaining intake window matters.\n\nMomentum with restraint."
     },
     {
       "label": "Performance",
-      "text": "Measured, not forceful."
+      "text": "Momentum with restraint."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is soft and first fuel is still light, with a long gap behind it and the afternoon starting underfed. For muscle retention, the next meal reads best as protein-led with real carbs, not a prolonged deficit. Today favors steady output over intensity.\n\nMeasured, not forceful.",
-    "performance": "Measured, not forceful.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new meal pulls a low-input day back into range, with protein finally moving in the right direction. Recovery is still subdued, so the day favors steady muscle protection over intensity while the remaining intake window matters.\n\nMomentum with restraint.",
+    "performance": "Momentum with restraint.",
     "transit": null
   },
-  "nutrition_nudge": "You're on pace; keep meals steady and make lunch protein-forward with 50g.",
+  "nutrition_nudge": "On pace so far; make the next meal protein-forward and keep calories steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 1,
     "sleep_hours": 6.6,
     "hrv_today": 46,
     "hrv_7d_avg": 59.1,
-    "nutrition": "calories 180 of 2574 goal, protein 6g of 138g goal, carbs 36g of 290g goal, fat 1g of 72g goal",
-    "nutrition_detail": "calories 180 of 2574 goal -> 2394 left; protein 6g of 138g goal -> 132g gap; carbs 36g of 290g goal; fat 1g of 72g goal",
+    "nutrition": "calories 1330 of 2574 goal, protein 61g of 138g goal, carbs 121g of 290g goal, fat 66g of 72g goal",
+    "nutrition_detail": "calories 1330 of 2574 goal -> 1244 left; protein 61g of 138g goal -> 77g gap; carbs 121g of 290g goal; fat 66g of 72g goal",
     "activity_today": null
   }
 }
