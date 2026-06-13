@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-13T07:50:17-05:00",
+  "generated_at": "2026-06-13T08:20:30-05:00",
   "score": 20,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -11,19 +11,15 @@
   "workout_intensity": "rest",
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
-    "sign": "Taurus",
-    "degree": "29\u00b0 Tau 50'",
+    "sign": "Gemini",
+    "degree": "0\u00b0 Gem 09'",
     "phase": "Waning Crescent",
     "next_sign_change": {
-      "sign": "Gemini",
-      "at": "2026-06-13T08:06-05:00",
-      "display": "Enters Gemini 6/13 at 8:06 AM"
+      "sign": "Cancer",
+      "at": "2026-06-15T07:14-05:00",
+      "display": "Enters Cancer 6/15 at 7:14 AM"
     },
-    "void_of_course": {
-      "active": true,
-      "until": "2026-06-13T08:06-05:00",
-      "until_display": "6/13 at 8:06 AM"
-    },
+    "void_of_course": null,
     "active_transits": []
   },
   "bars": {
@@ -41,8 +37,8 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 59.83,
-    "moon_sign": "Taurus",
+    "moon_longitude": 60.15,
+    "moon_sign": "Gemini",
     "moon_phase": "Waning Crescent",
     "moon_house_natal": 5,
     "aspect_to_natal_moon": null,
