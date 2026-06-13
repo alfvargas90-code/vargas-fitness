@@ -17,13 +17,18 @@
   --gold:#d4a857;--gold-br:#e8c573;--gold-deep:#7a5a18;
   --green:#4ade80;--orange:#f59e0b;--cyan:#67e8f9;--red:#f87171;--violet:#a78bfa;--pink:#f472b6;--coral:#fb7185;
   --t:rgba(255,255,255,.92);--t2:rgba(255,255,255,.55);--t3:rgba(255,255,255,.34);
-  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;
+  /* "Apple Symbols" / "Segoe UI Symbol" supply MONOCHROME text glyphs for zodiac + planets,
+     so the browser uses those instead of falling back to the color-emoji font. */
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,"Apple Symbols","Segoe UI Symbol","Noto Sans Symbols2",sans-serif;
   --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
   --mono:"SF Mono",ui-monospace,Menlo,monospace;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+/* SVG chart text (wheel signs, planet glyphs) must use the symbol-inclusive stack too */
+svg text{font-family:var(--sans);font-variant-emoji:text}
 html,body{width:100%}
 body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;
+  font-variant-emoji:text;text-rendering:optimizeLegibility;
   background:radial-gradient(1100px 560px at 50% -4%,rgba(212,168,87,.13),transparent 56%),
     radial-gradient(700px 420px at 50% 4%,rgba(232,197,115,.05),transparent 60%),
     linear-gradient(180deg,var(--bg),var(--bg2));background-attachment:fixed;padding-bottom:40px}
@@ -38,19 +43,33 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
 .hdr .tt .d{font-size:10px;color:var(--t2);margin-top:2px}
 .hdr .dots{width:30px}
 
-/* ANIMATED SOLAR-SYSTEM HERO */
-.solar{position:relative;height:230px;margin:2px 0 6px;overflow:hidden}
-.solar .sun{position:absolute;left:50%;top:115px;width:96px;height:96px;border-radius:50%;margin:-48px 0 0 -48px;z-index:3;
-  background:radial-gradient(circle at 40% 38%,#FFFCEA,#FFF1B3 12%,#FFD659 30%,#E8A93A 55%,#8A4D0B 100%);
-  box-shadow:0 0 50px rgba(255,218,109,.55),0 0 110px rgba(212,168,87,.32),inset -14px -20px 40px rgba(180,80,0,.55),inset 6px 6px 20px rgba(255,250,200,.5);animation:breathe 6s ease-in-out infinite}
-@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
-.orb{position:absolute;left:50%;top:115px;border:1px solid rgba(255,255,255,.06);border-radius:50%;transform:translate(-50%,-50%)}
-.spin{position:absolute;left:50%;top:115px;width:0;height:0;transform:translate(-50%,-50%);animation:spin linear infinite}
-.spin .pl{position:absolute;font-size:15px;transform:translate(-50%,-50%);filter:drop-shadow(0 0 5px currentColor)}
+/* CINEMATIC SOLAR-SYSTEM HERO — tilted orbital plane + starfield + luminous sun */
+.solar{position:relative;height:300px;margin:2px -16px 8px;overflow:hidden}
+#starfield{position:absolute;inset:0;z-index:0;pointer-events:none}
+.solar .neb{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(55% 62% at 50% 56%,rgba(212,168,87,.13),transparent 72%),
+    radial-gradient(46% 46% at 26% 42%,rgba(167,139,250,.10),transparent 72%),
+    radial-gradient(42% 46% at 76% 50%,rgba(103,232,249,.07),transparent 72%)}
+.solar .vig{position:absolute;inset:0;z-index:4;pointer-events:none;
+  background:radial-gradient(82% 92% at 50% 44%,transparent 54%,rgba(6,7,10,.7))}
+/* the orbital plane is squashed vertically (scaleY) → circles read as ellipses seen at an angle */
+.field{position:absolute;left:50%;top:150px;width:0;height:0;z-index:1;transform:translate(-50%,-50%) scaleY(.46)}
+.orb{position:absolute;left:50%;top:50%;border-radius:50%;border:1px solid rgba(255,255,255,.07);transform:translate(-50%,-50%)}
+.spin{position:absolute;left:50%;top:50%;width:0;height:0;transform:translate(-50%,-50%);animation:spin linear infinite}
+.spin .pl{position:absolute;left:0;transform:translate(-50%,-50%) scaleY(2.17);font-size:14px;filter:drop-shadow(0 0 6px currentColor)}
 @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
-.solar .label{position:absolute;left:0;right:0;bottom:6px;text-align:center;z-index:4}
-.solar .label .ph{font-size:26px;font-weight:800;letter-spacing:.05em;color:var(--gold);text-transform:uppercase;text-shadow:0 0 22px rgba(212,168,87,.4)}
-.solar .label .sub{font-size:11px;color:var(--t2);margin-top:1px}
+.sun{position:absolute;left:50%;top:150px;width:120px;height:120px;border-radius:50%;margin:-60px 0 0 -60px;z-index:2;
+  background:radial-gradient(circle at 42% 38%,#FFFEF4 0%,#FFF1B3 14%,#FFD659 32%,#E8A93A 56%,#B5630C 82%,#6e3b08 100%);
+  box-shadow:0 0 64px rgba(255,218,109,.6),0 0 140px rgba(232,197,115,.42),0 0 250px rgba(212,168,87,.3),
+    inset -18px -24px 52px rgba(150,60,0,.6),inset 9px 9px 28px rgba(255,252,220,.55);animation:breathe 7s ease-in-out infinite}
+.sun::before{content:"";position:absolute;inset:-16px;border-radius:50%;z-index:-1;
+  background:radial-gradient(circle,rgba(255,214,89,.34),transparent 66%);animation:corona 7s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+@keyframes corona{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.14)}}
+.solar .label{position:absolute;left:0;right:0;bottom:14px;text-align:center;z-index:5}
+.solar .label .ph{font-size:36px;font-weight:800;letter-spacing:.14em;color:var(--gold-br);text-transform:uppercase;
+  text-shadow:0 0 32px rgba(212,168,87,.55),0 2px 22px rgba(0,0,0,.7)}
+.solar .label .sub{font-size:11px;color:var(--t2);margin-top:3px;text-shadow:0 1px 8px rgba(0,0,0,.85)}
 
 /* lens nav */
 .lensnav{display:flex;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:5px;margin:6px 0 16px}
@@ -159,9 +178,13 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
     <div class="dots"></div>
   </div>
 
-  <!-- ANIMATED SOLAR SYSTEM HERO -->
+  <!-- CINEMATIC SOLAR SYSTEM HERO -->
   <div class="solar" id="solar">
+    <canvas id="starfield"></canvas>
+    <div class="neb"></div>
+    <div class="field" id="field"></div>
     <div class="sun"></div>
+    <div class="vig"></div>
     <div class="label"><div class="ph">EXPANSION</div><div class="sub">12th-house Sagittarius year · lord Jupiter · build before the August turn</div></div>
   </div>
 
@@ -283,22 +306,35 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
 <script>
 const NS='http://www.w3.org/2000/svg';
 function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+/* force monochrome TEXT presentation on astro/planet/arrow glyphs (Apple defaults them to color emoji).
+   Appends U+FE0E to every matched glyph across HTML + SVG text nodes. */
+function noEmoji(root){
+  const SET=/[↗↘♈-♓♀♂♃♄♅♆♇☉☼☽☿☊❤☀]/g;
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null);const nodes=[];let n;
+  while(n=w.nextNode())nodes.push(n);
+  nodes.forEach(t=>{const v=t.nodeValue;if(SET.test(v)){SET.lastIndex=0;t.nodeValue=v.replace(SET,m=>m+'︎');}SET.lastIndex=0;});
+}
 
-/* ---- animated solar-system hero ---- */
+/* ---- cinematic solar-system hero: starfield + tilted orbital plane ---- */
 (function(){
-  const host=document.getElementById('solar');
-  // decorative orbital system: rings + orbiting planet glyphs
+  const host=document.getElementById('solar'), W=host.clientWidth||375, H=300;
+  // starfield
+  const cv=document.getElementById('starfield');cv.width=W;cv.height=H;const x=cv.getContext('2d');
+  for(let i=0;i<130;i++){const r=Math.pow(Math.random(),2)*1.4+.2;x.beginPath();x.arc(Math.random()*W,Math.random()*H,r,0,7);
+    x.fillStyle=`rgba(255,255,255,${Math.random()*.5+.12})`;x.fill();}
+  for(let i=0;i<16;i++){x.beginPath();x.arc(Math.random()*W,Math.random()*H,Math.random()*1+.4,0,7);
+    x.fillStyle=`rgba(232,197,115,${Math.random()*.5+.3})`;x.fill();}
+  // orbital plane (squashed via CSS scaleY → ellipses)
+  const field=document.getElementById('field');
   const planets=[ // [glyph,color,radius,period(s),startDeg]
-    ['☿','#a78bfa',64,9,20],['♀','#f472b6',86,16,140],['♂','#fb7185',108,26,250],
-    ['♃','#e8c573',132,40,60],['♄','#67e8f9',158,60,310]];
+    ['☿','#c4b5fd',66,9,20],['♀','#f9a8d4',90,15,150],['♂','#fb7185',114,25,250],
+    ['♃','#f0c674',140,40,60],['♄','#7dd3fc',164,62,310]];
   planets.forEach(([g,c,r,per,start])=>{
-    const ring=document.createElement('div');ring.className='orb';
-    ring.style.width=ring.style.height=(r*2)+'px';host.insertBefore(ring,host.firstChild);
+    const ring=document.createElement('div');ring.className='orb';ring.style.width=ring.style.height=(r*2)+'px';field.appendChild(ring);
     const spin=document.createElement('div');spin.className='spin';
     spin.style.animationDuration=per+'s';spin.style.transform=`translate(-50%,-50%) rotate(${start}deg)`;
-    const pl=document.createElement('div');pl.className='pl';pl.textContent=g;pl.style.color=c;
-    pl.style.left='0px';pl.style.top=(-r)+'px';
-    spin.appendChild(pl);host.insertBefore(spin,host.querySelector('.label'));
+    const pl=document.createElement('div');pl.className='pl';pl.textContent=g;pl.style.color=c;pl.style.top=(-r)+'px';
+    spin.appendChild(pl);field.appendChild(spin);
   });
 })();
 
@@ -380,6 +416,9 @@ function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const
     const order=['trad','vedic','modern'];const cur=order.indexOf(document.querySelector('.slide.on').dataset.lens);
     const ni=Math.max(0,Math.min(2,cur+(dx<0?1:-1)));nav.children[ni].click();});
 })();
+
+/* run last: strip emoji presentation from all glyphs (HTML + SVG) */
+noEmoji(document.body);
 </script>
 </body>
 </html>
