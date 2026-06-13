@@ -288,7 +288,7 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
       <span class="it"><span class="live-chip"><span class="dot"></span>Live sky</span></span>
       <span class="it" id="sky-sun">☉ —</span>
     </div>
-    <div class="label"><div class="ph">EXPANSION</div><div class="sub" id="hero-sub">12th-house Sagittarius year · lord Jupiter · build before the August turn</div></div>
+    <div class="label"><div class="ph" id="hero-phase">EXPANSION</div><div class="sub" id="hero-sub">12th-house Sagittarius year · lord Jupiter · build before the August turn</div></div>
   </div>
 
   <!-- LENS NAV -->
@@ -304,17 +304,17 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
     <!-- ══ TRADITIONAL ══ -->
     <section class="slide on" data-lens="trad">
       <div class="card">
-        <div class="sh">Today's Sky <span class="sub">transits · aspects</span></div>
-        <div class="trow"><div class="g">☽</div><div class="b"><div class="h">Moon void-of-course <span class="sym">— in late Taurus</span></div><div class="x">Makes no further aspects until it enters Gemini at 2:40 PM. A held breath — finish, don't begin.</div></div><div class="tag tag-ch">Hold</div></div>
-        <div class="trow"><div class="g">♃</div><div class="b"><div class="h">Jupiter <span class="sym">△ applying to</span> natal Sun</div><div class="x">The year-lord's benefic creeps toward your 9th-whole-sign Sun — the slow climb toward recognition. 30 days from its own return.</div></div><div class="tag tag-su">Support</div></div>
-        <div class="trow"><div class="g">♄</div><div class="b"><div class="h">Saturn <span class="sym">⚻ quincunx</span> Ascendant</div><div class="x">A sustained recalibration of how you show up — adjust the structure, don't force it.</div></div><div class="tag tag-nu">Neutral</div></div>
+        <div class="sh">Today's Sky <span class="sub" id="today-sky-sub">transits · aspects</span></div>
+        <div id="today-sky">
+          <div class="trow"><div class="g">☽</div><div class="b"><div class="h">Reading the live sky…</div><div class="x">Computing today's transits from the ephemeris.</div></div></div>
+        </div>
       </div>
 
       <div class="cols2">
         <div class="card">
           <div class="sh">Annual Profection</div>
           <svg viewBox="0 0 220 220" id="profection" style="width:100%;height:auto;max-width:240px;display:block;margin:0 auto"></svg>
-          <p class="prose muted" style="font-size:12px;margin-top:8px;text-align:center">Age 35 → <b style="color:var(--gold-br)">12th house · Sagittarius</b><br>Year-lord <b style="color:var(--gold-br)">Jupiter</b> · the house of retreat & preparation. Turns to the 1st (Capricorn, Saturn) on Aug 30.</p>
+          <p class="prose muted" id="profection-text" style="font-size:12px;margin-top:8px;text-align:center">Age 35 → <b style="color:var(--gold-br)">12th house · Sagittarius</b><br>Year-lord <b style="color:var(--gold-br)">Jupiter</b>.</p>
         </div>
         <div class="card">
           <div class="sh">Hellenistic Lots <span class="sub">day chart · whole-sign</span></div>
@@ -419,10 +419,10 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
       </div>
 
       <div class="card">
-        <div class="sh">June Forecast <span class="sub">modern transits</span></div>
-        <div class="fc"><div class="d">~Jun 24</div><div class="b"><div class="h">Jupiter ingress Cancer</div><p>Crosses into your 7th — partnership & shared resources warm and expand. Builds toward the Jupiter return at 2°36′ Leo ~Jul 12.</p></div></div>
-        <div class="fc"><div class="d">All month</div><div class="b"><div class="h">Neptune □ Moon &amp; Ascendant</div><p>Fog over the Capricorn cluster — fatigue, idealization, blurred boundaries. Don't decide identity questions from the haze.</p></div></div>
-        <div class="fc"><div class="d">All month</div><div class="b"><div class="h">Pluto in Aquarius · 2nd house</div><p>Slow transformation of values & self-worth, working the North Node. What you measure yourself by is being rebuilt.</p></div></div>
+        <div class="sh">Forecast <span class="sub">upcoming · computed</span></div>
+        <div id="forecast-list">
+          <div class="fc"><div class="d">…</div><div class="b"><div class="h">Computing upcoming events…</div></div></div>
+        </div>
       </div>
 
       <div class="card contrast">
@@ -540,7 +540,9 @@ function noEmoji(root){
 (function(){
   const svg=document.getElementById('profection'),cx=110,cy=110,rO=98,rI=58;
   const signs=['Cap','Aqu','Pis','Ari','Tau','Gem','Can','Leo','Vir','Lib','Sco','Sag'];
-  const current=11; // 12th house index (0-based) = Sagittarius
+  // profected house from today (whole-sign from Cap ASC): index = house-1
+  const _n=new Date(), _by=1990, _had=(_n.getMonth()>7)||(_n.getMonth()===7&&_n.getDate()>=30);
+  let _age=_n.getFullYear()-_by; if(!_had)_age--; const current=(_age%12); // 0-based highlighted house
   for(let i=0;i<12;i++){
     const a0=(i*30-90)*Math.PI/180, a1=((i+1)*30-90)*Math.PI/180, am=((i+0.5)*30-90)*Math.PI/180;
     const x0=cx+rO*Math.cos(a0),y0=cy+rO*Math.sin(a0),x1=cx+rO*Math.cos(a1),y1=cy+rO*Math.sin(a1);
@@ -552,7 +554,8 @@ function noEmoji(root){
     const t1=el('text',{x:cx+rm*Math.cos(am),y:cy+rm*Math.sin(am)-3,'text-anchor':'middle','font-size':'10','fill':hot?'#e8c573':'rgba(255,255,255,.55)','font-weight':hot?'700':'400'},svg);t1.textContent=signs[i];
     const t2=el('text',{x:cx+rm*Math.cos(am),y:cy+rm*Math.sin(am)+9,'text-anchor':'middle','font-size':'8','fill':hot?'#d4a857':'rgba(255,255,255,.3)'},svg);t2.textContent='H'+(i+1);
   }
-  const cj=el('text',{x:cx,y:cy+4,'text-anchor':'middle','font-size':'22','fill':'#e8c573'},svg);cj.textContent='♃';
+  const LORDG=['♄','♄','♃','♂','♀','☿','☽','☉','☿','♀','♂','♃']; // ruler glyph by signs[] index (Cap..Sag)
+  const cj=el('text',{x:cx,y:cy+4,'text-anchor':'middle','font-size':'22','fill':'#e8c573'},svg);cj.textContent=LORDG[current];
 })();
 
 /* ---- modern natal wheel ---- */
@@ -712,6 +715,9 @@ function calcSkyNow(date){
    ephemeris.py). Fall back to the in-page Schlyter approximation (Sun/Moon only)
    if the fetch fails, and say so. ---- */
 const CLS={Conjunction:'conj',Opposition:'hard',Square:'hard',Trine:'soft',Sextile:'soft'};
+const PGLY={Sun:'☉',Moon:'☽',Mercury:'☿',Venus:'♀',Mars:'♂',Jupiter:'♃',Saturn:'♄',Uranus:'♅',Neptune:'♆',Pluto:'♇',Node:'☊'};
+const PG=n=>PGLY[n]||'●';
+function tagFor(asp){return (asp==='Square'||asp==='Opposition')?'tag-ch':(asp==='Trine'||asp==='Sextile')?'tag-su':'tag-nu';}
 function setSky(phase,illum,sign,waxing,sunDeg,sunSign){
   const mt=document.getElementById('moon-txt'); if(mt)mt.textContent=`${phase} · ${illum}% · ${sign}`;
   const ss=document.getElementById('sky-sun'); if(ss)ss.textContent='☉ '+sunDeg+'°'+sunSign;
@@ -733,6 +739,24 @@ function setSky(phase,illum,sign,waxing,sunDeg,sunSign){
       const note=document.createElement('div');note.style.cssText='font-size:10px;color:var(--t3);margin-top:9px;line-height:1.5';
       note.innerHTML=`All planets · ${data.engine}. Regenerated by ephemeris.py.`;list.appendChild(note);
     }
+    // ── hero phase (derived from profection) ──
+    if(data.phase){const hp=document.getElementById('hero-phase');if(hp)hp.textContent=data.phase.label;
+      const hs=document.getElementById('hero-sub');if(hs)hs.textContent=data.phase.subtitle;}
+    // ── annual profection text ──
+    if(data.profection){const pr=data.profection,pt=document.getElementById('profection-text');
+      if(pt)pt.innerHTML=`Age ${pr.age} → <b style="color:var(--gold-br)">${pr.houseOrd} house · ${pr.sign}</b><br>Year-lord <b style="color:var(--gold-br)">${pr.lord}</b> · the house of ${pr.theme.toLowerCase()}. Turns to the ${pr.nextHouseOrd} (${pr.nextSign}, ${pr.nextLord}) in ${pr.daysToTurn} days.`;}
+    // ── today's sky (moon void + notable transits) ──
+    if(data.dailySky){const ts=document.getElementById('today-sky'),sub=document.getElementById('today-sky-sub');
+      if(sub)sub.textContent=`${data.moon.phase} · ${data.moon.sign}`;
+      let h='';
+      if(data.moonVoid){const mv=data.moonVoid;
+        h+=`<div class="trow"><div class="g">☽</div><div class="b"><div class="h">${mv.void?'Moon void-of-course':'Moon in '+mv.sign}</div><div class="x">${mv.void?('No more aspects before it leaves '+mv.sign+' — finish, don’t begin.'):('Active until it enters '+mv.nextSign+' in ~'+Math.round(mv.entersNextHours)+'h.')}</div></div><div class="tag ${mv.void?'tag-ch':'tag-nu'}">${mv.void?'Hold':'Flowing'}</div></div>`;}
+      data.dailySky.forEach(r=>{h+=`<div class="trow"><div class="g">${PG(r.t)}</div><div class="b"><div class="h">${r.t} <span class="sym">${r.sym} ${r.applying?'applying':'separating'}</span> natal ${r.n}</div><div class="x">${r.text}</div></div><div class="tag ${tagFor(r.aspect)}">${r.applying?'Applying':'Sep.'}</div></div>`;});
+      if(ts)ts.innerHTML=h||'<div class="trow"><div class="b"><div class="x">Quiet sky — no tight personal transits today.</div></div></div>';}
+    // ── forecast (upcoming, computed) ──
+    if(data.forecast){const fl=document.getElementById('forecast-list');
+      if(fl)fl.innerHTML=data.forecast.map(f=>`<div class="fc"><div class="d">${f.days}d</div><div class="b"><div class="h">${f.label}</div><p>${f.note}</p></div></div>`).join('');}
+    noEmoji(document.body);
   } else { // ── fallback: in-page Schlyter, Sun & Moon only ──
     const NAT={Sun:157.23,Moon:275.52,Mercury:172.17,Venus:140.8,Mars:59.7,Jupiter:122.6,Saturn:289.13,
       Uranus:275.68,Neptune:281.93,Pluto:225.32,Node:306.98,ASC:278.35,MC:213.9};
