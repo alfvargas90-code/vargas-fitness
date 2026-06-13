@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-12T22:03:59-05:00",
-  "data_hash": "007116e0ee91af73",
+  "generated_at": "2026-06-13T02:35:25-05:00",
+  "data_hash": "b6969362455e269f",
   "slot": "macros-update",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 94%\n\nRead\nThe fresh meal moved the day from catching up to clearly topped off, with protein now carrying its share. Recovery is subdued and output is lighter than usual, so this favors muscle support over further surplus.\n\nStrong, but topped.\n\nPerformance: Strong, but topped.\n\nTransit: none",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new food entry only begins to move the day out of a very low-input start, while recovery still reads subdued. For muscle retention, the day now favors steady catch-up and controlled output over intensity.\n\nQuiet rebuild.\n\nPerformance: Quiet rebuild.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 94%\n\nRead\nThe fresh meal moved the day from catching up to clearly topped off, with protein now carrying its share. Recovery is subdued and output is lighter than usual, so this favors muscle support over further surplus.\n\nStrong, but topped."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new food entry only begins to move the day out of a very low-input start, while recovery still reads subdued. For muscle retention, the day now favors steady catch-up and controlled output over intensity.\n\nQuiet rebuild."
     },
     {
       "label": "Performance",
-      "text": "Strong, but topped."
+      "text": "Quiet rebuild."
     },
     {
       "label": "Transit",
@@ -23,8 +23,8 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 94%\n\nRead\nThe fresh meal moved the day from catching up to clearly topped off, with protein now carrying its share. Recovery is subdued and output is lighter than usual, so this favors muscle support over further surplus.\n\nStrong, but topped.",
-    "performance": "Strong, but topped.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new food entry only begins to move the day out of a very low-input start, while recovery still reads subdued. For muscle retention, the day now favors steady catch-up and controlled output over intensity.\n\nQuiet rebuild.",
+    "performance": "Quiet rebuild.",
     "transit": null
   },
   "nutrition_nudge": "",
@@ -34,8 +34,8 @@
     "sleep_hours": 6.6,
     "hrv_today": 46,
     "hrv_7d_avg": 59.1,
-    "nutrition": "calories 3550 of 2574 goal, protein 149g of 138g goal, carbs 400g of 290g goal, fat 162g of 72g goal",
-    "nutrition_detail": "calories 3550 of 2574 goal -> 976 over; protein 149g of 138g goal -> 11g over; carbs 400g of 290g goal; fat 162g of 72g goal",
-    "activity_today": "5,305 steps so far, 4h 49m active, 2,171 calories burned, Moderate training load"
+    "nutrition": "calories 180 of 2574 goal, protein 6g of 138g goal, carbs 36g of 290g goal, fat 1g of 72g goal",
+    "nutrition_detail": "calories 180 of 2574 goal -> 2394 left; protein 6g of 138g goal -> 132g gap; carbs 36g of 290g goal; fat 1g of 72g goal",
+    "activity_today": null
   }
 }
