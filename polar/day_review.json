@@ -1,19 +1,19 @@
 {
-  "date": "2026-06-11",
-  "generated_at": "2026-06-11T21:45:00-05:00",
-  "verdict": "Big",
+  "date": "2026-06-12",
+  "generated_at": "2026-06-12T21:45:00-05:00",
+  "verdict": "Solid",
   "stats": {
-    "steps": 8329,
-    "active_minutes": 406,
-    "active_time_display": "6h 46m",
-    "calories_burned": 2749,
-    "active_calories": 1164,
-    "calories_eaten": 2050,
-    "net_deficit": 699,
+    "steps": 5305,
+    "active_minutes": 289,
+    "active_time_display": "4h 49m",
+    "calories_burned": 2171,
+    "active_calories": 752,
+    "calories_eaten": 2100,
+    "net_deficit": 71,
     "calorie_target": 2574,
-    "protein_g": 120,
+    "protein_g": 94,
     "protein_target_g": 138,
-    "protein_gap_g": 18
+    "protein_gap_g": 44
   },
-  "prose": "Big output day, Alfie: about 8,300 steps, nearly 7 hours active, and a roughly 700-calorie deficit, which is still in the useful zone but close enough that muscle protection matters. The miss was protein, about 18 short, and that is the part that decides whether this kind of deficit pulls from fat or starts costing you lean tissue. Push protein hard tomorrow and keep the deficit modest."
+  "prose": "Solid balanced day: about 5,300 steps, plenty of active time, and only a small 70-calorie deficit, which is right in the muscle-protecting zone. The miss was protein at about 45 grams short, so tomorrow, push protein hard before adding anything else."
 }
