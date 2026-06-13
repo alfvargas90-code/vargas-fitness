@@ -167,6 +167,46 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
 .contrast .prose{font-style:italic;color:var(--gold-br)}
 
 .foot-tag{text-align:center;font-size:10px;color:var(--t3);margin-top:8px;letter-spacing:.03em}
+
+/* moon phase + current sky (hero) */
+.skybar{position:absolute;left:0;right:0;top:8px;z-index:5;display:flex;justify-content:center;gap:14px;font-size:10px;color:var(--t2);text-shadow:0 1px 6px rgba(0,0,0,.9)}
+.skybar .it{display:inline-flex;align-items:center;gap:6px}
+.moondisc{width:15px;height:15px;border-radius:50%;background:#0c0c14;position:relative;overflow:hidden;box-shadow:0 0 8px rgba(232,197,115,.35),inset 0 0 0 1px rgba(255,255,255,.12)}
+.moondisc i{position:absolute;inset:0;background:radial-gradient(circle at 35% 35%,#fff,#d9d2b0 70%,#b8b090)}
+.live-chip{display:inline-flex;align-items:center;gap:5px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--green)}
+.live-chip .dot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green)}
+
+/* aspect grid */
+.asp{display:flex;flex-direction:column}
+.asprow{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.asprow:last-child{border-bottom:none}
+.asprow .pair b{font-family:var(--sans)}
+.asprow .sym{font-size:15px;color:var(--violet)}
+.asprow .orb{font-size:10px;color:var(--t3);font-variant-numeric:tabular-nums}
+.asprow .nm{font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);width:74px;text-align:right}
+.asp .hard .sym{color:var(--orange)}.asp .soft .sym{color:var(--cyan)}.asp .conj .sym{color:var(--gold-br)}
+
+/* lord of year */
+.loy{display:flex;gap:14px;align-items:flex-start}
+.loy .big{font-size:34px;color:var(--gold-br);line-height:1;filter:drop-shadow(0 0 8px rgba(212,168,87,.4))}
+.loy .b .h{font-size:14px;font-weight:700;color:var(--gold-br)}
+.loy .b .sub{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin:2px 0 7px}
+.loy .b p{font-size:12.5px;line-height:1.6;color:var(--t2)}
+
+/* ── DESKTOP / iPad: wider shell, grander hero, denser rows ── */
+@media(min-width:860px){
+  .shell{max-width:1040px;padding:0 28px}
+  .solar{height:360px;margin:6px -28px 14px}
+  .sun{width:150px;height:150px;margin:-75px 0 0 -75px;top:180px}
+  .field{top:180px}
+  .solar .label .ph{font-size:52px;letter-spacing:.16em}
+  .solar .label{bottom:24px}
+  .lensnav button{font-size:14px;padding:12px}
+  .lensnav button .sm{font-size:9.5px}
+  .cols2{grid-template-columns:1fr 1fr}     /* keep two-up on wide screens */
+  .lots{grid-template-columns:repeat(3,1fr)}
+  .dchart{grid-template-rows:repeat(4,72px)}
+}
 </style>
 </head>
 <body>
@@ -185,7 +225,12 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
     <div class="field" id="field"></div>
     <div class="sun"></div>
     <div class="vig"></div>
-    <div class="label"><div class="ph">EXPANSION</div><div class="sub">12th-house Sagittarius year · lord Jupiter · build before the August turn</div></div>
+    <div class="skybar">
+      <span class="it"><span class="moondisc"><i id="moon-lit"></i></span><span id="moon-txt">—</span></span>
+      <span class="it"><span class="live-chip"><span class="dot"></span>Live sky</span></span>
+      <span class="it" id="sky-sun">☉ —</span>
+    </div>
+    <div class="label"><div class="ph">EXPANSION</div><div class="sub" id="hero-sub">12th-house Sagittarius year · lord Jupiter · build before the August turn</div></div>
   </div>
 
   <!-- LENS NAV -->
@@ -220,6 +265,11 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
             <div class="lot"><div class="name">Eros</div><div class="glyph">❤</div><div class="pos">19°05′ ♐</div><div class="hs">Sagittarius · 12th</div><div class="mean">Desire — held in the hidden house; longing kept private.</div></div>
           </div>
         </div>
+      </div>
+
+      <div class="card">
+        <div class="sh">Lord of the Year</div>
+        <div class="loy"><div class="big">♃</div><div class="b"><div class="h">Jupiter — ruler of the profected 12th</div><div class="sub">natally in Leo · 8th whole-sign</div><p>The benefic carries your year, but rules it from the houses of the unseen — preparation, depth, shared resources. And he is walking back to <span style="color:var(--gold-br)">his own natal place</span>: the year-lord renews exactly at the Jupiter return, <span style="color:var(--gold-br)" id="loy-days">~Jul 12</span>. Until then the year is setup; from then it begins to pay.</p></div></div>
       </div>
     </section>
 
@@ -283,6 +333,11 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
         <div class="sh">Natal Wheel <span class="sub">tropical · Placidus · all planets</span></div>
         <svg viewBox="0 0 300 300" id="wheel" style="width:100%;height:auto;max-width:330px;display:block;margin:0 auto"></svg>
         <div class="legend" id="legend"></div>
+      </div>
+
+      <div class="card">
+        <div class="sh">Natal Aspects <span class="sub">tightest orbs · computed</span></div>
+        <div class="asp" id="aspect-list"></div>
       </div>
 
       <div class="card">
@@ -415,6 +470,55 @@ function noEmoji(root){
   sl.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)<50)return;
     const order=['trad','vedic','modern'];const cur=order.indexOf(document.querySelector('.slide.on').dataset.lens);
     const ni=Math.max(0,Math.min(2,cur+(dx<0?1:-1)));nav.children[ni].click();});
+})();
+
+/* ---- LIVE ASTRO COMPUTE — derived client-side from natal constants + today ---- */
+(function(){
+  const NAT={ASC:278.35,Sun:157.23,Moon:275.52,Mercury:172.17,Venus:140.8,Mars:59.7,Jupiter:122.6,
+    Saturn:289.13,Uranus:275.68,Neptune:281.93,Pluto:225.32,Node:306.98,MC:213.9};
+  const GLY=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+  const now=new Date();
+  const fmtDeg=x=>{x=((x%360)+360)%360;const s=Math.floor(x/30);return Math.floor(x-30*s)+'°'+GLY[s];};
+
+  // moon phase — ref new moon 2000-01-06 18:14 UTC, synodic month
+  const syn=29.530588853, ref=Date.UTC(2000,0,6,18,14);
+  const ageM=(((now-ref)/86400000)%syn+syn)%syn;
+  const illum=Math.round((1-Math.cos(2*Math.PI*ageM/syn))/2*100);
+  const waxing=ageM<syn/2, toNew=Math.max(1,Math.round((syn-ageM)%syn));
+  let phase; if(ageM<1||ageM>syn-1)phase='New Moon';else if(ageM<6.4)phase='Waxing crescent';
+    else if(ageM<8.6)phase='First quarter';else if(ageM<13.8)phase='Waxing gibbous';
+    else if(ageM<15.8)phase='Full Moon';else if(ageM<21.1)phase='Waning gibbous';
+    else if(ageM<23.3)phase='Last quarter';else phase='Waning crescent';
+  const mt=document.getElementById('moon-txt'); if(mt)mt.textContent=`${phase} · ${illum}% · New Moon in ${toNew}d`;
+  const lit=document.getElementById('moon-lit');
+  if(lit)lit.style.clipPath=waxing?`inset(0 ${100-illum}% 0 0)`:`inset(0 0 0 ${100-illum}%)`;
+
+  // approx current Sun longitude (from ~2026 vernal equinox)
+  const eqx=Date.UTC(2026,2,20,14,0); let sun=((now-eqx)/86400000*0.98565)%360; sun=((sun%360)+360)%360;
+  const ss=document.getElementById('sky-sun'); if(ss)ss.textContent='☉ '+fmtDeg(sun);
+
+  // profection from birth 1990-08-30
+  const m=now.getUTCMonth(),d=now.getUTCDate(); const had=(m>7)||(m===7&&d>=30);
+  let ageY=now.getUTCFullYear()-1990; if(!had)ageY--; const house=(ageY%12)+1;
+  const turn=Date.UTC(now.getUTCFullYear()+(had?1:0),7,30); const dTurn=Math.ceil((turn-now)/86400000);
+  // Jupiter return Jul 12 2026
+  const dJR=Math.ceil((Date.UTC(2026,6,12)-now)/86400000);
+  const loy=document.getElementById('loy-days'); if(loy)loy.textContent=dJR>0?`in ${dJR} days (Jul 12)`:'Jul 12';
+  const hs=document.getElementById('hero-sub');
+  if(hs&&house===12)hs.textContent=`12th-house Sagittarius year · lord Jupiter · ${dTurn} days to the Capricorn turn`;
+
+  // natal aspects (major, tightest first)
+  const order=Object.keys(NAT);
+  const ASP=[['☌',0,7,'conj','Conjunction'],['☍',180,7,'hard','Opposition'],['△',120,6,'soft','Trine'],['□',90,6,'hard','Square'],['⚹',60,4,'soft','Sextile']];
+  const found=[];
+  for(let i=0;i<order.length;i++)for(let j=i+1;j<order.length;j++){
+    let dd=Math.abs(NAT[order[i]]-NAT[order[j]])%360; if(dd>180)dd=360-dd;
+    for(const[sym,deg,orb,cls,nm]of ASP){const o=Math.abs(dd-deg);if(o<=orb){found.push({a:order[i],b:order[j],sym,cls,nm,orb:o});break;}}
+  }
+  found.sort((x,y)=>x.orb-y.orb);
+  const list=document.getElementById('aspect-list');
+  if(list)found.slice(0,8).forEach(f=>{const r=document.createElement('div');r.className='asprow '+f.cls;
+    r.innerHTML=`<span class="pair"><b>${f.a}</b> <span class="sym">${f.sym}</span> <b>${f.b}</b></span><span class="orb">${f.orb.toFixed(1)}°</span><span class="nm">${f.nm}</span>`;list.appendChild(r);});
 })();
 
 /* run last: strip emoji presentation from all glyphs (HTML + SVG) */
