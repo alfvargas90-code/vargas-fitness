@@ -228,8 +228,7 @@ def main():
         "Community":   "build with the group and aim past yourself",
     }
     frame = FRAME.get(prof["theme"], "move with the season")
-    synthesis = (f"All four lenses converge — {frame}; expansion opens at {jr_txt}, "
-                 f"a new chapter at the {prof['nextSign']} turn ({prof['daysToTurn']}d).")
+    synthesis = frame[0].upper() + frame[1:] + "."
 
     data = {
         "generated": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
