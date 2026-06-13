@@ -1,36 +1,36 @@
 {
- "generated": "2026-06-13T21:21:52Z",
+ "generated": "2026-06-13T21:23:45Z",
  "transits": [
   {
-   "lon": 82.874,
+   "lon": 82.875,
    "sign": "Gem",
    "deg": 22,
    "name": "Sun",
    "rx": false
   },
   {
-   "lon": 65.23,
+   "lon": 65.249,
    "sign": "Gem",
    "deg": 5,
    "name": "Moon",
    "rx": false
   },
   {
-   "lon": 107.251,
+   "lon": 107.253,
    "sign": "Can",
    "deg": 17,
    "name": "Mercury",
    "rx": false
   },
   {
-   "lon": 120.514,
+   "lon": 120.515,
    "sign": "Leo",
    "deg": 0,
    "name": "Venus",
    "rx": false
   },
   {
-   "lon": 49.237,
+   "lon": 49.238,
    "sign": "Tau",
    "deg": 19,
    "name": "Mars",
@@ -88,7 +88,7 @@
  "moonVoid": {
   "void": false,
   "sign": "Gemini",
-  "entersNextHours": 39.1,
+  "entersNextHours": 39.0,
   "nextSign": "Cancer"
  },
  "transitAspects": [
@@ -183,21 +183,21 @@
    "applying": true
   },
   {
+   "t": "Moon",
+   "rx": false,
+   "sym": "\u25b3",
+   "aspect": "Trine",
+   "n": "Node",
+   "orb": 1.7,
+   "applying": false
+  },
+  {
    "t": "Neptune",
    "rx": false,
    "sym": "\u25b3",
    "aspect": "Trine",
    "n": "Jupiter",
    "orb": 1.7,
-   "applying": false
-  },
-  {
-   "t": "Moon",
-   "rx": false,
-   "sym": "\u25b3",
-   "aspect": "Trine",
-   "n": "Node",
-   "orb": 1.8,
    "applying": false
   },
   {
@@ -384,7 +384,7 @@
   "label": "PREPARATION",
   "subtitle": "12th-house Sagittarius year \u00b7 lord Jupiter \u00b7 78 days to the Capricorn turn"
  },
- "synthesis": "All four lenses converge \u2014 build quietly and refine now, don't perform; expansion opens at the Jupiter return (29d), a new chapter at the Capricorn turn (78d).",
+ "synthesis": "Build quietly and refine now, don't perform.",
  "forecast": [
   {
    "label": "New Moon",
