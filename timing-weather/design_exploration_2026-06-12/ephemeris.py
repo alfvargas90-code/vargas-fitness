@@ -159,6 +159,22 @@ def jupiter_return(jd, natal_jup):
         prev = cur
     return None
 
+def live_lots(jd, nat):
+    """The 3 lots computed from the natal Ascendant + TODAY's Sun/Moon/Venus (day sect),
+    so their sign shifts as the days change (Moon-driven). Fortune/Spirit move ~12°/day."""
+    asc = nat["ASC"]
+    sun = lonspeed(jd, swe.SUN)[0]; moon = lonspeed(jd, swe.MOON)[0]; ven = lonspeed(jd, swe.VENUS)[0]
+    fortune = (asc + moon - sun) % 360          # day-sect formulas (his is a day chart)
+    spirit  = (asc + sun - moon) % 360
+    eros    = (asc + ven - spirit) % 360
+    def pack(name, glyph, lon, meaning):
+        s = int(lon // 30) % 12
+        return {"name": name, "glyph": glyph, "lon": round(lon, 2),
+                "sign": SIGN_FULL[s], "deg": int(lon % 30), "meaning": meaning}
+    return [pack("Fortune", "⊗", fortune, "body & fortune"),
+            pack("Spirit",  "⊕", spirit,  "action & will"),
+            pack("Eros",    "❤", eros,    "desire & love")]
+
 def daily_sky(aspects):
     """Notable CURRENT transits for the Traditional 'Today's Sky' — applying ones to
     personal points, top 3, with generated prose."""
@@ -240,6 +256,7 @@ def main():
         "profection": prof,
         "phase": phase_block(prof),
         "synthesis": synthesis,
+        "lotsLive": live_lots(jd, nat),
         "forecast": fc,
         "natalTropical": nat,
         "engine": f"Swiss Ephemeris {swe.version}",

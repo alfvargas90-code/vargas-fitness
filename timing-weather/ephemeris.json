@@ -1,57 +1,57 @@
 {
- "generated": "2026-06-13T21:23:45Z",
+ "generated": "2026-06-13T22:14:19Z",
  "transits": [
   {
-   "lon": 82.875,
+   "lon": 82.909,
    "sign": "Gem",
    "deg": 22,
    "name": "Sun",
    "rx": false
   },
   {
-   "lon": 65.249,
+   "lon": 65.784,
    "sign": "Gem",
    "deg": 5,
    "name": "Moon",
    "rx": false
   },
   {
-   "lon": 107.253,
+   "lon": 107.29,
    "sign": "Can",
    "deg": 17,
    "name": "Mercury",
    "rx": false
   },
   {
-   "lon": 120.515,
+   "lon": 120.556,
    "sign": "Leo",
    "deg": 0,
    "name": "Venus",
    "rx": false
   },
   {
-   "lon": 49.238,
+   "lon": 49.263,
    "sign": "Tau",
    "deg": 19,
    "name": "Mars",
    "rx": false
   },
   {
-   "lon": 116.591,
+   "lon": 116.598,
    "sign": "Can",
    "deg": 26,
    "name": "Jupiter",
    "rx": false
   },
   {
-   "lon": 13.231,
+   "lon": 13.233,
    "sign": "Ari",
    "deg": 13,
    "name": "Saturn",
    "rx": false
   },
   {
-   "lon": 62.799,
+   "lon": 62.801,
    "sign": "Gem",
    "deg": 2,
    "name": "Uranus",
@@ -65,14 +65,14 @@
    "rx": false
   },
   {
-   "lon": 305.19,
+   "lon": 305.189,
    "sign": "Aqu",
    "deg": 5,
    "name": "Pluto",
    "rx": true
   },
   {
-   "lon": 332.477,
+   "lon": 332.471,
    "sign": "Pis",
    "deg": 2,
    "name": "Node",
@@ -88,7 +88,7 @@
  "moonVoid": {
   "void": false,
   "sign": "Gemini",
-  "entersNextHours": 39.0,
+  "entersNextHours": 38.2,
   "nextSign": "Cancer"
  },
  "transitAspects": [
@@ -125,7 +125,16 @@
    "sym": "\u26b9",
    "aspect": "Sextile",
    "n": "Mars",
-   "orb": 0.8,
+   "orb": 0.9,
+   "applying": false
+  },
+  {
+   "t": "Moon",
+   "rx": false,
+   "sym": "\u25b3",
+   "aspect": "Trine",
+   "n": "Node",
+   "orb": 1.2,
    "applying": false
   },
   {
@@ -174,22 +183,22 @@
    "applying": false
   },
   {
+   "t": "Moon",
+   "rx": false,
+   "sym": "\u25a1",
+   "aspect": "Square",
+   "n": "Sun",
+   "orb": 1.5,
+   "applying": false
+  },
+  {
    "t": "Mars",
    "rx": false,
    "sym": "\u25a1",
    "aspect": "Square",
    "n": "Venus",
-   "orb": 1.6,
+   "orb": 1.5,
    "applying": true
-  },
-  {
-   "t": "Moon",
-   "rx": false,
-   "sym": "\u25b3",
-   "aspect": "Trine",
-   "n": "Node",
-   "orb": 1.7,
-   "applying": false
   },
   {
    "t": "Neptune",
@@ -224,15 +233,6 @@
    "sym": "\u25b3",
    "aspect": "Trine",
    "n": "Pluto",
-   "orb": 1.9,
-   "applying": false
-  },
-  {
-   "t": "Moon",
-   "rx": false,
-   "sym": "\u25a1",
-   "aspect": "Square",
-   "n": "Sun",
    "orb": 2.0,
    "applying": false
   },
@@ -253,15 +253,6 @@
    "n": "Jupiter",
    "orb": 2.1,
    "applying": true
-  },
-  {
-   "t": "Moon",
-   "rx": false,
-   "sym": "\u26b9",
-   "aspect": "Sextile",
-   "n": "Jupiter",
-   "orb": 2.6,
-   "applying": false
   },
   {
    "t": "Pluto",
@@ -314,7 +305,7 @@
    "sym": "\u25a1",
    "aspect": "Square",
    "n": "MC",
-   "orb": 3.4,
+   "orb": 3.3,
    "applying": true
   },
   {
@@ -363,7 +354,7 @@
    "n": "Mars",
    "rx": false,
    "aspect": "Sextile",
-   "orb": 0.8,
+   "orb": 0.9,
    "applying": false,
    "text": "sweetens your drive \u2014 an open door."
   }
@@ -385,6 +376,32 @@
   "subtitle": "12th-house Sagittarius year \u00b7 lord Jupiter \u00b7 78 days to the Capricorn turn"
  },
  "synthesis": "Build quietly and refine now, don't perform.",
+ "lotsLive": [
+  {
+   "name": "Fortune",
+   "glyph": "\u2297",
+   "lon": 261.24,
+   "sign": "Sagittarius",
+   "deg": 21,
+   "meaning": "body & fortune"
+  },
+  {
+   "name": "Spirit",
+   "glyph": "\u2295",
+   "lon": 295.49,
+   "sign": "Capricorn",
+   "deg": 25,
+   "meaning": "action & will"
+  },
+  {
+   "name": "Eros",
+   "glyph": "\u2764",
+   "lon": 103.43,
+   "sign": "Cancer",
+   "deg": 13,
+   "meaning": "desire & love"
+  }
+ ],
  "forecast": [
   {
    "label": "New Moon",

@@ -282,11 +282,11 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
           <p class="prose muted" id="profection-text" style="font-size:12px;margin-top:8px;text-align:center">Age 35 → <b style="color:var(--gold-br)">12th house · Sagittarius</b><br>Year-lord <b style="color:var(--gold-br)">Jupiter</b>.</p>
         </div>
         <div class="card">
-          <div class="sh">Hellenistic Lots <span class="sub">day chart · whole-sign</span></div>
-          <div class="lots">
-            <div class="lot"><div class="name">Fortune</div><div class="glyph">⊗</div><div class="pos">6°38′ ♉</div><div class="hs">Taurus · 5th</div><div class="mean">Body & fortune — vitality through creation and pleasure.</div></div>
-            <div class="lot"><div class="name">Spirit</div><div class="glyph">⊕</div><div class="pos">10°04′ ♍</div><div class="hs">Virgo · 9th · on Sun</div><div class="mean">Career & will — conjunct your Sun: purpose through the craft.</div></div>
-            <div class="lot"><div class="name">Eros</div><div class="glyph">❤</div><div class="pos">19°05′ ♐</div><div class="hs">Sagittarius · 12th</div><div class="mean">Desire — held in the hidden house; longing kept private.</div></div>
+          <div class="sh">Hellenistic Lots <span class="sub">sign today · moves with the Moon</span></div>
+          <div class="lots" id="lots-live">
+            <div class="lot"><div class="name">⊗ Fortune</div><div class="glyph">—</div><div class="pos">…</div><div class="mean">body & fortune</div></div>
+            <div class="lot"><div class="name">⊕ Spirit</div><div class="glyph">—</div><div class="pos">…</div><div class="mean">action & will</div></div>
+            <div class="lot"><div class="name">❤ Eros</div><div class="glyph">—</div><div class="pos">…</div><div class="mean">desire & love</div></div>
           </div>
         </div>
       </div>
@@ -710,6 +710,10 @@ function setSky(phase,illum,sign,waxing,sunDeg,sunSign){
     // ── annual profection text ──
     if(data.profection){const pr=data.profection,pt=document.getElementById('profection-text');
       if(pt)pt.innerHTML=`Age ${pr.age} → <b style="color:var(--gold-br)">${pr.houseOrd} house · ${pr.sign}</b><br>Year-lord <b style="color:var(--gold-br)">${pr.lord}</b> · the house of ${pr.theme.toLowerCase()}. Turns to the ${pr.nextHouseOrd} (${pr.nextSign}, ${pr.nextLord}) in ${pr.daysToTurn} days.`;}
+    // ── live lots (sign today, moves with the Moon) ──
+    if(data.lotsLive){const lc=document.getElementById('lots-live');
+      const SGLY={Aries:'♈',Taurus:'♉',Gemini:'♊',Cancer:'♋',Leo:'♌',Virgo:'♍',Libra:'♎',Scorpio:'♏',Sagittarius:'♐',Capricorn:'♑',Aquarius:'♒',Pisces:'♓'};
+      if(lc)lc.innerHTML=data.lotsLive.map(l=>`<div class="lot"><div class="name">${l.glyph} ${l.name}</div><div class="glyph" style="font-size:26px">${SGLY[l.sign]||''}</div><div class="pos" style="font-size:13px">${l.sign}</div><div class="hs">${l.deg}° · today</div><div class="mean">${l.meaning}</div></div>`).join('');}
     // ── today's sky (moon void + notable transits) ──
     if(data.dailySky){const ts=document.getElementById('today-sky'),sub=document.getElementById('today-sky-sub');
       if(sub)sub.textContent=`${data.moon.phase} · ${data.moon.sign}`;
