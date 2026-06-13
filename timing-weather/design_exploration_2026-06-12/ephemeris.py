@@ -209,6 +209,28 @@ def main():
                "note": f"lord becomes {prof['nextLord']}"})
     fc.sort(key=lambda x: x["days"])
 
+    # one-sentence cross-system synthesis for the hero (pinned across all lenses).
+    # The interpretive frame keys off the profection theme; the markers are computed.
+    jr_days = next((x["days"] for x in fc if x["label"] == "Jupiter Return"), None)
+    jr_txt = f"the Jupiter return ({jr_days}d)" if jr_days is not None else "the Jupiter return"
+    FRAME = {
+        "Preparation": "build quietly and refine now, don't perform",
+        "Embodiment":  "step into the new identity and own it",
+        "Resources":   "consolidate what you have and grow it",
+        "Connection":  "learn, network, and put ideas into words",
+        "Foundations": "tend home, roots, and emotional ground",
+        "Creation":    "make, play, and let yourself be seen",
+        "Refinement":  "sharpen the craft and the daily systems",
+        "Partnership": "meet others halfway and commit",
+        "Depth":       "go deep, transform, and share resources",
+        "Expansion":   "widen the world — travel, study, believe",
+        "Visibility":  "step into view and lead",
+        "Community":   "build with the group and aim past yourself",
+    }
+    frame = FRAME.get(prof["theme"], "move with the season")
+    synthesis = (f"All four lenses converge — {frame}; expansion opens at {jr_txt}, "
+                 f"a new chapter at the {prof['nextSign']} turn ({prof['daysToTurn']}d).")
+
     data = {
         "generated": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "transits": trans,
@@ -218,6 +240,7 @@ def main():
         "dailySky": daily_sky(aspects),
         "profection": prof,
         "phase": phase_block(prof),
+        "synthesis": synthesis,
         "forecast": fc,
         "natalTropical": nat,
         "engine": f"Swiss Ephemeris {swe.version}",
