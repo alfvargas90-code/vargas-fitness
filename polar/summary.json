@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-13T15:00:01-05:00",
-  "data_hash": "27aaf61457e6acd8",
-  "slot": "fuel-2",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nToday's system is under-recovered, while the recent meal gives the evening window usable energy rather than a deep deficit. For muscle retention, the day still hinges on protein catching up; it favors controlled strength work over intensity.\n\nMeasured, not maximal.\n\nPerformance: Measured, not maximal.\n\nTransit: none",
+  "generated_at": "2026-06-13T17:49:09-05:00",
+  "data_hash": "e3ca65e9e8336b80",
+  "slot": "train-1",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is running low as the workout window opens, with enough sleep but little sign of full readiness. Intake so far leaves muscle support underbuilt, so the day favors a measured resistance session over intensity or extra burn.\n\nMeasured strength, not strain.\n\nPerformance: Measured strength, not strain.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nToday's system is under-recovered, while the recent meal gives the evening window usable energy rather than a deep deficit. For muscle retention, the day still hinges on protein catching up; it favors controlled strength work over intensity.\n\nMeasured, not maximal."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is running low as the workout window opens, with enough sleep but little sign of full readiness. Intake so far leaves muscle support underbuilt, so the day favors a measured resistance session over intensity or extra burn.\n\nMeasured strength, not strain."
     },
     {
       "label": "Performance",
-      "text": "Measured, not maximal."
+      "text": "Measured strength, not strain."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nToday's system is under-recovered, while the recent meal gives the evening window usable energy rather than a deep deficit. For muscle retention, the day still hinges on protein catching up; it favors controlled strength work over intensity.\n\nMeasured, not maximal.",
-    "performance": "Measured, not maximal.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is running low as the workout window opens, with enough sleep but little sign of full readiness. Intake so far leaves muscle support underbuilt, so the day favors a measured resistance session over intensity or extra burn.\n\nMeasured strength, not strain.",
+    "performance": "Measured strength, not strain.",
     "transit": null
   },
-  "nutrition_nudge": "You're on pace; keep dinner protein-forward and steady, aiming for 50g to protect muscle.",
+  "nutrition_nudge": "Pacing is on track; anchor dinner with lean protein and keep calories steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 1,
