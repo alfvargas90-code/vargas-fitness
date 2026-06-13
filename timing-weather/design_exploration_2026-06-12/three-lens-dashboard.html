@@ -579,12 +579,15 @@ function noEmoji(root){
   // deep-link: ?lens=trad|vedic|modern
   const want=new URLSearchParams(location.search).get('lens');
   if(want){const b=nav.querySelector(`[data-lens="${want}"]`);if(b)b.click();}
-  // swipe
-  let sx=0;const sl=document.getElementById('slides');
-  sl.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
-  sl.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)<50)return;
+  // swipe — only a DELIBERATE horizontal swipe changes lens; vertical scrolls are left alone
+  let sx=0,sy=0,st=0;const sl=document.getElementById('slides');
+  sl.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;st=Date.now();},{passive:true});
+  sl.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+    // require: mostly-horizontal, decisive distance, quick flick — otherwise it's a scroll
+    if(Math.abs(dx)<70 || Math.abs(dx)<Math.abs(dy)*2 || (Date.now()-st)>600) return;
     const order=['trad','vedic','modern','bazi'];const cur=order.indexOf(document.querySelector('.slide.on').dataset.lens);
-    const ni=Math.max(0,Math.min(3,cur+(dx<0?1:-1)));nav.children[ni].click();});
+    const ni=Math.max(0,Math.min(3,cur+(dx<0?1:-1)));if(ni!==cur)nav.children[ni].click();});
 })();
 
 /* ---- LIVE ASTRO COMPUTE — derived client-side from natal constants + today ---- */
