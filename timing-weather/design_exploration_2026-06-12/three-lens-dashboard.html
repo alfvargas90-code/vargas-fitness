@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Timing Weather · Three Lenses</title>
+<!-- THREE-LENS DASHBOARD (v1)
+     Animated solar-system hero spanning the top, then three swipeable lenses:
+     Traditional (transits/aspects + profection wheel + Hellenistic Lots),
+     Vedic (D1 Rasi chart + dasha + Mars focus + D9), Modern (tropical wheel +
+     June transit forecast + contrast). Gold solar aesthetic. Real natal data
+     for Alfredo Vargas (1990-08-30, 16:22 CDT, Chicago). Mockup — live PWA untouched. -->
+<style>
+:root{
+  --bg:#06070a;--bg2:#0a0c14;
+  --card:rgba(255,255,255,.04);--card2:rgba(255,255,255,.06);--border:rgba(255,255,255,.09);--line:rgba(255,255,255,.06);
+  --gold:#d4a857;--gold-br:#e8c573;--gold-deep:#7a5a18;
+  --green:#4ade80;--orange:#f59e0b;--cyan:#67e8f9;--red:#f87171;--violet:#a78bfa;--pink:#f472b6;--coral:#fb7185;
+  --t:rgba(255,255,255,.92);--t2:rgba(255,255,255,.55);--t3:rgba(255,255,255,.34);
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;
+  --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
+  --mono:"SF Mono",ui-monospace,Menlo,monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%}
+body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;
+  background:radial-gradient(1100px 560px at 50% -4%,rgba(212,168,87,.13),transparent 56%),
+    radial-gradient(700px 420px at 50% 4%,rgba(232,197,115,.05),transparent 60%),
+    linear-gradient(180deg,var(--bg),var(--bg2));background-attachment:fixed;padding-bottom:40px}
+.shell{max-width:760px;margin:0 auto;padding:0 16px}
+
+/* header */
+.hdr{display:flex;align-items:center;gap:12px;padding:14px 4px 8px}
+.hdr .menu{font-size:18px;color:var(--t2);width:30px}
+.hdr .tt{flex:1;text-align:center}
+.hdr .tt h1{font-size:12px;letter-spacing:.34em;font-weight:700}
+.hdr .tt h1::before{content:"☼ ";color:var(--gold);letter-spacing:0}
+.hdr .tt .d{font-size:10px;color:var(--t2);margin-top:2px}
+.hdr .dots{width:30px}
+
+/* ANIMATED SOLAR-SYSTEM HERO */
+.solar{position:relative;height:230px;margin:2px 0 6px;overflow:hidden}
+.solar .sun{position:absolute;left:50%;top:115px;width:96px;height:96px;border-radius:50%;margin:-48px 0 0 -48px;z-index:3;
+  background:radial-gradient(circle at 40% 38%,#FFFCEA,#FFF1B3 12%,#FFD659 30%,#E8A93A 55%,#8A4D0B 100%);
+  box-shadow:0 0 50px rgba(255,218,109,.55),0 0 110px rgba(212,168,87,.32),inset -14px -20px 40px rgba(180,80,0,.55),inset 6px 6px 20px rgba(255,250,200,.5);animation:breathe 6s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.orb{position:absolute;left:50%;top:115px;border:1px solid rgba(255,255,255,.06);border-radius:50%;transform:translate(-50%,-50%)}
+.spin{position:absolute;left:50%;top:115px;width:0;height:0;transform:translate(-50%,-50%);animation:spin linear infinite}
+.spin .pl{position:absolute;font-size:15px;transform:translate(-50%,-50%);filter:drop-shadow(0 0 5px currentColor)}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.solar .label{position:absolute;left:0;right:0;bottom:6px;text-align:center;z-index:4}
+.solar .label .ph{font-size:26px;font-weight:800;letter-spacing:.05em;color:var(--gold);text-transform:uppercase;text-shadow:0 0 22px rgba(212,168,87,.4)}
+.solar .label .sub{font-size:11px;color:var(--t2);margin-top:1px}
+
+/* lens nav */
+.lensnav{display:flex;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:5px;margin:6px 0 16px}
+.lensnav button{flex:1;background:transparent;border:0;color:var(--t2);font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.04em;padding:9px 6px;border-radius:10px;cursor:pointer;transition:.2s}
+.lensnav button .sm{display:block;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-top:2px}
+.lensnav button.on{background:linear-gradient(180deg,rgba(212,168,87,.18),rgba(212,168,87,.08));color:var(--gold-br);box-shadow:inset 0 0 0 1px rgba(212,168,87,.3)}
+.lensnav button.on .sm{color:var(--gold)}
+
+/* slides */
+.slides{position:relative}
+.slide{display:none;animation:fade .35s ease}
+.slide.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* shared cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 14px 38px rgba(0,0,0,.4);margin-bottom:14px}
+.sh{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.sh .sub{margin-left:auto;font-size:9px;font-weight:600;color:var(--t3);letter-spacing:.06em}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.cols2{grid-template-columns:1fr}}
+.prose{font-size:13.5px;line-height:1.66;color:var(--t)}
+.prose .em{color:var(--coral);font-style:italic}
+.muted{color:var(--t2)}
+
+/* transit/aspect rows */
+.trow{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.trow:last-child{border-bottom:none}
+.trow .g{font-size:16px;width:24px;text-align:center;flex:0 0 auto;color:var(--gold)}
+.trow .b{flex:1}
+.trow .b .h{font-size:13px;font-weight:600}
+.trow .b .h .sym{color:var(--violet)}
+.trow .b .x{font-size:11.5px;color:var(--t2);line-height:1.5;margin-top:2px}
+.trow .tag{font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:10px;flex:0 0 auto;align-self:center}
+.tag-ch{background:rgba(245,158,11,.14);color:var(--orange)}.tag-su{background:rgba(74,222,128,.14);color:var(--green)}.tag-nu{background:rgba(167,139,250,.14);color:var(--violet)}
+
+/* lots */
+.lots{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:560px){.lots{grid-template-columns:1fr}}
+.lot{background:var(--card2);border:1px solid var(--border);border-radius:13px;padding:13px;text-align:center}
+.lot .name{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.lot .glyph{font-size:20px;margin:6px 0 3px;color:var(--gold-br)}
+.lot .pos{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.lot .hs{font-size:10px;color:var(--t3);margin-top:1px}
+.lot .mean{font-size:11px;color:var(--t2);line-height:1.5;margin-top:8px;border-top:1px solid var(--line);padding-top:8px}
+
+/* South Indian Vedic chart */
+.dchart{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,58px);gap:2px;background:rgba(212,168,87,.14);border:1px solid rgba(212,168,87,.3);border-radius:8px;padding:2px}
+.dcell{background:var(--bg2);border-radius:3px;padding:4px 5px;position:relative;overflow:hidden}
+.dcell .sg{position:absolute;top:2px;right:4px;font-size:8px;color:var(--t3);letter-spacing:.04em}
+.dcell .pls{font-size:11px;line-height:1.32;font-weight:600;color:var(--gold-br)}
+.dcell .pls .asc{color:var(--cyan)}.dcell .pls .rx{color:var(--coral);font-size:8px}
+.dcenter{grid-column:2/4;grid-row:2/4;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.dcenter .t{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.dcenter .s{font-size:9px;color:var(--t3);margin-top:3px}
+
+/* dasha timeline */
+.dasha{display:flex;flex-direction:column;gap:0}
+.drow{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+.drow:last-child{border-bottom:none}
+.drow.now{background:linear-gradient(90deg,rgba(212,168,87,.1),transparent);border-radius:8px;padding-left:8px;margin-left:-8px}
+.drow .pd{font-size:12px;font-weight:700;width:96px;flex:0 0 auto}
+.drow .pd .sub{display:block;font-size:9px;color:var(--t3);font-weight:400}
+.drow .bar{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.06);position:relative;overflow:hidden}
+.drow .bar i{position:absolute;height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold-deep),var(--gold))}
+.drow .rng{font-size:9.5px;color:var(--t2);width:84px;text-align:right;flex:0 0 auto;font-variant-numeric:tabular-nums}
+.now-pill{font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(212,168,87,.4);border-radius:9px;padding:2px 6px;margin-left:6px}
+
+/* focus card */
+.focus{display:flex;gap:14px;align-items:flex-start}
+.focus .big{font-size:36px;color:var(--coral);line-height:1;filter:drop-shadow(0 0 8px rgba(251,113,133,.4))}
+.focus .b .h{font-size:14px;font-weight:700;color:var(--coral)}
+.focus .b .sub{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin:2px 0 7px}
+.focus .b p{font-size:12.5px;line-height:1.6;color:var(--t2)}
+
+/* badges grid for D9 */
+.d9{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.d9 .b{background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:10px 12px}
+.d9 .b .k{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--t3)}
+.d9 .b .v{font-size:13px;font-weight:700;color:var(--gold-br);margin-top:2px}
+.d9 .b .x{font-size:10.5px;color:var(--t2);margin-top:3px;line-height:1.45}
+
+/* legend for wheel */
+.legend{display:grid;grid-template-columns:repeat(2,1fr);gap:5px 14px;margin-top:12px}
+.legend .li{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--t2)}
+.legend .li b{font-family:var(--serif);font-size:14px;font-weight:400;width:18px;text-align:center}
+.legend .li .pp{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--t3);font-size:10px}
+
+/* forecast list */
+.fc{display:flex;gap:11px;padding:10px 0;border-bottom:1px solid var(--line)}
+.fc:last-child{border-bottom:none}
+.fc .d{font-size:10px;font-weight:700;color:var(--gold);width:54px;flex:0 0 auto;text-align:center;padding-top:2px}
+.fc .b .h{font-size:13px;font-weight:600}
+.fc .b p{font-size:11.5px;color:var(--t2);line-height:1.5;margin-top:2px}
+.contrast{background:linear-gradient(160deg,rgba(212,168,87,.1),rgba(167,139,250,.05));border-color:rgba(212,168,87,.25)}
+.contrast .prose{font-style:italic;color:var(--gold-br)}
+
+.foot-tag{text-align:center;font-size:10px;color:var(--t3);margin-top:8px;letter-spacing:.03em}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="hdr">
+    <div class="menu">≡</div>
+    <div class="tt"><h1>TIMING WEATHER</h1><div class="d">Saturday, June 13, 2026 · Alfredo</div></div>
+    <div class="dots"></div>
+  </div>
+
+  <!-- ANIMATED SOLAR SYSTEM HERO -->
+  <div class="solar" id="solar">
+    <div class="sun"></div>
+    <div class="label"><div class="ph">EXPANSION</div><div class="sub">12th-house Sagittarius year · lord Jupiter · build before the August turn</div></div>
+  </div>
+
+  <!-- LENS NAV -->
+  <div class="lensnav" id="lensnav">
+    <button data-lens="trad" class="on">Traditional<span class="sm">Hellenistic</span></button>
+    <button data-lens="vedic">Vedic<span class="sm">Sidereal</span></button>
+    <button data-lens="modern">Modern<span class="sm">Tropical</span></button>
+  </div>
+
+  <div class="slides" id="slides">
+
+    <!-- ══ TRADITIONAL ══ -->
+    <section class="slide on" data-lens="trad">
+      <div class="card">
+        <div class="sh">Today's Sky <span class="sub">transits · aspects</span></div>
+        <div class="trow"><div class="g">☽</div><div class="b"><div class="h">Moon void-of-course <span class="sym">— in late Taurus</span></div><div class="x">Makes no further aspects until it enters Gemini at 2:40 PM. A held breath — finish, don't begin.</div></div><div class="tag tag-ch">Hold</div></div>
+        <div class="trow"><div class="g">♃</div><div class="b"><div class="h">Jupiter <span class="sym">△ applying to</span> natal Sun</div><div class="x">The year-lord's benefic creeps toward your 9th-whole-sign Sun — the slow climb toward recognition. 30 days from its own return.</div></div><div class="tag tag-su">Support</div></div>
+        <div class="trow"><div class="g">♄</div><div class="b"><div class="h">Saturn <span class="sym">⚻ quincunx</span> Ascendant</div><div class="x">A sustained recalibration of how you show up — adjust the structure, don't force it.</div></div><div class="tag tag-nu">Neutral</div></div>
+      </div>
+
+      <div class="cols2">
+        <div class="card">
+          <div class="sh">Annual Profection</div>
+          <svg viewBox="0 0 220 220" id="profection" style="width:100%;height:auto;max-width:240px;display:block;margin:0 auto"></svg>
+          <p class="prose muted" style="font-size:12px;margin-top:8px;text-align:center">Age 35 → <b style="color:var(--gold-br)">12th house · Sagittarius</b><br>Year-lord <b style="color:var(--gold-br)">Jupiter</b> · the house of retreat & preparation. Turns to the 1st (Capricorn, Saturn) on Aug 30.</p>
+        </div>
+        <div class="card">
+          <div class="sh">Hellenistic Lots <span class="sub">day chart · whole-sign</span></div>
+          <div class="lots">
+            <div class="lot"><div class="name">Fortune</div><div class="glyph">⊗</div><div class="pos">6°38′ ♉</div><div class="hs">Taurus · 5th</div><div class="mean">Body & fortune — vitality through creation and pleasure.</div></div>
+            <div class="lot"><div class="name">Spirit</div><div class="glyph">⊕</div><div class="pos">10°04′ ♍</div><div class="hs">Virgo · 9th · on Sun</div><div class="mean">Career & will — conjunct your Sun: purpose through the craft.</div></div>
+            <div class="lot"><div class="name">Eros</div><div class="glyph">❤</div><div class="pos">19°05′ ♐</div><div class="hs">Sagittarius · 12th</div><div class="mean">Desire — held in the hidden house; longing kept private.</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ VEDIC ══ -->
+    <section class="slide" data-lens="vedic">
+      <div class="cols2">
+        <div class="card">
+          <div class="sh">Rasi · D1 <span class="sub">sidereal · Lahiri</span></div>
+          <div class="dchart">
+            <!-- row 1 -->
+            <div class="dcell"><span class="sg">Pis</span></div>
+            <div class="dcell"><span class="sg">Ari</span></div>
+            <div class="dcell"><span class="sg">Tau</span><div class="pls">Ma</div></div>
+            <div class="dcell"><span class="sg">Gem</span></div>
+            <!-- row 2 -->
+            <div class="dcell"><span class="sg">Aqu</span></div>
+            <div class="dcenter"><div class="t">Sag Lagna</div><div class="s">Moon Mahadasha</div></div>
+            <div class="dcell"><span class="sg">Can</span><div class="pls">Ju Ve Ke<span class="rx"> ℞</span></div></div>
+            <!-- row 3 -->
+            <div class="dcell"><span class="sg">Cap</span><div class="pls">Ra<span class="rx"> ℞</span></div></div>
+            <div class="dcell"><span class="sg">Leo</span><div class="pls">Su Me<span class="rx"> ℞</span></div></div>
+            <!-- row 4 -->
+            <div class="dcell"><span class="sg">Sag</span><div class="pls"><span class="asc">As</span> Mo Sa<span class="rx"> ℞</span></div></div>
+            <div class="dcell"><span class="sg">Sco</span></div>
+            <div class="dcell"><span class="sg">Lib</span></div>
+            <div class="dcell"><span class="sg">Vir</span></div>
+          </div>
+          <p class="prose muted" style="font-size:11.5px;margin-top:9px">Triple Sagittarius 1st (Moon · Saturn · Lagna) — guarded, philosophical. Exalted Jupiter + Venus + Ketu in the 8th (Cancer): hidden gifts through transformation.</p>
+        </div>
+        <div class="card">
+          <div class="sh">Dasha & Look-Ahead <span class="sub">Vimshottari</span></div>
+          <div class="dasha">
+            <div class="drow now"><span class="pd">Moon · Venus<span class="sub">Maha · Antar</span></span><span class="bar"><i style="left:0;width:88%"></i></span><span class="rng">→ Dec 2026 <span class="now-pill">now</span></span></div>
+            <div class="drow"><span class="pd">Moon · Sun<span class="sub">next antar</span></span><span class="bar"><i style="left:0;width:30%"></i></span><span class="rng">Dec–Jun ’27</span></div>
+            <div class="drow"><span class="pd">Mars Maha<span class="sub">chapter change</span></span><span class="bar"><i style="left:0;width:8%"></i></span><span class="rng">Jun 2027 →</span></div>
+          </div>
+          <p class="prose muted" style="font-size:11.5px;margin-top:9px">Venus sub-period = first relationship-warm weather in years. <span class="em">Sade Sati</span> (Small Panoti, Pisces) pressures foundations through Jun 2027.</p>
+        </div>
+      </div>
+
+      <div class="cols2">
+        <div class="card">
+          <div class="sh">Key Focus · Mars</div>
+          <div class="focus"><div class="big">♂</div><div class="b"><div class="h">Darakaraka — the partner significator</div><div class="sub">Taurus · 6th house</div><p>Mars carries your relationships: dynamic, direct, philosophical — possibly foreign. In the 6th, the work is meeting conflict and service before union. Activated when Mars Mahadasha opens June 2027.</p></div></div>
+        </div>
+        <div class="card">
+          <div class="sh">Navamsa · D9 <span class="sub">the marriage / dharma chart</span></div>
+          <div class="d9">
+            <div class="b"><div class="k">D9 Lagna</div><div class="v">Gemini</div><div class="x">Curious, communicative inner blueprint.</div></div>
+            <div class="b"><div class="k">Jupiter + Venus</div><div class="v">Cancer</div><div class="x">Grace & abundance conjunct — the chart's gift.</div></div>
+            <div class="b"><div class="k">Darakaraka Mars</div><div class="v">Aquarius · 9th</div><div class="x">Partner = philosophy / foreign / future-facing.</div></div>
+            <div class="b"><div class="k">Trigger</div><div class="v">TR Jupiter → Cancer</div><div class="x">Jun 2026 double-activates D9 Jup-Ven.</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ MODERN ══ -->
+    <section class="slide" data-lens="modern">
+      <div class="card">
+        <div class="sh">Natal Wheel <span class="sub">tropical · Placidus · all planets</span></div>
+        <svg viewBox="0 0 300 300" id="wheel" style="width:100%;height:auto;max-width:330px;display:block;margin:0 auto"></svg>
+        <div class="legend" id="legend"></div>
+      </div>
+
+      <div class="card">
+        <div class="sh">June Forecast <span class="sub">modern transits</span></div>
+        <div class="fc"><div class="d">~Jun 24</div><div class="b"><div class="h">Jupiter ingress Cancer</div><p>Crosses into your 7th — partnership & shared resources warm and expand. Builds toward the Jupiter return at 2°36′ Leo ~Jul 12.</p></div></div>
+        <div class="fc"><div class="d">All month</div><div class="b"><div class="h">Neptune □ Moon &amp; Ascendant</div><p>Fog over the Capricorn cluster — fatigue, idealization, blurred boundaries. Don't decide identity questions from the haze.</p></div></div>
+        <div class="fc"><div class="d">All month</div><div class="b"><div class="h">Pluto in Aquarius · 2nd house</div><p>Slow transformation of values & self-worth, working the North Node. What you measure yourself by is being rebuilt.</p></div></div>
+      </div>
+
+      <div class="card contrast">
+        <div class="sh">Traditional ↔ Modern</div>
+        <p class="prose">Both languages tell one story. Traditional puts the year in the <span style="font-style:normal;color:var(--gold-br)">12th house of preparation</span> (Jupiter, whole-sign, the Lots hidden in the 12th and 9th). Modern hears the same note in <span style="font-style:normal;color:var(--gold-br)">Neptune's dissolving square</span> and the slow Jupiter return — expansion assembled quietly, off-stage, before August makes it real.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="foot-tag">Three lenses · one chart · mock prototype — not the live PWA</div>
+</div>
+
+<script>
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+
+/* ---- animated solar-system hero ---- */
+(function(){
+  const host=document.getElementById('solar');
+  // decorative orbital system: rings + orbiting planet glyphs
+  const planets=[ // [glyph,color,radius,period(s),startDeg]
+    ['☿','#a78bfa',64,9,20],['♀','#f472b6',86,16,140],['♂','#fb7185',108,26,250],
+    ['♃','#e8c573',132,40,60],['♄','#67e8f9',158,60,310]];
+  planets.forEach(([g,c,r,per,start])=>{
+    const ring=document.createElement('div');ring.className='orb';
+    ring.style.width=ring.style.height=(r*2)+'px';host.insertBefore(ring,host.firstChild);
+    const spin=document.createElement('div');spin.className='spin';
+    spin.style.animationDuration=per+'s';spin.style.transform=`translate(-50%,-50%) rotate(${start}deg)`;
+    const pl=document.createElement('div');pl.className='pl';pl.textContent=g;pl.style.color=c;
+    pl.style.left='0px';pl.style.top=(-r)+'px';
+    spin.appendChild(pl);host.insertBefore(spin,host.querySelector('.label'));
+  });
+})();
+
+/* ---- profection wheel (12 whole-sign houses from Cap ASC) ---- */
+(function(){
+  const svg=document.getElementById('profection'),cx=110,cy=110,rO=98,rI=58;
+  const signs=['Cap','Aqu','Pis','Ari','Tau','Gem','Can','Leo','Vir','Lib','Sco','Sag'];
+  const current=11; // 12th house index (0-based) = Sagittarius
+  for(let i=0;i<12;i++){
+    const a0=(i*30-90)*Math.PI/180, a1=((i+1)*30-90)*Math.PI/180, am=((i+0.5)*30-90)*Math.PI/180;
+    const x0=cx+rO*Math.cos(a0),y0=cy+rO*Math.sin(a0),x1=cx+rO*Math.cos(a1),y1=cy+rO*Math.sin(a1);
+    const xi0=cx+rI*Math.cos(a0),yi0=cy+rI*Math.sin(a0),xi1=cx+rI*Math.cos(a1),yi1=cy+rI*Math.sin(a1);
+    const hot=i===current;
+    el('path',{d:`M${x0} ${y0} A${rO} ${rO} 0 0 1 ${x1} ${y1} L${xi1} ${yi1} A${rI} ${rI} 0 0 0 ${xi0} ${yi0} Z`,
+      fill:hot?'rgba(212,168,87,0.22)':'rgba(255,255,255,0.025)',stroke:hot?'rgba(212,168,87,0.7)':'rgba(255,255,255,0.09)','stroke-width':hot?'1.4':'0.8'},svg);
+    const rm=(rO+rI)/2;
+    const t1=el('text',{x:cx+rm*Math.cos(am),y:cy+rm*Math.sin(am)-3,'text-anchor':'middle','font-size':'10','fill':hot?'#e8c573':'rgba(255,255,255,.55)','font-weight':hot?'700':'400'},svg);t1.textContent=signs[i];
+    const t2=el('text',{x:cx+rm*Math.cos(am),y:cy+rm*Math.sin(am)+9,'text-anchor':'middle','font-size':'8','fill':hot?'#d4a857':'rgba(255,255,255,.3)'},svg);t2.textContent='H'+(i+1);
+  }
+  const cj=el('text',{x:cx,y:cy+4,'text-anchor':'middle','font-size':'22','fill':'#e8c573'},svg);cj.textContent='♃';
+})();
+
+/* ---- modern natal wheel ---- */
+(function(){
+  const svg=document.getElementById('wheel'),cx=150,cy=150,rZodiac=132,rPlanet=108,rHouse=150;
+  // sign ring
+  el('circle',{cx,cy,r:rHouse,fill:'none',stroke:'rgba(212,168,87,.18)','stroke-width':'1'},svg);
+  el('circle',{cx,cy,r:rZodiac,fill:'none',stroke:'rgba(167,139,250,.22)','stroke-width':'1'},svg);
+  el('circle',{cx,cy,r:74,fill:'none',stroke:'rgba(103,232,249,.18)','stroke-width':'1','stroke-dasharray':'2 5'},svg);
+  const SG=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+  // 0° Aries at left (9 o'clock), counter-clockwise. screen angle = 180 - lon
+  const toXY=(lon,r)=>{const a=(180-lon)*Math.PI/180;return [cx+r*Math.cos(a),cy-r*Math.sin(a)];};
+  for(let i=0;i<12;i++){
+    const [lx,ly]=toXY(i*30, (rHouse));
+    el('line',{x1:cx,y1:cy,x2:lx,y2:ly,stroke:'rgba(255,255,255,.05)','stroke-width':'0.7'},svg);
+    const [gx,gy]=toXY(i*30+15,(rZodiac+rHouse)/2);
+    const t=el('text',{x:gx,y:gy+5,'text-anchor':'middle','font-size':'12','fill':'rgba(255,255,255,.5)'},svg);t.textContent=SG[i];
+  }
+  // planets [glyph, lon, color, name, posLabel]
+  const P=[['☉',157.23,'#e8c573','Sun','7°♍ · 8H'],['☽',275.52,'#cbd5e1','Moon','5°♑ · 12H'],
+    ['☿',172.17,'#a78bfa','Mercury','22°♍℞'],['♀',140.8,'#f472b6','Venus','20°♌'],
+    ['♂',59.7,'#fb7185','Mars','29°♉'],['♃',122.6,'#e8c573','Jupiter','2°♌'],
+    ['♄',289.13,'#9aa0b4','Saturn','19°♑℞'],['♅',275.68,'#7dd3fc','Uranus','5°♑℞'],
+    ['♆',281.93,'#67e8f9','Neptune','11°♑℞'],['♇',225.32,'#c084fc','Pluto','15°♏'],
+    ['☊',306.98,'#4ade80','N.Node','6°♒']];
+  // de-clutter Capricorn stack (Moon/Uranus/Neptune/Saturn close): nudge radii
+  const radii={};
+  P.forEach((p)=>{ const key=Math.round(p[1]/8); radii[key]=(radii[key]||0)+1; p.push(radii[key]); });
+  P.forEach(([g,lon,c,,,stack])=>{const r=rPlanet-(stack-1)*16;const [x,y]=toXY(lon,r);
+    el('circle',{cx:x,cy:y,r:2,fill:c},svg);
+    const t=el('text',{x,y:y-7,'text-anchor':'middle','font-size':'13','fill':c},svg);t.textContent=g;});
+  // ASC / MC axis
+  const asc=278.35, mc=213.9;
+  [['ASC',asc,'#67e8f9'],['MC',mc,'#e8c573']].forEach(([lab,lon,c])=>{
+    const [x,y]=toXY(lon,rHouse);el('line',{x1:cx,y1:cy,x2:x,y2:y,stroke:c,'stroke-width':'1.3','stroke-dasharray':'3 3',opacity:'.8'},svg);
+    const [tx,ty]=toXY(lon,rHouse+10);const t=el('text',{x:tx,y:ty+3,'text-anchor':'middle','font-size':'8','fill':c,'font-weight':'700'},svg);t.textContent=lab;});
+  // legend
+  const lg=document.getElementById('legend');
+  P.forEach(([g,,c,name,pos])=>{const d=document.createElement('div');d.className='li';
+    d.innerHTML=`<b style="color:${c}">${g}</b>${name}<span class="pp">${pos}</span>`;lg.appendChild(d);});
+})();
+
+/* ---- lens nav ---- */
+(function(){
+  const nav=document.getElementById('lensnav'),slides=[...document.querySelectorAll('.slide')];
+  nav.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+    const lens=b.dataset.lens;
+    [...nav.children].forEach(x=>x.classList.toggle('on',x===b));
+    slides.forEach(s=>s.classList.toggle('on',s.dataset.lens===lens));
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+  // deep-link: ?lens=trad|vedic|modern
+  const want=new URLSearchParams(location.search).get('lens');
+  if(want){const b=nav.querySelector(`[data-lens="${want}"]`);if(b)b.click();}
+  // swipe
+  let sx=0;const sl=document.getElementById('slides');
+  sl.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
+  sl.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)<50)return;
+    const order=['trad','vedic','modern'];const cur=order.indexOf(document.querySelector('.slide.on').dataset.lens);
+    const ni=Math.max(0,Math.min(2,cur+(dx<0?1:-1)));nav.children[ni].click();});
+})();
+</script>
+</body>
+</html>
