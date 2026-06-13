@@ -1,64 +1,64 @@
 {
- "generated": "2026-06-13T20:06:53Z",
+ "generated": "2026-06-13T21:21:52Z",
  "transits": [
   {
-   "lon": 82.824,
+   "lon": 82.874,
    "sign": "Gem",
    "deg": 22,
    "name": "Sun",
    "rx": false
   },
   {
-   "lon": 64.437,
+   "lon": 65.23,
    "sign": "Gem",
-   "deg": 4,
+   "deg": 5,
    "name": "Moon",
    "rx": false
   },
   {
-   "lon": 107.195,
+   "lon": 107.251,
    "sign": "Can",
    "deg": 17,
    "name": "Mercury",
    "rx": false
   },
   {
-   "lon": 120.453,
+   "lon": 120.514,
    "sign": "Leo",
    "deg": 0,
    "name": "Venus",
    "rx": false
   },
   {
-   "lon": 49.199,
+   "lon": 49.237,
    "sign": "Tau",
    "deg": 19,
    "name": "Mars",
    "rx": false
   },
   {
-   "lon": 116.58,
+   "lon": 116.591,
    "sign": "Can",
    "deg": 26,
    "name": "Jupiter",
    "rx": false
   },
   {
-   "lon": 13.227,
+   "lon": 13.231,
    "sign": "Ari",
    "deg": 13,
    "name": "Saturn",
    "rx": false
   },
   {
-   "lon": 62.796,
+   "lon": 62.799,
    "sign": "Gem",
    "deg": 2,
    "name": "Uranus",
    "rx": false
   },
   {
-   "lon": 4.266,
+   "lon": 4.267,
    "sign": "Ari",
    "deg": 4,
    "name": "Neptune",
@@ -72,7 +72,7 @@
    "rx": true
   },
   {
-   "lon": 332.485,
+   "lon": 332.477,
    "sign": "Pis",
    "deg": 2,
    "name": "Node",
@@ -81,14 +81,14 @@
  ],
  "moon": {
   "phase": "Waning crescent",
-  "illum": 3,
+  "illum": 2,
   "sign": "Gem",
   "waxing": false
  },
  "moonVoid": {
   "void": false,
   "sign": "Gemini",
-  "entersNextHours": 40.3,
+  "entersNextHours": 39.1,
   "nextSign": "Cancer"
  },
  "transitAspects": [
@@ -116,7 +116,7 @@
    "sym": "\u25a1",
    "aspect": "Square",
    "n": "Mercury",
-   "orb": 0.6,
+   "orb": 0.7,
    "applying": false
   },
   {
@@ -194,9 +194,9 @@
   {
    "t": "Moon",
    "rx": false,
-   "sym": "\u26b9",
-   "aspect": "Sextile",
-   "n": "Jupiter",
+   "sym": "\u25b3",
+   "aspect": "Trine",
+   "n": "Node",
    "orb": 1.8,
    "applying": false
   },
@@ -228,12 +228,21 @@
    "applying": false
   },
   {
+   "t": "Moon",
+   "rx": false,
+   "sym": "\u25a1",
+   "aspect": "Square",
+   "n": "Sun",
+   "orb": 2.0,
+   "applying": false
+  },
+  {
    "t": "Sun",
    "rx": false,
    "sym": "\u26b9",
    "aspect": "Sextile",
    "n": "Venus",
-   "orb": 2.0,
+   "orb": 2.1,
    "applying": false
   },
   {
@@ -242,15 +251,15 @@
    "sym": "\u260c",
    "aspect": "Conjunction",
    "n": "Jupiter",
-   "orb": 2.2,
+   "orb": 2.1,
    "applying": true
   },
   {
    "t": "Moon",
    "rx": false,
-   "sym": "\u25b3",
-   "aspect": "Trine",
-   "n": "Node",
+   "sym": "\u26b9",
+   "aspect": "Sextile",
+   "n": "Jupiter",
    "orb": 2.6,
    "applying": false
   },
@@ -273,15 +282,6 @@
    "applying": true
   },
   {
-   "t": "Moon",
-   "rx": false,
-   "sym": "\u25a1",
-   "aspect": "Square",
-   "n": "Sun",
-   "orb": 2.8,
-   "applying": false
-  },
-  {
    "t": "Node",
    "rx": true,
    "sym": "\u25a1",
@@ -296,7 +296,7 @@
    "sym": "\u25b3",
    "aspect": "Trine",
    "n": "Mercury",
-   "orb": 3.0,
+   "orb": 2.9,
    "applying": true
   },
   {
@@ -327,15 +327,6 @@
    "applying": false
   },
   {
-   "t": "Moon",
-   "rx": false,
-   "sym": "\u260c",
-   "aspect": "Conjunction",
-   "n": "Mars",
-   "orb": 4.7,
-   "applying": false
-  },
-  {
    "t": "Node",
    "rx": true,
    "sym": "\u260d",
@@ -362,7 +353,7 @@
    "n": "Mercury",
    "rx": false,
    "aspect": "Square",
-   "orb": 0.6,
+   "orb": 0.7,
    "applying": false,
    "text": "lights up your mind \u2014 productive friction."
   },
@@ -393,6 +384,7 @@
   "label": "PREPARATION",
   "subtitle": "12th-house Sagittarius year \u00b7 lord Jupiter \u00b7 78 days to the Capricorn turn"
  },
+ "synthesis": "All four lenses converge \u2014 build quietly and refine now, don't perform; expansion opens at the Jupiter return (29d), a new chapter at the Capricorn turn (78d).",
  "forecast": [
   {
    "label": "New Moon",
