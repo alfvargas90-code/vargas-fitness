@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-13T02:35:25-05:00",
-  "data_hash": "b6969362455e269f",
-  "slot": "macros-update",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new food entry only begins to move the day out of a very low-input start, while recovery still reads subdued. For muscle retention, the day now favors steady catch-up and controlled output over intensity.\n\nQuiet rebuild.\n\nPerformance: Quiet rebuild.\n\nTransit: none",
+  "generated_at": "2026-06-13T04:00:00-05:00",
+  "data_hash": "afb9a9d7550fd737",
+  "slot": "sleep",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nLast night gave you enough sleep, but not much restoration, so the day opens with a thin reserve. For muscle gain while trimming fat, this state favors steady effort and adequate nourishment over heavy strain or a deep deficit.\n\nQuiet momentum.\n\nPerformance: Quiet momentum.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new food entry only begins to move the day out of a very low-input start, while recovery still reads subdued. For muscle retention, the day now favors steady catch-up and controlled output over intensity.\n\nQuiet rebuild."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nLast night gave you enough sleep, but not much restoration, so the day opens with a thin reserve. For muscle gain while trimming fat, this state favors steady effort and adequate nourishment over heavy strain or a deep deficit.\n\nQuiet momentum."
     },
     {
       "label": "Performance",
-      "text": "Quiet rebuild."
+      "text": "Quiet momentum."
     },
     {
       "label": "Transit",
@@ -23,8 +23,8 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new food entry only begins to move the day out of a very low-input start, while recovery still reads subdued. For muscle retention, the day now favors steady catch-up and controlled output over intensity.\n\nQuiet rebuild.",
-    "performance": "Quiet rebuild.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nLast night gave you enough sleep, but not much restoration, so the day opens with a thin reserve. For muscle gain while trimming fat, this state favors steady effort and adequate nourishment over heavy strain or a deep deficit.\n\nQuiet momentum.",
+    "performance": "Quiet momentum.",
     "transit": null
   },
   "nutrition_nudge": "",
