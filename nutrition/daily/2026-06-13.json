@@ -1,6 +1,6 @@
 {
   "date": "2026-06-13",
-  "synced_at": "2026-06-13T18:38:28+00:00",
+  "synced_at": "2026-06-13T19:08:35+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 180.0,
-    "protein_g": 6.0,
-    "carbs_g": 36.0,
-    "fat_g": 1.0
+    "calories": 1330.0,
+    "protein_g": 61.0,
+    "carbs_g": 121.0,
+    "fat_g": 66.0
   },
-  "meal_count": 1,
+  "meal_count": 2,
   "raw": {
     "date": "2026-06-13",
     "meals": [
@@ -26,13 +26,22 @@
         "fat": 1,
         "carbs": 36,
         "emoji": "\u00f0\u009f\u008d\u009e"
+      },
+      {
+        "title": "Raising Cane's Meal",
+        "time": "13:44",
+        "calories": 1150,
+        "protein": 55,
+        "fat": 65,
+        "carbs": 85,
+        "emoji": "\u00f0\u009f\u008d\u0097"
       }
     ],
     "totals": {
-      "calories": 180,
-      "protein": 6,
-      "fat": 1,
-      "carbs": 36
+      "calories": 1330,
+      "protein": 61,
+      "fat": 66,
+      "carbs": 121
     },
     "targets": {
       "calories": 2574,
@@ -41,14 +50,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 2394,
+      "calories": 1244,
       "is_over": false
     },
-    "meal_count": 1,
+    "meal_count": 2,
     "labels": {
       "header": "Today",
-      "calories_remaining": "2394 kcal remaining today",
-      "meals_logged": "1 meals logged",
+      "calories_remaining": "1244 kcal remaining today",
+      "meals_logged": "2 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
