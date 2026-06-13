@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-12T23:46:20-05:00",
-  "score": 23,
+  "generated_at": "2026-06-13T00:16:34-05:00",
+  "score": 20,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
   "physiology": {
@@ -8,11 +8,11 @@
     "rhr_delta_bpm": 2,
     "sleep_score": 72
   },
-  "workout_intensity": "moderate",
+  "workout_intensity": "rest",
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Taurus",
-    "degree": "24\u00b0 Tau 46'",
+    "degree": "25\u00b0 Tau 05'",
     "phase": "Waning Crescent",
     "next_sign_change": {
       "sign": "Gemini",
@@ -30,14 +30,14 @@
       "max": 55
     },
     "body": {
-      "filled": 6,
+      "filled": 5,
       "total": 10,
-      "points": 23,
+      "points": 20,
       "max": 40
     }
   },
   "transit_detail": {
-    "moon_longitude": 54.76,
+    "moon_longitude": 55.08,
     "moon_sign": "Taurus",
     "moon_phase": "Waning Crescent",
     "moon_house_natal": 4,
@@ -45,20 +45,19 @@
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 23,
+    "raw_score": 20,
     "transit_points": 0,
-    "physiology_points": 23,
+    "physiology_points": 20,
     "breakdown": [
       "+10 HRV -22% below baseline",
       "+5 RHR +2 bpm vs baseline",
-      "+5 Sleep score 72 (70-80)",
-      "+3 Moderate-intensity day"
+      "+5 Sleep score 72 (70-80)"
     ],
     "baselines": {
       "hrv_7d": 59.1,
       "rhr_7d": 56.9
     },
-    "active_calories": 752,
+    "active_calories": null,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
