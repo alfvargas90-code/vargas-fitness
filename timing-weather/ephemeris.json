@@ -1,0 +1,340 @@
+{
+ "generated": "2026-06-13T17:27:28Z",
+ "transits": [
+  {
+   "lon": 82.718,
+   "sign": "Gem",
+   "deg": 22,
+   "name": "Sun",
+   "rx": false
+  },
+  {
+   "lon": 62.754,
+   "sign": "Gem",
+   "deg": 2,
+   "name": "Moon",
+   "rx": false
+  },
+  {
+   "lon": 107.076,
+   "sign": "Can",
+   "deg": 17,
+   "name": "Mercury",
+   "rx": false
+  },
+  {
+   "lon": 120.324,
+   "sign": "Leo",
+   "deg": 0,
+   "name": "Venus",
+   "rx": false
+  },
+  {
+   "lon": 49.118,
+   "sign": "Tau",
+   "deg": 19,
+   "name": "Mars",
+   "rx": false
+  },
+  {
+   "lon": 116.558,
+   "sign": "Can",
+   "deg": 26,
+   "name": "Jupiter",
+   "rx": false
+  },
+  {
+   "lon": 13.22,
+   "sign": "Ari",
+   "deg": 13,
+   "name": "Saturn",
+   "rx": false
+  },
+  {
+   "lon": 62.789,
+   "sign": "Gem",
+   "deg": 2,
+   "name": "Uranus",
+   "rx": false
+  },
+  {
+   "lon": 4.265,
+   "sign": "Ari",
+   "deg": 4,
+   "name": "Neptune",
+   "rx": false
+  },
+  {
+   "lon": 305.192,
+   "sign": "Aqu",
+   "deg": 5,
+   "name": "Pluto",
+   "rx": true
+  },
+  {
+   "lon": 332.503,
+   "sign": "Pis",
+   "deg": 2,
+   "name": "Node",
+   "rx": true
+  }
+ ],
+ "moon": {
+  "phase": "Waning crescent",
+  "illum": 3,
+  "sign": "Gem",
+  "waxing": false
+ },
+ "transitAspects": [
+  {
+   "t": "Mars",
+   "rx": false,
+   "sym": "\u25b3",
+   "aspect": "Trine",
+   "n": "Saturn",
+   "orb": 0.0,
+   "applying": false
+  },
+  {
+   "t": "Moon",
+   "rx": false,
+   "sym": "\u26b9",
+   "aspect": "Sextile",
+   "n": "Jupiter",
+   "orb": 0.1,
+   "applying": false
+  },
+  {
+   "t": "Uranus",
+   "rx": false,
+   "sym": "\u26b9",
+   "aspect": "Sextile",
+   "n": "Jupiter",
+   "orb": 0.2,
+   "applying": false
+  },
+  {
+   "t": "Sun",
+   "rx": false,
+   "sym": "\u25a1",
+   "aspect": "Square",
+   "n": "Mercury",
+   "orb": 0.5,
+   "applying": false
+  },
+  {
+   "t": "Venus",
+   "rx": false,
+   "sym": "\u26b9",
+   "aspect": "Sextile",
+   "n": "Mars",
+   "orb": 0.6,
+   "applying": false
+  },
+  {
+   "t": "Saturn",
+   "rx": false,
+   "sym": "\u25a1",
+   "aspect": "Square",
+   "n": "Neptune",
+   "orb": 1.3,
+   "applying": false
+  },
+  {
+   "t": "Neptune",
+   "rx": false,
+   "sym": "\u25a1",
+   "aspect": "Square",
+   "n": "Moon",
+   "orb": 1.3,
+   "applying": true
+  },
+  {
+   "t": "Pluto",
+   "rx": true,
+   "sym": "\u25a1",
+   "aspect": "Square",
+   "n": "MC",
+   "orb": 1.3,
+   "applying": true
+  },
+  {
+   "t": "Neptune",
+   "rx": false,
+   "sym": "\u25a1",
+   "aspect": "Square",
+   "n": "Uranus",
+   "orb": 1.4,
+   "applying": true
+  },
+  {
+   "t": "Node",
+   "rx": true,
+   "sym": "\u25b3",
+   "aspect": "Trine",
+   "n": "MC",
+   "orb": 1.4,
+   "applying": false
+  },
+  {
+   "t": "Mercury",
+   "rx": false,
+   "sym": "\u25b3",
+   "aspect": "Trine",
+   "n": "Pluto",
+   "orb": 1.7,
+   "applying": false
+  },
+  {
+   "t": "Mars",
+   "rx": false,
+   "sym": "\u25a1",
+   "aspect": "Square",
+   "n": "Venus",
+   "orb": 1.7,
+   "applying": true
+  },
+  {
+   "t": "Neptune",
+   "rx": false,
+   "sym": "\u25b3",
+   "aspect": "Trine",
+   "n": "Jupiter",
+   "orb": 1.7,
+   "applying": false
+  },
+  {
+   "t": "Pluto",
+   "rx": true,
+   "sym": "\u260c",
+   "aspect": "Conjunction",
+   "n": "Node",
+   "orb": 1.8,
+   "applying": false
+  },
+  {
+   "t": "Sun",
+   "rx": false,
+   "sym": "\u26b9",
+   "aspect": "Sextile",
+   "n": "Venus",
+   "orb": 1.9,
+   "applying": false
+  },
+  {
+   "t": "Mercury",
+   "rx": false,
+   "sym": "\u260d",
+   "aspect": "Opposition",
+   "n": "Saturn",
+   "orb": 2.1,
+   "applying": true
+  },
+  {
+   "t": "Venus",
+   "rx": false,
+   "sym": "\u260c",
+   "aspect": "Conjunction",
+   "n": "Jupiter",
+   "orb": 2.3,
+   "applying": true
+  },
+  {
+   "t": "Pluto",
+   "rx": true,
+   "sym": "\u260d",
+   "aspect": "Opposition",
+   "n": "Jupiter",
+   "orb": 2.6,
+   "applying": true
+  },
+  {
+   "t": "Neptune",
+   "rx": false,
+   "sym": "\u26b9",
+   "aspect": "Sextile",
+   "n": "Node",
+   "orb": 2.7,
+   "applying": true
+  },
+  {
+   "t": "Node",
+   "rx": true,
+   "sym": "\u25a1",
+   "aspect": "Square",
+   "n": "Mars",
+   "orb": 2.8,
+   "applying": true
+  },
+  {
+   "t": "Moon",
+   "rx": false,
+   "sym": "\u260c",
+   "aspect": "Conjunction",
+   "n": "Mars",
+   "orb": 3.1,
+   "applying": false
+  },
+  {
+   "t": "Mars",
+   "rx": false,
+   "sym": "\u25b3",
+   "aspect": "Trine",
+   "n": "Mercury",
+   "orb": 3.1,
+   "applying": true
+  },
+  {
+   "t": "Uranus",
+   "rx": false,
+   "sym": "\u260c",
+   "aspect": "Conjunction",
+   "n": "Mars",
+   "orb": 3.1,
+   "applying": false
+  },
+  {
+   "t": "Venus",
+   "rx": false,
+   "sym": "\u25a1",
+   "aspect": "Square",
+   "n": "MC",
+   "orb": 3.6,
+   "applying": true
+  },
+  {
+   "t": "Mars",
+   "rx": false,
+   "sym": "\u260d",
+   "aspect": "Opposition",
+   "n": "Pluto",
+   "orb": 3.8,
+   "applying": false
+  },
+  {
+   "t": "Node",
+   "rx": true,
+   "sym": "\u260d",
+   "aspect": "Opposition",
+   "n": "Sun",
+   "orb": 4.7,
+   "applying": false
+  }
+ ],
+ "natalTropical": {
+  "Sun": 157.242,
+  "Moon": 275.531,
+  "Mercury": 172.178,
+  "Venus": 140.803,
+  "Mars": 59.702,
+  "Jupiter": 122.611,
+  "Saturn": 289.142,
+  "Uranus": 275.693,
+  "Neptune": 281.95,
+  "Pluto": 225.331,
+  "Node": 306.99,
+  "ASC": 278.366,
+  "MC": 213.902
+ },
+ "engine": "Swiss Ephemeris 2.10.03"
+}

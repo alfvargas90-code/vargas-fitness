@@ -14,21 +14,28 @@ import os, subprocess, importlib.util
 
 REPO = "/Volumes/Alfie&Co2/alfredo.v/04_Projects/fitness-dashboard"
 SUBDIR = os.path.join(REPO, "timing-weather/design_exploration_2026-06-12")
-REL = "timing-weather/design_exploration_2026-06-12/ephemeris.json"
+LIVE = os.path.join(REPO, "timing-weather")        # the live PWA serves ephemeris.json from here
+# refresh BOTH the live PWA copy and the dev/exploration copy
+RELS = ["timing-weather/ephemeris.json",
+        "timing-weather/design_exploration_2026-06-12/ephemeris.json"]
 
 def git(*a):
     return subprocess.run(["git", "-C", REPO, *a], capture_output=True, text=True)
 
-def main():
-    # 1) regenerate ephemeris.json (writes to SUBDIR cwd)
-    os.chdir(SUBDIR)
+def regen(outdir):
+    os.chdir(outdir)
     spec = importlib.util.spec_from_file_location("ephem", os.path.join(SUBDIR, "ephemeris.py"))
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     mod.main()
 
-    # 2) commit + push only the json (rebase to avoid racing the other auto-commit jobs)
-    git("add", REL)
+def main():
+    # 1) regenerate ephemeris.json into the live PWA dir AND the exploration dir
+    regen(LIVE)
+    regen(SUBDIR)
+
+    # 2) commit + push only the json files (rebase to avoid racing the other auto-commit jobs)
+    git("add", *RELS)
     if git("diff", "--cached", "--quiet").returncode == 0:
         print("no change")
         return

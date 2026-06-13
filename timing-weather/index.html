@@ -1,434 +1,763 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Timing Weather</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Timing Weather</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-  <meta name="theme-color" content="#030404" />
+  <meta name="theme-color" content="#06070a" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Timing" />
-  <link rel="stylesheet" href="assets/css/timing-weather.css?v=v3.2.0-bazi" />
-
-  <!-- ── Self-healing cache buster (Layers 1+3) ─────────────────────────────────
-       Runs before any other JS. Compares this device's stored version against the
-       live version.json; on a mismatch it nukes caches and reloads ONCE so a stale
-       home-screen PWA can never pin an old build. First visit never reloads.
-       Wrapped in try/catch — a failure here must never block the page from loading.
-       Escape hatch: append ?clear=1 to the URL to fully reset every storage layer.
-       Docs: docs/cache-busting.md -->
+  <!-- Self-healing cache buster + service worker (preserved from prior PWA; docs/cache-busting.md) -->
   <script>
 (async () => {
   try {
     const url = new URL(window.location.href);
     if (url.searchParams.get('clear') === '1') {
-      // Emergency nuke — wipe every client-side storage layer, then reload clean.
       try { const dbs = (await indexedDB.databases?.()) || [];
             await Promise.all(dbs.map(db => indexedDB.deleteDatabase(db.name))); } catch (e) {}
-      if ('caches' in window) {
-        const keys = await caches.keys();
-        await Promise.all(keys.map(k => caches.delete(k)));
-      }
-      if ('serviceWorker' in navigator) {
-        const regs = await navigator.serviceWorker.getRegistrations();
-        await Promise.all(regs.map(r => r.unregister()));
-      }
+      if ('caches' in window) { const keys = await caches.keys(); await Promise.all(keys.map(k => caches.delete(k))); }
+      if ('serviceWorker' in navigator) { const regs = await navigator.serviceWorker.getRegistrations(); await Promise.all(regs.map(r => r.unregister())); }
       try { localStorage.clear(); sessionStorage.clear(); } catch (e) {}
       url.searchParams.delete('clear');
       window.location.replace(url.pathname + url.search + (url.search ? '&' : '?') + 't=' + Date.now());
       return;
     }
-
     const resp = await fetch('version.json?t=' + Date.now(), { cache: 'no-store' });
     if (!resp.ok) return;
     const remote = await resp.json();
     const local = localStorage.getItem('dashboard_version');
     if (local !== remote.version) {
-      if ('caches' in window) {
-        const keys = await caches.keys();
-        await Promise.all(keys.map(k => caches.delete(k)));
-      }
+      if ('caches' in window) { const keys = await caches.keys(); await Promise.all(keys.map(k => caches.delete(k))); }
       localStorage.setItem('dashboard_version', remote.version);
-      if (local !== null) {
-        // Only reload if they've been here before — first visit must not loop.
-        window.location.reload();
-        return;
-      }
+      if (local !== null) { window.location.reload(); return; }
     }
-
-    // Layer 3 — register the service worker (feature-detected, never fatal).
-    if ('serviceWorker' in navigator) {
-      try { await navigator.serviceWorker.register('sw.js'); } catch (e) {}
-    }
-  } catch (e) { /* silent — never block page load on the cache check */ }
+    if ('serviceWorker' in navigator) { try { await navigator.serviceWorker.register('sw.js'); } catch (e) {} }
+  } catch (e) { /* never block load */ }
 })();
   </script>
+
+<!-- THREE-LENS DASHBOARD (v1)
+     Animated solar-system hero spanning the top, then three swipeable lenses:
+     Traditional (transits/aspects + profection wheel + Hellenistic Lots),
+     Vedic (D1 Rasi chart + dasha + Mars focus + D9), Modern (tropical wheel +
+     June transit forecast + contrast). Gold solar aesthetic. Real natal data
+     for Alfredo Vargas (1990-08-30, 16:22 CDT, Chicago). Mockup — live PWA untouched. -->
+<style>
+:root{
+  --bg:#06070a;--bg2:#0a0c14;
+  --card:rgba(255,255,255,.04);--card2:rgba(255,255,255,.06);--border:rgba(255,255,255,.09);--line:rgba(255,255,255,.06);
+  --gold:#d4a857;--gold-br:#e8c573;--gold-deep:#7a5a18;
+  --green:#4ade80;--orange:#f59e0b;--cyan:#67e8f9;--red:#f87171;--violet:#a78bfa;--pink:#f472b6;--coral:#fb7185;
+  --t:rgba(255,255,255,.92);--t2:rgba(255,255,255,.55);--t3:rgba(255,255,255,.34);
+  /* "Apple Symbols" / "Segoe UI Symbol" supply MONOCHROME text glyphs for zodiac + planets,
+     so the browser uses those instead of falling back to the color-emoji font. */
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,"Apple Symbols","Segoe UI Symbol","Noto Sans Symbols2",sans-serif;
+  --serif:"Iowan Old Style",Georgia,"Times New Roman",serif;
+  --mono:"SF Mono",ui-monospace,Menlo,monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+/* SVG chart text (wheel signs, planet glyphs) must use the symbol-inclusive stack too */
+svg text{font-family:var(--sans);font-variant-emoji:text}
+html,body{width:100%}
+body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;
+  font-variant-emoji:text;text-rendering:optimizeLegibility;
+  background:radial-gradient(1100px 560px at 50% -4%,rgba(212,168,87,.13),transparent 56%),
+    radial-gradient(700px 420px at 50% 4%,rgba(232,197,115,.05),transparent 60%),
+    linear-gradient(180deg,var(--bg),var(--bg2));background-attachment:fixed;padding-bottom:40px}
+.shell{max-width:760px;margin:0 auto;padding:0 16px}
+
+/* header */
+.hdr{display:flex;align-items:center;gap:12px;padding:14px 4px 8px}
+.hdr .menu{font-size:18px;color:var(--t2);width:30px}
+.hdr .tt{flex:1;text-align:center}
+.hdr .tt h1{font-size:12px;letter-spacing:.34em;font-weight:700}
+.hdr .tt h1::before{content:"☼ ";color:var(--gold);letter-spacing:0}
+.hdr .tt .d{font-size:10px;color:var(--t2);margin-top:2px}
+.hdr .dots{width:30px}
+
+/* CINEMATIC SOLAR-SYSTEM HERO — tilted orbital plane + starfield + luminous sun */
+.solar{position:relative;height:300px;margin:2px -16px 8px;overflow:hidden}
+#starfield{position:absolute;inset:0;z-index:0;pointer-events:none}
+.solar .neb{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(55% 62% at 50% 56%,rgba(212,168,87,.13),transparent 72%),
+    radial-gradient(46% 46% at 26% 42%,rgba(167,139,250,.10),transparent 72%),
+    radial-gradient(42% 46% at 76% 50%,rgba(103,232,249,.07),transparent 72%)}
+.solar .vig{position:absolute;inset:0;z-index:4;pointer-events:none;
+  background:radial-gradient(82% 92% at 50% 44%,transparent 54%,rgba(6,7,10,.7))}
+/* the orbital plane is squashed vertically (scaleY) → circles read as ellipses seen at an angle */
+.field{position:absolute;left:50%;top:150px;width:0;height:0;z-index:1;transform:translate(-50%,-50%) scaleY(.46)}
+.orb{position:absolute;left:50%;top:50%;border-radius:50%;border:1px solid rgba(255,255,255,.07);transform:translate(-50%,-50%)}
+.spin{position:absolute;left:50%;top:50%;width:0;height:0;transform:translate(-50%,-50%);animation:spin linear infinite}
+.spin .pl{position:absolute;left:0;transform:translate(-50%,-50%) scaleY(2.17);font-size:14px;filter:drop-shadow(0 0 6px currentColor)}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.sun{position:absolute;left:50%;top:150px;width:120px;height:120px;border-radius:50%;margin:-60px 0 0 -60px;z-index:2;
+  background:radial-gradient(circle at 42% 38%,#FFFEF4 0%,#FFF1B3 14%,#FFD659 32%,#E8A93A 56%,#B5630C 82%,#6e3b08 100%);
+  box-shadow:0 0 64px rgba(255,218,109,.6),0 0 140px rgba(232,197,115,.42),0 0 250px rgba(212,168,87,.3),
+    inset -18px -24px 52px rgba(150,60,0,.6),inset 9px 9px 28px rgba(255,252,220,.55);animation:breathe 7s ease-in-out infinite}
+.sun::before{content:"";position:absolute;inset:-16px;border-radius:50%;z-index:-1;
+  background:radial-gradient(circle,rgba(255,214,89,.34),transparent 66%);animation:corona 7s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+@keyframes corona{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.14)}}
+.solar .label{position:absolute;left:0;right:0;bottom:14px;text-align:center;z-index:5}
+.solar .label .ph{font-size:36px;font-weight:800;letter-spacing:.14em;color:var(--gold-br);text-transform:uppercase;
+  text-shadow:0 0 32px rgba(212,168,87,.55),0 2px 22px rgba(0,0,0,.7)}
+.solar .label .sub{font-size:11px;color:var(--t2);margin-top:3px;text-shadow:0 1px 8px rgba(0,0,0,.85)}
+
+/* lens nav */
+.lensnav{display:flex;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:5px;margin:6px 0 16px}
+.lensnav button{flex:1;background:transparent;border:0;color:var(--t2);font-family:var(--sans);font-size:12.5px;font-weight:600;letter-spacing:.02em;padding:9px 4px;border-radius:10px;cursor:pointer;transition:.2s}
+.lensnav button .sm{display:block;font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-top:2px}
+.lensnav button.on{background:linear-gradient(180deg,rgba(212,168,87,.18),rgba(212,168,87,.08));color:var(--gold-br);box-shadow:inset 0 0 0 1px rgba(212,168,87,.3)}
+.lensnav button.on .sm{color:var(--gold)}
+
+/* slides */
+.slides{position:relative}
+.slide{display:none;animation:fade .35s ease}
+.slide.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* shared cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 14px 38px rgba(0,0,0,.4);margin-bottom:14px}
+.sh{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.sh .sub{margin-left:auto;font-size:9px;font-weight:600;color:var(--t3);letter-spacing:.06em}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.cols2{grid-template-columns:1fr}}
+.prose{font-size:13.5px;line-height:1.66;color:var(--t)}
+.prose .em{color:var(--coral);font-style:italic}
+.muted{color:var(--t2)}
+
+/* transit/aspect rows */
+.trow{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.trow:last-child{border-bottom:none}
+.trow .g{font-size:16px;width:24px;text-align:center;flex:0 0 auto;color:var(--gold)}
+.trow .b{flex:1}
+.trow .b .h{font-size:13px;font-weight:600}
+.trow .b .h .sym{color:var(--violet)}
+.trow .b .x{font-size:11.5px;color:var(--t2);line-height:1.5;margin-top:2px}
+.trow .tag{font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:10px;flex:0 0 auto;align-self:center}
+.tag-ch{background:rgba(245,158,11,.14);color:var(--orange)}.tag-su{background:rgba(74,222,128,.14);color:var(--green)}.tag-nu{background:rgba(167,139,250,.14);color:var(--violet)}
+
+/* lots */
+.lots{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:560px){.lots{grid-template-columns:1fr}}
+.lot{background:var(--card2);border:1px solid var(--border);border-radius:13px;padding:13px;text-align:center}
+.lot .name{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.lot .glyph{font-size:20px;margin:6px 0 3px;color:var(--gold-br)}
+.lot .pos{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.lot .hs{font-size:10px;color:var(--t3);margin-top:1px}
+.lot .mean{font-size:11px;color:var(--t2);line-height:1.5;margin-top:8px;border-top:1px solid var(--line);padding-top:8px}
+
+/* South Indian Vedic chart */
+.dchart{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,58px);gap:2px;background:rgba(212,168,87,.14);border:1px solid rgba(212,168,87,.3);border-radius:8px;padding:2px}
+.dcell{background:var(--bg2);border-radius:3px;padding:4px 5px;position:relative;overflow:hidden}
+.dcell .sg{position:absolute;top:2px;right:4px;font-size:8px;color:var(--t3);letter-spacing:.04em}
+.dcell .pls{font-size:11px;line-height:1.32;font-weight:600;color:var(--gold-br)}
+.dcell .pls .asc{color:var(--cyan)}.dcell .pls .rx{color:var(--coral);font-size:8px}.dcell .pls .exalt{color:var(--green);font-size:10px;font-weight:700}
+.dcenter{grid-column:2/4;grid-row:2/4;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.dcenter .t{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.dcenter .s{font-size:9px;color:var(--t3);margin-top:3px}
+
+/* dasha timeline */
+.dasha{display:flex;flex-direction:column;gap:0}
+.drow{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+.drow:last-child{border-bottom:none}
+.drow.now{background:linear-gradient(90deg,rgba(212,168,87,.1),transparent);border-radius:8px;padding-left:8px;margin-left:-8px}
+.drow .pd{font-size:12px;font-weight:700;width:96px;flex:0 0 auto}
+.drow .pd .sub{display:block;font-size:9px;color:var(--t3);font-weight:400}
+.drow .bar{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.06);position:relative;overflow:hidden}
+.drow .bar i{position:absolute;height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold-deep),var(--gold))}
+.drow .rng{font-size:9.5px;color:var(--t2);width:84px;text-align:right;flex:0 0 auto;font-variant-numeric:tabular-nums}
+.now-pill{font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(212,168,87,.4);border-radius:9px;padding:2px 6px;margin-left:6px}
+
+/* focus card */
+.focus{display:flex;gap:14px;align-items:flex-start}
+.focus .big{font-size:36px;color:var(--coral);line-height:1;filter:drop-shadow(0 0 8px rgba(251,113,133,.4))}
+.focus .b .h{font-size:14px;font-weight:700;color:var(--coral)}
+.focus .b .sub{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin:2px 0 7px}
+.focus .b p{font-size:12.5px;line-height:1.6;color:var(--t2)}
+
+/* badges grid for D9 */
+.d9{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.d9 .b{background:var(--card2);border:1px solid var(--border);border-radius:11px;padding:10px 12px}
+.d9 .b .k{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--t3)}
+.d9 .b .v{font-size:13px;font-weight:700;color:var(--gold-br);margin-top:2px}
+.d9 .b .x{font-size:10.5px;color:var(--t2);margin-top:3px;line-height:1.45}
+
+/* legend for wheel */
+.legend{display:grid;grid-template-columns:repeat(2,1fr);gap:5px 14px;margin-top:12px}
+.legend .li{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--t2)}
+.legend .li b{font-family:var(--serif);font-size:14px;font-weight:400;width:18px;text-align:center}
+.legend .li .pp{margin-left:auto;font-variant-numeric:tabular-nums;color:var(--t3);font-size:10px}
+
+/* forecast list */
+.fc{display:flex;gap:11px;padding:10px 0;border-bottom:1px solid var(--line)}
+.fc:last-child{border-bottom:none}
+.fc .d{font-size:10px;font-weight:700;color:var(--gold);width:54px;flex:0 0 auto;text-align:center;padding-top:2px}
+.fc .b .h{font-size:13px;font-weight:600}
+.fc .b p{font-size:11.5px;color:var(--t2);line-height:1.5;margin-top:2px}
+.contrast{background:linear-gradient(160deg,rgba(212,168,87,.1),rgba(167,139,250,.05));border-color:rgba(212,168,87,.25)}
+.contrast .prose{font-style:italic;color:var(--gold-br)}
+
+.foot-tag{text-align:center;font-size:10px;color:var(--t3);margin-top:8px;letter-spacing:.03em}
+
+/* BaZi — four pillars */
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pillar{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:11px 6px 10px;text-align:center;position:relative}
+.pillar.self{border-color:rgba(212,168,87,.5);box-shadow:0 0 0 1px rgba(212,168,87,.25),0 0 18px rgba(212,168,87,.12)}
+.pillar .self-tag{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:7.5px;letter-spacing:.05em;text-transform:uppercase;background:var(--gold);color:#1a1206;border-radius:8px;padding:2px 7px;font-weight:700;white-space:nowrap}
+.pillar .plab{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
+.pillar.self .plab{color:var(--gold)}
+.pillar .han{font-size:30px;line-height:1.05;font-family:var(--serif)}
+.pillar .pinyin{font-size:10px;color:var(--t2);margin-top:1px}
+.pillar .elem{font-size:8px;letter-spacing:.03em;text-transform:uppercase;margin-top:2px}
+.pillar .branch{margin-top:9px;padding-top:9px;border-top:1px solid var(--line)}
+.pillar .animal{font-size:11px;color:var(--t);font-weight:600;margin-top:3px}
+.pillar .hidden{font-size:8.5px;color:var(--t3);margin-top:8px}
+.el-wood{color:#5be3a7}.el-fire{color:#fb7185}.el-earth{color:#e8c573}.el-metal{color:#cbd5e1}.el-water{color:#7dd3fc}
+/* five elements */
+.elbars{display:flex;flex-direction:column;gap:10px}
+.elbar{display:grid;grid-template-columns:118px 1fr 18px;align-items:center;gap:9px;font-size:11px}
+.elbar .en{display:flex;align-items:center;gap:7px;color:var(--t2)}
+.elbar .en .han{font-family:var(--serif);font-size:15px}
+.elbar .tr{height:7px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden}
+.elbar .tr i{display:block;height:100%;border-radius:4px}
+.elbar .ct{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+
+/* moon phase + current sky (hero) */
+.skybar{position:absolute;left:0;right:0;top:8px;z-index:5;display:flex;justify-content:center;gap:14px;font-size:10px;color:var(--t2);text-shadow:0 1px 6px rgba(0,0,0,.9)}
+.skybar .it{display:inline-flex;align-items:center;gap:6px}
+.moondisc{width:15px;height:15px;border-radius:50%;background:#0c0c14;position:relative;overflow:hidden;box-shadow:0 0 8px rgba(232,197,115,.35),inset 0 0 0 1px rgba(255,255,255,.12)}
+.moondisc i{position:absolute;inset:0;background:radial-gradient(circle at 35% 35%,#fff,#d9d2b0 70%,#b8b090)}
+.live-chip{display:inline-flex;align-items:center;gap:5px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--green)}
+.live-chip .dot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green)}
+
+/* aspect grid */
+.asp{display:flex;flex-direction:column}
+.asprow{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.asprow:last-child{border-bottom:none}
+.asprow .pair b{font-family:var(--sans)}
+.asprow .sym{font-size:15px;color:var(--violet)}
+.asprow .orb{font-size:10px;color:var(--t3);font-variant-numeric:tabular-nums}
+.asprow .nm{font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);width:74px;text-align:right}
+.asp .hard .sym{color:var(--orange)}.asp .soft .sym{color:var(--cyan)}.asp .conj .sym{color:var(--gold-br)}
+
+/* lord of year */
+.loy{display:flex;gap:14px;align-items:flex-start}
+.loy .big{font-size:34px;color:var(--gold-br);line-height:1;filter:drop-shadow(0 0 8px rgba(212,168,87,.4))}
+.loy .b .h{font-size:14px;font-weight:700;color:var(--gold-br)}
+.loy .b .sub{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin:2px 0 7px}
+.loy .b p{font-size:12.5px;line-height:1.6;color:var(--t2)}
+
+/* ── DESKTOP / iPad: wider shell, grander hero, denser rows ── */
+@media(min-width:860px){
+  .shell{max-width:1040px;padding:0 28px}
+  .solar{height:360px;margin:6px -28px 14px}
+  .sun{width:150px;height:150px;margin:-75px 0 0 -75px;top:180px}
+  .field{top:180px}
+  .solar .label .ph{font-size:52px;letter-spacing:.16em}
+  .solar .label{bottom:24px}
+  .lensnav button{font-size:14px;padding:12px}
+  .lensnav button .sm{font-size:9.5px}
+  .cols2{grid-template-columns:1fr 1fr}     /* keep two-up on wide screens */
+  .lots{grid-template-columns:repeat(3,1fr)}
+  .dchart{grid-template-rows:repeat(4,72px)}
+}
+</style>
 </head>
 <body>
-  <div class="timing-weather-shell">
+<div class="shell">
 
-    <!-- Row 0: Header chrome (full bleed) — preserved per spec -->
-    <header class="row row--bleed header-chrome">
-      <button class="header-menu" aria-label="Menu">≡</button>
-      <div class="header-title-block">
-        <h1 class="header-title">TIMING WEATHER</h1>
-        <p class="header-date" id="header-date">—</p>
-      </div>
-      <div class="header-status" aria-hidden="true">
-        <span class="status-dot"></span>
-        <span class="status-dot"></span>
-        <span class="status-dot"></span>
-      </div>
-    </header>
-
-    <!-- 1: Hero Solar Intelligence (4 corner stats + solar core + forecast + moon line) -->
-    <div class="row row--bleed">
-      <section id="section-1-hero" data-section="Hero Solar Intelligence">
-        <div class="hero-shell">
-          <!-- top-left -->
-          <div class="hero-corner hero-corner--tl">
-            <div class="corner-label">Opportunity</div>
-            <div class="corner-value" id="hero-opportunity">—</div>
-            <div class="corner-tag" id="hero-opportunity-tag">—</div>
-          </div>
-          <!-- top-right -->
-          <div class="hero-corner hero-corner--tr">
-            <div class="corner-label">Pressure</div>
-            <div class="corner-value" id="hero-pressure">—</div>
-            <div class="corner-tag" id="hero-pressure-tag">—</div>
-          </div>
-
-          <!-- center solar core -->
-          <div class="sun-hero" id="sun-hero" aria-hidden="true"></div>
-          <h1 class="forecast-title" id="forecast-title">—</h1>
-          <p class="forecast-subtitle" id="forecast-subtitle">—</p>
-          <p class="hero-moon" id="hero-moon">—</p>
-
-          <!-- bottom-left -->
-          <div class="hero-corner hero-corner--bl">
-            <div class="corner-label">Momentum</div>
-            <div class="corner-value" id="hero-momentum">—</div>
-            <div class="corner-tag" id="hero-momentum-tag">—</div>
-          </div>
-          <!-- bottom-right -->
-          <div class="hero-corner hero-corner--br">
-            <div class="corner-label">Next Event</div>
-            <div class="corner-value" id="hero-next-event-days">—</div>
-            <div class="corner-tag" id="hero-next-event-label">Days</div>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <!-- 2: System Consensus (Modern vs Traditional agreement) -->
-    <div class="row">
-      <section id="section-2-consensus" data-section="System Consensus">
-        <h2 class="section-heading">SYSTEM CONSENSUS</h2>
-        <div class="card consensus-card">
-          <div class="consensus-row">
-            <div class="consensus-side consensus-side--modern">
-              <div class="consensus-small-label">MODERN</div>
-              <span class="consensus-state" id="consensus-modern-state">—</span>
-            </div>
-            <div class="consensus-center">
-              <div class="consensus-pct" id="consensus-pct">—</div>
-              <div class="consensus-status" id="consensus-status">—</div>
-            </div>
-            <div class="consensus-side consensus-side--traditional">
-              <div class="consensus-small-label">TRADITIONAL</div>
-              <span class="consensus-state" id="consensus-traditional-state">—</span>
-            </div>
-          </div>
-          <p class="consensus-action" id="consensus-action">—</p>
-        </div>
-      </section>
-    </div>
-
-    <!-- 3: Daily Horoscope — four always-visible reading cards (v2.4 redesign).
-         Order per Alfie: Vedic → Modern → Traditional → BaZi. Each card surfaces the
-         day's reading prose directly; the "This Month" footer opens that system's
-         drawer for the monthly (+ BaZi 10-Year) deep dive. -->
-    <div class="row">
-      <section id="section-3-daily-horoscope" data-section="Daily Horoscope">
-        <h2 class="section-heading">DAILY HOROSCOPE</h2>
-        <div class="readings-stack">
-
-          <article class="reading-card" data-reading="vedic">
-            <header class="reading-card__head">
-              <div class="reading-card__titles">
-                <h3 class="reading-card__label">VEDIC</h3>
-                <span class="reading-card__sub">Sidereal · Vimshottari</span>
-              </div>
-              <span class="reading-card__state" id="reading-vedic-state">—</span>
-            </header>
-            <p class="reading-card__body" id="reading-vedic-body">—</p>
-            <button type="button" class="reading-card__more" data-drawer-open="vedic">This Month →</button>
-          </article>
-
-          <article class="reading-card" data-reading="modern">
-            <header class="reading-card__head">
-              <div class="reading-card__titles">
-                <h3 class="reading-card__label">MODERN</h3>
-                <span class="reading-card__sub">Western · Tropical</span>
-              </div>
-              <span class="reading-card__state" id="reading-modern-state">—</span>
-            </header>
-            <p class="reading-card__body" id="reading-modern-body">—</p>
-            <button type="button" class="reading-card__more" data-drawer-open="modern">This Month →</button>
-          </article>
-
-          <article class="reading-card" data-reading="traditional">
-            <header class="reading-card__head">
-              <div class="reading-card__titles">
-                <h3 class="reading-card__label">TRADITIONAL</h3>
-                <span class="reading-card__sub">Hellenistic · 7 classical planets</span>
-              </div>
-              <span class="reading-card__state" id="reading-traditional-state">—</span>
-            </header>
-            <p class="reading-card__body" id="reading-traditional-body">—</p>
-            <button type="button" class="reading-card__more" data-drawer-open="traditional">This Month →</button>
-          </article>
-
-          <article class="reading-card reading-card--bazi" data-reading="bazi">
-            <header class="reading-card__head">
-              <div class="reading-card__titles">
-                <h3 class="reading-card__label">BAZI</h3>
-                <span class="reading-card__sub">Eastern · Four Pillars</span>
-              </div>
-              <span class="reading-card__state" id="reading-bazi-state">—</span>
-            </header>
-            <!-- Layer 1 · Core Animal -->
-            <div class="bazi-core">
-              <div class="bazi-core__animal">
-                <span class="bazi-core__animal-name" id="bazi-core-animal">—</span>
-                <span class="bazi-core__daymaster" id="bazi-daymaster">—</span>
-              </div>
-              <div class="bazi-core__pillars" id="bazi-pillars"></div>
-            </div>
-            <!-- Layer 2 · Daily Tactical (animal slots) -->
-            <ul class="bazi-slots" id="bazi-slots"></ul>
-            <!-- Tactical prose -->
-            <p class="reading-card__body" id="reading-bazi-body">—</p>
-            <button type="button" class="reading-card__more" data-drawer-open="bazi">Month · 10-Year →</button>
-          </article>
-
-        </div>
-      </section>
-    </div>
-
-    <!-- 4: Analysis Drawers (hidden by default; render.js manages open/close + tabs) -->
-    <div class="row">
-      <section id="section-4-drawers" data-section="Analysis Drawers">
-        <aside class="drawer" id="drawer-modern" data-drawer="modern" hidden aria-modal="false">
-          <header class="drawer-header">
-            <h3>Modern Analysis</h3>
-            <button type="button" class="drawer-close" data-drawer-close="modern" aria-label="Close">×</button>
-          </header>
-          <div class="drawer-tabs" role="tablist">
-            <button type="button" role="tab" aria-selected="true" data-tab="today">Today</button>
-            <button type="button" role="tab" aria-selected="false" data-tab="month">Month</button>
-            <button type="button" role="tab" aria-selected="false" disabled data-tab="quarter">Quarter (Coming Soon)</button>
-            <button type="button" role="tab" aria-selected="false" disabled data-tab="year">Year (Coming Soon)</button>
-          </div>
-          <div class="drawer-content">
-            <section class="drawer-panel" data-panel="today">
-              <div class="drawer-state" id="drawer-modern-today-state">—</div>
-              <p class="drawer-body" id="drawer-modern-today-body">—</p>
-            </section>
-            <section class="drawer-panel" data-panel="month" hidden>
-              <div class="drawer-state" id="drawer-modern-month-state">—</div>
-              <p class="drawer-body" id="drawer-modern-month-body">—</p>
-            </section>
-            <section class="drawer-panel drawer-panel--soon" data-panel="quarter" hidden>
-              <p class="drawer-placeholder">Coming Soon · Quarter forecast wires up in v3.1</p>
-            </section>
-            <section class="drawer-panel drawer-panel--soon" data-panel="year" hidden>
-              <p class="drawer-placeholder">Coming Soon · Year forecast wires up in v3.1</p>
-            </section>
-          </div>
-        </aside>
-
-        <aside class="drawer" id="drawer-traditional" data-drawer="traditional" hidden aria-modal="false">
-          <header class="drawer-header">
-            <h3>Traditional Analysis</h3>
-            <button type="button" class="drawer-close" data-drawer-close="traditional" aria-label="Close">×</button>
-          </header>
-          <div class="drawer-tabs" role="tablist">
-            <button type="button" role="tab" aria-selected="true" data-tab="today">Today</button>
-            <button type="button" role="tab" aria-selected="false" data-tab="month">Month</button>
-            <button type="button" role="tab" aria-selected="false" disabled data-tab="quarter">Quarter (Coming Soon)</button>
-            <button type="button" role="tab" aria-selected="false" disabled data-tab="year">Year (Coming Soon)</button>
-          </div>
-          <div class="drawer-content">
-            <section class="drawer-panel" data-panel="today">
-              <div class="drawer-state" id="drawer-traditional-today-state">—</div>
-              <p class="drawer-body" id="drawer-traditional-today-body">—</p>
-            </section>
-            <section class="drawer-panel" data-panel="month" hidden>
-              <div class="drawer-state" id="drawer-traditional-month-state">—</div>
-              <p class="drawer-body" id="drawer-traditional-month-body">—</p>
-            </section>
-            <section class="drawer-panel drawer-panel--soon" data-panel="quarter" hidden>
-              <p class="drawer-placeholder">Coming Soon · Quarter forecast wires up in v3.1</p>
-            </section>
-            <section class="drawer-panel drawer-panel--soon" data-panel="year" hidden>
-              <p class="drawer-placeholder">Coming Soon · Year forecast wires up in v3.1</p>
-            </section>
-          </div>
-        </aside>
-
-        <aside class="drawer" id="drawer-vedic" data-drawer="vedic" hidden aria-modal="false">
-          <header class="drawer-header">
-            <h3>Vedic Analysis</h3>
-            <button type="button" class="drawer-close" data-drawer-close="vedic" aria-label="Close">×</button>
-          </header>
-          <div class="drawer-tabs" role="tablist">
-            <button type="button" role="tab" aria-selected="true"  data-tab="today">Today</button>
-            <button type="button" role="tab" aria-selected="false" data-tab="month">Month</button>
-            <button type="button" role="tab" aria-selected="false" disabled data-tab="quarter">Quarter (Coming Soon)</button>
-            <button type="button" role="tab" aria-selected="false" disabled data-tab="year">Year (Coming Soon)</button>
-          </div>
-          <div class="drawer-content">
-            <section class="drawer-panel" data-panel="today">
-              <div class="drawer-state" id="drawer-vedic-today-state">—</div>
-              <p class="drawer-body" id="drawer-vedic-today-body">—</p>
-            </section>
-            <section class="drawer-panel" data-panel="month" hidden>
-              <div class="drawer-state" id="drawer-vedic-month-state">—</div>
-              <p class="drawer-body" id="drawer-vedic-month-body">—</p>
-            </section>
-            <section class="drawer-panel drawer-panel--soon" data-panel="quarter" hidden>
-              <p class="drawer-placeholder">Coming Soon · Quarter forecast wires up in v3.1</p>
-            </section>
-            <section class="drawer-panel drawer-panel--soon" data-panel="year" hidden>
-              <p class="drawer-placeholder">Coming Soon · Year forecast wires up in v3.1</p>
-            </section>
-          </div>
-        </aside>
-
-        <aside class="drawer" id="drawer-bazi" data-drawer="bazi" hidden aria-modal="false">
-          <header class="drawer-header">
-            <h3>BaZi Analysis</h3>
-            <button type="button" class="drawer-close" data-drawer-close="bazi" aria-label="Close">×</button>
-          </header>
-          <div class="drawer-tabs" role="tablist">
-            <button type="button" role="tab" aria-selected="true"  data-tab="today">Today</button>
-            <button type="button" role="tab" aria-selected="false" data-tab="month">Month</button>
-            <button type="button" role="tab" aria-selected="false" data-tab="strategic">10-Year</button>
-          </div>
-          <div class="drawer-content">
-            <section class="drawer-panel" data-panel="today">
-              <div class="drawer-state" id="drawer-bazi-today-state">—</div>
-              <p class="drawer-body" id="drawer-bazi-today-body">—</p>
-            </section>
-            <section class="drawer-panel" data-panel="month" hidden>
-              <div class="drawer-state" id="drawer-bazi-month-state">—</div>
-              <p class="drawer-body" id="drawer-bazi-month-body">—</p>
-            </section>
-            <section class="drawer-panel" data-panel="strategic" hidden>
-              <div class="drawer-state" id="drawer-bazi-dayun">—</div>
-              <p class="drawer-body" id="drawer-bazi-dayun-body">—</p>
-            </section>
-          </div>
-        </aside>
-      </section>
-    </div>
-
-    <!-- 5: What Changed -->
-    <div class="row">
-      <section id="section-5-what-changed" data-section="What Changed">
-        <h2 class="section-heading">WHAT CHANGED <span class="heading-sub">SINCE YESTERDAY</span></h2>
-        <div class="card changed-card" id="changed-card"></div>
-      </section>
-    </div>
-
-    <!-- 6: Today's Insight (premium gold-accent card) -->
-    <div class="row">
-      <section id="section-6-todays-insight" data-section="Today's Insight">
-        <h2 class="section-heading">TODAY'S INSIGHT</h2>
-        <div class="card insight-card insight-card--premium" id="insight-card">—</div>
-      </section>
-    </div>
-
-    <!-- 7: Recommended Actions (Do / Avoid) -->
-    <div class="row">
-      <section id="section-7-recommended" data-section="Recommended Actions">
-        <h2 class="section-heading">RECOMMENDED ACTIONS</h2>
-        <div class="card actions-card">
-          <h3>Do More Of</h3>
-          <ul id="actions-do"></ul>
-          <h3>Avoid</h3>
-          <ul id="actions-avoid"></ul>
-        </div>
-      </section>
-    </div>
-
-    <!-- 8: Upcoming Conditions (timeline bars) -->
-    <div class="row">
-      <section id="section-8-upcoming" data-section="Upcoming Conditions">
-        <h2 class="section-heading">UPCOMING CONDITIONS</h2>
-        <ul class="timeline-list" id="timeline-list"></ul>
-      </section>
-    </div>
-
-    <!-- 9: Sky Conditions -->
-    <div class="row">
-      <section id="section-9-sky" data-section="Sky Conditions">
-        <h2 class="section-heading">SKY CONDITIONS</h2>
-        <div class="card sky-card" id="sky-card"></div>
-      </section>
-    </div>
-
-    <!-- 10: Planet Influences (compact list) -->
-    <div class="row">
-      <section id="section-10-planet-influences" data-section="Planet Influences">
-        <h2 class="section-heading">PLANET INFLUENCES</h2>
-        <ul class="influences-compact" id="influences-grid"></ul>
-      </section>
-    </div>
-
-    <!-- 11: Top Drivers -->
-    <div class="row">
-      <section id="section-11-top-drivers" data-section="Top Drivers">
-        <h2 class="section-heading">TOP DRIVERS</h2>
-        <ol class="drivers-list" id="drivers-list"></ol>
-      </section>
-    </div>
-
-    <!-- 12: Why This Forecast -->
-    <div class="row">
-      <section id="section-12-why-forecast" data-section="Why This Forecast">
-        <h2 class="section-heading">WHY THIS FORECAST</h2>
-        <details class="card why-card">
-          <summary>Expansion Score: <span id="expansion-score">—</span></summary>
-          <div class="why-rows" id="why-rows"></div>
-        </details>
-      </section>
-    </div>
-
-    <!-- 13: Confidence -->
-    <div class="row">
-      <section id="section-13-confidence" data-section="Confidence">
-        <h2 class="section-heading">CONFIDENCE</h2>
-        <div class="card confidence-card">
-          <div class="confidence-ring confidence-ring--unrated" aria-hidden="true"></div>
-          <div class="confidence-label">Not Rated</div>
-          <div class="confidence-sub">Gathering More Data</div>
-        </div>
-      </section>
-    </div>
-
-    <!-- 14: Footer Nav (full bleed) — Home functional, others Coming Soon -->
-    <nav class="row row--bleed footer-nav" id="section-14-footer-nav" data-section="Footer Navigation">
-      <a class="nav-item active" href="#">Home</a>
-      <a class="nav-item nav-item--soon" href="#" aria-disabled="true">Timeline</a>
-      <a class="nav-item nav-item--soon" href="#" aria-disabled="true">Reports</a>
-      <a class="nav-item nav-item--soon" href="#" aria-disabled="true">Profile</a>
-    </nav>
+  <div class="hdr">
+    <div class="menu">≡</div>
+    <div class="tt"><h1>TIMING WEATHER</h1><div class="d">Saturday, June 13, 2026 · Alfredo</div></div>
+    <div class="dots"></div>
   </div>
 
-  <script src="assets/js/timing_weather_render.js?v=v3.2.0-bazi"></script>
+  <!-- CINEMATIC SOLAR SYSTEM HERO -->
+  <div class="solar" id="solar">
+    <canvas id="starfield"></canvas>
+    <div class="neb"></div>
+    <div class="field" id="field"></div>
+    <div class="sun"></div>
+    <div class="vig"></div>
+    <div class="skybar">
+      <span class="it"><span class="moondisc"><i id="moon-lit"></i></span><span id="moon-txt">—</span></span>
+      <span class="it"><span class="live-chip"><span class="dot"></span>Live sky</span></span>
+      <span class="it" id="sky-sun">☉ —</span>
+    </div>
+    <div class="label"><div class="ph">EXPANSION</div><div class="sub" id="hero-sub">12th-house Sagittarius year · lord Jupiter · build before the August turn</div></div>
+  </div>
+
+  <!-- LENS NAV -->
+  <div class="lensnav" id="lensnav">
+    <button data-lens="trad" class="on">Traditional<span class="sm">Hellenistic</span></button>
+    <button data-lens="vedic">Vedic<span class="sm">Sidereal</span></button>
+    <button data-lens="modern">Modern<span class="sm">Tropical</span></button>
+    <button data-lens="bazi">BaZi<span class="sm">Four Pillars</span></button>
+  </div>
+
+  <div class="slides" id="slides">
+
+    <!-- ══ TRADITIONAL ══ -->
+    <section class="slide on" data-lens="trad">
+      <div class="card">
+        <div class="sh">Today's Sky <span class="sub">transits · aspects</span></div>
+        <div class="trow"><div class="g">☽</div><div class="b"><div class="h">Moon void-of-course <span class="sym">— in late Taurus</span></div><div class="x">Makes no further aspects until it enters Gemini at 2:40 PM. A held breath — finish, don't begin.</div></div><div class="tag tag-ch">Hold</div></div>
+        <div class="trow"><div class="g">♃</div><div class="b"><div class="h">Jupiter <span class="sym">△ applying to</span> natal Sun</div><div class="x">The year-lord's benefic creeps toward your 9th-whole-sign Sun — the slow climb toward recognition. 30 days from its own return.</div></div><div class="tag tag-su">Support</div></div>
+        <div class="trow"><div class="g">♄</div><div class="b"><div class="h">Saturn <span class="sym">⚻ quincunx</span> Ascendant</div><div class="x">A sustained recalibration of how you show up — adjust the structure, don't force it.</div></div><div class="tag tag-nu">Neutral</div></div>
+      </div>
+
+      <div class="cols2">
+        <div class="card">
+          <div class="sh">Annual Profection</div>
+          <svg viewBox="0 0 220 220" id="profection" style="width:100%;height:auto;max-width:240px;display:block;margin:0 auto"></svg>
+          <p class="prose muted" style="font-size:12px;margin-top:8px;text-align:center">Age 35 → <b style="color:var(--gold-br)">12th house · Sagittarius</b><br>Year-lord <b style="color:var(--gold-br)">Jupiter</b> · the house of retreat & preparation. Turns to the 1st (Capricorn, Saturn) on Aug 30.</p>
+        </div>
+        <div class="card">
+          <div class="sh">Hellenistic Lots <span class="sub">day chart · whole-sign</span></div>
+          <div class="lots">
+            <div class="lot"><div class="name">Fortune</div><div class="glyph">⊗</div><div class="pos">6°38′ ♉</div><div class="hs">Taurus · 5th</div><div class="mean">Body & fortune — vitality through creation and pleasure.</div></div>
+            <div class="lot"><div class="name">Spirit</div><div class="glyph">⊕</div><div class="pos">10°04′ ♍</div><div class="hs">Virgo · 9th · on Sun</div><div class="mean">Career & will — conjunct your Sun: purpose through the craft.</div></div>
+            <div class="lot"><div class="name">Eros</div><div class="glyph">❤</div><div class="pos">19°05′ ♐</div><div class="hs">Sagittarius · 12th</div><div class="mean">Desire — held in the hidden house; longing kept private.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sh">Lord of the Year</div>
+        <div class="loy"><div class="big">♃</div><div class="b"><div class="h">Jupiter — ruler of the profected 12th</div><div class="sub">natally in Leo · 8th whole-sign</div><p>The benefic carries your year, but rules it from the houses of the unseen — preparation, depth, shared resources. And he is walking back to <span style="color:var(--gold-br)">his own natal place</span>: the year-lord renews exactly at the Jupiter return, <span style="color:var(--gold-br)" id="loy-days">~Jul 12</span>. Until then the year is setup; from then it begins to pay.</p></div></div>
+      </div>
+    </section>
+
+    <!-- ══ VEDIC ══ -->
+    <section class="slide" data-lens="vedic">
+      <div class="cols2">
+        <div class="card">
+          <div class="sh">Rasi · D1 <span class="sub">sidereal · Lahiri</span></div>
+          <div class="dchart">
+            <!-- row 1 -->
+            <div class="dcell"><span class="sg">Pis</span></div>
+            <div class="dcell"><span class="sg">Ari</span></div>
+            <div class="dcell"><span class="sg">Tau</span><div class="pls">Ma</div></div>
+            <div class="dcell"><span class="sg">Gem</span></div>
+            <!-- row 2 -->
+            <div class="dcell"><span class="sg">Aqu</span></div>
+            <div class="dcenter"><div class="t">Sag Lagna</div><div class="s">Moon Mahadasha</div></div>
+            <div class="dcell"><span class="sg">Can</span><div class="pls">Ju Ve Ke<span class="rx"> ℞</span></div></div>
+            <!-- row 3 -->
+            <div class="dcell"><span class="sg">Cap</span><div class="pls">Ra<span class="rx"> ℞</span></div></div>
+            <div class="dcell"><span class="sg">Leo</span><div class="pls">Su Me<span class="rx"> ℞</span></div></div>
+            <!-- row 4 -->
+            <div class="dcell"><span class="sg">Sag</span><div class="pls"><span class="asc">As</span> Mo Sa<span class="rx"> ℞</span></div></div>
+            <div class="dcell"><span class="sg">Sco</span></div>
+            <div class="dcell"><span class="sg">Lib</span></div>
+            <div class="dcell"><span class="sg">Vir</span></div>
+          </div>
+          <p class="prose muted" style="font-size:11.5px;margin-top:9px">Triple Sagittarius 1st (Moon · Saturn · Lagna) — guarded, philosophical. Exalted Jupiter + Venus + Ketu in the 8th (Cancer): hidden gifts through transformation.</p>
+        </div>
+        <div class="card">
+          <div class="sh">Dasha & Look-Ahead <span class="sub">Vimshottari</span></div>
+          <div class="dasha">
+            <div class="drow now"><span class="pd">Moon · Venus<span class="sub">Maha · Antar</span></span><span class="bar"><i style="left:0;width:88%"></i></span><span class="rng">→ Dec 2026 <span class="now-pill">now</span></span></div>
+            <div class="drow"><span class="pd">Moon · Sun<span class="sub">next antar</span></span><span class="bar"><i style="left:0;width:30%"></i></span><span class="rng">Dec–Jun ’27</span></div>
+            <div class="drow"><span class="pd">Mars Maha<span class="sub">chapter change</span></span><span class="bar"><i style="left:0;width:8%"></i></span><span class="rng">Jun 2027 →</span></div>
+          </div>
+          <p class="prose muted" style="font-size:11.5px;margin-top:9px">Venus sub-period = first relationship-warm weather in years. <span class="em">Sade Sati</span> (Small Panoti, Pisces) pressures foundations through Jun 2027.</p>
+        </div>
+      </div>
+
+      <div class="cols2">
+        <div class="card">
+          <div class="sh">Key Focus · Mars</div>
+          <div class="focus"><div class="big">♂</div><div class="b"><div class="h">Darakaraka — the partner significator</div><div class="sub">Taurus · 6th (D1) · 7th (D9)</div><p>Mars carries your relationships: dynamic, direct, philosophical — possibly foreign. In the D1 6th the work is conflict and service before union; in the Navamsa it sits <span style="color:var(--gold-br)">right on the 7th</span> — the partner significator on the marriage house. Activated when Mars Mahadasha opens June 2027.</p></div></div>
+        </div>
+        <div class="card">
+          <div class="sh">Navamsa · D9 <span class="sub">Leo lagna · marriage chart</span></div>
+          <div class="dchart">
+            <!-- row 1 -->
+            <div class="dcell"><span class="sg">Pis</span><div class="pls">Ve<span class="exalt"> ↑</span></div></div>
+            <div class="dcell"><span class="sg">Ari</span><div class="pls">Ra<span class="rx"> ℞</span></div></div>
+            <div class="dcell"><span class="sg">Tau</span></div>
+            <div class="dcell"><span class="sg">Gem</span></div>
+            <!-- row 2 -->
+            <div class="dcell"><span class="sg">Aqu</span><div class="pls">Ma</div></div>
+            <div class="dcenter"><div class="t">Leo Lagna</div><div class="s">Navamsa · D9</div></div>
+            <div class="dcell"><span class="sg">Can</span><div class="pls">Mo</div></div>
+            <!-- row 3 -->
+            <div class="dcell"><span class="sg">Cap</span></div>
+            <div class="dcell"><span class="sg">Leo</span><div class="pls"><span class="asc">As</span> Su</div></div>
+            <!-- row 4 -->
+            <div class="dcell"><span class="sg">Sag</span><div class="pls">Me<span class="rx"> ℞</span></div></div>
+            <div class="dcell"><span class="sg">Sco</span><div class="pls">Sa<span class="rx"> ℞</span></div></div>
+            <div class="dcell"><span class="sg">Lib</span><div class="pls">Ke<span class="rx"> ℞</span></div></div>
+            <div class="dcell"><span class="sg">Vir</span><div class="pls">Ju</div></div>
+          </div>
+          <p class="prose muted" style="font-size:11.5px;margin-top:9px"><span style="color:var(--gold-br)">Venus exalted in Pisces</span> (8th) — grace in intimacy. <span style="color:var(--coral)">Mars, your Darakaraka, sits in the 7th</span> — the partner significator on the marriage house itself. Sun + Lagna in Leo: a warm, confident relational core.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ MODERN ══ -->
+    <section class="slide" data-lens="modern">
+      <div class="card">
+        <div class="sh">Natal Wheel <span class="sub">tropical · Placidus · all planets</span></div>
+        <svg viewBox="0 0 300 300" id="wheel" style="width:100%;height:auto;max-width:330px;display:block;margin:0 auto"></svg>
+        <div class="legend" id="legend"></div>
+      </div>
+
+      <div class="card">
+        <div class="sh">Natal Aspects <span class="sub">tightest orbs · computed</span></div>
+        <div class="asp" id="aspect-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="sh">Transits Now <span class="sub" id="transit-time">live · transit → natal</span></div>
+        <div class="asp" id="transit-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="sh">June Forecast <span class="sub">modern transits</span></div>
+        <div class="fc"><div class="d">~Jun 24</div><div class="b"><div class="h">Jupiter ingress Cancer</div><p>Crosses into your 7th — partnership & shared resources warm and expand. Builds toward the Jupiter return at 2°36′ Leo ~Jul 12.</p></div></div>
+        <div class="fc"><div class="d">All month</div><div class="b"><div class="h">Neptune □ Moon &amp; Ascendant</div><p>Fog over the Capricorn cluster — fatigue, idealization, blurred boundaries. Don't decide identity questions from the haze.</p></div></div>
+        <div class="fc"><div class="d">All month</div><div class="b"><div class="h">Pluto in Aquarius · 2nd house</div><p>Slow transformation of values & self-worth, working the North Node. What you measure yourself by is being rebuilt.</p></div></div>
+      </div>
+
+      <div class="card contrast">
+        <div class="sh">Traditional ↔ Modern</div>
+        <p class="prose">Both languages tell one story. Traditional puts the year in the <span style="font-style:normal;color:var(--gold-br)">12th house of preparation</span> (Jupiter, whole-sign, the Lots hidden in the 12th and 9th). Modern hears the same note in <span style="font-style:normal;color:var(--gold-br)">Neptune's dissolving square</span> and the slow Jupiter return — expansion assembled quietly, off-stage, before August makes it real.</p>
+      </div>
+    </section>
+
+    <!-- ══ BAZI ══ -->
+    <section class="slide" data-lens="bazi">
+      <div class="card">
+        <div class="sh">Four Pillars <span class="sub">八字 · Ding Fire day master</span></div>
+        <div class="pillars">
+          <div class="pillar">
+            <div class="plab">Year</div>
+            <div class="han el-metal">庚</div><div class="pinyin">Gēng</div><div class="elem el-metal">Yang Metal</div>
+            <div class="branch"><div class="han el-fire">午</div><div class="animal">Horse</div></div>
+            <div class="hidden">Ding · Ji</div>
+          </div>
+          <div class="pillar">
+            <div class="plab">Month</div>
+            <div class="han el-wood">甲</div><div class="pinyin">Jiǎ</div><div class="elem el-wood">Yang Wood</div>
+            <div class="branch"><div class="han el-metal">申</div><div class="animal">Monkey</div></div>
+            <div class="hidden">Geng · Ren · Wu</div>
+          </div>
+          <div class="pillar self">
+            <div class="self-tag">Day Master</div>
+            <div class="plab">Day</div>
+            <div class="han el-fire">丁</div><div class="pinyin">Dīng</div><div class="elem el-fire">Yin Fire</div>
+            <div class="branch"><div class="han el-wood">卯</div><div class="animal">Rabbit</div></div>
+            <div class="hidden">Yi</div>
+          </div>
+          <div class="pillar">
+            <div class="plab">Hour</div>
+            <div class="han el-earth">戊</div><div class="pinyin">Wù</div><div class="elem el-earth">Yang Earth</div>
+            <div class="branch"><div class="han el-metal">申</div><div class="animal">Monkey</div></div>
+            <div class="hidden">Geng · Ren · Wu</div>
+          </div>
+        </div>
+        <p class="prose muted" style="font-size:11.5px;margin-top:11px">Public identity reads as the <span style="color:var(--gold-br)">Horse</span> (year branch), but your true operating self is the <span style="color:var(--gold-br)">Rabbit</span> (day branch) — precision, diplomacy, refinement over force. The day master is <span style="color:var(--coral)">Ding</span>: a candle flame, not a bonfire.</p>
+      </div>
+
+      <div class="cols2">
+        <div class="card">
+          <div class="sh">Day Master · Ding Fire</div>
+          <div class="focus"><div class="big" style="color:var(--coral)">丁</div><div class="b"><div class="h" style="color:var(--coral)">A candle flame</div><div class="sub">Yin Fire · 火</div><p>Warm, precise, illuminating — the steady light that guides rather than the bonfire that consumes. Strength comes from refinement and the right company; the risk is being blown out by overwork or scattered demands.</p></div></div>
+        </div>
+        <div class="card">
+          <div class="sh">Five Elements <span class="sub">balance · function</span></div>
+          <div class="elbars">
+            <div class="elbar"><span class="en"><span class="han el-earth">土</span>Earth · Output</span><span class="tr"><i style="width:80%;background:#e8c573"></i></span><span class="ct">4</span></div>
+            <div class="elbar"><span class="en"><span class="han el-metal">金</span>Metal · Wealth</span><span class="tr"><i style="width:60%;background:#cbd5e1"></i></span><span class="ct">3</span></div>
+            <div class="elbar"><span class="en"><span class="han el-fire">火</span>Fire · Self</span><span class="tr"><i style="width:40%;background:#fb7185"></i></span><span class="ct">2</span></div>
+            <div class="elbar"><span class="en"><span class="han el-water">水</span>Water · Power</span><span class="tr"><i style="width:40%;background:#7dd3fc"></i></span><span class="ct">2</span></div>
+            <div class="elbar"><span class="en"><span class="han el-wood">木</span>Wood · Resource</span><span class="tr"><i style="width:40%;background:#5be3a7"></i></span><span class="ct">2</span></div>
+          </div>
+          <p class="prose muted" style="font-size:11px;margin-top:10px">Output-heavy: you produce and express a lot — but Output drains the Fire. Guard the flame; let Wood (study, rest, mentors) feed it.</p>
+        </div>
+      </div>
+
+      <div class="cols2">
+        <div class="card">
+          <div class="sh">Current Luck <span class="sub">Da Yun · year</span></div>
+          <div class="trow"><div class="g" style="color:#e8c573;font-family:var(--serif)">戊</div><div class="b"><div class="h">Da Yun · Wu-Zi 戊子</div><div class="x">The decade pillar: Earth Output over Water Power — producing under pressure, building structure.</div></div></div>
+          <div class="trow"><div class="g" style="color:#fb7185;font-family:var(--serif)">丙</div><div class="b"><div class="h">2026 · Bing-Wu 丙午 — peer fire</div><div class="x">Yang Fire "Rob Wealth" beside your Ding: visibility and competition spike, and so does burnout. A bright, contested year.</div></div></div>
+        </div>
+        <div class="card">
+          <div class="sh">Strategy</div>
+          <p class="prose">This is a <span class="em">peer-fire year</span> — burn precise, not hot. Your Rabbit core wins through elegance and relationships, never brute force. The Jupiter return (~Jul 12) stacks onto this fire month for a real late-June-through-September visibility window. <span style="color:var(--gold-br)">Bank the fire; one refined move beats three loud ones.</span></p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="foot-tag">Four lenses · one chart · mock prototype — not the live PWA</div>
+</div>
+
+<script>
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+/* force monochrome TEXT presentation on astro/planet/arrow glyphs (Apple defaults them to color emoji).
+   Appends U+FE0E to every matched glyph across HTML + SVG text nodes. */
+function noEmoji(root){
+  const SET=/[↗↘♈-♓♀♂♃♄♅♆♇☉☼☽☿☊❤☀]/g;
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null);const nodes=[];let n;
+  while(n=w.nextNode())nodes.push(n);
+  nodes.forEach(t=>{const v=t.nodeValue;if(SET.test(v)){SET.lastIndex=0;t.nodeValue=v.replace(SET,m=>m+'︎');}SET.lastIndex=0;});
+}
+
+/* ---- cinematic solar-system hero: starfield + tilted orbital plane ---- */
+(function(){
+  const host=document.getElementById('solar'), W=host.clientWidth||375, H=300;
+  // starfield
+  const cv=document.getElementById('starfield');cv.width=W;cv.height=H;const x=cv.getContext('2d');
+  for(let i=0;i<130;i++){const r=Math.pow(Math.random(),2)*1.4+.2;x.beginPath();x.arc(Math.random()*W,Math.random()*H,r,0,7);
+    x.fillStyle=`rgba(255,255,255,${Math.random()*.5+.12})`;x.fill();}
+  for(let i=0;i<16;i++){x.beginPath();x.arc(Math.random()*W,Math.random()*H,Math.random()*1+.4,0,7);
+    x.fillStyle=`rgba(232,197,115,${Math.random()*.5+.3})`;x.fill();}
+  // orbital plane (squashed via CSS scaleY → ellipses)
+  const field=document.getElementById('field');
+  const planets=[ // [glyph,color,radius,period(s),startDeg]
+    ['☿','#c4b5fd',66,9,20],['♀','#f9a8d4',90,15,150],['♂','#fb7185',114,25,250],
+    ['♃','#f0c674',140,40,60],['♄','#7dd3fc',164,62,310]];
+  planets.forEach(([g,c,r,per,start])=>{
+    const ring=document.createElement('div');ring.className='orb';ring.style.width=ring.style.height=(r*2)+'px';field.appendChild(ring);
+    const spin=document.createElement('div');spin.className='spin';
+    spin.style.animationDuration=per+'s';spin.style.transform=`translate(-50%,-50%) rotate(${start}deg)`;
+    const pl=document.createElement('div');pl.className='pl';pl.textContent=g;pl.style.color=c;pl.style.top=(-r)+'px';
+    spin.appendChild(pl);field.appendChild(spin);
+  });
+})();
+
+/* ---- profection wheel (12 whole-sign houses from Cap ASC) ---- */
+(function(){
+  const svg=document.getElementById('profection'),cx=110,cy=110,rO=98,rI=58;
+  const signs=['Cap','Aqu','Pis','Ari','Tau','Gem','Can','Leo','Vir','Lib','Sco','Sag'];
+  const current=11; // 12th house index (0-based) = Sagittarius
+  for(let i=0;i<12;i++){
+    const a0=(i*30-90)*Math.PI/180, a1=((i+1)*30-90)*Math.PI/180, am=((i+0.5)*30-90)*Math.PI/180;
+    const x0=cx+rO*Math.cos(a0),y0=cy+rO*Math.sin(a0),x1=cx+rO*Math.cos(a1),y1=cy+rO*Math.sin(a1);
+    const xi0=cx+rI*Math.cos(a0),yi0=cy+rI*Math.sin(a0),xi1=cx+rI*Math.cos(a1),yi1=cy+rI*Math.sin(a1);
+    const hot=i===current;
+    el('path',{d:`M${x0} ${y0} A${rO} ${rO} 0 0 1 ${x1} ${y1} L${xi1} ${yi1} A${rI} ${rI} 0 0 0 ${xi0} ${yi0} Z`,
+      fill:hot?'rgba(212,168,87,0.22)':'rgba(255,255,255,0.025)',stroke:hot?'rgba(212,168,87,0.7)':'rgba(255,255,255,0.09)','stroke-width':hot?'1.4':'0.8'},svg);
+    const rm=(rO+rI)/2;
+    const t1=el('text',{x:cx+rm*Math.cos(am),y:cy+rm*Math.sin(am)-3,'text-anchor':'middle','font-size':'10','fill':hot?'#e8c573':'rgba(255,255,255,.55)','font-weight':hot?'700':'400'},svg);t1.textContent=signs[i];
+    const t2=el('text',{x:cx+rm*Math.cos(am),y:cy+rm*Math.sin(am)+9,'text-anchor':'middle','font-size':'8','fill':hot?'#d4a857':'rgba(255,255,255,.3)'},svg);t2.textContent='H'+(i+1);
+  }
+  const cj=el('text',{x:cx,y:cy+4,'text-anchor':'middle','font-size':'22','fill':'#e8c573'},svg);cj.textContent='♃';
+})();
+
+/* ---- modern natal wheel ---- */
+(function(){
+  const svg=document.getElementById('wheel'),cx=150,cy=150,rZodiac=132,rPlanet=108,rHouse=150;
+  // sign ring
+  el('circle',{cx,cy,r:rHouse,fill:'none',stroke:'rgba(212,168,87,.18)','stroke-width':'1'},svg);
+  el('circle',{cx,cy,r:rZodiac,fill:'none',stroke:'rgba(167,139,250,.22)','stroke-width':'1'},svg);
+  el('circle',{cx,cy,r:74,fill:'none',stroke:'rgba(103,232,249,.18)','stroke-width':'1','stroke-dasharray':'2 5'},svg);
+  const SG=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+  // 0° Aries at left (9 o'clock), counter-clockwise. screen angle = 180 - lon
+  const toXY=(lon,r)=>{const a=(180-lon)*Math.PI/180;return [cx+r*Math.cos(a),cy-r*Math.sin(a)];};
+  for(let i=0;i<12;i++){
+    const [lx,ly]=toXY(i*30, (rHouse));
+    el('line',{x1:cx,y1:cy,x2:lx,y2:ly,stroke:'rgba(255,255,255,.05)','stroke-width':'0.7'},svg);
+    const [gx,gy]=toXY(i*30+15,(rZodiac+rHouse)/2);
+    const t=el('text',{x:gx,y:gy+5,'text-anchor':'middle','font-size':'12','fill':'rgba(255,255,255,.5)'},svg);t.textContent=SG[i];
+  }
+  // planets [glyph, lon, color, name, posLabel]
+  const P=[['☉',157.23,'#e8c573','Sun','7°♍ · 8H'],['☽',275.52,'#cbd5e1','Moon','5°♑ · 12H'],
+    ['☿',172.17,'#a78bfa','Mercury','22°♍℞'],['♀',140.8,'#f472b6','Venus','20°♌'],
+    ['♂',59.7,'#fb7185','Mars','29°♉'],['♃',122.6,'#e8c573','Jupiter','2°♌'],
+    ['♄',289.13,'#9aa0b4','Saturn','19°♑℞'],['♅',275.68,'#7dd3fc','Uranus','5°♑℞'],
+    ['♆',281.93,'#67e8f9','Neptune','11°♑℞'],['♇',225.32,'#c084fc','Pluto','15°♏'],
+    ['☊',306.98,'#4ade80','N.Node','6°♒']];
+  // de-clutter Capricorn stack (Moon/Uranus/Neptune/Saturn close): nudge radii
+  const radii={};
+  P.forEach((p)=>{ const key=Math.round(p[1]/8); radii[key]=(radii[key]||0)+1; p.push(radii[key]); });
+  P.forEach(([g,lon,c,,,stack])=>{const r=rPlanet-(stack-1)*16;const [x,y]=toXY(lon,r);
+    el('circle',{cx:x,cy:y,r:2,fill:c},svg);
+    const t=el('text',{x,y:y-7,'text-anchor':'middle','font-size':'13','fill':c},svg);t.textContent=g;});
+  // ASC / MC axis
+  const asc=278.35, mc=213.9;
+  [['ASC',asc,'#67e8f9'],['MC',mc,'#e8c573']].forEach(([lab,lon,c])=>{
+    const [x,y]=toXY(lon,rHouse);el('line',{x1:cx,y1:cy,x2:x,y2:y,stroke:c,'stroke-width':'1.3','stroke-dasharray':'3 3',opacity:'.8'},svg);
+    const [tx,ty]=toXY(lon,rHouse+10);const t=el('text',{x:tx,y:ty+3,'text-anchor':'middle','font-size':'8','fill':c,'font-weight':'700'},svg);t.textContent=lab;});
+  // legend
+  const lg=document.getElementById('legend');
+  P.forEach(([g,,c,name,pos])=>{const d=document.createElement('div');d.className='li';
+    d.innerHTML=`<b style="color:${c}">${g}</b>${name}<span class="pp">${pos}</span>`;lg.appendChild(d);});
+})();
+
+/* ---- lens nav ---- */
+(function(){
+  const nav=document.getElementById('lensnav'),slides=[...document.querySelectorAll('.slide')];
+  nav.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+    const lens=b.dataset.lens;
+    [...nav.children].forEach(x=>x.classList.toggle('on',x===b));
+    slides.forEach(s=>s.classList.toggle('on',s.dataset.lens===lens));
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+  // deep-link: ?lens=trad|vedic|modern
+  const want=new URLSearchParams(location.search).get('lens');
+  if(want){const b=nav.querySelector(`[data-lens="${want}"]`);if(b)b.click();}
+  // swipe
+  let sx=0;const sl=document.getElementById('slides');
+  sl.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
+  sl.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)<50)return;
+    const order=['trad','vedic','modern','bazi'];const cur=order.indexOf(document.querySelector('.slide.on').dataset.lens);
+    const ni=Math.max(0,Math.min(3,cur+(dx<0?1:-1)));nav.children[ni].click();});
+})();
+
+/* ---- LIVE ASTRO COMPUTE — derived client-side from natal constants + today ---- */
+(function(){
+  const NAT={ASC:278.35,Sun:157.23,Moon:275.52,Mercury:172.17,Venus:140.8,Mars:59.7,Jupiter:122.6,
+    Saturn:289.13,Uranus:275.68,Neptune:281.93,Pluto:225.32,Node:306.98,MC:213.9};
+  const GLY=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+  const now=new Date();
+  const fmtDeg=x=>{x=((x%360)+360)%360;const s=Math.floor(x/30);return Math.floor(x-30*s)+'°'+GLY[s];};
+
+  // moon phase — ref new moon 2000-01-06 18:14 UTC, synodic month
+  const syn=29.530588853, ref=Date.UTC(2000,0,6,18,14);
+  const ageM=(((now-ref)/86400000)%syn+syn)%syn;
+  const illum=Math.round((1-Math.cos(2*Math.PI*ageM/syn))/2*100);
+  const waxing=ageM<syn/2, toNew=Math.max(1,Math.round((syn-ageM)%syn));
+  let phase; if(ageM<1||ageM>syn-1)phase='New Moon';else if(ageM<6.4)phase='Waxing crescent';
+    else if(ageM<8.6)phase='First quarter';else if(ageM<13.8)phase='Waxing gibbous';
+    else if(ageM<15.8)phase='Full Moon';else if(ageM<21.1)phase='Waning gibbous';
+    else if(ageM<23.3)phase='Last quarter';else phase='Waning crescent';
+  const mt=document.getElementById('moon-txt'); if(mt)mt.textContent=`${phase} · ${illum}% · New Moon in ${toNew}d`;
+  const lit=document.getElementById('moon-lit');
+  if(lit)lit.style.clipPath=waxing?`inset(0 ${100-illum}% 0 0)`:`inset(0 0 0 ${100-illum}%)`;
+
+  // approx current Sun longitude (from ~2026 vernal equinox)
+  const eqx=Date.UTC(2026,2,20,14,0); let sun=((now-eqx)/86400000*0.98565)%360; sun=((sun%360)+360)%360;
+  const ss=document.getElementById('sky-sun'); if(ss)ss.textContent='☉ '+fmtDeg(sun);
+
+  // profection from birth 1990-08-30
+  const m=now.getUTCMonth(),d=now.getUTCDate(); const had=(m>7)||(m===7&&d>=30);
+  let ageY=now.getUTCFullYear()-1990; if(!had)ageY--; const house=(ageY%12)+1;
+  const turn=Date.UTC(now.getUTCFullYear()+(had?1:0),7,30); const dTurn=Math.ceil((turn-now)/86400000);
+  // Jupiter return Jul 12 2026
+  const dJR=Math.ceil((Date.UTC(2026,6,12)-now)/86400000);
+  const loy=document.getElementById('loy-days'); if(loy)loy.textContent=dJR>0?`in ${dJR} days (Jul 12)`:'Jul 12';
+  const hs=document.getElementById('hero-sub');
+  if(hs&&house===12)hs.textContent=`12th-house Sagittarius year · lord Jupiter · ${dTurn} days to the Capricorn turn`;
+
+  // natal aspects (major, tightest first)
+  const order=Object.keys(NAT);
+  const ASP=[['☌',0,7,'conj','Conjunction'],['☍',180,7,'hard','Opposition'],['△',120,6,'soft','Trine'],['□',90,6,'hard','Square'],['⚹',60,4,'soft','Sextile']];
+  const found=[];
+  for(let i=0;i<order.length;i++)for(let j=i+1;j<order.length;j++){
+    let dd=Math.abs(NAT[order[i]]-NAT[order[j]])%360; if(dd>180)dd=360-dd;
+    for(const[sym,deg,orb,cls,nm]of ASP){const o=Math.abs(dd-deg);if(o<=orb){found.push({a:order[i],b:order[j],sym,cls,nm,orb:o});break;}}
+  }
+  found.sort((x,y)=>x.orb-y.orb);
+  const list=document.getElementById('aspect-list');
+  if(list)found.slice(0,8).forEach(f=>{const r=document.createElement('div');r.className='asprow '+f.cls;
+    r.innerHTML=`<span class="pair"><b>${f.a}</b> <span class="sym">${f.sym}</span> <b>${f.b}</b></span><span class="orb">${f.orb.toFixed(1)}°</span><span class="nm">${f.nm}</span>`;list.appendChild(r);});
+})();
+
+/* ---- REAL EPHEMERIS (Paul Schlyter method, ported from the kids-astro engine) ---- */
+function calcSkyNow(date){
+  const Y=date.getUTCFullYear(),Mo=date.getUTCMonth()+1,D=date.getUTCDate();
+  const UT=date.getUTCHours()+date.getUTCMinutes()/60+date.getUTCSeconds()/3600;
+  const JD=367*Y-Math.floor(7*(Y+Math.floor((Mo+9)/12))/4)+Math.floor(275*Mo/9)+D+1721013.5+UT/24;
+  const d=JD-2451543.5, PI=Math.PI,r2d=180/PI,d2r=PI/180, rev=a=>((a%360)+360)%360;
+  const kepler=(M,e)=>{let E=M*d2r;for(let i=0;i<80;i++){const dE=(M*d2r-E+e*Math.sin(E))/(1-e*Math.cos(E));E+=dE;if(Math.abs(dE)<1e-9)break;}return E;};
+  function helio(N,inc,w,a,e,M){M=rev(M);const E=kepler(M,e);const xv=a*(Math.cos(E)-e),yv=a*Math.sqrt(1-e*e)*Math.sin(E);
+    const v=Math.atan2(yv,xv)*r2d,rv=Math.sqrt(xv*xv+yv*yv),Nr=N*d2r,ir=inc*d2r,vr=(v+w)*d2r;
+    return{xh:rv*(Math.cos(Nr)*Math.cos(vr)-Math.sin(Nr)*Math.sin(vr)*Math.cos(ir)),yh:rv*(Math.sin(Nr)*Math.cos(vr)+Math.cos(Nr)*Math.sin(vr)*Math.cos(ir))};}
+  // Sun
+  function sunLonAt(dd){const sw=rev(282.9404+4.70935e-5*dd),se=0.016709-1.151e-9*dd,sm=rev(356.0470+0.9856002585*dd);
+    const sE=kepler(sm,se);const sv=Math.atan2(Math.sqrt(1-se*se)*Math.sin(sE),Math.cos(sE)-se)*r2d;return{lon:rev(sv+sw),sw,se,sm,sE};}
+  const S=sunLonAt(d); const sr=Math.sqrt((Math.cos(S.sE)-S.se)**2+(Math.sqrt(1-S.se*S.se)*Math.sin(S.sE))**2);
+  const xs=sr*Math.cos(S.lon*d2r),ys=sr*Math.sin(S.lon*d2r);
+  const geoLon=(N,inc,w,a,e,M)=>{const{xh,yh}=helio(N,inc,w,a,e,M);return rev(Math.atan2(yh+ys,xh+xs)*r2d);};
+  // Moon
+  const MN=rev(125.1228-0.0529538083*d),Mw=rev(318.0634+0.1643573223*d),MM=rev(115.3654+13.0649929509*d);
+  const ME=kepler(MM,0.0549),Mxv=60.2666*(Math.cos(ME)-0.0549),Myv=60.2666*Math.sqrt(1-0.0549*0.0549)*Math.sin(ME);
+  const Mv=Math.atan2(Myv,Mxv)*r2d,Mr=Math.sqrt(Mxv*Mxv+Myv*Myv),Mvr=(Mv+Mw)*d2r,MNr=MN*d2r,Mir=5.1454*d2r;
+  const Mxh=Mr*(Math.cos(MNr)*Math.cos(Mvr)-Math.sin(MNr)*Math.sin(Mvr)*Math.cos(Mir));
+  const Myh=Mr*(Math.sin(MNr)*Math.cos(Mvr)+Math.cos(MNr)*Math.sin(Mvr)*Math.cos(Mir));
+  const Mlon0=rev(Math.atan2(Myh,Mxh)*r2d), Lm=rev(MN+Mw+MM),Ms=S.sm,Dd=rev(Lm-S.lon),Fm=MM;
+  const moonLon=rev(Mlon0-1.274*Math.sin((Fm-2*Dd)*d2r)+0.658*Math.sin(2*Dd*d2r)-0.186*Math.sin(Ms*d2r)
+    -0.059*Math.sin((2*Fm-2*Dd)*d2r)-0.057*Math.sin((Fm-2*Dd+Ms)*d2r)+0.053*Math.sin((Fm+2*Dd)*d2r)
+    +0.046*Math.sin((2*Dd-Ms)*d2r)+0.041*Math.sin((Fm-Ms)*d2r)-0.035*Math.sin(Dd*d2r)-0.031*Math.sin((Fm+Ms)*d2r));
+  const EL=[ // [name, lon, lonYesterday] for Rx detection
+    ['Sun',S.lon,sunLonAt(d-1).lon],
+    ['Moon',moonLon,rev(moonLon-13.176)],
+    ['Mercury',geoLon(rev(48.3313+3.24587e-5*d),7.0047,rev(29.1241+1.01444e-5*d),0.387098,0.205635,rev(168.6562+4.0923344368*d)),geoLon(rev(48.3313+3.24587e-5*(d-1)),7.0047,rev(29.1241+1.01444e-5*(d-1)),0.387098,0.205635,rev(168.6562+4.0923344368*(d-1)))],
+    ['Venus',geoLon(rev(76.6799+2.4659e-5*d),3.3946,rev(54.8910+1.38374e-5*d),0.72333,0.006773,rev(48.0052+1.6021302244*d)),geoLon(rev(76.6799+2.4659e-5*(d-1)),3.3946,rev(54.8910+1.38374e-5*(d-1)),0.72333,0.006773,rev(48.0052+1.6021302244*(d-1)))],
+    ['Mars',geoLon(rev(49.5574+2.11081e-5*d),1.8497,rev(286.5016+2.92961e-5*d),1.523688,0.093405,rev(18.6021+0.5240207766*d)),geoLon(rev(49.5574+2.11081e-5*(d-1)),1.8497,rev(286.5016+2.92961e-5*(d-1)),1.523688,0.093405,rev(18.6021+0.5240207766*(d-1)))],
+    ['Jupiter',geoLon(rev(100.4542+2.76854e-5*d),1.3030,rev(273.8777+1.64505e-5*d),5.20256,0.048498,rev(19.8950+0.0830853001*d)),geoLon(rev(100.4542+2.76854e-5*(d-1)),1.3030,rev(273.8777+1.64505e-5*(d-1)),5.20256,0.048498,rev(19.8950+0.0830853001*(d-1)))],
+    ['Saturn',geoLon(rev(113.6634+2.3898e-5*d),2.4886,rev(339.3939+2.97661e-5*d),9.55475,0.055546,rev(316.9670+0.0334442282*d)),geoLon(rev(113.6634+2.3898e-5*(d-1)),2.4886,rev(339.3939+2.97661e-5*(d-1)),9.55475,0.055546,rev(316.9670+0.0334442282*(d-1)))],
+    ['Uranus',geoLon(rev(74.0005+1.3978e-5*d),0.7733,rev(96.6612+3.0565e-5*d),19.18171,0.047318,rev(142.5905+0.011725806*d)),geoLon(rev(74.0005+1.3978e-5*(d-1)),0.7733,rev(96.6612+3.0565e-5*(d-1)),19.18171,0.047318,rev(142.5905+0.011725806*(d-1)))],
+    ['Neptune',geoLon(rev(131.7806+3.0173e-5*d),1.7700,rev(272.8461-6.027e-6*d),30.05826,0.008606,rev(260.2471+0.005995147*d)),geoLon(rev(131.7806+3.0173e-5*(d-1)),1.7700,rev(272.8461-6.027e-6*(d-1)),30.05826,0.008606,rev(260.2471+0.005995147*(d-1)))],
+    ['Pluto',rev(238.953+0.003968789*d),rev(238.953+0.003968789*(d-1))],
+  ];
+  const GLY=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+  return EL.map(([name,lon,lonY])=>{let diff=lon-lonY;if(diff>180)diff-=360;if(diff<-180)diff+=360;
+    return{name,lon,rx:diff<0,sign:GLY[Math.floor(rev(lon)/30)],deg:Math.floor(rev(lon)%30)};});
+}
+
+/* ---- TRANSITS NOW → natal ----
+   Prefer the accurate Swiss-Ephemeris snapshot (ephemeris.json, regenerated by
+   ephemeris.py). Fall back to the in-page Schlyter approximation (Sun/Moon only)
+   if the fetch fails, and say so. ---- */
+const CLS={Conjunction:'conj',Opposition:'hard',Square:'hard',Trine:'soft',Sextile:'soft'};
+function setSky(phase,illum,sign,waxing,sunDeg,sunSign){
+  const mt=document.getElementById('moon-txt'); if(mt)mt.textContent=`${phase} · ${illum}% · ${sign}`;
+  const ss=document.getElementById('sky-sun'); if(ss)ss.textContent='☉ '+sunDeg+'°'+sunSign;
+  const lit=document.getElementById('moon-lit'); if(lit)lit.style.clipPath=waxing?`inset(0 ${100-illum}% 0 0)`:`inset(0 0 0 ${100-illum}%)`;
+}
+(async function(){
+  const list=document.getElementById('transit-list'), tt=document.getElementById('transit-time');
+  let data=null;
+  try{const r=await fetch('ephemeris.json?t='+Date.now(),{cache:'no-store'});if(r.ok)data=await r.json();}catch(e){}
+
+  if(data){ // ── accurate path: Swiss Ephemeris ──
+    setSky(data.moon.phase,data.moon.illum,data.moon.sign,data.moon.waxing,
+           data.transits.find(p=>p.name==='Sun').deg,data.transits.find(p=>p.name==='Sun').sign);
+    const gen=new Date(data.generated);
+    if(tt)tt.textContent='Swiss Ephemeris · '+gen.toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    if(list){
+      data.transitAspects.slice(0,8).forEach(h=>{const r=document.createElement('div');r.className='asprow '+(CLS[h.aspect]||'');
+        r.innerHTML=`<span class="pair">TR <b>${h.t}${h.rx?'℞':''}</b> <span class="sym">${h.sym}</span> natal <b>${h.n}</b></span><span class="orb">${h.orb.toFixed(1)}°</span><span class="nm">${h.applying?'applying':'separating'}</span>`;list.appendChild(r);});
+      const note=document.createElement('div');note.style.cssText='font-size:10px;color:var(--t3);margin-top:9px;line-height:1.5';
+      note.innerHTML=`All planets · ${data.engine}. Regenerated by ephemeris.py.`;list.appendChild(note);
+    }
+  } else { // ── fallback: in-page Schlyter, Sun & Moon only ──
+    const NAT={Sun:157.23,Moon:275.52,Mercury:172.17,Venus:140.8,Mars:59.7,Jupiter:122.6,Saturn:289.13,
+      Uranus:275.68,Neptune:281.93,Pluto:225.32,Node:306.98,ASC:278.35,MC:213.9};
+    const sky=calcSkyNow(new Date()), sun=sky.find(p=>p.name==='Sun'), moon=sky.find(p=>p.name==='Moon');
+    let elong=((moon.lon-sun.lon)%360+360)%360; const illum=Math.round((1-Math.cos(elong*Math.PI/180))/2*100);
+    let ph; if(illum<2)ph='New Moon';else if(elong<90)ph='Waxing crescent';else if(elong<100)ph='First quarter';
+      else if(elong<170)ph='Waxing gibbous';else if(elong<190)ph='Full Moon';else if(elong<260)ph='Waning gibbous';
+      else if(elong<280)ph='Last quarter';else ph='Waning crescent';
+    setSky(ph,illum,moon.sign,elong<180,sun.deg,sun.sign);
+    const ASP=[['☌',0,4,'conj'],['☍',180,4,'hard'],['△',120,3,'soft'],['□',90,3,'hard'],['⚹',60,2.5,'soft']];
+    const hits=[];[sun,moon].forEach(tp=>{for(const nk in NAT){let dd=Math.abs(tp.lon-NAT[nk])%360;if(dd>180)dd=360-dd;
+      for(const[sym,deg,orb,cls]of ASP){const o=Math.abs(dd-deg);if(o<=orb){hits.push({t:tp.name,sym,cls,nk,orb:o});break;}}}});
+    hits.sort((a,b)=>a.orb-b.orb);
+    if(tt)tt.textContent='Sun & Moon · approx';
+    if(list){hits.slice(0,6).forEach(h=>{const r=document.createElement('div');r.className='asprow '+h.cls;
+      r.innerHTML=`<span class="pair">TR <b>${h.t}</b> <span class="sym">${h.sym}</span> natal <b>${h.nk}</b></span><span class="orb">${h.orb.toFixed(1)}°</span><span class="nm">live</span>`;list.appendChild(r);});
+      const note=document.createElement('div');note.style.cssText='font-size:10px;color:var(--t3);margin-top:9px;line-height:1.5';
+      note.innerHTML='Ephemeris feed unavailable — showing Sun &amp; Moon (Schlyter approx) only.';list.appendChild(note);}
+  }
+  noEmoji(document.getElementById('transit-list'));
+  const sb=document.querySelector('.skybar'); if(sb)noEmoji(sb);
+})();
+
+/* run last: strip emoji presentation from all glyphs (HTML + SVG) */
+noEmoji(document.body);
+</script>
 </body>
 </html>
