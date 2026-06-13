@@ -1,36 +1,36 @@
 {
- "generated": "2026-06-13T17:27:28Z",
+ "generated": "2026-06-13T17:29:20Z",
  "transits": [
   {
-   "lon": 82.718,
+   "lon": 82.719,
    "sign": "Gem",
    "deg": 22,
    "name": "Sun",
    "rx": false
   },
   {
-   "lon": 62.754,
+   "lon": 62.774,
    "sign": "Gem",
    "deg": 2,
    "name": "Moon",
    "rx": false
   },
   {
-   "lon": 107.076,
+   "lon": 107.078,
    "sign": "Can",
    "deg": 17,
    "name": "Mercury",
    "rx": false
   },
   {
-   "lon": 120.324,
+   "lon": 120.326,
    "sign": "Leo",
    "deg": 0,
    "name": "Venus",
    "rx": false
   },
   {
-   "lon": 49.118,
+   "lon": 49.119,
    "sign": "Tau",
    "deg": 19,
    "name": "Mars",
@@ -51,7 +51,7 @@
    "rx": false
   },
   {
-   "lon": 62.789,
+   "lon": 62.79,
    "sign": "Gem",
    "deg": 2,
    "name": "Uranus",
@@ -101,7 +101,7 @@
    "sym": "\u26b9",
    "aspect": "Sextile",
    "n": "Jupiter",
-   "orb": 0.1,
+   "orb": 0.2,
    "applying": false
   },
   {
