@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-13T07:00:00-05:00",
-  "data_hash": "efb776244d081e20",
-  "slot": "recovery",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nYour system woke under-recovered despite a normal-length night, so capacity is narrowed before the day begins. For muscle retention, this is a day that favors steadier effort and a measured deficit over intensity or restriction.\n\nMeasured, not maximal.\n\nPerformance: Measured, not maximal.\n\nTransit: none",
+  "generated_at": "2026-06-13T11:30:00-05:00",
+  "data_hash": "96ebe74d04e9f0cc",
+  "slot": "fuel-1",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is soft and first fuel is still light, with a long gap behind it and the afternoon starting underfed. For muscle retention, the next meal reads best as protein-led with real carbs, not a prolonged deficit. Today favors steady output over intensity.\n\nMeasured, not forceful.\n\nPerformance: Measured, not forceful.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nYour system woke under-recovered despite a normal-length night, so capacity is narrowed before the day begins. For muscle retention, this is a day that favors steadier effort and a measured deficit over intensity or restriction.\n\nMeasured, not maximal."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is soft and first fuel is still light, with a long gap behind it and the afternoon starting underfed. For muscle retention, the next meal reads best as protein-led with real carbs, not a prolonged deficit. Today favors steady output over intensity.\n\nMeasured, not forceful."
     },
     {
       "label": "Performance",
-      "text": "Measured, not maximal."
+      "text": "Measured, not forceful."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nYour system woke under-recovered despite a normal-length night, so capacity is narrowed before the day begins. For muscle retention, this is a day that favors steadier effort and a measured deficit over intensity or restriction.\n\nMeasured, not maximal.",
-    "performance": "Measured, not maximal.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is soft and first fuel is still light, with a long gap behind it and the afternoon starting underfed. For muscle retention, the next meal reads best as protein-led with real carbs, not a prolonged deficit. Today favors steady output over intensity.\n\nMeasured, not forceful.",
+    "performance": "Measured, not forceful.",
     "transit": null
   },
-  "nutrition_nudge": "Protein and calories are on pace; anchor breakfast with 35g protein and keep meals steady.",
+  "nutrition_nudge": "You're on pace; keep meals steady and make lunch protein-forward with 50g.",
   "transits": [],
   "data_basis": {
     "recharge_today": 1,
