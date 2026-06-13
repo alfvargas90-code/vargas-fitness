@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-13T14:08:38-05:00",
-  "data_hash": "ced91b7f40aa13ca",
-  "slot": "macros-update",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new meal pulls a low-input day back into range, with protein finally moving in the right direction. Recovery is still subdued, so the day favors steady muscle protection over intensity while the remaining intake window matters.\n\nMomentum with restraint.\n\nPerformance: Momentum with restraint.\n\nTransit: none",
+  "generated_at": "2026-06-13T15:00:01-05:00",
+  "data_hash": "27aaf61457e6acd8",
+  "slot": "fuel-2",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nToday's system is under-recovered, while the recent meal gives the evening window usable energy rather than a deep deficit. For muscle retention, the day still hinges on protein catching up; it favors controlled strength work over intensity.\n\nMeasured, not maximal.\n\nPerformance: Measured, not maximal.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new meal pulls a low-input day back into range, with protein finally moving in the right direction. Recovery is still subdued, so the day favors steady muscle protection over intensity while the remaining intake window matters.\n\nMomentum with restraint."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nToday's system is under-recovered, while the recent meal gives the evening window usable energy rather than a deep deficit. For muscle retention, the day still hinges on protein catching up; it favors controlled strength work over intensity.\n\nMeasured, not maximal."
     },
     {
       "label": "Performance",
-      "text": "Momentum with restraint."
+      "text": "Measured, not maximal."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new meal pulls a low-input day back into range, with protein finally moving in the right direction. Recovery is still subdued, so the day favors steady muscle protection over intensity while the remaining intake window matters.\n\nMomentum with restraint.",
-    "performance": "Momentum with restraint.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nToday's system is under-recovered, while the recent meal gives the evening window usable energy rather than a deep deficit. For muscle retention, the day still hinges on protein catching up; it favors controlled strength work over intensity.\n\nMeasured, not maximal.",
+    "performance": "Measured, not maximal.",
     "transit": null
   },
-  "nutrition_nudge": "On pace so far; make the next meal protein-forward and keep calories steady.",
+  "nutrition_nudge": "You're on pace; keep dinner protein-forward and steady, aiming for 50g to protect muscle.",
   "transits": [],
   "data_basis": {
     "recharge_today": 1,
