@@ -379,6 +379,11 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
       </div>
 
       <div class="card">
+        <div class="sh">Transits Now <span class="sub" id="transit-time">live · transit → natal</span></div>
+        <div class="asp" id="transit-list"></div>
+      </div>
+
+      <div class="card">
         <div class="sh">June Forecast <span class="sub">modern transits</span></div>
         <div class="fc"><div class="d">~Jun 24</div><div class="b"><div class="h">Jupiter ingress Cancer</div><p>Crosses into your 7th — partnership & shared resources warm and expand. Builds toward the Jupiter return at 2°36′ Leo ~Jul 12.</p></div></div>
         <div class="fc"><div class="d">All month</div><div class="b"><div class="h">Neptune □ Moon &amp; Ascendant</div><p>Fog over the Capricorn cluster — fatigue, idealization, blurred boundaries. Don't decide identity questions from the haze.</p></div></div>
@@ -622,6 +627,84 @@ function noEmoji(root){
   const list=document.getElementById('aspect-list');
   if(list)found.slice(0,8).forEach(f=>{const r=document.createElement('div');r.className='asprow '+f.cls;
     r.innerHTML=`<span class="pair"><b>${f.a}</b> <span class="sym">${f.sym}</span> <b>${f.b}</b></span><span class="orb">${f.orb.toFixed(1)}°</span><span class="nm">${f.nm}</span>`;list.appendChild(r);});
+})();
+
+/* ---- REAL EPHEMERIS (Paul Schlyter method, ported from the kids-astro engine) ---- */
+function calcSkyNow(date){
+  const Y=date.getUTCFullYear(),Mo=date.getUTCMonth()+1,D=date.getUTCDate();
+  const UT=date.getUTCHours()+date.getUTCMinutes()/60+date.getUTCSeconds()/3600;
+  const JD=367*Y-Math.floor(7*(Y+Math.floor((Mo+9)/12))/4)+Math.floor(275*Mo/9)+D+1721013.5+UT/24;
+  const d=JD-2451543.5, PI=Math.PI,r2d=180/PI,d2r=PI/180, rev=a=>((a%360)+360)%360;
+  const kepler=(M,e)=>{let E=M*d2r;for(let i=0;i<80;i++){const dE=(M*d2r-E+e*Math.sin(E))/(1-e*Math.cos(E));E+=dE;if(Math.abs(dE)<1e-9)break;}return E;};
+  function helio(N,inc,w,a,e,M){M=rev(M);const E=kepler(M,e);const xv=a*(Math.cos(E)-e),yv=a*Math.sqrt(1-e*e)*Math.sin(E);
+    const v=Math.atan2(yv,xv)*r2d,rv=Math.sqrt(xv*xv+yv*yv),Nr=N*d2r,ir=inc*d2r,vr=(v+w)*d2r;
+    return{xh:rv*(Math.cos(Nr)*Math.cos(vr)-Math.sin(Nr)*Math.sin(vr)*Math.cos(ir)),yh:rv*(Math.sin(Nr)*Math.cos(vr)+Math.cos(Nr)*Math.sin(vr)*Math.cos(ir))};}
+  // Sun
+  function sunLonAt(dd){const sw=rev(282.9404+4.70935e-5*dd),se=0.016709-1.151e-9*dd,sm=rev(356.0470+0.9856002585*dd);
+    const sE=kepler(sm,se);const sv=Math.atan2(Math.sqrt(1-se*se)*Math.sin(sE),Math.cos(sE)-se)*r2d;return{lon:rev(sv+sw),sw,se,sm,sE};}
+  const S=sunLonAt(d); const sr=Math.sqrt((Math.cos(S.sE)-S.se)**2+(Math.sqrt(1-S.se*S.se)*Math.sin(S.sE))**2);
+  const xs=sr*Math.cos(S.lon*d2r),ys=sr*Math.sin(S.lon*d2r);
+  const geoLon=(N,inc,w,a,e,M)=>{const{xh,yh}=helio(N,inc,w,a,e,M);return rev(Math.atan2(yh+ys,xh+xs)*r2d);};
+  // Moon
+  const MN=rev(125.1228-0.0529538083*d),Mw=rev(318.0634+0.1643573223*d),MM=rev(115.3654+13.0649929509*d);
+  const ME=kepler(MM,0.0549),Mxv=60.2666*(Math.cos(ME)-0.0549),Myv=60.2666*Math.sqrt(1-0.0549*0.0549)*Math.sin(ME);
+  const Mv=Math.atan2(Myv,Mxv)*r2d,Mr=Math.sqrt(Mxv*Mxv+Myv*Myv),Mvr=(Mv+Mw)*d2r,MNr=MN*d2r,Mir=5.1454*d2r;
+  const Mxh=Mr*(Math.cos(MNr)*Math.cos(Mvr)-Math.sin(MNr)*Math.sin(Mvr)*Math.cos(Mir));
+  const Myh=Mr*(Math.sin(MNr)*Math.cos(Mvr)+Math.cos(MNr)*Math.sin(Mvr)*Math.cos(Mir));
+  const Mlon0=rev(Math.atan2(Myh,Mxh)*r2d), Lm=rev(MN+Mw+MM),Ms=S.sm,Dd=rev(Lm-S.lon),Fm=MM;
+  const moonLon=rev(Mlon0-1.274*Math.sin((Fm-2*Dd)*d2r)+0.658*Math.sin(2*Dd*d2r)-0.186*Math.sin(Ms*d2r)
+    -0.059*Math.sin((2*Fm-2*Dd)*d2r)-0.057*Math.sin((Fm-2*Dd+Ms)*d2r)+0.053*Math.sin((Fm+2*Dd)*d2r)
+    +0.046*Math.sin((2*Dd-Ms)*d2r)+0.041*Math.sin((Fm-Ms)*d2r)-0.035*Math.sin(Dd*d2r)-0.031*Math.sin((Fm+Ms)*d2r));
+  const EL=[ // [name, lon, lonYesterday] for Rx detection
+    ['Sun',S.lon,sunLonAt(d-1).lon],
+    ['Moon',moonLon,rev(moonLon-13.176)],
+    ['Mercury',geoLon(rev(48.3313+3.24587e-5*d),7.0047,rev(29.1241+1.01444e-5*d),0.387098,0.205635,rev(168.6562+4.0923344368*d)),geoLon(rev(48.3313+3.24587e-5*(d-1)),7.0047,rev(29.1241+1.01444e-5*(d-1)),0.387098,0.205635,rev(168.6562+4.0923344368*(d-1)))],
+    ['Venus',geoLon(rev(76.6799+2.4659e-5*d),3.3946,rev(54.8910+1.38374e-5*d),0.72333,0.006773,rev(48.0052+1.6021302244*d)),geoLon(rev(76.6799+2.4659e-5*(d-1)),3.3946,rev(54.8910+1.38374e-5*(d-1)),0.72333,0.006773,rev(48.0052+1.6021302244*(d-1)))],
+    ['Mars',geoLon(rev(49.5574+2.11081e-5*d),1.8497,rev(286.5016+2.92961e-5*d),1.523688,0.093405,rev(18.6021+0.5240207766*d)),geoLon(rev(49.5574+2.11081e-5*(d-1)),1.8497,rev(286.5016+2.92961e-5*(d-1)),1.523688,0.093405,rev(18.6021+0.5240207766*(d-1)))],
+    ['Jupiter',geoLon(rev(100.4542+2.76854e-5*d),1.3030,rev(273.8777+1.64505e-5*d),5.20256,0.048498,rev(19.8950+0.0830853001*d)),geoLon(rev(100.4542+2.76854e-5*(d-1)),1.3030,rev(273.8777+1.64505e-5*(d-1)),5.20256,0.048498,rev(19.8950+0.0830853001*(d-1)))],
+    ['Saturn',geoLon(rev(113.6634+2.3898e-5*d),2.4886,rev(339.3939+2.97661e-5*d),9.55475,0.055546,rev(316.9670+0.0334442282*d)),geoLon(rev(113.6634+2.3898e-5*(d-1)),2.4886,rev(339.3939+2.97661e-5*(d-1)),9.55475,0.055546,rev(316.9670+0.0334442282*(d-1)))],
+    ['Uranus',geoLon(rev(74.0005+1.3978e-5*d),0.7733,rev(96.6612+3.0565e-5*d),19.18171,0.047318,rev(142.5905+0.011725806*d)),geoLon(rev(74.0005+1.3978e-5*(d-1)),0.7733,rev(96.6612+3.0565e-5*(d-1)),19.18171,0.047318,rev(142.5905+0.011725806*(d-1)))],
+    ['Neptune',geoLon(rev(131.7806+3.0173e-5*d),1.7700,rev(272.8461-6.027e-6*d),30.05826,0.008606,rev(260.2471+0.005995147*d)),geoLon(rev(131.7806+3.0173e-5*(d-1)),1.7700,rev(272.8461-6.027e-6*(d-1)),30.05826,0.008606,rev(260.2471+0.005995147*(d-1)))],
+    ['Pluto',rev(238.953+0.003968789*d),rev(238.953+0.003968789*(d-1))],
+  ];
+  const GLY=['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+  return EL.map(([name,lon,lonY])=>{let diff=lon-lonY;if(diff>180)diff-=360;if(diff<-180)diff+=360;
+    return{name,lon,rx:diff<0,sign:GLY[Math.floor(rev(lon)/30)],deg:Math.floor(rev(lon)%30)};});
+}
+
+/* ---- TRANSITS NOW → natal ---- */
+(function(){
+  const NAT={Sun:157.23,Moon:275.52,Mercury:172.17,Venus:140.8,Mars:59.7,Jupiter:122.6,Saturn:289.13,
+    Uranus:275.68,Neptune:281.93,Pluto:225.32,Node:306.98,ASC:278.35,MC:213.9};
+  const now=new Date(), sky=calcSkyNow(now);
+  // update skybar with precise Schlyter Sun + moon phase from elongation
+  const sun=sky.find(p=>p.name==='Sun'), moon=sky.find(p=>p.name==='Moon');
+  let elong=((moon.lon-sun.lon)%360+360)%360; const illum=Math.round((1-Math.cos(elong*Math.PI/180))/2*100);
+  let ph; if(illum<2)ph=(elong<180?'New Moon':'New Moon');else if(elong<90)ph='Waxing crescent';
+    else if(elong<100)ph='First quarter';else if(elong<170)ph='Waxing gibbous';else if(elong<190)ph='Full Moon';
+    else if(elong<260)ph='Waning gibbous';else if(elong<280)ph='Last quarter';else ph='Waning crescent';
+  const syn=29.53059, toNew=Math.max(1,Math.round((1-(elong/360))*syn));
+  const mt=document.getElementById('moon-txt'); if(mt)mt.textContent=`${ph} · ${illum}% · ${moon.sign}`;
+  const ss=document.getElementById('sky-sun'); if(ss)ss.textContent='☉ '+sun.deg+'°'+sun.sign;
+  const lit=document.getElementById('moon-lit'); if(lit)lit.style.clipPath=elong<180?`inset(0 ${100-illum}% 0 0)`:`inset(0 0 0 ${100-illum}%)`;
+
+  // transit → natal aspects. ONLY Sun & Moon: the Schlyter approximation is accurate for
+  // these but drifts for slow planets (e.g. it mis-signs Pluto), so we don't assert those.
+  const ASP=[['☌',0,4,'conj'],['☍',180,4,'hard'],['△',120,3,'soft'],['□',90,3,'hard'],['⚹',60,2.5,'soft']];
+  const fast=sky.filter(p=>p.name==='Sun'||p.name==='Moon');
+  const hits=[];
+  fast.forEach(tp=>{for(const nk in NAT){let dd=Math.abs(tp.lon-NAT[nk])%360;if(dd>180)dd=360-dd;
+    for(const[sym,deg,orb,cls]of ASP){const o=Math.abs(dd-deg);if(o<=orb){hits.push({t:tp.name,rx:tp.rx,sym,cls,nk,orb:o});break;}}}});
+  hits.sort((a,b)=>a.orb-b.orb);
+  const list=document.getElementById('transit-list');
+  const tt=document.getElementById('transit-time');
+  if(tt)tt.textContent='Sun & Moon · '+now.toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+  if(list){ if(!hits.length){list.innerHTML='<div style="font-size:12px;color:var(--t3);padding:6px 0">No tight Sun/Moon contacts to natal points right now.</div>';}
+    hits.slice(0,6).forEach(h=>{const r=document.createElement('div');r.className='asprow '+h.cls;
+      r.innerHTML=`<span class="pair">TR <b>${h.t}</b> <span class="sym">${h.sym}</span> natal <b>${h.nk}</b></span><span class="orb">${h.orb.toFixed(1)}°</span><span class="nm">live</span>`;list.appendChild(r);});
+    const note=document.createElement('div');note.style.cssText='font-size:10px;color:var(--t3);margin-top:9px;line-height:1.5';
+    note.innerHTML='Sun &amp; Moon computed live (Schlyter). Outer-planet transits need the Swiss-Ephemeris engine — wired in production, not approximated here.';
+    list.appendChild(note); }
 })();
 
 /* run last: strip emoji presentation from all glyphs (HTML + SVG) */
