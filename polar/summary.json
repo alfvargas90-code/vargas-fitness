@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-12T17:32:21-05:00",
-  "data_hash": "25a2c40927a12254",
-  "slot": "macros-update",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 60%\n\nRead\nThe latest meal moves the day out of a low-input pattern and back into a workable fueling range, with protein now meaningfully closer to supporting lean mass. Recovery still reads constrained and output is lighter than usual, so the day favors repair-minded consistency over intensity.\n\nQuiet consolidation.\n\nPerformance: Quiet consolidation.\n\nTransit: none",
+  "generated_at": "2026-06-12T20:00:00-05:00",
+  "data_hash": "6d2a5d9f826cd214",
+  "slot": "train-2",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 94%\n\nRead\nEvening lands on a depleted system: recovery is low, output ran lighter than your usual day, and the training load still made a dent. The body-composition signal favors muscle preservation tonight, with protein support not yet matching the effort.\n\nLow gear, clean finish.\n\nPerformance: Low gear, clean finish.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 60%\n\nRead\nThe latest meal moves the day out of a low-input pattern and back into a workable fueling range, with protein now meaningfully closer to supporting lean mass. Recovery still reads constrained and output is lighter than usual, so the day favors repair-minded consistency over intensity.\n\nQuiet consolidation."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 94%\n\nRead\nEvening lands on a depleted system: recovery is low, output ran lighter than your usual day, and the training load still made a dent. The body-composition signal favors muscle preservation tonight, with protein support not yet matching the effort.\n\nLow gear, clean finish."
     },
     {
       "label": "Performance",
-      "text": "Quiet consolidation."
+      "text": "Low gear, clean finish."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 60%\n\nRead\nThe latest meal moves the day out of a low-input pattern and back into a workable fueling range, with protein now meaningfully closer to supporting lean mass. Recovery still reads constrained and output is lighter than usual, so the day favors repair-minded consistency over intensity.\n\nQuiet consolidation.",
-    "performance": "Quiet consolidation.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain 94%\n\nRead\nEvening lands on a depleted system: recovery is low, output ran lighter than your usual day, and the training load still made a dent. The body-composition signal favors muscle preservation tonight, with protein support not yet matching the effort.\n\nLow gear, clean finish.",
+    "performance": "Low gear, clean finish.",
     "transit": null
   },
-  "nutrition_nudge": "Fat is already over, so keep dinner lean, skip oils, and add 44g protein.",
+  "nutrition_nudge": "Front-load 44g protein into dinner now to protect muscle while keeping the deficit modest.",
   "transits": [],
   "data_basis": {
     "recharge_today": 1,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 59.1,
     "nutrition": "calories 2100 of 2574 goal, protein 94g of 138g goal, carbs 235g of 290g goal, fat 77g of 72g goal",
     "nutrition_detail": "calories 2100 of 2574 goal -> 474 left; protein 94g of 138g goal -> 44g gap; carbs 235g of 290g goal; fat 77g of 72g goal",
-    "activity_today": "3,591 steps so far, 3h 2m active, 1,708 calories burned, Moderate training load"
+    "activity_today": "5,305 steps so far, 4h 49m active, 2,171 calories burned, Moderate training load"
   }
 }
