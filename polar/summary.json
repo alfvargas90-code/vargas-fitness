@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-13T17:49:09-05:00",
-  "data_hash": "e3ca65e9e8336b80",
-  "slot": "train-1",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is running low as the workout window opens, with enough sleep but little sign of full readiness. Intake so far leaves muscle support underbuilt, so the day favors a measured resistance session over intensity or extra burn.\n\nMeasured strength, not strain.\n\nPerformance: Measured strength, not strain.\n\nTransit: none",
+  "generated_at": "2026-06-13T20:00:00-05:00",
+  "data_hash": "aaa4c34dae2c7493",
+  "slot": "train-2",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is muted tonight, and the workout window reads more like a checkpoint than a place for extra strain. Intake is running light where muscle retention matters most, so the day favors repair, steadiness, and a narrower deficit over added output.\n\nQuiet consolidation.\n\nPerformance: Quiet consolidation.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is running low as the workout window opens, with enough sleep but little sign of full readiness. Intake so far leaves muscle support underbuilt, so the day favors a measured resistance session over intensity or extra burn.\n\nMeasured strength, not strain."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is muted tonight, and the workout window reads more like a checkpoint than a place for extra strain. Intake is running light where muscle retention matters most, so the day favors repair, steadiness, and a narrower deficit over added output.\n\nQuiet consolidation."
     },
     {
       "label": "Performance",
-      "text": "Measured strength, not strain."
+      "text": "Quiet consolidation."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is running low as the workout window opens, with enough sleep but little sign of full readiness. Intake so far leaves muscle support underbuilt, so the day favors a measured resistance session over intensity or extra burn.\n\nMeasured strength, not strain.",
-    "performance": "Measured strength, not strain.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is muted tonight, and the workout window reads more like a checkpoint than a place for extra strain. Intake is running light where muscle retention matters most, so the day favors repair, steadiness, and a narrower deficit over added output.\n\nQuiet consolidation.",
+    "performance": "Quiet consolidation.",
     "transit": null
   },
-  "nutrition_nudge": "Pacing is on track; anchor dinner with lean protein and keep calories steady.",
+  "nutrition_nudge": "Front-load dinner with 75g protein now to protect muscle while keeping the deficit modest.",
   "transits": [],
   "data_basis": {
     "recharge_today": 1,
