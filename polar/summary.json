@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-14T07:00:00-05:00",
-  "data_hash": "e5c7ad2e6c779d1a",
-  "slot": "recovery",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nLast night\u2019s rest was ordinary, but the deeper signal is muted, so the morning opens with narrower capacity. With muscle preservation in view, the day favors measured output and steady protein follow-through over intensity or a deep deficit.\n\nMeasured from the start.\n\nPerformance: Measured from the start.\n\nTransit: none",
+  "generated_at": "2026-06-14T11:30:02-05:00",
+  "data_hash": "4b54d389385c5dcc",
+  "slot": "fuel-1",
+  "summary": "Reading: State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 10%\n\nRead\nSleep gave you more runway than usual, but recovery still reads muted and output is running lighter than a typical day. With a long meal gap and protein still carrying the afternoon, this favors a protein-forward next plate and a modest deficit, not intensity.\n\nSteady muscle-first afternoon.\n\nPerformance: Steady muscle-first afternoon.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
-      "text": "Poor"
+      "text": ""
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nLast night\u2019s rest was ordinary, but the deeper signal is muted, so the morning opens with narrower capacity. With muscle preservation in view, the day favors measured output and steady protein follow-through over intensity or a deep deficit.\n\nMeasured from the start."
+      "text": "State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 10%\n\nRead\nSleep gave you more runway than usual, but recovery still reads muted and output is running lighter than a typical day. With a long meal gap and protein still carrying the afternoon, this favors a protein-forward next plate and a modest deficit, not intensity.\n\nSteady muscle-first afternoon."
     },
     {
       "label": "Performance",
-      "text": "Measured from the start."
+      "text": "Steady muscle-first afternoon."
     },
     {
       "label": "Transit",
@@ -22,20 +22,20 @@
     }
   ],
   "simple": {
-    "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nLast night\u2019s rest was ordinary, but the deeper signal is muted, so the morning opens with narrower capacity. With muscle preservation in view, the day favors measured output and steady protein follow-through over intensity or a deep deficit.\n\nMeasured from the start.",
-    "performance": "Measured from the start.",
+    "recovery": null,
+    "reading": "State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 10%\n\nRead\nSleep gave you more runway than usual, but recovery still reads muted and output is running lighter than a typical day. With a long meal gap and protein still carrying the afternoon, this favors a protein-forward next plate and a modest deficit, not intensity.\n\nSteady muscle-first afternoon.",
+    "performance": "Steady muscle-first afternoon.",
     "transit": null
   },
-  "nutrition_nudge": "Protein is on pace at 60g; keep breakfast steady and make lunch carry the next 40g.",
+  "nutrition_nudge": "Keep lunch steady with about 40g protein and normal portions to protect muscle.",
   "transits": [],
   "data_basis": {
-    "recharge_today": 1,
-    "sleep_hours": 6.6,
-    "hrv_today": 46,
-    "hrv_7d_avg": 59.1,
+    "recharge_today": null,
+    "sleep_hours": 8.1,
+    "hrv_today": 55,
+    "hrv_7d_avg": 54.3,
     "nutrition": "calories 600 of 2574 goal, protein 60g of 138g goal, carbs 60g of 290g goal, fat 15g of 72g goal",
     "nutrition_detail": "calories 600 of 2574 goal -> 1974 left; protein 60g of 138g goal -> 78g gap; carbs 60g of 290g goal; fat 15g of 72g goal",
-    "activity_today": null
+    "activity_today": "400 steps so far, 30m active, 778 calories burned, Light training load"
   }
 }
