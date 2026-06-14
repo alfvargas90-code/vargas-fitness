@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-13T20:42:19-05:00",
-  "data_hash": "19d8825aee2c77c8",
+  "generated_at": "2026-06-14T00:43:57-05:00",
+  "data_hash": "9d3029b04baad746",
   "slot": "macros-update",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new food log changes the day from underfed to mostly covered, with protein now close enough to support the muscle-preserving side of the cut. Underlying strain still reads low-capacity, so the day favors steady maintenance over intensity.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new meal turns a low-input start into a more supported day, with protein now doing real work for muscle preservation. Recovery still reads muted, so the day favors steady output and a modest gap over intensity or aggressive restriction.\n\nMeasured, not maximal.\n\nPerformance: Measured, not maximal.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new food log changes the day from underfed to mostly covered, with protein now close enough to support the muscle-preserving side of the cut. Underlying strain still reads low-capacity, so the day favors steady maintenance over intensity.\n\nSteady, not forceful."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new meal turns a low-input start into a more supported day, with protein now doing real work for muscle preservation. Recovery still reads muted, so the day favors steady output and a modest gap over intensity or aggressive restriction.\n\nMeasured, not maximal."
     },
     {
       "label": "Performance",
-      "text": "Steady, not forceful."
+      "text": "Measured, not maximal."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new food log changes the day from underfed to mostly covered, with protein now close enough to support the muscle-preserving side of the cut. Underlying strain still reads low-capacity, so the day favors steady maintenance over intensity.\n\nSteady, not forceful.",
-    "performance": "Steady, not forceful.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new meal turns a low-input start into a more supported day, with protein now doing real work for muscle preservation. Recovery still reads muted, so the day favors steady output and a modest gap over intensity or aggressive restriction.\n\nMeasured, not maximal.",
+    "performance": "Measured, not maximal.",
     "transit": null
   },
-  "nutrition_nudge": "Fat budget is spent; keep dinner lean and add 22g protein without oils.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 1,
     "sleep_hours": 6.6,
     "hrv_today": 46,
     "hrv_7d_avg": 59.1,
-    "nutrition": "calories 2130 of 2574 goal, protein 116g of 138g goal, carbs 186g of 290g goal, fat 108g of 72g goal",
-    "nutrition_detail": "calories 2130 of 2574 goal -> 444 left; protein 116g of 138g goal -> 22g gap; carbs 186g of 290g goal; fat 108g of 72g goal",
+    "nutrition": "calories 600 of 2574 goal, protein 60g of 138g goal, carbs 60g of 290g goal, fat 15g of 72g goal",
+    "nutrition_detail": "calories 600 of 2574 goal -> 1974 left; protein 60g of 138g goal -> 78g gap; carbs 60g of 290g goal; fat 15g of 72g goal",
     "activity_today": null
   }
 }
