@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-14T00:43:57-05:00",
-  "data_hash": "9d3029b04baad746",
-  "slot": "macros-update",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new meal turns a low-input start into a more supported day, with protein now doing real work for muscle preservation. Recovery still reads muted, so the day favors steady output and a modest gap over intensity or aggressive restriction.\n\nMeasured, not maximal.\n\nPerformance: Measured, not maximal.\n\nTransit: none",
+  "generated_at": "2026-06-14T04:00:02-05:00",
+  "data_hash": "e49771fca5b67e46",
+  "slot": "sleep",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nLast night restored less than usual, leaving a narrower reserve for the day ahead. Sleep length held near your norm, but the deeper signal points to a system still carrying strain. Today favors preservation, protein consistency, and measured strength over high output.\n\nQuiet reserve.\n\nPerformance: Quiet reserve.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new meal turns a low-input start into a more supported day, with protein now doing real work for muscle preservation. Recovery still reads muted, so the day favors steady output and a modest gap over intensity or aggressive restriction.\n\nMeasured, not maximal."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nLast night restored less than usual, leaving a narrower reserve for the day ahead. Sleep length held near your norm, but the deeper signal points to a system still carrying strain. Today favors preservation, protein consistency, and measured strength over high output.\n\nQuiet reserve."
     },
     {
       "label": "Performance",
-      "text": "Measured, not maximal."
+      "text": "Quiet reserve."
     },
     {
       "label": "Transit",
@@ -23,8 +23,8 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new meal turns a low-input start into a more supported day, with protein now doing real work for muscle preservation. Recovery still reads muted, so the day favors steady output and a modest gap over intensity or aggressive restriction.\n\nMeasured, not maximal.",
-    "performance": "Measured, not maximal.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nLast night restored less than usual, leaving a narrower reserve for the day ahead. Sleep length held near your norm, but the deeper signal points to a system still carrying strain. Today favors preservation, protein consistency, and measured strength over high output.\n\nQuiet reserve.",
+    "performance": "Quiet reserve.",
     "transit": null
   },
   "nutrition_nudge": "",
