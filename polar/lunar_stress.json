@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-06-14T10:17:46-05:00",
+  "generated_at": "2026-06-14T11:19:49-05:00",
   "score": 5,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
   "physiology": {
     "hrv_pct_baseline": 1,
     "rhr_delta_bpm": 1,
-    "sleep_score": 72
+    "sleep_score": 79
   },
   "workout_intensity": "rest",
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Gemini",
-    "degree": "16\u00b0 Gem 39'",
+    "degree": "17\u00b0 Gem 18'",
     "phase": "Waning Crescent",
     "next_sign_change": {
       "sign": "Cancer",
@@ -41,7 +41,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 76.64,
+    "moon_longitude": 77.3,
     "moon_sign": "Gemini",
     "moon_phase": "Waning Crescent",
     "moon_house_natal": 5,
@@ -53,7 +53,7 @@
     "transit_points": 0,
     "physiology_points": 5,
     "breakdown": [
-      "+5 Sleep score 72 (70-80)"
+      "+5 Sleep score 79 (70-80)"
     ],
     "baselines": {
       "hrv_7d": 54.3,
