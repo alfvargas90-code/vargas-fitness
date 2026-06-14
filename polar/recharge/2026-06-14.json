@@ -1,0 +1,10 @@
+{
+  "polar_user": "https://polaraccesslink.com/v3/users/64113897",
+  "date": "2026-06-14",
+  "heart_rate_avg": 59,
+  "beat_to_beat_avg": 1001,
+  "heart_rate_variability_avg": 55,
+  "breathing_rate_avg": 12.1,
+  "nightly_recharge_status": 4,
+  "ans_charge": -4.2
+}
