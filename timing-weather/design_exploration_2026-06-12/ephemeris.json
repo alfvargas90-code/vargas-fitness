@@ -1,78 +1,78 @@
 {
- "generated": "2026-06-14T17:15:00Z",
+ "generated": "2026-06-14T23:01:45Z",
  "transits": [
   {
-   "lon": 83.666,
+   "lon": 83.896,
    "sign": "Gem",
    "deg": 23,
    "name": "Sun",
    "rx": false
   },
   {
-   "lon": 77.89,
+   "lon": 81.578,
    "sign": "Gem",
-   "deg": 17,
+   "deg": 21,
    "name": "Moon",
    "rx": false
   },
   {
-   "lon": 108.121,
+   "lon": 108.366,
    "sign": "Can",
    "deg": 18,
    "name": "Mercury",
    "rx": false
   },
   {
-   "lon": 121.478,
+   "lon": 121.758,
    "sign": "Leo",
    "deg": 1,
    "name": "Venus",
    "rx": false
   },
   {
-   "lon": 49.841,
+   "lon": 50.016,
    "sign": "Tau",
-   "deg": 19,
+   "deg": 20,
    "name": "Mars",
    "rx": false
   },
   {
-   "lon": 116.758,
+   "lon": 116.807,
    "sign": "Can",
    "deg": 26,
    "name": "Jupiter",
    "rx": false
   },
   {
-   "lon": 13.287,
+   "lon": 13.303,
    "sign": "Ari",
    "deg": 13,
    "name": "Saturn",
    "rx": false
   },
   {
-   "lon": 62.845,
+   "lon": 62.858,
    "sign": "Gem",
    "deg": 2,
    "name": "Uranus",
    "rx": false
   },
   {
-   "lon": 4.277,
+   "lon": 4.28,
    "sign": "Ari",
    "deg": 4,
    "name": "Neptune",
    "rx": false
   },
   {
-   "lon": 305.176,
+   "lon": 305.173,
    "sign": "Aqu",
    "deg": 5,
    "name": "Pluto",
    "rx": true
   },
   {
-   "lon": 332.343,
+   "lon": 332.305,
    "sign": "Pis",
    "deg": 2,
    "name": "Node",
@@ -88,7 +88,7 @@
  "moonVoid": {
   "void": false,
   "sign": "Gemini",
-  "entersNextHours": 19.0,
+  "entersNextHours": 13.2,
   "nextSign": "Cancer"
  },
  "transitAspects": [
@@ -102,12 +102,21 @@
    "applying": false
   },
   {
-   "t": "Mars",
+   "t": "Moon",
    "rx": false,
-   "sym": "\u25b3",
-   "aspect": "Trine",
-   "n": "Saturn",
-   "orb": 0.7,
+   "sym": "\u25a1",
+   "aspect": "Square",
+   "n": "Mercury",
+   "orb": 0.6,
+   "applying": false
+  },
+  {
+   "t": "Moon",
+   "rx": false,
+   "sym": "\u26b9",
+   "aspect": "Sextile",
+   "n": "Venus",
+   "orb": 0.8,
    "applying": false
   },
   {
@@ -116,7 +125,7 @@
    "sym": "\u260d",
    "aspect": "Opposition",
    "n": "Saturn",
-   "orb": 1.0,
+   "orb": 0.8,
    "applying": true
   },
   {
@@ -125,7 +134,7 @@
    "sym": "\u25a1",
    "aspect": "Square",
    "n": "Venus",
-   "orb": 1.0,
+   "orb": 0.8,
    "applying": true
   },
   {
@@ -134,16 +143,16 @@
    "sym": "\u260c",
    "aspect": "Conjunction",
    "n": "Jupiter",
-   "orb": 1.1,
+   "orb": 0.9,
    "applying": true
   },
   {
-   "t": "Saturn",
+   "t": "Mars",
    "rx": false,
-   "sym": "\u25a1",
-   "aspect": "Square",
-   "n": "Neptune",
-   "orb": 1.3,
+   "sym": "\u25b3",
+   "aspect": "Trine",
+   "n": "Saturn",
+   "orb": 0.9,
    "applying": false
   },
   {
@@ -165,6 +174,15 @@
    "applying": true
   },
   {
+   "t": "Saturn",
+   "rx": false,
+   "sym": "\u25a1",
+   "aspect": "Square",
+   "n": "Neptune",
+   "orb": 1.4,
+   "applying": false
+  },
+  {
    "t": "Neptune",
    "rx": false,
    "sym": "\u25a1",
@@ -174,21 +192,21 @@
    "applying": true
   },
   {
-   "t": "Sun",
-   "rx": false,
-   "sym": "\u25a1",
-   "aspect": "Square",
-   "n": "Mercury",
-   "orb": 1.5,
-   "applying": false
-  },
-  {
    "t": "Node",
    "rx": true,
    "sym": "\u25b3",
    "aspect": "Trine",
    "n": "MC",
    "orb": 1.6,
+   "applying": false
+  },
+  {
+   "t": "Sun",
+   "rx": false,
+   "sym": "\u25a1",
+   "aspect": "Square",
+   "n": "Mercury",
+   "orb": 1.7,
    "applying": false
   },
   {
@@ -201,15 +219,6 @@
    "applying": false
   },
   {
-   "t": "Venus",
-   "rx": false,
-   "sym": "\u26b9",
-   "aspect": "Sextile",
-   "n": "Mars",
-   "orb": 1.8,
-   "applying": false
-  },
-  {
    "t": "Pluto",
    "rx": true,
    "sym": "\u260c",
@@ -219,13 +228,13 @@
    "applying": false
   },
   {
-   "t": "Mars",
+   "t": "Venus",
    "rx": false,
-   "sym": "\u25b3",
-   "aspect": "Trine",
-   "n": "Mercury",
-   "orb": 2.3,
-   "applying": true
+   "sym": "\u26b9",
+   "aspect": "Sextile",
+   "n": "Mars",
+   "orb": 2.1,
+   "applying": false
   },
   {
    "t": "Venus",
@@ -233,7 +242,16 @@
    "sym": "\u25a1",
    "aspect": "Square",
    "n": "MC",
-   "orb": 2.4,
+   "orb": 2.1,
+   "applying": true
+  },
+  {
+   "t": "Mars",
+   "rx": false,
+   "sym": "\u25b3",
+   "aspect": "Trine",
+   "n": "Mercury",
+   "orb": 2.2,
    "applying": true
   },
   {
@@ -264,33 +282,6 @@
    "applying": true
   },
   {
-   "t": "Mercury",
-   "rx": false,
-   "sym": "\u25b3",
-   "aspect": "Trine",
-   "n": "Pluto",
-   "orb": 2.8,
-   "applying": false
-  },
-  {
-   "t": "Sun",
-   "rx": false,
-   "sym": "\u26b9",
-   "aspect": "Sextile",
-   "n": "Venus",
-   "orb": 2.9,
-   "applying": false
-  },
-  {
-   "t": "Moon",
-   "rx": false,
-   "sym": "\u26b9",
-   "aspect": "Sextile",
-   "n": "Venus",
-   "orb": 2.9,
-   "applying": false
-  },
-  {
    "t": "Jupiter",
    "rx": false,
    "sym": "\u26b9",
@@ -300,12 +291,21 @@
    "applying": true
   },
   {
+   "t": "Mercury",
+   "rx": false,
+   "sym": "\u25b3",
+   "aspect": "Trine",
+   "n": "Pluto",
+   "orb": 3.0,
+   "applying": false
+  },
+  {
    "t": "Uranus",
    "rx": false,
    "sym": "\u260c",
    "aspect": "Conjunction",
    "n": "Mars",
-   "orb": 3.1,
+   "orb": 3.2,
    "applying": false
   },
   {
@@ -314,7 +314,7 @@
    "sym": "\u260d",
    "aspect": "Opposition",
    "n": "Pluto",
-   "orb": 4.5,
+   "orb": 4.7,
    "applying": false
   },
   {
@@ -329,14 +329,24 @@
  ],
  "dailySky": [
   {
-   "t": "Mars",
-   "sym": "\u25b3",
-   "n": "Saturn",
+   "t": "Moon",
+   "sym": "\u25a1",
+   "n": "Mercury",
    "rx": false,
-   "aspect": "Trine",
-   "orb": 0.7,
+   "aspect": "Square",
+   "orb": 0.6,
    "applying": false,
-   "text": "fires up your structure \u2014 easy flow."
+   "text": "stirs your mind \u2014 productive friction."
+  },
+  {
+   "t": "Moon",
+   "sym": "\u26b9",
+   "n": "Venus",
+   "rx": false,
+   "aspect": "Sextile",
+   "orb": 0.8,
+   "applying": false,
+   "text": "stirs your values & love \u2014 an open door."
   },
   {
    "t": "Mercury",
@@ -344,19 +354,9 @@
    "n": "Saturn",
    "rx": false,
    "aspect": "Opposition",
-   "orb": 1.0,
+   "orb": 0.8,
    "applying": true,
    "text": "sparks thinking around your structure \u2014 a pull toward balance."
-  },
-  {
-   "t": "Mars",
-   "sym": "\u25a1",
-   "n": "Venus",
-   "rx": false,
-   "aspect": "Square",
-   "orb": 1.0,
-   "applying": true,
-   "text": "fires up your values & love \u2014 productive friction."
   }
  ],
  "profection": {
@@ -380,25 +380,25 @@
   {
    "name": "Fortune",
    "glyph": "\u2297",
-   "lon": 272.59,
+   "lon": 276.05,
    "sign": "Capricorn",
-   "deg": 2,
+   "deg": 6,
    "meaning": "body & fortune"
   },
   {
    "name": "Spirit",
    "glyph": "\u2295",
-   "lon": 284.14,
+   "lon": 280.68,
    "sign": "Capricorn",
-   "deg": 14,
+   "deg": 10,
    "meaning": "action & will"
   },
   {
    "name": "Eros",
    "glyph": "\u2764",
-   "lon": 115.7,
+   "lon": 119.44,
    "sign": "Cancer",
-   "deg": 25,
+   "deg": 29,
    "meaning": "desire & love"
   }
  ],
