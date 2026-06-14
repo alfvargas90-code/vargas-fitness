@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-14T11:19:49-05:00",
+  "generated_at": "2026-06-14T11:50:48-05:00",
   "score": 5,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -12,7 +12,7 @@
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Gemini",
-    "degree": "17\u00b0 Gem 18'",
+    "degree": "17\u00b0 Gem 38'",
     "phase": "Waning Crescent",
     "next_sign_change": {
       "sign": "Cancer",
@@ -41,7 +41,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 77.3,
+    "moon_longitude": 77.63,
     "moon_sign": "Gemini",
     "moon_phase": "Waning Crescent",
     "moon_house_natal": 5,
@@ -59,7 +59,7 @@
       "hrv_7d": 54.3,
       "rhr_7d": 58.4
     },
-    "active_calories": 77,
+    "active_calories": 103,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
