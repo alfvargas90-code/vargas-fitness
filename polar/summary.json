@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-14T15:00:00-05:00",
-  "data_hash": "39227a6d8fd8374c",
-  "slot": "fuel-2",
-  "summary": "Reading: State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 41%\n\nRead\nSleep gave you a better base, but recovery still reads unfinished and output has run lighter than usual. With a long gap since the last meal and protein still behind, the evening window favors measured resistance work and a protein-led refuel over intensity.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
+  "generated_at": "2026-06-14T17:30:01-05:00",
+  "data_hash": "cfbd101c225f7b98",
+  "slot": "train-1",
+  "summary": "Reading: State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 53%\n\nRead\nLonger sleep gives the day some cushion, but recovery still reads muted against a moderate spend so far. Output is lighter than your usual day, and the large intake gap makes muscle preservation the constraint. The open window favors measured strength over intensity.\n\nMeasured strength.\n\nPerformance: Measured strength.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 41%\n\nRead\nSleep gave you a better base, but recovery still reads unfinished and output has run lighter than usual. With a long gap since the last meal and protein still behind, the evening window favors measured resistance work and a protein-led refuel over intensity.\n\nSteady, not forceful."
+      "text": "State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 53%\n\nRead\nLonger sleep gives the day some cushion, but recovery still reads muted against a moderate spend so far. Output is lighter than your usual day, and the large intake gap makes muscle preservation the constraint. The open window favors measured strength over intensity.\n\nMeasured strength."
     },
     {
       "label": "Performance",
-      "text": "Steady, not forceful."
+      "text": "Measured strength."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": null,
-    "reading": "State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 41%\n\nRead\nSleep gave you a better base, but recovery still reads unfinished and output has run lighter than usual. With a long gap since the last meal and protein still behind, the evening window favors measured resistance work and a protein-led refuel over intensity.\n\nSteady, not forceful.",
-    "performance": "Steady, not forceful.",
+    "reading": "State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 53%\n\nRead\nLonger sleep gives the day some cushion, but recovery still reads muted against a moderate spend so far. Output is lighter than your usual day, and the large intake gap makes muscle preservation the constraint. The open window favors measured strength over intensity.\n\nMeasured strength.",
+    "performance": "Measured strength.",
     "transit": null
   },
-  "nutrition_nudge": "Add a carb base at your next meal, like rice or potatoes, and keep protein anchored.",
+  "nutrition_nudge": "Add a solid carb at dinner, like rice or potatoes, and pair it with lean protein.",
   "transits": [],
   "data_basis": {
     "recharge_today": null,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.3,
     "nutrition": "calories 600 of 2574 goal, protein 60g of 138g goal, carbs 60g of 290g goal, fat 15g of 72g goal",
     "nutrition_detail": "calories 600 of 2574 goal -> 1974 left; protein 60g of 138g goal -> 78g gap; carbs 60g of 290g goal; fat 15g of 72g goal",
-    "activity_today": "2,950 steps so far, 2h 45m active, 1,374 calories burned, Light training load"
+    "activity_today": "3,370 steps so far, 3h 27m active, 1,640 calories burned, Moderate training load"
   }
 }
