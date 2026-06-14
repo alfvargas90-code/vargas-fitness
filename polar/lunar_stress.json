@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-14T16:58:54-05:00",
-  "score": 5,
+  "generated_at": "2026-06-14T17:29:10-05:00",
+  "score": 8,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
   "physiology": {
@@ -8,11 +8,11 @@
     "rhr_delta_bpm": 1,
     "sleep_score": 79
   },
-  "workout_intensity": "rest",
+  "workout_intensity": "moderate",
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Gemini",
-    "degree": "20\u00b0 Gem 55'",
+    "degree": "21\u00b0 Gem 14'",
     "phase": "New",
     "next_sign_change": {
       "sign": "Cancer",
@@ -34,14 +34,14 @@
       "max": 55
     },
     "body": {
-      "filled": 1,
+      "filled": 2,
       "total": 10,
-      "points": 5,
+      "points": 8,
       "max": 40
     }
   },
   "transit_detail": {
-    "moon_longitude": 80.91,
+    "moon_longitude": 81.23,
     "moon_sign": "Gemini",
     "moon_phase": "New",
     "moon_house_natal": 6,
@@ -49,17 +49,18 @@
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 5,
+    "raw_score": 8,
     "transit_points": 0,
-    "physiology_points": 5,
+    "physiology_points": 8,
     "breakdown": [
-      "+5 Sleep score 79 (70-80)"
+      "+5 Sleep score 79 (70-80)",
+      "+3 Moderate-intensity day"
     ],
     "baselines": {
       "hrv_7d": 54.3,
       "rhr_7d": 58.4
     },
-    "active_calories": 397,
+    "active_calories": 425,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
