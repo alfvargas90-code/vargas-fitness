@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-13T20:00:00-05:00",
-  "data_hash": "aaa4c34dae2c7493",
-  "slot": "train-2",
-  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is muted tonight, and the workout window reads more like a checkpoint than a place for extra strain. Intake is running light where muscle retention matters most, so the day favors repair, steadiness, and a narrower deficit over added output.\n\nQuiet consolidation.\n\nPerformance: Quiet consolidation.\n\nTransit: none",
+  "generated_at": "2026-06-13T20:42:19-05:00",
+  "data_hash": "19d8825aee2c77c8",
+  "slot": "macros-update",
+  "summary": "Recovery: Poor\n\nReading: State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new food log changes the day from underfed to mostly covered, with protein now close enough to support the muscle-preserving side of the cut. Underlying strain still reads low-capacity, so the day favors steady maintenance over intensity.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is muted tonight, and the workout window reads more like a checkpoint than a place for extra strain. Intake is running light where muscle retention matters most, so the day favors repair, steadiness, and a narrower deficit over added output.\n\nQuiet consolidation."
+      "text": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new food log changes the day from underfed to mostly covered, with protein now close enough to support the muscle-preserving side of the cut. Underlying strain still reads low-capacity, so the day favors steady maintenance over intensity.\n\nSteady, not forceful."
     },
     {
       "label": "Performance",
-      "text": "Quiet consolidation."
+      "text": "Steady, not forceful."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Poor",
-    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nRecovery is muted tonight, and the workout window reads more like a checkpoint than a place for extra strain. Intake is running light where muscle retention matters most, so the day favors repair, steadiness, and a narrower deficit over added output.\n\nQuiet consolidation.",
-    "performance": "Quiet consolidation.",
+    "reading": "State\nPoor\nRecovery 46 \u2022 Sleep 72 \u2022 Strain \u2014\n\nRead\nThe new food log changes the day from underfed to mostly covered, with protein now close enough to support the muscle-preserving side of the cut. Underlying strain still reads low-capacity, so the day favors steady maintenance over intensity.\n\nSteady, not forceful.",
+    "performance": "Steady, not forceful.",
     "transit": null
   },
-  "nutrition_nudge": "Front-load dinner with 75g protein now to protect muscle while keeping the deficit modest.",
+  "nutrition_nudge": "Fat budget is spent; keep dinner lean and add 22g protein without oils.",
   "transits": [],
   "data_basis": {
     "recharge_today": 1,
     "sleep_hours": 6.6,
     "hrv_today": 46,
     "hrv_7d_avg": 59.1,
-    "nutrition": "calories 1330 of 2574 goal, protein 61g of 138g goal, carbs 121g of 290g goal, fat 66g of 72g goal",
-    "nutrition_detail": "calories 1330 of 2574 goal -> 1244 left; protein 61g of 138g goal -> 77g gap; carbs 121g of 290g goal; fat 66g of 72g goal",
+    "nutrition": "calories 2130 of 2574 goal, protein 116g of 138g goal, carbs 186g of 290g goal, fat 108g of 72g goal",
+    "nutrition_detail": "calories 2130 of 2574 goal -> 444 left; protein 116g of 138g goal -> 22g gap; carbs 186g of 290g goal; fat 108g of 72g goal",
     "activity_today": null
   }
 }
