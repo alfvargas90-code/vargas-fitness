@@ -1,19 +1,19 @@
 {
-  "date": "2026-06-12",
-  "generated_at": "2026-06-12T21:45:00-05:00",
-  "verdict": "Solid",
+  "date": "2026-06-13",
+  "generated_at": "2026-06-13T21:45:00-05:00",
+  "verdict": "Easy",
   "stats": {
-    "steps": 5305,
-    "active_minutes": 289,
-    "active_time_display": "4h 49m",
-    "calories_burned": 2171,
-    "active_calories": 752,
-    "calories_eaten": 2100,
-    "net_deficit": 71,
+    "steps": null,
+    "active_minutes": null,
+    "active_time_display": "\u2014",
+    "calories_burned": null,
+    "active_calories": null,
+    "calories_eaten": 2130,
+    "net_deficit": null,
     "calorie_target": 2574,
-    "protein_g": 94,
+    "protein_g": 116,
     "protein_target_g": 138,
-    "protein_gap_g": 44
+    "protein_gap_g": 22
   },
-  "prose": "Solid balanced day: about 5,300 steps, plenty of active time, and only a small 70-calorie deficit, which is right in the muscle-protecting zone. The miss was protein at about 45 grams short, so tomorrow, push protein hard before adding anything else."
+  "prose": ""
 }
