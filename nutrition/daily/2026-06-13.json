@@ -1,6 +1,6 @@
 {
   "date": "2026-06-13",
-  "synced_at": "2026-06-14T01:12:10+00:00",
+  "synced_at": "2026-06-14T01:42:16+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 1330.0,
-    "protein_g": 61.0,
-    "carbs_g": 121.0,
-    "fat_g": 66.0
+    "calories": 2130.0,
+    "protein_g": 116.0,
+    "carbs_g": 186.0,
+    "fat_g": 108.0
   },
-  "meal_count": 2,
+  "meal_count": 4,
   "raw": {
     "date": "2026-06-13",
     "meals": [
@@ -35,13 +35,31 @@
         "fat": 65,
         "carbs": 85,
         "emoji": "\u00f0\u009f\u008d\u0097"
+      },
+      {
+        "title": "Chick-fil-A Chicken Salad & Drink",
+        "time": "20:27",
+        "calories": 550,
+        "protein": 35,
+        "fat": 28,
+        "carbs": 45,
+        "emoji": "\u00f0\u009f\u00a5\u0097"
+      },
+      {
+        "title": "Spicy Fillet",
+        "time": "20:27",
+        "calories": 250,
+        "protein": 20,
+        "fat": 14,
+        "carbs": 20,
+        "emoji": "\u00f0\u009f\u008d\u0097"
       }
     ],
     "totals": {
-      "calories": 1330,
-      "protein": 61,
-      "fat": 66,
-      "carbs": 121
+      "calories": 2130,
+      "protein": 116,
+      "fat": 108,
+      "carbs": 186
     },
     "targets": {
       "calories": 2574,
@@ -50,14 +68,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 1244,
+      "calories": 444,
       "is_over": false
     },
-    "meal_count": 2,
+    "meal_count": 4,
     "labels": {
       "header": "Today",
-      "calories_remaining": "1244 kcal remaining today",
-      "meals_logged": "2 meals logged",
+      "calories_remaining": "444 kcal remaining today",
+      "meals_logged": "4 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
