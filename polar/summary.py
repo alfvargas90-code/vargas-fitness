@@ -366,8 +366,14 @@ def rest_day_framing(date_iso):
     )
 
 
-def recharge_score(rec):   # Nightly Recharge status, 1-6
-    return rec.get("ans_charge_status")
+def recharge_score(rec):   # Nightly Recharge status, 1-6 (6 best)
+    # Polar's Nightly Recharge status lives in `nightly_recharge_status` (1-6).
+    # `ans_charge_status` is a different 1-3 ANS field — reading it here mislabeled
+    # the recovery word and went null whenever a sync omitted it (e.g. 2026-06-14),
+    # which is what rendered the Currents State as "—". Fall back to ans_charge_status
+    # only when the proper field is absent, so the word never silently disappears.
+    v = rec.get("nightly_recharge_status")
+    return v if v is not None else rec.get("ans_charge_status")
 
 
 def recovery_word(rec_score, hrv_today=None, hrv_7d=None):
