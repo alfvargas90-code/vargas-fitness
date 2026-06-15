@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-15T15:00:00-05:00",
-  "data_hash": "fc5cf97188772fd8",
-  "slot": "fuel-2",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 56%\n\nRead\nRecovery is serviceable but not full, and today\u2019s intake is running behind the effort already spent. The evening window favors measured strength work only if the protein and energy picture closes, with muscle protection more important than chasing extra output.\n\nMuscle first.\n\nPerformance: Muscle first.\n\nTransit: none",
+  "generated_at": "2026-06-15T17:30:00-05:00",
+  "data_hash": "0c2e0518f8515aa5",
+  "slot": "train-1",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 69%\n\nRead\nRecovery is middling and the day has already taken a moderate bite, while output is still lighter than your usual rhythm. With intake running thin, especially on the muscle-protection side, this window favors quality resistance work over intensity or extra volume.\n\nMeasured strength.\n\nPerformance: Measured strength.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 56%\n\nRead\nRecovery is serviceable but not full, and today\u2019s intake is running behind the effort already spent. The evening window favors measured strength work only if the protein and energy picture closes, with muscle protection more important than chasing extra output.\n\nMuscle first."
+      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 69%\n\nRead\nRecovery is middling and the day has already taken a moderate bite, while output is still lighter than your usual rhythm. With intake running thin, especially on the muscle-protection side, this window favors quality resistance work over intensity or extra volume.\n\nMeasured strength."
     },
     {
       "label": "Performance",
-      "text": "Muscle first."
+      "text": "Measured strength."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 56%\n\nRead\nRecovery is serviceable but not full, and today\u2019s intake is running behind the effort already spent. The evening window favors measured strength work only if the protein and energy picture closes, with muscle protection more important than chasing extra output.\n\nMuscle first.",
-    "performance": "Muscle first.",
+    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 69%\n\nRead\nRecovery is middling and the day has already taken a moderate bite, while output is still lighter than your usual rhythm. With intake running thin, especially on the muscle-protection side, this window favors quality resistance work over intensity or extra volume.\n\nMeasured strength.",
+    "performance": "Measured strength.",
     "transit": null
   },
-  "nutrition_nudge": "Add a carb-heavy side at your next meal, like rice or potatoes, to protect training energy.",
+  "nutrition_nudge": "Add a carb base at dinner, like rice or potatoes, and pair it with lean protein.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 53.7,
     "nutrition": "calories 770 of 2574 goal, protein 47g of 138g goal, carbs 68g of 290g goal, fat 38g of 72g goal",
     "nutrition_detail": "calories 770 of 2574 goal -> 1804 left; protein 47g of 138g goal -> 91g gap; carbs 68g of 290g goal; fat 38g of 72g goal",
-    "activity_today": "3,734 steps so far, 2h 50m active, 1,480 calories burned, Moderate training load"
+    "activity_today": "4,576 steps so far, 3h 35m active, 1,734 calories burned, Moderate training load"
   }
 }
