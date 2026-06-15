@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-15T14:01:02-05:00",
-  "data_hash": "49cda39a9c0f2f25",
-  "slot": "macros-update",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 43%\n\nRead\nThe new intake lifts a low-input day, but the window remains wide and protein is still carrying the risk. Output is lighter than your usual pattern, with effort only lightly drawn down. Today favors steady muscle support over a sharp deficit.\n\nMeasured, not depleted.\n\nPerformance: Measured, not depleted.\n\nTransit: none",
+  "generated_at": "2026-06-15T15:00:00-05:00",
+  "data_hash": "fc5cf97188772fd8",
+  "slot": "fuel-2",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 56%\n\nRead\nRecovery is serviceable but not full, and today\u2019s intake is running behind the effort already spent. The evening window favors measured strength work only if the protein and energy picture closes, with muscle protection more important than chasing extra output.\n\nMuscle first.\n\nPerformance: Muscle first.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 43%\n\nRead\nThe new intake lifts a low-input day, but the window remains wide and protein is still carrying the risk. Output is lighter than your usual pattern, with effort only lightly drawn down. Today favors steady muscle support over a sharp deficit.\n\nMeasured, not depleted."
+      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 56%\n\nRead\nRecovery is serviceable but not full, and today\u2019s intake is running behind the effort already spent. The evening window favors measured strength work only if the protein and energy picture closes, with muscle protection more important than chasing extra output.\n\nMuscle first."
     },
     {
       "label": "Performance",
-      "text": "Measured, not depleted."
+      "text": "Muscle first."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 43%\n\nRead\nThe new intake lifts a low-input day, but the window remains wide and protein is still carrying the risk. Output is lighter than your usual pattern, with effort only lightly drawn down. Today favors steady muscle support over a sharp deficit.\n\nMeasured, not depleted.",
-    "performance": "Measured, not depleted.",
+    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 56%\n\nRead\nRecovery is serviceable but not full, and today\u2019s intake is running behind the effort already spent. The evening window favors measured strength work only if the protein and energy picture closes, with muscle protection more important than chasing extra output.\n\nMuscle first.",
+    "performance": "Muscle first.",
     "transit": null
   },
-  "nutrition_nudge": "Add a carb base at your next meal, like rice or potatoes, with a solid protein serving.",
+  "nutrition_nudge": "Add a carb-heavy side at your next meal, like rice or potatoes, to protect training energy.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 53.7,
     "nutrition": "calories 770 of 2574 goal, protein 47g of 138g goal, carbs 68g of 290g goal, fat 38g of 72g goal",
     "nutrition_detail": "calories 770 of 2574 goal -> 1804 left; protein 47g of 138g goal -> 91g gap; carbs 68g of 290g goal; fat 38g of 72g goal",
-    "activity_today": "2,870 steps so far, 2h 16m active, 1,179 calories burned, Light training load"
+    "activity_today": "3,734 steps so far, 2h 50m active, 1,480 calories burned, Moderate training load"
   }
 }
