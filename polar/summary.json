@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-15T10:48:59-05:00",
-  "data_hash": "697dfef5d2c754fa",
+  "generated_at": "2026-06-15T11:30:00-05:00",
+  "data_hash": "b2e2b8826ef3458e",
   "slot": "fuel-1",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 30%\n\nRead\nYou enter the afternoon lightly spent but under-supplied, with movement still below your usual day and recovery only middling. The long gap without a logged meal makes protein the missing anchor; this day favors muscle preservation over deeper deficit.\n\nAfternoon needs an anchor.\n\nPerformance: Afternoon needs an anchor.\n\nTransit: none",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 30%\n\nRead\nA long food gap has left the day underfed heading into afternoon, with protein still absent and recovery only middling. Effort has been light versus your usual rhythm, so the day favors a protein-forward first meal and measured consistency over intensity.\n\nMuscle first.\n\nPerformance: Muscle first.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 30%\n\nRead\nYou enter the afternoon lightly spent but under-supplied, with movement still below your usual day and recovery only middling. The long gap without a logged meal makes protein the missing anchor; this day favors muscle preservation over deeper deficit.\n\nAfternoon needs an anchor."
+      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 30%\n\nRead\nA long food gap has left the day underfed heading into afternoon, with protein still absent and recovery only middling. Effort has been light versus your usual rhythm, so the day favors a protein-forward first meal and measured consistency over intensity.\n\nMuscle first."
     },
     {
       "label": "Performance",
-      "text": "Afternoon needs an anchor."
+      "text": "Muscle first."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 30%\n\nRead\nYou enter the afternoon lightly spent but under-supplied, with movement still below your usual day and recovery only middling. The long gap without a logged meal makes protein the missing anchor; this day favors muscle preservation over deeper deficit.\n\nAfternoon needs an anchor.",
-    "performance": "Afternoon needs an anchor.",
+    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 30%\n\nRead\nA long food gap has left the day underfed heading into afternoon, with protein still absent and recovery only middling. Effort has been light versus your usual rhythm, so the day favors a protein-forward first meal and measured consistency over intensity.\n\nMuscle first.",
+    "performance": "Muscle first.",
     "transit": null
   },
-  "nutrition_nudge": "Start breakfast with 35g protein and keep meal pacing steady for muscle protection.",
+  "nutrition_nudge": "On pace for the day; make lunch protein-forward and keep meal timing steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
