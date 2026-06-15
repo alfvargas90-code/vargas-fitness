@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-15T04:00:00-05:00",
-  "data_hash": "5a42c8ef8bc4411a",
-  "slot": "sleep",
-  "summary": "Reading: State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 1%\n\nRead\nLast night offered more rest than usual, but the underlying rebound still looks muted. The day ahead carries a low-reserve signature, favoring steady output over intensity, with muscle preservation depending more on adequate protein than extra grind.\n\nTransit: none",
+  "generated_at": "2026-06-15T07:00:00-05:00",
+  "data_hash": "8e6332e8caf643b9",
+  "slot": "recovery",
+  "summary": "Reading: State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 2%\n\nRead\nYou woke from a longer night, but the recovery signal is still absent, so capacity reads unfinished rather than fully restored. With the day still nutritionally blank, muscle protection is not yet supported. Today favors steady structure over intensity.\n\nEarly, not yet defined.\n\nPerformance: Early, not yet defined.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 1%\n\nRead\nLast night offered more rest than usual, but the underlying rebound still looks muted. The day ahead carries a low-reserve signature, favoring steady output over intensity, with muscle preservation depending more on adequate protein than extra grind."
+      "text": "State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 2%\n\nRead\nYou woke from a longer night, but the recovery signal is still absent, so capacity reads unfinished rather than fully restored. With the day still nutritionally blank, muscle protection is not yet supported. Today favors steady structure over intensity.\n\nEarly, not yet defined."
     },
     {
       "label": "Performance",
-      "text": ""
+      "text": "Early, not yet defined."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": null,
-    "reading": "State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 1%\n\nRead\nLast night offered more rest than usual, but the underlying rebound still looks muted. The day ahead carries a low-reserve signature, favoring steady output over intensity, with muscle preservation depending more on adequate protein than extra grind.",
-    "performance": null,
+    "reading": "State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 2%\n\nRead\nYou woke from a longer night, but the recovery signal is still absent, so capacity reads unfinished rather than fully restored. With the day still nutritionally blank, muscle protection is not yet supported. Today favors steady structure over intensity.\n\nEarly, not yet defined.",
+    "performance": "Early, not yet defined.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "On pace this morning \u2014 keep meal timing steady and anchor breakfast with protein.",
   "transits": [],
   "data_basis": {
     "recharge_today": null,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.3,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "0m active, 448 calories burned, \u2014 training load"
   }
 }
