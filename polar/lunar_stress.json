@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-15T14:40:21-05:00",
+  "generated_at": "2026-06-15T15:10:33-05:00",
   "score": 38,
   "band": "Mild Compression",
   "trigger": "Moon opposite natal Moon",
@@ -12,7 +12,7 @@
   "recommendation": "Keep the day structured and move work forward; no need to back off.",
   "lunar": {
     "sign": "Cancer",
-    "degree": "4\u00b0 Can 44'",
+    "degree": "5\u00b0 Can 03'",
     "phase": "Waxing Crescent",
     "next_sign_change": {
       "sign": "Leo",
@@ -37,11 +37,11 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 94.73,
+    "moon_longitude": 95.05,
     "moon_sign": "Cancer",
     "moon_phase": "Waxing Crescent",
     "moon_house_natal": 6,
-    "aspect_to_natal_moon": "opposition (0.8\u00b0 applying)",
+    "aspect_to_natal_moon": "opposition (0.5\u00b0 applying)",
     "is_full_moon": false
   },
   "scoring_detail": {
