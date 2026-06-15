@@ -1,6 +1,6 @@
 {
   "date": "2026-06-15",
-  "synced_at": "2026-06-15T18:30:50+00:00",
+  "synced_at": "2026-06-15T19:00:59+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 520.0,
-    "protein_g": 42.0,
-    "carbs_g": 8.0,
+    "calories": 770.0,
+    "protein_g": 47.0,
+    "carbs_g": 68.0,
     "fat_g": 38.0
   },
-  "meal_count": 1,
+  "meal_count": 2,
   "raw": {
     "date": "2026-06-15",
     "meals": [
@@ -26,13 +26,22 @@
         "fat": 38,
         "carbs": 8,
         "emoji": "\u00f0\u009f\u008d\u00b3"
+      },
+      {
+        "title": "Five Tangerines",
+        "time": "13:48",
+        "calories": 250,
+        "protein": 5,
+        "fat": 0,
+        "carbs": 60,
+        "emoji": "\u00f0\u009f\u008d\u008a"
       }
     ],
     "totals": {
-      "calories": 520,
-      "protein": 42,
+      "calories": 770,
+      "protein": 47,
       "fat": 38,
-      "carbs": 8
+      "carbs": 68
     },
     "targets": {
       "calories": 2574,
@@ -41,14 +50,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 2054,
+      "calories": 1804,
       "is_over": false
     },
-    "meal_count": 1,
+    "meal_count": 2,
     "labels": {
       "header": "Today",
-      "calories_remaining": "2054 kcal remaining today",
-      "meals_logged": "1 meals logged",
+      "calories_remaining": "1804 kcal remaining today",
+      "meals_logged": "2 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
