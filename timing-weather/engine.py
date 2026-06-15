@@ -150,6 +150,19 @@ SADE_SATI = (date(2025, 3, 30), date(2027, 6, 2))
 # BaZi Da Yun shift (~Sep 2026, Output->payoff). natal_context.md bazi.da_yun.
 BAZI_SHIFT = date(2026, 9, 15)
 
+# Solar-arc directions perfecting in the 2026-27 window (exact dates from the natal
+# convergence review / the daily-transit-snapshot SKILL's SA list). Principle #6:
+# announced ONCE, on the exact day; the daily snapshot SKILL handles the orb-based
+# approach separately. Past exacts (e.g. SA Jupiter cnj Sun, Feb 28 2026) are omitted.
+SOLAR_ARC_EXACTS = [
+    (date(2026, 7, 16), "Solar arc MC perfects square to natal Chiron today (exact) — angular and "
+                        "structural; where competence and old sensitivity overlap peaks in the public role."),
+    (date(2026, 10, 2), "Solar arc Saturn perfects sextile to the natal Ascendant today (exact) — a "
+                        "structural support point on identity and form."),
+    (date(2027, 1, 2),  "Solar arc Pluto perfects trine to natal Venus today (exact) — a long-arc shift "
+                        "in how value and relationships consolidate."),
+]
+
 # Vedic Moon-Venus antardasha (relationship-positive) end (natal_context vedic.dashas).
 VENUS_ANTARDASHA = (date(2025, 4, 1), date(2026, 12, 31))
 
@@ -1624,6 +1637,13 @@ STYLE_GUIDE_BLOCK = (
     "best discharged through action, not discussion.' Not 'tensions arise' but 'if friction "
     "appears around fairness or value, do not reopen old disputes.'\n"
     "- ANSWER FOUR QUESTIONS: what matters, what doesn't, what to build, what to ignore.\n"
+    "- ANNOUNCE STANDING THEMES ONCE, ON THEIR ACTIVATION DAY. Assume Alfredo already knows the "
+    "standing background — lord of the year, the current dasha/antardasha, the current Da Yun, "
+    "active solar arcs, Sade Sati. Do NOT restate them daily; he installed them himself. Mention "
+    "a long-running theme only on the day it begins or shifts (see the activation note below). On "
+    "an ordinary day, lead with the actionable stack — 1-3 day spikes, the trap, the best use — "
+    "not with the standing frame. What stays daily: tone spikes, same-day observations, the trap "
+    "and best use from THAT day's stack, and exactitude/station days.\n"
     "- TONE: direct, clinical, high-signal. No therapy language, no motivational language, no "
     "prediction inflation, no emotional hand-holding. Pattern recognition and decision support, "
     "not inspiration.\n"
@@ -1631,7 +1651,117 @@ STYLE_GUIDE_BLOCK = (
 )
 
 
-def codex_reading(system, forecast, factors, moon_desc, context_block, mood, snap=""):
+# --- Principle #6: announce standing themes ONCE, on their activation day ----
+def _profection_month_index(d):
+    """(month_index 1..12, year-start year, last birthday, month length in days) for date d."""
+    by = d.year if (d.month, d.day) >= BIRTH_MONTH_DAY else d.year - 1
+    last_bd = date(by, *BIRTH_MONTH_DAY)
+    year_len = (date(by + 1, *BIRTH_MONTH_DAY) - last_bd).days
+    month_len = year_len / 12.0
+    idx = min(12, int((d - last_bd).days // month_len) + 1)
+    return idx, by, last_bd, month_len
+
+
+def _monthly_profection_rotation(today):
+    """Activation label if today is a monthly-profection rotation (the lord of the month
+    hands off), else None. The annual flip (birthday) is handled separately, so the
+    birthday itself is skipped here. Mirrors the house math in traditional_monthly_factors."""
+    if (today.month, today.day) == BIRTH_MONTH_DAY:
+        return None
+    idx_today, by, _, _ = _profection_month_index(today)
+    idx_yest, _, _, _ = _profection_month_index(today - timedelta(days=1))
+    if idx_today == idx_yest:
+        return None
+    asc_i = SIGNS.index(ASC_SIGN)
+    annual_house = (by - 1990) % 12 + 1
+    house = ((annual_house - 1) + (idx_today - 1)) % 12 + 1
+    sign = SIGNS[(asc_i + house - 1) % 12]
+    lord = TRADITIONAL_RULERS[sign]
+    return (f"The monthly profection rotates today to the {ordinal(house)} whole-sign house "
+            f"({sign}, lord {lord}) — the month's time-lord hands off today.")
+
+
+def _slow_ingress_today(now_utc):
+    """Tropical sign ingresses for slow bodies (Jupiter..Pluto) crossing a sign boundary in
+    the last 24h. Moon and fast personal planets are excluded — those are daily tone, not
+    standing themes. Pure ephemeris (PVR)."""
+    out = []
+    jd_t, jd_y = jd_now(now_utc), jd_now(now_utc - timedelta(days=1))
+    slow = {"jupiter": swe.JUPITER, "saturn": swe.SATURN, "uranus": swe.URANUS,
+            "neptune": swe.NEPTUNE, "pluto": swe.PLUTO}
+    for name, b in slow.items():
+        try:
+            if sign_of(lon_of(jd_t, b)) != sign_of(lon_of(jd_y, b)):
+                out.append(f"{name.title()} ingresses into {sign_of(lon_of(jd_t, b))} today — a "
+                           "multi-year sign change. Name it today, then drop it from daily prose.")
+        except Exception:
+            continue
+    return out
+
+
+def standing_theme_activations(today, now_utc):
+    """Per-system list of standing/long-running themes that BEGIN or SHIFT exactly today
+    (Principle #6 of the translation style guide). These get announced ONCE, on the
+    activation day, then drop out of daily prose. An EMPTY list for a system means: assume
+    its standing background is known, do not restate it. Every entry is derived from the
+    dated facts above or live ephemeris — never fabricated (PVR)."""
+    acts = {"tropical": [], "traditional": [], "vedic": [], "bazi": []}
+    # Annual profection / lord-of-year flip — birthday (tropical + traditional time-lord).
+    if today == PROFECTION_FLIP:
+        acts["tropical"].append(
+            f"The annual profection turns over today: the 12th-house {LORD_BEFORE_FLIP.title()} "
+            f"year ends and the 1st-house {LORD_AFTER_FLIP.title()} year begins.")
+        acts["traditional"].append(
+            f"The lord of the year changes today to {LORD_AFTER_FLIP.title()} — the profection "
+            f"rotates to the 1st whole-sign house ({ASC_SIGN}). The annual time-lord hands off today.")
+    # Traditional monthly profection rotation — lord of the month hands off.
+    rot = _monthly_profection_rotation(today)
+    if rot:
+        acts["traditional"].append(rot)
+    # BaZi 10-year Da Yun shift.
+    if today == BAZI_SHIFT:
+        acts["bazi"].append(
+            "The 10-year Da Yun luck pillar shifts today (into the Output-payoff phase) — a "
+            "once-a-decade handoff. Name it today, then drop it.")
+    # Vedic Vimshottari sub-period (pratyantardasha) starts.
+    for w in VEDIC_SUBPERIODS:
+        if today == w["start"]:
+            acts["vedic"].append(
+                f"A new Vimshottari sub-period begins today: {VEDIC_MAHADASHA}–{VEDIC_ANTARDASHA}–"
+                f"{w['sub']} (runs through {w['end'].isoformat()}).")
+    # Vedic antardasha boundary.
+    if today == VENUS_ANTARDASHA[1]:
+        acts["vedic"].append(f"The {VEDIC_ANTARDASHA} antardasha ends today; the next one begins.")
+    # Sade Sati boundaries.
+    if today == SADE_SATI[0]:
+        acts["vedic"].append(f"Sade Sati ({SADE_SATI_PHASE}) begins today.")
+    if today == SADE_SATI[1]:
+        acts["vedic"].append(f"Sade Sati ({SADE_SATI_PHASE}) ends today.")
+    # Solar-arc directions perfecting (tropical structural).
+    for d, desc in SOLAR_ARC_EXACTS:
+        if today == d:
+            acts["tropical"].append(desc)
+    # Slow/outer-planet tropical sign ingress.
+    try:
+        acts["tropical"].extend(_slow_ingress_today(now_utc))
+    except Exception as e:
+        log(f"  ingress activation check failed ({e}) — skipping")
+    return acts
+
+
+def _activation_directive(system, activations):
+    """The per-system activation note injected into a daily reading prompt (Principle #6)."""
+    items = (activations or {}).get(system, [])
+    if items:
+        return ("ACTIVATION DAY NOTE — a standing/long-running theme BEGINS or SHIFTS today. LEAD "
+                "the reading with it; it is genuine news today. State it once, plainly, then move to "
+                "today's stack. Today's activation(s): " + " ".join(items))
+    return ("ACTIVATION DAY NOTE — no standing-theme activation today. Do NOT restate the standing "
+            "background (lord of year, current dasha, Da Yun, active solar arcs, Sade Sati); assume "
+            "he knows it. Lead with today's actionable stack: spikes, trap, best use.")
+
+
+def codex_reading(system, forecast, factors, moon_desc, context_block, mood, snap="", activation=""):
     """ONE framework's daily reading via ~/bin/llm --model codex (Cowork-safe). `system`
     is 'tropical' or 'vedic'; the prompt sees ONLY that system's context_block, speaks
     in that tradition's vocabulary, and is forbidden the other tradition's terms (no
@@ -1670,7 +1800,8 @@ def codex_reading(system, forecast, factors, moon_desc, context_block, mood, sna
         "qualifiers, no run-on sentences, no semicolons. Be honest about BOTH the supports and "
         "the tensions. No event predictions, no fortune-telling, no hype, no fluff.\n\n"
         + STYLE_GUIDE_BLOCK + "\n\n"
-        f"Headline weather mode: {forecast}.\n"
+        + (activation + "\n\n" if activation else "")
+        + f"Headline weather mode: {forecast}.\n"
         "Live factors to weave in (interpret in your framework, do not just list): "
         + "; ".join(facts) + ".\n"
         f"Mood: {mood}\n"
@@ -2225,14 +2356,20 @@ def compute(now=None, with_codex=True):
         # Three independent passes — each sees ONLY its framework's MD context (no
         # blending). v2.2.3 adds the Traditional/Hellenistic pass between the two.
         trad_factors = traditional_profection(today, natal, aspects)
+        # Principle #6: announce standing themes only on their activation/shift day.
+        activations = standing_theme_activations(today, now_utc)
         ts, tb = codex_reading("tropical", forecast, trop_factors, trop_moon_desc,
-                               tropical_context_block(), reading_mood, snap)
+                               tropical_context_block(), reading_mood, snap,
+                               _activation_directive("tropical", activations))
         trs, trb = codex_reading("traditional", forecast, trad_factors, "",
-                                 traditional_context_block(), reading_mood)
+                                 traditional_context_block(), reading_mood, "",
+                                 _activation_directive("traditional", activations))
         vs, vb = codex_reading("vedic", forecast, ved_factors, ved_moon_desc,
-                               vedic_context_block(), reading_mood)
+                               vedic_context_block(), reading_mood, "",
+                               _activation_directive("vedic", activations))
         bzs, bzb = codex_reading("bazi", forecast, bazi_factors(today, now_utc), "",
-                                 bazi_context_block(), reading_mood)
+                                 bazi_context_block(), reading_mood, "",
+                                 _activation_directive("bazi", activations))
         tropical_reading = {"state": ts, "body": tb} if tb else None
         traditional_reading = {"state": trs, "body": trb} if trb else None
         vedic_reading = {"state": vs, "body": vb} if vb else None
