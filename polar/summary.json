@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-15T11:30:00-05:00",
-  "data_hash": "b2e2b8826ef3458e",
-  "slot": "fuel-1",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 30%\n\nRead\nA long food gap has left the day underfed heading into afternoon, with protein still absent and recovery only middling. Effort has been light versus your usual rhythm, so the day favors a protein-forward first meal and measured consistency over intensity.\n\nMuscle first.\n\nPerformance: Muscle first.\n\nTransit: none",
+  "generated_at": "2026-06-15T12:00:01-05:00",
+  "data_hash": "44dbdb953e3e4332",
+  "slot": "macros-update",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 36%\n\nRead\nThe first meal brought the day out of a low-input start, with protein now carrying more of the load. Output is still lighter than your usual day and effort cost is low, so the day favors measured catch-up without forcing intensity.\n\nMeasured catch-up.\n\nPerformance: Measured catch-up.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 30%\n\nRead\nA long food gap has left the day underfed heading into afternoon, with protein still absent and recovery only middling. Effort has been light versus your usual rhythm, so the day favors a protein-forward first meal and measured consistency over intensity.\n\nMuscle first."
+      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 36%\n\nRead\nThe first meal brought the day out of a low-input start, with protein now carrying more of the load. Output is still lighter than your usual day and effort cost is low, so the day favors measured catch-up without forcing intensity.\n\nMeasured catch-up."
     },
     {
       "label": "Performance",
-      "text": "Muscle first."
+      "text": "Measured catch-up."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 30%\n\nRead\nA long food gap has left the day underfed heading into afternoon, with protein still absent and recovery only middling. Effort has been light versus your usual rhythm, so the day favors a protein-forward first meal and measured consistency over intensity.\n\nMuscle first.",
-    "performance": "Muscle first.",
+    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 36%\n\nRead\nThe first meal brought the day out of a low-input start, with protein now carrying more of the load. Output is still lighter than your usual day and effort cost is low, so the day favors measured catch-up without forcing intensity.\n\nMeasured catch-up.",
+    "performance": "Measured catch-up.",
     "transit": null
   },
-  "nutrition_nudge": "On pace for the day; make lunch protein-forward and keep meal timing steady.",
+  "nutrition_nudge": "Add a carb base at lunch, like rice, potatoes, oats, or fruit, and keep protein anchored.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
     "sleep_hours": 6.8,
     "hrv_today": 46,
     "hrv_7d_avg": 53.7,
-    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
-    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "1,936 steps so far, 1h 39m active, 957 calories burned, Light training load"
+    "nutrition": "calories 520 of 2574 goal, protein 42g of 138g goal, carbs 8g of 290g goal, fat 38g of 72g goal",
+    "nutrition_detail": "calories 520 of 2574 goal -> 2054 left; protein 42g of 138g goal -> 96g gap; carbs 8g of 290g goal; fat 38g of 72g goal",
+    "activity_today": "2,300 steps so far, 1h 59m active, 1,081 calories burned, Light training load"
   }
 }
