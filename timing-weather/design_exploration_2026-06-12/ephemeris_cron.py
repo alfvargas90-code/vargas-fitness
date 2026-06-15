@@ -37,6 +37,29 @@ RELS = ["timing-weather/ephemeris.json",
         "timing-weather/state.json",
         "timing-weather/version.json"]
 
+def ensure_node_on_path():
+    """engine.py's readings come from Codex (`~/bin/llm --model codex`), and the codex
+    CLI is a `#!/usr/bin/env node` script. launchd starts this job with a bare PATH
+    (/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin) that has NO node — so under launchd
+    `env node` fails, every Codex call dies, and EVERY reading silently nulls (the
+    2026-06-15 06:15 regression: state.json regenerated with all prose null). Interactive
+    runs work only because the shell PATH carries the nvm node dir. Fix: discover node's
+    bin dir and prepend it to PATH for engine.py's subprocesses. Self-healing across node
+    version bumps (globs nvm) and homebrew/system installs — never version-pinned."""
+    import glob
+    home = os.path.expanduser("~")
+    candidates = sorted(glob.glob(os.path.join(home, ".nvm/versions/node/*/bin")), reverse=True)
+    candidates += ["/opt/homebrew/bin", "/usr/local/bin", os.path.join(home, "bin")]
+    have = os.environ.get("PATH", "").split(":")
+    add = [d for d in candidates if d not in have and os.path.exists(os.path.join(d, "node"))]
+    # also keep ~/bin (the llm router) reachable even if it has no node next to it
+    binhint = os.path.join(home, "bin")
+    if binhint not in have and binhint not in add and os.path.isdir(binhint):
+        add.append(binhint)
+    if add:
+        os.environ["PATH"] = ":".join(add + have)
+        print("PATH += " + ":".join(add))
+
 def git(*a):
     return subprocess.run(["git", "-C", REPO, *a], capture_output=True, text=True)
 
@@ -68,6 +91,9 @@ def bump_version():
     print("version.json ->", ts)
 
 def main():
+    # 0) make sure node (and thus the codex CLI) is reachable under launchd's bare PATH
+    ensure_node_on_path()
+
     # 1) refresh the raw transit snapshot (live PWA dir + exploration dir)
     regen(LIVE)
     regen(SUBDIR)
