@@ -766,7 +766,7 @@ def astro_framework_block():
         "that other material is background only. Lean on their specific logic — the External "
         "Manifestation Windows (especially the strongest, Aug 12 – Sep 5 2026), the Moon–Venus "
         "antardasha, the 12th-House annual profection (a foundation/preparation year, not a "
-        "coronation), the 'valuation cycle, not destiny cycle' framing, the June = valuation "
+        "coronation), the 'valuation cycle you work, not a predetermined one' framing, the June = valuation "
         "month read, and the self-valuation / 2nd-House North Node lifetime arc (servicing "
         "institutions → owning unconventional value, IP over salary). Manifestation requires "
         "agency — outcomes depend on decisions, not on the calendar. BUT still obey the output "
@@ -1560,7 +1560,7 @@ _READING_SYSTEMS = {
         "name": "TROPICAL (Western)",
         "use": ("Western/tropical structural vocabulary naturally — Capricorn Rising, "
                 "the 12th-House annual profection (a foundation/preparation year), the "
-                "'valuation cycle, not destiny cycle' framing, structural leverage, the "
+                "'valuation cycle you work, not a predetermined one' framing, structural leverage, the "
                 "2nd-House North Node self-valuation arc, and natal aspects."),
         "forbid": ("Mahadasha, antardasha, dasha, Vimshottari, nakshatra, pada, Lagna, "
                    "Sade Sati, Panoti, or 'External Manifestation Windows'"),
@@ -1603,6 +1603,34 @@ _READING_SYSTEMS = {
 }
 
 
+# Canonical translation style guide — mirrors
+# 02_Astrology/Alfie/translation_style_guide.md (authored 2026-06-14). Injected into
+# every prose prompt so generated readings translate astrology into decision-oriented
+# operational language rather than describing it. Keep in sync with the vault doc.
+STYLE_GUIDE_BLOCK = (
+    "=== TRANSLATION STYLE GUIDE (mandatory) ===\n"
+    "Translate astrology into decision-oriented operational language. Do NOT describe "
+    "astrology — translate it into what a high-agency, systems-oriented reader should do.\n"
+    "- LEAD WITH HIERARCHY. Do not weight factors equally. Rank: structural/long-term first, "
+    "then outer-planet activations, then personal transit spikes, then emotional tone. Name "
+    "the dominant influence; demote the loud-but-transient one.\n"
+    "- TRANSLATE SYMBOLISM INTO REALITY. Not 'Chiron is activated' but 'areas where competence "
+    "and old sensitivity overlap become more visible.' Not 'Pluto transforms' but 'long-term "
+    "consequences become more apparent.'\n"
+    "- NO MYSTICAL LANGUAGE. Banned words: destiny, karma, soul, soul lesson, cosmic, universe, "
+    "divine, divine timing, wounds activated, manifest, vibration, alignment(mystical sense). "
+    "Replace with: direction, pattern, consequence, restructuring, opportunity, pressure.\n"
+    "- CONVERT EMOTION INTO DECISION POINTS. Not 'you may feel frustrated' but 'frustration is "
+    "best discharged through action, not discussion.' Not 'tensions arise' but 'if friction "
+    "appears around fairness or value, do not reopen old disputes.'\n"
+    "- ANSWER FOUR QUESTIONS: what matters, what doesn't, what to build, what to ignore.\n"
+    "- TONE: direct, clinical, high-signal. No therapy language, no motivational language, no "
+    "prediction inflation, no emotional hand-holding. Pattern recognition and decision support, "
+    "not inspiration.\n"
+    "=== END STYLE GUIDE ==="
+)
+
+
 def codex_reading(system, forecast, factors, moon_desc, context_block, mood, snap=""):
     """ONE framework's daily reading via ~/bin/llm --model codex (Cowork-safe). `system`
     is 'tropical' or 'vedic'; the prompt sees ONLY that system's context_block, speaks
@@ -1641,6 +1669,7 @@ def codex_reading(system, forecast, factors, moon_desc, context_block, mood, sna
         "Lead with the bottom line, then the why. Blunt, plain, direct: no hedging, no stacked "
         "qualifiers, no run-on sentences, no semicolons. Be honest about BOTH the supports and "
         "the tensions. No event predictions, no fortune-telling, no hype, no fluff.\n\n"
+        + STYLE_GUIDE_BLOCK + "\n\n"
         f"Headline weather mode: {forecast}.\n"
         "Live factors to weave in (interpret in your framework, do not just list): "
         + "; ".join(facts) + ".\n"
@@ -1805,6 +1834,7 @@ def codex_monthly_reading(system, forecast, factors, context_block, mood):
         "Second person, ~5-6 lines (roughly 100-150 words). Name specific dates inside the month "
         "where the factors give them. Be honest about BOTH the supports and the tensions. No event "
         "predictions, no fortune-telling, no hype, no fluff.\n\n"
+        + STYLE_GUIDE_BLOCK + "\n\n"
         f"Headline weather mode: {forecast}.\n"
         "Live monthly factors to weave in (interpret in your framework, do not just list): "
         + "; ".join(facts) + ".\n"
