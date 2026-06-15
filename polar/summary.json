@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-15T07:00:00-05:00",
-  "data_hash": "8e6332e8caf643b9",
-  "slot": "recovery",
-  "summary": "Reading: State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 2%\n\nRead\nYou woke from a longer night, but the recovery signal is still absent, so capacity reads unfinished rather than fully restored. With the day still nutritionally blank, muscle protection is not yet supported. Today favors steady structure over intensity.\n\nEarly, not yet defined.\n\nPerformance: Early, not yet defined.\n\nTransit: none",
+  "generated_at": "2026-06-15T10:48:59-05:00",
+  "data_hash": "697dfef5d2c754fa",
+  "slot": "fuel-1",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 30%\n\nRead\nYou enter the afternoon lightly spent but under-supplied, with movement still below your usual day and recovery only middling. The long gap without a logged meal makes protein the missing anchor; this day favors muscle preservation over deeper deficit.\n\nAfternoon needs an anchor.\n\nPerformance: Afternoon needs an anchor.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
-      "text": ""
+      "text": "Average"
     },
     {
       "label": "Reading",
-      "text": "State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 2%\n\nRead\nYou woke from a longer night, but the recovery signal is still absent, so capacity reads unfinished rather than fully restored. With the day still nutritionally blank, muscle protection is not yet supported. Today favors steady structure over intensity.\n\nEarly, not yet defined."
+      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 30%\n\nRead\nYou enter the afternoon lightly spent but under-supplied, with movement still below your usual day and recovery only middling. The long gap without a logged meal makes protein the missing anchor; this day favors muscle preservation over deeper deficit.\n\nAfternoon needs an anchor."
     },
     {
       "label": "Performance",
-      "text": "Early, not yet defined."
+      "text": "Afternoon needs an anchor."
     },
     {
       "label": "Transit",
@@ -22,20 +22,20 @@
     }
   ],
   "simple": {
-    "recovery": null,
-    "reading": "State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 2%\n\nRead\nYou woke from a longer night, but the recovery signal is still absent, so capacity reads unfinished rather than fully restored. With the day still nutritionally blank, muscle protection is not yet supported. Today favors steady structure over intensity.\n\nEarly, not yet defined.",
-    "performance": "Early, not yet defined.",
+    "recovery": "Average",
+    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 30%\n\nRead\nYou enter the afternoon lightly spent but under-supplied, with movement still below your usual day and recovery only middling. The long gap without a logged meal makes protein the missing anchor; this day favors muscle preservation over deeper deficit.\n\nAfternoon needs an anchor.",
+    "performance": "Afternoon needs an anchor.",
     "transit": null
   },
-  "nutrition_nudge": "On pace this morning \u2014 keep meal timing steady and anchor breakfast with protein.",
+  "nutrition_nudge": "Start breakfast with 35g protein and keep meal pacing steady for muscle protection.",
   "transits": [],
   "data_basis": {
-    "recharge_today": null,
-    "sleep_hours": 8.1,
-    "hrv_today": 55,
-    "hrv_7d_avg": 54.3,
+    "recharge_today": 3,
+    "sleep_hours": 6.8,
+    "hrv_today": 46,
+    "hrv_7d_avg": 53.7,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "0m active, 448 calories burned, \u2014 training load"
+    "activity_today": "1,936 steps so far, 1h 39m active, 957 calories burned, Light training load"
   }
 }
