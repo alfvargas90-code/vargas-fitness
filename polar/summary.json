@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-15T12:00:01-05:00",
-  "data_hash": "44dbdb953e3e4332",
+  "generated_at": "2026-06-15T14:01:02-05:00",
+  "data_hash": "49cda39a9c0f2f25",
   "slot": "macros-update",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 36%\n\nRead\nThe first meal brought the day out of a low-input start, with protein now carrying more of the load. Output is still lighter than your usual day and effort cost is low, so the day favors measured catch-up without forcing intensity.\n\nMeasured catch-up.\n\nPerformance: Measured catch-up.\n\nTransit: none",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 43%\n\nRead\nThe new intake lifts a low-input day, but the window remains wide and protein is still carrying the risk. Output is lighter than your usual pattern, with effort only lightly drawn down. Today favors steady muscle support over a sharp deficit.\n\nMeasured, not depleted.\n\nPerformance: Measured, not depleted.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 36%\n\nRead\nThe first meal brought the day out of a low-input start, with protein now carrying more of the load. Output is still lighter than your usual day and effort cost is low, so the day favors measured catch-up without forcing intensity.\n\nMeasured catch-up."
+      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 43%\n\nRead\nThe new intake lifts a low-input day, but the window remains wide and protein is still carrying the risk. Output is lighter than your usual pattern, with effort only lightly drawn down. Today favors steady muscle support over a sharp deficit.\n\nMeasured, not depleted."
     },
     {
       "label": "Performance",
-      "text": "Measured catch-up."
+      "text": "Measured, not depleted."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 36%\n\nRead\nThe first meal brought the day out of a low-input start, with protein now carrying more of the load. Output is still lighter than your usual day and effort cost is low, so the day favors measured catch-up without forcing intensity.\n\nMeasured catch-up.",
-    "performance": "Measured catch-up.",
+    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 43%\n\nRead\nThe new intake lifts a low-input day, but the window remains wide and protein is still carrying the risk. Output is lighter than your usual pattern, with effort only lightly drawn down. Today favors steady muscle support over a sharp deficit.\n\nMeasured, not depleted.",
+    "performance": "Measured, not depleted.",
     "transit": null
   },
-  "nutrition_nudge": "Add a carb base at lunch, like rice, potatoes, oats, or fruit, and keep protein anchored.",
+  "nutrition_nudge": "Add a carb base at your next meal, like rice or potatoes, with a solid protein serving.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
     "sleep_hours": 6.8,
     "hrv_today": 46,
     "hrv_7d_avg": 53.7,
-    "nutrition": "calories 520 of 2574 goal, protein 42g of 138g goal, carbs 8g of 290g goal, fat 38g of 72g goal",
-    "nutrition_detail": "calories 520 of 2574 goal -> 2054 left; protein 42g of 138g goal -> 96g gap; carbs 8g of 290g goal; fat 38g of 72g goal",
-    "activity_today": "2,300 steps so far, 1h 59m active, 1,081 calories burned, Light training load"
+    "nutrition": "calories 770 of 2574 goal, protein 47g of 138g goal, carbs 68g of 290g goal, fat 38g of 72g goal",
+    "nutrition_detail": "calories 770 of 2574 goal -> 1804 left; protein 47g of 138g goal -> 91g gap; carbs 68g of 290g goal; fat 38g of 72g goal",
+    "activity_today": "2,870 steps so far, 2h 16m active, 1,179 calories burned, Light training load"
   }
 }
