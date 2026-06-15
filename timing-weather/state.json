@@ -92,17 +92,17 @@
   "volatility": 78,
   "momentum": 76,
   "moonNow": {
-    "timestamp": "2026-06-15T05:15:00Z",
+    "timestamp": "2026-06-15T11:15:00Z",
     "tropical": {
       "sign": "Gemini",
-      "degree": 25.55,
+      "degree": 29.37,
       "house": 6
     },
     "vedic": {
       "sign": "Gemini",
-      "degree": 1.32,
+      "degree": 5.14,
       "nakshatra": "Mrigashira",
-      "nakshatra_pada": 3,
+      "nakshatra_pada": 4,
       "house": 7
     }
   },
@@ -185,7 +185,7 @@
     "pressure": 0,
     "volatility": 0,
     "comparedTo": "2026-06-14",
-    "lastComparedAt": "2026-06-15T00:15:00-05:00"
+    "lastComparedAt": "2026-06-15T06:15:00-05:00"
   },
   "todaysInsight": null,
   "recommendations": [],
@@ -277,7 +277,7 @@
     }
   ],
   "trendDirection": "Stable",
-  "updatedAt": "2026-06-15T00:15:00-05:00",
+  "updatedAt": "2026-06-15T06:15:00-05:00",
   "sourceMode": "static",
   "currentDate": "2026-06-15",
   "sources": [
@@ -288,36 +288,36 @@
   ],
   "scoringDetail": {
     "dominanceScores": {
-      "jupiter": 10.63,
-      "saturn": 6.84,
-      "pluto": 6.94,
-      "uranus": 6.77,
-      "venus": 5.55
+      "jupiter": 10.68,
+      "saturn": 6.83,
+      "pluto": 6.95,
+      "uranus": 6.76,
+      "venus": 5.79
     },
     "corroboration": "High",
     "lordOfYear": "jupiter",
     "activeWindows": [],
     "metricDetail": {
       "opportunity": [
-        "Venus conjunction natal jupiter (0.54°)",
-        "Jupiter conjunction natal jupiter (5.74°)",
+        "Venus conjunction natal jupiter (0.25°)",
+        "Jupiter conjunction natal jupiter (5.69°)",
         "Jupiter is lord of the year (benefic regime)",
         "approaching benefic window: Jupiter return — chapter reset (27d)",
         "Vedic Moon–Venus antardasha (relationship-positive)"
       ],
       "pressure": [
-        "Mars square natal venus (0.6°)",
-        "Saturn square natal saturn (5.81°)",
-        "Saturn square natal neptune (1.39°)",
-        "Saturn square natal asc (4.97°)",
+        "Mars square natal venus (0.41°)",
+        "Saturn square natal saturn (5.8°)",
+        "Saturn square natal neptune (1.4°)",
+        "Saturn square natal asc (4.99°)",
         "Sade Sati (Small Panoti) — pressure on foundations"
       ],
       "volatility": [
-        "Uranus square natal sun (4.36°)",
-        "Uranus conjunction natal mars (3.17°)",
-        "Uranus sextile natal jupiter (0.27°)",
-        "Uranus trine natal north_node (4.11°)",
-        "pluto square natal mc (angular, 1.27°)"
+        "Uranus square natal sun (4.35°)",
+        "Uranus conjunction natal mars (3.19°)",
+        "Uranus sextile natal jupiter (0.29°)",
+        "Uranus trine natal north_node (4.1°)",
+        "pluto square natal mc (angular, 1.26°)"
       ],
       "momentum": [
         "8 fast transit(s) exact within 3°",
@@ -326,47 +326,41 @@
       ]
     },
     "transitSigns": {
-      "sun": "24.14° Gemini",
-      "moon": "25.55° Gemini",
-      "mercury": "18.63° Cancer",
-      "venus": "2.06° Leo",
-      "mars": "20.2° Taurus",
-      "jupiter": "26.86° Cancer",
-      "saturn": "13.32° Aries",
-      "uranus": "2.87° Gemini",
-      "neptune": "4.28° Aries",
-      "pluto": "5.17° Aquarius"
+      "sun": "24.38° Gemini",
+      "moon": "29.37° Gemini",
+      "mercury": "18.87° Cancer",
+      "venus": "2.35° Leo",
+      "mars": "20.39° Taurus",
+      "jupiter": "26.91° Cancer",
+      "saturn": "13.34° Aries",
+      "uranus": "2.89° Gemini",
+      "neptune": "4.29° Aries",
+      "pluto": "5.16° Aquarius"
     },
     "tightAspects": [
       {
-        "transit": "uranus",
+        "transit": "venus",
         "natal": "jupiter",
-        "aspect": "sextile",
-        "orb": 0.27
+        "aspect": "conjunction",
+        "orb": 0.25
       },
       {
         "transit": "mercury",
         "natal": "saturn",
         "aspect": "opposition",
-        "orb": 0.51
+        "orb": 0.26
       },
       {
-        "transit": "venus",
+        "transit": "uranus",
         "natal": "jupiter",
-        "aspect": "conjunction",
-        "orb": 0.54
+        "aspect": "sextile",
+        "orb": 0.29
       },
       {
         "transit": "mars",
         "natal": "venus",
         "aspect": "square",
-        "orb": 0.6
-      },
-      {
-        "transit": "mars",
-        "natal": "saturn",
-        "aspect": "trine",
-        "orb": 1.07
+        "orb": 0.41
       },
       {
         "transit": "neptune",
@@ -375,16 +369,22 @@
         "orb": 1.23
       },
       {
+        "transit": "mars",
+        "natal": "saturn",
+        "aspect": "trine",
+        "orb": 1.25
+      },
+      {
         "transit": "pluto",
         "natal": "mc",
         "aspect": "square",
-        "orb": 1.27
+        "orb": 1.26
       },
       {
         "transit": "saturn",
         "natal": "neptune",
         "aspect": "square",
-        "orb": 1.39
+        "orb": 1.4
       },
       {
         "transit": "neptune",
@@ -393,22 +393,22 @@
         "orb": 1.4
       },
       {
-        "transit": "neptune",
-        "natal": "jupiter",
-        "aspect": "trine",
-        "orb": 1.68
-      },
-      {
-        "transit": "pluto",
-        "natal": "north_node",
-        "aspect": "conjunction",
-        "orb": 1.81
-      },
-      {
         "transit": "venus",
         "natal": "mc",
         "aspect": "square",
-        "orb": 1.84
+        "orb": 1.55
+      },
+      {
+        "transit": "neptune",
+        "natal": "jupiter",
+        "aspect": "trine",
+        "orb": 1.69
+      },
+      {
+        "transit": "mars",
+        "natal": "mercury",
+        "aspect": "trine",
+        "orb": 1.78
       }
     ],
     "transitMissing": [],
