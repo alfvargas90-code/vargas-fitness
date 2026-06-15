@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-15T07:06:35-05:00",
+  "generated_at": "2026-06-15T07:36:49-05:00",
   "score": 5,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -11,19 +11,15 @@
   "workout_intensity": "rest",
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
-    "sign": "Gemini",
-    "degree": "29\u00b0 Gem 55'",
+    "sign": "Cancer",
+    "degree": "0\u00b0 Can 14'",
     "phase": "New",
     "next_sign_change": {
-      "sign": "Cancer",
-      "at": "2026-06-15T07:14-05:00",
-      "display": "Enters Cancer 6/15 at 7:14 AM"
+      "sign": "Leo",
+      "at": "2026-06-17T07:05-05:00",
+      "display": "Enters Leo 6/17 at 7:05 AM"
     },
-    "void_of_course": {
-      "active": true,
-      "until": "2026-06-15T07:14-05:00",
-      "until_display": "6/15 at 7:14 AM"
-    },
+    "void_of_course": null,
     "active_transits": []
   },
   "bars": {
@@ -41,8 +37,8 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 89.92,
-    "moon_sign": "Gemini",
+    "moon_longitude": 90.24,
+    "moon_sign": "Cancer",
     "moon_phase": "New",
     "moon_house_natal": 6,
     "aspect_to_natal_moon": null,
