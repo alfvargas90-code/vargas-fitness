@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-14T20:00:00-05:00",
-  "data_hash": "74540e92441ba983",
-  "slot": "train-2",
-  "summary": "Reading: State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 66%\n\nRead\nThe session window is closing on a lighter-than-usual output day, with moderate effort already spent and recovery still muted despite longer rest. The remaining read favors quiet repair, a modest deficit, and enough protein support to preserve muscle.\n\nQuiet repair.\n\nPerformance: Quiet repair.\n\nTransit: none",
+  "generated_at": "2026-06-15T04:00:00-05:00",
+  "data_hash": "5a42c8ef8bc4411a",
+  "slot": "sleep",
+  "summary": "Reading: State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 1%\n\nRead\nLast night offered more rest than usual, but the underlying rebound still looks muted. The day ahead carries a low-reserve signature, favoring steady output over intensity, with muscle preservation depending more on adequate protein than extra grind.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 66%\n\nRead\nThe session window is closing on a lighter-than-usual output day, with moderate effort already spent and recovery still muted despite longer rest. The remaining read favors quiet repair, a modest deficit, and enough protein support to preserve muscle.\n\nQuiet repair."
+      "text": "State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 1%\n\nRead\nLast night offered more rest than usual, but the underlying rebound still looks muted. The day ahead carries a low-reserve signature, favoring steady output over intensity, with muscle preservation depending more on adequate protein than extra grind."
     },
     {
       "label": "Performance",
-      "text": "Quiet repair."
+      "text": ""
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": null,
-    "reading": "State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 66%\n\nRead\nThe session window is closing on a lighter-than-usual output day, with moderate effort already spent and recovery still muted despite longer rest. The remaining read favors quiet repair, a modest deficit, and enough protein support to preserve muscle.\n\nQuiet repair.",
-    "performance": "Quiet repair.",
+    "reading": "State\n\u2014\nRecovery 68 \u2022 Sleep 79 \u2022 Strain 1%\n\nRead\nLast night offered more rest than usual, but the underlying rebound still looks muted. The day ahead carries a low-reserve signature, favoring steady output over intensity, with muscle preservation depending more on adequate protein than extra grind.",
+    "performance": null,
     "transit": null
   },
-  "nutrition_nudge": "Load your next meal with 70g protein to protect muscle while keeping the deficit modest.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": null,
     "sleep_hours": 8.1,
     "hrv_today": 55,
     "hrv_7d_avg": 54.3,
-    "nutrition": "calories 600 of 2574 goal, protein 60g of 138g goal, carbs 60g of 290g goal, fat 15g of 72g goal",
-    "nutrition_detail": "calories 600 of 2574 goal -> 1974 left; protein 60g of 138g goal -> 78g gap; carbs 60g of 290g goal; fat 15g of 72g goal",
-    "activity_today": "3,662 steps so far, 4h 11m active, 1,896 calories burned, Moderate training load"
+    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
+    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
+    "activity_today": null
   }
 }
