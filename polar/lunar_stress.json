@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-16T00:15:34-05:00",
+  "generated_at": "2026-06-16T00:45:48-05:00",
   "score": 20,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -12,7 +12,7 @@
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Cancer",
-    "degree": "10\u00b0 Can 48'",
+    "degree": "11\u00b0 Can 07'",
     "phase": "Waxing Crescent",
     "next_sign_change": {
       "sign": "Leo",
@@ -37,7 +37,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 100.8,
+    "moon_longitude": 101.11,
     "moon_sign": "Cancer",
     "moon_phase": "Waxing Crescent",
     "moon_house_natal": 7,
