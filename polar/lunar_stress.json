@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-15T22:44:50-05:00",
+  "generated_at": "2026-06-15T23:15:05-05:00",
   "score": 30,
   "band": "Mild Compression",
   "trigger": "No active lunar trigger",
@@ -12,7 +12,7 @@
   "recommendation": "Keep the day structured and move work forward; no need to back off.",
   "lunar": {
     "sign": "Cancer",
-    "degree": "9\u00b0 Can 50'",
+    "degree": "10\u00b0 Can 10'",
     "phase": "Waxing Crescent",
     "next_sign_change": {
       "sign": "Leo",
@@ -37,7 +37,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 99.84,
+    "moon_longitude": 100.16,
     "moon_sign": "Cancer",
     "moon_phase": "Waxing Crescent",
     "moon_house_natal": 7,
