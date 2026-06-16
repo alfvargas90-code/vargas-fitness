@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-16T15:00:00-05:00",
-  "data_hash": "ac7ee7ba9c598c27",
-  "slot": "fuel-2",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nRecovery is middling, and the long gap since the last meal has the evening window under-supplied. With protein still carrying the day, this favors a protein-forward plate with steady carbs over pushing intensity from a deficit.\n\nMuscle first.\n\nPerformance: Muscle first.\n\nTransit: none",
+  "generated_at": "2026-06-16T17:30:00-05:00",
+  "data_hash": "efd5498d0da2fe84",
+  "slot": "train-1",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nRecovery is moderate, and intake is running too light for muscle preservation as the workout window opens. This favors controlled resistance work over intensity, with protein still the day\u2019s main missing support.\n\nSteady, not sharp.\n\nPerformance: Steady, not sharp.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nRecovery is middling, and the long gap since the last meal has the evening window under-supplied. With protein still carrying the day, this favors a protein-forward plate with steady carbs over pushing intensity from a deficit.\n\nMuscle first."
+      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nRecovery is moderate, and intake is running too light for muscle preservation as the workout window opens. This favors controlled resistance work over intensity, with protein still the day\u2019s main missing support.\n\nSteady, not sharp."
     },
     {
       "label": "Performance",
-      "text": "Muscle first."
+      "text": "Steady, not sharp."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nRecovery is middling, and the long gap since the last meal has the evening window under-supplied. With protein still carrying the day, this favors a protein-forward plate with steady carbs over pushing intensity from a deficit.\n\nMuscle first.",
-    "performance": "Muscle first.",
+    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nRecovery is moderate, and intake is running too light for muscle preservation as the workout window opens. This favors controlled resistance work over intensity, with protein still the day\u2019s main missing support.\n\nSteady, not sharp.",
+    "performance": "Steady, not sharp.",
     "transit": null
   },
-  "nutrition_nudge": "Add a carb-dense lunch now, pairing rice or potatoes with protein to protect training energy.",
+  "nutrition_nudge": "Add a carb anchor at dinner, like rice or potatoes, to protect training energy.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
