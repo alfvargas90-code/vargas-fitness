@@ -1,6 +1,6 @@
 {
   "date": "2026-06-15",
-  "synced_at": "2026-06-16T01:33:46+00:00",
+  "synced_at": "2026-06-16T02:03:57+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 910.0,
-    "protein_g": 82.0,
-    "carbs_g": 68.0,
-    "fat_g": 38.0
+    "calories": 1460.0,
+    "protein_g": 127.0,
+    "carbs_g": 118.0,
+    "fat_g": 63.0
   },
-  "meal_count": 3,
+  "meal_count": 4,
   "raw": {
     "date": "2026-06-15",
     "meals": [
@@ -44,13 +44,22 @@
         "fat": 0,
         "carbs": 0,
         "emoji": "\u00f0\u009f\u008d\u0097"
+      },
+      {
+        "title": "Milk, Protein, and Sourdough with Cream Cheese",
+        "time": "20:53",
+        "calories": 550,
+        "protein": 45,
+        "fat": 25,
+        "carbs": 50,
+        "emoji": "\u00f0\u009f\u00a5\u009b"
       }
     ],
     "totals": {
-      "calories": 910,
-      "protein": 82,
-      "fat": 38,
-      "carbs": 68
+      "calories": 1460,
+      "protein": 127,
+      "fat": 63,
+      "carbs": 118
     },
     "targets": {
       "calories": 2574,
@@ -59,14 +68,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 1664,
+      "calories": 1114,
       "is_over": false
     },
-    "meal_count": 3,
+    "meal_count": 4,
     "labels": {
       "header": "Today",
-      "calories_remaining": "1664 kcal remaining today",
-      "meals_logged": "3 meals logged",
+      "calories_remaining": "1114 kcal remaining today",
+      "meals_logged": "4 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
