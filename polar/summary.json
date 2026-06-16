@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-15T21:04:01-05:00",
-  "data_hash": "44f7f86206366e79",
-  "slot": "macros-update",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 100%\n\nRead\nThe latest meal reopened the day from underfed toward structurally supported: protein is now nearly carrying the muscle-preservation side, while the energy gap remains meaningful. With heavy output on only moderate recovery, this favors repair and restraint over added strain.\n\nQuiet consolidation.\n\nPerformance: Quiet consolidation.\n\nTransit: none",
+  "generated_at": "2026-06-16T04:00:00-05:00",
+  "data_hash": "6362e7fbc8ba542f",
+  "slot": "sleep",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nLast night gave you a usable but not abundant reserve, with recovery still hovering in the middle rather than opening the throttle. For muscle preservation, this is a steadier day: enough capacity for structure, less support for aggressive strain or deep deficit.\n\nMeasured momentum.\n\nPerformance: Measured momentum.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 100%\n\nRead\nThe latest meal reopened the day from underfed toward structurally supported: protein is now nearly carrying the muscle-preservation side, while the energy gap remains meaningful. With heavy output on only moderate recovery, this favors repair and restraint over added strain.\n\nQuiet consolidation."
+      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nLast night gave you a usable but not abundant reserve, with recovery still hovering in the middle rather than opening the throttle. For muscle preservation, this is a steadier day: enough capacity for structure, less support for aggressive strain or deep deficit.\n\nMeasured momentum."
     },
     {
       "label": "Performance",
-      "text": "Quiet consolidation."
+      "text": "Measured momentum."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 100%\n\nRead\nThe latest meal reopened the day from underfed toward structurally supported: protein is now nearly carrying the muscle-preservation side, while the energy gap remains meaningful. With heavy output on only moderate recovery, this favors repair and restraint over added strain.\n\nQuiet consolidation.",
-    "performance": "Quiet consolidation.",
+    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nLast night gave you a usable but not abundant reserve, with recovery still hovering in the middle rather than opening the throttle. For muscle preservation, this is a steadier day: enough capacity for structure, less support for aggressive strain or deep deficit.\n\nMeasured momentum.",
+    "performance": "Measured momentum.",
     "transit": null
   },
-  "nutrition_nudge": "Keep dinner steady and include 15g protein to protect muscle while closing the day.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
     "sleep_hours": 6.8,
     "hrv_today": 46,
     "hrv_7d_avg": 53.7,
-    "nutrition": "calories 1460 of 2574 goal, protein 127g of 138g goal, carbs 118g of 290g goal, fat 63g of 72g goal",
-    "nutrition_detail": "calories 1460 of 2574 goal -> 1114 left; protein 127g of 138g goal -> 11g gap; carbs 118g of 290g goal; fat 63g of 72g goal",
-    "activity_today": "8,800 steps so far, 6h 21m active, 2,567 calories burned, Heavy training load"
+    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
+    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
+    "activity_today": null
   }
 }
