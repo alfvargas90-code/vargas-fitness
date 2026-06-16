@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-16T04:00:00-05:00",
-  "data_hash": "6362e7fbc8ba542f",
-  "slot": "sleep",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nLast night gave you a usable but not abundant reserve, with recovery still hovering in the middle rather than opening the throttle. For muscle preservation, this is a steadier day: enough capacity for structure, less support for aggressive strain or deep deficit.\n\nMeasured momentum.\n\nPerformance: Measured momentum.\n\nTransit: none",
+  "generated_at": "2026-06-16T07:00:04-05:00",
+  "data_hash": "3196abb7e6d79bfe",
+  "slot": "recovery",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nYou woke with middling reserves: rested enough to start clean, not primed for maximal strain. For muscle retention while leaning down, today favors measured output and a strong protein foundation over an aggressive deficit.\n\nSteady base, measured ceiling.\n\nPerformance: Steady base, measured ceiling.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nLast night gave you a usable but not abundant reserve, with recovery still hovering in the middle rather than opening the throttle. For muscle preservation, this is a steadier day: enough capacity for structure, less support for aggressive strain or deep deficit.\n\nMeasured momentum."
+      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nYou woke with middling reserves: rested enough to start clean, not primed for maximal strain. For muscle retention while leaning down, today favors measured output and a strong protein foundation over an aggressive deficit.\n\nSteady base, measured ceiling."
     },
     {
       "label": "Performance",
-      "text": "Measured momentum."
+      "text": "Steady base, measured ceiling."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nLast night gave you a usable but not abundant reserve, with recovery still hovering in the middle rather than opening the throttle. For muscle preservation, this is a steadier day: enough capacity for structure, less support for aggressive strain or deep deficit.\n\nMeasured momentum.",
-    "performance": "Measured momentum.",
+    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nYou woke with middling reserves: rested enough to start clean, not primed for maximal strain. For muscle retention while leaning down, today favors measured output and a strong protein foundation over an aggressive deficit.\n\nSteady base, measured ceiling.",
+    "performance": "Steady base, measured ceiling.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Start breakfast with 40g protein and keep meals evenly paced from here.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
