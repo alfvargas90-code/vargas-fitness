@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-16T07:00:04-05:00",
-  "data_hash": "3196abb7e6d79bfe",
-  "slot": "recovery",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nYou woke with middling reserves: rested enough to start clean, not primed for maximal strain. For muscle retention while leaning down, today favors measured output and a strong protein foundation over an aggressive deficit.\n\nSteady base, measured ceiling.\n\nPerformance: Steady base, measured ceiling.\n\nTransit: none",
+  "generated_at": "2026-06-16T09:08:01-05:00",
+  "data_hash": "fa80dacce0f94c7e",
+  "slot": "macros-update",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nThe first logged meal has reopened the day\u2019s intake from a low-input morning, with protein now present but still carrying the main load. Recovery reads moderate, so the day favors steady muscle preservation over intensity.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nYou woke with middling reserves: rested enough to start clean, not primed for maximal strain. For muscle retention while leaning down, today favors measured output and a strong protein foundation over an aggressive deficit.\n\nSteady base, measured ceiling."
+      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nThe first logged meal has reopened the day\u2019s intake from a low-input morning, with protein now present but still carrying the main load. Recovery reads moderate, so the day favors steady muscle preservation over intensity.\n\nSteady, not forceful."
     },
     {
       "label": "Performance",
-      "text": "Steady base, measured ceiling."
+      "text": "Steady, not forceful."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nYou woke with middling reserves: rested enough to start clean, not primed for maximal strain. For muscle retention while leaning down, today favors measured output and a strong protein foundation over an aggressive deficit.\n\nSteady base, measured ceiling.",
-    "performance": "Steady base, measured ceiling.",
+    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nThe first logged meal has reopened the day\u2019s intake from a low-input morning, with protein now present but still carrying the main load. Recovery reads moderate, so the day favors steady muscle preservation over intensity.\n\nSteady, not forceful.",
+    "performance": "Steady, not forceful.",
     "transit": null
   },
-  "nutrition_nudge": "Start breakfast with 40g protein and keep meals evenly paced from here.",
+  "nutrition_nudge": "On pace this morning \u2014 keep meals steady and make lunch carry at least 45g protein.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
     "sleep_hours": 6.8,
     "hrv_today": 46,
     "hrv_7d_avg": 53.7,
-    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
-    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
+    "nutrition": "calories 620 of 2574 goal, protein 42g of 138g goal, carbs 45g of 290g goal, fat 38g of 72g goal",
+    "nutrition_detail": "calories 620 of 2574 goal -> 1954 left; protein 42g of 138g goal -> 96g gap; carbs 45g of 290g goal; fat 38g of 72g goal",
     "activity_today": null
   }
 }
