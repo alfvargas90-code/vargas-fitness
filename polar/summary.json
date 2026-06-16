@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-16T09:08:01-05:00",
-  "data_hash": "fa80dacce0f94c7e",
-  "slot": "macros-update",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nThe first logged meal has reopened the day\u2019s intake from a low-input morning, with protein now present but still carrying the main load. Recovery reads moderate, so the day favors steady muscle preservation over intensity.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
+  "generated_at": "2026-06-16T11:30:00-05:00",
+  "data_hash": "d11b6d706a652f29",
+  "slot": "fuel-1",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nThe morning opened with a solid protein base, but the day is still lightly fueled against the amount of muscle you are trying to preserve. Recovery reads moderate, so the afternoon favors steady output and a measured deficit over intensity.\n\nMeasured, not maximal.\n\nPerformance: Measured, not maximal.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nThe first logged meal has reopened the day\u2019s intake from a low-input morning, with protein now present but still carrying the main load. Recovery reads moderate, so the day favors steady muscle preservation over intensity.\n\nSteady, not forceful."
+      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nThe morning opened with a solid protein base, but the day is still lightly fueled against the amount of muscle you are trying to preserve. Recovery reads moderate, so the afternoon favors steady output and a measured deficit over intensity.\n\nMeasured, not maximal."
     },
     {
       "label": "Performance",
-      "text": "Steady, not forceful."
+      "text": "Measured, not maximal."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nThe first logged meal has reopened the day\u2019s intake from a low-input morning, with protein now present but still carrying the main load. Recovery reads moderate, so the day favors steady muscle preservation over intensity.\n\nSteady, not forceful.",
-    "performance": "Steady, not forceful.",
+    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nThe morning opened with a solid protein base, but the day is still lightly fueled against the amount of muscle you are trying to preserve. Recovery reads moderate, so the afternoon favors steady output and a measured deficit over intensity.\n\nMeasured, not maximal.",
+    "performance": "Measured, not maximal.",
     "transit": null
   },
-  "nutrition_nudge": "On pace this morning \u2014 keep meals steady and make lunch carry at least 45g protein.",
+  "nutrition_nudge": "Keep lunch steady with a protein anchor around 45g to protect muscle while calories stay on pace.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
