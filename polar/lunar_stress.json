@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-06-17T07:32:10-05:00",
-  "score": 20,
+  "generated_at": "2026-06-17T08:02:27-05:00",
+  "score": 5,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
   "physiology": {
-    "hrv_pct_baseline": -14,
+    "hrv_pct_baseline": 36,
     "rhr_delta_bpm": -1,
-    "sleep_score": 62
+    "sleep_score": 65
   },
   "workout_intensity": "rest",
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Leo",
-    "degree": "0\u00b0 Leo 17'",
+    "degree": "0\u00b0 Leo 35'",
     "phase": "Waxing Crescent",
     "next_sign_change": {
       "sign": "Virgo",
@@ -30,14 +30,14 @@
       "max": 55
     },
     "body": {
-      "filled": 5,
+      "filled": 1,
       "total": 10,
-      "points": 20,
+      "points": 5,
       "max": 40
     }
   },
   "transit_detail": {
-    "moon_longitude": 120.28,
+    "moon_longitude": 120.59,
     "moon_sign": "Leo",
     "moon_phase": "Waxing Crescent",
     "moon_house_natal": 7,
@@ -45,18 +45,18 @@
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 20,
+    "raw_score": 5,
     "transit_points": 0,
-    "physiology_points": 20,
+    "physiology_points": 5,
     "breakdown": [
-      "+10 HRV -14% below baseline",
-      "+10 Sleep score 62 (<70)"
+      "-5 HRV 36% above baseline",
+      "+10 Sleep score 65 (<70)"
     ],
     "baselines": {
-      "hrv_7d": 53.7,
-      "rhr_7d": 58.4
+      "hrv_7d": 58.9,
+      "rhr_7d": 58.1
     },
-    "active_calories": 62,
+    "active_calories": 107,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
