@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-17T13:46:18-05:00",
-  "data_hash": "2f08630ecbcd4823",
-  "slot": "macros-update",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 46%\n\nRead\nThe meal changed the day from underfed to well-supported, with protein now carrying most of the muscle-preservation work. Output is still lighter than your usual day, so the open intake window looks controlled rather than strained. Today favors steady tissue repair over intensity.\n\nSteady tissue signal.\n\nPerformance: Steady tissue signal.\n\nTransit: none",
+  "generated_at": "2026-06-17T15:00:00-05:00",
+  "data_hash": "3401405a49ca41ab",
+  "slot": "fuel-2",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 46%\n\nRead\nRecovery is firmer than recent days, and the midday meal covered muscle support well, but overall output is still lighter than usual. The evening window opens with capacity intact and a meaningful energy gap, favoring controlled strength work over extra burn.\n\nCapacity intact, margin narrow.\n\nPerformance: Capacity intact, margin narrow.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 46%\n\nRead\nThe meal changed the day from underfed to well-supported, with protein now carrying most of the muscle-preservation work. Output is still lighter than your usual day, so the open intake window looks controlled rather than strained. Today favors steady tissue repair over intensity.\n\nSteady tissue signal."
+      "text": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 46%\n\nRead\nRecovery is firmer than recent days, and the midday meal covered muscle support well, but overall output is still lighter than usual. The evening window opens with capacity intact and a meaningful energy gap, favoring controlled strength work over extra burn.\n\nCapacity intact, margin narrow."
     },
     {
       "label": "Performance",
-      "text": "Steady tissue signal."
+      "text": "Capacity intact, margin narrow."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 46%\n\nRead\nThe meal changed the day from underfed to well-supported, with protein now carrying most of the muscle-preservation work. Output is still lighter than your usual day, so the open intake window looks controlled rather than strained. Today favors steady tissue repair over intensity.\n\nSteady tissue signal.",
-    "performance": "Steady tissue signal.",
+    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 46%\n\nRead\nRecovery is firmer than recent days, and the midday meal covered muscle support well, but overall output is still lighter than usual. The evening window opens with capacity intact and a meaningful energy gap, favoring controlled strength work over extra burn.\n\nCapacity intact, margin narrow.",
+    "performance": "Capacity intact, margin narrow.",
     "transit": null
   },
-  "nutrition_nudge": "You're on pace; keep meals steady and add 12g protein with your next snack.",
+  "nutrition_nudge": "On pace today; add 12g protein at dinner and keep meal pacing steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 58.9,
     "nutrition": "calories 1435 of 2574 goal, protein 126g of 138g goal, carbs 97g of 290g goal, fat 57g of 72g goal",
     "nutrition_detail": "calories 1435 of 2574 goal -> 1139 left; protein 126g of 138g goal -> 12g gap; carbs 97g of 290g goal; fat 57g of 72g goal",
-    "activity_today": "2,741 steps so far, 2h 6m active, 1,339 calories burned, Light training load"
+    "activity_today": "2,741 steps so far, 2h 6m active, 1,376 calories burned, Light training load"
   }
 }
