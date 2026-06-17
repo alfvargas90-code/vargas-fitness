@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-17T11:30:00-05:00",
-  "data_hash": "05287edb6ad5113d",
-  "slot": "fuel-1",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 27%\n\nRead\nOvernight recovery is better than recent pattern, while output is still lighter than your usual day. Breakfast gave the day a solid protein start, but the afternoon now runs on a widening energy gap. This favors measured muscle-preserving intake over added intensity.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
+  "generated_at": "2026-06-17T13:46:18-05:00",
+  "data_hash": "2f08630ecbcd4823",
+  "slot": "macros-update",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 46%\n\nRead\nThe meal changed the day from underfed to well-supported, with protein now carrying most of the muscle-preservation work. Output is still lighter than your usual day, so the open intake window looks controlled rather than strained. Today favors steady tissue repair over intensity.\n\nSteady tissue signal.\n\nPerformance: Steady tissue signal.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 27%\n\nRead\nOvernight recovery is better than recent pattern, while output is still lighter than your usual day. Breakfast gave the day a solid protein start, but the afternoon now runs on a widening energy gap. This favors measured muscle-preserving intake over added intensity.\n\nSteady, not forceful."
+      "text": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 46%\n\nRead\nThe meal changed the day from underfed to well-supported, with protein now carrying most of the muscle-preservation work. Output is still lighter than your usual day, so the open intake window looks controlled rather than strained. Today favors steady tissue repair over intensity.\n\nSteady tissue signal."
     },
     {
       "label": "Performance",
-      "text": "Steady, not forceful."
+      "text": "Steady tissue signal."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 27%\n\nRead\nOvernight recovery is better than recent pattern, while output is still lighter than your usual day. Breakfast gave the day a solid protein start, but the afternoon now runs on a widening energy gap. This favors measured muscle-preserving intake over added intensity.\n\nSteady, not forceful.",
-    "performance": "Steady, not forceful.",
+    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 46%\n\nRead\nThe meal changed the day from underfed to well-supported, with protein now carrying most of the muscle-preservation work. Output is still lighter than your usual day, so the open intake window looks controlled rather than strained. Today favors steady tissue repair over intensity.\n\nSteady tissue signal.",
+    "performance": "Steady tissue signal.",
     "transit": null
   },
-  "nutrition_nudge": "Calories and protein are on pace; keep lunch steady with a lean protein anchor.",
+  "nutrition_nudge": "You're on pace; keep meals steady and add 12g protein with your next snack.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
     "sleep_hours": 7.8,
     "hrv_today": 80,
     "hrv_7d_avg": 58.9,
-    "nutrition": "calories 685 of 2574 goal, protein 41g of 138g goal, carbs 42g of 290g goal, fat 42g of 72g goal",
-    "nutrition_detail": "calories 685 of 2574 goal -> 1889 left; protein 41g of 138g goal -> 97g gap; carbs 42g of 290g goal; fat 42g of 72g goal",
-    "activity_today": "1,683 steps so far, 1h 9m active, 961 calories burned, Light training load"
+    "nutrition": "calories 1435 of 2574 goal, protein 126g of 138g goal, carbs 97g of 290g goal, fat 57g of 72g goal",
+    "nutrition_detail": "calories 1435 of 2574 goal -> 1139 left; protein 126g of 138g goal -> 12g gap; carbs 97g of 290g goal; fat 57g of 72g goal",
+    "activity_today": "2,741 steps so far, 2h 6m active, 1,339 calories burned, Light training load"
   }
 }
