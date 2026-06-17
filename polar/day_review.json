@@ -1,19 +1,19 @@
 {
-  "date": "2026-06-15",
-  "generated_at": "2026-06-15T21:45:00-05:00",
+  "date": "2026-06-16",
+  "generated_at": "2026-06-16T21:45:00-05:00",
   "verdict": "Big",
   "stats": {
-    "steps": 8800,
-    "active_minutes": 381,
-    "active_time_display": "6h 21m",
-    "calories_burned": 2567,
-    "active_calories": 1055,
-    "calories_eaten": 1460,
-    "net_deficit": 1107,
+    "steps": 420,
+    "active_minutes": 14,
+    "active_time_display": "14m",
+    "calories_burned": 1449,
+    "active_calories": 66,
+    "calories_eaten": 620,
+    "net_deficit": 829,
     "calorie_target": 2574,
-    "protein_g": 127,
+    "protein_g": 42,
     "protein_target_g": 138,
-    "protein_gap_g": 11
+    "protein_gap_g": 96
   },
-  "prose": "Big output day: about 8,800 steps, hours of movement, and a big burn, but eating so little left you in about a 1,100-calorie hole, which is too steep if you want to keep muscle while dropping fat. Protein was close but still short, and on a day like this that gap matters more than squeezing out extra steps. Push protein hard tomorrow and keep the deficit smaller."
+  "prose": "Big output day, but with only about 420 steps and 14 minutes active, the bigger issue is that you ate about 620 against about 1,450 burned, which leaves too big a gap for protecting muscle. Protein was the miss, with only 42 in and almost 100 left on the table, so tomorrow push protein hard and keep the deficit calmer."
 }
