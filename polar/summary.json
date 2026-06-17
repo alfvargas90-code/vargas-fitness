@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-17T04:00:00-05:00",
-  "data_hash": "b4752ce3461f411a",
-  "slot": "sleep",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 1%\n\nRead\nRest landed near normal, while deeper recovery is still only mid-range. Today favors consistency over intensity, with enough reserve for rhythm but not a strong signal for hard charging; for muscle change, protein carries more weight than extra burn.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
+  "generated_at": "2026-06-17T07:00:00-05:00",
+  "data_hash": "3a2bb247ee130bca",
+  "slot": "recovery",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 2%\n\nRead\nYou woke on a middle-ground base: sleep was close to usual, but the system is less restored than its better days. With the day still mostly untouched, it favors steady resistance-led work and enough protein to make any deficit muscle-sparing rather than costly.\n\nSteady foundation.\n\nPerformance: Steady foundation.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 1%\n\nRead\nRest landed near normal, while deeper recovery is still only mid-range. Today favors consistency over intensity, with enough reserve for rhythm but not a strong signal for hard charging; for muscle change, protein carries more weight than extra burn.\n\nSteady, not forceful."
+      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 2%\n\nRead\nYou woke on a middle-ground base: sleep was close to usual, but the system is less restored than its better days. With the day still mostly untouched, it favors steady resistance-led work and enough protein to make any deficit muscle-sparing rather than costly.\n\nSteady foundation."
     },
     {
       "label": "Performance",
-      "text": "Steady, not forceful."
+      "text": "Steady foundation."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 1%\n\nRead\nRest landed near normal, while deeper recovery is still only mid-range. Today favors consistency over intensity, with enough reserve for rhythm but not a strong signal for hard charging; for muscle change, protein carries more weight than extra burn.\n\nSteady, not forceful.",
-    "performance": "Steady, not forceful.",
+    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 2%\n\nRead\nYou woke on a middle-ground base: sleep was close to usual, but the system is less restored than its better days. With the day still mostly untouched, it favors steady resistance-led work and enough protein to make any deficit muscle-sparing rather than costly.\n\nSteady foundation.",
+    "performance": "Steady foundation.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Start breakfast with 35g protein and keep meal pacing steady for muscle protection.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 53.7,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "3m active, 433 calories burned, \u2014 training load"
   }
 }
