@@ -1,6 +1,6 @@
 {
   "date": "2026-06-17",
-  "synced_at": "2026-06-17T14:44:44+00:00",
+  "synced_at": "2026-06-17T15:14:52+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,20 +9,30 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 0.0,
-    "protein_g": 0.0,
-    "carbs_g": 0.0,
-    "fat_g": 0.0
+    "calories": 685.0,
+    "protein_g": 41.0,
+    "carbs_g": 42.0,
+    "fat_g": 42.0
   },
-  "meal_count": 0,
+  "meal_count": 1,
   "raw": {
     "date": "2026-06-17",
-    "meals": [],
+    "meals": [
+      {
+        "title": "Breakfast: Eggs, Sweet Potato, Cottage Cheese & Coffee",
+        "time": "09:45",
+        "calories": 685,
+        "protein": 41,
+        "fat": 42,
+        "carbs": 42,
+        "emoji": "\u00f0\u009f\u008d\u00b3"
+      }
+    ],
     "totals": {
-      "calories": 0,
-      "protein": 0,
-      "fat": 0,
-      "carbs": 0
+      "calories": 685,
+      "protein": 41,
+      "fat": 42,
+      "carbs": 42
     },
     "targets": {
       "calories": 2574,
@@ -31,14 +41,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 2574,
+      "calories": 1889,
       "is_over": false
     },
-    "meal_count": 0,
+    "meal_count": 1,
     "labels": {
       "header": "Today",
-      "calories_remaining": "2574 kcal remaining today",
-      "meals_logged": "0 meals logged",
+      "calories_remaining": "1889 kcal remaining today",
+      "meals_logged": "1 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
