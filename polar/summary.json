@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-16T17:30:00-05:00",
-  "data_hash": "efd5498d0da2fe84",
-  "slot": "train-1",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nRecovery is moderate, and intake is running too light for muscle preservation as the workout window opens. This favors controlled resistance work over intensity, with protein still the day\u2019s main missing support.\n\nSteady, not sharp.\n\nPerformance: Steady, not sharp.\n\nTransit: none",
+  "generated_at": "2026-06-16T20:00:00-05:00",
+  "data_hash": "f4751254c38bb2c5",
+  "slot": "train-2",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nThe workout window is effectively closing on a moderate system: steady enough, but not deeply restored. Intake is running too light for muscle preservation, with protein carrying the main gap, so tonight favors recovery and replenishment over added strain.\n\nQuiet consolidation.\n\nPerformance: Quiet consolidation.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nRecovery is moderate, and intake is running too light for muscle preservation as the workout window opens. This favors controlled resistance work over intensity, with protein still the day\u2019s main missing support.\n\nSteady, not sharp."
+      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nThe workout window is effectively closing on a moderate system: steady enough, but not deeply restored. Intake is running too light for muscle preservation, with protein carrying the main gap, so tonight favors recovery and replenishment over added strain.\n\nQuiet consolidation."
     },
     {
       "label": "Performance",
-      "text": "Steady, not sharp."
+      "text": "Quiet consolidation."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nRecovery is moderate, and intake is running too light for muscle preservation as the workout window opens. This favors controlled resistance work over intensity, with protein still the day\u2019s main missing support.\n\nSteady, not sharp.",
-    "performance": "Steady, not sharp.",
+    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nThe workout window is effectively closing on a moderate system: steady enough, but not deeply restored. Intake is running too light for muscle preservation, with protein carrying the main gap, so tonight favors recovery and replenishment over added strain.\n\nQuiet consolidation.",
+    "performance": "Quiet consolidation.",
     "transit": null
   },
-  "nutrition_nudge": "Add a carb anchor at dinner, like rice or potatoes, to protect training energy.",
+  "nutrition_nudge": "Front-load your next meal with 60g protein to protect muscle and start closing the 96g gap.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
