@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-17T15:00:00-05:00",
-  "data_hash": "3401405a49ca41ab",
-  "slot": "fuel-2",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 46%\n\nRead\nRecovery is firmer than recent days, and the midday meal covered muscle support well, but overall output is still lighter than usual. The evening window opens with capacity intact and a meaningful energy gap, favoring controlled strength work over extra burn.\n\nCapacity intact, margin narrow.\n\nPerformance: Capacity intact, margin narrow.\n\nTransit: none",
+  "generated_at": "2026-06-17T17:30:00-05:00",
+  "data_hash": "35e59ebd2a350fe7",
+  "slot": "train-1",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 62%\n\nRead\nRecovery is stronger than recent days, while output has run lighter than usual and the day\u2019s spend remains moderate. With protein largely covered but the energy gap still wide, this window favors controlled resistance work over extra volume, with muscle preservation as the bias.\n\nStrong base, measured ceiling.\n\nPerformance: Strong base, measured ceiling.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 46%\n\nRead\nRecovery is firmer than recent days, and the midday meal covered muscle support well, but overall output is still lighter than usual. The evening window opens with capacity intact and a meaningful energy gap, favoring controlled strength work over extra burn.\n\nCapacity intact, margin narrow."
+      "text": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 62%\n\nRead\nRecovery is stronger than recent days, while output has run lighter than usual and the day\u2019s spend remains moderate. With protein largely covered but the energy gap still wide, this window favors controlled resistance work over extra volume, with muscle preservation as the bias.\n\nStrong base, measured ceiling."
     },
     {
       "label": "Performance",
-      "text": "Capacity intact, margin narrow."
+      "text": "Strong base, measured ceiling."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 46%\n\nRead\nRecovery is firmer than recent days, and the midday meal covered muscle support well, but overall output is still lighter than usual. The evening window opens with capacity intact and a meaningful energy gap, favoring controlled strength work over extra burn.\n\nCapacity intact, margin narrow.",
-    "performance": "Capacity intact, margin narrow.",
+    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 62%\n\nRead\nRecovery is stronger than recent days, while output has run lighter than usual and the day\u2019s spend remains moderate. With protein largely covered but the energy gap still wide, this window favors controlled resistance work over extra volume, with muscle preservation as the bias.\n\nStrong base, measured ceiling.",
+    "performance": "Strong base, measured ceiling.",
     "transit": null
   },
-  "nutrition_nudge": "On pace today; add 12g protein at dinner and keep meal pacing steady.",
+  "nutrition_nudge": "On pace today; anchor dinner with 12g protein and keep calories steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 58.9,
     "nutrition": "calories 1435 of 2574 goal, protein 126g of 138g goal, carbs 97g of 290g goal, fat 57g of 72g goal",
     "nutrition_detail": "calories 1435 of 2574 goal -> 1139 left; protein 126g of 138g goal -> 12g gap; carbs 97g of 290g goal; fat 57g of 72g goal",
-    "activity_today": "2,741 steps so far, 2h 6m active, 1,376 calories burned, Light training load"
+    "activity_today": "3,507 steps so far, 2h 51m active, 1,727 calories burned, Moderate training load"
   }
 }
