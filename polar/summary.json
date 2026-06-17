@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-17T10:14:55-05:00",
-  "data_hash": "36124d7fdba6a7ff",
-  "slot": "macros-update",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 26%\n\nRead\nThe first meal has moved a low-input morning into a more usable place, with protein finally gaining traction. Output is still lighter than your usual day and effort remains light, so the day favors steady muscle support over intensity or a sharp deficit.\n\nSteady base.\n\nPerformance: Steady base.\n\nTransit: none",
+  "generated_at": "2026-06-17T11:30:00-05:00",
+  "data_hash": "05287edb6ad5113d",
+  "slot": "fuel-1",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 27%\n\nRead\nOvernight recovery is better than recent pattern, while output is still lighter than your usual day. Breakfast gave the day a solid protein start, but the afternoon now runs on a widening energy gap. This favors measured muscle-preserving intake over added intensity.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 26%\n\nRead\nThe first meal has moved a low-input morning into a more usable place, with protein finally gaining traction. Output is still lighter than your usual day and effort remains light, so the day favors steady muscle support over intensity or a sharp deficit.\n\nSteady base."
+      "text": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 27%\n\nRead\nOvernight recovery is better than recent pattern, while output is still lighter than your usual day. Breakfast gave the day a solid protein start, but the afternoon now runs on a widening energy gap. This favors measured muscle-preserving intake over added intensity.\n\nSteady, not forceful."
     },
     {
       "label": "Performance",
-      "text": "Steady base."
+      "text": "Steady, not forceful."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 26%\n\nRead\nThe first meal has moved a low-input morning into a more usable place, with protein finally gaining traction. Output is still lighter than your usual day and effort remains light, so the day favors steady muscle support over intensity or a sharp deficit.\n\nSteady base.",
-    "performance": "Steady base.",
+    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 27%\n\nRead\nOvernight recovery is better than recent pattern, while output is still lighter than your usual day. Breakfast gave the day a solid protein start, but the afternoon now runs on a widening energy gap. This favors measured muscle-preserving intake over added intensity.\n\nSteady, not forceful.",
+    "performance": "Steady, not forceful.",
     "transit": null
   },
-  "nutrition_nudge": "Keep meal pacing steady and make lunch protein-forward to protect muscle.",
+  "nutrition_nudge": "Calories and protein are on pace; keep lunch steady with a lean protein anchor.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 58.9,
     "nutrition": "calories 685 of 2574 goal, protein 41g of 138g goal, carbs 42g of 290g goal, fat 42g of 72g goal",
     "nutrition_detail": "calories 685 of 2574 goal -> 1889 left; protein 41g of 138g goal -> 97g gap; carbs 42g of 290g goal; fat 42g of 72g goal",
-    "activity_today": "1,675 steps so far, 1h 8m active, 914 calories burned, Light training load"
+    "activity_today": "1,683 steps so far, 1h 9m active, 961 calories burned, Light training load"
   }
 }
