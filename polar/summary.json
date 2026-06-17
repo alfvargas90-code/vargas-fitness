@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-17T07:00:00-05:00",
-  "data_hash": "3a2bb247ee130bca",
-  "slot": "recovery",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 2%\n\nRead\nYou woke on a middle-ground base: sleep was close to usual, but the system is less restored than its better days. With the day still mostly untouched, it favors steady resistance-led work and enough protein to make any deficit muscle-sparing rather than costly.\n\nSteady foundation.\n\nPerformance: Steady foundation.\n\nTransit: none",
+  "generated_at": "2026-06-17T10:14:55-05:00",
+  "data_hash": "36124d7fdba6a7ff",
+  "slot": "macros-update",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 26%\n\nRead\nThe first meal has moved a low-input morning into a more usable place, with protein finally gaining traction. Output is still lighter than your usual day and effort remains light, so the day favors steady muscle support over intensity or a sharp deficit.\n\nSteady base.\n\nPerformance: Steady base.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
-      "text": "Average"
+      "text": "Good"
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 2%\n\nRead\nYou woke on a middle-ground base: sleep was close to usual, but the system is less restored than its better days. With the day still mostly untouched, it favors steady resistance-led work and enough protein to make any deficit muscle-sparing rather than costly.\n\nSteady foundation."
+      "text": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 26%\n\nRead\nThe first meal has moved a low-input morning into a more usable place, with protein finally gaining traction. Output is still lighter than your usual day and effort remains light, so the day favors steady muscle support over intensity or a sharp deficit.\n\nSteady base."
     },
     {
       "label": "Performance",
-      "text": "Steady foundation."
+      "text": "Steady base."
     },
     {
       "label": "Transit",
@@ -22,20 +22,20 @@
     }
   ],
   "simple": {
-    "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 2%\n\nRead\nYou woke on a middle-ground base: sleep was close to usual, but the system is less restored than its better days. With the day still mostly untouched, it favors steady resistance-led work and enough protein to make any deficit muscle-sparing rather than costly.\n\nSteady foundation.",
-    "performance": "Steady foundation.",
+    "recovery": "Good",
+    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 26%\n\nRead\nThe first meal has moved a low-input morning into a more usable place, with protein finally gaining traction. Output is still lighter than your usual day and effort remains light, so the day favors steady muscle support over intensity or a sharp deficit.\n\nSteady base.",
+    "performance": "Steady base.",
     "transit": null
   },
-  "nutrition_nudge": "Start breakfast with 35g protein and keep meal pacing steady for muscle protection.",
+  "nutrition_nudge": "Keep meal pacing steady and make lunch protein-forward to protect muscle.",
   "transits": [],
   "data_basis": {
-    "recharge_today": 3,
-    "sleep_hours": 6.8,
-    "hrv_today": 46,
-    "hrv_7d_avg": 53.7,
-    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
-    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "3m active, 433 calories burned, \u2014 training load"
+    "recharge_today": 4,
+    "sleep_hours": 7.8,
+    "hrv_today": 80,
+    "hrv_7d_avg": 58.9,
+    "nutrition": "calories 685 of 2574 goal, protein 41g of 138g goal, carbs 42g of 290g goal, fat 42g of 72g goal",
+    "nutrition_detail": "calories 685 of 2574 goal -> 1889 left; protein 41g of 138g goal -> 97g gap; carbs 42g of 290g goal; fat 42g of 72g goal",
+    "activity_today": "1,675 steps so far, 1h 8m active, 914 calories burned, Light training load"
   }
 }
