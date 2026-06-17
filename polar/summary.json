@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-16T20:00:00-05:00",
-  "data_hash": "f4751254c38bb2c5",
-  "slot": "train-2",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nThe workout window is effectively closing on a moderate system: steady enough, but not deeply restored. Intake is running too light for muscle preservation, with protein carrying the main gap, so tonight favors recovery and replenishment over added strain.\n\nQuiet consolidation.\n\nPerformance: Quiet consolidation.\n\nTransit: none",
+  "generated_at": "2026-06-17T04:00:00-05:00",
+  "data_hash": "b4752ce3461f411a",
+  "slot": "sleep",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 1%\n\nRead\nRest landed near normal, while deeper recovery is still only mid-range. Today favors consistency over intensity, with enough reserve for rhythm but not a strong signal for hard charging; for muscle change, protein carries more weight than extra burn.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nThe workout window is effectively closing on a moderate system: steady enough, but not deeply restored. Intake is running too light for muscle preservation, with protein carrying the main gap, so tonight favors recovery and replenishment over added strain.\n\nQuiet consolidation."
+      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 1%\n\nRead\nRest landed near normal, while deeper recovery is still only mid-range. Today favors consistency over intensity, with enough reserve for rhythm but not a strong signal for hard charging; for muscle change, protein carries more weight than extra burn.\n\nSteady, not forceful."
     },
     {
       "label": "Performance",
-      "text": "Quiet consolidation."
+      "text": "Steady, not forceful."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain \u2014\n\nRead\nThe workout window is effectively closing on a moderate system: steady enough, but not deeply restored. Intake is running too light for muscle preservation, with protein carrying the main gap, so tonight favors recovery and replenishment over added strain.\n\nQuiet consolidation.",
-    "performance": "Quiet consolidation.",
+    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 62 \u2022 Strain 1%\n\nRead\nRest landed near normal, while deeper recovery is still only mid-range. Today favors consistency over intensity, with enough reserve for rhythm but not a strong signal for hard charging; for muscle change, protein carries more weight than extra burn.\n\nSteady, not forceful.",
+    "performance": "Steady, not forceful.",
     "transit": null
   },
-  "nutrition_nudge": "Front-load your next meal with 60g protein to protect muscle and start closing the 96g gap.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
     "sleep_hours": 6.8,
     "hrv_today": 46,
     "hrv_7d_avg": 53.7,
-    "nutrition": "calories 620 of 2574 goal, protein 42g of 138g goal, carbs 45g of 290g goal, fat 38g of 72g goal",
-    "nutrition_detail": "calories 620 of 2574 goal -> 1954 left; protein 42g of 138g goal -> 96g gap; carbs 45g of 290g goal; fat 38g of 72g goal",
+    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
+    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
     "activity_today": null
   }
 }
