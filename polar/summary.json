@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-17T17:30:00-05:00",
-  "data_hash": "35e59ebd2a350fe7",
-  "slot": "train-1",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 62%\n\nRead\nRecovery is stronger than recent days, while output has run lighter than usual and the day\u2019s spend remains moderate. With protein largely covered but the energy gap still wide, this window favors controlled resistance work over extra volume, with muscle preservation as the bias.\n\nStrong base, measured ceiling.\n\nPerformance: Strong base, measured ceiling.\n\nTransit: none",
+  "generated_at": "2026-06-17T20:00:00-05:00",
+  "data_hash": "8134a82dfd0b6fd0",
+  "slot": "train-2",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 77%\n\nRead\nThe session window closes on a moderate-effort day with better recovery underneath, but output ran lighter than your usual rhythm. For muscle retention, the main signal is a wide energy gap with protein nearly covered, so the night favors replenishment and downshifting.\n\nRecovery with purpose.\n\nPerformance: Recovery with purpose.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 62%\n\nRead\nRecovery is stronger than recent days, while output has run lighter than usual and the day\u2019s spend remains moderate. With protein largely covered but the energy gap still wide, this window favors controlled resistance work over extra volume, with muscle preservation as the bias.\n\nStrong base, measured ceiling."
+      "text": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 77%\n\nRead\nThe session window closes on a moderate-effort day with better recovery underneath, but output ran lighter than your usual rhythm. For muscle retention, the main signal is a wide energy gap with protein nearly covered, so the night favors replenishment and downshifting.\n\nRecovery with purpose."
     },
     {
       "label": "Performance",
-      "text": "Strong base, measured ceiling."
+      "text": "Recovery with purpose."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 62%\n\nRead\nRecovery is stronger than recent days, while output has run lighter than usual and the day\u2019s spend remains moderate. With protein largely covered but the energy gap still wide, this window favors controlled resistance work over extra volume, with muscle preservation as the bias.\n\nStrong base, measured ceiling.",
-    "performance": "Strong base, measured ceiling.",
+    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 77%\n\nRead\nThe session window closes on a moderate-effort day with better recovery underneath, but output ran lighter than your usual rhythm. For muscle retention, the main signal is a wide energy gap with protein nearly covered, so the night favors replenishment and downshifting.\n\nRecovery with purpose.",
+    "performance": "Recovery with purpose.",
     "transit": null
   },
-  "nutrition_nudge": "On pace today; anchor dinner with 12g protein and keep calories steady.",
+  "nutrition_nudge": "Keep dinner steady and include 12g protein to protect muscle without forcing a big calorie push.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 58.9,
     "nutrition": "calories 1435 of 2574 goal, protein 126g of 138g goal, carbs 97g of 290g goal, fat 57g of 72g goal",
     "nutrition_detail": "calories 1435 of 2574 goal -> 1139 left; protein 126g of 138g goal -> 12g gap; carbs 97g of 290g goal; fat 57g of 72g goal",
-    "activity_today": "3,507 steps so far, 2h 51m active, 1,727 calories burned, Moderate training load"
+    "activity_today": "4,697 steps so far, 3h 38m active, 1,965 calories burned, Moderate training load"
   }
 }
