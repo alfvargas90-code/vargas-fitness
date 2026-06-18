@@ -843,5 +843,11 @@ function setSky(phase,illum,sign,waxing,sunDeg,sunSign){
 /* run last: strip emoji presentation from all glyphs (HTML + SVG) */
 noEmoji(document.body);
 </script>
+
+<!-- Motion micro-animations (additive presentation layer; self-hosted, no build).
+     vendor/motion.js exposes the global `Motion`; the enhancer degrades to a
+     fully-visible page if either script fails or reduced-motion is requested. -->
+<script src="assets/js/vendor/motion.js"></script>
+<script src="assets/js/timing_weather_motion.js"></script>
 </body>
 </html>
