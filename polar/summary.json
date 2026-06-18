@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-18T04:00:00-05:00",
-  "data_hash": "ba16f37a8e1d4eab",
-  "slot": "sleep",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 1%\n\nRead\nThe night leaves a fuller reserve than usual, with recovery trending stronger than the recent pattern. This is a steadier system, better suited to controlled output and muscle-preserving work than forceful intensity.\n\nSteady reserve.\n\nPerformance: Steady reserve.\n\nTransit: none",
+  "generated_at": "2026-06-18T18:51:07-05:00",
+  "data_hash": "a93f5dd5d85da1e6",
+  "slot": "train-2",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 80%\n\nRead\nThe training window is nearly closed with output far lighter than your usual day, despite a steadier overnight reset. With intake still unlogged, the main risk is an overly deep deficit rather than fatigue. Tonight favors quiet recovery and muscle preservation.\n\nQuiet reset.\n\nPerformance: Quiet reset.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 1%\n\nRead\nThe night leaves a fuller reserve than usual, with recovery trending stronger than the recent pattern. This is a steadier system, better suited to controlled output and muscle-preserving work than forceful intensity.\n\nSteady reserve."
+      "text": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 80%\n\nRead\nThe training window is nearly closed with output far lighter than your usual day, despite a steadier overnight reset. With intake still unlogged, the main risk is an overly deep deficit rather than fatigue. Tonight favors quiet recovery and muscle preservation.\n\nQuiet reset."
     },
     {
       "label": "Performance",
-      "text": "Steady reserve."
+      "text": "Quiet reset."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 1%\n\nRead\nThe night leaves a fuller reserve than usual, with recovery trending stronger than the recent pattern. This is a steadier system, better suited to controlled output and muscle-preserving work than forceful intensity.\n\nSteady reserve.",
-    "performance": "Steady reserve.",
+    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 80%\n\nRead\nThe training window is nearly closed with output far lighter than your usual day, despite a steadier overnight reset. With intake still unlogged, the main risk is an overly deep deficit rather than fatigue. Tonight favors quiet recovery and muscle preservation.\n\nQuiet reset.",
+    "performance": "Quiet reset.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Make your next meal protein-heavy with at least 60g to protect muscle while keeping the deficit modest.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 58.9,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "2 steps so far, 2m active, 441 calories burned, \u2014 training load"
   }
 }
