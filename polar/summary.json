@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-17T20:48:43-05:00",
-  "data_hash": "6ae6920fbf004fe0",
-  "slot": "macros-update",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe new meal changes the day: a low-input stretch has caught up, with protein now doing real muscle-protection work while the remaining intake window stays modest. Output has run heavier than usual, so this favors recovery from work already spent over added intensity.\n\nMomentum, contained.\n\nPerformance: Momentum, contained.\n\nTransit: none",
+  "generated_at": "2026-06-18T04:00:00-05:00",
+  "data_hash": "ba16f37a8e1d4eab",
+  "slot": "sleep",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 1%\n\nRead\nThe night leaves a fuller reserve than usual, with recovery trending stronger than the recent pattern. This is a steadier system, better suited to controlled output and muscle-preserving work than forceful intensity.\n\nSteady reserve.\n\nPerformance: Steady reserve.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe new meal changes the day: a low-input stretch has caught up, with protein now doing real muscle-protection work while the remaining intake window stays modest. Output has run heavier than usual, so this favors recovery from work already spent over added intensity.\n\nMomentum, contained."
+      "text": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 1%\n\nRead\nThe night leaves a fuller reserve than usual, with recovery trending stronger than the recent pattern. This is a steadier system, better suited to controlled output and muscle-preserving work than forceful intensity.\n\nSteady reserve."
     },
     {
       "label": "Performance",
-      "text": "Momentum, contained."
+      "text": "Steady reserve."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe new meal changes the day: a low-input stretch has caught up, with protein now doing real muscle-protection work while the remaining intake window stays modest. Output has run heavier than usual, so this favors recovery from work already spent over added intensity.\n\nMomentum, contained.",
-    "performance": "Momentum, contained.",
+    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 1%\n\nRead\nThe night leaves a fuller reserve than usual, with recovery trending stronger than the recent pattern. This is a steadier system, better suited to controlled output and muscle-preserving work than forceful intensity.\n\nSteady reserve.",
+    "performance": "Steady reserve.",
     "transit": null
   },
-  "nutrition_nudge": "Fat is already high, so keep the rest lean and skip added oils tonight.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
     "sleep_hours": 7.8,
     "hrv_today": 80,
     "hrv_7d_avg": 58.9,
-    "nutrition": "calories 2085 of 2574 goal, protein 161g of 138g goal, carbs 142g of 290g goal, fat 95g of 72g goal",
-    "nutrition_detail": "calories 2085 of 2574 goal -> 489 left; protein 161g of 138g goal -> 23g over; carbs 142g of 290g goal; fat 95g of 72g goal",
-    "activity_today": "11,163 steps so far, 5h 14m active, 2,559 calories burned, Heavy training load"
+    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
+    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
+    "activity_today": null
   }
 }
