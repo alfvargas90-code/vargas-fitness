@@ -1,66 +1,67 @@
-/* timing_weather_motion.js — PROOF OF CONCEPT (additive presentation layer)
+/* timing_weather_motion.js — additive entrance animations.
  *
- * Vanilla Motion micro-animations layered on top of the v3 dashboard, using the
- * self-hosted UMD global `window.Motion` (assets/js/vendor/motion.js). No build
- * step, no React — same runtime model as the rest of the dashboard.
+ * Uses the NATIVE Web Animations API (element.animate) + IntersectionObserver —
+ * no external library, so there is nothing for GitHub Pages' Jekyll build to
+ * strip and nothing extra to download. Same static runtime as the dashboard.
  *
  * STRICTLY ADDITIVE per LOCKED.md. This file:
+ *   • only animates opacity / transform — presentation, never content
  *   • never touches live data, the moon engine, ring values, or Currents voice
- *   • only animates opacity / transform — presentation, not content
- *   • degrades to a fully-visible, un-animated page if Motion fails to load
- *     (we only ever set opacity:0 from inside the Motion-loaded path, so a
- *      missing library or a thrown error can never hide content)
+ *   • is fail-safe: it never sets inline opacity itself, so if the API is
+ *     missing or a call throws, every element keeps its normal (visible) CSS
  *   • honors prefers-reduced-motion — zero motion when the user asks for none
  *
- * Animated entry points: hero label rise-in · per-lens card reveal (above-fold
- * staggers in, below-fold reveals on scroll) · lens-nav hover lift ·
- * barely-there ambient sun-bloom pulse.
+ * Effects: hero label rise-in · per-lens card reveal (above-fold staggers in,
+ * below-fold reveals on scroll) · subtle ambient sun-bloom pulse.
  */
 (function () {
-  const M = window.Motion;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Fail safe: reduced-motion, or a browser without WAAPI → leave the DOM as-is.
+  if (reduce || typeof Element.prototype.animate !== 'function') return;
 
-  // Fail safe: no library, or the user prefers reduced motion → leave DOM as-is.
-  if (!M || reduce) return;
+  const RISE = [
+    { opacity: 0, transform: 'translateY(18px)' },
+    { opacity: 1, transform: 'translateY(0)' },
+  ];
+  const TIMING = { duration: 560, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'both' };
+  const seen = new WeakSet(); // each card animates at most once
 
-  const { animate, inView, hover, stagger } = M;
-  const RISE = ['translateY(14px)', 'none'];
-  const seen = new WeakSet(); // each card is revealed at most once
-
-  function reveal(el, opts) {
-    animate(el, { opacity: [0, 1], transform: RISE }, { duration: 0.5, ease: 'easeOut', ...opts });
+  function rise(el, delay) {
+    try { el.animate(RISE, Object.assign({}, TIMING, { delay: delay || 0 })); }
+    catch (e) { /* never block the page on a presentation effect */ }
   }
 
   // Reveal a slide's not-yet-seen cards: above-the-fold cards stagger in now,
-  // below-the-fold cards reveal on scroll as they enter, so the effect lands
-  // where the eye is rather than being spent before you scroll there. Cards in
-  // hidden slides are never pre-hidden (no JS failure can strand content), and a
-  // safety timer un-hides anything IntersectionObserver somehow misses.
+  // below-the-fold cards reveal on scroll as they enter — so the effect lands
+  // where the eye is. Cards are never pre-hidden, so a miss can't strand them.
   function revealSlide(slide) {
     const cards = Array.from(slide.querySelectorAll('.card')).filter((c) => !seen.has(c));
     if (!cards.length) return;
-    cards.forEach((c) => { seen.add(c); c.style.opacity = '0'; });
-
-    const fold = (window.innerHeight || document.documentElement.clientHeight) * 0.9;
-    const above = cards.filter((c) => c.getBoundingClientRect().top < fold);
-    const below = cards.filter((c) => !above.includes(c));
-
-    if (above.length) reveal(above, { delay: stagger(0.05) });
-    below.forEach((c) => inView(c, () => reveal(c), { amount: 0.15 }));
-
-    // Belt-and-suspenders: force-reveal any still-hidden but visible card.
-    setTimeout(() => cards.forEach((c) => {
-      if (c.style.opacity === '0' && c.offsetParent !== null) reveal(c, { duration: 0.4 });
-    }), 3000);
+    const fold = (window.innerHeight || 800) * 0.92;
+    let stagger = 0;
+    cards.forEach((c) => {
+      seen.add(c);
+      if (io && c.getBoundingClientRect().top >= fold) {
+        io.observe(c);                 // below the fold → reveal on scroll
+      } else {
+        rise(c, stagger);              // visible now → stagger in
+        stagger += 70;
+      }
+    });
   }
+
+  const io = ('IntersectionObserver' in window)
+    ? new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { rise(e.target, 0); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.12 })
+    : null;
 
   function run() {
     // 1 — Hero label rises in once on load.
     const label = document.querySelector('.solar .label');
-    if (label) {
-      animate(label, { opacity: [0, 1], transform: RISE },
-              { duration: 0.6, ease: 'easeOut' });
-    }
+    if (label) rise(label, 0);
 
     // 2 — Cards in the active lens stagger in; other lenses reveal on switch.
     const active = document.querySelector('.slide.on') || document.querySelector('.slide');
@@ -68,28 +69,20 @@
     document.querySelectorAll('.lensnav button').forEach((btn) => {
       btn.addEventListener('click', () => {
         const slide = document.querySelector(`.slide[data-lens="${btn.dataset.lens}"]`);
-        // Defer a frame: the existing handler toggles .on (display) first, so we
-        // measure the slide's real layout after the switch, not before.
+        // Defer a frame: the existing handler flips display first, so we measure
+        // the slide's real layout after the switch, not before.
         if (slide) requestAnimationFrame(() => revealSlide(slide));
       });
     });
 
-    // 3 — Lens-nav buttons get a tactile lift on hover (pointer devices only).
-    if (typeof hover === 'function') {
-      document.querySelectorAll('.lensnav button').forEach((btn) => {
-        hover(btn, () => {
-          animate(btn, { transform: 'translateY(-2px)' }, { duration: 0.18, ease: 'easeOut' });
-          return () => animate(btn, { transform: 'none' }, { duration: 0.18, ease: 'easeOut' });
-        });
-      });
-    }
-
-    // 4 — Ambient sun bloom: a barely-there breathing pulse so the hero reads as
-    //     "alive". Low amplitude on a purely decorative layer — never the moon.
+    // 3 — Ambient sun bloom: a barely-there breathing pulse over the decorative
+    //     sun glow so the hero reads as "alive". Never the moon.
     const sun = document.querySelector('.solar .sun');
     if (sun) {
-      animate(sun, { opacity: [0.92, 1, 0.92] },
-              { duration: 6, repeat: Infinity, ease: 'easeInOut' });
+      try {
+        sun.animate([{ opacity: 0.9 }, { opacity: 1 }, { opacity: 0.9 }],
+                    { duration: 6000, iterations: Infinity, easing: 'ease-in-out' });
+      } catch (e) { /* decorative only */ }
     }
   }
 
