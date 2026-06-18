@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-17T20:00:00-05:00",
-  "data_hash": "8134a82dfd0b6fd0",
-  "slot": "train-2",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 77%\n\nRead\nThe session window closes on a moderate-effort day with better recovery underneath, but output ran lighter than your usual rhythm. For muscle retention, the main signal is a wide energy gap with protein nearly covered, so the night favors replenishment and downshifting.\n\nRecovery with purpose.\n\nPerformance: Recovery with purpose.\n\nTransit: none",
+  "generated_at": "2026-06-17T20:48:43-05:00",
+  "data_hash": "6ae6920fbf004fe0",
+  "slot": "macros-update",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe new meal changes the day: a low-input stretch has caught up, with protein now doing real muscle-protection work while the remaining intake window stays modest. Output has run heavier than usual, so this favors recovery from work already spent over added intensity.\n\nMomentum, contained.\n\nPerformance: Momentum, contained.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 77%\n\nRead\nThe session window closes on a moderate-effort day with better recovery underneath, but output ran lighter than your usual rhythm. For muscle retention, the main signal is a wide energy gap with protein nearly covered, so the night favors replenishment and downshifting.\n\nRecovery with purpose."
+      "text": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe new meal changes the day: a low-input stretch has caught up, with protein now doing real muscle-protection work while the remaining intake window stays modest. Output has run heavier than usual, so this favors recovery from work already spent over added intensity.\n\nMomentum, contained."
     },
     {
       "label": "Performance",
-      "text": "Recovery with purpose."
+      "text": "Momentum, contained."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 77%\n\nRead\nThe session window closes on a moderate-effort day with better recovery underneath, but output ran lighter than your usual rhythm. For muscle retention, the main signal is a wide energy gap with protein nearly covered, so the night favors replenishment and downshifting.\n\nRecovery with purpose.",
-    "performance": "Recovery with purpose.",
+    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 65 \u2022 Strain 100%\n\nRead\nThe new meal changes the day: a low-input stretch has caught up, with protein now doing real muscle-protection work while the remaining intake window stays modest. Output has run heavier than usual, so this favors recovery from work already spent over added intensity.\n\nMomentum, contained.",
+    "performance": "Momentum, contained.",
     "transit": null
   },
-  "nutrition_nudge": "Keep dinner steady and include 12g protein to protect muscle without forcing a big calorie push.",
+  "nutrition_nudge": "Fat is already high, so keep the rest lean and skip added oils tonight.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
     "sleep_hours": 7.8,
     "hrv_today": 80,
     "hrv_7d_avg": 58.9,
-    "nutrition": "calories 1435 of 2574 goal, protein 126g of 138g goal, carbs 97g of 290g goal, fat 57g of 72g goal",
-    "nutrition_detail": "calories 1435 of 2574 goal -> 1139 left; protein 126g of 138g goal -> 12g gap; carbs 97g of 290g goal; fat 57g of 72g goal",
-    "activity_today": "4,697 steps so far, 3h 38m active, 1,965 calories burned, Moderate training load"
+    "nutrition": "calories 2085 of 2574 goal, protein 161g of 138g goal, carbs 142g of 290g goal, fat 95g of 72g goal",
+    "nutrition_detail": "calories 2085 of 2574 goal -> 489 left; protein 161g of 138g goal -> 23g over; carbs 142g of 290g goal; fat 95g of 72g goal",
+    "activity_today": "11,163 steps so far, 5h 14m active, 2,559 calories burned, Heavy training load"
   }
 }
