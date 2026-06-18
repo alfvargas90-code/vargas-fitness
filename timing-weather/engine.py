@@ -144,6 +144,25 @@ BIRTH_MONTH_DAY = (8, 30)       # solar return / birthday — anchors the monthl
 CHART_SECT = "diurnal"          # natal Sun above the horizon (8th house) → day chart
 CLASSICAL_TRANSITS = ["sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn"]
 
+# --- Per-card planet-set restrictions for the DIRECT daily-transit statement -----
+# Each system names TODAY's actual aspects only within its own tradition's bodies, so
+# no system bleeds into another (Modern = all 10; Traditional = visible 7 only, never
+# Uranus/Neptune/Pluto; Vedic = visible 7 + the lunar nodes Rahu/Ketu, sidereal).
+MODERN_TRANSIT_BODIES = {"sun", "moon", "mercury", "venus", "mars", "jupiter",
+                         "saturn", "uranus", "neptune", "pluto"}
+CLASSICAL_BODIES = {"sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn"}
+OUTER_BODIES = {"uranus", "neptune", "pluto"}
+ANGLES = {"asc", "mc"}
+# Modern may aspect any natal point; Traditional restricts to the 7 + angles (no nodes,
+# no outers); Vedic uses the 7 + transit/natal nodes + the sidereal Lagna (asc).
+MODERN_NATAL_POINTS = MODERN_TRANSIT_BODIES | ANGLES | {"north_node"}
+TRADITIONAL_NATAL_POINTS = CLASSICAL_BODIES | ANGLES
+VEDIC_TRANSIT_BODIES = CLASSICAL_BODIES | {"rahu", "ketu"}
+VEDIC_NATAL_POINTS = CLASSICAL_BODIES | {"rahu", "ketu", "asc"}
+NATAL_LABEL = {"asc": "Ascendant", "mc": "Midheaven", "north_node": "North Node",
+               "rahu": "Rahu", "ketu": "Ketu"}
+VEDIC_LABEL = {"asc": "Lagna", "rahu": "Rahu", "ketu": "Ketu", "north_node": "Rahu"}
+
 # Sade Sati Small Panoti active window (natal_context.md vedic.sade_sati).
 SADE_SATI = (date(2025, 3, 30), date(2027, 6, 2))
 
@@ -1195,6 +1214,90 @@ def read_transit_snapshot(today):
     return " ".join(grabbed)[:600]
 
 
+# --- DIRECT daily-transit statement (the day's actual aspects, per system) -------
+# Each daily card must OPEN by naming TODAY's tight transits, restricted to its own
+# tradition's planet set (Principle: state what the transits ARE for that day, not the
+# standing monthly frame). Built deterministically from the same aspect array that
+# becomes scoringDetail.tightAspects (PVR: never fabricated; orbs are measured).
+
+def _fmt_aspect(a, label_map=None, sidereal=False):
+    """One transit→natal aspect as a direct, plain phrase:
+    'Mars trine natal Mercury (exact, 0.04°)' / 'Pluto square natal MC (angular, 1.22°)'."""
+    lm = label_map or NATAL_LABEL
+    nat = lm.get(a["natal"], cap(a["natal"]))
+    tr = lm.get(a["transit"], cap(a["transit"]))
+    orb = round(a["orb"], 2)
+    tags = []
+    if orb <= 0.2:
+        tags.append("exact")
+    if a["natal"] in ANGLES:
+        tags.append("angular")
+    paren = (", ".join(tags) + ", " if tags else "") + f"{orb}°"
+    pre = "transit " if sidereal else ""
+    return f"{pre}{tr} {a['aspect']} natal {nat} ({paren})"
+
+
+def _node_key(body):
+    """Collapse the two lunar-node names to one dedup token — a conjunction to one node is
+    an opposition to the other, so they describe the same axis and must not double-count."""
+    return "node" if body in ("rahu", "ketu", "north_node", "south_node") else body
+
+
+def daily_transit_statement(aspects, allowed_transit, allowed_natal, limit=5,
+                            sidereal=False, label_map=None):
+    """The literal 'Today: …' opener for ONE system — today's tight transits restricted to
+    that tradition's bodies, TIGHTEST first, deduped by transit↔natal pair (node axis
+    collapsed). Returns '' when nothing qualifies (PVR: the card stays honest)."""
+    cand = sorted([a for a in aspects
+                   if a["transit"] in allowed_transit and a["natal"] in allowed_natal],
+                  key=lambda a: a["orb"])
+    out, seen = [], set()
+    for a in cand:
+        key = (_node_key(a["transit"]), _node_key(a["natal"]))
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(_fmt_aspect(a, label_map, sidereal))
+        if len(out) >= limit:
+            break
+    if not out:
+        return ""
+    return "Today: " + ", ".join(out) + "."
+
+
+def vedic_transit_aspects(natal, now_utc, max_orb=5.0):
+    """Sidereal (Lahiri) transit→natal aspect dicts — same shape as tightAspects but
+    sidereal, and INCLUDING the transit lunar nodes (Rahu/Ketu). Sidereal orbs differ
+    slightly from tropical because the ayanamsha at transit vs at birth differs. Restricts
+    to the Vedic body/point sets so the Vedic card never names an outer planet. Returns []
+    on ephemeris failure (PVR)."""
+    try:
+        vnatal = sidereal_natal(natal)
+        vtransits, _ = vedic_transits_at(now_utc)
+    except Exception as e:
+        log(f"  vedic tight aspects: base compute failed ({e}) — empty")
+        return []
+    try:
+        swe.set_sid_mode(swe.SIDM_LAHIRI, 0, 0)
+        nn = swe.calc_ut(jd_now(now_utc), swe.TRUE_NODE,
+                         swe.FLG_SWIEPH | swe.FLG_SIDEREAL)[0][0]
+        vtransits["rahu"] = nn
+        vtransits["ketu"] = (nn + 180) % 360
+    except Exception as e:
+        log(f"  vedic tight aspects: transit nodes failed ({e}) — nodes skipped")
+    out = []
+    for t, tl in vtransits.items():
+        if t not in VEDIC_TRANSIT_BODIES:
+            continue
+        for n, nl in vnatal.items():
+            if n not in VEDIC_NATAL_POINTS:
+                continue
+            asp, orb = closest_aspect(tl, nl, max_orb)
+            if asp:
+                out.append({"transit": t, "natal": n, "aspect": asp, "orb": round(orb, 2)})
+    return sorted(out, key=lambda a: a["orb"])
+
+
 def tropical_key_factors(aspects, limit=3):
     """Top tropical transit→natal aspects for today, prioritizing personal/angular
     natal points then tightness. Jargon OK (internal/audit array)."""
@@ -1506,6 +1609,72 @@ def bazi_factors(today, now_utc):
     return facts
 
 
+# BaZi branch/stem interaction tables — for the DIRECT daily BaZi statement (today's
+# day pillar read against Alfredo's Ding-Mao day master + Horse/Monkey/Rabbit/Monkey
+# natal animal stack). Classical Liu Chong (clash), Liu He (six combine), San He (three-
+# harmony trine), and the Heavenly-Stem five combinations.
+SIX_CLASH = {frozenset(p) for p in [("Rat", "Horse"), ("Ox", "Goat"), ("Tiger", "Monkey"),
+                                    ("Rabbit", "Rooster"), ("Dragon", "Dog"), ("Snake", "Pig")]}
+SIX_HARMONY = {  # frozenset(pair) -> element the Six-Combine produces
+    frozenset(["Rat", "Ox"]): "Earth", frozenset(["Tiger", "Pig"]): "Wood",
+    frozenset(["Rabbit", "Dog"]): "Fire", frozenset(["Dragon", "Rooster"]): "Metal",
+    frozenset(["Snake", "Monkey"]): "Water", frozenset(["Horse", "Goat"]): "Fire",
+}
+THREE_HARMONY = {"Fire": {"Tiger", "Horse", "Dog"}, "Wood": {"Pig", "Rabbit", "Goat"},
+                 "Metal": {"Snake", "Rooster", "Ox"}, "Water": {"Monkey", "Rat", "Dragon"}}
+STEM_COMBO = {  # Heavenly-Stem five combinations (合) -> element produced
+    frozenset(["Jia", "Ji"]): "Earth", frozenset(["Yi", "Geng"]): "Metal",
+    frozenset(["Bing", "Xin"]): "Water", frozenset(["Ding", "Ren"]): "Wood",
+    frozenset(["Wu", "Gui"]): "Fire",
+}
+ELEM_TENGOD_DING = {"Wood": "Resource", "Fire": "Companion", "Earth": "Output",
+                    "Metal": "Wealth", "Water": "Power/Officer"}
+
+
+def _branch_relation(today_animal, natal_animal):
+    """Short label for today's branch animal vs one natal animal, or None if neutral."""
+    if today_animal == natal_animal:
+        return f"sits on your {natal_animal}"
+    pair = frozenset([today_animal, natal_animal])
+    if pair in SIX_CLASH:
+        return f"clashes your {natal_animal}"
+    if pair in SIX_HARMONY:
+        return f"forms the {SIX_HARMONY[pair]} Six-Combine with your {natal_animal}"
+    for elem, trio in THREE_HARMONY.items():
+        if today_animal in trio and natal_animal in trio:
+            return f"forms the {elem} trine with your {natal_animal}"
+    return None
+
+
+def bazi_day_line(today):
+    """The literal 'Today: …' opener for the BaZi card — today's DAY PILLAR read against
+    the Ding day master and the natal animal stack (Horse/Monkey/Rabbit/Monkey). Stem
+    combination with Ding + branch clash/combine/trine relations only. No Western planets,
+    no zodiac signs (PVR: fully computed from the sexagenary day)."""
+    ds, db, da = bazi_day_pillar(today)
+    elem, role = BAZI_STEM_ELEM.get(ds, ("", ""))
+    combo = STEM_COMBO.get(frozenset([ds, "Ding"]))
+    if ds == "Ding":
+        stem_txt = (f"the {ds} stem doubles your Ding day master (peer Fire — Companion, "
+                    "competition runs hot)")
+    elif combo:
+        stem_txt = (f"the {ds} stem ({elem}, {role} for Ding) combines with your Ding day "
+                    f"master into {combo} ({ELEM_TENGOD_DING.get(combo, '')})")
+    else:
+        stem_txt = f"the {ds} stem is {elem} ({role} for Ding)"
+    rels, seen = [], set()
+    for an in BAZI_NATAL["animalStack"]:
+        if an in seen:
+            continue
+        seen.add(an)
+        r = _branch_relation(da, an)
+        if r:
+            rels.append(r)
+    branch_txt = (f"the {da} branch " + " and ".join(rels)) if rels else \
+        f"the {da} branch is quiet against your natal stack today"
+    return f"Today: {ds}-{db} ({da}) day. {stem_txt[0].upper()}{stem_txt[1:]}; {branch_txt}."
+
+
 def bazi_monthly_factors(today, now_utc):
     """Live MONTHLY factors for the BaZi monthly Codex pass — the current solar-term month,
     the next jié handoff date, and the year's stacking window. PVR: derived from ephemeris
@@ -1768,7 +1937,8 @@ def _activation_directive(system, activations):
             "he knows it. Lead with today's actionable stack: spikes, trap, best use.")
 
 
-def codex_reading(system, forecast, factors, moon_desc, context_block, mood, snap="", activation=""):
+def codex_reading(system, forecast, factors, moon_desc, context_block, mood, snap="",
+                  activation="", transit_line=""):
     """ONE framework's daily reading via ~/bin/llm --model codex (Cowork-safe). `system`
     is 'tropical' or 'vedic'; the prompt sees ONLY that system's context_block, speaks
     in that tradition's vocabulary, and is forbidden the other tradition's terms (no
@@ -1796,31 +1966,42 @@ def codex_reading(system, forecast, factors, moon_desc, context_block, mood, sna
         background += " Today's read from the morning snapshot: " + snap
     context_section = ("\n\n=== " + cfg["name"] + " CONTEXT (your ONLY source) ===\n"
                        + context_block + "\n=== END CONTEXT ===") if context_block else ""
+    # The card must STATE today's actual transits first, then interpret them. The opener
+    # is built deterministically (PVR-accurate) and reproduced verbatim; Codex writes only
+    # the operational read after it.
+    opener_rule = (
+        "BEGIN the body with this exact sentence, reproduced VERBATIM, as the first "
+        f"sentence — do not paraphrase, reorder, or drop any aspect:\n\"{transit_line}\"\n"
+        "Then add 2-3 short declarative sentences interpreting THOSE specific transits in "
+        "your framework. " if transit_line else
+        "Open with today's specific activation, then 2-3 sentences of operational read. ")
     prompt = (
         f"You are writing the {cfg['name']} sub-reading for a personal astrology dashboard. "
         f"This card has three clearly-labeled sub-sections; you write ONLY the {cfg['name']} one. "
         f"USE {cfg['use']} "
         f"Speak ONLY in the {cfg['name']} framework — do NOT use the OTHER tradition's terms "
         f"(no {cfg['forbid']}). "
-        "Second person, EXACTLY 3-4 short declarative sentences — 45-60 words TOTAL, a hard cap. "
-        "Lead with the bottom line, then the why. Blunt, plain, direct: no hedging, no stacked "
-        "qualifiers, no run-on sentences, no semicolons. Be honest about BOTH the supports and "
-        "the tensions. No event predictions, no fortune-telling, no hype, no fluff. "
-        "Exactly ONE of those sentences must carry an image — an evocative, decision-grounded "
-        "metaphor in the bottom line or the closing line (e.g. 'Saturn is the quiet edit, not the "
-        "loud cut'); the rest stay clinical. No fortune-cookie or therapy voice.\n\n"
+        "This is a DAILY reading: state what the transits ARE for TODAY, directly and "
+        "specifically — never a generic monthly summary. " + opener_rule +
+        "After the verbatim opener, 65-90 words TOTAL is the hard cap. Lead the interpretation "
+        "with the bottom line, then the why. Blunt, plain, direct: no hedging, no stacked "
+        "qualifiers, no run-on sentences. Be honest about BOTH the supports and the tensions. "
+        "No event predictions, no fortune-telling, no hype, no fluff. "
+        "Exactly ONE of your interpretive sentences must carry an image — an evocative, "
+        "decision-grounded metaphor (e.g. 'Saturn is the quiet edit, not the loud cut'); the "
+        "rest stay clinical. No fortune-cookie or therapy voice.\n\n"
         + STYLE_GUIDE_BLOCK + "\n\n"
         + (activation + "\n\n" if activation else "")
         + f"Headline weather mode: {forecast}.\n"
-        "Live factors to weave in (interpret in your framework, do not just list): "
-        + "; ".join(facts) + ".\n"
+        "Supporting context to inform the interpretation (do NOT re-list these; the opener "
+        "already names today's transits): " + "; ".join(facts) + ".\n"
         f"Mood: {mood}\n"
         f"Background: {background}"
         + context_section + "\n\n"
         "Output EXACTLY this shape and nothing else:\n"
         "STATE: <one or two word state label for THIS framework today, e.g. Expansion, "
         "Consolidation, Pivot, Preparation>\n"
-        "BODY: <the second-person passage>"
+        "BODY: <the verbatim opener sentence, then your interpretation>"
     )
     try:
         out = subprocess.run([llm, "--lane", "reasoning", "--model", "codex", prompt],
@@ -2368,18 +2549,34 @@ def compute(now=None, with_codex=True):
         trad_factors = traditional_profection(today, natal, aspects)
         # Principle #6: announce standing themes only on their activation/shift day.
         activations = standing_theme_activations(today, now_utc)
+        # DIRECT daily-transit openers — each restricted to its own tradition's planet set
+        # (Modern = all 10; Traditional = visible 7, no outers/nodes; Vedic = 7 + Rahu/Ketu,
+        # sidereal; BaZi = today's day pillar vs the natal stack). PVR: measured, never faked.
+        trop_transit_line = daily_transit_statement(
+            aspects, MODERN_TRANSIT_BODIES, MODERN_NATAL_POINTS, limit=5)
+        trad_transit_line = daily_transit_statement(
+            aspects, CLASSICAL_BODIES, TRADITIONAL_NATAL_POINTS, limit=4)
+        ved_aspects = vedic_transit_aspects(natal, now_utc)
+        ved_transit_line = daily_transit_statement(
+            ved_aspects, VEDIC_TRANSIT_BODIES, VEDIC_NATAL_POINTS, limit=4,
+            sidereal=True, label_map=VEDIC_LABEL)
+        if moon and moon.get("vedic", {}).get("nakshatra"):
+            vl = moon["vedic"]
+            ved_transit_line = (ved_transit_line + " " if ved_transit_line else "Today: ") + \
+                f"Moon in {vl['sign']} {vl['degree']}°, nakshatra {vl['nakshatra']} pada {vl['nakshatra_pada']}."
+        bazi_transit_line = bazi_day_line(today)
         ts, tb = codex_reading("tropical", forecast, trop_factors, trop_moon_desc,
                                tropical_context_block(), reading_mood, snap,
-                               _activation_directive("tropical", activations))
+                               _activation_directive("tropical", activations), trop_transit_line)
         trs, trb = codex_reading("traditional", forecast, trad_factors, "",
                                  traditional_context_block(), reading_mood, "",
-                                 _activation_directive("traditional", activations))
+                                 _activation_directive("traditional", activations), trad_transit_line)
         vs, vb = codex_reading("vedic", forecast, ved_factors, ved_moon_desc,
                                vedic_context_block(), reading_mood, "",
-                               _activation_directive("vedic", activations))
+                               _activation_directive("vedic", activations), ved_transit_line)
         bzs, bzb = codex_reading("bazi", forecast, bazi_factors(today, now_utc), "",
                                  bazi_context_block(), reading_mood, "",
-                                 _activation_directive("bazi", activations))
+                                 _activation_directive("bazi", activations), bazi_transit_line)
         tropical_reading = {"state": ts, "body": tb} if tb else None
         traditional_reading = {"state": trs, "body": trb} if trb else None
         vedic_reading = {"state": vs, "body": vb} if vb else None
