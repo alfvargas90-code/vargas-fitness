@@ -1243,26 +1243,58 @@ def _node_key(body):
     return "node" if body in ("rahu", "ketu", "north_node", "south_node") else body
 
 
-def daily_transit_statement(aspects, allowed_transit, allowed_natal, limit=5,
-                            sidereal=False, label_map=None):
-    """The literal 'Today: …' opener for ONE system — today's tight transits restricted to
-    that tradition's bodies, TIGHTEST first, deduped by transit↔natal pair (node axis
-    collapsed). Returns '' when nothing qualifies (PVR: the card stays honest)."""
+def dominant_transit_names(aspects, allowed_transit, allowed_natal, n=2,
+                           sidereal=False, label_map=None):
+    """The 1-2 MOST DOMINANT transits today (tightest first), restricted to this
+    tradition's bodies and named in PLAIN language — NO orb/degree numbers. The day's
+    prose should READ as energy + action, not an aspect catalog; these names get woven in.
+    Node axis collapsed. Returns '' when nothing qualifies (PVR: the card stays honest)."""
     cand = sorted([a for a in aspects
                    if a["transit"] in allowed_transit and a["natal"] in allowed_natal],
                   key=lambda a: a["orb"])
+    lm = label_map or NATAL_LABEL
     out, seen = [], set()
     for a in cand:
         key = (_node_key(a["transit"]), _node_key(a["natal"]))
         if key in seen:
             continue
         seen.add(key)
-        out.append(_fmt_aspect(a, label_map, sidereal))
-        if len(out) >= limit:
+        if a["natal"] in ANGLES:
+            nat = "the " + lm.get(a["natal"], {"asc": "Ascendant", "mc": "Midheaven"}[a["natal"]])
+        else:
+            nat = lm.get(a["natal"], cap(a["natal"]))
+        tr = lm.get(a["transit"], cap(a["transit"]))
+        qual = "exact " if round(a["orb"], 2) <= 0.2 else ""
+        out.append(f"{qual}{tr} {a['aspect']} {nat}")
+        if len(out) >= n:
             break
-    if not out:
+    return "; ".join(out)
+
+
+def ordinal_house_of_sign(sign, asc_sign):
+    """Whole-sign house (1-12) of `sign` counted from the rising sign as the 1st."""
+    return (SIGNS.index(sign) - SIGNS.index(asc_sign)) % 12 + 1
+
+
+def tropical_moon_house_line(moon):
+    """Factual 'Moon today' placement for the Traditional card: tropical Moon sign + its
+    WHOLE-SIGN house from the Capricorn Ascendant. '' if Moon data absent (PVR)."""
+    tl = (moon or {}).get("tropical", {})
+    sign = tl.get("sign")
+    if not sign or sign not in SIGNS:
         return ""
-    return "Today: " + ", ".join(out) + "."
+    return f"Moon in {sign}, your {ordinal(ordinal_house_of_sign(sign, ASC_SIGN))} whole-sign house"
+
+
+def vedic_moon_line(moon):
+    """Factual 'Moon today' placement for the Vedic card: sidereal Moon sign + whole-sign
+    house (already off the sidereal Lagna) + nakshatra/pada. '' if absent (PVR)."""
+    vl = (moon or {}).get("vedic", {})
+    if not vl.get("sign"):
+        return ""
+    house = f", your {ordinal(vl['house'])} house" if vl.get("house") else ""
+    return (f"Moon in {vl['sign']}{house}, nakshatra {vl['nakshatra']} "
+            f"pada {vl['nakshatra_pada']}")
 
 
 def vedic_transit_aspects(natal, now_utc, max_orb=5.0):
@@ -1647,10 +1679,11 @@ def _branch_relation(today_animal, natal_animal):
 
 
 def bazi_day_line(today):
-    """The literal 'Today: …' opener for the BaZi card — today's DAY PILLAR read against
-    the Ding day master and the natal animal stack (Horse/Monkey/Rabbit/Monkey). Stem
-    combination with Ding + branch clash/combine/trine relations only. No Western planets,
-    no zodiac signs (PVR: fully computed from the sexagenary day)."""
+    """The compact DOMINANT phrase for the BaZi card — today's DAY PILLAR read against the
+    Ding day master and the natal animal stack (Horse/Monkey/Rabbit/Monkey): stem
+    combination with Ding + the strongest branch clash/combine/trine relations. Fed into the
+    directive opener (energy + action), not printed as a catalog. No Western planets, no
+    zodiac signs (PVR: fully computed from the sexagenary day)."""
     ds, db, da = bazi_day_pillar(today)
     elem, role = BAZI_STEM_ELEM.get(ds, ("", ""))
     combo = STEM_COMBO.get(frozenset([ds, "Ding"]))
@@ -1670,9 +1703,11 @@ def bazi_day_line(today):
         r = _branch_relation(da, an)
         if r:
             rels.append(r)
-    branch_txt = (f"the {da} branch " + " and ".join(rels)) if rels else \
-        f"the {da} branch is quiet against your natal stack today"
-    return f"Today: {ds}-{db} ({da}) day. {stem_txt[0].upper()}{stem_txt[1:]}; {branch_txt}."
+    branch_txt = (f"its {da} branch " + " and ".join(rels)) if rels else \
+        f"its {da} branch is quiet against your natal stack today"
+    # Compact dominant phrase (NOT a catalog) for the directive opener — the day pillar,
+    # its key stem interaction with the Ding day master, and the strongest branch relation.
+    return f"the {ds}-{db} ({da}) day pillar: {stem_txt}, and {branch_txt}"
 
 
 def bazi_monthly_factors(today, now_utc):
@@ -1938,12 +1973,14 @@ def _activation_directive(system, activations):
 
 
 def codex_reading(system, forecast, factors, moon_desc, context_block, mood, snap="",
-                  activation="", transit_line=""):
-    """ONE framework's daily reading via ~/bin/llm --model codex (Cowork-safe). `system`
-    is 'tropical' or 'vedic'; the prompt sees ONLY that system's context_block, speaks
-    in that tradition's vocabulary, and is forbidden the other tradition's terms (no
-    cross-contamination). Emits the framework's OWN state label + a ~3-4 line body.
-    Returns (state_label, body) or (None, None) on any failure (PVR: that side -> null)."""
+                  activation="", dominant="", moon_today=""):
+    """ONE framework's daily reading via ~/bin/llm --model codex (Cowork-safe). The prompt
+    sees ONLY that system's context_block, speaks in that tradition's vocabulary, and is
+    forbidden the other tradition's terms (no cross-contamination). Leads with the day's
+    ENERGY + the action (directive, imperative voice), names at most the 1-2 `dominant`
+    influences in plain language (no orb numbers), and — when `moon_today` is supplied
+    (Traditional + Vedic) — appends a clearly-labeled 'Moon today' line. Returns
+    (state_label, body) or (None, None) on any failure (PVR: that side -> null)."""
     cfg = _READING_SYSTEMS[system]
     llm = os.path.expanduser("~/bin/llm")
     if not os.path.exists(llm):
@@ -1966,42 +2003,53 @@ def codex_reading(system, forecast, factors, moon_desc, context_block, mood, sna
         background += " Today's read from the morning snapshot: " + snap
     context_section = ("\n\n=== " + cfg["name"] + " CONTEXT (your ONLY source) ===\n"
                        + context_block + "\n=== END CONTEXT ===") if context_block else ""
-    # The card must STATE today's actual transits first, then interpret them. The opener
-    # is built deterministically (PVR-accurate) and reproduced verbatim; Codex writes only
-    # the operational read after it.
+    # Directive energy-first opener. NAME the day's energy as a fact, then the action; weave
+    # in AT MOST the 1-2 dominant influences in plain language. No aspect catalog, no orb
+    # numbers — the full tightAspects array lives in scoringDetail for anyone drilling in.
     opener_rule = (
-        "BEGIN the body with this exact sentence, reproduced VERBATIM, as the first "
-        f"sentence — do not paraphrase, reorder, or drop any aspect:\n\"{transit_line}\"\n"
-        "Then add 2-3 short declarative sentences interpreting THOSE specific transits in "
-        "your framework. " if transit_line else
-        "Open with today's specific activation, then 2-3 sentences of operational read. ")
+        "OPEN with one or two DIRECTIVE sentences that NAME today's energy as a fact and "
+        "give the action — answer 'what is the energy of today and what do I do with it?' in "
+        "the opening. Imperative voice: 'Today is X — <energy>. <do this>.' State it as fact. "
+        "BANNED hedging words: may, might, could, can, possibly, tends to, perhaps. "
+        + (f"Weave in AT MOST these 1-2 dominant influences, in plain language: {dominant}. "
+           if dominant else "")
+        + "Do NOT list more than two aspects. Do NOT print any degree or orb numbers (e.g. "
+          "'1.2°', '0.04°') anywhere in the prose — energy and action are the foreground, "
+          "aspect mechanics are background. ")
+    moon_rule = (
+        "Separately, write a Moon read for the MOON field below: ONE sentence on what today's "
+        "Moon placement brings — what to do or watch. Do NOT restate the placement itself "
+        "(sign/house/nakshatra); I print that. Do NOT start with 'Moon today'. Just the "
+        f"one-sentence read. For reference, today's placement is: {moon_today}. "
+        if moon_today else "")
     prompt = (
         f"You are writing the {cfg['name']} sub-reading for a personal astrology dashboard. "
         f"This card has three clearly-labeled sub-sections; you write ONLY the {cfg['name']} one. "
         f"USE {cfg['use']} "
         f"Speak ONLY in the {cfg['name']} framework — do NOT use the OTHER tradition's terms "
         f"(no {cfg['forbid']}). "
-        "This is a DAILY reading: state what the transits ARE for TODAY, directly and "
-        "specifically — never a generic monthly summary. " + opener_rule +
-        "After the verbatim opener, 65-90 words TOTAL is the hard cap. Lead the interpretation "
-        "with the bottom line, then the why. Blunt, plain, direct: no hedging, no stacked "
+        "This is a DAILY reading about TODAY's energy and the move — never a generic monthly "
+        "summary. " + opener_rule +
+        "The main reading is 55-80 words. Blunt, plain, directive: no hedging, no stacked "
         "qualifiers, no run-on sentences. Be honest about BOTH the supports and the tensions. "
         "No event predictions, no fortune-telling, no hype, no fluff. "
-        "Exactly ONE of your interpretive sentences must carry an image — an evocative, "
-        "decision-grounded metaphor (e.g. 'Saturn is the quiet edit, not the loud cut'); the "
-        "rest stay clinical. No fortune-cookie or therapy voice.\n\n"
+        "Exactly ONE sentence may carry an image — an evocative, decision-grounded metaphor "
+        "(e.g. 'Saturn is the quiet edit, not the loud cut'); the rest stay clinical. No "
+        "fortune-cookie or therapy voice.\n\n"
         + STYLE_GUIDE_BLOCK + "\n\n"
         + (activation + "\n\n" if activation else "")
         + f"Headline weather mode: {forecast}.\n"
-        "Supporting context to inform the interpretation (do NOT re-list these; the opener "
-        "already names today's transits): " + "; ".join(facts) + ".\n"
+        "Supporting context to inform the read (do NOT re-list these as a catalog): "
+        + "; ".join(facts) + ".\n"
         f"Mood: {mood}\n"
         f"Background: {background}"
         + context_section + "\n\n"
+        + moon_rule + "\n"
         "Output EXACTLY this shape and nothing else:\n"
         "STATE: <one or two word state label for THIS framework today, e.g. Expansion, "
         "Consolidation, Pivot, Preparation>\n"
-        "BODY: <the verbatim opener sentence, then your interpretation>"
+        "BODY: <the directive energy + action reading>"
+        + ("\nMOON: <one sentence on what today's Moon placement brings>" if moon_today else "")
     )
     try:
         out = subprocess.run([llm, "--lane", "reasoning", "--model", "codex", prompt],
@@ -2014,12 +2062,23 @@ def codex_reading(system, forecast, factors, moon_desc, context_block, mood, sna
         return None, None
     raw = out.stdout
     sm = re.search(r"(?im)^\s*STATE:\s*(.+?)\s*$", raw)
-    bm = re.search(r"(?is)BODY:\s*(.+)$", raw)
+    # BODY ends where MOON begins (if present) so the catalog/energy text stays clean.
+    bm = re.search(r"(?is)BODY:\s*(.+?)(?=\n\s*MOON:|\Z)", raw)
+    mm = re.search(r"(?is)MOON:\s*(.+)$", raw)
     state_label = sm.group(1).strip().strip(".").strip() if sm else None
     body = re.sub(r"\s+", " ", bm.group(1)).strip() if bm else re.sub(r"\s+", " ", raw).strip()
     if not body:
         log(f"  codex {system} reading produced no body — null")
         return None, None
+    # Append the clearly-labeled 'Moon today' line on its OWN line (rd-body renders
+    # white-space: pre-line). The factual placement is deterministic; Codex wrote the read.
+    if moon_today:
+        read = re.sub(r"\s+", " ", mm.group(1)).strip() if mm else ""
+        read = re.sub(r"(?i)^moon today\s*[—-]\s*", "", read).strip()
+        moon_line = "Moon today — " + moon_today + ("." if not moon_today.endswith(".") else "")
+        if read:
+            moon_line += " " + read
+        body = body + "\n\n" + moon_line
     if not state_label:
         state_label = forecast.title()
     return state_label, body
@@ -2549,34 +2608,37 @@ def compute(now=None, with_codex=True):
         trad_factors = traditional_profection(today, natal, aspects)
         # Principle #6: announce standing themes only on their activation/shift day.
         activations = standing_theme_activations(today, now_utc)
-        # DIRECT daily-transit openers — each restricted to its own tradition's planet set
-        # (Modern = all 10; Traditional = visible 7, no outers/nodes; Vedic = 7 + Rahu/Ketu,
-        # sidereal; BaZi = today's day pillar vs the natal stack). PVR: measured, never faked.
-        trop_transit_line = daily_transit_statement(
-            aspects, MODERN_TRANSIT_BODIES, MODERN_NATAL_POINTS, limit=5)
-        trad_transit_line = daily_transit_statement(
-            aspects, CLASSICAL_BODIES, TRADITIONAL_NATAL_POINTS, limit=4)
+        # Dominant influences (1-2, names only, NO orbs) — restricted to each tradition's
+        # planet set (Modern = all 10; Traditional = visible 7, no outers/nodes; Vedic = 7 +
+        # Rahu/Ketu, sidereal; BaZi = today's day pillar vs the natal stack). The prose reads
+        # as energy + action; these get woven in. PVR: measured, never faked.
+        trop_dominant = dominant_transit_names(
+            aspects, MODERN_TRANSIT_BODIES, MODERN_NATAL_POINTS, n=2)
+        trad_dominant = dominant_transit_names(
+            aspects, CLASSICAL_BODIES, TRADITIONAL_NATAL_POINTS, n=2)
         ved_aspects = vedic_transit_aspects(natal, now_utc)
-        ved_transit_line = daily_transit_statement(
-            ved_aspects, VEDIC_TRANSIT_BODIES, VEDIC_NATAL_POINTS, limit=4,
+        ved_dominant = dominant_transit_names(
+            ved_aspects, VEDIC_TRANSIT_BODIES, VEDIC_NATAL_POINTS, n=2,
             sidereal=True, label_map=VEDIC_LABEL)
-        if moon and moon.get("vedic", {}).get("nakshatra"):
-            vl = moon["vedic"]
-            ved_transit_line = (ved_transit_line + " " if ved_transit_line else "Today: ") + \
-                f"Moon in {vl['sign']} {vl['degree']}°, nakshatra {vl['nakshatra']} pada {vl['nakshatra_pada']}."
-        bazi_transit_line = bazi_day_line(today)
+        bazi_dominant = bazi_day_line(today)
+        # Moon-today lines (Traditional = tropical sign + whole-sign house; Vedic = sidereal
+        # sign + house + nakshatra). BaZi has no Moon-by-house (Western concept) — omitted.
+        trad_moon_today = tropical_moon_house_line(moon)
+        ved_moon_today = vedic_moon_line(moon)
         ts, tb = codex_reading("tropical", forecast, trop_factors, trop_moon_desc,
                                tropical_context_block(), reading_mood, snap,
-                               _activation_directive("tropical", activations), trop_transit_line)
+                               _activation_directive("tropical", activations), trop_dominant)
         trs, trb = codex_reading("traditional", forecast, trad_factors, "",
                                  traditional_context_block(), reading_mood, "",
-                                 _activation_directive("traditional", activations), trad_transit_line)
+                                 _activation_directive("traditional", activations),
+                                 trad_dominant, trad_moon_today)
         vs, vb = codex_reading("vedic", forecast, ved_factors, ved_moon_desc,
                                vedic_context_block(), reading_mood, "",
-                               _activation_directive("vedic", activations), ved_transit_line)
+                               _activation_directive("vedic", activations),
+                               ved_dominant, ved_moon_today)
         bzs, bzb = codex_reading("bazi", forecast, bazi_factors(today, now_utc), "",
                                  bazi_context_block(), reading_mood, "",
-                                 _activation_directive("bazi", activations), bazi_transit_line)
+                                 _activation_directive("bazi", activations), bazi_dominant)
         tropical_reading = {"state": ts, "body": tb} if tb else None
         traditional_reading = {"state": trs, "body": trb} if trb else None
         vedic_reading = {"state": vs, "body": vb} if vb else None
