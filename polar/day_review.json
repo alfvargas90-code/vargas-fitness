@@ -1,19 +1,19 @@
 {
-  "date": "2026-06-16",
-  "generated_at": "2026-06-16T21:45:00-05:00",
+  "date": "2026-06-17",
+  "generated_at": "2026-06-17T21:45:00-05:00",
   "verdict": "Big",
   "stats": {
-    "steps": 420,
-    "active_minutes": 14,
-    "active_time_display": "14m",
-    "calories_burned": 1449,
-    "active_calories": 66,
-    "calories_eaten": 620,
-    "net_deficit": 829,
+    "steps": 11907,
+    "active_minutes": 343,
+    "active_time_display": "5h 43m",
+    "calories_burned": 2697,
+    "active_calories": 1147,
+    "calories_eaten": 2085,
+    "net_deficit": 612,
     "calorie_target": 2574,
-    "protein_g": 42,
+    "protein_g": 161,
     "protein_target_g": 138,
-    "protein_gap_g": 96
+    "protein_gap_g": -23
   },
-  "prose": "Big output day, but with only about 420 steps and 14 minutes active, the bigger issue is that you ate about 620 against about 1,450 burned, which leaves too big a gap for protecting muscle. Protein was the miss, with only 42 in and almost 100 left on the table, so tomorrow push protein hard and keep the deficit calmer."
+  "prose": "Big work day: nearly 12,000 steps, hours of movement, and about 600 calories under, which is lean enough to move fat without getting reckless. The best part is you actually hit protein, so the day supports muscle instead of just chasing burn. Keep protein locked in tomorrow and make the training count."
 }
