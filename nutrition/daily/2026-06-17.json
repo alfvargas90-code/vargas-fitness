@@ -1,6 +1,6 @@
 {
   "date": "2026-06-17",
-  "synced_at": "2026-06-18T01:18:28+00:00",
+  "synced_at": "2026-06-18T01:48:38+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 1435.0,
-    "protein_g": 126.0,
-    "carbs_g": 97.0,
-    "fat_g": 57.0
+    "calories": 2085.0,
+    "protein_g": 161.0,
+    "carbs_g": 142.0,
+    "fat_g": 95.0
   },
-  "meal_count": 2,
+  "meal_count": 3,
   "raw": {
     "date": "2026-06-17",
     "meals": [
@@ -35,13 +35,22 @@
         "fat": 15,
         "carbs": 55,
         "emoji": "\u00f0\u009f\u00a5\u00a3"
+      },
+      {
+        "title": "Beef Taco Bowl",
+        "time": "20:21",
+        "calories": 650,
+        "protein": 35,
+        "fat": 38,
+        "carbs": 45,
+        "emoji": "\u00f0\u009f\u008c\u00ae"
       }
     ],
     "totals": {
-      "calories": 1435,
-      "protein": 126,
-      "fat": 57,
-      "carbs": 97
+      "calories": 2085,
+      "protein": 161,
+      "fat": 95,
+      "carbs": 142
     },
     "targets": {
       "calories": 2574,
@@ -50,14 +59,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 1139,
+      "calories": 489,
       "is_over": false
     },
-    "meal_count": 2,
+    "meal_count": 3,
     "labels": {
       "header": "Today",
-      "calories_remaining": "1139 kcal remaining today",
-      "meals_logged": "2 meals logged",
+      "calories_remaining": "489 kcal remaining today",
+      "meals_logged": "3 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
