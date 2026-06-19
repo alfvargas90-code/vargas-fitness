@@ -1,6 +1,6 @@
 {
   "date": "2026-06-19",
-  "synced_at": "2026-06-19T19:27:18+00:00",
+  "synced_at": "2026-06-19T19:57:25+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,20 +9,30 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 0.0,
-    "protein_g": 0.0,
-    "carbs_g": 0.0,
-    "fat_g": 0.0
+    "calories": 1870.0,
+    "protein_g": 75.0,
+    "carbs_g": 180.0,
+    "fat_g": 100.0
   },
-  "meal_count": 0,
+  "meal_count": 1,
   "raw": {
     "date": "2026-06-19",
-    "meals": [],
+    "meals": [
+      {
+        "title": "Texas Double Whopper Meal",
+        "time": "14:44",
+        "calories": 1870,
+        "protein": 75,
+        "fat": 100,
+        "carbs": 180,
+        "emoji": "\u00f0\u009f\u008d\u0094"
+      }
+    ],
     "totals": {
-      "calories": 0,
-      "protein": 0,
-      "fat": 0,
-      "carbs": 0
+      "calories": 1870,
+      "protein": 75,
+      "fat": 100,
+      "carbs": 180
     },
     "targets": {
       "calories": 2574,
@@ -31,14 +41,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 2574,
+      "calories": 704,
       "is_over": false
     },
-    "meal_count": 0,
+    "meal_count": 1,
     "labels": {
       "header": "Today",
-      "calories_remaining": "2574 kcal remaining today",
-      "meals_logged": "0 meals logged",
+      "calories_remaining": "704 kcal remaining today",
+      "meals_logged": "1 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
