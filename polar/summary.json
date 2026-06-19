@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-19T14:57:29-05:00",
-  "data_hash": "e10f3a6530604665",
-  "slot": "macros-update",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 46%\n\nRead\nThe new meal shifted the day from underfed to partially caught up: energy is back in range, and protein has begun carrying more of the day. Output is still lighter than usual, with moderate recovery, so the state favors muscle preservation and steadiness over intensity.\n\nMeasured progress.\n\nPerformance: Measured progress.\n\nTransit: none",
+  "generated_at": "2026-06-19T15:00:00-05:00",
+  "data_hash": "8762322dd9150976",
+  "slot": "fuel-2",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 46%\n\nRead\nEnergy is no longer thin after the late meal, while output remains lighter than your usual day. The evening window favors controlled strength work over volume; muscle protection is still the unfinished piece, with protein lagging behind the fuel already taken in.\n\nMeasured, not depleted.\n\nPerformance: Measured, not depleted.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 46%\n\nRead\nThe new meal shifted the day from underfed to partially caught up: energy is back in range, and protein has begun carrying more of the day. Output is still lighter than usual, with moderate recovery, so the state favors muscle preservation and steadiness over intensity.\n\nMeasured progress."
+      "text": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 46%\n\nRead\nEnergy is no longer thin after the late meal, while output remains lighter than your usual day. The evening window favors controlled strength work over volume; muscle protection is still the unfinished piece, with protein lagging behind the fuel already taken in.\n\nMeasured, not depleted."
     },
     {
       "label": "Performance",
-      "text": "Measured progress."
+      "text": "Measured, not depleted."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 46%\n\nRead\nThe new meal shifted the day from underfed to partially caught up: energy is back in range, and protein has begun carrying more of the day. Output is still lighter than usual, with moderate recovery, so the state favors muscle preservation and steadiness over intensity.\n\nMeasured progress.",
-    "performance": "Measured progress.",
+    "reading": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 46%\n\nRead\nEnergy is no longer thin after the late meal, while output remains lighter than your usual day. The evening window favors controlled strength work over volume; muscle protection is still the unfinished piece, with protein lagging behind the fuel already taken in.\n\nMeasured, not depleted.",
+    "performance": "Measured, not depleted.",
     "transit": null
   },
-  "nutrition_nudge": "Fat is already over budget, so keep remaining meals lean and skip added oils.",
+  "nutrition_nudge": "Keep remaining meals lean: skip oils and added fats, and anchor dinner with 60g protein.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
