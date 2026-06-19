@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-19T05:31:02-05:00",
+  "generated_at": "2026-06-19T06:01:20-05:00",
   "score": 15,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -12,7 +12,7 @@
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Leo",
-    "degree": "27\u00b0 Leo 39'",
+    "degree": "27\u00b0 Leo 56'",
     "phase": "Waxing Crescent",
     "next_sign_change": {
       "sign": "Virgo",
@@ -37,7 +37,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 147.64,
+    "moon_longitude": 147.94,
     "moon_sign": "Leo",
     "moon_phase": "Waxing Crescent",
     "moon_house_natal": 8,
