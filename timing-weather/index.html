@@ -288,8 +288,13 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
   .solar{height:360px;margin:6px -28px 14px}
   .sun{width:150px;height:150px;margin:-75px 0 0 -75px;top:180px}
   .field{top:180px}
-  .solar .label .ph{font-size:52px;letter-spacing:.16em}
-  .solar .label{bottom:24px}
+  /* v3.2: larger card + caption on wide screens; phase stays a compact label, not the 52px headline */
+  .herocard{top:90px;width:124px;height:192px}
+  .herocard .gl{font-size:46px}
+  .herocard .nm{font-size:12.5px}
+  .solar .label .ph{font-size:15px;letter-spacing:.24em}
+  .solar .label .tn{font-size:22px}
+  .solar .label{bottom:22px}
   .lensnav button{font-size:14px;padding:12px}
   .lensnav button .sm{font-size:9.5px}
   .cols2{grid-template-columns:1fr 1fr}     /* keep two-up on wide screens */
