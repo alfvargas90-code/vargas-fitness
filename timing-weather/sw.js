@@ -13,6 +13,13 @@ const CACHE_NAME = PREFIX + '-static-v1';
 
 const STATIC_RE = /\.(png|jpe?g|gif|svg|ico|webp|avif|woff2?|ttf|otf)$/i;
 
+// Live per-day data — the daily astrology output (timing-weather/state.json)
+// and any sibling polar/nutrition/vesync JSON. These must NEVER be served
+// stale, so they bypass BOTH the SW cache and the browser HTTP cache
+// (NetworkOnly + no-store). version.json (the deploy gate) and the PWA
+// /manifest.json deliberately fall through to the cached paths below.
+const LIVE_DATA_RE = /\/(polar|nutrition|vesync|timing-weather)\/.*\.(json|jsonl)$/i;
+
 // Take over as soon as installed — no waiting for old tabs to close.
 self.addEventListener('install', () => self.skipWaiting());
 
@@ -36,6 +43,13 @@ self.addEventListener('fetch', (event) => {
   let url;
   try { url = new URL(req.url); } catch (e) { return; }
   if (url.origin !== self.location.origin) return; // only manage same-origin
+
+  if (LIVE_DATA_RE.test(url.pathname)) {
+    // NetworkOnly + no-store — live data is never cached and never served
+    // stale. no-store also bypasses the browser HTTP disk cache underneath.
+    event.respondWith(fetch(req, { cache: 'no-store' }));
+    return;
+  }
 
   if (STATIC_RE.test(url.pathname)) {
     // Cache-first for static assets.
