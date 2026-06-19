@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-18T20:00:00-05:00",
-  "data_hash": "7cc2dd8dcb278fbe",
-  "slot": "train-2",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 61 \u2022 Strain 93%\n\nRead\nThe day closes with moderate strain on a thinner recovery base, and output ran lighter than usual. With intake still under-supported, the night favors repair and muscle preservation over extra demand.\n\nQuiet consolidation.\n\nPerformance: Quiet consolidation.\n\nTransit: none",
+  "generated_at": "2026-06-18T21:22:15-05:00",
+  "data_hash": "74cb58c851f51cc7",
+  "slot": "macros-update",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 61 \u2022 Strain 100%\n\nRead\nThe new intake changes the shape of the day: protein is no longer the weak link, and the calorie window has reopened after a heavy-output stretch. With recovery only middling and sleep light, today favors muscle retention and measured demand over another hard push.\n\nCovered, but not limitless.\n\nPerformance: Covered, but not limitless.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 61 \u2022 Strain 93%\n\nRead\nThe day closes with moderate strain on a thinner recovery base, and output ran lighter than usual. With intake still under-supported, the night favors repair and muscle preservation over extra demand.\n\nQuiet consolidation."
+      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 61 \u2022 Strain 100%\n\nRead\nThe new intake changes the shape of the day: protein is no longer the weak link, and the calorie window has reopened after a heavy-output stretch. With recovery only middling and sleep light, today favors muscle retention and measured demand over another hard push.\n\nCovered, but not limitless."
     },
     {
       "label": "Performance",
-      "text": "Quiet consolidation."
+      "text": "Covered, but not limitless."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 61 \u2022 Strain 93%\n\nRead\nThe day closes with moderate strain on a thinner recovery base, and output ran lighter than usual. With intake still under-supported, the night favors repair and muscle preservation over extra demand.\n\nQuiet consolidation.",
-    "performance": "Quiet consolidation.",
+    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 61 \u2022 Strain 100%\n\nRead\nThe new intake changes the shape of the day: protein is no longer the weak link, and the calorie window has reopened after a heavy-output stretch. With recovery only middling and sleep light, today favors muscle retention and measured demand over another hard push.\n\nCovered, but not limitless.",
+    "performance": "Covered, but not limitless.",
     "transit": null
   },
-  "nutrition_nudge": "Make your next meal protein-heavy: aim for 60g to protect muscle while keeping the deficit modest.",
+  "nutrition_nudge": "Add a carb serving at your next meal to protect training energy while protein is already covered.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
     "sleep_hours": 5.7,
     "hrv_today": 47,
     "hrv_7d_avg": 58.4,
-    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
-    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "6,455 steps so far, 4h 36m active, 2,162 calories burned, Moderate training load"
+    "nutrition": "calories 1240 of 2574 goal, protein 150g of 138g goal, carbs 81g of 290g goal, fat 33g of 72g goal",
+    "nutrition_detail": "calories 1240 of 2574 goal -> 1334 left; protein 150g of 138g goal -> 12g over; carbs 81g of 290g goal; fat 33g of 72g goal",
+    "activity_today": "7,899 steps so far, 5h 26m active, 2,380 calories burned, Heavy training load"
   }
 }
