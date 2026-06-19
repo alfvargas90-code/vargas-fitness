@@ -293,6 +293,148 @@ PLANET_SUMMARY = {
 # Forecast-trend retroactive offsets in days (today minus N). Spec: ~27/17/5/0.
 TREND_OFFSETS = [27, 17, 5, 0]
 
+# ─── DAILY TAROT (v3.2) ──────────────────────────────────────────────────────
+# A single Rider-Waite-Smith card drawn once per day, DETERMINISTICALLY seeded by
+# the date (stable for the whole day, changes at midnight, fully reproducible — no
+# RNG state). The card SELECTION is honest (any of the 78 can come up); the
+# INTERPRETATION is pure-computed and always BRIDGES whatever card landed to today's
+# actual forecast + dominant/pressure planet + sharpest transit + nearest event.
+# No LLM/Codex call → free, offline, never-null. Style guide: directive, concrete,
+# no mysticism, tied to action. Glyphs are monochrome text symbols (the dashboard
+# forces font-variant-emoji:text and ships Noto Sans Symbols), never color emoji.
+
+# 22 Major Arcana: (name, roman, glyph, upright directive essence — no mysticism)
+TAROT_MAJORS = [
+    ("The Fool",            "0",     "✺", "a clean start taken on faith; commit before the whole path is visible"),
+    ("The Magician",        "I",     "∞", "every tool is already on the table; arrange what you have, don't reach for more"),
+    ("The High Priestess",  "II",    "☽", "the answer is internal; watch and let the pattern surface before you speak"),
+    ("The Empress",         "III",   "♀", "tend what's growing; results come from nurturing it, not forcing it"),
+    ("The Emperor",         "IV",    "♂", "set the structure and hold the line; authority through order"),
+    ("The Hierophant",      "V",     "⛭", "work inside the system and its rules; learn the established way before improvising"),
+    ("The Lovers",          "VI",    "♡", "a values-aligned choice; decide from what you actually want, not what's offered"),
+    ("The Chariot",         "VII",   "⚚", "move with control, not speed; drive one direction with the reins tight"),
+    ("Strength",            "VIII",  "∞", "patient force; influence through steadiness, not pressure"),
+    ("The Hermit",          "IX",    "☾", "step back to see clearly; the move is reflection before action"),
+    ("Wheel of Fortune",    "X",     "☉", "a turning point you position into, not force; be ready when the cycle opens"),
+    ("Justice",             "XI",    "⚖", "weigh it honestly and act on the truth; consequences are being set now"),
+    ("The Hanged Man",      "XII",   "♱", "a deliberate pause; gain by suspending the move and shifting the angle"),
+    ("Death",               "XIII",  "☥", "an ending that clears the ground; let the finished thing finish"),
+    ("Temperance",          "XIV",   "⚗", "blend and moderate; the win is the measured middle, not the extreme"),
+    ("The Devil",           "XV",    "♀", "name what's binding you; the constraint is a choice you can revisit"),
+    ("The Tower",           "XVI",   "⚡", "a sudden break in false structure; let what's unstable fall, then rebuild clean"),
+    ("The Star",            "XVII",  "✧", "quiet recovery and a clear aim; restore, then point at the real target"),
+    ("The Moon",            "XVIII", "☾", "signals are unclear; verify before acting, don't trust the first read"),
+    ("The Sun",             "XIX",   "☉", "clarity and visible momentum; move in the open, the yes is real"),
+    ("Judgement",           "XX",    "☊", "a reckoning and a call; answer it honestly and step up"),
+    ("The World",           "XXI",   "⊕", "a cycle completes; close it fully before opening the next"),
+]
+
+# Four Minor suits: (suit name, glyph, theme word woven into every pip/court essence)
+TAROT_SUITS = [
+    ("Wands",     "♧", "drive"),       # fire — initiative, momentum
+    ("Cups",      "♡", "connection"),  # water — feeling, relationship
+    ("Swords",    "♤", "clarity"),     # air — mind, conflict, truth
+    ("Pentacles", "♢", "work"),        # earth — resources, craft, money
+]
+_PIP_RANKS = ["Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"]
+# stage essence per pip number (1-10), {theme} substituted per suit
+_PIP_STAGE = {
+    1:  "a seed of {theme}; a fresh opening to act on",
+    2:  "a choice in {theme}; balance the two before committing",
+    3:  "early growth in {theme}; the first results are landing",
+    4:  "stability in {theme}; consolidate and hold what you've built",
+    5:  "friction in {theme}; a setback to work through, not around",
+    6:  "flow in {theme}; cooperation and movement after the rough patch",
+    7:  "a checkpoint in {theme}; defend the position or re-evaluate it",
+    8:  "momentum in {theme}; focused, skilled motion toward the goal",
+    9:  "near-completion in {theme}; the load is almost carried, hold steady",
+    10: "culmination in {theme}; the cycle of {theme} peaks and pays out",
+}
+_COURT = [
+    ("Page",   "a learner's stance in {theme}; curiosity and a first message"),
+    ("Knight", "decisive movement in {theme}; act on it and pursue"),
+    ("Queen",  "mastery and care in {theme}; lead by tending it"),
+    ("King",   "authority in {theme}; own the decision and set direction"),
+]
+
+
+def _build_tarot_deck():
+    """Assemble the full 78-card deck once at import. Each card:
+    {name, kind, rank, glyph, keywords, essence}."""
+    deck = []
+    for name, roman, glyph, essence in TAROT_MAJORS:
+        deck.append({"name": name, "kind": "Major Arcana", "rank": roman,
+                     "glyph": glyph, "keywords": name.replace("The ", ""),
+                     "essence": essence})
+    for suit, glyph, theme in TAROT_SUITS:
+        for i, rank_word in enumerate(_PIP_RANKS, start=1):
+            deck.append({"name": f"{rank_word} of {suit}", "kind": suit,
+                         "rank": ("A" if i == 1 else str(i)),
+                         "glyph": glyph, "keywords": theme,
+                         "essence": _PIP_STAGE[i].format(theme=theme)})
+        for court, ess in _COURT:
+            deck.append({"name": f"{court} of {suit}", "kind": suit,
+                         "rank": court[0], "glyph": glyph, "keywords": theme,
+                         "essence": ess.format(theme=theme)})
+    return deck
+
+
+TAROT_DECK = _build_tarot_deck()  # 22 + 4*(10+4) = 78
+
+# Directive (not mystical) one-liner per forecast state — what to actually DO today.
+TAROT_STATE_DIRECTIVE = {
+    "EXPANSION":      "build leverage and document the move, but keep formal commitments for later",
+    "CONSOLIDATION":  "formalize, commit, and make the work concrete",
+    "TRANSFORMATION": "let the old structure go and rebuild deliberately",
+    "TRANSITION":     "stay adaptable and avoid locking anything in yet",
+    "DISRUPTION":     "expect sudden shifts; protect the essentials and stay flexible",
+    "ATTRACTION":     "open the door to people and resources and let value come in",
+    "PRESSURE":       "protect the essentials and carry only what matters",
+    "NEUTRAL":        "keep steady maintenance going; nothing to force",
+}
+
+
+def daily_tarot(today, forecast, dominant, pressure_src, radar, dom_transit=""):
+    """Deterministic daily card + a transit-woven, pure-computed interpretation.
+
+    Selection: multiplicative hash of the date ordinal → stable all day, changes at
+    midnight, reproducible. Interpretation: bridges the drawn card to today's real
+    forecast, dominant/pressure planet, sharpest transit, and nearest event. Returns
+    the locked contract dict consumed by index.html, or None only if the deck is empty.
+    """
+    if not TAROT_DECK:
+        return None
+    idx = (today.toordinal() * 2654435761) % len(TAROT_DECK)
+    card = TAROT_DECK[idx]
+
+    directive = TAROT_STATE_DIRECTIVE.get(forecast, "read the day and move deliberately")
+    # bridge sentence — woven from the same real signals the readings use
+    bits = []
+    if dominant:
+        bits.append(f"{cap(dominant)} carries the field")
+    if pressure_src and cap(pressure_src) != cap(dominant):
+        bits.append(f"{cap(pressure_src)} is the constraint to respect")
+    bridge = (", and ".join(bits) + ".") if bits else ""
+    if dom_transit:
+        bridge += f" {dom_transit} is the sharpest aspect today — let it set the operating language."
+    # nearest dated event from the radar (near bucket first, else mid)
+    nxt = (radar.get("near") or radar.get("mid") or [None])[0] if isinstance(radar, dict) else None
+    if nxt:
+        bridge += f" The {nxt['title']} sits {nxt['days']} days out, so treat today as part of that setup."
+
+    body = (f"{card['name']} — {card['essence']}. Today is {forecast.title()}: "
+            f"{directive}. {bridge}").strip()
+
+    return {
+        "name": card["name"],
+        "kind": card["kind"],          # "Major Arcana" | "Wands" | "Cups" | "Swords" | "Pentacles"
+        "rank": card["rank"],          # roman numeral (major) or A/2-10/P/N/Q/K (minor)
+        "glyph": card["glyph"],        # monochrome text symbol for the SVG card face
+        "keywords": card["keywords"],
+        "state": forecast.title(),
+        "body": body,
+    }
+
 
 def log(msg):
     print(msg, flush=True)
@@ -2562,6 +2704,11 @@ def compute(now=None, with_codex=True):
 
     # --- Sections 2/4/5/6: derived structure (pure, no Codex) ------------
     radar = event_radar(today)
+    # Daily tarot (v3.2) — deterministic draw + pure-computed transit-woven reading.
+    # Sharpest Modern transit named outside the Codex block so the card never goes null.
+    _tarot_transit = dominant_transit_names(
+        aspects, MODERN_TRANSIT_BODIES, MODERN_NATAL_POINTS, n=1)
+    tarot_card = daily_tarot(today, forecast, dominant, pressure_src, radar, _tarot_transit)
     upcoming = upcoming_events(today)
     moon = moon_now(now_utc, natal)
     now_bar = build_now_bar(forecast, pre, daily_changes, trend_dir, nxt)
@@ -2709,6 +2856,8 @@ def compute(now=None, with_codex=True):
         "traditionalReading": traditional_reading,   # Hellenistic whole-sign — {state, body} or null
         "vedicReading": vedic_reading,               # sidereal Vedic — {state, body} or null
         "baziReading": bazi_reading,                 # Eastern Four Pillars — {state, body} or null
+        # --- v3.2: Daily Tarot (hero card) — pure-computed, deterministic, never null ---
+        "tarotCard": tarot_card,                      # {name, kind, rank, glyph, keywords, state, body}
         # --- v2.3: Monthly readings (this month, native month frame per system) ---
         "tropicalMonthly": tropical_monthly,         # Modern — Sun-sign transit month
         "traditionalMonthly": traditional_monthly,   # Traditional — profection month
