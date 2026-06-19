@@ -1,29 +1,25 @@
 {
-  "generated_at": "2026-06-19T08:32:47-05:00",
-  "score": 15,
+  "generated_at": "2026-06-19T12:34:57-05:00",
+  "score": 5,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
   "physiology": {
-    "hrv_pct_baseline": -20,
-    "rhr_delta_bpm": -3,
-    "sleep_score": 61
+    "hrv_pct_baseline": 20,
+    "rhr_delta_bpm": 1,
+    "sleep_score": 66
   },
   "workout_intensity": "rest",
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
-    "sign": "Leo",
-    "degree": "29\u00b0 Leo 23'",
+    "sign": "Virgo",
+    "degree": "1\u00b0 Vir 42'",
     "phase": "Waxing Crescent",
     "next_sign_change": {
-      "sign": "Virgo",
-      "at": "2026-06-19T09:36-05:00",
-      "display": "Enters Virgo 6/19 at 9:36 AM"
+      "sign": "Libra",
+      "at": "2026-06-21T15:54-05:00",
+      "display": "Enters Libra 6/21 at 3:54 PM"
     },
-    "void_of_course": {
-      "active": true,
-      "until": "2026-06-19T09:36-05:00",
-      "until_display": "6/19 at 9:36 AM"
-    },
+    "void_of_course": null,
     "active_transits": []
   },
   "bars": {
@@ -34,34 +30,33 @@
       "max": 55
     },
     "body": {
-      "filled": 4,
+      "filled": 1,
       "total": 10,
-      "points": 15,
+      "points": 5,
       "max": 40
     }
   },
   "transit_detail": {
-    "moon_longitude": 149.39,
-    "moon_sign": "Leo",
+    "moon_longitude": 151.7,
+    "moon_sign": "Virgo",
     "moon_phase": "Waxing Crescent",
     "moon_house_natal": 8,
     "aspect_to_natal_moon": null,
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 15,
+    "raw_score": 5,
     "transit_points": 0,
-    "physiology_points": 15,
+    "physiology_points": 5,
     "breakdown": [
-      "+10 HRV -20% below baseline",
-      "-5 RHR -3 bpm vs baseline",
-      "+10 Sleep score 61 (<70)"
+      "-5 HRV 20% above baseline",
+      "+10 Sleep score 66 (<70)"
     ],
     "baselines": {
-      "hrv_7d": 58.4,
-      "rhr_7d": 58
+      "hrv_7d": 55.1,
+      "rhr_7d": 57.4
     },
-    "active_calories": 56,
+    "active_calories": 237,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
