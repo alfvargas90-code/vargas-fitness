@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-19T07:00:00-05:00",
-  "data_hash": "d34d98da27c7c37c",
-  "slot": "recovery",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 61 \u2022 Strain 3%\n\nRead\nYou woke on a moderate base, with shorter sleep leaving capacity a little below your usual. The day favors measured output over strain, with muscle preservation depending on how well protein coverage comes online as the morning opens.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
+  "generated_at": "2026-06-19T14:57:29-05:00",
+  "data_hash": "e10f3a6530604665",
+  "slot": "macros-update",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 46%\n\nRead\nThe new meal shifted the day from underfed to partially caught up: energy is back in range, and protein has begun carrying more of the day. Output is still lighter than usual, with moderate recovery, so the state favors muscle preservation and steadiness over intensity.\n\nMeasured progress.\n\nPerformance: Measured progress.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 61 \u2022 Strain 3%\n\nRead\nYou woke on a moderate base, with shorter sleep leaving capacity a little below your usual. The day favors measured output over strain, with muscle preservation depending on how well protein coverage comes online as the morning opens.\n\nSteady, not forceful."
+      "text": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 46%\n\nRead\nThe new meal shifted the day from underfed to partially caught up: energy is back in range, and protein has begun carrying more of the day. Output is still lighter than usual, with moderate recovery, so the state favors muscle preservation and steadiness over intensity.\n\nMeasured progress."
     },
     {
       "label": "Performance",
-      "text": "Steady, not forceful."
+      "text": "Measured progress."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 61 \u2022 Strain 3%\n\nRead\nYou woke on a moderate base, with shorter sleep leaving capacity a little below your usual. The day favors measured output over strain, with muscle preservation depending on how well protein coverage comes online as the morning opens.\n\nSteady, not forceful.",
-    "performance": "Steady, not forceful.",
+    "reading": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 46%\n\nRead\nThe new meal shifted the day from underfed to partially caught up: energy is back in range, and protein has begun carrying more of the day. Output is still lighter than usual, with moderate recovery, so the state favors muscle preservation and steadiness over intensity.\n\nMeasured progress.",
+    "performance": "Measured progress.",
     "transit": null
   },
-  "nutrition_nudge": "Start breakfast with 35g protein and keep the rest of today's meals evenly paced.",
+  "nutrition_nudge": "Fat is already over budget, so keep remaining meals lean and skip added oils.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
-    "sleep_hours": 5.7,
-    "hrv_today": 47,
-    "hrv_7d_avg": 58.4,
-    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
-    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "38 steps so far, 4m active, 432 calories burned, \u2014 training load"
+    "sleep_hours": 6.6,
+    "hrv_today": 66,
+    "hrv_7d_avg": 55.1,
+    "nutrition": "calories 1870 of 2574 goal, protein 75g of 138g goal, carbs 180g of 290g goal, fat 100g of 72g goal",
+    "nutrition_detail": "calories 1870 of 2574 goal -> 704 left; protein 75g of 138g goal -> 63g gap; carbs 180g of 290g goal; fat 100g of 72g goal",
+    "activity_today": "2,986 steps so far, 2h 2m active, 1,390 calories burned, Light training load"
   }
 }
