@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-19T18:35:30+00:00",
+  "generated_at": "2026-06-19T19:05:44+00:00",
   "current_phase": "Waxing Crescent",
   "phase_stats": {
     "New Moon": {
@@ -16,7 +16,7 @@
     "Waxing Crescent": {
       "sleep_delta_h": -0.0,
       "recovery_delta_pct": 5,
-      "strain_delta_pct": -8,
+      "strain_delta_pct": -6,
       "sample_size": 14,
       "metric_samples": {
         "sleep": 14,
@@ -94,6 +94,6 @@
   "overall_avg": {
     "sleep_h": 6.7,
     "recovery": 50,
-    "strain_kcal": 884
+    "strain_kcal": 886
   }
 }
