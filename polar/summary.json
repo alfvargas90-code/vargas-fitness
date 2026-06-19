@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-19T04:00:00-05:00",
-  "data_hash": "5e3af94253a1b90e",
-  "slot": "sleep",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 61 \u2022 Strain 2%\n\nRead\nLast night left a thinner reserve than usual, with recovery sitting in the middle rather than fully restored. This is a lower-output morning for muscle retention, where the day favors steady structure and adequate nourishment over intensity.\n\nLower gear.\n\nPerformance: Lower gear.\n\nTransit: none",
+  "generated_at": "2026-06-19T07:00:00-05:00",
+  "data_hash": "d34d98da27c7c37c",
+  "slot": "recovery",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 51 \u2022 Sleep 61 \u2022 Strain 3%\n\nRead\nYou woke on a moderate base, with shorter sleep leaving capacity a little below your usual. The day favors measured output over strain, with muscle preservation depending on how well protein coverage comes online as the morning opens.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 61 \u2022 Strain 2%\n\nRead\nLast night left a thinner reserve than usual, with recovery sitting in the middle rather than fully restored. This is a lower-output morning for muscle retention, where the day favors steady structure and adequate nourishment over intensity.\n\nLower gear."
+      "text": "State\nAverage\nRecovery 51 \u2022 Sleep 61 \u2022 Strain 3%\n\nRead\nYou woke on a moderate base, with shorter sleep leaving capacity a little below your usual. The day favors measured output over strain, with muscle preservation depending on how well protein coverage comes online as the morning opens.\n\nSteady, not forceful."
     },
     {
       "label": "Performance",
-      "text": "Lower gear."
+      "text": "Steady, not forceful."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 61 \u2022 Strain 2%\n\nRead\nLast night left a thinner reserve than usual, with recovery sitting in the middle rather than fully restored. This is a lower-output morning for muscle retention, where the day favors steady structure and adequate nourishment over intensity.\n\nLower gear.",
-    "performance": "Lower gear.",
+    "reading": "State\nAverage\nRecovery 51 \u2022 Sleep 61 \u2022 Strain 3%\n\nRead\nYou woke on a moderate base, with shorter sleep leaving capacity a little below your usual. The day favors measured output over strain, with muscle preservation depending on how well protein coverage comes online as the morning opens.\n\nSteady, not forceful.",
+    "performance": "Steady, not forceful.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Start breakfast with 35g protein and keep the rest of today's meals evenly paced.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 58.4,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "38 steps so far, 4m active, 432 calories burned, \u2014 training load"
   }
 }
