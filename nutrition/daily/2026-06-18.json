@@ -1,6 +1,6 @@
 {
   "date": "2026-06-18",
-  "synced_at": "2026-06-19T01:52:06+00:00",
+  "synced_at": "2026-06-19T02:22:13+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,20 +9,48 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 0.0,
-    "protein_g": 0.0,
-    "carbs_g": 0.0,
-    "fat_g": 0.0
+    "calories": 1240.0,
+    "protein_g": 150.0,
+    "carbs_g": 81.0,
+    "fat_g": 33.0
   },
-  "meal_count": 0,
+  "meal_count": 3,
   "raw": {
     "date": "2026-06-18",
-    "meals": [],
+    "meals": [
+      {
+        "title": "Chicken and Sweet Potato",
+        "time": "11:30",
+        "calories": 650,
+        "protein": 85,
+        "fat": 12,
+        "carbs": 45,
+        "emoji": "\u00f0\u009f\u008d\u0097"
+      },
+      {
+        "title": "Leftovers",
+        "time": "15:00",
+        "calories": 40,
+        "protein": 10,
+        "fat": 1,
+        "carbs": 1,
+        "emoji": "\u00f0\u009f\u00a5\u00a1"
+      },
+      {
+        "title": "Protein Shake and Bar",
+        "time": "21:13",
+        "calories": 550,
+        "protein": 55,
+        "fat": 20,
+        "carbs": 35,
+        "emoji": "\u00f0\u009f\u00a5\u00a4"
+      }
+    ],
     "totals": {
-      "calories": 0,
-      "protein": 0,
-      "fat": 0,
-      "carbs": 0
+      "calories": 1240,
+      "protein": 150,
+      "fat": 33,
+      "carbs": 81
     },
     "targets": {
       "calories": 2574,
@@ -31,14 +59,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 2574,
+      "calories": 1334,
       "is_over": false
     },
-    "meal_count": 0,
+    "meal_count": 3,
     "labels": {
       "header": "Today",
-      "calories_remaining": "2574 kcal remaining today",
-      "meals_logged": "0 meals logged",
+      "calories_remaining": "1334 kcal remaining today",
+      "meals_logged": "3 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
