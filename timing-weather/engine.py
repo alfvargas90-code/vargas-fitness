@@ -2822,6 +2822,17 @@ def compute(now=None, with_codex=True):
 
     sources = [NATAL_MD, TROPICAL_MD, VEDIC_MD, COUNCIL_MD]
 
+    # Sidereal (Lahiri) Sun for the Vedic "Season" tile. tropical − ayanamsha is
+    # exact for a single ecliptic longitude (same identity as sidereal_natal).
+    # Wrapped so a swe hiccup can never break state generation.
+    sidereal_sun = None
+    try:
+        if "sun" in transits:
+            sid = (transits["sun"] - swe.get_ayanamsa_ut(jd_now(now_utc))) % 360
+            sidereal_sun = f"{round(sid % 30, 2)}° {sign_of(sid)}"
+    except Exception as e:
+        log(f"  siderealSun compute failed: {e} — emitting null")
+
     state = {
         # --- Section 1: Hero Solar Intelligence ---
         "forecast": forecast,
@@ -2908,6 +2919,7 @@ def compute(now=None, with_codex=True):
                 "momentum": [d for _, d, _ in mom_c],
             },
             "transitSigns": {k: f"{round(v % 30, 2)}° {sign_of(v)}" for k, v in transits.items()},
+            "siderealSun": sidereal_sun,
             "tightAspects": sorted(aspects, key=lambda a: a["orb"])[:12],
             "transitMissing": transit_missing,
             "natalMissing": missing,
