@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-19T17:30:00-05:00",
-  "data_hash": "a544f5992603d957",
-  "slot": "train-1",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 62%\n\nRead\nRecovery is serviceable, not abundant, and the day has already taken a moderate bite from the tank. Movement is running lighter than usual, so the open workout window favors controlled resistance quality over extra output, with protein still the weak link for muscle protection.\n\nMeasured strength, not strain.\n\nPerformance: Measured strength, not strain.\n\nTransit: none",
+  "generated_at": "2026-06-19T20:00:05-05:00",
+  "data_hash": "3bfad7de788053ab",
+  "slot": "train-2",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 71%\n\nRead\nOutput ran lighter than usual, with moderate strain and only partial readiness beneath it. The session window now reads as secondary; the night favors a calmer landing, while the protein shortfall leaves muscle protection less secure than the day needs.\n\nSteady, low-glare finish.\n\nPerformance: Steady, low-glare finish.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 62%\n\nRead\nRecovery is serviceable, not abundant, and the day has already taken a moderate bite from the tank. Movement is running lighter than usual, so the open workout window favors controlled resistance quality over extra output, with protein still the weak link for muscle protection.\n\nMeasured strength, not strain."
+      "text": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 71%\n\nRead\nOutput ran lighter than usual, with moderate strain and only partial readiness beneath it. The session window now reads as secondary; the night favors a calmer landing, while the protein shortfall leaves muscle protection less secure than the day needs.\n\nSteady, low-glare finish."
     },
     {
       "label": "Performance",
-      "text": "Measured strength, not strain."
+      "text": "Steady, low-glare finish."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 62%\n\nRead\nRecovery is serviceable, not abundant, and the day has already taken a moderate bite from the tank. Movement is running lighter than usual, so the open workout window favors controlled resistance quality over extra output, with protein still the weak link for muscle protection.\n\nMeasured strength, not strain.",
-    "performance": "Measured strength, not strain.",
+    "reading": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 71%\n\nRead\nOutput ran lighter than usual, with moderate strain and only partial readiness beneath it. The session window now reads as secondary; the night favors a calmer landing, while the protein shortfall leaves muscle protection less secure than the day needs.\n\nSteady, low-glare finish.",
+    "performance": "Steady, low-glare finish.",
     "transit": null
   },
-  "nutrition_nudge": "Pull back oils and fats at dinner while loading lean protein to close the 63g gap.",
+  "nutrition_nudge": "Front-load dinner with 60g protein to close the gap and protect muscle.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 55.1,
     "nutrition": "calories 1870 of 2574 goal, protein 75g of 138g goal, carbs 180g of 290g goal, fat 100g of 72g goal",
     "nutrition_detail": "calories 1870 of 2574 goal -> 704 left; protein 75g of 138g goal -> 63g gap; carbs 180g of 290g goal; fat 100g of 72g goal",
-    "activity_today": "3,896 steps so far, 2h 50m active, 1,715 calories burned, Moderate training load"
+    "activity_today": "4,270 steps so far, 3h 17m active, 1,941 calories burned, Moderate training load"
   }
 }
