@@ -1,78 +1,78 @@
 {
- "generated": "2026-06-20T05:15:00Z",
+ "generated": "2026-06-20T11:15:00Z",
  "transits": [
   {
-   "lon": 88.92,
+   "lon": 89.158,
    "sign": "Gem",
-   "deg": 28,
+   "deg": 29,
    "name": "Sun",
    "rx": false
   },
   {
-   "lon": 158.302,
+   "lon": 161.657,
    "sign": "Vir",
-   "deg": 8,
+   "deg": 11,
    "name": "Moon",
    "rx": false
   },
   {
-   "lon": 112.868,
+   "lon": 113.039,
    "sign": "Can",
-   "deg": 22,
+   "deg": 23,
    "name": "Mercury",
    "rx": false
   },
   {
-   "lon": 127.853,
+   "lon": 128.141,
    "sign": "Leo",
-   "deg": 7,
+   "deg": 8,
    "name": "Venus",
    "rx": false
   },
   {
-   "lon": 53.831,
+   "lon": 54.011,
    "sign": "Tau",
-   "deg": 23,
+   "deg": 24,
    "name": "Mars",
    "rx": false
   },
   {
-   "lon": 117.887,
+   "lon": 117.939,
    "sign": "Can",
    "deg": 27,
    "name": "Jupiter",
    "rx": false
   },
   {
-   "lon": 13.635,
+   "lon": 13.649,
    "sign": "Ari",
    "deg": 13,
    "name": "Saturn",
    "rx": false
   },
   {
-   "lon": 63.146,
+   "lon": 63.16,
    "sign": "Gem",
    "deg": 3,
    "name": "Uranus",
    "rx": false
   },
   {
-   "lon": 4.337,
+   "lon": 4.339,
    "sign": "Ari",
    "deg": 4,
    "name": "Neptune",
    "rx": false
   },
   {
-   "lon": 305.083,
+   "lon": 305.079,
    "sign": "Aqu",
    "deg": 5,
    "name": "Pluto",
    "rx": true
   },
   {
-   "lon": 331.907,
+   "lon": 331.909,
    "sign": "Pis",
    "deg": 1,
    "name": "Node",
@@ -81,14 +81,14 @@
  ],
  "moon": {
   "phase": "Waxing crescent",
-  "illum": 32,
+  "illum": 35,
   "sign": "Vir",
   "waxing": true
  },
  "moonVoid": {
   "void": false,
   "sign": "Virgo",
-  "entersNextHours": 38.6,
+  "entersNextHours": 32.9,
   "nextSign": "Libra"
  },
  "transitAspects": [
@@ -97,8 +97,8 @@
    "rx": false,
    "sym": "\u25b3",
    "aspect": "Trine",
-   "n": "ASC",
-   "orb": 0.1,
+   "n": "Neptune",
+   "orb": 0.3,
    "applying": false
   },
   {
@@ -116,7 +116,7 @@
    "sym": "\u26b9",
    "aspect": "Sextile",
    "n": "Mercury",
-   "orb": 0.7,
+   "orb": 0.9,
    "applying": false
   },
   {
@@ -125,16 +125,7 @@
    "sym": "\u260d",
    "aspect": "Opposition",
    "n": "Node",
-   "orb": 0.9,
-   "applying": false
-  },
-  {
-   "t": "Moon",
-   "rx": false,
-   "sym": "\u260c",
-   "aspect": "Conjunction",
-   "n": "Sun",
-   "orb": 1.1,
+   "orb": 1.2,
    "applying": false
   },
   {
@@ -165,15 +156,6 @@
    "applying": true
   },
   {
-   "t": "Mars",
-   "rx": false,
-   "sym": "\u25b3",
-   "aspect": "Trine",
-   "n": "Mercury",
-   "orb": 1.7,
-   "applying": false
-  },
-  {
    "t": "Saturn",
    "rx": false,
    "sym": "\u25a1",
@@ -189,6 +171,15 @@
    "aspect": "Trine",
    "n": "Jupiter",
    "orb": 1.7,
+   "applying": false
+  },
+  {
+   "t": "Mars",
+   "rx": false,
+   "sym": "\u25b3",
+   "aspect": "Trine",
+   "n": "Mercury",
+   "orb": 1.8,
    "applying": false
   },
   {
@@ -237,15 +228,6 @@
    "applying": true
   },
   {
-   "t": "Moon",
-   "rx": false,
-   "sym": "\u25b3",
-   "aspect": "Trine",
-   "n": "Uranus",
-   "orb": 2.6,
-   "applying": false
-  },
-  {
    "t": "Neptune",
    "rx": false,
    "sym": "\u26b9",
@@ -255,21 +237,21 @@
    "applying": true
   },
   {
-   "t": "Moon",
-   "rx": false,
-   "sym": "\u25b3",
-   "aspect": "Trine",
-   "n": "Moon",
-   "orb": 2.8,
-   "applying": false
-  },
-  {
    "t": "Mars",
    "rx": false,
    "sym": "\u25a1",
    "aspect": "Square",
    "n": "Venus",
-   "orb": 3.0,
+   "orb": 3.2,
+   "applying": false
+  },
+  {
+   "t": "Moon",
+   "rx": false,
+   "sym": "\u25b3",
+   "aspect": "Trine",
+   "n": "ASC",
+   "orb": 3.3,
    "applying": false
   },
   {
@@ -278,25 +260,7 @@
    "sym": "\u260c",
    "aspect": "Conjunction",
    "n": "Mars",
-   "orb": 3.4,
-   "applying": false
-  },
-  {
-   "t": "Moon",
-   "rx": false,
-   "sym": "\u25b3",
-   "aspect": "Trine",
-   "n": "Neptune",
-   "orb": 3.6,
-   "applying": true
-  },
-  {
-   "t": "Mercury",
-   "rx": false,
-   "sym": "\u260d",
-   "aspect": "Opposition",
-   "n": "Saturn",
-   "orb": 3.7,
+   "orb": 3.5,
    "applying": false
   },
   {
@@ -309,12 +273,21 @@
    "applying": true
   },
   {
-   "t": "Venus",
+   "t": "Mercury",
    "rx": false,
-   "sym": "\u25a1",
-   "aspect": "Square",
-   "n": "MC",
-   "orb": 4.0,
+   "sym": "\u260d",
+   "aspect": "Opposition",
+   "n": "Saturn",
+   "orb": 3.9,
+   "applying": false
+  },
+  {
+   "t": "Moon",
+   "rx": false,
+   "sym": "\u260c",
+   "aspect": "Conjunction",
+   "n": "Sun",
+   "orb": 4.4,
    "applying": false
   },
   {
@@ -331,12 +304,12 @@
   {
    "t": "Moon",
    "sym": "\u25b3",
-   "n": "ASC",
+   "n": "Neptune",
    "rx": false,
    "aspect": "Trine",
-   "orb": 0.1,
+   "orb": 0.3,
    "applying": false,
-   "text": "stirs your presence \u2014 easy flow."
+   "text": "stirs your imagination \u2014 easy flow."
   },
   {
    "t": "Mercury",
@@ -344,7 +317,7 @@
    "n": "Mercury",
    "rx": false,
    "aspect": "Sextile",
-   "orb": 0.7,
+   "orb": 0.9,
    "applying": false,
    "text": "sparks thinking around your mind \u2014 an open door."
   },
@@ -354,7 +327,7 @@
    "n": "Node",
    "rx": false,
    "aspect": "Opposition",
-   "orb": 0.9,
+   "orb": 1.2,
    "applying": false,
    "text": "sweetens your direction \u2014 a pull toward balance."
   }
@@ -380,37 +353,37 @@
   {
    "name": "Fortune",
    "glyph": "\u2297",
-   "lon": 347.75,
+   "lon": 350.86,
    "sign": "Pisces",
-   "deg": 17,
+   "deg": 20,
    "meaning": "body & fortune"
   },
   {
    "name": "Spirit",
    "glyph": "\u2295",
-   "lon": 208.98,
+   "lon": 205.87,
    "sign": "Libra",
-   "deg": 28,
+   "deg": 25,
    "meaning": "action & will"
   },
   {
    "name": "Eros",
    "glyph": "\u2764",
-   "lon": 197.24,
+   "lon": 200.64,
    "sign": "Libra",
-   "deg": 17,
+   "deg": 20,
    "meaning": "desire & love"
   }
  ],
  "forecast": [
   {
    "label": "Full Moon",
-   "days": 10,
+   "days": 9,
    "note": "culmination"
   },
   {
    "label": "Jupiter Return",
-   "days": 23,
+   "days": 22,
    "note": "12-yr renewal of the year-lord"
   },
   {
