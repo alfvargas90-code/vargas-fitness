@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-20T04:00:00-05:00",
-  "data_hash": "d26bd340fc4803e6",
-  "slot": "sleep",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 1%\n\nRead\nRecovery is serviceable rather than strong, with enough reserve for a structured day but not much surplus. For muscle retention while leaning down, today favors consistency, protein sufficiency, and controlled strain over intensity.\n\nMeasured reserve.\n\nPerformance: Measured reserve.\n\nTransit: none",
+  "generated_at": "2026-06-20T07:00:00-05:00",
+  "data_hash": "dc949e27905e6a3f",
+  "slot": "recovery",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 2%\n\nRead\nYou woke on a moderate base: rested enough for normal output, not primed for hard pressure. With the day still untouched, it favors steady resistance-focused work and enough protein later so the deficit supports fat loss without borrowing from muscle.\n\nSteady base.\n\nPerformance: Steady base.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 1%\n\nRead\nRecovery is serviceable rather than strong, with enough reserve for a structured day but not much surplus. For muscle retention while leaning down, today favors consistency, protein sufficiency, and controlled strain over intensity.\n\nMeasured reserve."
+      "text": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 2%\n\nRead\nYou woke on a moderate base: rested enough for normal output, not primed for hard pressure. With the day still untouched, it favors steady resistance-focused work and enough protein later so the deficit supports fat loss without borrowing from muscle.\n\nSteady base."
     },
     {
       "label": "Performance",
-      "text": "Measured reserve."
+      "text": "Steady base."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 1%\n\nRead\nRecovery is serviceable rather than strong, with enough reserve for a structured day but not much surplus. For muscle retention while leaning down, today favors consistency, protein sufficiency, and controlled strain over intensity.\n\nMeasured reserve.",
-    "performance": "Measured reserve.",
+    "reading": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 2%\n\nRead\nYou woke on a moderate base: rested enough for normal output, not primed for hard pressure. With the day still untouched, it favors steady resistance-focused work and enough protein later so the deficit supports fat loss without borrowing from muscle.\n\nSteady base.",
+    "performance": "Steady base.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "On pace this morning; start breakfast with 35g protein and keep meals steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 55.1,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "20 steps so far, 1m active, 460 calories burned, \u2014 training load"
   }
 }
