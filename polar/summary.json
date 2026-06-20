@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-19T20:00:05-05:00",
-  "data_hash": "3bfad7de788053ab",
-  "slot": "train-2",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 71%\n\nRead\nOutput ran lighter than usual, with moderate strain and only partial readiness beneath it. The session window now reads as secondary; the night favors a calmer landing, while the protein shortfall leaves muscle protection less secure than the day needs.\n\nSteady, low-glare finish.\n\nPerformance: Steady, low-glare finish.\n\nTransit: none",
+  "generated_at": "2026-06-20T04:00:00-05:00",
+  "data_hash": "d26bd340fc4803e6",
+  "slot": "sleep",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 1%\n\nRead\nRecovery is serviceable rather than strong, with enough reserve for a structured day but not much surplus. For muscle retention while leaning down, today favors consistency, protein sufficiency, and controlled strain over intensity.\n\nMeasured reserve.\n\nPerformance: Measured reserve.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 71%\n\nRead\nOutput ran lighter than usual, with moderate strain and only partial readiness beneath it. The session window now reads as secondary; the night favors a calmer landing, while the protein shortfall leaves muscle protection less secure than the day needs.\n\nSteady, low-glare finish."
+      "text": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 1%\n\nRead\nRecovery is serviceable rather than strong, with enough reserve for a structured day but not much surplus. For muscle retention while leaning down, today favors consistency, protein sufficiency, and controlled strain over intensity.\n\nMeasured reserve."
     },
     {
       "label": "Performance",
-      "text": "Steady, low-glare finish."
+      "text": "Measured reserve."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 71%\n\nRead\nOutput ran lighter than usual, with moderate strain and only partial readiness beneath it. The session window now reads as secondary; the night favors a calmer landing, while the protein shortfall leaves muscle protection less secure than the day needs.\n\nSteady, low-glare finish.",
-    "performance": "Steady, low-glare finish.",
+    "reading": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 1%\n\nRead\nRecovery is serviceable rather than strong, with enough reserve for a structured day but not much surplus. For muscle retention while leaning down, today favors consistency, protein sufficiency, and controlled strain over intensity.\n\nMeasured reserve.",
+    "performance": "Measured reserve.",
     "transit": null
   },
-  "nutrition_nudge": "Front-load dinner with 60g protein to close the gap and protect muscle.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
     "sleep_hours": 6.6,
     "hrv_today": 66,
     "hrv_7d_avg": 55.1,
-    "nutrition": "calories 1870 of 2574 goal, protein 75g of 138g goal, carbs 180g of 290g goal, fat 100g of 72g goal",
-    "nutrition_detail": "calories 1870 of 2574 goal -> 704 left; protein 75g of 138g goal -> 63g gap; carbs 180g of 290g goal; fat 100g of 72g goal",
-    "activity_today": "4,270 steps so far, 3h 17m active, 1,941 calories burned, Moderate training load"
+    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
+    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
+    "activity_today": null
   }
 }
