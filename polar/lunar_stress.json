@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-19T20:39:08-05:00",
-  "score": 0,
+  "generated_at": "2026-06-19T21:09:24-05:00",
+  "score": 8,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
   "physiology": {
@@ -12,7 +12,7 @@
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Virgo",
-    "degree": "6\u00b0 Vir 17'",
+    "degree": "6\u00b0 Vir 34'",
     "phase": "Waxing Crescent",
     "next_sign_change": {
       "sign": "Libra",
@@ -26,7 +26,7 @@
     "transit": {
       "filled": 0,
       "total": 10,
-      "points": -15,
+      "points": 0,
       "max": 55
     },
     "body": {
@@ -37,19 +37,18 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 156.28,
+    "moon_longitude": 156.56,
     "moon_sign": "Virgo",
     "moon_phase": "Waxing Crescent",
     "moon_house_natal": 8,
-    "aspect_to_natal_moon": "trine (0.7\u00b0 separating)",
+    "aspect_to_natal_moon": null,
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": -7,
-    "transit_points": -15,
+    "raw_score": 8,
+    "transit_points": 0,
     "physiology_points": 8,
     "breakdown": [
-      "-15 Moon trine natal Moon",
       "-5 HRV 20% above baseline",
       "+10 Sleep score 66 (<70)",
       "+3 Moderate-intensity day"
