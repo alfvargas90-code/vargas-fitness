@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-20T15:00:00-05:00",
-  "data_hash": "697635ceb3029c93",
-  "slot": "fuel-2",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 63%\n\nRead\nRecovery is middling, output is already meaningful, and the empty food log leaves the evening window under-supported. This is a muscle-preservation day: protein matters more than extra effort, and the workout window favors steady strength over intensity.\n\nProtein sets the tone.\n\nPerformance: Protein sets the tone.\n\nTransit: none",
+  "generated_at": "2026-06-20T15:04:59-05:00",
+  "data_hash": "38ac6d4ea8d01583",
+  "slot": "macros-update",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 63%\n\nRead\nThe first real intake of the day has reopened the calorie window and moved protein onto the board, but the day still reads underfed for muscle protection. Output has been moderate, so this now favors steady catch-up over intensity.\n\nSteady catch-up.\n\nPerformance: Steady catch-up.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 63%\n\nRead\nRecovery is middling, output is already meaningful, and the empty food log leaves the evening window under-supported. This is a muscle-preservation day: protein matters more than extra effort, and the workout window favors steady strength over intensity.\n\nProtein sets the tone."
+      "text": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 63%\n\nRead\nThe first real intake of the day has reopened the calorie window and moved protein onto the board, but the day still reads underfed for muscle protection. Output has been moderate, so this now favors steady catch-up over intensity.\n\nSteady catch-up."
     },
     {
       "label": "Performance",
-      "text": "Protein sets the tone."
+      "text": "Steady catch-up."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 63%\n\nRead\nRecovery is middling, output is already meaningful, and the empty food log leaves the evening window under-supported. This is a muscle-preservation day: protein matters more than extra effort, and the workout window favors steady strength over intensity.\n\nProtein sets the tone.",
-    "performance": "Protein sets the tone.",
+    "reading": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 63%\n\nRead\nThe first real intake of the day has reopened the calorie window and moved protein onto the board, but the day still reads underfed for muscle protection. Output has been moderate, so this now favors steady catch-up over intensity.\n\nSteady catch-up.",
+    "performance": "Steady catch-up.",
     "transit": null
   },
-  "nutrition_nudge": "Eat a protein-heavy meal now with 60g to protect muscle and close the gap.",
+  "nutrition_nudge": "Add 60g carbs at your next meal to steady energy and keep training fueled.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
     "sleep_hours": 7.0,
     "hrv_today": 41,
     "hrv_7d_avg": 54.4,
-    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
-    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
+    "nutrition": "calories 1050 of 2574 goal, protein 55g of 138g goal, carbs 65g of 290g goal, fat 62g of 72g goal",
+    "nutrition_detail": "calories 1050 of 2574 goal -> 1524 left; protein 55g of 138g goal -> 83g gap; carbs 65g of 290g goal; fat 62g of 72g goal",
     "activity_today": "5,696 steps so far, 3h 15m active, 1,528 calories burned, Moderate training load"
   }
 }
