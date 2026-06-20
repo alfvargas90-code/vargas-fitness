@@ -1,19 +1,19 @@
 {
-  "date": "2026-06-18",
-  "generated_at": "2026-06-18T21:45:00-05:00",
+  "date": "2026-06-19",
+  "generated_at": "2026-06-19T21:45:00-05:00",
   "verdict": "Big",
   "stats": {
-    "steps": 7899,
-    "active_minutes": 326,
-    "active_time_display": "5h 26m",
-    "calories_burned": 2380,
-    "active_calories": 882,
-    "calories_eaten": 1240,
-    "net_deficit": 1140,
+    "steps": 7108,
+    "active_minutes": 339,
+    "active_time_display": "5h 39m",
+    "calories_burned": 2749,
+    "active_calories": 1185,
+    "calories_eaten": 1870,
+    "net_deficit": 879,
     "calorie_target": 2574,
-    "protein_g": 150,
+    "protein_g": 75,
     "protein_target_g": 138,
-    "protein_gap_g": -12
+    "protein_gap_g": 63
   },
-  "prose": "Big output day: about 7,900 steps, hours of movement, and you did the most important thing right by hitting protein. The only flag is the roughly 1,100-calorie deficit, which is too steep if you want the weight coming off to be fat instead of hard-earned muscle. Keep protein high tomorrow and bring food up a bit so the deficit is smaller."
+  "prose": "Big output day with about 7,100 steps and a long active stretch, but the 880-calorie deficit was steeper than ideal if you want to keep muscle while leaning out. The bigger issue was protein: eating about 75 and missing by roughly 60 makes that deficit more likely to pull from lean mass instead of fat. Push protein hard tomorrow and keep the deficit more modest."
 }
