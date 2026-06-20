@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-20T15:04:59-05:00",
-  "data_hash": "38ac6d4ea8d01583",
-  "slot": "macros-update",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 63%\n\nRead\nThe first real intake of the day has reopened the calorie window and moved protein onto the board, but the day still reads underfed for muscle protection. Output has been moderate, so this now favors steady catch-up over intensity.\n\nSteady catch-up.\n\nPerformance: Steady catch-up.\n\nTransit: none",
+  "generated_at": "2026-06-20T17:30:00-05:00",
+  "data_hash": "a55168fe990d1d17",
+  "slot": "train-1",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 92%\n\nRead\nYou\u2019re entering the workout window with decent sleep behind you, but recovery is only moderate and the day has already drawn meaningfully from the tank. The larger signal is under-fueling, especially protein, so this favors controlled strength work over intensity.\n\nMuscle wants steadiness.\n\nPerformance: Muscle wants steadiness.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 63%\n\nRead\nThe first real intake of the day has reopened the calorie window and moved protein onto the board, but the day still reads underfed for muscle protection. Output has been moderate, so this now favors steady catch-up over intensity.\n\nSteady catch-up."
+      "text": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 92%\n\nRead\nYou\u2019re entering the workout window with decent sleep behind you, but recovery is only moderate and the day has already drawn meaningfully from the tank. The larger signal is under-fueling, especially protein, so this favors controlled strength work over intensity.\n\nMuscle wants steadiness."
     },
     {
       "label": "Performance",
-      "text": "Steady catch-up."
+      "text": "Muscle wants steadiness."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 63%\n\nRead\nThe first real intake of the day has reopened the calorie window and moved protein onto the board, but the day still reads underfed for muscle protection. Output has been moderate, so this now favors steady catch-up over intensity.\n\nSteady catch-up.",
-    "performance": "Steady catch-up.",
+    "reading": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 92%\n\nRead\nYou\u2019re entering the workout window with decent sleep behind you, but recovery is only moderate and the day has already drawn meaningfully from the tank. The larger signal is under-fueling, especially protein, so this favors controlled strength work over intensity.\n\nMuscle wants steadiness.",
+    "performance": "Muscle wants steadiness.",
     "transit": null
   },
-  "nutrition_nudge": "Add 60g carbs at your next meal to steady energy and keep training fueled.",
+  "nutrition_nudge": "Add 70g carbs at dinner, pairing rice or potatoes with lean protein to protect training and muscle.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.4,
     "nutrition": "calories 1050 of 2574 goal, protein 55g of 138g goal, carbs 65g of 290g goal, fat 62g of 72g goal",
     "nutrition_detail": "calories 1050 of 2574 goal -> 1524 left; protein 55g of 138g goal -> 83g gap; carbs 65g of 290g goal; fat 62g of 72g goal",
-    "activity_today": "5,696 steps so far, 3h 15m active, 1,528 calories burned, Moderate training load"
+    "activity_today": "7,594 steps so far, 4h 56m active, 1,954 calories burned, Moderate training load"
   }
 }
