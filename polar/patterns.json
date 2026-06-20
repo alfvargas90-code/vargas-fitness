@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-06-20T04:10:37+00:00",
+  "generated_at": "2026-06-20T04:40:54+00:00",
   "current_phase": "Waxing Crescent",
   "phase_stats": {
     "New Moon": {
       "sleep_delta_h": 0.1,
       "recovery_delta_pct": -34,
-      "strain_delta_pct": -7,
+      "strain_delta_pct": -8,
       "sample_size": 10,
       "metric_samples": {
         "sleep": 9,
@@ -16,7 +16,7 @@
     "Waxing Crescent": {
       "sleep_delta_h": -0.0,
       "recovery_delta_pct": 5,
-      "strain_delta_pct": 22,
+      "strain_delta_pct": 27,
       "sample_size": 14,
       "metric_samples": {
         "sleep": 14,
@@ -60,7 +60,7 @@
     "Waning Gibbous": {
       "sleep_delta_h": 0.3,
       "recovery_delta_pct": 39,
-      "strain_delta_pct": 14,
+      "strain_delta_pct": 13,
       "sample_size": 10,
       "metric_samples": {
         "sleep": 10,
@@ -82,7 +82,7 @@
     "Waning Crescent": {
       "sleep_delta_h": 0.2,
       "recovery_delta_pct": -20,
-      "strain_delta_pct": -2,
+      "strain_delta_pct": -3,
       "sample_size": 12,
       "metric_samples": {
         "sleep": 12,
@@ -94,6 +94,6 @@
   "overall_avg": {
     "sleep_h": 6.7,
     "recovery": 50,
-    "strain_kcal": 933
+    "strain_kcal": 942
   }
 }
