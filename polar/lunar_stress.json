@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-19T19:08:18-05:00",
+  "generated_at": "2026-06-19T19:38:34-05:00",
   "score": 0,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -12,7 +12,7 @@
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Virgo",
-    "degree": "5\u00b0 Vir 25'",
+    "degree": "5\u00b0 Vir 42'",
     "phase": "Waxing Crescent",
     "next_sign_change": {
       "sign": "Libra",
@@ -37,11 +37,11 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 155.42,
+    "moon_longitude": 155.71,
     "moon_sign": "Virgo",
     "moon_phase": "Waxing Crescent",
     "moon_house_natal": 8,
-    "aspect_to_natal_moon": "trine (0.1\u00b0 separating)",
+    "aspect_to_natal_moon": "trine (0.2\u00b0 separating)",
     "is_full_moon": false
   },
   "scoring_detail": {
