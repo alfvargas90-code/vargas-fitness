@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-20T07:00:00-05:00",
-  "data_hash": "dc949e27905e6a3f",
-  "slot": "recovery",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 2%\n\nRead\nYou woke on a moderate base: rested enough for normal output, not primed for hard pressure. With the day still untouched, it favors steady resistance-focused work and enough protein later so the deficit supports fat loss without borrowing from muscle.\n\nSteady base.\n\nPerformance: Steady base.\n\nTransit: none",
+  "generated_at": "2026-06-20T11:30:00-05:00",
+  "data_hash": "20ea6953834ccd0f",
+  "slot": "fuel-1",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 20%\n\nRead\nRecovery is moderate and output is still lighter than usual, but the bigger signal is an unfed first half. With no recent meal logged, the afternoon hinges on a protein-forward first plate and a modest deficit, favoring muscle protection over intensity.\n\nSteady before stronger.\n\nPerformance: Steady before stronger.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 2%\n\nRead\nYou woke on a moderate base: rested enough for normal output, not primed for hard pressure. With the day still untouched, it favors steady resistance-focused work and enough protein later so the deficit supports fat loss without borrowing from muscle.\n\nSteady base."
+      "text": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 20%\n\nRead\nRecovery is moderate and output is still lighter than usual, but the bigger signal is an unfed first half. With no recent meal logged, the afternoon hinges on a protein-forward first plate and a modest deficit, favoring muscle protection over intensity.\n\nSteady before stronger."
     },
     {
       "label": "Performance",
-      "text": "Steady base."
+      "text": "Steady before stronger."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 56 \u2022 Sleep 66 \u2022 Strain 2%\n\nRead\nYou woke on a moderate base: rested enough for normal output, not primed for hard pressure. With the day still untouched, it favors steady resistance-focused work and enough protein later so the deficit supports fat loss without borrowing from muscle.\n\nSteady base.",
-    "performance": "Steady base.",
+    "reading": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 20%\n\nRead\nRecovery is moderate and output is still lighter than usual, but the bigger signal is an unfed first half. With no recent meal logged, the afternoon hinges on a protein-forward first plate and a modest deficit, favoring muscle protection over intensity.\n\nSteady before stronger.",
+    "performance": "Steady before stronger.",
     "transit": null
   },
-  "nutrition_nudge": "On pace this morning; start breakfast with 35g protein and keep meals steady.",
+  "nutrition_nudge": "Keep meal pacing steady and make lunch protein-forward with 50g to protect muscle.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
-    "sleep_hours": 6.6,
-    "hrv_today": 66,
-    "hrv_7d_avg": 55.1,
+    "sleep_hours": 7.0,
+    "hrv_today": 41,
+    "hrv_7d_avg": 54.4,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "20 steps so far, 1m active, 460 calories burned, \u2014 training load"
+    "activity_today": "1,566 steps so far, 1h 9m active, 914 calories burned, Light training load"
   }
 }
