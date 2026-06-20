@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-20T11:30:00-05:00",
-  "data_hash": "20ea6953834ccd0f",
-  "slot": "fuel-1",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 20%\n\nRead\nRecovery is moderate and output is still lighter than usual, but the bigger signal is an unfed first half. With no recent meal logged, the afternoon hinges on a protein-forward first plate and a modest deficit, favoring muscle protection over intensity.\n\nSteady before stronger.\n\nPerformance: Steady before stronger.\n\nTransit: none",
+  "generated_at": "2026-06-20T15:00:00-05:00",
+  "data_hash": "697635ceb3029c93",
+  "slot": "fuel-2",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 63%\n\nRead\nRecovery is middling, output is already meaningful, and the empty food log leaves the evening window under-supported. This is a muscle-preservation day: protein matters more than extra effort, and the workout window favors steady strength over intensity.\n\nProtein sets the tone.\n\nPerformance: Protein sets the tone.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 20%\n\nRead\nRecovery is moderate and output is still lighter than usual, but the bigger signal is an unfed first half. With no recent meal logged, the afternoon hinges on a protein-forward first plate and a modest deficit, favoring muscle protection over intensity.\n\nSteady before stronger."
+      "text": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 63%\n\nRead\nRecovery is middling, output is already meaningful, and the empty food log leaves the evening window under-supported. This is a muscle-preservation day: protein matters more than extra effort, and the workout window favors steady strength over intensity.\n\nProtein sets the tone."
     },
     {
       "label": "Performance",
-      "text": "Steady before stronger."
+      "text": "Protein sets the tone."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 20%\n\nRead\nRecovery is moderate and output is still lighter than usual, but the bigger signal is an unfed first half. With no recent meal logged, the afternoon hinges on a protein-forward first plate and a modest deficit, favoring muscle protection over intensity.\n\nSteady before stronger.",
-    "performance": "Steady before stronger.",
+    "reading": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 63%\n\nRead\nRecovery is middling, output is already meaningful, and the empty food log leaves the evening window under-supported. This is a muscle-preservation day: protein matters more than extra effort, and the workout window favors steady strength over intensity.\n\nProtein sets the tone.",
+    "performance": "Protein sets the tone.",
     "transit": null
   },
-  "nutrition_nudge": "Keep meal pacing steady and make lunch protein-forward with 50g to protect muscle.",
+  "nutrition_nudge": "Eat a protein-heavy meal now with 60g to protect muscle and close the gap.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.4,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "1,566 steps so far, 1h 9m active, 914 calories burned, Light training load"
+    "activity_today": "5,696 steps so far, 3h 15m active, 1,528 calories burned, Moderate training load"
   }
 }
