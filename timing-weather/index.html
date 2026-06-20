@@ -148,6 +148,13 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 14px 38px rgba(0,0,0,.4);margin-bottom:14px}
 .sh{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
 .sh .sub{margin-left:auto;font-size:9px;font-weight:600;color:var(--t3);letter-spacing:.06em}
+/* Season tile — compact zodiac-season marker pinned above the daily reading */
+.season-card{padding:14px 16px}
+.season-card .sh{margin-bottom:9px}
+.season .sun{font-family:var(--serif);font-size:21px;color:var(--gold-br);line-height:1.1;letter-spacing:.01em}
+.season .sun .gl{color:var(--gold);margin-right:5px}
+.season .day{font-size:12px;color:var(--t2);margin-top:5px;font-variant-numeric:tabular-nums}
+.season .next{font-size:11.5px;color:var(--t3);margin-top:3px;font-variant-numeric:tabular-nums}
 .cols2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:560px){.cols2{grid-template-columns:1fr}}
 .prose{font-size:13.5px;line-height:1.66;color:var(--t)}
@@ -351,6 +358,14 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
 
     <!-- ══ TRADITIONAL ══ -->
     <section class="slide on" data-lens="trad">
+      <div class="card season-card">
+        <div class="sh">Season <span class="sub">tropical</span></div>
+        <div class="season">
+          <div class="sun"><span class="gl">☉</span><span id="trad-season-sign">—</span></div>
+          <div class="day" id="trad-season-day">Day — of ~30</div>
+          <div class="next" id="trad-season-next">—</div>
+        </div>
+      </div>
       <div class="card rd-card">
         <div class="sh">Daily Horoscope <span class="sub"><span class="rd-state" id="trad-rd-state">—</span></span></div>
         <p class="rd-body" id="trad-rd-body">Loading your reading…</p>
@@ -387,6 +402,14 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
 
     <!-- ══ VEDIC ══ -->
     <section class="slide" data-lens="vedic">
+      <div class="card season-card">
+        <div class="sh">Season <span class="sub">sidereal · Lahiri</span></div>
+        <div class="season">
+          <div class="sun"><span class="gl">☉</span><span id="vedic-season-sign">—</span></div>
+          <div class="day" id="vedic-season-day">Day — of ~30</div>
+          <div class="next" id="vedic-season-next">—</div>
+        </div>
+      </div>
       <div class="card rd-card">
         <div class="sh">Daily Horoscope <span class="sub"><span class="rd-state" id="vedic-rd-state">—</span></span></div>
         <p class="rd-body" id="vedic-rd-body">Loading your reading…</p>
@@ -460,6 +483,14 @@ body{font-family:var(--sans);color:var(--t);-webkit-font-smoothing:antialiased;m
 
     <!-- ══ MODERN ══ -->
     <section class="slide" data-lens="modern">
+      <div class="card season-card">
+        <div class="sh">Season <span class="sub">tropical</span></div>
+        <div class="season">
+          <div class="sun"><span class="gl">☉</span><span id="modern-season-sign">—</span></div>
+          <div class="day" id="modern-season-day">Day — of ~30</div>
+          <div class="next" id="modern-season-next">—</div>
+        </div>
+      </div>
       <div class="card rd-card">
         <div class="sh">Daily Horoscope <span class="sub"><span class="rd-state" id="modern-rd-state">—</span></span></div>
         <p class="rd-body" id="modern-rd-body">Loading your reading…</p>
@@ -876,6 +907,64 @@ function setSky(phase,illum,sign,waxing,sunDeg,sunSign){
       if(bEl)bEl.textContent='Your reading is being generated — check back shortly.';
     }
   }
+  /* ---- Season tile: zodiac-season marker per lens (Modern/Traditional = tropical
+         Sun; Vedic = sidereal Sun. BaZi excluded — no zodiac-season concept). ---- */
+  (function(){
+    const SIGNS=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+    const sd=st&&st.scoringDetail;
+    // "29.4° Gemini" → {sign, deg, idx} (absolute ecliptic longitude in `lon`)
+    function parsePos(str){
+      const m=/([\d.]+)\s*°?\s*([A-Za-z]+)/.exec(str||'');
+      if(!m)return null; const idx=SIGNS.indexOf(m[2]); if(idx<0)return null;
+      const deg=parseFloat(m[1]); return {sign:m[2],deg,idx,lon:idx*30+deg};
+    }
+    function fromLon(lon){lon=((lon%360)+360)%360;const idx=Math.floor(lon/30);return {sign:SIGNS[idx],deg:lon-idx*30,idx,lon};}
+    // Lahiri ayanamsa: derive from the engine's own moonNow (tropical vs sidereal)
+    // so it's self-consistent; fall back to the 2026 constant if moon data is absent.
+    function ayanamsa(){
+      const mn=st&&st.moonNow;
+      if(mn&&mn.tropical&&mn.vedic){
+        const ti=SIGNS.indexOf(mn.tropical.sign), vi=SIGNS.indexOf(mn.vedic.sign);
+        if(ti>=0&&vi>=0){
+          let a=(ti*30+mn.tropical.degree)-(vi*30+mn.vedic.degree);
+          a=((a%360)+360)%360; if(a>180)a-=360; if(a>0&&a<40)return a;
+        }
+      }
+      return 24.16;
+    }
+    // Sun moves ~1°/day → days to next ingress ≈ ceil(30 − degree-into-sign).
+    function render(prefix,pos,baseISO){
+      const sgn=document.getElementById(prefix+'-season-sign');
+      const dayEl=document.getElementById(prefix+'-season-day');
+      const nextEl=document.getElementById(prefix+'-season-next');
+      if(!sgn)return;
+      if(!pos){if(dayEl)dayEl.textContent='Day — of ~30';if(nextEl)nextEl.textContent='Position unavailable';return;}
+      const day=Math.min(30,Math.floor(pos.deg)+1);
+      sgn.textContent=pos.sign;
+      if(dayEl)dayEl.textContent='Day '+day+' of 30';
+      if(nextEl){
+        const nextSign=SIGNS[(pos.idx+1)%12];
+        const days=Math.max(1,Math.ceil(30-pos.deg));
+        let txt=nextSign+' starts';
+        if(baseISO){
+          const d=new Date(baseISO+'T00:00:00Z'); d.setUTCDate(d.getUTCDate()+days);
+          txt+=' '+d.toISOString().slice(0,10);
+          if(days===1)txt+=' · tomorrow';
+        }
+        nextEl.textContent=txt;
+      }
+    }
+    const baseISO=(st&&(st.currentDate||(st.updatedAt||'').slice(0,10)))||null;
+    const tropSun=sd&&parsePos(sd.transitSigns&&sd.transitSigns.sun);
+    // Vedic: prefer engine's siderealSun field; else compute tropical − ayanamsa.
+    let sidSun=sd&&parsePos(sd.siderealSun);
+    if(!sidSun&&tropSun)sidSun=fromLon(tropSun.lon-ayanamsa());
+    render('modern',tropSun,baseISO);
+    render('trad',tropSun,baseISO);
+    render('vedic',sidSun,baseISO);
+    ['modern-season-sign','trad-season-sign','vedic-season-sign']
+      .forEach(id=>{const e=document.getElementById(id);if(e)noEmoji(e.parentNode);});
+  })();
   /* ---- v3.2 Daily Tarot: hero card face + caption + interpretation panel ---- */
   const tc=st&&st.tarotCard;
   const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
