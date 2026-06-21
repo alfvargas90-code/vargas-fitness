@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-21T11:23:45+00:00",
+  "generated_at": "2026-06-21T11:53:57+00:00",
   "current_phase": "First Quarter",
   "phase_stats": {
     "New Moon": {
@@ -82,7 +82,7 @@
     "Waning Crescent": {
       "sleep_delta_h": 0.2,
       "recovery_delta_pct": -19,
-      "strain_delta_pct": 1,
+      "strain_delta_pct": 0,
       "sample_size": 12,
       "metric_samples": {
         "sleep": 12,
