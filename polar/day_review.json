@@ -1,19 +1,19 @@
 {
-  "date": "2026-06-19",
-  "generated_at": "2026-06-19T21:45:00-05:00",
+  "date": "2026-06-20",
+  "generated_at": "2026-06-20T21:45:00-05:00",
   "verdict": "Big",
   "stats": {
-    "steps": 7108,
-    "active_minutes": 339,
-    "active_time_display": "5h 39m",
-    "calories_burned": 2749,
-    "active_calories": 1185,
-    "calories_eaten": 1870,
-    "net_deficit": 879,
+    "steps": 10101,
+    "active_minutes": 407,
+    "active_time_display": "6h 47m",
+    "calories_burned": 2470,
+    "active_calories": 984,
+    "calories_eaten": 3890,
+    "net_deficit": -1420,
     "calorie_target": 2574,
-    "protein_g": 75,
+    "protein_g": 175,
     "protein_target_g": 138,
-    "protein_gap_g": 63
+    "protein_gap_g": -37
   },
-  "prose": "Big output day with about 7,100 steps and a long active stretch, but the 880-calorie deficit was steeper than ideal if you want to keep muscle while leaning out. The bigger issue was protein: eating about 75 and missing by roughly 60 makes that deficit more likely to pull from lean mass instead of fat. Push protein hard tomorrow and keep the deficit more modest."
+  "prose": "Big work day with about 10,000 steps and a long stretch of movement, but eating roughly 1,400 above the burn makes fat loss a lot harder even with protein handled well. The protein hit matters because it protects the muscle you\u2019re trying to build, so the main miss was portion control, not effort. Tomorrow, keep protein high and pull intake back closer to even."
 }
