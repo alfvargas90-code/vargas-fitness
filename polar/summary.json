@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-21T04:00:00-05:00",
-  "data_hash": "fee3215163d12230",
-  "slot": "sleep",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 8%\n\nRead\nThe night gave you enough rest, but recovery is only middling, so the day opens with usable rather than abundant reserve. For muscle preservation, the conditions favor steady resistance work and enough protein over a hard deficit or output chase.\n\nSteady reserve.\n\nPerformance: Steady reserve.\n\nTransit: none",
+  "generated_at": "2026-06-21T07:00:00-05:00",
+  "data_hash": "334349bcabe55e39",
+  "slot": "recovery",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 9%\n\nRead\nYou woke with enough sleep in the bank, but recovery is only middling and the system looks a little muted. With effort still light, the day favors steady muscle-preserving output and a modest energy gap over intensity or aggressive restriction.\n\nMeasured, not muted.\n\nPerformance: Measured, not muted.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 8%\n\nRead\nThe night gave you enough rest, but recovery is only middling, so the day opens with usable rather than abundant reserve. For muscle preservation, the conditions favor steady resistance work and enough protein over a hard deficit or output chase.\n\nSteady reserve."
+      "text": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 9%\n\nRead\nYou woke with enough sleep in the bank, but recovery is only middling and the system looks a little muted. With effort still light, the day favors steady muscle-preserving output and a modest energy gap over intensity or aggressive restriction.\n\nMeasured, not muted."
     },
     {
       "label": "Performance",
-      "text": "Steady reserve."
+      "text": "Measured, not muted."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 8%\n\nRead\nThe night gave you enough rest, but recovery is only middling, so the day opens with usable rather than abundant reserve. For muscle preservation, the conditions favor steady resistance work and enough protein over a hard deficit or output chase.\n\nSteady reserve.",
-    "performance": "Steady reserve.",
+    "reading": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 9%\n\nRead\nYou woke with enough sleep in the bank, but recovery is only middling and the system looks a little muted. With effort still light, the day favors steady muscle-preserving output and a modest energy gap over intensity or aggressive restriction.\n\nMeasured, not muted.",
+    "performance": "Measured, not muted.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Start with a protein-forward breakfast around 35g, then keep meals steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.4,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "144 steps so far, 30m active, 539 calories burned, Light training load"
   }
 }
