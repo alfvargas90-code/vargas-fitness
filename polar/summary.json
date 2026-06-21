@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-20T17:30:00-05:00",
-  "data_hash": "a55168fe990d1d17",
-  "slot": "train-1",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 92%\n\nRead\nYou\u2019re entering the workout window with decent sleep behind you, but recovery is only moderate and the day has already drawn meaningfully from the tank. The larger signal is under-fueling, especially protein, so this favors controlled strength work over intensity.\n\nMuscle wants steadiness.\n\nPerformance: Muscle wants steadiness.\n\nTransit: none",
+  "generated_at": "2026-06-20T20:00:00-05:00",
+  "data_hash": "570e7d313f0cc3a0",
+  "slot": "train-2",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 100%\n\nRead\nThe day landed heavy: movement matched your usual rhythm, but training drew more from the system than readiness fully supported. With intake still too light, tonight favors recovery depth and muscle preservation over any added output.\n\nQuiet consolidation.\n\nPerformance: Quiet consolidation.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 92%\n\nRead\nYou\u2019re entering the workout window with decent sleep behind you, but recovery is only moderate and the day has already drawn meaningfully from the tank. The larger signal is under-fueling, especially protein, so this favors controlled strength work over intensity.\n\nMuscle wants steadiness."
+      "text": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 100%\n\nRead\nThe day landed heavy: movement matched your usual rhythm, but training drew more from the system than readiness fully supported. With intake still too light, tonight favors recovery depth and muscle preservation over any added output.\n\nQuiet consolidation."
     },
     {
       "label": "Performance",
-      "text": "Muscle wants steadiness."
+      "text": "Quiet consolidation."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 92%\n\nRead\nYou\u2019re entering the workout window with decent sleep behind you, but recovery is only moderate and the day has already drawn meaningfully from the tank. The larger signal is under-fueling, especially protein, so this favors controlled strength work over intensity.\n\nMuscle wants steadiness.",
-    "performance": "Muscle wants steadiness.",
+    "reading": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 100%\n\nRead\nThe day landed heavy: movement matched your usual rhythm, but training drew more from the system than readiness fully supported. With intake still too light, tonight favors recovery depth and muscle preservation over any added output.\n\nQuiet consolidation.",
+    "performance": "Quiet consolidation.",
     "transit": null
   },
-  "nutrition_nudge": "Add 70g carbs at dinner, pairing rice or potatoes with lean protein to protect training and muscle.",
+  "nutrition_nudge": "Front-load protein now; make dinner carry 60g to protect muscle while keeping the deficit modest.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.4,
     "nutrition": "calories 1050 of 2574 goal, protein 55g of 138g goal, carbs 65g of 290g goal, fat 62g of 72g goal",
     "nutrition_detail": "calories 1050 of 2574 goal -> 1524 left; protein 55g of 138g goal -> 83g gap; carbs 65g of 290g goal; fat 62g of 72g goal",
-    "activity_today": "7,594 steps so far, 4h 56m active, 1,954 calories burned, Moderate training load"
+    "activity_today": "8,510 steps so far, 5h 47m active, 2,283 calories burned, Heavy training load"
   }
 }
