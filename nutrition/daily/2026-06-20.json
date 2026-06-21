@@ -1,6 +1,6 @@
 {
   "date": "2026-06-20",
-  "synced_at": "2026-06-21T01:37:07+00:00",
+  "synced_at": "2026-06-21T02:07:17+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 1050.0,
-    "protein_g": 55.0,
-    "carbs_g": 65.0,
-    "fat_g": 62.0
+    "calories": 3890.0,
+    "protein_g": 175.0,
+    "carbs_g": 375.0,
+    "fat_g": 182.0
   },
-  "meal_count": 1,
+  "meal_count": 2,
   "raw": {
     "date": "2026-06-20",
     "meals": [
@@ -26,13 +26,22 @@
         "fat": 62,
         "carbs": 65,
         "emoji": "\u00f0\u009f\u008d\u0097"
+      },
+      {
+        "title": "Custom Thin Crust Pizza",
+        "time": "20:52",
+        "calories": 2840,
+        "protein": 120,
+        "fat": 120,
+        "carbs": 310,
+        "emoji": "\u00f0\u009f\u008d\u0095"
       }
     ],
     "totals": {
-      "calories": 1050,
-      "protein": 55,
-      "fat": 62,
-      "carbs": 65
+      "calories": 3890,
+      "protein": 175,
+      "fat": 182,
+      "carbs": 375
     },
     "targets": {
       "calories": 2574,
@@ -41,14 +50,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 1524,
-      "is_over": false
+      "calories": -1316,
+      "is_over": true
     },
-    "meal_count": 1,
+    "meal_count": 2,
     "labels": {
       "header": "Today",
-      "calories_remaining": "1524 kcal remaining today",
-      "meals_logged": "1 meals logged",
+      "calories_remaining": "1316 kcal over today",
+      "meals_logged": "2 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
