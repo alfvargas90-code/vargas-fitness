@@ -1,6 +1,6 @@
 {
   "date": "2026-06-21",
-  "synced_at": "2026-06-21T22:23:56+00:00",
+  "synced_at": "2026-06-21T22:54:03+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,20 +9,30 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 0.0,
-    "protein_g": 0.0,
-    "carbs_g": 0.0,
-    "fat_g": 0.0
+    "calories": 1450.0,
+    "protein_g": 50.0,
+    "carbs_g": 120.0,
+    "fat_g": 85.0
   },
-  "meal_count": 0,
+  "meal_count": 1,
   "raw": {
     "date": "2026-06-21",
-    "meals": [],
+    "meals": [
+      {
+        "title": "In-N-Out Meal",
+        "time": "17:38",
+        "calories": 1450,
+        "protein": 50,
+        "fat": 85,
+        "carbs": 120,
+        "emoji": "\u00f0\u009f\u008d\u0094"
+      }
+    ],
     "totals": {
-      "calories": 0,
-      "protein": 0,
-      "fat": 0,
-      "carbs": 0
+      "calories": 1450,
+      "protein": 50,
+      "fat": 85,
+      "carbs": 120
     },
     "targets": {
       "calories": 2574,
@@ -31,14 +41,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 2574,
+      "calories": 1124,
       "is_over": false
     },
-    "meal_count": 0,
+    "meal_count": 1,
     "labels": {
       "header": "Today",
-      "calories_remaining": "2574 kcal remaining today",
-      "meals_logged": "0 meals logged",
+      "calories_remaining": "1124 kcal remaining today",
+      "meals_logged": "1 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
