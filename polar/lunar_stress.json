@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-21T15:32:29-05:00",
+  "generated_at": "2026-06-21T16:02:57-05:00",
   "score": 23,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -11,19 +11,15 @@
   "workout_intensity": "moderate",
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
-    "sign": "Virgo",
-    "degree": "29\u00b0 Vir 48'",
+    "sign": "Libra",
+    "degree": "0\u00b0 Lib 04'",
     "phase": "First Quarter",
     "next_sign_change": {
-      "sign": "Libra",
-      "at": "2026-06-21T15:54-05:00",
-      "display": "Enters Libra 6/21 at 3:54 PM"
+      "sign": "Scorpio",
+      "at": "2026-06-24T01:43-05:00",
+      "display": "Enters Scorpio 6/24 at 1:43 AM"
     },
-    "void_of_course": {
-      "active": true,
-      "until": "2026-06-21T15:54-05:00",
-      "until_display": "6/21 at 3:54 PM"
-    },
+    "void_of_course": null,
     "active_transits": []
   },
   "bars": {
@@ -41,8 +37,8 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 179.8,
-    "moon_sign": "Virgo",
+    "moon_longitude": 180.07,
+    "moon_sign": "Libra",
     "moon_phase": "First Quarter",
     "moon_house_natal": 8,
     "aspect_to_natal_moon": null,
@@ -61,7 +57,7 @@
       "hrv_7d": 54.4,
       "rhr_7d": 57.3
     },
-    "active_calories": 575,
+    "active_calories": 625,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
