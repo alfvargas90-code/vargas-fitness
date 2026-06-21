@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-21T17:30:00-05:00",
-  "data_hash": "c6794524cc8937b4",
-  "slot": "train-1",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 86%\n\nRead\nRecovery is only middling after a short night, while today's output has run lighter than usual but still drawn a moderate reserve. With protein still absent from the picture, this is a muscle-preservation day that favors measured resistance work over intensity.\n\nMeasured strength.\n\nPerformance: Measured strength.\n\nTransit: none",
+  "generated_at": "2026-06-21T17:54:06-05:00",
+  "data_hash": "800f66121da410ee",
+  "slot": "macros-update",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 86%\n\nRead\nThe logged meal reopened the day\u2019s energy picture after a low-input stretch, with protein moving but still not carrying the muscle-preservation side. Recovery and output both read moderate-to-light, so the day favors steadiness over intensity.\n\nCatch-up, not surplus.\n\nPerformance: Catch-up, not surplus.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 86%\n\nRead\nRecovery is only middling after a short night, while today's output has run lighter than usual but still drawn a moderate reserve. With protein still absent from the picture, this is a muscle-preservation day that favors measured resistance work over intensity.\n\nMeasured strength."
+      "text": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 86%\n\nRead\nThe logged meal reopened the day\u2019s energy picture after a low-input stretch, with protein moving but still not carrying the muscle-preservation side. Recovery and output both read moderate-to-light, so the day favors steadiness over intensity.\n\nCatch-up, not surplus."
     },
     {
       "label": "Performance",
-      "text": "Measured strength."
+      "text": "Catch-up, not surplus."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 86%\n\nRead\nRecovery is only middling after a short night, while today's output has run lighter than usual but still drawn a moderate reserve. With protein still absent from the picture, this is a muscle-preservation day that favors measured resistance work over intensity.\n\nMeasured strength.",
-    "performance": "Measured strength.",
+    "reading": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 86%\n\nRead\nThe logged meal reopened the day\u2019s energy picture after a low-input stretch, with protein moving but still not carrying the muscle-preservation side. Recovery and output both read moderate-to-light, so the day favors steadiness over intensity.\n\nCatch-up, not surplus.",
+    "performance": "Catch-up, not surplus.",
     "transit": null
   },
-  "nutrition_nudge": "Make your next meal protein-heavy with 60g to protect muscle while keeping tonight's deficit modest.",
+  "nutrition_nudge": "Fat budget is spent, so keep dinner lean and skip oils, cheese, and nut butters.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
     "sleep_hours": 5.7,
     "hrv_today": 46,
     "hrv_7d_avg": 54.4,
-    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
-    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
+    "nutrition": "calories 1450 of 2574 goal, protein 50g of 138g goal, carbs 120g of 290g goal, fat 85g of 72g goal",
+    "nutrition_detail": "calories 1450 of 2574 goal -> 1124 left; protein 50g of 138g goal -> 88g gap; carbs 120g of 290g goal; fat 85g of 72g goal",
     "activity_today": "4,849 steps so far, 4h 34m active, 1,926 calories burned, Moderate training load"
   }
 }
