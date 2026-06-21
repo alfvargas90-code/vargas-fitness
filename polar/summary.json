@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-21T15:00:00-05:00",
-  "data_hash": "3f49db42898ca554",
-  "slot": "fuel-2",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 64%\n\nRead\nThe day is entering the evening underfed: movement has been moderate, sleep and recovery are softened, and protein is still unaccounted for. This favors a measured, muscle-preserving evening over a harder push.\n\nSteady over force.\n\nPerformance: Steady over force.\n\nTransit: none",
+  "generated_at": "2026-06-21T17:30:00-05:00",
+  "data_hash": "c6794524cc8937b4",
+  "slot": "train-1",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 86%\n\nRead\nRecovery is only middling after a short night, while today's output has run lighter than usual but still drawn a moderate reserve. With protein still absent from the picture, this is a muscle-preservation day that favors measured resistance work over intensity.\n\nMeasured strength.\n\nPerformance: Measured strength.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 64%\n\nRead\nThe day is entering the evening underfed: movement has been moderate, sleep and recovery are softened, and protein is still unaccounted for. This favors a measured, muscle-preserving evening over a harder push.\n\nSteady over force."
+      "text": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 86%\n\nRead\nRecovery is only middling after a short night, while today's output has run lighter than usual but still drawn a moderate reserve. With protein still absent from the picture, this is a muscle-preservation day that favors measured resistance work over intensity.\n\nMeasured strength."
     },
     {
       "label": "Performance",
-      "text": "Steady over force."
+      "text": "Measured strength."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 64%\n\nRead\nThe day is entering the evening underfed: movement has been moderate, sleep and recovery are softened, and protein is still unaccounted for. This favors a measured, muscle-preserving evening over a harder push.\n\nSteady over force.",
-    "performance": "Steady over force.",
+    "reading": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 86%\n\nRead\nRecovery is only middling after a short night, while today's output has run lighter than usual but still drawn a moderate reserve. With protein still absent from the picture, this is a muscle-preservation day that favors measured resistance work over intensity.\n\nMeasured strength.",
+    "performance": "Measured strength.",
     "transit": null
   },
-  "nutrition_nudge": "Make your next meal protein-heavy with 60g to protect muscle and close today's gap.",
+  "nutrition_nudge": "Make your next meal protein-heavy with 60g to protect muscle while keeping tonight's deficit modest.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.4,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "3,539 steps so far, 3h 15m active, 1,558 calories burned, Moderate training load"
+    "activity_today": "4,849 steps so far, 4h 34m active, 1,926 calories burned, Moderate training load"
   }
 }
