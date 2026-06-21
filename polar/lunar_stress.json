@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-06-21T09:55:07-05:00",
+  "generated_at": "2026-06-21T10:25:21-05:00",
   "score": 20,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
   "physiology": {
-    "hrv_pct_baseline": -25,
-    "rhr_delta_bpm": 1,
-    "sleep_score": 58
+    "hrv_pct_baseline": -15,
+    "rhr_delta_bpm": 0,
+    "sleep_score": 68
   },
   "workout_intensity": "rest",
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Virgo",
-    "degree": "26\u00b0 Vir 47'",
+    "degree": "27\u00b0 Vir 04'",
     "phase": "First Quarter",
     "next_sign_change": {
       "sign": "Libra",
@@ -37,7 +37,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 176.79,
+    "moon_longitude": 177.06,
     "moon_sign": "Virgo",
     "moon_phase": "First Quarter",
     "moon_house_natal": 8,
@@ -49,14 +49,14 @@
     "transit_points": 0,
     "physiology_points": 20,
     "breakdown": [
-      "+10 HRV -25% below baseline",
-      "+10 Sleep score 58 (<70)"
+      "+10 HRV -15% below baseline",
+      "+10 Sleep score 68 (<70)"
     ],
     "baselines": {
       "hrv_7d": 54.4,
       "rhr_7d": 57.3
     },
-    "active_calories": 113,
+    "active_calories": 123,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
