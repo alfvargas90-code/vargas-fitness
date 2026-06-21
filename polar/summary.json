@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-20T21:07:22-05:00",
-  "data_hash": "86311a8b6b3e355b",
-  "slot": "macros-update",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 100%\n\nRead\nThe new meal flips the day from catch-up to surplus, with protein now more than covering the muscle-protection side of the equation. Output has run heavier than usual, but recovery reads only moderate, so the day favors absorption over added intensity.\n\nPlenty in the system.\n\nPerformance: Plenty in the system.\n\nTransit: none",
+  "generated_at": "2026-06-21T04:00:00-05:00",
+  "data_hash": "fee3215163d12230",
+  "slot": "sleep",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 8%\n\nRead\nThe night gave you enough rest, but recovery is only middling, so the day opens with usable rather than abundant reserve. For muscle preservation, the conditions favor steady resistance work and enough protein over a hard deficit or output chase.\n\nSteady reserve.\n\nPerformance: Steady reserve.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 100%\n\nRead\nThe new meal flips the day from catch-up to surplus, with protein now more than covering the muscle-protection side of the equation. Output has run heavier than usual, but recovery reads only moderate, so the day favors absorption over added intensity.\n\nPlenty in the system."
+      "text": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 8%\n\nRead\nThe night gave you enough rest, but recovery is only middling, so the day opens with usable rather than abundant reserve. For muscle preservation, the conditions favor steady resistance work and enough protein over a hard deficit or output chase.\n\nSteady reserve."
     },
     {
       "label": "Performance",
-      "text": "Plenty in the system."
+      "text": "Steady reserve."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 100%\n\nRead\nThe new meal flips the day from catch-up to surplus, with protein now more than covering the muscle-protection side of the equation. Output has run heavier than usual, but recovery reads only moderate, so the day favors absorption over added intensity.\n\nPlenty in the system.",
-    "performance": "Plenty in the system.",
+    "reading": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 8%\n\nRead\nThe night gave you enough rest, but recovery is only middling, so the day opens with usable rather than abundant reserve. For muscle preservation, the conditions favor steady resistance work and enough protein over a hard deficit or output chase.\n\nSteady reserve.",
+    "performance": "Steady reserve.",
     "transit": null
   },
-  "nutrition_nudge": "Fat is already high tonight, so keep anything else lean and skip oils, butter, nuts, and cheese.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
     "sleep_hours": 7.0,
     "hrv_today": 41,
     "hrv_7d_avg": 54.4,
-    "nutrition": "calories 3890 of 2574 goal, protein 175g of 138g goal, carbs 375g of 290g goal, fat 182g of 72g goal",
-    "nutrition_detail": "calories 3890 of 2574 goal -> 1316 over; protein 175g of 138g goal -> 37g over; carbs 375g of 290g goal; fat 182g of 72g goal",
-    "activity_today": "10,101 steps so far, 6h 47m active, 2,470 calories burned, Heavy training load"
+    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
+    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
+    "activity_today": null
   }
 }
