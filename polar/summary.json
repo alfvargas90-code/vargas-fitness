@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-20T20:00:00-05:00",
-  "data_hash": "570e7d313f0cc3a0",
-  "slot": "train-2",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 100%\n\nRead\nThe day landed heavy: movement matched your usual rhythm, but training drew more from the system than readiness fully supported. With intake still too light, tonight favors recovery depth and muscle preservation over any added output.\n\nQuiet consolidation.\n\nPerformance: Quiet consolidation.\n\nTransit: none",
+  "generated_at": "2026-06-20T21:07:22-05:00",
+  "data_hash": "86311a8b6b3e355b",
+  "slot": "macros-update",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 100%\n\nRead\nThe new meal flips the day from catch-up to surplus, with protein now more than covering the muscle-protection side of the equation. Output has run heavier than usual, but recovery reads only moderate, so the day favors absorption over added intensity.\n\nPlenty in the system.\n\nPerformance: Plenty in the system.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 100%\n\nRead\nThe day landed heavy: movement matched your usual rhythm, but training drew more from the system than readiness fully supported. With intake still too light, tonight favors recovery depth and muscle preservation over any added output.\n\nQuiet consolidation."
+      "text": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 100%\n\nRead\nThe new meal flips the day from catch-up to surplus, with protein now more than covering the muscle-protection side of the equation. Output has run heavier than usual, but recovery reads only moderate, so the day favors absorption over added intensity.\n\nPlenty in the system."
     },
     {
       "label": "Performance",
-      "text": "Quiet consolidation."
+      "text": "Plenty in the system."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 100%\n\nRead\nThe day landed heavy: movement matched your usual rhythm, but training drew more from the system than readiness fully supported. With intake still too light, tonight favors recovery depth and muscle preservation over any added output.\n\nQuiet consolidation.",
-    "performance": "Quiet consolidation.",
+    "reading": "State\nAverage\nRecovery 48 \u2022 Sleep 58 \u2022 Strain 100%\n\nRead\nThe new meal flips the day from catch-up to surplus, with protein now more than covering the muscle-protection side of the equation. Output has run heavier than usual, but recovery reads only moderate, so the day favors absorption over added intensity.\n\nPlenty in the system.",
+    "performance": "Plenty in the system.",
     "transit": null
   },
-  "nutrition_nudge": "Front-load protein now; make dinner carry 60g to protect muscle while keeping the deficit modest.",
+  "nutrition_nudge": "Fat is already high tonight, so keep anything else lean and skip oils, butter, nuts, and cheese.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
     "sleep_hours": 7.0,
     "hrv_today": 41,
     "hrv_7d_avg": 54.4,
-    "nutrition": "calories 1050 of 2574 goal, protein 55g of 138g goal, carbs 65g of 290g goal, fat 62g of 72g goal",
-    "nutrition_detail": "calories 1050 of 2574 goal -> 1524 left; protein 55g of 138g goal -> 83g gap; carbs 65g of 290g goal; fat 62g of 72g goal",
-    "activity_today": "8,510 steps so far, 5h 47m active, 2,283 calories burned, Heavy training load"
+    "nutrition": "calories 3890 of 2574 goal, protein 175g of 138g goal, carbs 375g of 290g goal, fat 182g of 72g goal",
+    "nutrition_detail": "calories 3890 of 2574 goal -> 1316 over; protein 175g of 138g goal -> 37g over; carbs 375g of 290g goal; fat 182g of 72g goal",
+    "activity_today": "10,101 steps so far, 6h 47m active, 2,470 calories burned, Heavy training load"
   }
 }
