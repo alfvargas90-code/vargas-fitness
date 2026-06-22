@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-22T04:00:00-05:00",
-  "data_hash": "ad0246a0b135cb67",
-  "slot": "sleep",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 1%\n\nRead\nLast night left your system under-replenished, with recovery sitting below its recent steadier pattern. This is not a depleted day, but reserves look limited, so the day favors consistency over intensity and muscle-preserving choices over aggressive output.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
+  "generated_at": "2026-06-22T07:00:00-05:00",
+  "data_hash": "8ce7f4dcc302cb4c",
+  "slot": "recovery",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 2%\n\nRead\nYou woke on a thinner charge than usual, with sleep and recovery both below your normal rhythm. The day favors measured output over force, with muscle protection more dependent on steady nourishment than extra movement.\n\nQuiet start.\n\nPerformance: Quiet start.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 1%\n\nRead\nLast night left your system under-replenished, with recovery sitting below its recent steadier pattern. This is not a depleted day, but reserves look limited, so the day favors consistency over intensity and muscle-preserving choices over aggressive output.\n\nSteady, not forceful."
+      "text": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 2%\n\nRead\nYou woke on a thinner charge than usual, with sleep and recovery both below your normal rhythm. The day favors measured output over force, with muscle protection more dependent on steady nourishment than extra movement.\n\nQuiet start."
     },
     {
       "label": "Performance",
-      "text": "Steady, not forceful."
+      "text": "Quiet start."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 1%\n\nRead\nLast night left your system under-replenished, with recovery sitting below its recent steadier pattern. This is not a depleted day, but reserves look limited, so the day favors consistency over intensity and muscle-preserving choices over aggressive output.\n\nSteady, not forceful.",
-    "performance": "Steady, not forceful.",
+    "reading": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 2%\n\nRead\nYou woke on a thinner charge than usual, with sleep and recovery both below your normal rhythm. The day favors measured output over force, with muscle protection more dependent on steady nourishment than extra movement.\n\nQuiet start.",
+    "performance": "Quiet start.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "On pace so far \u2014 start breakfast with 35g protein to protect muscle and keep meals steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.4,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "50 steps so far, 7m active, 439 calories burned, \u2014 training load"
   }
 }
