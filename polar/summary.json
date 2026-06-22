@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-21T20:00:00-05:00",
-  "data_hash": "5f467a870bee5a98",
-  "slot": "train-2",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 100%\n\nRead\nA heavier training day landed on a softer recovery base, with sleep running short and movement lighter than your usual day. The night favors repair over added strain; the main tension is a deep food gap with protein still too thin for muscle protection.\n\nRecovery takes priority.\n\nPerformance: Recovery takes priority.\n\nTransit: none",
+  "generated_at": "2026-06-22T04:00:00-05:00",
+  "data_hash": "ad0246a0b135cb67",
+  "slot": "sleep",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 1%\n\nRead\nLast night left your system under-replenished, with recovery sitting below its recent steadier pattern. This is not a depleted day, but reserves look limited, so the day favors consistency over intensity and muscle-preserving choices over aggressive output.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 100%\n\nRead\nA heavier training day landed on a softer recovery base, with sleep running short and movement lighter than your usual day. The night favors repair over added strain; the main tension is a deep food gap with protein still too thin for muscle protection.\n\nRecovery takes priority."
+      "text": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 1%\n\nRead\nLast night left your system under-replenished, with recovery sitting below its recent steadier pattern. This is not a depleted day, but reserves look limited, so the day favors consistency over intensity and muscle-preserving choices over aggressive output.\n\nSteady, not forceful."
     },
     {
       "label": "Performance",
-      "text": "Recovery takes priority."
+      "text": "Steady, not forceful."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 100%\n\nRead\nA heavier training day landed on a softer recovery base, with sleep running short and movement lighter than your usual day. The night favors repair over added strain; the main tension is a deep food gap with protein still too thin for muscle protection.\n\nRecovery takes priority.",
-    "performance": "Recovery takes priority.",
+    "reading": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 1%\n\nRead\nLast night left your system under-replenished, with recovery sitting below its recent steadier pattern. This is not a depleted day, but reserves look limited, so the day favors consistency over intensity and muscle-preserving choices over aggressive output.\n\nSteady, not forceful.",
+    "performance": "Steady, not forceful.",
     "transit": null
   },
-  "nutrition_nudge": "Front-load dinner with 70g protein to protect muscle while keeping the calorie gap modest.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
     "sleep_hours": 5.7,
     "hrv_today": 46,
     "hrv_7d_avg": 54.4,
-    "nutrition": "calories 1450 of 2574 goal, protein 50g of 138g goal, carbs 120g of 290g goal, fat 85g of 72g goal",
-    "nutrition_detail": "calories 1450 of 2574 goal -> 1124 left; protein 50g of 138g goal -> 88g gap; carbs 120g of 290g goal; fat 85g of 72g goal",
-    "activity_today": "6,635 steps so far, 5h 59m active, 2,299 calories burned, Heavy training load"
+    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
+    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
+    "activity_today": null
   }
 }
