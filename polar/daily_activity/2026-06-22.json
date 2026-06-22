@@ -1,11 +1,11 @@
 {
-  "id": 4086911893,
+  "id": 4086951273,
   "polar-user": "https://www.polaraccesslink.com/v3/users/64113897",
-  "transaction-id": 1740044483,
+  "transaction-id": 1740059500,
   "date": "2026-06-22",
-  "created": "2026-06-22T11:11:20.000",
-  "calories": 439,
-  "active-calories": 17,
-  "duration": "PT7M",
-  "active-steps": 50
+  "created": "2026-06-22T11:41:49.000",
+  "calories": 485,
+  "active-calories": 27,
+  "duration": "PT9M30S",
+  "active-steps": 88
 }
