@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-21T19:05:20-05:00",
+  "generated_at": "2026-06-21T19:35:58-05:00",
   "score": 30,
   "band": "Mild Compression",
   "trigger": "No active lunar trigger",
@@ -12,7 +12,7 @@
   "recommendation": "Keep the day structured and move work forward; no need to back off.",
   "lunar": {
     "sign": "Libra",
-    "degree": "1\u00b0 Lib 41'",
+    "degree": "1\u00b0 Lib 58'",
     "phase": "First Quarter",
     "next_sign_change": {
       "sign": "Scorpio",
@@ -37,7 +37,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 181.69,
+    "moon_longitude": 181.96,
     "moon_sign": "Libra",
     "moon_phase": "First Quarter",
     "moon_house_natal": 8,
@@ -57,7 +57,7 @@
       "hrv_7d": 54.4,
       "rhr_7d": 57.3
     },
-    "active_calories": 827,
+    "active_calories": 870,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
