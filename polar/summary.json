@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-22T17:30:00-05:00",
-  "data_hash": "e8f15eacdc30e93e",
-  "slot": "train-1",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 62%\n\nRead\nRecovery is serviceable, not abundant, and today\u2019s output has run lighter than your usual day despite a moderate draw on reserves. The larger signal is underfed muscle support, so the window favors controlled strength quality over extra volume.\n\nMeasured strength, preserved momentum.\n\nPerformance: Measured strength, preserved momentum.\n\nTransit: none",
+  "generated_at": "2026-06-22T18:40:00-05:00",
+  "data_hash": "5c05649cfe640d9f",
+  "slot": "macros-update",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 75%\n\nRead\nThe new intake opens the day\u2019s energy window a little, but it barely changes the muscle-support picture. With moderate effort already spent and overall input still light, today favors recovery-aware consistency over intensity, with protein still the main unfinished signal.\n\nSteady, underfed, salvageable.\n\nPerformance: Steady, underfed, salvageable.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 62%\n\nRead\nRecovery is serviceable, not abundant, and today\u2019s output has run lighter than your usual day despite a moderate draw on reserves. The larger signal is underfed muscle support, so the window favors controlled strength quality over extra volume.\n\nMeasured strength, preserved momentum."
+      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 75%\n\nRead\nThe new intake opens the day\u2019s energy window a little, but it barely changes the muscle-support picture. With moderate effort already spent and overall input still light, today favors recovery-aware consistency over intensity, with protein still the main unfinished signal.\n\nSteady, underfed, salvageable."
     },
     {
       "label": "Performance",
-      "text": "Measured strength, preserved momentum."
+      "text": "Steady, underfed, salvageable."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 62%\n\nRead\nRecovery is serviceable, not abundant, and today\u2019s output has run lighter than your usual day despite a moderate draw on reserves. The larger signal is underfed muscle support, so the window favors controlled strength quality over extra volume.\n\nMeasured strength, preserved momentum.",
-    "performance": "Measured strength, preserved momentum.",
+    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 75%\n\nRead\nThe new intake opens the day\u2019s energy window a little, but it barely changes the muscle-support picture. With moderate effort already spent and overall input still light, today favors recovery-aware consistency over intensity, with protein still the main unfinished signal.\n\nSteady, underfed, salvageable.",
+    "performance": "Steady, underfed, salvageable.",
     "transit": null
   },
-  "nutrition_nudge": "Add a carb base at dinner, then anchor it with lean protein to protect muscle.",
+  "nutrition_nudge": "Eat a real dinner now with 60g protein to protect muscle while closing the steep calorie gap.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
     "sleep_hours": 6.0,
     "hrv_today": 53,
     "hrv_7d_avg": 54.1,
-    "nutrition": "calories 650 of 2574 goal, protein 55g of 138g goal, carbs 8g of 290g goal, fat 52g of 72g goal",
-    "nutrition_detail": "calories 650 of 2574 goal -> 1924 left; protein 55g of 138g goal -> 83g gap; carbs 8g of 290g goal; fat 52g of 72g goal",
-    "activity_today": "3,864 steps so far, 3h 47m active, 1,746 calories burned, Moderate training load"
+    "nutrition": "calories 900 of 2574 goal, protein 59g of 138g goal, carbs 40g of 290g goal, fat 64g of 72g goal",
+    "nutrition_detail": "calories 900 of 2574 goal -> 1674 left; protein 59g of 138g goal -> 79g gap; carbs 40g of 290g goal; fat 64g of 72g goal",
+    "activity_today": "4,918 steps so far, 4h 17m active, 1,922 calories burned, Moderate training load"
   }
 }
