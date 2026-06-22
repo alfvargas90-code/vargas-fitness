@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-22T07:00:00-05:00",
-  "data_hash": "8ce7f4dcc302cb4c",
-  "slot": "recovery",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 2%\n\nRead\nYou woke on a thinner charge than usual, with sleep and recovery both below your normal rhythm. The day favors measured output over force, with muscle protection more dependent on steady nourishment than extra movement.\n\nQuiet start.\n\nPerformance: Quiet start.\n\nTransit: none",
+  "generated_at": "2026-06-22T11:08:17-05:00",
+  "data_hash": "fd9e3242a3faff60",
+  "slot": "macros-update",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 29%\n\nRead\nThe first logged meal changed the shape of the day: protein is now meaningfully on the board, while the calorie window remains wide. Output is still lighter than your usual day, so the current state favors steady muscle protection over intensity.\n\nMomentum is returning.\n\nPerformance: Momentum is returning.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
-      "text": "Average"
+      "text": "Good"
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 2%\n\nRead\nYou woke on a thinner charge than usual, with sleep and recovery both below your normal rhythm. The day favors measured output over force, with muscle protection more dependent on steady nourishment than extra movement.\n\nQuiet start."
+      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 29%\n\nRead\nThe first logged meal changed the shape of the day: protein is now meaningfully on the board, while the calorie window remains wide. Output is still lighter than your usual day, so the current state favors steady muscle protection over intensity.\n\nMomentum is returning."
     },
     {
       "label": "Performance",
-      "text": "Quiet start."
+      "text": "Momentum is returning."
     },
     {
       "label": "Transit",
@@ -22,20 +22,20 @@
     }
   ],
   "simple": {
-    "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 2%\n\nRead\nYou woke on a thinner charge than usual, with sleep and recovery both below your normal rhythm. The day favors measured output over force, with muscle protection more dependent on steady nourishment than extra movement.\n\nQuiet start.",
-    "performance": "Quiet start.",
+    "recovery": "Good",
+    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 29%\n\nRead\nThe first logged meal changed the shape of the day: protein is now meaningfully on the board, while the calorie window remains wide. Output is still lighter than your usual day, so the current state favors steady muscle protection over intensity.\n\nMomentum is returning.",
+    "performance": "Momentum is returning.",
     "transit": null
   },
-  "nutrition_nudge": "On pace so far \u2014 start breakfast with 35g protein to protect muscle and keep meals steady.",
+  "nutrition_nudge": "On pace so far; make lunch protein-forward and keep meal timing steady.",
   "transits": [],
   "data_basis": {
-    "recharge_today": 3,
-    "sleep_hours": 5.7,
-    "hrv_today": 46,
-    "hrv_7d_avg": 54.4,
-    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
-    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "50 steps so far, 7m active, 439 calories burned, \u2014 training load"
+    "recharge_today": 4,
+    "sleep_hours": 6.0,
+    "hrv_today": 53,
+    "hrv_7d_avg": 54.1,
+    "nutrition": "calories 650 of 2574 goal, protein 55g of 138g goal, carbs 8g of 290g goal, fat 52g of 72g goal",
+    "nutrition_detail": "calories 650 of 2574 goal -> 1924 left; protein 55g of 138g goal -> 83g gap; carbs 8g of 290g goal; fat 52g of 72g goal",
+    "activity_today": "2,192 steps so far, 1h 43m active, 979 calories burned, Light training load"
   }
 }
