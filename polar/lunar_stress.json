@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-06-21T18:34:47-05:00",
-  "score": 23,
-  "band": "Stable Control",
+  "generated_at": "2026-06-21T19:05:20-05:00",
+  "score": 30,
+  "band": "Mild Compression",
   "trigger": "No active lunar trigger",
   "physiology": {
     "hrv_pct_baseline": -15,
     "rhr_delta_bpm": 0,
     "sleep_score": 68
   },
-  "workout_intensity": "moderate",
-  "recommendation": "System's regulated. Load up and push output hard today.",
+  "workout_intensity": "high",
+  "recommendation": "Keep the day structured and move work forward; no need to back off.",
   "lunar": {
     "sign": "Libra",
-    "degree": "1\u00b0 Lib 25'",
+    "degree": "1\u00b0 Lib 41'",
     "phase": "First Quarter",
     "next_sign_change": {
       "sign": "Scorpio",
@@ -30,14 +30,14 @@
       "max": 55
     },
     "body": {
-      "filled": 6,
+      "filled": 8,
       "total": 10,
-      "points": 23,
+      "points": 30,
       "max": 40
     }
   },
   "transit_detail": {
-    "moon_longitude": 181.42,
+    "moon_longitude": 181.69,
     "moon_sign": "Libra",
     "moon_phase": "First Quarter",
     "moon_house_natal": 8,
@@ -45,19 +45,19 @@
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 23,
+    "raw_score": 30,
     "transit_points": 0,
-    "physiology_points": 23,
+    "physiology_points": 30,
     "breakdown": [
       "+10 HRV -15% below baseline",
       "+10 Sleep score 68 (<70)",
-      "+3 Moderate-intensity day"
+      "+10 High-intensity day on suppressed HRV"
     ],
     "baselines": {
       "hrv_7d": 54.4,
       "rhr_7d": 57.3
     },
-    "active_calories": 777,
+    "active_calories": 827,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
