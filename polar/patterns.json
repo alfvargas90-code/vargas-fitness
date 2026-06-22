@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-22T21:11:40+00:00",
+  "generated_at": "2026-06-22T21:41:52+00:00",
   "current_phase": "First Quarter",
   "phase_stats": {
     "New Moon": {
@@ -94,6 +94,6 @@
   "overall_avg": {
     "sleep_h": 6.7,
     "recovery": 49,
-    "strain_kcal": 939
+    "strain_kcal": 941
   }
 }
