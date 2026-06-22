@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-22T11:08:17-05:00",
-  "data_hash": "fd9e3242a3faff60",
-  "slot": "macros-update",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 29%\n\nRead\nThe first logged meal changed the shape of the day: protein is now meaningfully on the board, while the calorie window remains wide. Output is still lighter than your usual day, so the current state favors steady muscle protection over intensity.\n\nMomentum is returning.\n\nPerformance: Momentum is returning.\n\nTransit: none",
+  "generated_at": "2026-06-22T11:30:05-05:00",
+  "data_hash": "2d76819927c75804",
+  "slot": "fuel-1",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 29%\n\nRead\nRecovery is steadier than recent days, while output is still lighter than your usual pattern. The first fueling was protein-forward, but energy support is still narrow heading into the afternoon, so the day favors measured muscle-preserving consistency over intensity.\n\nQuiet base, more runway.\n\nPerformance: Quiet base, more runway.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 29%\n\nRead\nThe first logged meal changed the shape of the day: protein is now meaningfully on the board, while the calorie window remains wide. Output is still lighter than your usual day, so the current state favors steady muscle protection over intensity.\n\nMomentum is returning."
+      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 29%\n\nRead\nRecovery is steadier than recent days, while output is still lighter than your usual pattern. The first fueling was protein-forward, but energy support is still narrow heading into the afternoon, so the day favors measured muscle-preserving consistency over intensity.\n\nQuiet base, more runway."
     },
     {
       "label": "Performance",
-      "text": "Momentum is returning."
+      "text": "Quiet base, more runway."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 29%\n\nRead\nThe first logged meal changed the shape of the day: protein is now meaningfully on the board, while the calorie window remains wide. Output is still lighter than your usual day, so the current state favors steady muscle protection over intensity.\n\nMomentum is returning.",
-    "performance": "Momentum is returning.",
+    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 29%\n\nRead\nRecovery is steadier than recent days, while output is still lighter than your usual pattern. The first fueling was protein-forward, but energy support is still narrow heading into the afternoon, so the day favors measured muscle-preserving consistency over intensity.\n\nQuiet base, more runway.",
+    "performance": "Quiet base, more runway.",
     "transit": null
   },
-  "nutrition_nudge": "On pace so far; make lunch protein-forward and keep meal timing steady.",
+  "nutrition_nudge": "You're on pace; keep lunch steady with 45g protein to protect muscle.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
