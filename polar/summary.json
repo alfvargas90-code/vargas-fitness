@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-22T15:00:00-05:00",
-  "data_hash": "b6bf61bc1da07728",
-  "slot": "fuel-2",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 43%\n\nRead\nOutput ran lighter than your usual day, but the bigger signal is fuel: a long gap has left the evening window under-supplied. For muscle retention, this favors a steadier plate built around protein and easy carbs over pushing deeper into deficit.\n\nQuiet momentum.\n\nPerformance: Quiet momentum.\n\nTransit: none",
+  "generated_at": "2026-06-22T17:30:00-05:00",
+  "data_hash": "e8f15eacdc30e93e",
+  "slot": "train-1",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 62%\n\nRead\nRecovery is serviceable, not abundant, and today\u2019s output has run lighter than your usual day despite a moderate draw on reserves. The larger signal is underfed muscle support, so the window favors controlled strength quality over extra volume.\n\nMeasured strength, preserved momentum.\n\nPerformance: Measured strength, preserved momentum.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 43%\n\nRead\nOutput ran lighter than your usual day, but the bigger signal is fuel: a long gap has left the evening window under-supplied. For muscle retention, this favors a steadier plate built around protein and easy carbs over pushing deeper into deficit.\n\nQuiet momentum."
+      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 62%\n\nRead\nRecovery is serviceable, not abundant, and today\u2019s output has run lighter than your usual day despite a moderate draw on reserves. The larger signal is underfed muscle support, so the window favors controlled strength quality over extra volume.\n\nMeasured strength, preserved momentum."
     },
     {
       "label": "Performance",
-      "text": "Quiet momentum."
+      "text": "Measured strength, preserved momentum."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 43%\n\nRead\nOutput ran lighter than your usual day, but the bigger signal is fuel: a long gap has left the evening window under-supplied. For muscle retention, this favors a steadier plate built around protein and easy carbs over pushing deeper into deficit.\n\nQuiet momentum.",
-    "performance": "Quiet momentum.",
+    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 62%\n\nRead\nRecovery is serviceable, not abundant, and today\u2019s output has run lighter than your usual day despite a moderate draw on reserves. The larger signal is underfed muscle support, so the window favors controlled strength quality over extra volume.\n\nMeasured strength, preserved momentum.",
+    "performance": "Measured strength, preserved momentum.",
     "transit": null
   },
-  "nutrition_nudge": "Add a carb base at your next meal, like rice or potatoes, to protect training energy.",
+  "nutrition_nudge": "Add a carb base at dinner, then anchor it with lean protein to protect muscle.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.1,
     "nutrition": "calories 650 of 2574 goal, protein 55g of 138g goal, carbs 8g of 290g goal, fat 52g of 72g goal",
     "nutrition_detail": "calories 650 of 2574 goal -> 1924 left; protein 55g of 138g goal -> 83g gap; carbs 8g of 290g goal; fat 52g of 72g goal",
-    "activity_today": "2,920 steps so far, 2h 25m active, 1,364 calories burned, Light training load"
+    "activity_today": "3,864 steps so far, 3h 47m active, 1,746 calories burned, Moderate training load"
   }
 }
