@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-21T17:54:06-05:00",
-  "data_hash": "800f66121da410ee",
-  "slot": "macros-update",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 86%\n\nRead\nThe logged meal reopened the day\u2019s energy picture after a low-input stretch, with protein moving but still not carrying the muscle-preservation side. Recovery and output both read moderate-to-light, so the day favors steadiness over intensity.\n\nCatch-up, not surplus.\n\nPerformance: Catch-up, not surplus.\n\nTransit: none",
+  "generated_at": "2026-06-21T20:00:00-05:00",
+  "data_hash": "5f467a870bee5a98",
+  "slot": "train-2",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 100%\n\nRead\nA heavier training day landed on a softer recovery base, with sleep running short and movement lighter than your usual day. The night favors repair over added strain; the main tension is a deep food gap with protein still too thin for muscle protection.\n\nRecovery takes priority.\n\nPerformance: Recovery takes priority.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 86%\n\nRead\nThe logged meal reopened the day\u2019s energy picture after a low-input stretch, with protein moving but still not carrying the muscle-preservation side. Recovery and output both read moderate-to-light, so the day favors steadiness over intensity.\n\nCatch-up, not surplus."
+      "text": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 100%\n\nRead\nA heavier training day landed on a softer recovery base, with sleep running short and movement lighter than your usual day. The night favors repair over added strain; the main tension is a deep food gap with protein still too thin for muscle protection.\n\nRecovery takes priority."
     },
     {
       "label": "Performance",
-      "text": "Catch-up, not surplus."
+      "text": "Recovery takes priority."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 86%\n\nRead\nThe logged meal reopened the day\u2019s energy picture after a low-input stretch, with protein moving but still not carrying the muscle-preservation side. Recovery and output both read moderate-to-light, so the day favors steadiness over intensity.\n\nCatch-up, not surplus.",
-    "performance": "Catch-up, not surplus.",
+    "reading": "State\nAverage\nRecovery 53 \u2022 Sleep 68 \u2022 Strain 100%\n\nRead\nA heavier training day landed on a softer recovery base, with sleep running short and movement lighter than your usual day. The night favors repair over added strain; the main tension is a deep food gap with protein still too thin for muscle protection.\n\nRecovery takes priority.",
+    "performance": "Recovery takes priority.",
     "transit": null
   },
-  "nutrition_nudge": "Fat budget is spent, so keep dinner lean and skip oils, cheese, and nut butters.",
+  "nutrition_nudge": "Front-load dinner with 70g protein to protect muscle while keeping the calorie gap modest.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.4,
     "nutrition": "calories 1450 of 2574 goal, protein 50g of 138g goal, carbs 120g of 290g goal, fat 85g of 72g goal",
     "nutrition_detail": "calories 1450 of 2574 goal -> 1124 left; protein 50g of 138g goal -> 88g gap; carbs 120g of 290g goal; fat 85g of 72g goal",
-    "activity_today": "4,849 steps so far, 4h 34m active, 1,926 calories burned, Moderate training load"
+    "activity_today": "6,635 steps so far, 5h 59m active, 2,299 calories burned, Heavy training load"
   }
 }
