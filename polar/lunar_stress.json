@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-06-22T00:10:28-05:00",
-  "score": 20,
-  "band": "Stable Control",
-  "trigger": "No active lunar trigger",
+  "generated_at": "2026-06-22T00:41:52-05:00",
+  "score": 40,
+  "band": "Mild Compression",
+  "trigger": "Moon square natal Moon",
   "physiology": {
     "hrv_pct_baseline": -15,
     "rhr_delta_bpm": 0,
     "sleep_score": 68
   },
   "workout_intensity": "rest",
-  "recommendation": "System's regulated. Load up and push output hard today.",
+  "recommendation": "Keep the day structured and move work forward; no need to back off.",
   "lunar": {
     "sign": "Libra",
-    "degree": "4\u00b0 Lib 23'",
+    "degree": "4\u00b0 Lib 40'",
     "phase": "First Quarter",
     "next_sign_change": {
       "sign": "Scorpio",
@@ -24,9 +24,9 @@
   },
   "bars": {
     "transit": {
-      "filled": 0,
+      "filled": 4,
       "total": 10,
-      "points": 0,
+      "points": 20,
       "max": 55
     },
     "body": {
@@ -37,18 +37,19 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 184.39,
+    "moon_longitude": 184.66,
     "moon_sign": "Libra",
     "moon_phase": "First Quarter",
     "moon_house_natal": 9,
-    "aspect_to_natal_moon": null,
+    "aspect_to_natal_moon": "square (0.9\u00b0 applying)",
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 20,
-    "transit_points": 0,
+    "raw_score": 40,
+    "transit_points": 20,
     "physiology_points": 20,
     "breakdown": [
+      "+20 Moon square natal Moon",
       "+10 HRV -15% below baseline",
       "+10 Sleep score 68 (<70)"
     ],
