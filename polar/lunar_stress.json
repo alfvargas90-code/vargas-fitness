@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-22T03:14:55-05:00",
+  "generated_at": "2026-06-22T03:45:20-05:00",
   "score": 40,
   "band": "Mild Compression",
   "trigger": "Moon square natal Moon",
@@ -12,7 +12,7 @@
   "recommendation": "Keep the day structured and move work forward; no need to back off.",
   "lunar": {
     "sign": "Libra",
-    "degree": "6\u00b0 Lib 01'",
+    "degree": "6\u00b0 Lib 17'",
     "phase": "First Quarter",
     "next_sign_change": {
       "sign": "Scorpio",
@@ -37,11 +37,11 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 186.01,
+    "moon_longitude": 186.28,
     "moon_sign": "Libra",
     "moon_phase": "First Quarter",
     "moon_house_natal": 9,
-    "aspect_to_natal_moon": "square (0.5\u00b0 separating)",
+    "aspect_to_natal_moon": "square (0.7\u00b0 separating)",
     "is_full_moon": false
   },
   "scoring_detail": {
