@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-22T11:30:05-05:00",
-  "data_hash": "2d76819927c75804",
-  "slot": "fuel-1",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 29%\n\nRead\nRecovery is steadier than recent days, while output is still lighter than your usual pattern. The first fueling was protein-forward, but energy support is still narrow heading into the afternoon, so the day favors measured muscle-preserving consistency over intensity.\n\nQuiet base, more runway.\n\nPerformance: Quiet base, more runway.\n\nTransit: none",
+  "generated_at": "2026-06-22T15:00:00-05:00",
+  "data_hash": "b6bf61bc1da07728",
+  "slot": "fuel-2",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 43%\n\nRead\nOutput ran lighter than your usual day, but the bigger signal is fuel: a long gap has left the evening window under-supplied. For muscle retention, this favors a steadier plate built around protein and easy carbs over pushing deeper into deficit.\n\nQuiet momentum.\n\nPerformance: Quiet momentum.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 29%\n\nRead\nRecovery is steadier than recent days, while output is still lighter than your usual pattern. The first fueling was protein-forward, but energy support is still narrow heading into the afternoon, so the day favors measured muscle-preserving consistency over intensity.\n\nQuiet base, more runway."
+      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 43%\n\nRead\nOutput ran lighter than your usual day, but the bigger signal is fuel: a long gap has left the evening window under-supplied. For muscle retention, this favors a steadier plate built around protein and easy carbs over pushing deeper into deficit.\n\nQuiet momentum."
     },
     {
       "label": "Performance",
-      "text": "Quiet base, more runway."
+      "text": "Quiet momentum."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 29%\n\nRead\nRecovery is steadier than recent days, while output is still lighter than your usual pattern. The first fueling was protein-forward, but energy support is still narrow heading into the afternoon, so the day favors measured muscle-preserving consistency over intensity.\n\nQuiet base, more runway.",
-    "performance": "Quiet base, more runway.",
+    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 43%\n\nRead\nOutput ran lighter than your usual day, but the bigger signal is fuel: a long gap has left the evening window under-supplied. For muscle retention, this favors a steadier plate built around protein and easy carbs over pushing deeper into deficit.\n\nQuiet momentum.",
+    "performance": "Quiet momentum.",
     "transit": null
   },
-  "nutrition_nudge": "You're on pace; keep lunch steady with 45g protein to protect muscle.",
+  "nutrition_nudge": "Add a carb base at your next meal, like rice or potatoes, to protect training energy.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.1,
     "nutrition": "calories 650 of 2574 goal, protein 55g of 138g goal, carbs 8g of 290g goal, fat 52g of 72g goal",
     "nutrition_detail": "calories 650 of 2574 goal -> 1924 left; protein 55g of 138g goal -> 83g gap; carbs 8g of 290g goal; fat 52g of 72g goal",
-    "activity_today": "2,192 steps so far, 1h 43m active, 979 calories burned, Light training load"
+    "activity_today": "2,920 steps so far, 2h 25m active, 1,364 calories burned, Light training load"
   }
 }
