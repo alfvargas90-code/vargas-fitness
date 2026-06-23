@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-23T17:18:30+00:00",
+  "generated_at": "2026-06-23T17:48:44+00:00",
   "current_phase": "First Quarter",
   "phase_stats": {
     "New Moon": {
@@ -16,7 +16,7 @@
     "Waxing Crescent": {
       "sleep_delta_h": 0.0,
       "recovery_delta_pct": 2,
-      "strain_delta_pct": 24,
+      "strain_delta_pct": 23,
       "sample_size": 15,
       "metric_samples": {
         "sleep": 15,
@@ -27,7 +27,7 @@
     "First Quarter": {
       "sleep_delta_h": -0.0,
       "recovery_delta_pct": -9,
-      "strain_delta_pct": 1,
+      "strain_delta_pct": 2,
       "sample_size": 9,
       "metric_samples": {
         "sleep": 9,
