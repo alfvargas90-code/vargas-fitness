@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-23T11:30:00-05:00",
-  "data_hash": "09555d9d92752f40",
-  "slot": "fuel-1",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 25%\n\nRead\nFueling is still untouched, while movement and strain are light, so the afternoon starts with capacity but little intake behind it. Recovery is serviceable, not fully charged. This favors a protein-forward first meal and measured effort over intensity, protecting muscle without forcing a deep deficit.\n\nMeasured, not empty.\n\nPerformance: Measured, not empty.\n\nTransit: none",
+  "generated_at": "2026-06-23T14:44:01-05:00",
+  "data_hash": "b90f57bd20ad8eb8",
+  "slot": "macros-update",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 43%\n\nRead\nThe late meal log turns a low-input day into one with real nutritional footing. Protein is now more than covered, supporting muscle retention, while overall output remains lighter than your usual day. This favors a steady, lower-strain finish over intensity.\n\nNourished, not spent.\n\nPerformance: Nourished, not spent.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 25%\n\nRead\nFueling is still untouched, while movement and strain are light, so the afternoon starts with capacity but little intake behind it. Recovery is serviceable, not fully charged. This favors a protein-forward first meal and measured effort over intensity, protecting muscle without forcing a deep deficit.\n\nMeasured, not empty."
+      "text": "State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 43%\n\nRead\nThe late meal log turns a low-input day into one with real nutritional footing. Protein is now more than covered, supporting muscle retention, while overall output remains lighter than your usual day. This favors a steady, lower-strain finish over intensity.\n\nNourished, not spent."
     },
     {
       "label": "Performance",
-      "text": "Measured, not empty."
+      "text": "Nourished, not spent."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 25%\n\nRead\nFueling is still untouched, while movement and strain are light, so the afternoon starts with capacity but little intake behind it. Recovery is serviceable, not fully charged. This favors a protein-forward first meal and measured effort over intensity, protecting muscle without forcing a deep deficit.\n\nMeasured, not empty.",
-    "performance": "Measured, not empty.",
+    "reading": "State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 43%\n\nRead\nThe late meal log turns a low-input day into one with real nutritional footing. Protein is now more than covered, supporting muscle retention, while overall output remains lighter than your usual day. This favors a steady, lower-strain finish over intensity.\n\nNourished, not spent.",
+    "performance": "Nourished, not spent.",
     "transit": null
   },
-  "nutrition_nudge": "Start lunch with 45g protein and keep meals steady for muscle protection.",
+  "nutrition_nudge": "Fat's already over; keep remaining meals lean and skip added oils, cheese, and creamy sauces.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
     "sleep_hours": 6.2,
     "hrv_today": 44,
     "hrv_7d_avg": 53.9,
-    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
-    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "1,176 steps so far, 1h 33m active, 946 calories burned, Light training load"
+    "nutrition": "calories 1710 of 2574 goal, protein 174g of 138g goal, carbs 39g of 290g goal, fat 88g of 72g goal",
+    "nutrition_detail": "calories 1710 of 2574 goal -> 864 left; protein 174g of 138g goal -> 36g over; carbs 39g of 290g goal; fat 88g of 72g goal",
+    "activity_today": "1,908 steps so far, 2h 26m active, 1,357 calories burned, Light training load"
   }
 }
