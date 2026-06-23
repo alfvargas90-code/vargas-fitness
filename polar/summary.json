@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-23T07:00:00-05:00",
-  "data_hash": "2aaee8cc2915c54f",
-  "slot": "recovery",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 3%\n\nRead\nYou woke with a usable but not expansive reserve, after sleep that ran a little light. The day favors steady resistance work over chasing volume, with muscle protection depending on protein and a modest energy gap once intake begins.\n\nSteady foundation.\n\nPerformance: Steady foundation.\n\nTransit: none",
+  "generated_at": "2026-06-23T11:30:00-05:00",
+  "data_hash": "09555d9d92752f40",
+  "slot": "fuel-1",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 25%\n\nRead\nFueling is still untouched, while movement and strain are light, so the afternoon starts with capacity but little intake behind it. Recovery is serviceable, not fully charged. This favors a protein-forward first meal and measured effort over intensity, protecting muscle without forcing a deep deficit.\n\nMeasured, not empty.\n\nPerformance: Measured, not empty.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 3%\n\nRead\nYou woke with a usable but not expansive reserve, after sleep that ran a little light. The day favors steady resistance work over chasing volume, with muscle protection depending on protein and a modest energy gap once intake begins.\n\nSteady foundation."
+      "text": "State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 25%\n\nRead\nFueling is still untouched, while movement and strain are light, so the afternoon starts with capacity but little intake behind it. Recovery is serviceable, not fully charged. This favors a protein-forward first meal and measured effort over intensity, protecting muscle without forcing a deep deficit.\n\nMeasured, not empty."
     },
     {
       "label": "Performance",
-      "text": "Steady foundation."
+      "text": "Measured, not empty."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 3%\n\nRead\nYou woke with a usable but not expansive reserve, after sleep that ran a little light. The day favors steady resistance work over chasing volume, with muscle protection depending on protein and a modest energy gap once intake begins.\n\nSteady foundation.",
-    "performance": "Steady foundation.",
+    "reading": "State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 25%\n\nRead\nFueling is still untouched, while movement and strain are light, so the afternoon starts with capacity but little intake behind it. Recovery is serviceable, not fully charged. This favors a protein-forward first meal and measured effort over intensity, protecting muscle without forcing a deep deficit.\n\nMeasured, not empty.",
+    "performance": "Measured, not empty.",
     "transit": null
   },
-  "nutrition_nudge": "Start breakfast with 35g protein to keep muscle protected and meal pacing steady.",
+  "nutrition_nudge": "Start lunch with 45g protein and keep meals steady for muscle protection.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
-    "sleep_hours": 6.0,
-    "hrv_today": 53,
-    "hrv_7d_avg": 54.1,
+    "sleep_hours": 6.2,
+    "hrv_today": 44,
+    "hrv_7d_avg": 53.9,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "34 steps so far, 6m active, 462 calories burned, \u2014 training load"
+    "activity_today": "1,176 steps so far, 1h 33m active, 946 calories burned, Light training load"
   }
 }
