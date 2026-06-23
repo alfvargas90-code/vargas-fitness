@@ -1,6 +1,6 @@
 {
   "date": "2026-06-23",
-  "synced_at": "2026-06-23T20:14:29+00:00",
+  "synced_at": "2026-06-23T20:44:34+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,33 +9,15 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 1710.0,
-    "protein_g": 174.0,
+    "calories": 944.0,
+    "protein_g": 88.0,
     "carbs_g": 39.0,
-    "fat_g": 88.0
+    "fat_g": 44.0
   },
-  "meal_count": 4,
+  "meal_count": 3,
   "raw": {
     "date": "2026-06-23",
     "meals": [
-      {
-        "title": "High Protein Breakfast",
-        "time": "14:36",
-        "calories": 520,
-        "protein": 42,
-        "fat": 38,
-        "carbs": 6,
-        "emoji": "\u00f0\u009f\u008d\u00b3"
-      },
-      {
-        "title": "Chicken and Crackers Lunch",
-        "time": "14:37",
-        "calories": 330,
-        "protein": 45,
-        "fat": 6,
-        "carbs": 15,
-        "emoji": "\u00f0\u009f\u008d\u0097"
-      },
       {
         "title": "Chicken and Crackers Lunch",
         "time": "14:42",
@@ -53,12 +35,21 @@
         "fat": 38,
         "carbs": 6,
         "emoji": "\u00f0\u009f\u008d\u00b3"
+      },
+      {
+        "title": "Mandarin segments",
+        "time": "15:25",
+        "calories": 84,
+        "protein": 1,
+        "fat": 0,
+        "carbs": 21,
+        "emoji": "\u00f0\u009f\u008d\u008a"
       }
     ],
     "totals": {
-      "calories": 1710,
-      "protein": 174,
-      "fat": 88,
+      "calories": 944,
+      "protein": 88,
+      "fat": 44,
       "carbs": 39
     },
     "targets": {
@@ -68,14 +59,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 864,
+      "calories": 1630,
       "is_over": false
     },
-    "meal_count": 4,
+    "meal_count": 3,
     "labels": {
       "header": "Today",
-      "calories_remaining": "864 kcal remaining today",
-      "meals_logged": "4 meals logged",
+      "calories_remaining": "1630 kcal remaining today",
+      "meals_logged": "3 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
