@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-06-23T22:50:21+00:00",
+  "generated_at": "2026-06-23T23:20:31+00:00",
   "current_phase": "First Quarter",
   "phase_stats": {
     "New Moon": {
       "sleep_delta_h": 0.2,
       "recovery_delta_pct": -33,
-      "strain_delta_pct": -9,
+      "strain_delta_pct": -10,
       "sample_size": 10,
       "metric_samples": {
         "sleep": 9,
@@ -27,7 +27,7 @@
     "First Quarter": {
       "sleep_delta_h": -0.0,
       "recovery_delta_pct": -9,
-      "strain_delta_pct": 8,
+      "strain_delta_pct": 10,
       "sample_size": 9,
       "metric_samples": {
         "sleep": 9,
@@ -94,6 +94,6 @@
   "overall_avg": {
     "sleep_h": 6.7,
     "recovery": 49,
-    "strain_kcal": 960
+    "strain_kcal": 963
   }
 }
