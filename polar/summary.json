@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-22T20:40:47-05:00",
-  "data_hash": "6bbfc29ea99549a8",
-  "slot": "macros-update",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 75%\n\nRead\nThe fresh meal pulls a low-input day back into a workable energy window, with protein now more supportive but still not fully carrying the muscle-preservation side. Output remains lighter than usual with moderate strain, so today favors repair, steadiness, and controlled momentum.\n\nMuscle stays in view.\n\nPerformance: Muscle stays in view.\n\nTransit: none",
+  "generated_at": "2026-06-23T04:00:00-05:00",
+  "data_hash": "206c260cfda8fc2d",
+  "slot": "sleep",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 2%\n\nRead\nThe system is coming online with workable reserve, though last night was lighter than your usual recovery window. Stress signals look contained, but capacity is not fully topped off. The day favors steady resistance work over chasing volume.\n\nSteady reserve.\n\nPerformance: Steady reserve.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 75%\n\nRead\nThe fresh meal pulls a low-input day back into a workable energy window, with protein now more supportive but still not fully carrying the muscle-preservation side. Output remains lighter than usual with moderate strain, so today favors repair, steadiness, and controlled momentum.\n\nMuscle stays in view."
+      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 2%\n\nRead\nThe system is coming online with workable reserve, though last night was lighter than your usual recovery window. Stress signals look contained, but capacity is not fully topped off. The day favors steady resistance work over chasing volume.\n\nSteady reserve."
     },
     {
       "label": "Performance",
-      "text": "Muscle stays in view."
+      "text": "Steady reserve."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 75%\n\nRead\nThe fresh meal pulls a low-input day back into a workable energy window, with protein now more supportive but still not fully carrying the muscle-preservation side. Output remains lighter than usual with moderate strain, so today favors repair, steadiness, and controlled momentum.\n\nMuscle stays in view.",
-    "performance": "Muscle stays in view.",
+    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 2%\n\nRead\nThe system is coming online with workable reserve, though last night was lighter than your usual recovery window. Stress signals look contained, but capacity is not fully topped off. The day favors steady resistance work over chasing volume.\n\nSteady reserve.",
+    "performance": "Steady reserve.",
     "transit": null
   },
-  "nutrition_nudge": "Load dinner with 45g protein now to protect muscle while keeping tonight\u2019s deficit modest.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
     "sleep_hours": 6.0,
     "hrv_today": 53,
     "hrv_7d_avg": 54.1,
-    "nutrition": "calories 1750 of 2574 goal, protein 94g of 138g goal, carbs 150g of 290g goal, fat 99g of 72g goal",
-    "nutrition_detail": "calories 1750 of 2574 goal -> 824 left; protein 94g of 138g goal -> 44g gap; carbs 150g of 290g goal; fat 99g of 72g goal",
-    "activity_today": "4,918 steps so far, 4h 17m active, 1,922 calories burned, Moderate training load"
+    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
+    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
+    "activity_today": null
   }
 }
