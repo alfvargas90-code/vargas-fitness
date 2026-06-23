@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-23T15:00:00-05:00",
-  "data_hash": "59cbe19ad42d0bc0",
-  "slot": "fuel-2",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 43%\n\nRead\nProtein is well covered, but the day is still running energy-light, with output lighter than usual and recovery only moderate. The evening window favors controlled strength work over intensity; muscle protection is the fragile edge if the deficit widens.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
+  "generated_at": "2026-06-23T15:44:36-05:00",
+  "data_hash": "3b36474a4af453de",
+  "slot": "macros-update",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 43%\n\nRead\nThe latest log reopens the calorie window while leaving protein in a much better place than the morning implied. With output still lighter than usual and recovery only moderate, this is a muscle-preservation day that favors steady intake and restraint over intensity.\n\nMeasured, not maxed.\n\nPerformance: Measured, not maxed.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 43%\n\nRead\nProtein is well covered, but the day is still running energy-light, with output lighter than usual and recovery only moderate. The evening window favors controlled strength work over intensity; muscle protection is the fragile edge if the deficit widens.\n\nSteady, not forceful."
+      "text": "State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 43%\n\nRead\nThe latest log reopens the calorie window while leaving protein in a much better place than the morning implied. With output still lighter than usual and recovery only moderate, this is a muscle-preservation day that favors steady intake and restraint over intensity.\n\nMeasured, not maxed."
     },
     {
       "label": "Performance",
-      "text": "Steady, not forceful."
+      "text": "Measured, not maxed."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 43%\n\nRead\nProtein is well covered, but the day is still running energy-light, with output lighter than usual and recovery only moderate. The evening window favors controlled strength work over intensity; muscle protection is the fragile edge if the deficit widens.\n\nSteady, not forceful.",
-    "performance": "Steady, not forceful.",
+    "reading": "State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 43%\n\nRead\nThe latest log reopens the calorie window while leaving protein in a much better place than the morning implied. With output still lighter than usual and recovery only moderate, this is a muscle-preservation day that favors steady intake and restraint over intensity.\n\nMeasured, not maxed.",
+    "performance": "Measured, not maxed.",
     "transit": null
   },
-  "nutrition_nudge": "Fat is already high, so keep dinner lean and skip oils, cheese, nuts, and creamy sauces.",
+  "nutrition_nudge": "Add a solid carb serving at your next meal, paired with protein to protect muscle.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
     "sleep_hours": 6.2,
     "hrv_today": 44,
     "hrv_7d_avg": 53.9,
-    "nutrition": "calories 1710 of 2574 goal, protein 174g of 138g goal, carbs 39g of 290g goal, fat 88g of 72g goal",
-    "nutrition_detail": "calories 1710 of 2574 goal -> 864 left; protein 174g of 138g goal -> 36g over; carbs 39g of 290g goal; fat 88g of 72g goal",
+    "nutrition": "calories 944 of 2574 goal, protein 88g of 138g goal, carbs 39g of 290g goal, fat 44g of 72g goal",
+    "nutrition_detail": "calories 944 of 2574 goal -> 1630 left; protein 88g of 138g goal -> 50g gap; carbs 39g of 290g goal; fat 44g of 72g goal",
     "activity_today": "1,908 steps so far, 2h 26m active, 1,357 calories burned, Light training load"
   }
 }
