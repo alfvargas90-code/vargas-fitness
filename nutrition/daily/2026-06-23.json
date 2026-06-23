@@ -1,6 +1,6 @@
 {
   "date": "2026-06-23",
-  "synced_at": "2026-06-23T19:13:55+00:00",
+  "synced_at": "2026-06-23T19:43:59+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,20 +9,57 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 0.0,
-    "protein_g": 0.0,
-    "carbs_g": 0.0,
-    "fat_g": 0.0
+    "calories": 1710.0,
+    "protein_g": 174.0,
+    "carbs_g": 39.0,
+    "fat_g": 88.0
   },
-  "meal_count": 0,
+  "meal_count": 4,
   "raw": {
     "date": "2026-06-23",
-    "meals": [],
+    "meals": [
+      {
+        "title": "High Protein Breakfast",
+        "time": "14:36",
+        "calories": 520,
+        "protein": 42,
+        "fat": 38,
+        "carbs": 6,
+        "emoji": "\u00f0\u009f\u008d\u00b3"
+      },
+      {
+        "title": "Chicken and Crackers Lunch",
+        "time": "14:37",
+        "calories": 330,
+        "protein": 45,
+        "fat": 6,
+        "carbs": 15,
+        "emoji": "\u00f0\u009f\u008d\u0097"
+      },
+      {
+        "title": "Chicken and Crackers Lunch",
+        "time": "14:42",
+        "calories": 340,
+        "protein": 45,
+        "fat": 6,
+        "carbs": 12,
+        "emoji": "\u00f0\u009f\u008d\u0097"
+      },
+      {
+        "title": "High Protein Breakfast",
+        "time": "14:42",
+        "calories": 520,
+        "protein": 42,
+        "fat": 38,
+        "carbs": 6,
+        "emoji": "\u00f0\u009f\u008d\u00b3"
+      }
+    ],
     "totals": {
-      "calories": 0,
-      "protein": 0,
-      "fat": 0,
-      "carbs": 0
+      "calories": 1710,
+      "protein": 174,
+      "fat": 88,
+      "carbs": 39
     },
     "targets": {
       "calories": 2574,
@@ -31,14 +68,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 2574,
+      "calories": 864,
       "is_over": false
     },
-    "meal_count": 0,
+    "meal_count": 4,
     "labels": {
       "header": "Today",
-      "calories_remaining": "2574 kcal remaining today",
-      "meals_logged": "0 meals logged",
+      "calories_remaining": "864 kcal remaining today",
+      "meals_logged": "4 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
