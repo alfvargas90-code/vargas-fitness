@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-23T04:00:00-05:00",
-  "data_hash": "206c260cfda8fc2d",
-  "slot": "sleep",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 2%\n\nRead\nThe system is coming online with workable reserve, though last night was lighter than your usual recovery window. Stress signals look contained, but capacity is not fully topped off. The day favors steady resistance work over chasing volume.\n\nSteady reserve.\n\nPerformance: Steady reserve.\n\nTransit: none",
+  "generated_at": "2026-06-23T07:00:00-05:00",
+  "data_hash": "2aaee8cc2915c54f",
+  "slot": "recovery",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 3%\n\nRead\nYou woke with a usable but not expansive reserve, after sleep that ran a little light. The day favors steady resistance work over chasing volume, with muscle protection depending on protein and a modest energy gap once intake begins.\n\nSteady foundation.\n\nPerformance: Steady foundation.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 2%\n\nRead\nThe system is coming online with workable reserve, though last night was lighter than your usual recovery window. Stress signals look contained, but capacity is not fully topped off. The day favors steady resistance work over chasing volume.\n\nSteady reserve."
+      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 3%\n\nRead\nYou woke with a usable but not expansive reserve, after sleep that ran a little light. The day favors steady resistance work over chasing volume, with muscle protection depending on protein and a modest energy gap once intake begins.\n\nSteady foundation."
     },
     {
       "label": "Performance",
-      "text": "Steady reserve."
+      "text": "Steady foundation."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 2%\n\nRead\nThe system is coming online with workable reserve, though last night was lighter than your usual recovery window. Stress signals look contained, but capacity is not fully topped off. The day favors steady resistance work over chasing volume.\n\nSteady reserve.",
-    "performance": "Steady reserve.",
+    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 3%\n\nRead\nYou woke with a usable but not expansive reserve, after sleep that ran a little light. The day favors steady resistance work over chasing volume, with muscle protection depending on protein and a modest energy gap once intake begins.\n\nSteady foundation.",
+    "performance": "Steady foundation.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Start breakfast with 35g protein to keep muscle protected and meal pacing steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.1,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "34 steps so far, 6m active, 462 calories burned, \u2014 training load"
   }
 }
