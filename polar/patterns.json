@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-23T10:16:01+00:00",
+  "generated_at": "2026-06-23T10:46:12+00:00",
   "current_phase": "First Quarter",
   "phase_stats": {
     "New Moon": {
@@ -27,7 +27,7 @@
     "First Quarter": {
       "sleep_delta_h": 0.0,
       "recovery_delta_pct": null,
-      "strain_delta_pct": -7,
+      "strain_delta_pct": -6,
       "sample_size": 9,
       "metric_samples": {
         "sleep": 8,
