@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-06-23T08:17:03-05:00",
-  "score": 10,
+  "generated_at": "2026-06-23T08:47:15-05:00",
+  "score": 20,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
   "physiology": {
-    "hrv_pct_baseline": -2,
-    "rhr_delta_bpm": -2,
-    "sleep_score": 66
+    "hrv_pct_baseline": -18,
+    "rhr_delta_bpm": -1,
+    "sleep_score": 64
   },
   "workout_intensity": "rest",
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Libra",
-    "degree": "21\u00b0 Lib 06'",
+    "degree": "21\u00b0 Lib 22'",
     "phase": "Waxing Gibbous",
     "next_sign_change": {
       "sign": "Scorpio",
@@ -30,14 +30,14 @@
       "max": 55
     },
     "body": {
-      "filled": 2,
+      "filled": 5,
       "total": 10,
-      "points": 10,
+      "points": 20,
       "max": 40
     }
   },
   "transit_detail": {
-    "moon_longitude": 201.1,
+    "moon_longitude": 201.36,
     "moon_sign": "Libra",
     "moon_phase": "Waxing Gibbous",
     "moon_house_natal": 9,
@@ -45,17 +45,18 @@
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 10,
+    "raw_score": 20,
     "transit_points": 0,
-    "physiology_points": 10,
+    "physiology_points": 20,
     "breakdown": [
-      "+10 Sleep score 66 (<70)"
+      "+10 HRV -18% below baseline",
+      "+10 Sleep score 64 (<70)"
     ],
     "baselines": {
-      "hrv_7d": 54.1,
-      "rhr_7d": 56.7
+      "hrv_7d": 53.9,
+      "rhr_7d": 56.4
     },
-    "active_calories": 85,
+    "active_calories": 130,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
