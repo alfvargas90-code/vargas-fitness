@@ -1,6 +1,6 @@
 {
   "date": "2026-06-22",
-  "synced_at": "2026-06-23T01:10:40+00:00",
+  "synced_at": "2026-06-23T01:40:45+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 900.0,
-    "protein_g": 59.0,
-    "carbs_g": 40.0,
-    "fat_g": 64.0
+    "calories": 1750.0,
+    "protein_g": 94.0,
+    "carbs_g": 150.0,
+    "fat_g": 99.0
   },
-  "meal_count": 2,
+  "meal_count": 3,
   "raw": {
     "date": "2026-06-22",
     "meals": [
@@ -35,13 +35,22 @@
         "fat": 12,
         "carbs": 32,
         "emoji": "\u00f0\u009f\u008d\u00ab"
+      },
+      {
+        "title": "Glazed meat with rice and vegetables",
+        "time": "20:37",
+        "calories": 850,
+        "protein": 35,
+        "fat": 35,
+        "carbs": 110,
+        "emoji": "\u00f0\u009f\u008d\u00b1"
       }
     ],
     "totals": {
-      "calories": 900,
-      "protein": 59,
-      "fat": 64,
-      "carbs": 40
+      "calories": 1750,
+      "protein": 94,
+      "fat": 99,
+      "carbs": 150
     },
     "targets": {
       "calories": 2574,
@@ -50,14 +59,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 1674,
+      "calories": 824,
       "is_over": false
     },
-    "meal_count": 2,
+    "meal_count": 3,
     "labels": {
       "header": "Today",
-      "calories_remaining": "1674 kcal remaining today",
-      "meals_logged": "2 meals logged",
+      "calories_remaining": "824 kcal remaining today",
+      "meals_logged": "3 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
