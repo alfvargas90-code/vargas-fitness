@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-23T14:44:01-05:00",
-  "data_hash": "b90f57bd20ad8eb8",
-  "slot": "macros-update",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 43%\n\nRead\nThe late meal log turns a low-input day into one with real nutritional footing. Protein is now more than covered, supporting muscle retention, while overall output remains lighter than your usual day. This favors a steady, lower-strain finish over intensity.\n\nNourished, not spent.\n\nPerformance: Nourished, not spent.\n\nTransit: none",
+  "generated_at": "2026-06-23T15:00:00-05:00",
+  "data_hash": "59cbe19ad42d0bc0",
+  "slot": "fuel-2",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 43%\n\nRead\nProtein is well covered, but the day is still running energy-light, with output lighter than usual and recovery only moderate. The evening window favors controlled strength work over intensity; muscle protection is the fragile edge if the deficit widens.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 43%\n\nRead\nThe late meal log turns a low-input day into one with real nutritional footing. Protein is now more than covered, supporting muscle retention, while overall output remains lighter than your usual day. This favors a steady, lower-strain finish over intensity.\n\nNourished, not spent."
+      "text": "State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 43%\n\nRead\nProtein is well covered, but the day is still running energy-light, with output lighter than usual and recovery only moderate. The evening window favors controlled strength work over intensity; muscle protection is the fragile edge if the deficit widens.\n\nSteady, not forceful."
     },
     {
       "label": "Performance",
-      "text": "Nourished, not spent."
+      "text": "Steady, not forceful."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 43%\n\nRead\nThe late meal log turns a low-input day into one with real nutritional footing. Protein is now more than covered, supporting muscle retention, while overall output remains lighter than your usual day. This favors a steady, lower-strain finish over intensity.\n\nNourished, not spent.",
-    "performance": "Nourished, not spent.",
+    "reading": "State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 43%\n\nRead\nProtein is well covered, but the day is still running energy-light, with output lighter than usual and recovery only moderate. The evening window favors controlled strength work over intensity; muscle protection is the fragile edge if the deficit widens.\n\nSteady, not forceful.",
+    "performance": "Steady, not forceful.",
     "transit": null
   },
-  "nutrition_nudge": "Fat's already over; keep remaining meals lean and skip added oils, cheese, and creamy sauces.",
+  "nutrition_nudge": "Fat is already high, so keep dinner lean and skip oils, cheese, nuts, and creamy sauces.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
