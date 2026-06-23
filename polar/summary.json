@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-22T18:40:00-05:00",
-  "data_hash": "5c05649cfe640d9f",
-  "slot": "macros-update",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 75%\n\nRead\nThe new intake opens the day\u2019s energy window a little, but it barely changes the muscle-support picture. With moderate effort already spent and overall input still light, today favors recovery-aware consistency over intensity, with protein still the main unfinished signal.\n\nSteady, underfed, salvageable.\n\nPerformance: Steady, underfed, salvageable.\n\nTransit: none",
+  "generated_at": "2026-06-22T20:00:00-05:00",
+  "data_hash": "de9b3988ae88833e",
+  "slot": "train-2",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 75%\n\nRead\nRecovery is serviceable, but output ran lighter than usual and intake is too thin for muscle protection. With the training window closing, the day favors a quiet landing over more strain, with protein and restoration carrying the night.\n\nQuiet recovery.\n\nPerformance: Quiet recovery.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 75%\n\nRead\nThe new intake opens the day\u2019s energy window a little, but it barely changes the muscle-support picture. With moderate effort already spent and overall input still light, today favors recovery-aware consistency over intensity, with protein still the main unfinished signal.\n\nSteady, underfed, salvageable."
+      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 75%\n\nRead\nRecovery is serviceable, but output ran lighter than usual and intake is too thin for muscle protection. With the training window closing, the day favors a quiet landing over more strain, with protein and restoration carrying the night.\n\nQuiet recovery."
     },
     {
       "label": "Performance",
-      "text": "Steady, underfed, salvageable."
+      "text": "Quiet recovery."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 75%\n\nRead\nThe new intake opens the day\u2019s energy window a little, but it barely changes the muscle-support picture. With moderate effort already spent and overall input still light, today favors recovery-aware consistency over intensity, with protein still the main unfinished signal.\n\nSteady, underfed, salvageable.",
-    "performance": "Steady, underfed, salvageable.",
+    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 75%\n\nRead\nRecovery is serviceable, but output ran lighter than usual and intake is too thin for muscle protection. With the training window closing, the day favors a quiet landing over more strain, with protein and restoration carrying the night.\n\nQuiet recovery.",
+    "performance": "Quiet recovery.",
     "transit": null
   },
-  "nutrition_nudge": "Eat a real dinner now with 60g protein to protect muscle while closing the steep calorie gap.",
+  "nutrition_nudge": "Front-load protein in your next meal with 70g to protect muscle while keeping the deficit modest.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
