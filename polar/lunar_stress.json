@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-23T18:20:28-05:00",
+  "generated_at": "2026-06-23T18:50:39-05:00",
   "score": 23,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -12,7 +12,7 @@
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Libra",
-    "degree": "26\u00b0 Lib 15'",
+    "degree": "26\u00b0 Lib 30'",
     "phase": "Waxing Gibbous",
     "next_sign_change": {
       "sign": "Scorpio",
@@ -37,7 +37,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 206.25,
+    "moon_longitude": 206.5,
     "moon_sign": "Libra",
     "moon_phase": "Waxing Gibbous",
     "moon_house_natal": 9,
@@ -57,7 +57,7 @@
       "hrv_7d": 53.9,
       "rhr_7d": 56.4
     },
-    "active_calories": 566,
+    "active_calories": 591,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
