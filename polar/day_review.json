@@ -1,19 +1,19 @@
 {
-  "date": "2026-06-21",
-  "generated_at": "2026-06-21T21:45:00-05:00",
+  "date": "2026-06-22",
+  "generated_at": "2026-06-22T21:45:00-05:00",
   "verdict": "Big",
   "stats": {
-    "steps": 9541,
-    "active_minutes": 470,
-    "active_time_display": "7h 50m",
-    "calories_burned": 2640,
-    "active_calories": 1056,
-    "calories_eaten": 1450,
-    "net_deficit": 1190,
+    "steps": 13534,
+    "active_minutes": 414,
+    "active_time_display": "6h 54m",
+    "calories_burned": 2889,
+    "active_calories": 1326,
+    "calories_eaten": 1750,
+    "net_deficit": 1139,
     "calorie_target": 2574,
-    "protein_g": 50,
+    "protein_g": 94,
     "protein_target_g": 138,
-    "protein_gap_g": 88
+    "protein_gap_g": 44
   },
-  "prose": "Big engine day, Alfie: about 9,500 steps and a long stretch of movement, but eating only about 1,450 against a burn near 2,600 made the deficit too steep for protecting muscle. The bigger miss was protein, because 50 is nowhere near enough when you\u2019re trying to get leaner without giving up hard-earned size. Push protein hard tomorrow and keep the deficit modest."
+  "prose": "Big output day: lots of movement, a real burn, and about 13,500 steps, but the food gap was too wide for protecting muscle. You were about 1,100 calories under and light on protein, so this was more fat-loss pressure than muscle-building support. Push protein hard tomorrow and keep the deficit smaller."
 }
