@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-24T11:30:00-05:00",
-  "data_hash": "bc23de5c62a224bb",
-  "slot": "fuel-1",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 30%\n\nRead\nRecovery looks stronger than recent days, and output has stayed lighter than usual so far. The first meal anchored protein well, but the afternoon is still under-fueled for muscle preservation if the gap stays wide. Today favors steady replenishment over intensity.\n\nQuiet momentum.\n\nPerformance: Quiet momentum.\n\nTransit: none",
+  "generated_at": "2026-06-24T12:18:39-05:00",
+  "data_hash": "b1ec20bef678a244",
+  "slot": "macros-update",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 30%\n\nRead\nThe new meal shifts today from underfed to supported: protein is now close enough to carry the muscle-preserving side of the day, while the intake window remains open. Output is still lighter than usual, so the day favors steady coverage over intensity.\n\nSteady coverage.\n\nPerformance: Steady coverage.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 30%\n\nRead\nRecovery looks stronger than recent days, and output has stayed lighter than usual so far. The first meal anchored protein well, but the afternoon is still under-fueled for muscle preservation if the gap stays wide. Today favors steady replenishment over intensity.\n\nQuiet momentum."
+      "text": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 30%\n\nRead\nThe new meal shifts today from underfed to supported: protein is now close enough to carry the muscle-preserving side of the day, while the intake window remains open. Output is still lighter than usual, so the day favors steady coverage over intensity.\n\nSteady coverage."
     },
     {
       "label": "Performance",
-      "text": "Quiet momentum."
+      "text": "Steady coverage."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 30%\n\nRead\nRecovery looks stronger than recent days, and output has stayed lighter than usual so far. The first meal anchored protein well, but the afternoon is still under-fueled for muscle preservation if the gap stays wide. Today favors steady replenishment over intensity.\n\nQuiet momentum.",
-    "performance": "Quiet momentum.",
+    "reading": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 30%\n\nRead\nThe new meal shifts today from underfed to supported: protein is now close enough to carry the muscle-preserving side of the day, while the intake window remains open. Output is still lighter than usual, so the day favors steady coverage over intensity.\n\nSteady coverage.",
+    "performance": "Steady coverage.",
     "transit": null
   },
-  "nutrition_nudge": "You're on pace; keep lunch steady with 50g protein to protect muscle.",
+  "nutrition_nudge": "Pull back oils and fatty add-ons, then get 25g lean protein to protect muscle.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
     "sleep_hours": 6.8,
     "hrv_today": 45,
     "hrv_7d_avg": 48.9,
-    "nutrition": "calories 580 of 2574 goal, protein 48g of 138g goal, carbs 6g of 290g goal, fat 42g of 72g goal",
-    "nutrition_detail": "calories 580 of 2574 goal -> 1994 left; protein 48g of 138g goal -> 90g gap; carbs 6g of 290g goal; fat 42g of 72g goal",
+    "nutrition": "calories 1360 of 2574 goal, protein 113g of 138g goal, carbs 61g of 290g goal, fat 77g of 72g goal",
+    "nutrition_detail": "calories 1360 of 2574 goal -> 1214 left; protein 113g of 138g goal -> 25g gap; carbs 61g of 290g goal; fat 77g of 72g goal",
     "activity_today": "1,448 steps so far, 1h 37m active, 1,034 calories burned, Light training load"
   }
 }
