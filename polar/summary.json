@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-24T15:00:00-05:00",
-  "data_hash": "c2d31052f750ddd7",
-  "slot": "fuel-2",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 52%\n\nRead\nRecovery is quietly supportive, but output has run lighter than your usual day and the midday meal leaves the evening window with a real energy gap. Protein is close enough to anchor muscle, while the day favors measured resistance work over chasing volume.\n\nComposed, with reserve.\n\nPerformance: Composed, with reserve.\n\nTransit: none",
+  "generated_at": "2026-06-24T17:30:00-05:00",
+  "data_hash": "4be73a7df3e959ee",
+  "slot": "train-1",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 69%\n\nRead\nRecovery is stronger than recent days, while output has run lighter than usual and the day has only drawn a moderate amount from the tank. The open window favors measured resistance work, with protein nearly carrying its share and the remaining deficit worth keeping gentle for muscle retention.\n\nStrong, not spent.\n\nPerformance: Strong, not spent.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 52%\n\nRead\nRecovery is quietly supportive, but output has run lighter than your usual day and the midday meal leaves the evening window with a real energy gap. Protein is close enough to anchor muscle, while the day favors measured resistance work over chasing volume.\n\nComposed, with reserve."
+      "text": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 69%\n\nRead\nRecovery is stronger than recent days, while output has run lighter than usual and the day has only drawn a moderate amount from the tank. The open window favors measured resistance work, with protein nearly carrying its share and the remaining deficit worth keeping gentle for muscle retention.\n\nStrong, not spent."
     },
     {
       "label": "Performance",
-      "text": "Composed, with reserve."
+      "text": "Strong, not spent."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 52%\n\nRead\nRecovery is quietly supportive, but output has run lighter than your usual day and the midday meal leaves the evening window with a real energy gap. Protein is close enough to anchor muscle, while the day favors measured resistance work over chasing volume.\n\nComposed, with reserve.",
-    "performance": "Composed, with reserve.",
+    "reading": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 69%\n\nRead\nRecovery is stronger than recent days, while output has run lighter than usual and the day has only drawn a moderate amount from the tank. The open window favors measured resistance work, with protein nearly carrying its share and the remaining deficit worth keeping gentle for muscle retention.\n\nStrong, not spent.",
+    "performance": "Strong, not spent.",
     "transit": null
   },
-  "nutrition_nudge": "Pull back oils and fatty add-ons tonight, and anchor dinner with 25g lean protein.",
+  "nutrition_nudge": "Fat budget is spent; keep dinner lean and add 25g protein without oils.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 48.9,
     "nutrition": "calories 1360 of 2574 goal, protein 113g of 138g goal, carbs 74g of 290g goal, fat 77g of 72g goal",
     "nutrition_detail": "calories 1360 of 2574 goal -> 1214 left; protein 113g of 138g goal -> 25g gap; carbs 74g of 290g goal; fat 77g of 72g goal",
-    "activity_today": "3,086 steps so far, 2h 42m active, 1,483 calories burned, Moderate training load"
+    "activity_today": "4,088 steps so far, 3h 39m active, 1,810 calories burned, Moderate training load"
   }
 }
