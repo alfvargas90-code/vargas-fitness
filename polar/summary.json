@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-24T07:00:00-05:00",
-  "data_hash": "eaf753bd0b9c4f6c",
-  "slot": "recovery",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 2%\n\nRead\nYou woke on a decent but not fully topped-off base, with sleep close to recent norms and recovery only moderately supportive. The day is still mostly unspent, so it favors measured strength work and steady protein rather than a hard deficit or intensity chase.\n\nSteady, not maximal.\n\nPerformance: Steady, not maximal.\n\nTransit: none",
+  "generated_at": "2026-06-24T09:17:44-05:00",
+  "data_hash": "43faf5f7541f3603",
+  "slot": "macros-update",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 13%\n\nRead\nThe first logged meal turns a low-input morning into a steadier base, with protein now carrying meaningful weight. Output remains lighter than usual and effort is still light, so the day favors measured muscle protection over intensity.\n\nMeasured momentum.\n\nPerformance: Measured momentum.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 2%\n\nRead\nYou woke on a decent but not fully topped-off base, with sleep close to recent norms and recovery only moderately supportive. The day is still mostly unspent, so it favors measured strength work and steady protein rather than a hard deficit or intensity chase.\n\nSteady, not maximal."
+      "text": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 13%\n\nRead\nThe first logged meal turns a low-input morning into a steadier base, with protein now carrying meaningful weight. Output remains lighter than usual and effort is still light, so the day favors measured muscle protection over intensity.\n\nMeasured momentum."
     },
     {
       "label": "Performance",
-      "text": "Steady, not maximal."
+      "text": "Measured momentum."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 60 \u2022 Sleep 64 \u2022 Strain 2%\n\nRead\nYou woke on a decent but not fully topped-off base, with sleep close to recent norms and recovery only moderately supportive. The day is still mostly unspent, so it favors measured strength work and steady protein rather than a hard deficit or intensity chase.\n\nSteady, not maximal.",
-    "performance": "Steady, not maximal.",
+    "reading": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 13%\n\nRead\nThe first logged meal turns a low-input morning into a steadier base, with protein now carrying meaningful weight. Output remains lighter than usual and effort is still light, so the day favors measured muscle protection over intensity.\n\nMeasured momentum.",
+    "performance": "Measured momentum.",
     "transit": null
   },
-  "nutrition_nudge": "On pace this morning; start breakfast with 35g protein to protect muscle and keep meals steady.",
+  "nutrition_nudge": "You're on pace; keep meal timing steady and make lunch protein-forward.",
   "transits": [],
   "data_basis": {
-    "recharge_today": 4,
-    "sleep_hours": 6.2,
-    "hrv_today": 44,
-    "hrv_7d_avg": 53.9,
-    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
-    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "2 steps so far, 0m active, 441 calories burned, \u2014 training load"
+    "recharge_today": 5,
+    "sleep_hours": 6.8,
+    "hrv_today": 45,
+    "hrv_7d_avg": 48.9,
+    "nutrition": "calories 580 of 2574 goal, protein 48g of 138g goal, carbs 6g of 290g goal, fat 42g of 72g goal",
+    "nutrition_detail": "calories 580 of 2574 goal -> 1994 left; protein 48g of 138g goal -> 90g gap; carbs 6g of 290g goal; fat 42g of 72g goal",
+    "activity_today": "540 steps so far, 49m active, 666 calories burned, Light training load"
   }
 }
