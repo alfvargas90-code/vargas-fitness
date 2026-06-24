@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-24T14:27:15-05:00",
-  "score": 0,
+  "generated_at": "2026-06-24T14:57:26-05:00",
+  "score": 8,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
   "physiology": {
@@ -8,11 +8,11 @@
     "rhr_delta_bpm": -2,
     "sleep_score": 71
   },
-  "workout_intensity": "rest",
+  "workout_intensity": "moderate",
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Scorpio",
-    "degree": "6\u00b0 Sco 26'",
+    "degree": "6\u00b0 Sco 41'",
     "phase": "Waxing Gibbous",
     "next_sign_change": {
       "sign": "Sagittarius",
@@ -26,39 +26,39 @@
     "transit": {
       "filled": 0,
       "total": 10,
-      "points": -10,
+      "points": 0,
       "max": 55
     },
     "body": {
-      "filled": 1,
+      "filled": 2,
       "total": 10,
-      "points": 5,
+      "points": 8,
       "max": 40
     }
   },
   "transit_detail": {
-    "moon_longitude": 216.43,
+    "moon_longitude": 216.69,
     "moon_sign": "Scorpio",
     "moon_phase": "Waxing Gibbous",
     "moon_house_natal": 10,
-    "aspect_to_natal_moon": "sextile (0.9\u00b0 separating)",
+    "aspect_to_natal_moon": null,
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": -5,
-    "transit_points": -10,
-    "physiology_points": 5,
+    "raw_score": 8,
+    "transit_points": 0,
+    "physiology_points": 8,
     "breakdown": [
-      "-10 Moon sextile natal Moon",
       "+5 HRV -8% below baseline",
       "-5 RHR -2 bpm vs baseline",
-      "+5 Sleep score 71 (70-80)"
+      "+5 Sleep score 71 (70-80)",
+      "+3 Moderate-intensity day"
     ],
     "baselines": {
       "hrv_7d": 48.9,
       "rhr_7d": 56
     },
-    "active_calories": 365,
+    "active_calories": 419,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
