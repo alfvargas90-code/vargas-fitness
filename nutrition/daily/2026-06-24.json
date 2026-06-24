@@ -1,6 +1,6 @@
 {
   "date": "2026-06-24",
-  "synced_at": "2026-06-24T16:48:33+00:00",
+  "synced_at": "2026-06-24T17:18:37+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 580.0,
-    "protein_g": 48.0,
-    "carbs_g": 6.0,
-    "fat_g": 42.0
+    "calories": 1360.0,
+    "protein_g": 113.0,
+    "carbs_g": 61.0,
+    "fat_g": 77.0
   },
-  "meal_count": 1,
+  "meal_count": 2,
   "raw": {
     "date": "2026-06-24",
     "meals": [
@@ -26,13 +26,22 @@
         "fat": 42,
         "carbs": 6,
         "emoji": "\u00f0\u009f\u008d\u00b3"
+      },
+      {
+        "title": "Chicken and chips",
+        "time": "12:12",
+        "calories": 780,
+        "protein": 65,
+        "fat": 35,
+        "carbs": 55,
+        "emoji": "\u00f0\u009f\u008d\u0097"
       }
     ],
     "totals": {
-      "calories": 580,
-      "protein": 48,
-      "fat": 42,
-      "carbs": 6
+      "calories": 1360,
+      "protein": 113,
+      "fat": 77,
+      "carbs": 61
     },
     "targets": {
       "calories": 2574,
@@ -41,14 +50,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 1994,
+      "calories": 1214,
       "is_over": false
     },
-    "meal_count": 1,
+    "meal_count": 2,
     "labels": {
       "header": "Today",
-      "calories_remaining": "1994 kcal remaining today",
-      "meals_logged": "1 meals logged",
+      "calories_remaining": "1214 kcal remaining today",
+      "meals_logged": "2 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
