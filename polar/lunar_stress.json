@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-24T01:22:45-05:00",
+  "generated_at": "2026-06-24T01:52:55-05:00",
   "score": 20,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -11,19 +11,15 @@
   "workout_intensity": "rest",
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
-    "sign": "Libra",
-    "degree": "29\u00b0 Lib 50'",
+    "sign": "Scorpio",
+    "degree": "0\u00b0 Sco 05'",
     "phase": "Waxing Gibbous",
     "next_sign_change": {
-      "sign": "Scorpio",
-      "at": "2026-06-24T01:43-05:00",
-      "display": "Enters Scorpio 6/24 at 1:43 AM"
+      "sign": "Sagittarius",
+      "at": "2026-06-26T13:40-05:00",
+      "display": "Enters Sagittarius 6/26 at 1:40 PM"
     },
-    "void_of_course": {
-      "active": true,
-      "until": "2026-06-24T01:43-05:00",
-      "until_display": "6/24 at 1:43 AM"
-    },
+    "void_of_course": null,
     "active_transits": []
   },
   "bars": {
@@ -41,8 +37,8 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 209.83,
-    "moon_sign": "Libra",
+    "moon_longitude": 210.08,
+    "moon_sign": "Scorpio",
     "moon_phase": "Waxing Gibbous",
     "moon_house_natal": 9,
     "aspect_to_natal_moon": null,
@@ -60,7 +56,7 @@
       "hrv_7d": 53.9,
       "rhr_7d": 56.4
     },
-    "active_calories": 1,
+    "active_calories": 2,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
