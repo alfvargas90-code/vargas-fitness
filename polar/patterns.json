@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T17:35:23+00:00",
+  "generated_at": "2026-06-25T18:05:35+00:00",
   "current_phase": "Waxing Gibbous",
   "phase_stats": {
     "New Moon": {
@@ -27,7 +27,7 @@
     "First Quarter": {
       "sleep_delta_h": -0.0,
       "recovery_delta_pct": -10,
-      "strain_delta_pct": 16,
+      "strain_delta_pct": 15,
       "sample_size": 9,
       "metric_samples": {
         "sleep": 9,
@@ -94,6 +94,6 @@
   "overall_avg": {
     "sleep_h": 6.7,
     "recovery": 49,
-    "strain_kcal": 944
+    "strain_kcal": 945
   }
 }
