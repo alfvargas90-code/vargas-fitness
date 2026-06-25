@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T04:00:00-05:00",
-  "data_hash": "be69dbe384679a61",
-  "slot": "sleep",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 1%\n\nRead\nLast night added a clearer reserve than recent mornings, though the system still reads more composed than charged. For muscle retention, the day favors steady resistance-focused output and a modest energy gap over intensity or volume chasing.\n\nQuiet strength.\n\nPerformance: Quiet strength.\n\nTransit: none",
+  "generated_at": "2026-06-25T07:00:00-05:00",
+  "data_hash": "e856484986c0cd7d",
+  "slot": "recovery",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 2%\n\nRead\nYou woke on a stronger base than recent days, with sleep and recovery giving the system more room than usual. The day is still unopened, so the read favors composed effort and muscle-preserving consistency, with protein becoming the main lever once intake begins.\n\nSteady capacity.\n\nPerformance: Steady capacity.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 1%\n\nRead\nLast night added a clearer reserve than recent mornings, though the system still reads more composed than charged. For muscle retention, the day favors steady resistance-focused output and a modest energy gap over intensity or volume chasing.\n\nQuiet strength."
+      "text": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 2%\n\nRead\nYou woke on a stronger base than recent days, with sleep and recovery giving the system more room than usual. The day is still unopened, so the read favors composed effort and muscle-preserving consistency, with protein becoming the main lever once intake begins.\n\nSteady capacity."
     },
     {
       "label": "Performance",
-      "text": "Quiet strength."
+      "text": "Steady capacity."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 1%\n\nRead\nLast night added a clearer reserve than recent mornings, though the system still reads more composed than charged. For muscle retention, the day favors steady resistance-focused output and a modest energy gap over intensity or volume chasing.\n\nQuiet strength.",
-    "performance": "Quiet strength.",
+    "reading": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 2%\n\nRead\nYou woke on a stronger base than recent days, with sleep and recovery giving the system more room than usual. The day is still unopened, so the read favors composed effort and muscle-preserving consistency, with protein becoming the main lever once intake begins.\n\nSteady capacity.",
+    "performance": "Steady capacity.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Start the day with 35g protein at breakfast and keep meal pacing steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 48.9,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "14 steps so far, 1m active, 459 calories burned, \u2014 training load"
   }
 }
