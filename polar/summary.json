@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T07:00:00-05:00",
-  "data_hash": "e856484986c0cd7d",
-  "slot": "recovery",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 2%\n\nRead\nYou woke on a stronger base than recent days, with sleep and recovery giving the system more room than usual. The day is still unopened, so the read favors composed effort and muscle-preserving consistency, with protein becoming the main lever once intake begins.\n\nSteady capacity.\n\nPerformance: Steady capacity.\n\nTransit: none",
+  "generated_at": "2026-06-25T08:22:21-05:00",
+  "data_hash": "e78b084cb3fa9b91",
+  "slot": "macros-update",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 10%\n\nRead\nThe first logged intake opens the day\u2019s runway, but it is still mostly energy with protein barely begun. Recovery is supportive and output is running lighter than usual, so the state favors measured catch-up and muscle-preserving balance over intensity.\n\nWide runway, steady state.\n\nPerformance: Wide runway, steady state.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 2%\n\nRead\nYou woke on a stronger base than recent days, with sleep and recovery giving the system more room than usual. The day is still unopened, so the read favors composed effort and muscle-preserving consistency, with protein becoming the main lever once intake begins.\n\nSteady capacity."
+      "text": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 10%\n\nRead\nThe first logged intake opens the day\u2019s runway, but it is still mostly energy with protein barely begun. Recovery is supportive and output is running lighter than usual, so the state favors measured catch-up and muscle-preserving balance over intensity.\n\nWide runway, steady state."
     },
     {
       "label": "Performance",
-      "text": "Steady capacity."
+      "text": "Wide runway, steady state."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 2%\n\nRead\nYou woke on a stronger base than recent days, with sleep and recovery giving the system more room than usual. The day is still unopened, so the read favors composed effort and muscle-preserving consistency, with protein becoming the main lever once intake begins.\n\nSteady capacity.",
-    "performance": "Steady capacity.",
+    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 10%\n\nRead\nThe first logged intake opens the day\u2019s runway, but it is still mostly energy with protein barely begun. Recovery is supportive and output is running lighter than usual, so the state favors measured catch-up and muscle-preserving balance over intensity.\n\nWide runway, steady state.",
+    "performance": "Wide runway, steady state.",
     "transit": null
   },
-  "nutrition_nudge": "Start the day with 35g protein at breakfast and keep meal pacing steady.",
+  "nutrition_nudge": "On pace so far; make breakfast carry 40g protein to protect muscle while the day builds.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
-    "sleep_hours": 6.8,
-    "hrv_today": 45,
-    "hrv_7d_avg": 48.9,
-    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
-    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "14 steps so far, 1m active, 459 calories burned, \u2014 training load"
+    "sleep_hours": 7.0,
+    "hrv_today": 44,
+    "hrv_7d_avg": 48.4,
+    "nutrition": "calories 230 of 2574 goal, protein 3g of 138g goal, carbs 36g of 290g goal, fat 8g of 72g goal",
+    "nutrition_detail": "calories 230 of 2574 goal -> 2344 left; protein 3g of 138g goal -> 135g gap; carbs 36g of 290g goal; fat 8g of 72g goal",
+    "activity_today": "568 steps so far, 21m active, 610 calories burned, Light training load"
   }
 }
