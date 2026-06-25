@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T08:22:21-05:00",
-  "data_hash": "e78b084cb3fa9b91",
+  "generated_at": "2026-06-25T09:52:56-05:00",
+  "data_hash": "8f2fbfa86a6c8809",
   "slot": "macros-update",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 10%\n\nRead\nThe first logged intake opens the day\u2019s runway, but it is still mostly energy with protein barely begun. Recovery is supportive and output is running lighter than usual, so the state favors measured catch-up and muscle-preserving balance over intensity.\n\nWide runway, steady state.\n\nPerformance: Wide runway, steady state.\n\nTransit: none",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 18%\n\nRead\nThe new intake shifts the day from underfed to partially supported: energy room remains open, and protein has started carrying more of the load. Output is still lighter than usual, so the day favors measured muscle protection over intensity.\n\nMeasured momentum.\n\nPerformance: Measured momentum.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 10%\n\nRead\nThe first logged intake opens the day\u2019s runway, but it is still mostly energy with protein barely begun. Recovery is supportive and output is running lighter than usual, so the state favors measured catch-up and muscle-preserving balance over intensity.\n\nWide runway, steady state."
+      "text": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 18%\n\nRead\nThe new intake shifts the day from underfed to partially supported: energy room remains open, and protein has started carrying more of the load. Output is still lighter than usual, so the day favors measured muscle protection over intensity.\n\nMeasured momentum."
     },
     {
       "label": "Performance",
-      "text": "Wide runway, steady state."
+      "text": "Measured momentum."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 10%\n\nRead\nThe first logged intake opens the day\u2019s runway, but it is still mostly energy with protein barely begun. Recovery is supportive and output is running lighter than usual, so the state favors measured catch-up and muscle-preserving balance over intensity.\n\nWide runway, steady state.",
-    "performance": "Wide runway, steady state.",
+    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 18%\n\nRead\nThe new intake shifts the day from underfed to partially supported: energy room remains open, and protein has started carrying more of the load. Output is still lighter than usual, so the day favors measured muscle protection over intensity.\n\nMeasured momentum.",
+    "performance": "Measured momentum.",
     "transit": null
   },
-  "nutrition_nudge": "On pace so far; make breakfast carry 40g protein to protect muscle while the day builds.",
+  "nutrition_nudge": "You're on pace; keep meals steady and make lunch protein-forward to protect muscle.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
     "sleep_hours": 7.0,
     "hrv_today": 44,
     "hrv_7d_avg": 48.4,
-    "nutrition": "calories 230 of 2574 goal, protein 3g of 138g goal, carbs 36g of 290g goal, fat 8g of 72g goal",
-    "nutrition_detail": "calories 230 of 2574 goal -> 2344 left; protein 3g of 138g goal -> 135g gap; carbs 36g of 290g goal; fat 8g of 72g goal",
-    "activity_today": "568 steps so far, 21m active, 610 calories burned, Light training load"
+    "nutrition": "calories 1010 of 2574 goal, protein 45g of 138g goal, carbs 96g of 290g goal, fat 52g of 72g goal",
+    "nutrition_detail": "calories 1010 of 2574 goal -> 1564 left; protein 45g of 138g goal -> 93g gap; carbs 96g of 290g goal; fat 52g of 72g goal",
+    "activity_today": "1,230 steps so far, 54m active, 748 calories burned, Light training load"
   }
 }
