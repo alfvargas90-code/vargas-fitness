@@ -1,19 +1,19 @@
 {
-  "date": "2026-06-23",
-  "generated_at": "2026-06-23T21:45:00-05:00",
+  "date": "2026-06-24",
+  "generated_at": "2026-06-24T21:45:00-05:00",
   "verdict": "Big",
   "stats": {
-    "steps": 3734,
-    "active_minutes": 304,
-    "active_time_display": "5h 4m",
-    "calories_burned": 2100,
-    "active_calories": 660,
-    "calories_eaten": 944,
-    "net_deficit": 1156,
+    "steps": 7052,
+    "active_minutes": 371,
+    "active_time_display": "6h 11m",
+    "calories_burned": 2465,
+    "active_calories": 939,
+    "calories_eaten": 1360,
+    "net_deficit": 1105,
     "calorie_target": 2574,
-    "protein_g": 88,
+    "protein_g": 113,
     "protein_target_g": 138,
-    "protein_gap_g": 50
+    "protein_gap_g": 25
   },
-  "prose": "Big output day, but the gap was too aggressive: eating under 1,000 after burning about 2,100 leaves muscle exposed, especially with protein about 50 short. The low steps do not matter much here; the bigger issue is fueling enough to keep strength and lean mass protected while fat comes off. Push protein hard tomorrow and keep the deficit smaller."
+  "prose": "Big output day, but the calorie gap was too wide for protecting muscle, especially with protein coming up about 25 short. About 7,000 steps and a long active day are useful, but the win tomorrow is food discipline: keep the deficit modest and get protein handled early. Push protein hard tomorrow."
 }
