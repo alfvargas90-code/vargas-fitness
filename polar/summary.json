@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T09:52:56-05:00",
-  "data_hash": "8f2fbfa86a6c8809",
-  "slot": "macros-update",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 18%\n\nRead\nThe new intake shifts the day from underfed to partially supported: energy room remains open, and protein has started carrying more of the load. Output is still lighter than usual, so the day favors measured muscle protection over intensity.\n\nMeasured momentum.\n\nPerformance: Measured momentum.\n\nTransit: none",
+  "generated_at": "2026-06-25T11:30:00-05:00",
+  "data_hash": "3d9c5736e0c04520",
+  "slot": "fuel-1",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 27%\n\nRead\nRecovery is supportive and output is still lighter than your usual day. Early intake gave the morning a real protein base, but muscle support is not fully anchored yet, so the afternoon favors steady consistency over intensity.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 18%\n\nRead\nThe new intake shifts the day from underfed to partially supported: energy room remains open, and protein has started carrying more of the load. Output is still lighter than usual, so the day favors measured muscle protection over intensity.\n\nMeasured momentum."
+      "text": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 27%\n\nRead\nRecovery is supportive and output is still lighter than your usual day. Early intake gave the morning a real protein base, but muscle support is not fully anchored yet, so the afternoon favors steady consistency over intensity.\n\nSteady, not forceful."
     },
     {
       "label": "Performance",
-      "text": "Measured momentum."
+      "text": "Steady, not forceful."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 18%\n\nRead\nThe new intake shifts the day from underfed to partially supported: energy room remains open, and protein has started carrying more of the load. Output is still lighter than usual, so the day favors measured muscle protection over intensity.\n\nMeasured momentum.",
-    "performance": "Measured momentum.",
+    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 27%\n\nRead\nRecovery is supportive and output is still lighter than your usual day. Early intake gave the morning a real protein base, but muscle support is not fully anchored yet, so the afternoon favors steady consistency over intensity.\n\nSteady, not forceful.",
+    "performance": "Steady, not forceful.",
     "transit": null
   },
-  "nutrition_nudge": "You're on pace; keep meals steady and make lunch protein-forward to protect muscle.",
+  "nutrition_nudge": "You\u2019re on pace; keep lunch steady with 45g protein and normal calories.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 48.4,
     "nutrition": "calories 1010 of 2574 goal, protein 45g of 138g goal, carbs 96g of 290g goal, fat 52g of 72g goal",
     "nutrition_detail": "calories 1010 of 2574 goal -> 1564 left; protein 45g of 138g goal -> 93g gap; carbs 96g of 290g goal; fat 52g of 72g goal",
-    "activity_today": "1,230 steps so far, 54m active, 748 calories burned, Light training load"
+    "activity_today": "1,796 steps so far, 1h 18m active, 977 calories burned, Light training load"
   }
 }
