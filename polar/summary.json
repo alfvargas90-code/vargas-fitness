@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T11:30:00-05:00",
-  "data_hash": "3d9c5736e0c04520",
-  "slot": "fuel-1",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 27%\n\nRead\nRecovery is supportive and output is still lighter than your usual day. Early intake gave the morning a real protein base, but muscle support is not fully anchored yet, so the afternoon favors steady consistency over intensity.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
+  "generated_at": "2026-06-25T12:54:01-05:00",
+  "data_hash": "b62c3e425fdbbb8d",
+  "slot": "macros-update",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 35%\n\nRead\nThe new food log shifts the day from underfed to structurally steadier: protein is now doing real support work, and the remaining intake window is moderate rather than tight. Output is still lighter than your usual day, so this favors muscle protection and controlled momentum over intensity.\n\nSteady, not spent.\n\nPerformance: Steady, not spent.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 27%\n\nRead\nRecovery is supportive and output is still lighter than your usual day. Early intake gave the morning a real protein base, but muscle support is not fully anchored yet, so the afternoon favors steady consistency over intensity.\n\nSteady, not forceful."
+      "text": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 35%\n\nRead\nThe new food log shifts the day from underfed to structurally steadier: protein is now doing real support work, and the remaining intake window is moderate rather than tight. Output is still lighter than your usual day, so this favors muscle protection and controlled momentum over intensity.\n\nSteady, not spent."
     },
     {
       "label": "Performance",
-      "text": "Steady, not forceful."
+      "text": "Steady, not spent."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 27%\n\nRead\nRecovery is supportive and output is still lighter than your usual day. Early intake gave the morning a real protein base, but muscle support is not fully anchored yet, so the afternoon favors steady consistency over intensity.\n\nSteady, not forceful.",
-    "performance": "Steady, not forceful.",
+    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 35%\n\nRead\nThe new food log shifts the day from underfed to structurally steadier: protein is now doing real support work, and the remaining intake window is moderate rather than tight. Output is still lighter than your usual day, so this favors muscle protection and controlled momentum over intensity.\n\nSteady, not spent.",
+    "performance": "Steady, not spent.",
     "transit": null
   },
-  "nutrition_nudge": "You\u2019re on pace; keep lunch steady with 45g protein and normal calories.",
+  "nutrition_nudge": "Pull back oils and fatty add-ons tonight while adding 37g lean protein.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
     "sleep_hours": 7.0,
     "hrv_today": 44,
     "hrv_7d_avg": 48.4,
-    "nutrition": "calories 1010 of 2574 goal, protein 45g of 138g goal, carbs 96g of 290g goal, fat 52g of 72g goal",
-    "nutrition_detail": "calories 1010 of 2574 goal -> 1564 left; protein 45g of 138g goal -> 93g gap; carbs 96g of 290g goal; fat 52g of 72g goal",
-    "activity_today": "1,796 steps so far, 1h 18m active, 977 calories burned, Light training load"
+    "nutrition": "calories 1780 of 2574 goal, protein 101g of 138g goal, carbs 151g of 290g goal, fat 91g of 72g goal",
+    "nutrition_detail": "calories 1780 of 2574 goal -> 794 left; protein 101g of 138g goal -> 37g gap; carbs 151g of 290g goal; fat 91g of 72g goal",
+    "activity_today": "2,194 steps so far, 1h 37m active, 1,154 calories burned, Light training load"
   }
 }
