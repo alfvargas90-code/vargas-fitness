@@ -1,6 +1,6 @@
 {
   "date": "2026-06-25",
-  "synced_at": "2026-06-25T17:23:37+00:00",
+  "synced_at": "2026-06-25T17:53:59+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 1010.0,
-    "protein_g": 45.0,
-    "carbs_g": 96.0,
-    "fat_g": 52.0
+    "calories": 1780.0,
+    "protein_g": 101.0,
+    "carbs_g": 151.0,
+    "fat_g": 91.0
   },
-  "meal_count": 3,
+  "meal_count": 5,
   "raw": {
     "date": "2026-06-25",
     "meals": [
@@ -44,13 +44,31 @@
         "fat": 44,
         "carbs": 6,
         "emoji": "\u00f0\u009f\u008d\u00b3"
+      },
+      {
+        "title": "Kirkland Breaded Chicken Breast",
+        "time": "12:39",
+        "calories": 630,
+        "protein": 54,
+        "fat": 33,
+        "carbs": 36,
+        "emoji": "\u00f0\u009f\u008d\u0097"
+      },
+      {
+        "title": "Chips",
+        "time": "12:40",
+        "calories": 140,
+        "protein": 2,
+        "fat": 6,
+        "carbs": 19,
+        "emoji": "\u00f0\u009f\u00a5\u0094"
       }
     ],
     "totals": {
-      "calories": 1010,
-      "protein": 45,
-      "fat": 52,
-      "carbs": 96
+      "calories": 1780,
+      "protein": 101,
+      "fat": 91,
+      "carbs": 151
     },
     "targets": {
       "calories": 2574,
@@ -59,14 +77,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 1564,
+      "calories": 794,
       "is_over": false
     },
-    "meal_count": 3,
+    "meal_count": 5,
     "labels": {
       "header": "Today",
-      "calories_remaining": "1564 kcal remaining today",
-      "meals_logged": "3 meals logged",
+      "calories_remaining": "794 kcal remaining today",
+      "meals_logged": "5 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
