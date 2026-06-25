@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25T00:30:41-05:00",
+  "generated_at": "2026-06-25T01:00:53-05:00",
   "score": 5,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -12,7 +12,7 @@
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Scorpio",
-    "degree": "11\u00b0 Sco 29'",
+    "degree": "11\u00b0 Sco 44'",
     "phase": "Waxing Gibbous",
     "next_sign_change": {
       "sign": "Sagittarius",
@@ -37,7 +37,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 221.49,
+    "moon_longitude": 221.74,
     "moon_sign": "Scorpio",
     "moon_phase": "Waxing Gibbous",
     "moon_house_natal": 10,
@@ -57,7 +57,7 @@
       "hrv_7d": 48.9,
       "rhr_7d": 56
     },
-    "active_calories": 1,
+    "active_calories": 2,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
