@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-24T17:30:00-05:00",
-  "data_hash": "4be73a7df3e959ee",
-  "slot": "train-1",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 69%\n\nRead\nRecovery is stronger than recent days, while output has run lighter than usual and the day has only drawn a moderate amount from the tank. The open window favors measured resistance work, with protein nearly carrying its share and the remaining deficit worth keeping gentle for muscle retention.\n\nStrong, not spent.\n\nPerformance: Strong, not spent.\n\nTransit: none",
+  "generated_at": "2026-06-24T20:00:00-05:00",
+  "data_hash": "4d9649bfd7bd6403",
+  "slot": "train-2",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 100%\n\nRead\nRecovery came in steadier than usual, but the day carried heavy effort with output still lighter than your typical rhythm. The training window has mostly become a landing, and tonight favors muscle preservation over deeper deficit.\n\nConsolidate the work.\n\nPerformance: Consolidate the work.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 69%\n\nRead\nRecovery is stronger than recent days, while output has run lighter than usual and the day has only drawn a moderate amount from the tank. The open window favors measured resistance work, with protein nearly carrying its share and the remaining deficit worth keeping gentle for muscle retention.\n\nStrong, not spent."
+      "text": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 100%\n\nRead\nRecovery came in steadier than usual, but the day carried heavy effort with output still lighter than your typical rhythm. The training window has mostly become a landing, and tonight favors muscle preservation over deeper deficit.\n\nConsolidate the work."
     },
     {
       "label": "Performance",
-      "text": "Strong, not spent."
+      "text": "Consolidate the work."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 69%\n\nRead\nRecovery is stronger than recent days, while output has run lighter than usual and the day has only drawn a moderate amount from the tank. The open window favors measured resistance work, with protein nearly carrying its share and the remaining deficit worth keeping gentle for muscle retention.\n\nStrong, not spent.",
-    "performance": "Strong, not spent.",
+    "reading": "State\nGood\nRecovery 62 \u2022 Sleep 71 \u2022 Strain 100%\n\nRead\nRecovery came in steadier than usual, but the day carried heavy effort with output still lighter than your typical rhythm. The training window has mostly become a landing, and tonight favors muscle preservation over deeper deficit.\n\nConsolidate the work.",
+    "performance": "Consolidate the work.",
     "transit": null
   },
-  "nutrition_nudge": "Fat budget is spent; keep dinner lean and add 25g protein without oils.",
+  "nutrition_nudge": "Fat budget is gone, so keep dinner lean: skip oils and add 25g protein.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 48.9,
     "nutrition": "calories 1360 of 2574 goal, protein 113g of 138g goal, carbs 74g of 290g goal, fat 77g of 72g goal",
     "nutrition_detail": "calories 1360 of 2574 goal -> 1214 left; protein 113g of 138g goal -> 25g gap; carbs 74g of 290g goal; fat 77g of 72g goal",
-    "activity_today": "4,088 steps so far, 3h 39m active, 1,810 calories burned, Moderate training load"
+    "activity_today": "6,796 steps so far, 5h 16m active, 2,260 calories burned, Heavy training load"
   }
 }
