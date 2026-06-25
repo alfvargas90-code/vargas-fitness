@@ -1,6 +1,6 @@
 {
   "date": "2026-06-24",
-  "synced_at": "2026-06-25T02:50:27+00:00",
+  "synced_at": "2026-06-25T03:20:31+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,12 +9,12 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 1360.0,
-    "protein_g": 113.0,
-    "carbs_g": 74.0,
-    "fat_g": 77.0
+    "calories": 1970.0,
+    "protein_g": 156.0,
+    "carbs_g": 110.0,
+    "fat_g": 111.0
   },
-  "meal_count": 2,
+  "meal_count": 4,
   "raw": {
     "date": "2026-06-24",
     "meals": [
@@ -35,13 +35,31 @@
         "fat": 35,
         "carbs": 68,
         "emoji": "\u00f0\u009f\u008d\u0097"
+      },
+      {
+        "title": "Kirkland breaded chicken",
+        "time": "21:52",
+        "calories": 520,
+        "protein": 40,
+        "fat": 28,
+        "carbs": 30,
+        "emoji": "\u00f0\u009f\u008d\u0097"
+      },
+      {
+        "title": "Orchard Valley Harvest seasoning",
+        "time": "21:53",
+        "calories": 90,
+        "protein": 3,
+        "fat": 6,
+        "carbs": 6,
+        "emoji": "\u00f0\u009f\u00a7\u0082"
       }
     ],
     "totals": {
-      "calories": 1360,
-      "protein": 113,
-      "fat": 77,
-      "carbs": 74
+      "calories": 1970,
+      "protein": 156,
+      "fat": 111,
+      "carbs": 110
     },
     "targets": {
       "calories": 2574,
@@ -50,14 +68,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 1214,
+      "calories": 604,
       "is_over": false
     },
-    "meal_count": 2,
+    "meal_count": 4,
     "labels": {
       "header": "Today",
-      "calories_remaining": "1214 kcal remaining today",
-      "meals_logged": "2 meals logged",
+      "calories_remaining": "604 kcal remaining today",
+      "meals_logged": "4 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
