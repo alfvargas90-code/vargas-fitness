@@ -1,6 +1,6 @@
 {
   "date": "2026-06-25",
-  "synced_at": "2026-06-25T12:52:15+00:00",
+  "synced_at": "2026-06-25T13:22:19+00:00",
   "source_tool": "get_day_summary",
   "goals": {
     "calories": 2574.0,
@@ -9,20 +9,30 @@
     "fat_g": 72.0
   },
   "totals": {
-    "calories": 0.0,
-    "protein_g": 0.0,
-    "carbs_g": 0.0,
-    "fat_g": 0.0
+    "calories": 230.0,
+    "protein_g": 3.0,
+    "carbs_g": 36.0,
+    "fat_g": 8.0
   },
-  "meal_count": 0,
+  "meal_count": 1,
   "raw": {
     "date": "2026-06-25",
-    "meals": [],
+    "meals": [
+      {
+        "title": "belVita Breakfast Biscuits",
+        "time": "08:14",
+        "calories": 230,
+        "protein": 3,
+        "fat": 8,
+        "carbs": 36,
+        "emoji": "\u00f0\u009f\u008d\u00aa"
+      }
+    ],
     "totals": {
-      "calories": 0,
-      "protein": 0,
-      "fat": 0,
-      "carbs": 0
+      "calories": 230,
+      "protein": 3,
+      "fat": 8,
+      "carbs": 36
     },
     "targets": {
       "calories": 2574,
@@ -31,14 +41,14 @@
       "carbs": 290
     },
     "remaining": {
-      "calories": 2574,
+      "calories": 2344,
       "is_over": false
     },
-    "meal_count": 0,
+    "meal_count": 1,
     "labels": {
       "header": "Today",
-      "calories_remaining": "2574 kcal remaining today",
-      "meals_logged": "0 meals logged",
+      "calories_remaining": "2344 kcal remaining today",
+      "meals_logged": "1 meals logged",
       "no_meals": "No meals logged yet",
       "protein": "Protein",
       "fat": "Fat",
