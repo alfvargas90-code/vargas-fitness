@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T15:00:00-05:00",
-  "data_hash": "e85cce049c7663f4",
-  "slot": "fuel-2",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 44%\n\nRead\nRecovery is supportive, but output has run lighter than usual and the midday fuel was protein-forward without fully closing the evening gap. This is a steady, usable day that favors measured resistance work and muscle preservation over chasing intensity.\n\nSteady reserves.\n\nPerformance: Steady reserves.\n\nTransit: none",
+  "generated_at": "2026-06-25T17:30:00-05:00",
+  "data_hash": "e75b6218ffaec367",
+  "slot": "train-1",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 57%\n\nRead\nRecovery is carrying better than recent days, while output has run lighter than a usual day and effort spent remains moderate. This window favors measured strength work over chasing volume; muscle protection still depends on the protein side catching up before the deficit gets too sharp.\n\nMeasured strength, quiet reserve.\n\nPerformance: Measured strength, quiet reserve.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 44%\n\nRead\nRecovery is supportive, but output has run lighter than usual and the midday fuel was protein-forward without fully closing the evening gap. This is a steady, usable day that favors measured resistance work and muscle preservation over chasing intensity.\n\nSteady reserves."
+      "text": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 57%\n\nRead\nRecovery is carrying better than recent days, while output has run lighter than a usual day and effort spent remains moderate. This window favors measured strength work over chasing volume; muscle protection still depends on the protein side catching up before the deficit gets too sharp.\n\nMeasured strength, quiet reserve."
     },
     {
       "label": "Performance",
-      "text": "Steady reserves."
+      "text": "Measured strength, quiet reserve."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 44%\n\nRead\nRecovery is supportive, but output has run lighter than usual and the midday fuel was protein-forward without fully closing the evening gap. This is a steady, usable day that favors measured resistance work and muscle preservation over chasing intensity.\n\nSteady reserves.",
-    "performance": "Steady reserves.",
+    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 57%\n\nRead\nRecovery is carrying better than recent days, while output has run lighter than a usual day and effort spent remains moderate. This window favors measured strength work over chasing volume; muscle protection still depends on the protein side catching up before the deficit gets too sharp.\n\nMeasured strength, quiet reserve.",
+    "performance": "Measured strength, quiet reserve.",
     "transit": null
   },
-  "nutrition_nudge": "Keep remaining meals lean: skip added oils and choose low-fat protein to protect muscle.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 48.4,
     "nutrition": "calories 1780 of 2574 goal, protein 101g of 138g goal, carbs 151g of 290g goal, fat 91g of 72g goal",
     "nutrition_detail": "calories 1780 of 2574 goal -> 794 left; protein 101g of 138g goal -> 37g gap; carbs 151g of 290g goal; fat 91g of 72g goal",
-    "activity_today": "2,826 steps so far, 2h 11m active, 1,386 calories burned, Light training load"
+    "activity_today": "3,418 steps so far, 2h 46m active, 1,695 calories burned, Moderate training load"
   }
 }
