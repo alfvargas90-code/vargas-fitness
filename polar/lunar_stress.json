@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-26T15:45:20-05:00",
+  "generated_at": "2026-06-26T16:15:30-05:00",
   "score": 8,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -8,11 +8,11 @@
     "rhr_delta_bpm": 2,
     "sleep_score": 53
   },
-  "workout_intensity": "moderate",
+  "workout_intensity": "high",
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Sagittarius",
-    "degree": "1\u00b0 Sag 02'",
+    "degree": "1\u00b0 Sag 17'",
     "phase": "Waxing Gibbous",
     "next_sign_change": {
       "sign": "Capricorn",
@@ -37,7 +37,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 241.03,
+    "moon_longitude": 241.28,
     "moon_sign": "Sagittarius",
     "moon_phase": "Waxing Gibbous",
     "moon_house_natal": 11,
@@ -51,13 +51,13 @@
     "breakdown": [
       "-5 HRV 82% above baseline",
       "+10 Sleep score 53 (<70)",
-      "+3 Moderate-intensity day"
+      "+3 High-intensity day, HRV normal"
     ],
     "baselines": {
       "hrv_7d": 52.7,
       "rhr_7d": 56.1
     },
-    "active_calories": 794,
+    "active_calories": 826,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
