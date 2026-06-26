@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T20:00:00-05:00",
-  "data_hash": "8407036447d3e5fe",
-  "slot": "train-2",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 70%\n\nRead\nThe training window is closing with a moderate load, stronger recovery beneath it, and output lighter than a usual day. The evening favors settling rather than adding intensity; the remaining nutrition picture is about muscle preservation, not a deeper deficit.\n\nContained effort, preserved ground.\n\nPerformance: Contained effort, preserved ground.\n\nTransit: none",
+  "generated_at": "2026-06-26T04:00:00-05:00",
+  "data_hash": "261484626a913e80",
+  "slot": "sleep",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 1%\n\nRead\nYou\u2019re waking into a stronger reserve than the recent pattern, with sleep carrying more of the load than stress. The day favors steady, muscle-preserving work over intensity, with protein still the quiet hinge for turning recovery into progress.\n\nSteady reserve.\n\nPerformance: Steady reserve.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 70%\n\nRead\nThe training window is closing with a moderate load, stronger recovery beneath it, and output lighter than a usual day. The evening favors settling rather than adding intensity; the remaining nutrition picture is about muscle preservation, not a deeper deficit.\n\nContained effort, preserved ground."
+      "text": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 1%\n\nRead\nYou\u2019re waking into a stronger reserve than the recent pattern, with sleep carrying more of the load than stress. The day favors steady, muscle-preserving work over intensity, with protein still the quiet hinge for turning recovery into progress.\n\nSteady reserve."
     },
     {
       "label": "Performance",
-      "text": "Contained effort, preserved ground."
+      "text": "Steady reserve."
     },
     {
       "label": "Transit",
@@ -23,19 +23,19 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 70%\n\nRead\nThe training window is closing with a moderate load, stronger recovery beneath it, and output lighter than a usual day. The evening favors settling rather than adding intensity; the remaining nutrition picture is about muscle preservation, not a deeper deficit.\n\nContained effort, preserved ground.",
-    "performance": "Contained effort, preserved ground.",
+    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 1%\n\nRead\nYou\u2019re waking into a stronger reserve than the recent pattern, with sleep carrying more of the load than stress. The day favors steady, muscle-preserving work over intensity, with protein still the quiet hinge for turning recovery into progress.\n\nSteady reserve.",
+    "performance": "Steady reserve.",
     "transit": null
   },
-  "nutrition_nudge": "Keep dinner lean: skip oils, butter, and fatty add-ons while finishing your 37g protein gap.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
     "sleep_hours": 7.0,
     "hrv_today": 44,
     "hrv_7d_avg": 48.4,
-    "nutrition": "calories 1780 of 2574 goal, protein 101g of 138g goal, carbs 151g of 290g goal, fat 91g of 72g goal",
-    "nutrition_detail": "calories 1780 of 2574 goal -> 794 left; protein 101g of 138g goal -> 37g gap; carbs 151g of 290g goal; fat 91g of 72g goal",
-    "activity_today": "4,180 steps so far, 3h 20m active, 1,984 calories burned, Moderate training load"
+    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
+    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
+    "activity_today": null
   }
 }
