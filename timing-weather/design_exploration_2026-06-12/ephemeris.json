@@ -1,78 +1,78 @@
 {
- "generated": "2026-06-26T05:15:00Z",
+ "generated": "2026-06-26T11:15:00Z",
  "transits": [
   {
-   "lon": 94.644,
+   "lon": 94.883,
    "sign": "Can",
    "deg": 4,
    "name": "Sun",
    "rx": false
   },
   {
-   "lon": 233.332,
+   "lon": 236.313,
    "sign": "Sco",
-   "deg": 23,
+   "deg": 26,
    "name": "Moon",
    "rx": false
   },
   {
-   "lon": 115.783,
+   "lon": 115.848,
    "sign": "Can",
    "deg": 25,
    "name": "Mercury",
    "rx": false
   },
   {
-   "lon": 134.748,
+   "lon": 135.034,
    "sign": "Leo",
-   "deg": 14,
+   "deg": 15,
    "name": "Venus",
    "rx": false
   },
   {
-   "lon": 58.146,
+   "lon": 58.325,
    "sign": "Tau",
    "deg": 28,
    "name": "Mars",
    "rx": false
   },
   {
-   "lon": 119.144,
+   "lon": 119.197,
    "sign": "Can",
    "deg": 29,
    "name": "Jupiter",
    "rx": false
   },
   {
-   "lon": 13.963,
+   "lon": 13.976,
    "sign": "Ari",
    "deg": 13,
    "name": "Saturn",
    "rx": false
   },
   {
-   "lon": 63.464,
+   "lon": 63.477,
    "sign": "Gem",
    "deg": 3,
    "name": "Uranus",
    "rx": false
   },
   {
-   "lon": 4.383,
+   "lon": 4.385,
    "sign": "Ari",
    "deg": 4,
    "name": "Neptune",
    "rx": false
   },
   {
-   "lon": 304.971,
+   "lon": 304.966,
    "sign": "Aqu",
    "deg": 4,
    "name": "Pluto",
    "rx": true
   },
   {
-   "lon": 331.62,
+   "lon": 331.584,
    "sign": "Pis",
    "deg": 1,
    "name": "Node",
@@ -81,14 +81,14 @@
  ],
  "moon": {
   "phase": "Waxing gibbous",
-  "illum": 88,
+  "illum": 89,
   "sign": "Sco",
   "waxing": true
  },
  "moonVoid": {
   "void": false,
   "sign": "Scorpio",
-  "entersNextHours": 13.4,
+  "entersNextHours": 7.4,
   "nextSign": "Sagittarius"
  },
  "transitAspects": [
@@ -98,7 +98,7 @@
    "sym": "\u25a1",
    "aspect": "Square",
    "n": "Pluto",
-   "orb": 0.6,
+   "orb": 0.3,
    "applying": true
   },
   {
@@ -107,17 +107,8 @@
    "sym": "\u26b9",
    "aspect": "Sextile",
    "n": "Mars",
-   "orb": 0.6,
+   "orb": 0.5,
    "applying": true
-  },
-  {
-   "t": "Sun",
-   "rx": false,
-   "sym": "\u25b3",
-   "aspect": "Trine",
-   "n": "MC",
-   "orb": 0.7,
-   "applying": false
   },
   {
    "t": "Sun",
@@ -125,7 +116,16 @@
    "sym": "\u260d",
    "aspect": "Opposition",
    "n": "Moon",
-   "orb": 0.9,
+   "orb": 0.6,
+   "applying": true
+  },
+  {
+   "t": "Sun",
+   "rx": false,
+   "sym": "\u260d",
+   "aspect": "Opposition",
+   "n": "Uranus",
+   "orb": 0.8,
    "applying": true
   },
   {
@@ -140,11 +140,11 @@
   {
    "t": "Sun",
    "rx": false,
-   "sym": "\u260d",
-   "aspect": "Opposition",
-   "n": "Uranus",
+   "sym": "\u25b3",
+   "aspect": "Trine",
+   "n": "MC",
    "orb": 1.0,
-   "applying": true
+   "applying": false
   },
   {
    "t": "Neptune",
@@ -165,15 +165,6 @@
    "applying": true
   },
   {
-   "t": "Moon",
-   "rx": false,
-   "sym": "\u26b9",
-   "aspect": "Sextile",
-   "n": "Mercury",
-   "orb": 1.2,
-   "applying": false
-  },
-  {
    "t": "Neptune",
    "rx": false,
    "sym": "\u25a1",
@@ -188,7 +179,7 @@
    "sym": "\u260c",
    "aspect": "Conjunction",
    "n": "Mars",
-   "orb": 1.6,
+   "orb": 1.4,
    "applying": true
   },
   {
@@ -237,30 +228,21 @@
    "applying": false
   },
   {
+   "t": "Sun",
+   "rx": false,
+   "sym": "\u26b9",
+   "aspect": "Sextile",
+   "n": "Sun",
+   "orb": 2.4,
+   "applying": true
+  },
+  {
    "t": "Pluto",
    "rx": true,
    "sym": "\u260d",
    "aspect": "Opposition",
    "n": "Jupiter",
    "orb": 2.4,
-   "applying": true
-  },
-  {
-   "t": "Moon",
-   "rx": false,
-   "sym": "\u25a1",
-   "aspect": "Square",
-   "n": "Venus",
-   "orb": 2.5,
-   "applying": false
-  },
-  {
-   "t": "Sun",
-   "rx": false,
-   "sym": "\u26b9",
-   "aspect": "Sextile",
-   "n": "Sun",
-   "orb": 2.6,
    "applying": true
   },
   {
@@ -273,11 +255,29 @@
    "applying": true
   },
   {
+   "t": "Moon",
+   "rx": false,
+   "sym": "\u260d",
+   "aspect": "Opposition",
+   "n": "Mars",
+   "orb": 3.4,
+   "applying": true
+  },
+  {
    "t": "Jupiter",
    "rx": false,
    "sym": "\u260c",
    "aspect": "Conjunction",
    "n": "Jupiter",
+   "orb": 3.4,
+   "applying": true
+  },
+  {
+   "t": "Sun",
+   "rx": false,
+   "sym": "\u260d",
+   "aspect": "Opposition",
+   "n": "ASC",
    "orb": 3.5,
    "applying": true
   },
@@ -288,15 +288,6 @@
    "aspect": "Trine",
    "n": "Node",
    "orb": 3.5,
-   "applying": true
-  },
-  {
-   "t": "Sun",
-   "rx": false,
-   "sym": "\u260d",
-   "aspect": "Opposition",
-   "n": "ASC",
-   "orb": 3.7,
    "applying": true
   },
   {
@@ -334,7 +325,7 @@
    "n": "Pluto",
    "rx": false,
    "aspect": "Square",
-   "orb": 0.6,
+   "orb": 0.3,
    "applying": true,
    "text": "sweetens your power \u2014 productive friction."
   },
@@ -344,19 +335,19 @@
    "n": "Mars",
    "rx": false,
    "aspect": "Sextile",
-   "orb": 0.6,
+   "orb": 0.5,
    "applying": true,
    "text": "expands your drive \u2014 an open door."
   },
   {
    "t": "Sun",
-   "sym": "\u25b3",
-   "n": "MC",
+   "sym": "\u260d",
+   "n": "Moon",
    "rx": false,
-   "aspect": "Trine",
-   "orb": 0.7,
-   "applying": false,
-   "text": "lights up your public path \u2014 easy flow."
+   "aspect": "Opposition",
+   "orb": 0.6,
+   "applying": true,
+   "text": "lights up your feelings \u2014 a pull toward balance."
   }
  ],
  "profection": {
@@ -380,37 +371,37 @@
   {
    "name": "Fortune",
    "glyph": "\u2297",
-   "lon": 57.05,
+   "lon": 59.8,
    "sign": "Taurus",
-   "deg": 27,
+   "deg": 29,
    "meaning": "body & fortune"
   },
   {
    "name": "Spirit",
    "glyph": "\u2295",
-   "lon": 139.68,
+   "lon": 136.94,
    "sign": "Leo",
-   "deg": 19,
+   "deg": 16,
    "meaning": "action & will"
   },
   {
    "name": "Eros",
    "glyph": "\u2764",
-   "lon": 273.44,
+   "lon": 276.46,
    "sign": "Capricorn",
-   "deg": 3,
+   "deg": 6,
    "meaning": "desire & love"
   }
  ],
  "forecast": [
   {
    "label": "Full Moon",
-   "days": 4,
+   "days": 3,
    "note": "culmination"
   },
   {
    "label": "Jupiter Return",
-   "days": 17,
+   "days": 16,
    "note": "12-yr renewal of the year-lord"
   },
   {
