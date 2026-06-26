@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-26T15:00:00-05:00",
-  "data_hash": "8b77c5b5698afa30",
-  "slot": "fuel-2",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 91%\n\nRead\nYou moved more than a typical day on short sleep, with moderate effort already spent and no logged intake behind it. The evening window looks under-supported; this favors measured resistance work only if protein becomes real, not another deep deficit.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
+  "generated_at": "2026-06-26T17:30:00-05:00",
+  "data_hash": "dffcccbdfd9b9f2a",
+  "slot": "train-1",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nRecovery is only moderate after a short night, while movement has already run heavier than usual. The workout window favors controlled strength, not ambition; with no protein foundation logged, the deficit reads more like lean-mass risk than clean fat loss.\n\nMeasured strength.\n\nPerformance: Measured strength.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 91%\n\nRead\nYou moved more than a typical day on short sleep, with moderate effort already spent and no logged intake behind it. The evening window looks under-supported; this favors measured resistance work only if protein becomes real, not another deep deficit.\n\nSteady, not forceful."
+      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nRecovery is only moderate after a short night, while movement has already run heavier than usual. The workout window favors controlled strength, not ambition; with no protein foundation logged, the deficit reads more like lean-mass risk than clean fat loss.\n\nMeasured strength."
     },
     {
       "label": "Performance",
-      "text": "Steady, not forceful."
+      "text": "Measured strength."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 91%\n\nRead\nYou moved more than a typical day on short sleep, with moderate effort already spent and no logged intake behind it. The evening window looks under-supported; this favors measured resistance work only if protein becomes real, not another deep deficit.\n\nSteady, not forceful.",
-    "performance": "Steady, not forceful.",
+    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nRecovery is only moderate after a short night, while movement has already run heavier than usual. The workout window favors controlled strength, not ambition; with no protein foundation logged, the deficit reads more like lean-mass risk than clean fat loss.\n\nMeasured strength.",
+    "performance": "Measured strength.",
     "transit": null
   },
-  "nutrition_nudge": "Front-load your next meal with 60g protein to protect muscle and start closing the 138g gap.",
+  "nutrition_nudge": "Front-load dinner with at least 60g protein to protect muscle and start closing the gap.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 52.7,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "8,756 steps so far, 7h 3m active, 1,804 calories burned, Moderate training load"
+    "activity_today": "11,246 steps so far, 8h 41m active, 2,097 calories burned, Heavy training load"
   }
 }
