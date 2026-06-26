@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-26T04:00:00-05:00",
-  "data_hash": "261484626a913e80",
-  "slot": "sleep",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 1%\n\nRead\nYou\u2019re waking into a stronger reserve than the recent pattern, with sleep carrying more of the load than stress. The day favors steady, muscle-preserving work over intensity, with protein still the quiet hinge for turning recovery into progress.\n\nSteady reserve.\n\nPerformance: Steady reserve.\n\nTransit: none",
+  "generated_at": "2026-06-26T07:00:00-05:00",
+  "data_hash": "6675dd063c96fa0a",
+  "slot": "recovery",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 20%\n\nRead\nYou woke on uneven capacity: recovery is serviceable, but short sleep keeps the ceiling lower than the signal underneath. Early effort is still light, and with no protein logged yet, the day favors measured output and muscle preservation over intensity.\n\nSteady capacity.\n\nPerformance: Steady capacity.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
-      "text": "Good"
+      "text": "Average"
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 1%\n\nRead\nYou\u2019re waking into a stronger reserve than the recent pattern, with sleep carrying more of the load than stress. The day favors steady, muscle-preserving work over intensity, with protein still the quiet hinge for turning recovery into progress.\n\nSteady reserve."
+      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 20%\n\nRead\nYou woke on uneven capacity: recovery is serviceable, but short sleep keeps the ceiling lower than the signal underneath. Early effort is still light, and with no protein logged yet, the day favors measured output and muscle preservation over intensity.\n\nSteady capacity."
     },
     {
       "label": "Performance",
-      "text": "Steady reserve."
+      "text": "Steady capacity."
     },
     {
       "label": "Transit",
@@ -22,20 +22,20 @@
     }
   ],
   "simple": {
-    "recovery": "Good",
-    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 1%\n\nRead\nYou\u2019re waking into a stronger reserve than the recent pattern, with sleep carrying more of the load than stress. The day favors steady, muscle-preserving work over intensity, with protein still the quiet hinge for turning recovery into progress.\n\nSteady reserve.",
-    "performance": "Steady reserve.",
+    "recovery": "Average",
+    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 20%\n\nRead\nYou woke on uneven capacity: recovery is serviceable, but short sleep keeps the ceiling lower than the signal underneath. Early effort is still light, and with no protein logged yet, the day favors measured output and muscle preservation over intensity.\n\nSteady capacity.",
+    "performance": "Steady capacity.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Start breakfast with 35g protein and keep today's meal pacing steady.",
   "transits": [],
   "data_basis": {
-    "recharge_today": 5,
-    "sleep_hours": 7.0,
-    "hrv_today": 44,
-    "hrv_7d_avg": 48.4,
+    "recharge_today": 3,
+    "sleep_hours": 4.6,
+    "hrv_today": 96,
+    "hrv_7d_avg": 52.7,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "3,254 steps so far, 1h 40m active, 594 calories burned, Light training load"
   }
 }
