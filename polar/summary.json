@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-25T17:30:00-05:00",
-  "data_hash": "e75b6218ffaec367",
-  "slot": "train-1",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 57%\n\nRead\nRecovery is carrying better than recent days, while output has run lighter than a usual day and effort spent remains moderate. This window favors measured strength work over chasing volume; muscle protection still depends on the protein side catching up before the deficit gets too sharp.\n\nMeasured strength, quiet reserve.\n\nPerformance: Measured strength, quiet reserve.\n\nTransit: none",
+  "generated_at": "2026-06-25T20:00:00-05:00",
+  "data_hash": "8407036447d3e5fe",
+  "slot": "train-2",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 70%\n\nRead\nThe training window is closing with a moderate load, stronger recovery beneath it, and output lighter than a usual day. The evening favors settling rather than adding intensity; the remaining nutrition picture is about muscle preservation, not a deeper deficit.\n\nContained effort, preserved ground.\n\nPerformance: Contained effort, preserved ground.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 57%\n\nRead\nRecovery is carrying better than recent days, while output has run lighter than a usual day and effort spent remains moderate. This window favors measured strength work over chasing volume; muscle protection still depends on the protein side catching up before the deficit gets too sharp.\n\nMeasured strength, quiet reserve."
+      "text": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 70%\n\nRead\nThe training window is closing with a moderate load, stronger recovery beneath it, and output lighter than a usual day. The evening favors settling rather than adding intensity; the remaining nutrition picture is about muscle preservation, not a deeper deficit.\n\nContained effort, preserved ground."
     },
     {
       "label": "Performance",
-      "text": "Measured strength, quiet reserve."
+      "text": "Contained effort, preserved ground."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 57%\n\nRead\nRecovery is carrying better than recent days, while output has run lighter than a usual day and effort spent remains moderate. This window favors measured strength work over chasing volume; muscle protection still depends on the protein side catching up before the deficit gets too sharp.\n\nMeasured strength, quiet reserve.",
-    "performance": "Measured strength, quiet reserve.",
+    "reading": "State\nGood\nRecovery 64 \u2022 Sleep 76 \u2022 Strain 70%\n\nRead\nThe training window is closing with a moderate load, stronger recovery beneath it, and output lighter than a usual day. The evening favors settling rather than adding intensity; the remaining nutrition picture is about muscle preservation, not a deeper deficit.\n\nContained effort, preserved ground.",
+    "performance": "Contained effort, preserved ground.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Keep dinner lean: skip oils, butter, and fatty add-ons while finishing your 37g protein gap.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 48.4,
     "nutrition": "calories 1780 of 2574 goal, protein 101g of 138g goal, carbs 151g of 290g goal, fat 91g of 72g goal",
     "nutrition_detail": "calories 1780 of 2574 goal -> 794 left; protein 101g of 138g goal -> 37g gap; carbs 151g of 290g goal; fat 91g of 72g goal",
-    "activity_today": "3,418 steps so far, 2h 46m active, 1,695 calories burned, Moderate training load"
+    "activity_today": "4,180 steps so far, 3h 20m active, 1,984 calories burned, Moderate training load"
   }
 }
