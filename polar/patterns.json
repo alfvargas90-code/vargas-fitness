@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-26T09:10:58+00:00",
+  "generated_at": "2026-06-26T09:41:09+00:00",
   "current_phase": "Waxing Gibbous",
   "phase_stats": {
     "New Moon": {
@@ -38,7 +38,7 @@
     "Waxing Gibbous": {
       "sleep_delta_h": -0.5,
       "recovery_delta_pct": null,
-      "strain_delta_pct": -37,
+      "strain_delta_pct": -36,
       "sample_size": 9,
       "metric_samples": {
         "sleep": 8,
@@ -60,7 +60,7 @@
     "Waning Gibbous": {
       "sleep_delta_h": 0.3,
       "recovery_delta_pct": 42,
-      "strain_delta_pct": 16,
+      "strain_delta_pct": 15,
       "sample_size": 10,
       "metric_samples": {
         "sleep": 10,
@@ -94,6 +94,6 @@
   "overall_avg": {
     "sleep_h": 6.7,
     "recovery": 49,
-    "strain_kcal": 924
+    "strain_kcal": 925
   }
 }
