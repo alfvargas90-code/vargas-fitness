@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-26T07:00:00-05:00",
-  "data_hash": "6675dd063c96fa0a",
-  "slot": "recovery",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 20%\n\nRead\nYou woke on uneven capacity: recovery is serviceable, but short sleep keeps the ceiling lower than the signal underneath. Early effort is still light, and with no protein logged yet, the day favors measured output and muscle preservation over intensity.\n\nSteady capacity.\n\nPerformance: Steady capacity.\n\nTransit: none",
+  "generated_at": "2026-06-26T11:30:00-05:00",
+  "data_hash": "f1c4935899f9d816",
+  "slot": "fuel-1",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 59%\n\nRead\nRecovery is serviceable, but short sleep leaves less margin while morning output has already drawn a moderate reserve. With first fueling still absent, the afternoon favors a measured meal anchored in protein over chasing a larger deficit, preserving muscle while keeping fat loss gradual.\n\nSteady over sharp.\n\nPerformance: Steady over sharp.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 20%\n\nRead\nYou woke on uneven capacity: recovery is serviceable, but short sleep keeps the ceiling lower than the signal underneath. Early effort is still light, and with no protein logged yet, the day favors measured output and muscle preservation over intensity.\n\nSteady capacity."
+      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 59%\n\nRead\nRecovery is serviceable, but short sleep leaves less margin while morning output has already drawn a moderate reserve. With first fueling still absent, the afternoon favors a measured meal anchored in protein over chasing a larger deficit, preserving muscle while keeping fat loss gradual.\n\nSteady over sharp."
     },
     {
       "label": "Performance",
-      "text": "Steady capacity."
+      "text": "Steady over sharp."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 20%\n\nRead\nYou woke on uneven capacity: recovery is serviceable, but short sleep keeps the ceiling lower than the signal underneath. Early effort is still light, and with no protein logged yet, the day favors measured output and muscle preservation over intensity.\n\nSteady capacity.",
-    "performance": "Steady capacity.",
+    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 59%\n\nRead\nRecovery is serviceable, but short sleep leaves less margin while morning output has already drawn a moderate reserve. With first fueling still absent, the afternoon favors a measured meal anchored in protein over chasing a larger deficit, preserving muscle while keeping fat loss gradual.\n\nSteady over sharp.",
+    "performance": "Steady over sharp.",
     "transit": null
   },
-  "nutrition_nudge": "Start breakfast with 35g protein and keep today's meal pacing steady.",
+  "nutrition_nudge": "Open with a protein-heavy first meal and keep the day paced steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 52.7,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "3,254 steps so far, 1h 40m active, 594 calories burned, Light training load"
+    "activity_today": "6,474 steps so far, 4h 42m active, 1,262 calories burned, Moderate training load"
   }
 }
