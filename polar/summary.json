@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-26T20:00:00-05:00",
-  "data_hash": "d2adb46d6c243920",
-  "slot": "train-2",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nYou moved well above your usual day on thin sleep, so the session lands on a body already carrying heavy effort. With no food or protein showing in the log, tonight reads less like a progress push and more like a muscle-protection checkpoint.\n\nHeavy day, quiet landing.\n\nPerformance: Heavy day, quiet landing.\n\nTransit: none",
+  "generated_at": "2026-06-27T04:00:00-05:00",
+  "data_hash": "4c235fceecba9b1b",
+  "slot": "sleep",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 1%\n\nRead\nGiven the shorter night, reserve is uneven: some internal signals look resilient, but the day is not fully restored. It favors controlled consistency, with muscle retention depending more on adequate protein and measured effort than extra activity.\n\nSteady reserve.\n\nPerformance: Steady reserve.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nYou moved well above your usual day on thin sleep, so the session lands on a body already carrying heavy effort. With no food or protein showing in the log, tonight reads less like a progress push and more like a muscle-protection checkpoint.\n\nHeavy day, quiet landing."
+      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 1%\n\nRead\nGiven the shorter night, reserve is uneven: some internal signals look resilient, but the day is not fully restored. It favors controlled consistency, with muscle retention depending more on adequate protein and measured effort than extra activity.\n\nSteady reserve."
     },
     {
       "label": "Performance",
-      "text": "Heavy day, quiet landing."
+      "text": "Steady reserve."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 100%\n\nRead\nYou moved well above your usual day on thin sleep, so the session lands on a body already carrying heavy effort. With no food or protein showing in the log, tonight reads less like a progress push and more like a muscle-protection checkpoint.\n\nHeavy day, quiet landing.",
-    "performance": "Heavy day, quiet landing.",
+    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 1%\n\nRead\nGiven the shorter night, reserve is uneven: some internal signals look resilient, but the day is not fully restored. It favors controlled consistency, with muscle retention depending more on adequate protein and measured effort than extra activity.\n\nSteady reserve.",
+    "performance": "Steady reserve.",
     "transit": null
   },
-  "nutrition_nudge": "Front-load protein now with a 60g dinner to protect muscle and narrow the gap.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 52.7,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "12,424 steps so far, 9h 59m active, 2,389 calories burned, Heavy training load"
+    "activity_today": null
   }
 }
