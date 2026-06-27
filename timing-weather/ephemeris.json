@@ -1,78 +1,78 @@
 {
- "generated": "2026-06-27T17:15:00Z",
+ "generated": "2026-06-27T23:15:00Z",
  "transits": [
   {
-   "lon": 96.075,
+   "lon": 96.313,
    "sign": "Can",
    "deg": 6,
    "name": "Sun",
    "rx": false
   },
   {
-   "lon": 251.173,
+   "lon": 254.14,
    "sign": "Sag",
-   "deg": 11,
+   "deg": 14,
    "name": "Moon",
    "rx": false
   },
   {
-   "lon": 116.101,
+   "lon": 116.137,
    "sign": "Can",
    "deg": 26,
    "name": "Mercury",
    "rx": false
   },
   {
-   "lon": 136.461,
+   "lon": 136.746,
    "sign": "Leo",
    "deg": 16,
    "name": "Venus",
    "rx": false
   },
   {
-   "lon": 59.219,
+   "lon": 59.398,
    "sign": "Tau",
    "deg": 29,
    "name": "Mars",
    "rx": false
   },
   {
-   "lon": 119.462,
+   "lon": 119.515,
    "sign": "Can",
    "deg": 29,
    "name": "Jupiter",
    "rx": false
   },
   {
-   "lon": 14.037,
+   "lon": 14.049,
    "sign": "Ari",
    "deg": 14,
    "name": "Saturn",
    "rx": false
   },
   {
-   "lon": 63.541,
+   "lon": 63.554,
    "sign": "Gem",
    "deg": 3,
    "name": "Uranus",
    "rx": false
   },
   {
-   "lon": 4.392,
+   "lon": 4.393,
    "sign": "Ari",
    "deg": 4,
    "name": "Neptune",
    "rx": false
   },
   {
-   "lon": 304.942,
+   "lon": 304.937,
    "sign": "Aqu",
    "deg": 4,
    "name": "Pluto",
    "rx": true
   },
   {
-   "lon": 331.385,
+   "lon": 331.343,
    "sign": "Pis",
    "deg": 1,
    "name": "Node",
@@ -81,14 +81,14 @@
  ],
  "moon": {
   "phase": "Waxing gibbous",
-  "illum": 95,
+  "illum": 96,
   "sign": "Sag",
   "waxing": true
  },
  "moonVoid": {
   "void": false,
   "sign": "Sagittarius",
-  "entersNextHours": 38.1,
+  "entersNextHours": 32.1,
   "nextSign": "Capricorn"
  },
  "transitAspects": [
@@ -102,12 +102,21 @@
    "applying": true
   },
   {
+   "t": "Mars",
+   "rx": false,
+   "sym": "\u260c",
+   "aspect": "Conjunction",
+   "n": "Mars",
+   "orb": 0.3,
+   "applying": true
+  },
+  {
    "t": "Sun",
    "rx": false,
    "sym": "\u260d",
    "aspect": "Opposition",
    "n": "Uranus",
-   "orb": 0.4,
+   "orb": 0.6,
    "applying": false
   },
   {
@@ -116,16 +125,16 @@
    "sym": "\u260d",
    "aspect": "Opposition",
    "n": "Moon",
-   "orb": 0.5,
+   "orb": 0.8,
    "applying": false
   },
   {
-   "t": "Mars",
+   "t": "Sun",
    "rx": false,
-   "sym": "\u260c",
-   "aspect": "Conjunction",
-   "n": "Mars",
-   "orb": 0.5,
+   "sym": "\u26b9",
+   "aspect": "Sextile",
+   "n": "Sun",
+   "orb": 0.9,
    "applying": true
   },
   {
@@ -147,30 +156,12 @@
    "applying": true
   },
   {
-   "t": "Venus",
-   "rx": false,
-   "sym": "\u25a1",
-   "aspect": "Square",
-   "n": "Pluto",
-   "orb": 1.1,
-   "applying": false
-  },
-  {
    "t": "Neptune",
    "rx": false,
    "sym": "\u25a1",
    "aspect": "Square",
    "n": "Moon",
    "orb": 1.1,
-   "applying": true
-  },
-  {
-   "t": "Sun",
-   "rx": false,
-   "sym": "\u26b9",
-   "aspect": "Sextile",
-   "n": "Sun",
-   "orb": 1.2,
    "applying": true
   },
   {
@@ -183,12 +174,21 @@
    "applying": true
   },
   {
+   "t": "Venus",
+   "rx": false,
+   "sym": "\u25a1",
+   "aspect": "Square",
+   "n": "Pluto",
+   "orb": 1.4,
+   "applying": false
+  },
+  {
    "t": "Node",
    "rx": true,
    "sym": "\u25a1",
    "aspect": "Square",
    "n": "Mars",
-   "orb": 1.7,
+   "orb": 1.6,
    "applying": true
   },
   {
@@ -201,13 +201,13 @@
    "applying": false
   },
   {
-   "t": "Pluto",
-   "rx": true,
-   "sym": "\u260c",
-   "aspect": "Conjunction",
-   "n": "Node",
-   "orb": 2.0,
-   "applying": false
+   "t": "Sun",
+   "rx": false,
+   "sym": "\u260d",
+   "aspect": "Opposition",
+   "n": "ASC",
+   "orb": 2.1,
+   "applying": true
   },
   {
    "t": "Saturn",
@@ -219,22 +219,13 @@
    "applying": false
   },
   {
-   "t": "Sun",
-   "rx": false,
-   "sym": "\u25b3",
-   "aspect": "Trine",
-   "n": "MC",
-   "orb": 2.2,
+   "t": "Pluto",
+   "rx": true,
+   "sym": "\u260c",
+   "aspect": "Conjunction",
+   "n": "Node",
+   "orb": 2.1,
    "applying": false
-  },
-  {
-   "t": "Sun",
-   "rx": false,
-   "sym": "\u260d",
-   "aspect": "Opposition",
-   "n": "ASC",
-   "orb": 2.3,
-   "applying": true
   },
   {
    "t": "Pluto",
@@ -246,12 +237,12 @@
    "applying": true
   },
   {
-   "t": "Node",
-   "rx": true,
+   "t": "Sun",
+   "rx": false,
    "sym": "\u25b3",
    "aspect": "Trine",
    "n": "MC",
-   "orb": 2.5,
+   "orb": 2.4,
    "applying": false
   },
   {
@@ -262,6 +253,15 @@
    "n": "Node",
    "orb": 2.6,
    "applying": true
+  },
+  {
+   "t": "Node",
+   "rx": true,
+   "sym": "\u25b3",
+   "aspect": "Trine",
+   "n": "MC",
+   "orb": 2.6,
+   "applying": false
   },
   {
    "t": "Jupiter",
@@ -296,15 +296,6 @@
    "sym": "\u260c",
    "aspect": "Conjunction",
    "n": "Mars",
-   "orb": 3.8,
-   "applying": false
-  },
-  {
-   "t": "Moon",
-   "rx": false,
-   "sym": "\u25a1",
-   "aspect": "Square",
-   "n": "Sun",
    "orb": 3.9,
    "applying": false
   },
@@ -323,7 +314,7 @@
    "sym": "\u260c",
    "aspect": "Conjunction",
    "n": "Venus",
-   "orb": 4.3,
+   "orb": 4.1,
    "applying": true
   }
  ],
@@ -339,24 +330,24 @@
    "text": "expands your drive \u2014 an open door."
   },
   {
+   "t": "Mars",
+   "sym": "\u260c",
+   "n": "Mars",
+   "rx": false,
+   "aspect": "Conjunction",
+   "orb": 0.3,
+   "applying": true,
+   "text": "fires up your drive \u2014 a charged fusion."
+  },
+  {
    "t": "Sun",
    "sym": "\u260d",
    "n": "Uranus",
    "rx": false,
    "aspect": "Opposition",
-   "orb": 0.4,
+   "orb": 0.6,
    "applying": false,
    "text": "lights up your awakening \u2014 a pull toward balance."
-  },
-  {
-   "t": "Sun",
-   "sym": "\u260d",
-   "n": "Moon",
-   "rx": false,
-   "aspect": "Opposition",
-   "orb": 0.5,
-   "applying": false,
-   "text": "lights up your feelings \u2014 a pull toward balance."
   }
  ],
  "profection": {
@@ -380,25 +371,25 @@
   {
    "name": "Fortune",
    "glyph": "\u2297",
-   "lon": 73.46,
+   "lon": 76.19,
    "sign": "Gemini",
-   "deg": 13,
+   "deg": 16,
    "meaning": "body & fortune"
   },
   {
    "name": "Spirit",
    "glyph": "\u2295",
-   "lon": 123.27,
+   "lon": 120.54,
    "sign": "Leo",
-   "deg": 3,
+   "deg": 0,
    "meaning": "action & will"
   },
   {
    "name": "Eros",
    "glyph": "\u2764",
-   "lon": 291.56,
+   "lon": 294.57,
    "sign": "Capricorn",
-   "deg": 21,
+   "deg": 24,
    "meaning": "desire & love"
   }
  ],
@@ -415,7 +406,7 @@
   },
   {
    "label": "New Moon",
-   "days": 17,
+   "days": 16,
    "note": "fresh cycle"
   },
   {
