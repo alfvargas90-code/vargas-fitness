@@ -1,19 +1,19 @@
 {
-  "date": "2026-06-25",
-  "generated_at": "2026-06-25T21:45:00-05:00",
-  "verdict": "Solid",
+  "date": "2026-06-26",
+  "generated_at": "2026-06-26T21:45:00-05:00",
+  "verdict": "Big",
   "stats": {
-    "steps": 4464,
-    "active_minutes": 214,
-    "active_time_display": "3h 34m",
-    "calories_burned": 2150,
-    "active_calories": 614,
-    "calories_eaten": 1780,
-    "net_deficit": 370,
+    "steps": 12862,
+    "active_minutes": 656,
+    "active_time_display": "10h 56m",
+    "calories_burned": 2691,
+    "active_calories": 1109,
+    "calories_eaten": 0,
+    "net_deficit": 2691,
     "calorie_target": 2574,
-    "protein_g": 101,
+    "protein_g": 0,
     "protein_target_g": 138,
-    "protein_gap_g": 37
+    "protein_gap_g": 138
   },
-  "prose": "Solid day: you moved plenty, kept food controlled, and the roughly 370-calorie deficit is right in the muscle-protecting zone instead of being too aggressive. The miss was protein, which came in about 40 short, and that matters more than the 4,500 steps if you want the weight to tighten up without giving back muscle. Push protein hard tomorrow."
+  "prose": "Big output day with about 13,000 steps and a lot of time moving, but eating nothing turns that into a problem for muscle, not a win for fat loss. A deficit around 2,700 calories is way too deep, and with protein basically missed, your body did not get what it needs to protect lean mass. Push protein hard tomorrow and keep the deficit modest."
 }
