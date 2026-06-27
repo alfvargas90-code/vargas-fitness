@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-27T03:19:20-05:00",
+  "generated_at": "2026-06-27T03:49:29-05:00",
   "score": 5,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -12,7 +12,7 @@
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Sagittarius",
-    "degree": "6\u00b0 Sag 45'",
+    "degree": "7\u00b0 Sag 00'",
     "phase": "Waxing Gibbous",
     "next_sign_change": {
       "sign": "Capricorn",
@@ -37,7 +37,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 246.76,
+    "moon_longitude": 247.0,
     "moon_sign": "Sagittarius",
     "moon_phase": "Waxing Gibbous",
     "moon_house_natal": 11,
