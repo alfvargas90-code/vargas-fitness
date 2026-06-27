@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-27T07:00:00-05:00",
-  "data_hash": "cd89a1ed23bccdd1",
-  "slot": "recovery",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 4%\n\nRead\nThe morning opens on mixed capacity: recovery is serviceable, but short sleep narrows the ceiling. The day favors measured strength work and steady nourishment over intensity, with muscle preservation depending on whether protein anchors the deficit.\n\nMeasured, not muted.\n\nPerformance: Measured, not muted.\n\nTransit: none",
+  "generated_at": "2026-06-27T11:30:00-05:00",
+  "data_hash": "23035eb3abbe6ab3",
+  "slot": "fuel-1",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 80%\n\nRead\nYour morning shows solid sleep, moderate recovery, and moderate effort already spent, but intake is still empty after a long food gap. For muscle retention, this afternoon favors a protein-first meal and a modest deficit, not intensity.\n\nSteady, not sharp.\n\nPerformance: Steady, not sharp.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
-      "text": "Average"
+      "text": "Good"
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 4%\n\nRead\nThe morning opens on mixed capacity: recovery is serviceable, but short sleep narrows the ceiling. The day favors measured strength work and steady nourishment over intensity, with muscle preservation depending on whether protein anchors the deficit.\n\nMeasured, not muted."
+      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 80%\n\nRead\nYour morning shows solid sleep, moderate recovery, and moderate effort already spent, but intake is still empty after a long food gap. For muscle retention, this afternoon favors a protein-first meal and a modest deficit, not intensity.\n\nSteady, not sharp."
     },
     {
       "label": "Performance",
-      "text": "Measured, not muted."
+      "text": "Steady, not sharp."
     },
     {
       "label": "Transit",
@@ -22,20 +22,20 @@
     }
   ],
   "simple": {
-    "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 4%\n\nRead\nThe morning opens on mixed capacity: recovery is serviceable, but short sleep narrows the ceiling. The day favors measured strength work and steady nourishment over intensity, with muscle preservation depending on whether protein anchors the deficit.\n\nMeasured, not muted.",
-    "performance": "Measured, not muted.",
+    "recovery": "Good",
+    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 80%\n\nRead\nYour morning shows solid sleep, moderate recovery, and moderate effort already spent, but intake is still empty after a long food gap. For muscle retention, this afternoon favors a protein-first meal and a modest deficit, not intensity.\n\nSteady, not sharp.",
+    "performance": "Steady, not sharp.",
     "transit": null
   },
-  "nutrition_nudge": "Start breakfast with 35g protein and keep meal pacing steady.",
+  "nutrition_nudge": "Start lunch with 50g protein and keep meal pacing steady.",
   "transits": [],
   "data_basis": {
-    "recharge_today": 3,
-    "sleep_hours": 4.6,
-    "hrv_today": 96,
-    "hrv_7d_avg": 52.7,
+    "recharge_today": 4,
+    "sleep_hours": 8.1,
+    "hrv_today": 51,
+    "hrv_7d_avg": 54.1,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "40 steps so far, 8m active, 433 calories burned, \u2014 training load"
+    "activity_today": "5,086 steps so far, 3h 57m active, 1,456 calories burned, Moderate training load"
   }
 }
