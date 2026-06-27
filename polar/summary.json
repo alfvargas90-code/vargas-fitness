@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-27T11:30:00-05:00",
-  "data_hash": "23035eb3abbe6ab3",
-  "slot": "fuel-1",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 80%\n\nRead\nYour morning shows solid sleep, moderate recovery, and moderate effort already spent, but intake is still empty after a long food gap. For muscle retention, this afternoon favors a protein-first meal and a modest deficit, not intensity.\n\nSteady, not sharp.\n\nPerformance: Steady, not sharp.\n\nTransit: none",
+  "generated_at": "2026-06-27T15:00:00-05:00",
+  "data_hash": "d4ca24539b3ed44f",
+  "slot": "fuel-2",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 100%\n\nRead\nRecovery is adequate and sleep gave you more runway than usual, but the day is carrying heavy effort with no recent intake logged. The evening window favors protein-first replenishment and a modest deficit, not an aggressive drain on lean mass.\n\nSteady, not depleted.\n\nPerformance: Steady, not depleted.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 80%\n\nRead\nYour morning shows solid sleep, moderate recovery, and moderate effort already spent, but intake is still empty after a long food gap. For muscle retention, this afternoon favors a protein-first meal and a modest deficit, not intensity.\n\nSteady, not sharp."
+      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 100%\n\nRead\nRecovery is adequate and sleep gave you more runway than usual, but the day is carrying heavy effort with no recent intake logged. The evening window favors protein-first replenishment and a modest deficit, not an aggressive drain on lean mass.\n\nSteady, not depleted."
     },
     {
       "label": "Performance",
-      "text": "Steady, not sharp."
+      "text": "Steady, not depleted."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 80%\n\nRead\nYour morning shows solid sleep, moderate recovery, and moderate effort already spent, but intake is still empty after a long food gap. For muscle retention, this afternoon favors a protein-first meal and a modest deficit, not intensity.\n\nSteady, not sharp.",
-    "performance": "Steady, not sharp.",
+    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 100%\n\nRead\nRecovery is adequate and sleep gave you more runway than usual, but the day is carrying heavy effort with no recent intake logged. The evening window favors protein-first replenishment and a modest deficit, not an aggressive drain on lean mass.\n\nSteady, not depleted.",
+    "performance": "Steady, not depleted.",
     "transit": null
   },
-  "nutrition_nudge": "Start lunch with 50g protein and keep meal pacing steady.",
+  "nutrition_nudge": "Front-load 60g protein in your next meal to protect muscle and close the afternoon gap.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.1,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "5,086 steps so far, 3h 57m active, 1,456 calories burned, Moderate training load"
+    "activity_today": "6,014 steps so far, 5h 11m active, 1,865 calories burned, Heavy training load"
   }
 }
