@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-27T04:00:00-05:00",
-  "data_hash": "4c235fceecba9b1b",
-  "slot": "sleep",
-  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 1%\n\nRead\nGiven the shorter night, reserve is uneven: some internal signals look resilient, but the day is not fully restored. It favors controlled consistency, with muscle retention depending more on adequate protein and measured effort than extra activity.\n\nSteady reserve.\n\nPerformance: Steady reserve.\n\nTransit: none",
+  "generated_at": "2026-06-27T07:00:00-05:00",
+  "data_hash": "cd89a1ed23bccdd1",
+  "slot": "recovery",
+  "summary": "Recovery: Average\n\nReading: State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 4%\n\nRead\nThe morning opens on mixed capacity: recovery is serviceable, but short sleep narrows the ceiling. The day favors measured strength work and steady nourishment over intensity, with muscle preservation depending on whether protein anchors the deficit.\n\nMeasured, not muted.\n\nPerformance: Measured, not muted.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 1%\n\nRead\nGiven the shorter night, reserve is uneven: some internal signals look resilient, but the day is not fully restored. It favors controlled consistency, with muscle retention depending more on adequate protein and measured effort than extra activity.\n\nSteady reserve."
+      "text": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 4%\n\nRead\nThe morning opens on mixed capacity: recovery is serviceable, but short sleep narrows the ceiling. The day favors measured strength work and steady nourishment over intensity, with muscle preservation depending on whether protein anchors the deficit.\n\nMeasured, not muted."
     },
     {
       "label": "Performance",
-      "text": "Steady reserve."
+      "text": "Measured, not muted."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Average",
-    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 1%\n\nRead\nGiven the shorter night, reserve is uneven: some internal signals look resilient, but the day is not fully restored. It favors controlled consistency, with muscle retention depending more on adequate protein and measured effort than extra activity.\n\nSteady reserve.",
-    "performance": "Steady reserve.",
+    "reading": "State\nAverage\nRecovery 61 \u2022 Sleep 53 \u2022 Strain 4%\n\nRead\nThe morning opens on mixed capacity: recovery is serviceable, but short sleep narrows the ceiling. The day favors measured strength work and steady nourishment over intensity, with muscle preservation depending on whether protein anchors the deficit.\n\nMeasured, not muted.",
+    "performance": "Measured, not muted.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Start breakfast with 35g protein and keep meal pacing steady.",
   "transits": [],
   "data_basis": {
     "recharge_today": 3,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 52.7,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "40 steps so far, 8m active, 433 calories burned, \u2014 training load"
   }
 }
