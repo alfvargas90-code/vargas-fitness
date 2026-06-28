@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-28T04:00:00-05:00",
-  "data_hash": "cfc298213a0ec638",
-  "slot": "sleep",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 8%\n\nRead\nSleep gave you more runway than usual, while recovery still reads as moderate rather than fully restored. The day favors measured consistency, controlled intensity, and muscle-preserving choices over aggressive output.\n\nSteady reserve.\n\nPerformance: Steady reserve.\n\nTransit: none",
+  "generated_at": "2026-06-28T07:00:00-05:00",
+  "data_hash": "9b28c96d4fb437c5",
+  "slot": "recovery",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 9%\n\nRead\nYou woke with deeper sleep than usual and a steady but not peak recovery signal. Effort so far is light, leaving the day open for measured strength and muscle-preserving nourishment rather than chasing volume.\n\nMeasured capacity.\n\nPerformance: Measured capacity.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 8%\n\nRead\nSleep gave you more runway than usual, while recovery still reads as moderate rather than fully restored. The day favors measured consistency, controlled intensity, and muscle-preserving choices over aggressive output.\n\nSteady reserve."
+      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 9%\n\nRead\nYou woke with deeper sleep than usual and a steady but not peak recovery signal. Effort so far is light, leaving the day open for measured strength and muscle-preserving nourishment rather than chasing volume.\n\nMeasured capacity."
     },
     {
       "label": "Performance",
-      "text": "Steady reserve."
+      "text": "Measured capacity."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 8%\n\nRead\nSleep gave you more runway than usual, while recovery still reads as moderate rather than fully restored. The day favors measured consistency, controlled intensity, and muscle-preserving choices over aggressive output.\n\nSteady reserve.",
-    "performance": "Steady reserve.",
+    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 9%\n\nRead\nYou woke with deeper sleep than usual and a steady but not peak recovery signal. Effort so far is light, leaving the day open for measured strength and muscle-preserving nourishment rather than chasing volume.\n\nMeasured capacity.",
+    "performance": "Measured capacity.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Start breakfast with 35g protein and keep calories paced for muscle.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.1,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "382 steps so far, 35m active, 497 calories burned, Light training load"
   }
 }
