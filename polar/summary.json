@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-28T07:00:00-05:00",
-  "data_hash": "9b28c96d4fb437c5",
-  "slot": "recovery",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 9%\n\nRead\nYou woke with deeper sleep than usual and a steady but not peak recovery signal. Effort so far is light, leaving the day open for measured strength and muscle-preserving nourishment rather than chasing volume.\n\nMeasured capacity.\n\nPerformance: Measured capacity.\n\nTransit: none",
+  "generated_at": "2026-06-28T11:30:00-05:00",
+  "data_hash": "9eaa58e59a57d29b",
+  "slot": "fuel-1",
+  "summary": "Recovery: Excellent\n\nReading: State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 16%\n\nRead\nRecovery is high and sleep gave the system a clean start, but output is still lighter than your usual day and no food has landed yet. For the afternoon, this favors a protein-forward first meal and a modest deficit, not strain.\n\nSteady, well supplied.\n\nPerformance: Steady, well supplied.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
-      "text": "Good"
+      "text": "Excellent"
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 9%\n\nRead\nYou woke with deeper sleep than usual and a steady but not peak recovery signal. Effort so far is light, leaving the day open for measured strength and muscle-preserving nourishment rather than chasing volume.\n\nMeasured capacity."
+      "text": "State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 16%\n\nRead\nRecovery is high and sleep gave the system a clean start, but output is still lighter than your usual day and no food has landed yet. For the afternoon, this favors a protein-forward first meal and a modest deficit, not strain.\n\nSteady, well supplied."
     },
     {
       "label": "Performance",
-      "text": "Measured capacity."
+      "text": "Steady, well supplied."
     },
     {
       "label": "Transit",
@@ -22,20 +22,20 @@
     }
   ],
   "simple": {
-    "recovery": "Good",
-    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 9%\n\nRead\nYou woke with deeper sleep than usual and a steady but not peak recovery signal. Effort so far is light, leaving the day open for measured strength and muscle-preserving nourishment rather than chasing volume.\n\nMeasured capacity.",
-    "performance": "Measured capacity.",
+    "recovery": "Excellent",
+    "reading": "State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 16%\n\nRead\nRecovery is high and sleep gave the system a clean start, but output is still lighter than your usual day and no food has landed yet. For the afternoon, this favors a protein-forward first meal and a modest deficit, not strain.\n\nSteady, well supplied.",
+    "performance": "Steady, well supplied.",
     "transit": null
   },
-  "nutrition_nudge": "Start breakfast with 35g protein and keep calories paced for muscle.",
+  "nutrition_nudge": "Meal pacing is on track; make lunch protein-forward with 50g to protect muscle.",
   "transits": [],
   "data_basis": {
-    "recharge_today": 4,
-    "sleep_hours": 8.1,
-    "hrv_today": 51,
-    "hrv_7d_avg": 54.1,
+    "recharge_today": 6,
+    "sleep_hours": 7.9,
+    "hrv_today": 50,
+    "hrv_7d_avg": 54.7,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "382 steps so far, 35m active, 497 calories burned, Light training load"
+    "activity_today": "644 steps so far, 48m active, 888 calories burned, Light training load"
   }
 }
