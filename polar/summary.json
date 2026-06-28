@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-27T17:30:00-05:00",
-  "data_hash": "43e991844c6a4a83",
-  "slot": "train-1",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 100%\n\nRead\nA stronger night gives the system some backing, but the day has already drawn heavily from the tank and movement is running above usual. With no intake logged, the muscle-preserving side of the equation looks thin. This window favors controlled resistance work over extra volume.\n\nMeasured, not maximal.\n\nPerformance: Measured, not maximal.\n\nTransit: none",
+  "generated_at": "2026-06-27T20:00:00-05:00",
+  "data_hash": "66477883e3e6e07e",
+  "slot": "train-2",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 100%\n\nRead\nThe training window closes on a high-output day: movement ran above usual and effort drew heavily from reserves, while last night gave more support than recent pattern. For muscle retention, the unresolved risk is the empty protein picture. Tonight favors repair over more strain.\n\nRecovery has the floor.\n\nPerformance: Recovery has the floor.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 100%\n\nRead\nA stronger night gives the system some backing, but the day has already drawn heavily from the tank and movement is running above usual. With no intake logged, the muscle-preserving side of the equation looks thin. This window favors controlled resistance work over extra volume.\n\nMeasured, not maximal."
+      "text": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 100%\n\nRead\nThe training window closes on a high-output day: movement ran above usual and effort drew heavily from reserves, while last night gave more support than recent pattern. For muscle retention, the unresolved risk is the empty protein picture. Tonight favors repair over more strain.\n\nRecovery has the floor."
     },
     {
       "label": "Performance",
-      "text": "Measured, not maximal."
+      "text": "Recovery has the floor."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 100%\n\nRead\nA stronger night gives the system some backing, but the day has already drawn heavily from the tank and movement is running above usual. With no intake logged, the muscle-preserving side of the equation looks thin. This window favors controlled resistance work over extra volume.\n\nMeasured, not maximal.",
-    "performance": "Measured, not maximal.",
+    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 66 \u2022 Strain 100%\n\nRead\nThe training window closes on a high-output day: movement ran above usual and effort drew heavily from reserves, while last night gave more support than recent pattern. For muscle retention, the unresolved risk is the empty protein picture. Tonight favors repair over more strain.\n\nRecovery has the floor.",
+    "performance": "Recovery has the floor.",
     "transit": null
   },
-  "nutrition_nudge": "Front-load your next meal with 60g protein to protect muscle and close the biggest gap.",
+  "nutrition_nudge": "Front-load protein now with 60g at dinner to protect muscle while keeping the deficit modest.",
   "transits": [],
   "data_basis": {
     "recharge_today": 4,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.1,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "9,394 steps so far, 6h 48m active, 2,297 calories burned, Heavy training load"
+    "activity_today": "11,094 steps so far, 7h 42m active, 2,483 calories burned, Heavy training load"
   }
 }
