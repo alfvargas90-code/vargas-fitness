@@ -10,7 +10,7 @@
   "nowBar": {
     "forecast": "EXPANSION",
     "pressureLevel": "High",
-    "momentumDirection": "Rising",
+    "momentumDirection": "Steady",
     "nextEventDays": 14
   },
   "currentPhase": "Preparation Window",
@@ -90,37 +90,37 @@
   "opportunity": 70,
   "pressure": 100,
   "volatility": 78,
-  "momentum": 83,
+  "momentum": 75,
   "moonNow": {
-    "timestamp": "2026-06-28T11:15:00Z",
+    "timestamp": "2026-06-28T17:15:00Z",
     "tropical": {
       "sign": "Sagittarius",
-      "degree": 20.07,
+      "degree": 23.04,
       "house": 12
     },
     "vedic": {
       "sign": "Scorpio",
-      "degree": 25.84,
+      "degree": 28.81,
       "nakshatra": "Jyeshtha",
-      "nakshatra_pada": 3,
+      "nakshatra_pada": 4,
       "house": 12
     }
   },
   "tropicalReading": {
     "state": "Expansion",
-    "body": "Today is Expansion — force plus opening. Use it to build structural leverage, not to force a final verdict. Exact Mars on natal Mars raises drive and irritation; exact Jupiter sextile Mars gives usable lift. Mars-Jupiter is pressure looking for a build, not a fight. For Capricorn Rising in a 12th-House annual profection, work the pipeline quietly. Ignore noise, avoid value disputes, and advance the 2nd-House North Node self-valuation arc through one concrete move."
+    "body": "Today is expansion — usable momentum under pressure. Push one concrete door open: send the message, refine the proposal, ask for the next step. For Capricorn Rising in a 12th-House annual profection, this is preparation work, not public coronation. Exact Jupiter sextile Mars supports action; Sun sextile Sun supports clean self-definition. Jupiter-Mars is a lever, not a lottery ticket. Build structural leverage, ignore noise, and keep the 2nd-House North Node self-valuation arc in your pricing."
   },
   "traditionalReading": {
     "state": "Expansion",
-    "body": "Today is Expansion — directed force with a clean opening. Use it to push one prepared move, not scatter effort. The month is a 9th whole-sign Virgo profection, so Mercury is lord of the month; natally in Virgo, Mercury is in domicile and exaltation, but today’s Moon stresses it. Exact Mars conjunction Mars brings heat; exact Jupiter sextile Mars gives support. Mars is a blade on the workbench: cut the task, not the table. Ignore arguments; build the document, pitch, or plan.\n\nMoon today — Moon in Sagittarius, your 12th whole-sign house. Keep private pressure out of public decisions; use solitude to clear noise, finish preparation, and avoid unnecessary disclosure."
+    "body": "Today is expansion — use it to open the right door and move the draft, ask, or offer forward. Act, but keep the form clean. In this day chart, Jupiter, lord of the year and in-sect benefic, sextiles Mars, giving useful push without removing Mars’ heat. The monthly profection is the 9th whole-sign house, Virgo; Mercury is lord of the month, in domicile and exaltation, well placed natally but pressed today by the Moon. Sun sextile Sun supports clean visibility. Mars-Jupiter is fuel; Mercury is the steering.\n\nMoon today — Moon in Sagittarius, your 12th whole-sign house. Clear private clutter, limit noise, and do not let background fatigue distort the next practical decision."
   },
   "vedicReading": {
     "state": "Expansion",
-    "body": "Today is Expansion — usable push under pressure. Build move leverage: confirm documents, repair loose logistics, and keep relationship/value choices simple under the Moon-Venus-Jupiter Vimshottari chain. For Sagittarius Lagna, Jyeshtha in the 12th makes the trap private overreaction; Small Panoti asks fewer, cleaner commitments. Mars meeting Mars is heat for execution, while Jupiter sextile Mars supports practical help. Mars is a workbench today, not a courtroom. Prepare for the strongest External Manifestation Window, Aug 12-Sep 5.\n\nMoon today — Moon in Scorpio, your 12th house, nakshatra Jyeshtha pada 3. Close open loops quietly, protect sleep and focus, and avoid turning private stress into a public conversation."
+    "body": "Today is Expansion — quiet leverage under pressure. Build the move pipeline for the Aug 12-Sep 5 External Manifestation Window: documents, cash checks, repair sequence, and one relationship/value-positive outreach; ignore noise asking for instant commitment. Under Sagittarius Lagna, Moon-Venus-Jupiter in the Vimshottari chain favors support, while Sade Sati keeps the standard strict. Mars conjunction Mars is fuel; Moon square Mercury makes loose wording expensive. Jyeshtha works like a locked drawer: open only the file that matters.\n\nMoon today — Moon in Scorpio, your 12th house, nakshatra Jyeshtha pada 4. Protect focus, close loose loops, and keep private concerns out of conversations that require clean facts."
   },
   "baziReading": {
     "state": "Expansion",
-    "body": "Today is Gui-You — Yin Water Officer over Rooster Metal Wealth pressing the Ding Fire day master. Move visibly: use the Jia-Wu solar-term month Resource/Companion fire and the Wu-Zi Da Yun Output-Officer track to build pipeline and leverage; formalize later. The Rooster clashes your Rabbit, so keep work public but scope tight. In this Ben Ming Horse-year peer-fire field, flame needs a channel, not more sparks. Do not turn competition into compulsion or scatter into too many parallel fires."
+    "body": "Today is Gui-You — Yin Water Officer over Rooster Metal Wealth pressing the Ding Fire day master. Use the Jia-Wu Mang Zhong month’s Resource-to-Companion fire to build leverage, clean documents, and move visibly. The Rooster clash against your Rabbit is a sharp desk audit, not a battle flag. Wu-Zi Da Yun pressure and the 2026 Ben Ming Horse field favor Output, visibility, and disciplined follow-through; do not turn competition into compulsion or scatter into too many parallel fires."
   },
   "tarotCard": {
     "name": "Four of Wands",
@@ -129,23 +129,23 @@
     "glyph": "♧",
     "keywords": "drive",
     "state": "Expansion",
-    "body": "Four of Wands — stability in drive; consolidate and hold what you've built. Today is Expansion: build leverage and document the move, but keep formal commitments for later. Jupiter carries the field, and Saturn is the constraint to respect. exact Mars conjunction Mars is the sharpest aspect today — let it set the operating language. The Jupiter Return sits 14 days out, so treat today as part of that setup."
+    "body": "Four of Wands — stability in drive; consolidate and hold what you've built. Today is Expansion: build leverage and document the move, but keep formal commitments for later. Jupiter carries the field, and Saturn is the constraint to respect. exact Jupiter sextile Mars is the sharpest aspect today — let it set the operating language. The Jupiter Return sits 14 days out, so treat today as part of that setup."
   },
   "tropicalMonthly": {
     "state": "Expansion",
-    "body": "The dominant month is preparation: Cancer Sun puts partnership and agreement channels first, but the Capricorn Rising/12th-House profection says build quiet leverage before asking the structure to carry weight. July 12 resets the Jupiter cycle through visibility and allies; use it to widen the pipeline, not to assume outcomes. July 16 makes competence and old sensitivity overlap around career direction, so document value instead of defending it. July 23 shifts the tone into Leo and 8th-House contract realism: price, scope, credit, and shared resources need sharper terms. This is a valuation cycle you work, not a predetermined one; the 2nd-House North Node arc rewards owned standards over institutional approval. Build the beam now; the load-bearing commitments belong after late August."
+    "body": "The dominant month is preparation with leverage: Cancer season through July 23 puts the work on agreements, clients, counterparties, and relational positioning, while your Capricorn Rising / 12th-House profection keeps the real build mostly private. The loud support is the July 12 Jupiter return in Leo: use it to widen the pipeline, strengthen alliances, and name value clearly, but do not treat it as an automatic outcome. July 16 is the harder checkpoint, where competence and old sensitivity overlap in public/work settings; respond with documentation, not defensiveness. Pluto on your 2nd-House North Node keeps the self-valuation arc structural: price, ownership, and contribution must become more explicit. After the Sun enters Leo on July 23, the emphasis shifts toward shared resources, terms, and commitments. This is scaffolding going up behind the wall: build leverage now, formalize after late August."
   },
   "traditionalMonthly": {
     "state": "Expansion",
-    "body": "Dominant frame: Jupiter, lord of the year in a day chart, keeps this 12th-house Sagittarius year aimed at preparation, but this month starts in the 9th whole-sign house, Virgo, with Mercury as lord of the month. Mercury is natally in Virgo, both domicile and exaltation, so the best use is planning, writing, analysis, credentialing, and systems cleanup. Mercury is a sharp drafting table, not a stage. The Moon’s square to Mercury adds noise: do not let mood, urgency, or incomplete feedback rewrite the plan. Mercury’s supportive contact to itself favors edits, documentation, and useful conversations. Around June 30, the month hands off to the 10th whole-sign house, Libra, ruled by Venus: start preparing visible work, but formalize later. Watch Mars-style haste; build leverage now."
+    "body": "Dominant frame: Jupiter remains lord of the year for a 12th-house Sagittarius year, so this month is still preparation, not public harvest. Until around 2026-06-30, the monthly profection is the 9th whole-sign house in Virgo, with Mercury as lord of the month; natally Mercury is strong in Virgo by domicile and exaltation, so lean into writing, study, planning, documentation, and precise judgment. Mercury is the clean drafting table: use it to sort the work before anyone asks for the finished version. The Moon’s square to Mercury marks pressure and irritability; do not let short-term mood rewrite the plan. Mercury’s sextile supports useful edits and practical conversations. After 2026-06-30, the handoff to Libra and Venus moves attention toward 10th-house visibility: build leverage now, formalize later."
   },
   "vedicMonthly": {
     "state": "Expansion",
-    "body": "Moon Mahadasha with Venus antardasha is the dominant frame: build relationship, value, cash-flow, and support systems, but keep Sade Sati / Small Panoti as the constraint layer. Moon–Venus–Jupiter favors preparation, not final locking; June 28–30 closes the Pivot window, so convert movement into pipeline, documentation, and follow-up. From Jyeshtha now through the full transit Moon nakshatra cycle, treat daily mood spikes as noise unless they expose a real operational gap. The External Manifestation Windows peak later, especially Aug 12–Sep 5 2026, so this month is scaffolding before weight-bearing commitments. Expansion is a bridge under load: useful only if every beam is named, tested, and assigned. Ignore hype, old disputes, and urgency theatre; build leverage now, formalize later."
+    "body": "Dominant influence: Moon Mahadasha with Venus antardasha and Moon–Venus–Jupiter favors preparation, relationships, value, and useful openings, but Sagittarius Lagna still operates under Sade Sati / Small Panoti, so every gain has to carry weight. From Jun 28–30, the active External Manifestation Window is still a pivot: prioritize career, property, money, and agreements over emotional interpretation. The transit Moon starts in Jyeshtha now, then cycles the full nakshatra wheel; use the return near Jul 25 as a review point, not a verdict. Saturn is the quiet edit, not the loud cut. Build leverage, documentation, and pipeline now; ignore urgency, old disputes over fairness, and anything asking for premature formal commitment before the stronger Aug 12–Sep 5 2026 window."
   },
   "baziMonthly": {
     "state": "Expansion",
-    "body": "Structural frame first: in 戊子 Wu-Zi Da Yun, 2026 Bing-Wu Ben Ming keeps peer-fire visible, while your Ding Fire over core Rabbit needs leverage, not noise. Today’s 癸酉 Gui-You field favors disciplined Power over Wealth: prioritize terms, proof, pricing, and decision gates. The current 甲午 Jia-Wu month gives Resource feeding Fire, so build pipeline, publish signals, and move visibly, but do not turn competition into compulsion or scatter into too many parallel fires. On July 7, Xiao Shu shifts the month into 乙未 Yi-Wei, moving from direct Horse heat into Wood-Earth planning/output. July 7 to September 7 is the weight-bearing stack; around July 12, make the visible move concrete, then formalize after late August. This month is a forge: useful heat, but only if you control the burn."
+    "body": "The dominant field is still 戊子 Wu-Zi Da Yun plus 2026 Bing-Wu Ben Ming peer-fire: visibility matters, but control matters more. Today’s 癸酉 Gui-You field brings Water Power over Metal Wealth, favoring disciplined prioritization, clean asks, and measurable value over noise. Through 2026-07-07, 甲午 Jia-Wu gives Ding Fire Resource plus Horse fire: build pipeline, show work, and do not turn competition into compulsion or scatter into too many parallel fires. On 2026-07-07, 小暑 shifts the month to 乙未 Yi-Wei: Resource moves into Output, so convert preparation into usable structure. Around 2026-07-12, the stack favors the visible move, but formalize after late August. This is a furnace month: feed one strong flame, not ten weak ones."
   },
   "baziCore": {
     "dayMaster": "Ding Fire (丁火) — Yin Fire",
@@ -207,12 +207,12 @@
     "traditionalState": "Expansion",
     "agreementPct": 92,
     "status": "agreement",
-    "primaryAction": "Build one structural lever and push it through today."
+    "primaryAction": "Move the offer forward by building one reusable structure today."
   },
   "snapshots": {
     "modern": {
       "theme": "Expansion",
-      "driver": "Mars",
+      "driver": "Jupiter",
       "opportunity": "High",
       "pressure": "Critical",
       "action": "Build structural leverage"
@@ -222,7 +222,7 @@
       "driver": "Mercury",
       "opportunity": "High",
       "pressure": "Critical",
-      "action": "Push one move"
+      "action": "Move offer forward"
     }
   },
   "tropicalQuarter": null,
@@ -231,24 +231,24 @@
   "traditionalYear": null,
   "dailyReading": null,
   "dailyChanges": {
-    "momentum": 8,
+    "momentum": 0,
     "opportunity": 0,
     "pressure": 0,
     "volatility": 0,
     "comparedTo": "2026-06-27",
-    "lastComparedAt": "2026-06-28T06:15:00-05:00"
+    "lastComparedAt": "2026-06-28T12:15:00-05:00"
   },
-  "todaysInsight": "Build leverage and expand the pipeline. Keep commitments provisional until the numbers and terms improve.",
+  "todaysInsight": "Build leverage and fill the pipeline. Price your work before you lock terms.",
   "recommendations": [
-    "Build promotion case",
-    "Package system assets",
-    "Repair cash flow",
-    "Schedule strategic meetings"
+    "Build pipeline",
+    "Document leverage",
+    "Schedule meetings",
+    "Repair foundations"
   ],
   "avoidances": [
-    "Finalizing weak commitments",
-    "Chasing romance signals",
-    "Undervaluing owned work"
+    "Final commitments",
+    "Romance fixation",
+    "Undervaluing work"
   ],
   "drivers": [
     {
@@ -337,7 +337,7 @@
     }
   ],
   "trendDirection": "Stable",
-  "updatedAt": "2026-06-28T06:15:00-05:00",
+  "updatedAt": "2026-06-28T12:15:00-05:00",
   "sourceMode": "static",
   "currentDate": "2026-06-28",
   "sources": [
@@ -348,110 +348,98 @@
   ],
   "scoringDetail": {
     "dominanceScores": {
-      "jupiter": 12.93,
-      "saturn": 6.22,
-      "pluto": 7.14,
-      "uranus": 6.18,
-      "venus": 4.33
+      "jupiter": 12.98,
+      "saturn": 6.21,
+      "pluto": 7.15,
+      "uranus": 6.17,
+      "venus": 4.1
     },
     "corroboration": "High",
     "lordOfYear": "jupiter",
     "activeWindows": [],
     "metricDetail": {
       "opportunity": [
-        "Venus conjunction natal venus (3.48°)",
-        "Jupiter conjunction natal jupiter (2.98°)",
+        "Venus conjunction natal venus (3.2°)",
+        "Jupiter conjunction natal jupiter (2.93°)",
         "Jupiter is lord of the year (benefic regime)",
         "approaching benefic window: Jupiter return — chapter reset (14d)",
         "Vedic Moon–Venus antardasha (relationship-positive)"
       ],
       "pressure": [
-        "Mars conjunction natal mars (0.06°)",
-        "Saturn square natal saturn (5.06°)",
-        "Saturn square natal neptune (2.14°)",
-        "Saturn square natal asc (5.72°)",
+        "Mars conjunction natal mars (0.23°)",
+        "Saturn square natal saturn (5.05°)",
+        "Saturn square natal neptune (2.15°)",
+        "Saturn square natal asc (5.73°)",
         "Sade Sati (Small Panoti) — pressure on foundations"
       ],
       "volatility": [
-        "Uranus square natal sun (3.65°)",
-        "Uranus conjunction natal mars (3.88°)",
-        "Uranus sextile natal jupiter (0.98°)",
-        "Uranus trine natal north_node (3.4°)",
-        "pluto square natal mc (angular, 1.03°)"
+        "Uranus square natal sun (3.64°)",
+        "Uranus conjunction natal mars (3.89°)",
+        "Uranus sextile natal jupiter (0.99°)",
+        "Uranus trine natal north_node (3.39°)",
+        "pluto square natal mc (angular, 1.02°)"
       ],
       "momentum": [
-        "8 fast transit(s) exact within 3°",
+        "7 fast transit(s) exact within 3°",
         "approaching Jupiter return — chapter reset (14d)",
         "BaZi Da Yun shift within 79 days"
       ]
     },
     "transitSigns": {
-      "sun": "6.79° Cancer",
-      "moon": "20.07° Sagittarius",
-      "mercury": "26.2° Cancer",
-      "venus": "17.32° Leo",
-      "mars": "29.76° Taurus",
-      "jupiter": "29.62° Cancer",
-      "saturn": "14.07° Aries",
-      "uranus": "3.58° Gemini",
+      "sun": "7.03° Cancer",
+      "moon": "23.04° Sagittarius",
+      "mercury": "26.22° Cancer",
+      "venus": "17.6° Leo",
+      "mars": "29.93° Taurus",
+      "jupiter": "29.67° Cancer",
+      "saturn": "14.08° Aries",
+      "uranus": "3.59° Gemini",
       "neptune": "4.4° Aries",
-      "pluto": "4.93° Aquarius"
+      "pluto": "4.92° Aquarius"
     },
-    "siderealSun": "12.56° Gemini",
+    "siderealSun": "12.8° Gemini",
     "tightAspects": [
-      {
-        "transit": "mars",
-        "natal": "mars",
-        "aspect": "conjunction",
-        "orb": 0.06
-      },
       {
         "transit": "jupiter",
         "natal": "mars",
         "aspect": "sextile",
-        "orb": 0.08
+        "orb": 0.03
       },
       {
         "transit": "sun",
         "natal": "sun",
         "aspect": "sextile",
-        "orb": 0.44
+        "orb": 0.21
+      },
+      {
+        "transit": "mars",
+        "natal": "mars",
+        "aspect": "conjunction",
+        "orb": 0.23
       },
       {
         "transit": "moon",
-        "natal": "venus",
-        "aspect": "trine",
-        "orb": 0.73
+        "natal": "mercury",
+        "aspect": "square",
+        "orb": 0.87
       },
       {
         "transit": "uranus",
         "natal": "jupiter",
         "aspect": "sextile",
-        "orb": 0.98
+        "orb": 0.99
       },
       {
         "transit": "pluto",
         "natal": "mc",
         "aspect": "square",
-        "orb": 1.03
-      },
-      {
-        "transit": "sun",
-        "natal": "uranus",
-        "aspect": "opposition",
-        "orb": 1.11
+        "orb": 1.02
       },
       {
         "transit": "neptune",
         "natal": "moon",
         "aspect": "square",
         "orb": 1.12
-      },
-      {
-        "transit": "sun",
-        "natal": "moon",
-        "aspect": "opposition",
-        "orb": 1.27
       },
       {
         "transit": "neptune",
@@ -463,7 +451,19 @@
         "transit": "sun",
         "natal": "asc",
         "aspect": "opposition",
-        "orb": 1.56
+        "orb": 1.32
+      },
+      {
+        "transit": "sun",
+        "natal": "uranus",
+        "aspect": "opposition",
+        "orb": 1.34
+      },
+      {
+        "transit": "sun",
+        "natal": "moon",
+        "aspect": "opposition",
+        "orb": 1.51
       },
       {
         "transit": "neptune",
