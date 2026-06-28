@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-28T08:32:35-05:00",
+  "generated_at": "2026-06-28T09:02:46-05:00",
   "score": 20,
   "band": "Stable Control",
   "trigger": "Moon in natal 12th house",
@@ -12,7 +12,7 @@
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Sagittarius",
-    "degree": "21\u00b0 Sag 12'",
+    "degree": "21\u00b0 Sag 27'",
     "phase": "Waxing Gibbous",
     "next_sign_change": {
       "sign": "Capricorn",
@@ -41,7 +41,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 261.21,
+    "moon_longitude": 261.46,
     "moon_sign": "Sagittarius",
     "moon_phase": "Waxing Gibbous",
     "moon_house_natal": 12,
@@ -61,7 +61,7 @@
       "hrv_7d": 54.1,
       "rhr_7d": 55.6
     },
-    "active_calories": 77,
+    "active_calories": 78,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
