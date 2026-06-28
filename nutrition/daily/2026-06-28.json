@@ -1,0 +1,51 @@
+{
+  "date": "2026-06-28",
+  "synced_at": "2026-06-28T05:03:52+00:00",
+  "source_tool": "get_day_summary",
+  "goals": {
+    "calories": 2574.0,
+    "protein_g": 138.0,
+    "carbs_g": 290.0,
+    "fat_g": 72.0
+  },
+  "totals": {
+    "calories": 0.0,
+    "protein_g": 0.0,
+    "carbs_g": 0.0,
+    "fat_g": 0.0
+  },
+  "meal_count": 0,
+  "raw": {
+    "date": "2026-06-28",
+    "meals": [],
+    "totals": {
+      "calories": 0,
+      "protein": 0,
+      "fat": 0,
+      "carbs": 0
+    },
+    "targets": {
+      "calories": 2574,
+      "protein": 138,
+      "fat": 72,
+      "carbs": 290
+    },
+    "remaining": {
+      "calories": 2574,
+      "is_over": false
+    },
+    "meal_count": 0,
+    "labels": {
+      "header": "Today",
+      "calories_remaining": "2574 kcal remaining today",
+      "meals_logged": "0 meals logged",
+      "no_meals": "No meals logged yet",
+      "protein": "Protein",
+      "fat": "Fat",
+      "carbs": "Carbs",
+      "view_in_app": "View in app"
+    },
+    "view_in_app_url": "https://api.recordo.app/calories/day/2026-06-28",
+    "app_icon_url": "https://api.recordo.app/app-assets/calories/icon.png"
+  }
+}
