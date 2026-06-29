@@ -490,7 +490,7 @@ function moonSVG(r, illum, waning) {
     <!-- ECLIPSE — broad bloom dropped; a single thin gold corona hugs the limb. -->
     <circle cx="0" cy="0" r="${haloR}" fill="url(#moonHalo)" filter="url(#moonHaloBlur)" opacity="0.30"/>
     <g clip-path="url(#moonClip)">
-      <image href="../../assets/moon-lro.webp" x="${-r}" y="${-r}" width="${2 * r}" height="${2 * r}"
+      <image href="assets/moon-lro.webp" x="${-r}" y="${-r}" width="${2 * r}" height="${2 * r}"
              preserveAspectRatio="xMidYMid slice" style="filter:brightness(1.02) saturate(0.9)"/>
       <circle cx="0" cy="0" r="${r}" fill="url(#moonLimb)"/>
       <circle cx="0" cy="0" r="${r}" fill="url(#moonSpec)"/>
@@ -887,7 +887,7 @@ async function renderSupportCards() {
   try {
     let n = null;
     for (const day of lastN(8).slice().reverse()) {
-      try { n = await fetchJSON(`../../nutrition/daily/${day}.json`); if (!n.date) n.date = day; break; } catch {}
+      try { n = await fetchJSON(`nutrition/daily/${day}.json`); if (!n.date) n.date = day; break; } catch {}
     }
     const valEl = document.getElementById("sc-nutrition-val");
     const unitEl = document.getElementById("sc-nutrition-unit");
@@ -909,13 +909,13 @@ async function renderSupportCards() {
 
   // ── Scale — latest weight + 7-day delta + history sparkline ──
   try {
-    const s = await fetchJSON("../../vesync/snapshot.json");
+    const s = await fetchJSON("vesync/snapshot.json");
     const valEl = document.getElementById("sc-scale-val");
     const detEl = document.getElementById("sc-scale-detail");
     const sparkEl = document.getElementById("sc-scale-spark");
     if (valEl) valEl.textContent = s.weight_lb != null ? fmt(s.weight_lb, 1) : "—";
     // history sparkline + delta vs ~7 days prior
-    let hist = await fetchJSON("../../vesync/history.json").catch(() => null);
+    let hist = await fetchJSON("vesync/history.json").catch(() => null);
     let delta = null;
     if (Array.isArray(hist) && hist.length) {
       const sorted = [...hist].filter(r => r.weight_lb != null).sort((a, b) => a.date.localeCompare(b.date));
@@ -1637,7 +1637,7 @@ async function renderNutrition() {
   // No nutrition manifest — probe today back 7 days for the most recent logged day.
   let n = null;
   for (const day of lastN(8).slice().reverse()) {
-    try { n = await fetchJSON(`../../nutrition/daily/${day}.json`); if (!n.date) n.date = day; break; } catch {}
+    try { n = await fetchJSON(`nutrition/daily/${day}.json`); if (!n.date) n.date = day; break; } catch {}
   }
   try {
     if (!n) throw new Error("no nutrition days");
@@ -1720,7 +1720,7 @@ async function renderScaleSnapshot() {
     if (sub) sub.textContent = "";
   };
   try {
-    const s = await fetchJSON("../../vesync/snapshot.json");
+    const s = await fetchJSON("vesync/snapshot.json");
     const tiles = [
       { label: "Weight",       value: s.weight_lb,           unit: " lbs", d: 1 },
       { label: "Body fat",     value: s.body_fat_pct,        unit: "%",    d: 1 },
@@ -1881,7 +1881,7 @@ async function renderScaleHistory() {
     if (caption) caption.textContent = "";
   };
   try {
-    const hist = await fetchJSON("../../vesync/history.json");
+    const hist = await fetchJSON("vesync/history.json");
     if (!Array.isArray(hist) || hist.length === 0) return showEmpty();
     const sorted = [...hist].sort((a, b) => (a.date < b.date ? 1 : -1)); // newest first
     rows.innerHTML = sorted.map(r => `
@@ -2162,7 +2162,7 @@ async function renderCoach() {
   // ── RECOMP — weight vs muscle deltas (vesync/history.json, newest-first array).
   // Weigh-ins are sparse, so match the reading nearest to the 7d / 30d target. ──
   try {
-    const hist = await fetchJSON("../../vesync/history.json");
+    const hist = await fetchJSON("vesync/history.json");
     const rows = (hist || []).filter(r => r && r.date && r.weight_lb != null)
       .sort((a, b) => a.date < b.date ? 1 : -1); // newest first
     if (rows.length >= 2) {
@@ -2219,7 +2219,7 @@ async function renderCoach() {
   try {
     for (const day of lastN(3).slice().reverse()) {
       try {
-        const n = await fetchJSON(`../../nutrition/daily/${day}.json`);
+        const n = await fetchJSON(`nutrition/daily/${day}.json`);
         const t = n.totals || {}, g = n.goals || {};
         if (t.protein_g != null) {
           S.proteinG = Math.round(t.protein_g);

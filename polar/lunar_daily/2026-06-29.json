@@ -1,8 +1,10 @@
 {
   "date": "2026-06-29",
   "moon_sign": "Capricorn",
-  "moon_degree": "3\u00b0 Cap 20'",
+  "moon_degree": "6\u00b0 Cap 28'",
   "moon_phase": "Full",
-  "active_major_transits": [],
-  "score": 30
+  "active_major_transits": [
+    "Mercury retrograde (until 7/24)"
+  ],
+  "score": 60
 }
