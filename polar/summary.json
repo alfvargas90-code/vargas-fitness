@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-28T11:30:00-05:00",
-  "data_hash": "9eaa58e59a57d29b",
-  "slot": "fuel-1",
-  "summary": "Recovery: Excellent\n\nReading: State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 16%\n\nRead\nRecovery is high and sleep gave the system a clean start, but output is still lighter than your usual day and no food has landed yet. For the afternoon, this favors a protein-forward first meal and a modest deficit, not strain.\n\nSteady, well supplied.\n\nPerformance: Steady, well supplied.\n\nTransit: none",
+  "generated_at": "2026-06-28T22:06:12-05:00",
+  "data_hash": "cf94e029b96a8aad",
+  "slot": "day-review",
+  "summary": "Recovery: Excellent\n\nReading: State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 18%\n\nRead\nThe morning opens on a strong recovery base, with sleep doing more of the lifting than strain. For muscle gain while leaning out, the day favors quality resistance work and enough protein over chasing extra movement.\n\nCapacity is clean.\n\nPerformance: Capacity is clean.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 16%\n\nRead\nRecovery is high and sleep gave the system a clean start, but output is still lighter than your usual day and no food has landed yet. For the afternoon, this favors a protein-forward first meal and a modest deficit, not strain.\n\nSteady, well supplied."
+      "text": "State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 18%\n\nRead\nThe morning opens on a strong recovery base, with sleep doing more of the lifting than strain. For muscle gain while leaning out, the day favors quality resistance work and enough protein over chasing extra movement.\n\nCapacity is clean."
     },
     {
       "label": "Performance",
-      "text": "Steady, well supplied."
+      "text": "Capacity is clean."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Excellent",
-    "reading": "State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 16%\n\nRead\nRecovery is high and sleep gave the system a clean start, but output is still lighter than your usual day and no food has landed yet. For the afternoon, this favors a protein-forward first meal and a modest deficit, not strain.\n\nSteady, well supplied.",
-    "performance": "Steady, well supplied.",
+    "reading": "State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 18%\n\nRead\nThe morning opens on a strong recovery base, with sleep doing more of the lifting than strain. For muscle gain while leaning out, the day favors quality resistance work and enough protein over chasing extra movement.\n\nCapacity is clean.",
+    "performance": "Capacity is clean.",
     "transit": null
   },
-  "nutrition_nudge": "Meal pacing is on track; make lunch protein-forward with 50g to protect muscle.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
     "recharge_today": 6,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.7,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "644 steps so far, 48m active, 888 calories burned, Light training load"
+    "activity_today": null
   }
 }
