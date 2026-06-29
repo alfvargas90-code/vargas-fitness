@@ -90,7 +90,7 @@ async function renderLastSynced() {
   const txt = document.getElementById("last-synced-text");
   if (!txt) return;
   try {
-    const manifest = await fetchJSON("../../polar/manifest.json");
+    const manifest = await fetchJSON("polar/manifest.json");
     const t = manifest.synced_at ? new Date(manifest.synced_at).getTime() : NaN;
     if (!isFinite(t)) {
       txt.textContent = "sync time unknown"; txt.style.color = "#8C8270";
@@ -186,7 +186,7 @@ async function renderMonthlyHistory() {
   const card = document.getElementById("monthly-history-card");
   if (!card) return;
   try {
-    const h = await fetchJSON("../../polar/history/2026-05.json");
+    const h = await fetchJSON("polar/history/2026-05.json");
     if (!h || !h.headlines) return; // malformed → stay hidden
     const hl = h.headlines;
     const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
@@ -216,7 +216,7 @@ async function fetchJSON(path) {
 // null on any failure, so displays render WITHOUT deltas (graceful = current behavior).
 let _baselinePromise = null;
 function loadBaseline() {
-  if (!_baselinePromise) _baselinePromise = fetchJSON("../../polar/baseline.json").catch(() => null);
+  if (!_baselinePromise) _baselinePromise = fetchJSON("polar/baseline.json").catch(() => null);
   return _baselinePromise;
 }
 
@@ -240,13 +240,13 @@ async function renderPolar() {
   if (!empty || !content) return;
   const showEmpty = () => { empty.classList.remove("hidden"); content.classList.add("hidden"); };
   try {
-    const manifest = await fetchJSON("../../polar/manifest.json");
+    const manifest = await fetchJSON("polar/manifest.json");
     const cats = manifest.categories || {};
     const recDates = (cats.recharge || []).slice().sort(), sleepDates = (cats.sleep || []).slice().sort();
     if (!recDates.length && !sleepDates.length) return showEmpty();
 
-    const recArr   = await Promise.all(recDates.map(d => fetchJSON(`../../polar/recharge/${d}.json`).catch(() => null)));
-    const sleepArr = await Promise.all(sleepDates.map(d => fetchJSON(`../../polar/sleep/${d}.json`).catch(() => null)));
+    const recArr   = await Promise.all(recDates.map(d => fetchJSON(`polar/recharge/${d}.json`).catch(() => null)));
+    const sleepArr = await Promise.all(sleepDates.map(d => fetchJSON(`polar/sleep/${d}.json`).catch(() => null)));
     const recMap = {}, sleepMap = {};
     recDates.forEach((d, i) => { if (recArr[i]) recMap[d] = recArr[i]; });
     sleepDates.forEach((d, i) => { if (sleepArr[i]) sleepMap[d] = sleepArr[i]; });
@@ -568,7 +568,7 @@ async function renderRings() {
       strainCal = null, hrvDeltaPct = null;
 
   try {
-    const lunar = await fetchJSON("../../polar/lunar_stress.json").catch(() => null);
+    const lunar = await fetchJSON("polar/lunar_stress.json").catch(() => null);
     if (lunar?.lunar) {
       const { illum, waning } = phaseToIllum(lunar.lunar.phase);
       moon = { illum, waning };
@@ -592,7 +592,7 @@ async function renderRings() {
       moonCtxHero.innerHTML = rows.join("");
     }
 
-    const cats = (await fetchJSON("../../polar/manifest.json")).categories || {};
+    const cats = (await fetchJSON("polar/manifest.json")).categories || {};
     const recDates   = (cats.recharge || []).slice().sort();
     const sleepDates = (cats.sleep || []).slice().sort();
     const actDates   = (cats.daily_activity || []).slice().sort();
@@ -600,7 +600,7 @@ async function renderRings() {
     // --- SLEEP — most recent sleep_score, only if fresh (≤1 day old) ---
     const sleepDate = sleepDates.at(-1) || null;
     const sleepFresh = sleepDate && (daysSinceDate(sleepDate) ?? 99) <= 1;
-    const sleepData = sleepDate ? await fetchJSON(`../../polar/sleep/${sleepDate}.json`).catch(() => null) : null;
+    const sleepData = sleepDate ? await fetchJSON(`polar/sleep/${sleepDate}.json`).catch(() => null) : null;
     if (sleepFresh && sleepData) {
       // Duration = sleep_start → sleep_end SPAN (time in bed), matching the Polar
       // app exactly. NOT the sum of light+deep+rem stages — that excludes
@@ -628,8 +628,8 @@ async function renderRings() {
     const latestRecovDate = [recDate, sleepDate].filter(Boolean).sort().at(-1);
     const recovFresh = latestRecovDate && (daysSinceDate(latestRecovDate) ?? 99) <= 1;
     if (recovFresh) {
-      const rec = recDate ? await fetchJSON(`../../polar/recharge/${recDate}.json`).catch(() => null) : null;
-      const hrvs = (await Promise.all(recDates.map(d => fetchJSON(`../../polar/recharge/${d}.json`).catch(() => null))))
+      const rec = recDate ? await fetchJSON(`polar/recharge/${recDate}.json`).catch(() => null) : null;
+      const hrvs = (await Promise.all(recDates.map(d => fetchJSON(`polar/recharge/${d}.json`).catch(() => null))))
         .map(r => r?.heart_rate_variability_avg).filter(v => v != null);
       const hrvBaseline = hrvs.length ? hrvs.reduce((a, b) => a + b, 0) / hrvs.length : null;
       recoveryScore = computeRecoveryScore(rec, sleepData, hrvBaseline);
@@ -646,7 +646,7 @@ async function renderRings() {
     // --- STRAIN — inverse of the old Reserve bar (depletion % of 800 cal) ---
     const actDate = actDates.at(-1) || null;
     const actFresh = actDate && (daysSinceDate(actDate) ?? 99) <= 1;
-    const act = actDate ? await fetchJSON(`../../polar/daily_activity/${actDate}.json`).catch(() => null) : null;
+    const act = actDate ? await fetchJSON(`polar/daily_activity/${actDate}.json`).catch(() => null) : null;
     if (actFresh && act && act["active-calories"] != null) {
       strainCal = Math.round(Number(act["active-calories"]));
       strainPct = Math.min(100, (strainCal / RESERVE_DEPLETION_CAL) * 100);
@@ -785,11 +785,11 @@ async function renderPhysiology() {
   if (!grid) return;
   let hrv = null, hrvDelta = null, rhr = null, rhrDelta = null, resp = null, respDelta = null;
   try {
-    const manifest = await fetchJSON("../../polar/manifest.json");
+    const manifest = await fetchJSON("polar/manifest.json");
     const recDates = ((manifest.categories || {}).recharge || []).slice().sort();
     const recDate = recDates.at(-1);
     if (recDate && (daysSinceDate(recDate) ?? 99) <= 2) {
-      const rec = await fetchJSON(`../../polar/recharge/${recDate}.json`).catch(() => null);
+      const rec = await fetchJSON(`polar/recharge/${recDate}.json`).catch(() => null);
       if (rec) {
         hrv = rec.heart_rate_variability_avg ?? null;
         rhr = rec.heart_rate_avg ?? null;
@@ -797,7 +797,7 @@ async function renderPhysiology() {
       }
     }
     // Deltas from the LSI physiology block (HRV % vs baseline, RHR Δbpm).
-    const lunar = await fetchJSON("../../polar/lunar_stress.json").catch(() => null);
+    const lunar = await fetchJSON("polar/lunar_stress.json").catch(() => null);
     if (lunar?.physiology) {
       if (lunar.physiology.hrv_pct_baseline != null) hrvDelta = lunar.physiology.hrv_pct_baseline;
       if (lunar.physiology.rhr_delta_bpm != null) rhrDelta = lunar.physiology.rhr_delta_bpm;
@@ -935,10 +935,10 @@ async function renderSupportCards() {
 
   // ── Activity — steps + Apple-style multi-ring (steps / active cal / active min) ──
   try {
-    const manifest = await fetchJSON("../../polar/manifest.json");
+    const manifest = await fetchJSON("polar/manifest.json");
     const dates = ((manifest.categories || {}).daily_activity || []).slice().sort();
     const latest = dates.at(-1);
-    const a = latest ? await fetchJSON(`../../polar/daily_activity/${latest}.json`).catch(() => null) : null;
+    const a = latest ? await fetchJSON(`polar/daily_activity/${latest}.json`).catch(() => null) : null;
     const valEl = document.getElementById("sc-activity-val");
     const ringEl = document.getElementById("sc-activity-ring");
     const statsEl = document.getElementById("sc-activity-stats");
@@ -995,7 +995,7 @@ async function renderRecentBurnBadge() {
   const hide = () => { el.style.display = "none"; el.textContent = ""; };
   let rows;
   try {
-    const txt = await fetch("../../polar/metrics_history.jsonl", { cache: "no-store" }).then(r => r.ok ? r.text() : "");
+    const txt = await fetch("polar/metrics_history.jsonl", { cache: "no-store" }).then(r => r.ok ? r.text() : "");
     rows = txt.split("\n").map(l => l.trim()).filter(Boolean).map(l => { try { return JSON.parse(l); } catch { return null; } })
       .filter(r => r && r.ts && r.active_cal != null)
       .map(r => ({ t: new Date(r.ts), cal: +r.active_cal }))
@@ -1429,7 +1429,7 @@ async function renderTodaysRead() {
   const readLabel = document.getElementById("read-label");
   if (!body) return;
   try {
-    const s = await fetchJSON("../../polar/summary.json");
+    const s = await fetchJSON("polar/summary.json");
     const simple = s.simple || null;
     const raw = (simple && (simple.reading || simple.performance)) || s.summary || "";
     const p = parseCurrents(raw);
@@ -1473,7 +1473,7 @@ async function renderTodaysRead() {
 let _lastSummarySig = null;
 async function pollCurrents() {
   try {
-    const s = await fetchJSON("../../polar/summary.json");
+    const s = await fetchJSON("polar/summary.json");
     const sig = s.data_hash || s.generated_at || null;
     if (sig && sig !== _lastSummarySig) {
       _lastSummarySig = sig;
@@ -1486,7 +1486,7 @@ async function pollCurrents() {
   } catch (e) { /* offline / file missing → keep last render */ }
 }
 function startCurrentsPolling() {
-  fetchJSON("../../polar/summary.json")
+  fetchJSON("polar/summary.json")
     .then(s => { _lastSummarySig = s.data_hash || s.generated_at || null; })
     .catch(() => {});
   setInterval(pollCurrents, 60000);
@@ -1546,7 +1546,7 @@ async function renderLunarStress() {
   if (!content) return;
   let d;
   try {
-    d = await fetchJSON("../../polar/lunar_stress.json");
+    d = await fetchJSON("polar/lunar_stress.json");
   } catch (e) {
     if (empty) empty.classList.remove("hidden");
     content.classList.add("hidden");
@@ -1578,7 +1578,7 @@ async function renderLunarStress() {
   const sparkEl = document.getElementById("lsi-spark");
   if (sparkEl) {
     const days = lastN(7);
-    const arr = await Promise.all(days.map(dd => fetchJSON(`../../polar/lunar_daily/${dd}.json`).catch(() => null)));
+    const arr = await Promise.all(days.map(dd => fetchJSON(`polar/lunar_daily/${dd}.json`).catch(() => null)));
     const series = arr.map(a => a && a.score != null ? scoreToIndex10(a.score) : null).filter(v => v != null);
     sparkEl.innerHTML = series.length >= 2 ? sparkline(series) : "";
   }
@@ -1680,7 +1680,7 @@ async function renderNutritionNudge() {
   const el = document.getElementById("nutrition-nudge");
   if (!el) return;
   try {
-    const s = await fetchJSON("../../polar/summary.json");
+    const s = await fetchJSON("polar/summary.json");
     const nudge = (s.nutrition_nudge || "").trim();
     if (nudge) {
       el.textContent = "→ " + nudge;
@@ -1787,7 +1787,7 @@ async function renderDayReview() {
     const dl = document.getElementById("day-review-date"); if (dl) dl.textContent = "";
   };
   try {
-    const r = await fetchJSON("../../polar/day_review.json");
+    const r = await fetchJSON("polar/day_review.json");
     const s = r.stats || {};
 
     // Header date — "· Mon, Jun 1" from the frozen date.
@@ -1946,7 +1946,7 @@ async function renderActivity() {
     if (sub) sub.textContent = "";
   };
   try {
-    const manifest = await fetchJSON("../../polar/manifest.json");
+    const manifest = await fetchJSON("polar/manifest.json");
 
     // "Updated N min ago" stamp from polar/sync.py's per-run manifest timestamp.
     const upd = document.getElementById("activity-updated");
@@ -1960,7 +1960,7 @@ async function renderActivity() {
     const dates = ((manifest.categories || {}).daily_activity || []).slice().sort();
     if (!dates.length) return showEmpty();                       // no synced activity → empty
     const latest = dates.at(-1);
-    const a = await fetchJSON(`../../polar/daily_activity/${latest}.json`).catch(() => null);
+    const a = await fetchJSON(`polar/daily_activity/${latest}.json`).catch(() => null);
     if (!a) return showEmpty();                                   // file missing / file:// → empty
     const day = (a.date || latest).slice(0, 10);
 
@@ -2075,7 +2075,7 @@ async function renderPatternEngine() {
   const card = document.getElementById("pattern-engine");
   if (!card) return;
   try {
-    const data = await fetchJSON("../../polar/patterns.json");
+    const data = await fetchJSON("polar/patterns.json");
     const phase = data.current_phase || "—";
     const phaseLc = phase === "—" ? phase : phase.toLowerCase();   // lowercase throughout this card
     const ps = (data.phase_stats || {})[phase] || null;
@@ -2188,7 +2188,7 @@ async function renderCoach() {
   // Total sleep = light+deep+rem (seconds → min); shortfall-only, never credited. ──
   try {
     const dates = lastN(7); // oldest → newest
-    const files = await Promise.all(dates.map(d => fetchJSON(`../../polar/sleep/${d}.json`).catch(() => null)));
+    const files = await Promise.all(dates.map(d => fetchJSON(`polar/sleep/${d}.json`).catch(() => null)));
     let debtMin = 0, have = 0, lastMin = null;
     files.forEach(f => {
       if (!f) return;
@@ -2203,7 +2203,7 @@ async function renderCoach() {
   // ── RECOVERY RESERVE — 14d sum of ANS Charge + consecutive net-negative streak. ──
   try {
     const dates = lastN(14);
-    const files = await Promise.all(dates.map(d => fetchJSON(`../../polar/recharge/${d}.json`).catch(() => null)));
+    const files = await Promise.all(dates.map(d => fetchJSON(`polar/recharge/${d}.json`).catch(() => null)));
     const vals = [];
     files.forEach(f => { if (f && f.ans_charge != null) vals.push(f.ans_charge); });
     if (vals.length) {
@@ -2232,7 +2232,7 @@ async function renderCoach() {
   try {
     for (const day of lastN(2).slice().reverse()) {
       try {
-        const a = await fetchJSON(`../../polar/daily_activity/${day}.json`);
+        const a = await fetchJSON(`polar/daily_activity/${day}.json`);
         if (a["active-calories"] != null) { S.activeCal = Math.round(a["active-calories"]); break; }
       } catch {}
     }
