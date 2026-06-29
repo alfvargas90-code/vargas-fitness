@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-28T12:34:12-05:00",
-  "score": 10,
+  "generated_at": "2026-06-28T22:27:00-05:00",
+  "score": 13,
   "band": "Stable Control",
   "trigger": "Moon in natal 12th house",
   "physiology": {
@@ -8,11 +8,11 @@
     "rhr_delta_bpm": -1,
     "sleep_score": 80
   },
-  "workout_intensity": "rest",
+  "workout_intensity": "moderate",
   "recommendation": "System's regulated. Load up and push output hard today.",
   "lunar": {
     "sign": "Sagittarius",
-    "degree": "23\u00b0 Sag 12'",
+    "degree": "28\u00b0 Sag 05'",
     "phase": "Waxing Gibbous",
     "next_sign_change": {
       "sign": "Capricorn",
@@ -34,14 +34,14 @@
       "max": 55
     },
     "body": {
-      "filled": 1,
+      "filled": 2,
       "total": 10,
-      "points": 5,
+      "points": 8,
       "max": 40
     }
   },
   "transit_detail": {
-    "moon_longitude": 263.2,
+    "moon_longitude": 268.09,
     "moon_sign": "Sagittarius",
     "moon_phase": "Waxing Gibbous",
     "moon_house_natal": 12,
@@ -49,18 +49,19 @@
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 10,
+    "raw_score": 13,
     "transit_points": 5,
-    "physiology_points": 5,
+    "physiology_points": 8,
     "breakdown": [
       "+5 Moon transiting natal 12th house",
-      "+5 HRV -9% below baseline"
+      "+5 HRV -9% below baseline",
+      "+3 Moderate-intensity day"
     ],
     "baselines": {
       "hrv_7d": 54.7,
       "rhr_7d": 55.1
     },
-    "active_calories": 148,
+    "active_calories": 605,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
