@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-06-29T04:58:48+00:00",
+  "generated_at": "2026-06-29T05:29:01+00:00",
   "current_phase": "Full Moon",
   "phase_stats": {
     "New Moon": {
       "sleep_delta_h": 0.2,
       "recovery_delta_pct": -33,
-      "strain_delta_pct": -10,
+      "strain_delta_pct": -7,
       "sample_size": 10,
       "metric_samples": {
         "sleep": 9,
@@ -16,7 +16,7 @@
     "Waxing Crescent": {
       "sleep_delta_h": 0.0,
       "recovery_delta_pct": 1,
-      "strain_delta_pct": 21,
+      "strain_delta_pct": 25,
       "sample_size": 15,
       "metric_samples": {
         "sleep": 15,
@@ -27,7 +27,7 @@
     "First Quarter": {
       "sleep_delta_h": -0.0,
       "recovery_delta_pct": -10,
-      "strain_delta_pct": 12,
+      "strain_delta_pct": 16,
       "sample_size": 9,
       "metric_samples": {
         "sleep": 9,
@@ -38,7 +38,7 @@
     "Waxing Gibbous": {
       "sleep_delta_h": -0.4,
       "recovery_delta_pct": 1,
-      "strain_delta_pct": 10,
+      "strain_delta_pct": 14,
       "sample_size": 10,
       "metric_samples": {
         "sleep": 10,
@@ -49,18 +49,18 @@
     "Full Moon": {
       "sleep_delta_h": 0.0,
       "recovery_delta_pct": 35,
-      "strain_delta_pct": -24,
-      "sample_size": 11,
+      "strain_delta_pct": -41,
+      "sample_size": 12,
       "metric_samples": {
         "sleep": 10,
         "recovery": 3,
-        "strain": 3
+        "strain": 4
       }
     },
     "Waning Gibbous": {
       "sleep_delta_h": 0.3,
       "recovery_delta_pct": 40,
-      "strain_delta_pct": 10,
+      "strain_delta_pct": 14,
       "sample_size": 10,
       "metric_samples": {
         "sleep": 10,
@@ -71,7 +71,7 @@
     "Last Quarter": {
       "sleep_delta_h": -0.2,
       "recovery_delta_pct": -16,
-      "strain_delta_pct": -18,
+      "strain_delta_pct": -15,
       "sample_size": 15,
       "metric_samples": {
         "sleep": 15,
@@ -82,7 +82,7 @@
     "Waning Crescent": {
       "sleep_delta_h": 0.2,
       "recovery_delta_pct": -19,
-      "strain_delta_pct": -6,
+      "strain_delta_pct": -3,
       "sample_size": 12,
       "metric_samples": {
         "sleep": 12,
@@ -94,6 +94,6 @@
   "overall_avg": {
     "sleep_h": 6.7,
     "recovery": 50,
-    "strain_kcal": 971
+    "strain_kcal": 938
   }
 }
