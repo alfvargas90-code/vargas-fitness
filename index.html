@@ -7,7 +7,7 @@
 <!-- PWA / Add to Home Screen -->
 <link rel="manifest" href="manifest.json" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-<meta name="theme-color" content="#03050F" />
+<meta name="theme-color" content="#040405" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="V" />
@@ -71,28 +71,28 @@
       extend: {
         colors: {
           // ── LPI v1 — "Lunar Performance Intelligence" replica palette ──────
-          ink:    "#03050F",                 // base — deep OLED black
-          ink2:   "#080B1C",
-          panel:  "#080B1C",
-          surface:"#10183A",
+          ink:    "#040405",                 // base — deep OLED black
+          ink2:   "#0B0A0C",
+          panel:  "#0B0A0C",
+          surface:"#14110B",
           card:   "rgba(12,16,38,0.66)",     // glass card base (sampled from mockup)
           bg:     "rgba(255,255,255,0.035)",  // faint inner-tile fill on glass
           line:   "rgba(255,255,255,0.07)",  // glass hairline
           linesoft: "rgba(255,255,255,0.05)",
-          muted:  "#8A90A6",                 // labels
+          muted:  "#8C8270",                 // labels
           // ── LPI semantic functions ──
-          recov:  "#00C8FF",                 // Recovery (cyan)
-          sleepc: "#8A5CFF",                 // Sleep (purple)
-          strainc:"#FF5E62",                 // Strain (coral/red)
-          activ:  "#FF8A3D",                 // Activity (orange)
-          nutri:  "#39D98A",                 // Nutrition (green)
-          ctx:    "#8A5CFF",                 // Context (Lunar)
+          recov:  "#F0B429",                 // Recovery (cyan)
+          sleepc: "#A98A3E",                 // Sleep (purple)
+          strainc:"#C8841E",                 // Strain (coral/red)
+          activ:  "#D9A52E",                 // Activity (orange)
+          nutri:  "#F0B429",                 // Nutrition (green)
+          ctx:    "#A98A3E",                 // Context (Lunar)
           // ── Legacy aliases repointed so old refs stay live ──
-          purple: "#8A5CFF", violet: "#8A5CFF", cyan: "#00C8FF",
-          coral:  "#FF5E62", green: "#39D98A", amber: "#FF8A3D",
-          accent: "#8A5CFF", electric: "#8A5CFF", cobalt: "#00C8FF",
-          good: "#39D98A", perf: "#39D98A", warn: "#FF8A3D", bad: "#FF5E62",
-          gold: "#FF8A3D", maroon: "#64748B",
+          purple: "#A98A3E", violet: "#A98A3E", cyan: "#F0B429",
+          coral:  "#C8841E", green: "#F0B429", amber: "#D9A52E",
+          accent: "#A98A3E", electric: "#A98A3E", cobalt: "#F0B429",
+          good: "#F0B429", perf: "#F0B429", warn: "#D9A52E", bad: "#C8841E",
+          gold: "#D9A52E", maroon: "#6E6656",
         },
       },
     },
@@ -100,33 +100,30 @@
 </script>
 <style>
   /* ── LPI v1 replica — Layer 1: deep OLED black base ─────────────────────────
-     Sampled base ≈ #03050F near top, lifting to ≈ #04091F lower. Corner blooms
+     Sampled base ≈ #040405 near top, lifting to ≈ #050505 lower. Corner blooms
      are intentionally subtle — the wave SVG (Layer 2) carries the color. */
   body {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
-    color: #F2F5FA;
+    color: #ECE6D8;
     min-height: 100vh;
+    /* ECLIPSE — near-pure black, a single whisper of gold high behind the moon. */
     background:
-      radial-gradient(118% 60% at 50% 28%, rgba(88,62,205,.40), transparent 62%),
-      radial-gradient(circle at 2% 42%, rgba(0,200,255,.10), transparent 46%),
-      radial-gradient(circle at 98% 42%, rgba(255,94,98,.10), transparent 46%),
-      radial-gradient(circle at 86% 70%, rgba(255,138,61,.09), transparent 46%),
-      radial-gradient(circle at 14% 72%, rgba(138,92,255,.12), transparent 46%),
-      linear-gradient(180deg, #03050F 0%, #04061a 50%, #03040E 100%);
+      radial-gradient(120% 52% at 50% 22%, rgba(240,180,41,.05), transparent 56%),
+      linear-gradient(180deg, #040405 0%, #050504 60%, #030303 100%);
     background-attachment: fixed;
     /* Solid base under the gradients. The `background:` shorthand above resets
        background-color to transparent; without this, iOS Safari shows WHITE in the
        overscroll/rubber-band region and the bottom safe-area strip, because its
        `background-attachment: fixed` is broken and the gradient fails to paint there.
        A solid deep-navy base guarantees those regions are never bare white. */
-    background-color: #03050F;
+    background-color: #040405;
   }
   .stat-num { font-variant-numeric: tabular-nums; }
   html, body { overflow-x: hidden; max-width: 100%; }
   /* Root paints the area outside body (top notch + bottom safe-area) the same
      deep OLED navy as the page base, so no white chrome bleeds through above or
      below the content. (body keeps its own gradient.) */
-  html { background: #03050F; }
+  html { background: #040405; }
 
   /* ── Layer 2: wave system — gradient ribbons converging on the moon center ──
      viewBox is 390×844 (the 1× design frame), so path coords are CSS pixels and
@@ -145,7 +142,7 @@
     content: ""; position: absolute; inset: 0;
     background-image:
       radial-gradient(rgba(255,255,255,.96) 0.7px, transparent 1.15px),
-      radial-gradient(rgba(0,200,255,.9) 0.6px, transparent 1.05px),
+      radial-gradient(rgba(240,180,41,.9) 0.6px, transparent 1.05px),
       radial-gradient(rgba(255,255,255,1) 1.1px, transparent 1.7px);
     background-size: 34px 34px, 50px 50px, 90px 90px;
     background-position: 0 0, 19px 13px, 41px 27px;
@@ -175,9 +172,9 @@
     position: absolute; inset: 0; z-index: 0; pointer-events: none;
     background:
       /* Central violet/blue bloom seated behind the moon — the mockup's core glow. */
-      radial-gradient(300px 250px at 50% 34%, rgba(120,108,255,0.20), transparent 70%),
-      radial-gradient(260px 260px at 6% 62%, rgba(0,200,255,0.20), transparent 76%),
-      radial-gradient(280px 280px at 94% 42%, rgba(255,94,98,0.18), transparent 76%);
+      radial-gradient(300px 250px at 50% 34%, rgba(176,128,30,0.20), transparent 70%),
+      radial-gradient(260px 260px at 6% 62%, rgba(240,180,41,0.20), transparent 76%),
+      radial-gradient(280px 280px at 94% 42%, rgba(200,132,30,0.18), transparent 76%);
     filter: blur(24px);
     animation: zoneBreathe 9s ease-in-out infinite alternate;
   }
@@ -229,53 +226,43 @@
 
   /* ── Hero metric corners ────────────────────────────────────────────────── */
   .metric-corner { display: flex; flex-direction: column; line-height: 1.02; }
-  .metric-cap   { font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; }
-  .metric-num   { font-size: 34px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
-  .metric-word  { font-size: 13px; font-weight: 700; margin-top: 2px; }
-  .metric-detail{ font-size: 11px; color: #8A90A6; margin-top: 2px; font-weight: 600; }
+  /* ECLIPSE — engraved/editorial type: light numerals, wide-tracked caps. */
+  .metric-cap   { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color:#A98A3E; }
+  .metric-num   { font-size: 36px; font-weight: 300; font-variant-numeric: tabular-nums; line-height: 1; letter-spacing: 1px; }
+  .metric-word  { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+  .metric-detail{ font-size: 10px; color: #8C8270; margin-top: 3px; font-weight: 500; letter-spacing:.4px; }
 
-  /* ── Soft semantic glows ─────────────────────────────────────────────────── */
-  .glow-recov  { text-shadow: 0 0 17px rgba(0,200,255,0.78); }
-  .glow-sleep  { text-shadow: 0 0 17px rgba(138,92,255,0.78); }
-  .glow-strain { text-shadow: 0 0 18px rgba(255,94,98,0.85); }
-  .glow-activ  { text-shadow: 0 0 11px rgba(255,138,61,0.55); }
-  .glow-nutri  { text-shadow: 0 0 11px rgba(57,217,138,0.55); }
-  .glow-ctx    { text-shadow: 0 0 12px rgba(138,92,255,0.60); }
-  .glow-purple, .glow-violet, .glow-electric { text-shadow: 0 0 17px rgba(138,92,255,0.78); }
-  .glow-cyan, .glow-cobalt   { text-shadow: 0 0 17px rgba(0,200,255,0.78); }
-  .glow-coral, .glow-bad     { text-shadow: 0 0 18px rgba(255,94,98,0.85); }
-  .glow-green, .glow-good     { text-shadow: 0 0 11px rgba(57,217,138,0.55); }
-  .glow-amber, .glow-gold, .glow-warn   { text-shadow: 0 0 11px rgba(255,138,61,0.55); }
-  .glow-maroon   { text-shadow: 0 0 7px rgba(100,116,139,0.50); }
+  /* ── ECLIPSE — glows dialed to a whisper (gold is line + ink, not bloom) ───── */
+  .glow-recov, .glow-sleep, .glow-strain, .glow-activ, .glow-nutri, .glow-ctx,
+  .glow-purple, .glow-violet, .glow-electric, .glow-cyan, .glow-cobalt,
+  .glow-coral, .glow-bad, .glow-green, .glow-good, .glow-amber, .glow-gold,
+  .glow-warn   { text-shadow: 0 0 6px rgba(240,180,41,0.30); }
+  .glow-maroon { text-shadow: none; }
 
-  /* ── Glass card system (sampled from mockup) ─────────────────────────────── */
+  /* ── ECLIPSE — engraved panels: flat near-black, gold hairline, tight radius ── */
   .gradient-card, .lpi-card {
-    /* Lit-glass tiles (mockup): slightly brighter, bluer surface + a top sheen so
-       cards read as lifted glass rather than vanishing into the OLED base. */
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0) 42%),
-      rgba(20,26,54,0.68);
-    border: 1px solid rgba(255,255,255,0.11);
-    -webkit-backdrop-filter: blur(24px) saturate(1.24);
-    backdrop-filter: blur(24px) saturate(1.24);
-    border-radius: 22px;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.16), inset 0 -1px 0 rgba(0,0,0,.35), 0 22px 50px rgba(0,0,0,.5);
+    background: rgba(14,13,10,0.45);
+    border: 1px solid rgba(240,180,41,0.16);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    border-radius: 6px;
+    box-shadow: inset 0 1px 0 rgba(240,180,41,.06), 0 18px 44px rgba(0,0,0,.5);
   }
   @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
-    .gradient-card, .lpi-card { background: rgba(9,12,28,0.94); }
+    .gradient-card, .lpi-card { background: rgba(12,11,8,0.94); }
   }
 
   /* ── COACH card — warm-gold trainer read (sets it apart from cyan/purple tabs) ── */
   .coach-card {
     background:
-      linear-gradient(180deg, rgba(255,176,32,0.10), rgba(255,176,32,0) 46%),
+      linear-gradient(180deg, rgba(240,180,41,0.10), rgba(240,180,41,0) 46%),
       rgba(28,23,12,0.66);
-    border: 1px solid rgba(255,176,32,0.30);
+    border: 1px solid rgba(240,180,41,0.30);
     -webkit-backdrop-filter: blur(24px) saturate(1.24);
     backdrop-filter: blur(24px) saturate(1.24);
     border-radius: 22px;
-    box-shadow: inset 0 1px 0 rgba(255,210,120,.18), inset 0 -1px 0 rgba(0,0,0,.35),
-                0 22px 50px rgba(0,0,0,.5), 0 0 22px rgba(255,176,32,0.10);
+    box-shadow: inset 0 1px 0 rgba(246,216,138,.18), inset 0 -1px 0 rgba(0,0,0,.35),
+                0 22px 50px rgba(0,0,0,.5), 0 0 22px rgba(240,180,41,0.10);
   }
   @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
     .coach-card { background: rgba(20,16,8,0.96); }
@@ -285,15 +272,15 @@
     font-size: 13.5px; line-height: 1.5; font-style: italic; font-weight: 500;
     color: #FCEFD6; letter-spacing: 0.1px;
     padding: 9px 12px; border-radius: 13px 13px 13px 4px;
-    background: linear-gradient(180deg, rgba(255,176,32,0.13), rgba(255,176,32,0.05));
-    border: 1px solid rgba(255,176,32,0.16);
+    background: linear-gradient(180deg, rgba(240,180,41,0.13), rgba(240,180,41,0.05));
+    border: 1px solid rgba(240,180,41,0.16);
   }
   /* Three compact trainer metrics */
   .coach-metrics { display: flex; gap: 8px; margin-top: 11px; }
   .coach-metric { flex: 1; min-width: 0; text-align: left; }
   .coach-metric + .coach-metric { border-left: 1px solid rgba(255,255,255,0.07); padding-left: 9px; }
   .coach-m-cap { font-size: 8.5px; letter-spacing: 0.7px; text-transform: uppercase; font-weight: 700;
-    color: rgba(255,210,120,0.62); white-space: nowrap; }
+    color: rgba(246,216,138,0.62); white-space: nowrap; }
   .coach-m-val { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums;
     line-height: 1.1; margin-top: 4px; color: #F4F1E8; }
   .coach-m-sub { font-size: 9.5px; font-weight: 600; line-height: 1.2; margin-top: 2px;
@@ -329,15 +316,15 @@
     cursor: pointer; padding: 3px 8px; background: none; border: none;
     -webkit-tap-highlight-color: transparent; transition: transform 0.15s; }
   .tabnav-item:active { transform: scale(0.94); }
-  .tabnav-bar { height: 3px; width: 18px; border-radius: 2px; background: #3A4163; transition: all 0.25s; }
+  .tabnav-bar { height: 3px; width: 18px; border-radius: 2px; background: #2A2515; transition: all 0.25s; }
   .tabnav-item.active .tabnav-bar { width: 30px; background: var(--tc); box-shadow: 0 0 10px var(--tc); }
   .tabnav-name { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
-    color: #6A7090; transition: color 0.2s; }
+    color: #6E6656; transition: color 0.2s; }
   .tabnav-item.active .tabnav-name { color: var(--tc); text-shadow: 0 0 12px var(--tc); }
   /* Recovery 3-col header + Body hero (SUN/MOON/RISING column pattern) */
   .big3-row { display: flex; gap: 8px; }
   .big3-cell { flex: 1; min-width: 0; text-align: center; padding: 12px 6px; border-radius: 16px; }
-  .big3-cap { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; color: #8A90A6; }
+  .big3-cap { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; color: #8C8270; }
   .big3-val { font-size: 21px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.05; margin-top: 5px; }
   .big3-sub { font-size: 10px; font-weight: 600; margin-top: 3px; line-height: 1.2; min-height: 12px; }
 
@@ -347,23 +334,23 @@
      Ambient moon-float runs always. Everything disabled under reduced-motion.
      The moon SVG renders into #rings-orbit-svg (no base transform) — animating it
      is safe; #moon-context-hero keeps its -translate-x-1/2 via a dedicated frame. */
-  #rings-orbit-svg { animation: heroMoonFloat 12s ease-in-out 1.4s infinite alternate; will-change: transform; }
+  #rings-orbit-svg { animation: heroMoonFloat 12s ease-in-out .5s infinite alternate; will-change: transform; }
   body.hero-intro #rings-orbit-svg {
-    animation: heroMoonRise 1.9s cubic-bezier(.16,.84,.3,1) .2s both,
-               heroMoonFloat 12s ease-in-out 2.2s infinite alternate;
+    animation: heroMoonRise .63s cubic-bezier(.16,.84,.3,1) .07s both,
+               heroMoonFloat 12s ease-in-out .75s infinite alternate;
   }
-  body.hero-intro .hero-metrics-overlay .ring-corner { animation: heroCornerIn .85s ease-out both; }
-  body.hero-intro .ring-corner[data-target="todays-read"] { animation-delay: 1.35s; }
-  body.hero-intro .ring-corner[data-target="polar-panel"] { animation-delay: 1.55s; }
-  body.hero-intro .ring-corner[data-target="activity"]    { animation-delay: 1.75s; }
-  body.hero-intro #moon-context-hero { animation: heroCtxIn 1s ease-out 1.95s both; }
+  body.hero-intro .hero-metrics-overlay .ring-corner { animation: heroCornerIn .28s ease-out both; }
+  body.hero-intro .ring-corner[data-target="todays-read"] { animation-delay: .45s; }
+  body.hero-intro .ring-corner[data-target="polar-panel"] { animation-delay: .52s; }
+  body.hero-intro .ring-corner[data-target="activity"]    { animation-delay: .58s; }
+  body.hero-intro #moon-context-hero { animation: heroCtxIn .33s ease-out .65s both; }
   .hero-flare {
     position: absolute; left: 50%; top: 138px; width: 300px; height: 3px; z-index: 4;
     transform: translate(-50%,-50%) scaleX(0); transform-origin: 50% 50%;
-    background: linear-gradient(90deg, transparent, rgba(190,239,255,.8) 38%, #fff 50%, rgba(216,203,255,.8) 62%, transparent);
+    background: linear-gradient(90deg, transparent, rgba(251,239,204,.8) 38%, #fff 50%, rgba(246,216,138,.8) 62%, transparent);
     filter: blur(1.4px); opacity: 0; pointer-events: none;
   }
-  body.hero-intro .hero-flare { animation: heroFlare 1.5s ease-out 1.25s both; }
+  body.hero-intro .hero-flare { animation: heroFlare .5s ease-out .42s both; }
   @keyframes heroMoonRise { from { opacity: 0; transform: translateY(30px) scale(.9); filter: brightness(.5); }
                             to   { opacity: 1; transform: translateY(0) scale(1); filter: brightness(1); } }
   @keyframes heroMoonFloat { from { transform: translateY(0) scale(1); } to { transform: translateY(-5px) scale(1.012); } }
@@ -377,6 +364,19 @@
     body.hero-intro .hero-metrics-overlay .ring-corner,
     body.hero-intro #moon-context-hero, body.hero-intro .hero-flare { animation: none !important; }
   }
+  /* ════ ECLIPSE austerity overrides — strip everything that isn't line + ink ════
+     Variant 4 is defined by EMPTINESS: no wave field, no atmospheric glow, no
+     particle haze. Just a starfield, hairline rings, and a thin-corona moon on
+     near-pure black. Suppress the canonical atmosphere layers entirely. */
+  #bg-waves, #bg-particles, .bg-fx::after { display: none !important; }
+  .hero-layer-2, .hero-zones, .hero-sleep-scrim, .hero-strain-scrim,
+  .hero-flare { display: none !important; }
+  /* Keep only a faint star wash from layer-1; mute the seat/cast so the moon
+     sits quietly rather than glowing. */
+  .hero-layer-1 { opacity: .7; }
+  /* Hero numerals: light editorial gold, no bloom (override the JS-set shadow via
+     a thin one in app.js; this just locks the resting color). */
+  .metric-num { color: #F6D88A; }
 </style>
 </head>
 <body class="min-h-screen hero-intro">
@@ -385,51 +385,51 @@
     <svg id="bg-waves" viewBox="0 0 390 844" preserveAspectRatio="xMidYMin slice" fill="none">
       <defs>
         <linearGradient id="wvCyan" x1="0" y1="0.5" x2="1" y2="0.7">
-          <stop offset="0" stop-color="#00C8FF" stop-opacity="0"/>
-          <stop offset="0.45" stop-color="#00C8FF" stop-opacity="1"/>
-          <stop offset="1" stop-color="#8A5CFF" stop-opacity="0.06"/>
+          <stop offset="0" stop-color="#F0B429" stop-opacity="0"/>
+          <stop offset="0.45" stop-color="#F0B429" stop-opacity="1"/>
+          <stop offset="1" stop-color="#A98A3E" stop-opacity="0.06"/>
         </linearGradient>
         <linearGradient id="wvPurple" x1="0" y1="0.5" x2="1" y2="0.7">
-          <stop offset="0" stop-color="#8A5CFF" stop-opacity="0"/>
-          <stop offset="0.5" stop-color="#8A5CFF" stop-opacity="0.98"/>
-          <stop offset="1" stop-color="#00C8FF" stop-opacity="0.06"/>
+          <stop offset="0" stop-color="#A98A3E" stop-opacity="0"/>
+          <stop offset="0.5" stop-color="#A98A3E" stop-opacity="0.98"/>
+          <stop offset="1" stop-color="#F0B429" stop-opacity="0.06"/>
         </linearGradient>
         <linearGradient id="wvCoral" x1="1" y1="0.5" x2="0" y2="0.7">
-          <stop offset="0" stop-color="#FF5E62" stop-opacity="0"/>
-          <stop offset="0.45" stop-color="#FF5E62" stop-opacity="1"/>
-          <stop offset="1" stop-color="#8A5CFF" stop-opacity="0.06"/>
+          <stop offset="0" stop-color="#C8841E" stop-opacity="0"/>
+          <stop offset="0.45" stop-color="#C8841E" stop-opacity="1"/>
+          <stop offset="1" stop-color="#A98A3E" stop-opacity="0.06"/>
         </linearGradient>
         <linearGradient id="wvOrange" x1="1" y1="0.5" x2="0" y2="0.7">
-          <stop offset="0" stop-color="#FF8A3D" stop-opacity="0"/>
-          <stop offset="0.5" stop-color="#FF8A3D" stop-opacity="1"/>
-          <stop offset="1" stop-color="#FF6B6B" stop-opacity="0.06"/>
+          <stop offset="0" stop-color="#D9A52E" stop-opacity="0"/>
+          <stop offset="0.5" stop-color="#D9A52E" stop-opacity="1"/>
+          <stop offset="1" stop-color="#C8841E" stop-opacity="0.06"/>
         </linearGradient>
         <!-- Radial glow halos — depth under the wave intersections, not brightness -->
         <radialGradient id="haloCyan" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0" stop-color="#00C8FF" stop-opacity="0.32"/>
-          <stop offset="1" stop-color="#00C8FF" stop-opacity="0"/>
+          <stop offset="0" stop-color="#F0B429" stop-opacity="0.32"/>
+          <stop offset="1" stop-color="#F0B429" stop-opacity="0"/>
         </radialGradient>
         <radialGradient id="haloViolet" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0" stop-color="#8A5CFF" stop-opacity="0.34"/>
-          <stop offset="1" stop-color="#8A5CFF" stop-opacity="0"/>
+          <stop offset="0" stop-color="#A98A3E" stop-opacity="0.34"/>
+          <stop offset="1" stop-color="#A98A3E" stop-opacity="0"/>
         </radialGradient>
         <radialGradient id="haloCoral" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0" stop-color="#FF5E62" stop-opacity="0.28"/>
-          <stop offset="1" stop-color="#FF5E62" stop-opacity="0"/>
+          <stop offset="0" stop-color="#C8841E" stop-opacity="0.28"/>
+          <stop offset="1" stop-color="#C8841E" stop-opacity="0"/>
         </radialGradient>
         <!-- Extra-large, extra-soft depth halos (alpha ~0.06–0.10) — atmospheric
              depth across the background plane, never reading as "brighter". -->
         <radialGradient id="haloCyanXL" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0" stop-color="#00C8FF" stop-opacity="0.09"/>
-          <stop offset="1" stop-color="#00C8FF" stop-opacity="0"/>
+          <stop offset="0" stop-color="#F0B429" stop-opacity="0.09"/>
+          <stop offset="1" stop-color="#F0B429" stop-opacity="0"/>
         </radialGradient>
         <radialGradient id="haloVioletXL" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0" stop-color="#8A5CFF" stop-opacity="0.10"/>
-          <stop offset="1" stop-color="#8A5CFF" stop-opacity="0"/>
+          <stop offset="0" stop-color="#A98A3E" stop-opacity="0.10"/>
+          <stop offset="1" stop-color="#A98A3E" stop-opacity="0"/>
         </radialGradient>
         <radialGradient id="haloCoralXL" cx="0.5" cy="0.5" r="0.5">
-          <stop offset="0" stop-color="#FF5E62" stop-opacity="0.07"/>
-          <stop offset="1" stop-color="#FF5E62" stop-opacity="0"/>
+          <stop offset="0" stop-color="#C8841E" stop-opacity="0.07"/>
+          <stop offset="1" stop-color="#C8841E" stop-opacity="0"/>
         </radialGradient>
         <filter id="wvblur" x="-40%" y="-40%" width="180%" height="180%">
           <feGaussianBlur stdDeviation="11"/>
@@ -526,38 +526,38 @@
     <svg id="bg-particles" viewBox="0 0 390 844" preserveAspectRatio="xMidYMin slice" fill="none" aria-hidden="true">
       <g>
         <circle cx="18" cy="58" r="0.7" fill="#FFFFFF" fill-opacity="0.24"/>
-        <circle cx="67" cy="32" r="0.5" fill="#BFE6FF" fill-opacity="0.28"/>
+        <circle cx="67" cy="32" r="0.5" fill="#FBEFCC" fill-opacity="0.28"/>
         <circle cx="129" cy="76" r="0.9" fill="#FFFFFF" fill-opacity="0.34"/>
         <circle cx="214" cy="41" r="0.6" fill="#FFFFFF" fill-opacity="0.22"/>
-        <circle cx="314" cy="69" r="0.8" fill="#D8C9FF" fill-opacity="0.31"/>
+        <circle cx="314" cy="69" r="0.8" fill="#F6D88A" fill-opacity="0.31"/>
         <circle cx="370" cy="37" r="0.5" fill="#FFFFFF" fill-opacity="0.26"/>
         <circle cx="42" cy="128" r="0.6" fill="#FFFFFF" fill-opacity="0.30"/>
         <circle cx="96" cy="164" r="1.0" fill="#FFFFFF" fill-opacity="0.38"/>
-        <circle cx="153" cy="151" r="1.2" fill="#BFE6FF" fill-opacity="0.50"/>
+        <circle cx="153" cy="151" r="1.2" fill="#FBEFCC" fill-opacity="0.50"/>
         <circle cx="201" cy="184" r="1.1" fill="#FFFFFF" fill-opacity="0.53"/>
         <circle cx="238" cy="126" r="0.7" fill="#FFFFFF" fill-opacity="0.29"/>
         <circle cx="287" cy="169" r="0.8" fill="#FFFFFF" fill-opacity="0.33"/>
-        <circle cx="351" cy="142" r="0.6" fill="#BFE6FF" fill-opacity="0.27"/>
-        <circle cx="27" cy="221" r="0.8" fill="#D8C9FF" fill-opacity="0.30"/>
+        <circle cx="351" cy="142" r="0.6" fill="#FBEFCC" fill-opacity="0.27"/>
+        <circle cx="27" cy="221" r="0.8" fill="#F6D88A" fill-opacity="0.30"/>
         <circle cx="74" cy="254" r="0.5" fill="#FFFFFF" fill-opacity="0.23"/>
         <circle cx="131" cy="238" r="0.7" fill="#FFFFFF" fill-opacity="0.35"/>
         <circle cx="169" cy="284" r="1.3" fill="#FFFFFF" fill-opacity="0.51"/>
-        <circle cx="218" cy="249" r="1.0" fill="#D8C9FF" fill-opacity="0.49"/>
-        <circle cx="244" cy="298" r="0.9" fill="#BFE6FF" fill-opacity="0.47"/>
+        <circle cx="218" cy="249" r="1.0" fill="#F6D88A" fill-opacity="0.49"/>
+        <circle cx="244" cy="298" r="0.9" fill="#FBEFCC" fill-opacity="0.47"/>
         <circle cx="302" cy="236" r="0.6" fill="#FFFFFF" fill-opacity="0.25"/>
         <circle cx="378" cy="272" r="0.8" fill="#FFFFFF" fill-opacity="0.32"/>
         <circle cx="15" cy="334" r="0.5" fill="#FFFFFF" fill-opacity="0.21"/>
-        <circle cx="54" cy="383" r="0.9" fill="#BFE6FF" fill-opacity="0.34"/>
+        <circle cx="54" cy="383" r="0.9" fill="#FBEFCC" fill-opacity="0.34"/>
         <circle cx="111" cy="346" r="0.6" fill="#FFFFFF" fill-opacity="0.27"/>
         <circle cx="147" cy="409" r="0.8" fill="#FFFFFF" fill-opacity="0.36"/>
         <circle cx="196" cy="361" r="0.5" fill="#FFFFFF" fill-opacity="0.24"/>
         <circle cx="265" cy="389" r="1.0" fill="#FFFFFF" fill-opacity="0.39"/>
-        <circle cx="333" cy="341" r="0.7" fill="#D8C9FF" fill-opacity="0.29"/>
+        <circle cx="333" cy="341" r="0.7" fill="#F6D88A" fill-opacity="0.29"/>
         <circle cx="382" cy="418" r="0.6" fill="#FFFFFF" fill-opacity="0.28"/>
         <circle cx="36" cy="459" r="0.7" fill="#FFFFFF" fill-opacity="0.26"/>
         <circle cx="88" cy="438" r="0.5" fill="#FFFFFF" fill-opacity="0.20"/>
         <circle cx="121" cy="465" r="0.9" fill="#FFFFFF" fill-opacity="0.33"/>
-        <circle cx="179" cy="430" r="0.6" fill="#BFE6FF" fill-opacity="0.30"/>
+        <circle cx="179" cy="430" r="0.6" fill="#FBEFCC" fill-opacity="0.30"/>
         <circle cx="232" cy="454" r="0.8" fill="#FFFFFF" fill-opacity="0.34"/>
         <circle cx="291" cy="446" r="0.5" fill="#FFFFFF" fill-opacity="0.22"/>
         <circle cx="349" cy="466" r="0.7" fill="#FFFFFF" fill-opacity="0.31"/>
@@ -577,14 +577,14 @@
         <svg class="hero-layer-1" viewBox="0 0 390 341" preserveAspectRatio="xMidYMid slice" fill="none">
           <defs>
             <radialGradient id="l1-nebula" cx="50%" cy="30%" r="46%">
-              <stop offset="0%"  stop-color="#4a3a9e" stop-opacity="0.34"/>
-              <stop offset="55%" stop-color="#1f1a52" stop-opacity="0.12"/>
-              <stop offset="100%" stop-color="#0a0a22" stop-opacity="0"/>
+              <stop offset="0%"  stop-color="#5a4a12" stop-opacity="0.34"/>
+              <stop offset="55%" stop-color="#221c0d" stop-opacity="0.12"/>
+              <stop offset="100%" stop-color="#0a0906" stop-opacity="0"/>
             </radialGradient>
             <radialGradient id="l1-vignette" cx="50%" cy="36%" r="78%">
-              <stop offset="0%"   stop-color="#02030B" stop-opacity="0"/>
-              <stop offset="68%"  stop-color="#02030B" stop-opacity="0"/>
-              <stop offset="100%" stop-color="#02030B" stop-opacity="0.55"/>
+              <stop offset="0%"   stop-color="#030303" stop-opacity="0"/>
+              <stop offset="68%"  stop-color="#030303" stop-opacity="0"/>
+              <stop offset="100%" stop-color="#030303" stop-opacity="0.55"/>
             </radialGradient>
             <radialGradient id="l1-star" cx="50%" cy="50%" r="50%">
               <stop offset="0%" stop-color="#FFFFFF" stop-opacity="1"/>
@@ -620,21 +620,21 @@
           <!-- a few brighter feature stars with soft glow -->
           <g>
             <circle cx="150" cy="58" r="3.4" fill="url(#l1-star)" opacity="0.5"/>
-            <circle cx="150" cy="58" r="1.0" fill="#EAF2FF" opacity="0.95"/>
+            <circle cx="150" cy="58" r="1.0" fill="#FBEFCC" opacity="0.95"/>
             <circle cx="262" cy="70" r="3.0" fill="url(#l1-star)" opacity="0.42"/>
-            <circle cx="262" cy="70" r="0.9" fill="#DCEBFF" opacity="0.9"/>
+            <circle cx="262" cy="70" r="0.9" fill="#FBEFCC" opacity="0.9"/>
             <circle cx="96"  cy="120" r="2.6" fill="url(#l1-star)" opacity="0.38"/>
             <circle cx="96"  cy="120" r="0.8" fill="#FFFFFF" opacity="0.85"/>
           </g>
         </svg>
         <svg class="hero-layer-2" viewBox="0 0 390 341" preserveAspectRatio="xMidYMid slice" fill="none">
           <defs>
-            <linearGradient id="l2-recov" x1="0" x2="1"><stop offset="0" stop-color="#22D8FF" stop-opacity="0"/><stop offset=".22" stop-color="#22D8FF"/><stop offset=".6" stop-color="#5A8CFF"/><stop offset="1" stop-color="#8A5CFF" stop-opacity=".5"/></linearGradient>
-            <linearGradient id="l2-recov2" x1="0" x2="1"><stop offset="0" stop-color="#8A5CFF" stop-opacity="0"/><stop offset=".3" stop-color="#7A6BFF"/><stop offset=".72" stop-color="#22D8FF"/><stop offset="1" stop-color="#00C8FF" stop-opacity=".4"/></linearGradient>
-            <linearGradient id="l2-strain" x1="1" x2="0"><stop offset="0" stop-color="#FF5E62" stop-opacity="0"/><stop offset=".22" stop-color="#FF5E62"/><stop offset=".6" stop-color="#FF7A48"/><stop offset="1" stop-color="#FFB070" stop-opacity=".5"/></linearGradient>
-            <linearGradient id="l2-strain2" x1="1" x2="0"><stop offset="0" stop-color="#FFB070" stop-opacity="0"/><stop offset=".3" stop-color="#FF8A3D"/><stop offset=".72" stop-color="#FF5E62"/><stop offset="1" stop-color="#FF6B6B" stop-opacity=".4"/></linearGradient>
-            <linearGradient id="l2-span" x1="0" x2="1"><stop offset="0" stop-color="#22D8FF" stop-opacity="0"/><stop offset=".13" stop-color="#22D8FF" stop-opacity=".92"/><stop offset=".42" stop-color="#8A5CFF" stop-opacity=".85"/><stop offset=".58" stop-color="#9A6BFF" stop-opacity=".85"/><stop offset=".87" stop-color="#FF6B5E" stop-opacity=".92"/><stop offset="1" stop-color="#FF8A3D" stop-opacity="0"/></linearGradient>
-            <radialGradient id="l2-merge" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#CDBCFF" stop-opacity=".5"/><stop offset=".5" stop-color="#8A5CFF" stop-opacity=".22"/><stop offset="1" stop-color="#8A5CFF" stop-opacity="0"/></radialGradient>
+            <linearGradient id="l2-recov" x1="0" x2="1"><stop offset="0" stop-color="#F0B429" stop-opacity="0"/><stop offset=".22" stop-color="#F0B429"/><stop offset=".6" stop-color="#D9A52E"/><stop offset="1" stop-color="#A98A3E" stop-opacity=".5"/></linearGradient>
+            <linearGradient id="l2-recov2" x1="0" x2="1"><stop offset="0" stop-color="#A98A3E" stop-opacity="0"/><stop offset=".3" stop-color="#A98A3E"/><stop offset=".72" stop-color="#F0B429"/><stop offset="1" stop-color="#F0B429" stop-opacity=".4"/></linearGradient>
+            <linearGradient id="l2-strain" x1="1" x2="0"><stop offset="0" stop-color="#C8841E" stop-opacity="0"/><stop offset=".22" stop-color="#C8841E"/><stop offset=".6" stop-color="#D9A52E"/><stop offset="1" stop-color="#F6D88A" stop-opacity=".5"/></linearGradient>
+            <linearGradient id="l2-strain2" x1="1" x2="0"><stop offset="0" stop-color="#F6D88A" stop-opacity="0"/><stop offset=".3" stop-color="#D9A52E"/><stop offset=".72" stop-color="#C8841E"/><stop offset="1" stop-color="#C8841E" stop-opacity=".4"/></linearGradient>
+            <linearGradient id="l2-span" x1="0" x2="1"><stop offset="0" stop-color="#F0B429" stop-opacity="0"/><stop offset=".13" stop-color="#F0B429" stop-opacity=".92"/><stop offset=".42" stop-color="#A98A3E" stop-opacity=".85"/><stop offset=".58" stop-color="#C8A24E" stop-opacity=".85"/><stop offset=".87" stop-color="#C8841E" stop-opacity=".92"/><stop offset="1" stop-color="#D9A52E" stop-opacity="0"/></linearGradient>
+            <radialGradient id="l2-merge" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#F6D88A" stop-opacity=".5"/><stop offset=".5" stop-color="#A98A3E" stop-opacity=".22"/><stop offset="1" stop-color="#A98A3E" stop-opacity="0"/></radialGradient>
             <filter id="l2-glow" x="-20%" y="-80%" width="140%" height="320%"><feGaussianBlur stdDeviation="5"/></filter>
             <filter id="l2-band" x="-15%" y="-60%" width="130%" height="280%"><feGaussianBlur stdDeviation="1.9"/></filter>
             <filter id="l2-hot" x="-15%" y="-50%" width="130%" height="240%"><feGaussianBlur stdDeviation="0.8"/></filter>
@@ -660,11 +660,11 @@
             <path d="M -34 322 C 90 312, 150 330, 196 332 C 250 334, 320 320, 426 330" stroke="url(#l2-span)" stroke-width="4"/>
           </g>
           <g filter="url(#l2-hot)" fill="none" stroke-linecap="round" opacity="1">
-            <path d="M -32 268 C 36 250, 84 256, 122 276 C 158 294, 182 300, 198 302" stroke="#BEEFFF" stroke-width="2.7"/>
-            <path d="M -30 246 C 34 230, 80 244, 120 262 C 156 278, 180 294, 196 300" stroke="#D8CBFF" stroke-width="1.3"/>
-            <path d="M 424 268 C 356 250, 308 256, 270 276 C 234 294, 210 300, 194 302" stroke="#FFC2AC" stroke-width="2.7"/>
-            <path d="M 422 246 C 358 230, 312 244, 272 262 C 236 278, 212 294, 196 300" stroke="#FFD0B0" stroke-width="1.3"/>
-            <path d="M -34 322 C 90 312, 150 330, 196 332 C 250 334, 320 320, 426 330" stroke="#CFE6FF" stroke-width="1.1"/>
+            <path d="M -32 268 C 36 250, 84 256, 122 276 C 158 294, 182 300, 198 302" stroke="#FBEFCC" stroke-width="2.7"/>
+            <path d="M -30 246 C 34 230, 80 244, 120 262 C 156 278, 180 294, 196 300" stroke="#F6D88A" stroke-width="1.3"/>
+            <path d="M 424 268 C 356 250, 308 256, 270 276 C 234 294, 210 300, 194 302" stroke="#F6D88A" stroke-width="2.7"/>
+            <path d="M 422 246 C 358 230, 312 244, 272 262 C 236 278, 212 294, 196 300" stroke="#F6D88A" stroke-width="1.3"/>
+            <path d="M -34 322 C 90 312, 150 330, 196 332 C 250 334, 320 320, 426 330" stroke="#FBEFCC" stroke-width="1.1"/>
           </g>
           <g filter="url(#l2-glow)" fill="none" stroke-linecap="round" opacity="0.5">
             <path d="M -30 196 C 30 214, 78 246, 124 274 C 158 292, 182 300, 198 302" stroke="url(#l2-recov)" stroke-width="11"/>
@@ -679,20 +679,20 @@
             <path d="M 422 224 C 364 240, 316 264, 270 286 C 234 300, 208 304, 190 304" stroke="url(#l2-strain2)" stroke-width="3"/>
           </g>
           <g filter="url(#l2-hot)" fill="none" stroke-linecap="round" opacity="0.9">
-            <path d="M -30 196 C 30 214, 78 246, 124 274 C 158 292, 182 300, 198 302" stroke="#BEEFFF" stroke-width="1.3"/>
-            <path d="M 420 196 C 360 214, 312 246, 266 274 C 232 292, 208 300, 192 302" stroke="#FFC2AC" stroke-width="1.3"/>
+            <path d="M -30 196 C 30 214, 78 246, 124 274 C 158 292, 182 300, 198 302" stroke="#FBEFCC" stroke-width="1.3"/>
+            <path d="M 420 196 C 360 214, 312 246, 266 274 C 232 292, 208 300, 192 302" stroke="#F6D88A" stroke-width="1.3"/>
           </g>
           <g fill="#FFFFFF">
             <circle cx="64" cy="276" r="0.9" fill-opacity="0.7"/>
             <circle cx="108" cy="300" r="0.7" fill-opacity="0.5"/>
             <circle cx="150" cy="288" r="1.0" fill-opacity="0.75"/>
             <circle cx="92" cy="320" r="0.6" fill-opacity="0.45"/>
-            <circle cx="300" cy="280" r="0.9" fill="#FFD9C2" fill-opacity="0.7"/>
-            <circle cx="262" cy="302" r="0.7" fill="#FFD9C2" fill-opacity="0.5"/>
-            <circle cx="320" cy="316" r="1.0" fill="#FFE0CC" fill-opacity="0.7"/>
+            <circle cx="300" cy="280" r="0.9" fill="#F6D88A" fill-opacity="0.7"/>
+            <circle cx="262" cy="302" r="0.7" fill="#F6D88A" fill-opacity="0.5"/>
+            <circle cx="320" cy="316" r="1.0" fill="#FBEFCC" fill-opacity="0.7"/>
             <circle cx="232" cy="320" r="0.6" fill-opacity="0.45"/>
-            <circle cx="196" cy="318" r="0.8" fill="#E6D8FF" fill-opacity="0.6"/>
-            <circle cx="356" cy="300" r="0.7" fill="#FFD9C2" fill-opacity="0.5"/>
+            <circle cx="196" cy="318" r="0.8" fill="#F6E2A8" fill-opacity="0.6"/>
+            <circle cx="356" cy="300" r="0.7" fill="#F6D88A" fill-opacity="0.5"/>
             <circle cx="36" cy="298" r="0.7" fill="#CFEFFF" fill-opacity="0.55"/>
           </g>
           <g filter="url(#l2-glow)">
@@ -708,24 +708,24 @@
         <svg class="hero-layer-3" viewBox="0 0 390 341" preserveAspectRatio="xMidYMid slice" fill="none">
           <defs>
             <radialGradient id="l3-seat" cx="50%" cy="50%" r="50%">
-              <stop offset="0%"   stop-color="#02030B" stop-opacity="0"/>
-              <stop offset="74%"  stop-color="#02030B" stop-opacity="0"/>
-              <stop offset="86%"  stop-color="#02030B" stop-opacity="0.30"/>
-              <stop offset="100%" stop-color="#02030B" stop-opacity="0"/>
+              <stop offset="0%"   stop-color="#030303" stop-opacity="0"/>
+              <stop offset="74%"  stop-color="#030303" stop-opacity="0"/>
+              <stop offset="86%"  stop-color="#030303" stop-opacity="0.30"/>
+              <stop offset="100%" stop-color="#030303" stop-opacity="0"/>
             </radialGradient>
             <radialGradient id="l3-bloomWide" cx="50%" cy="50%" r="50%">
-              <stop offset="0%"   stop-color="#CBDBFF" stop-opacity="0"/>
-              <stop offset="42%"  stop-color="#C2D4FF" stop-opacity="0"/>
-              <stop offset="56%"  stop-color="#B9CCFF" stop-opacity="0.13"/>
-              <stop offset="78%"  stop-color="#9CC0F4" stop-opacity="0.05"/>
-              <stop offset="100%" stop-color="#7FA8E8" stop-opacity="0"/>
+              <stop offset="0%"   stop-color="#F6E2A8" stop-opacity="0"/>
+              <stop offset="42%"  stop-color="#F6E2A8" stop-opacity="0"/>
+              <stop offset="56%"  stop-color="#E8C268" stop-opacity="0.13"/>
+              <stop offset="78%"  stop-color="#C79A38" stop-opacity="0.05"/>
+              <stop offset="100%" stop-color="#A9781C" stop-opacity="0"/>
             </radialGradient>
             <radialGradient id="l3-bloom" cx="50%" cy="50%" r="50%">
-              <stop offset="0%"   stop-color="#EAF2FF" stop-opacity="0"/>
+              <stop offset="0%"   stop-color="#FBEFCC" stop-opacity="0"/>
               <stop offset="52%"  stop-color="#E0EBFF" stop-opacity="0"/>
-              <stop offset="62%"  stop-color="#D2E2FF" stop-opacity="0.40"/>
-              <stop offset="72%"  stop-color="#B6D0FF" stop-opacity="0.18"/>
-              <stop offset="100%" stop-color="#93BBF2" stop-opacity="0"/>
+              <stop offset="62%"  stop-color="#F6E2A8" stop-opacity="0.40"/>
+              <stop offset="72%"  stop-color="#E8C268" stop-opacity="0.18"/>
+              <stop offset="100%" stop-color="#C79A38" stop-opacity="0"/>
             </radialGradient>
             <filter id="l3-soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="7"/></filter>
           </defs>
@@ -745,27 +745,27 @@
         <!-- Recovery — top left -->
         <button type="button" data-target="todays-read"
                 class="ring-corner metric-corner items-start text-left absolute left-1 top-1 z-10 focus:outline-none">
-          <span class="metric-cap" style="color:#00C8FF">Recovery</span>
-          <span class="metric-num glow-recov" id="m-recovery-val" style="color:#E9F7FF">—</span>
-          <span class="metric-word" id="m-recovery-label" style="color:#00C8FF"></span>
-          <span class="metric-detail" id="m-recovery-detail" style="color:#00C8FF"></span>
+          <span class="metric-cap" style="color:#F0B429">Recovery</span>
+          <span class="metric-num glow-recov" id="m-recovery-val" style="color:#F6EFDC">—</span>
+          <span class="metric-word" id="m-recovery-label" style="color:#F0B429"></span>
+          <span class="metric-detail" id="m-recovery-detail" style="color:#F0B429"></span>
         </button>
 
         <!-- Sleep — top right -->
         <button type="button" data-target="polar-panel"
                 class="ring-corner metric-corner items-end text-right absolute right-1 top-1 z-10 focus:outline-none">
-          <span class="metric-cap" style="color:#8A5CFF">Sleep</span>
-          <span class="metric-num glow-sleep" id="m-sleep-val" style="color:#9A6BFF">—</span>
-          <span class="metric-word" id="m-sleep-label" style="color:#8A5CFF"></span>
+          <span class="metric-cap" style="color:#A98A3E">Sleep</span>
+          <span class="metric-num glow-sleep" id="m-sleep-val" style="color:#C8A24E">—</span>
+          <span class="metric-word" id="m-sleep-label" style="color:#A98A3E"></span>
           <span class="metric-detail" id="m-sleep-detail"></span>
         </button>
 
         <!-- Strain — right, lower -->
         <button type="button" data-target="activity"
                 class="ring-corner metric-corner items-end text-right absolute right-1 bottom-1 z-10 focus:outline-none">
-          <span class="metric-cap" id="m-strain-cap" style="color:#FF5E62">Strain</span>
-          <span class="metric-num glow-strain" id="m-strain-val" style="color:#FF5E62">—</span>
-          <span class="metric-word" id="m-strain-label" style="color:#FF5E62"></span>
+          <span class="metric-cap" id="m-strain-cap" style="color:#C8841E">Strain</span>
+          <span class="metric-num glow-strain" id="m-strain-val" style="color:#C8841E">—</span>
+          <span class="metric-word" id="m-strain-label" style="color:#C8841E"></span>
           <span class="metric-detail" id="m-strain-detail"></span>
         </button>
         <!-- Lunar context under the moon — filled from real lunar_stress.json data by app.js -->
@@ -775,22 +775,22 @@
 
     <!-- ════════════════ NOW — live / today section eyebrow + Last Synced badge ═══════ -->
     <div class="flex items-center justify-between mb-2 px-1">
-      <div class="text-[11px] uppercase tracking-[2px] font-bold" style="color:#9A6BFF;opacity:0.85" aria-hidden="true">Now</div>
+      <div class="text-[11px] uppercase tracking-[2px] font-bold" style="color:#C8A24E;opacity:0.85" aria-hidden="true">Now</div>
       <!-- Last Synced — relative freshness of the Polar pipeline (manifest.synced_at),
            green <30m · yellow 30m–2h · red >2h. Tap re-fetches + re-renders. -->
       <button type="button" id="last-synced" aria-label="Last synced — tap to refresh" title="Tap to refresh"
               class="flex items-center gap-1.5 rounded-full px-2.5 py-1 focus:outline-none active:scale-95 transition-transform"
               style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08)">
-        <span id="last-synced-dot" class="inline-block w-2 h-2 rounded-full" style="background:#8A90A6"></span>
-        <span id="last-synced-text" class="text-[11px] font-semibold stat-num" style="color:#8A90A6">checking sync…</span>
+        <span id="last-synced-dot" class="inline-block w-2 h-2 rounded-full" style="background:#8C8270"></span>
+        <span id="last-synced-text" class="text-[11px] font-semibold stat-num" style="color:#8C8270">checking sync…</span>
       </button>
     </div>
 
     <!-- ════════════════ TODAY'S READ — glass, prose + physiology rows ═══════ -->
     <section class="gradient-card p-3.5 mb-2.5" id="todays-read">
       <div class="flex items-center justify-between mb-2">
-        <h2 class="font-bold text-[15px] flex items-center gap-1.5" style="color:#9A6BFF">Currents
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="#9A6BFF"><path d="M12 1.5c.3 3.6 1.9 5.2 5.5 5.5-3.6.3-5.2 1.9-5.5 5.5-.3-3.6-1.9-5.2-5.5-5.5 3.6-.3 5.2-1.9 5.5-5.5z"/><path d="M18.5 13c.16 1.9 1 2.74 2.9 2.9-1.9.16-2.74 1-2.9 2.9-.16-1.9-1-2.74-2.9-2.9 1.9-.16 2.74-1 2.9-2.9z"/></svg>
+        <h2 class="font-bold text-[15px] flex items-center gap-1.5" style="color:#C8A24E">Currents
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#C8A24E"><path d="M12 1.5c.3 3.6 1.9 5.2 5.5 5.5-3.6.3-5.2 1.9-5.5 5.5-.3-3.6-1.9-5.2-5.5-5.5 3.6-.3 5.2-1.9 5.5-5.5z"/><path d="M18.5 13c.16 1.9 1 2.74 2.9 2.9-1.9.16-2.74 1-2.9 2.9-.16-1.9-1-2.74-2.9-2.9 1.9-.16 2.74-1 2.9-2.9z"/></svg>
           <span class="text-[11px] text-muted font-semibold">AI</span>
         </h2>
         <span class="text-[12px] text-muted" id="read-ts"></span>
@@ -800,13 +800,13 @@
       <div class="min-w-0" id="read-left">
         <!-- State -->
         <div class="text-[10px] uppercase tracking-wider text-muted font-semibold">State</div>
-        <div class="text-[22px] font-bold leading-none mt-1" id="read-recovery-word" style="color:#E9EDF5">—</div>
+        <div class="text-[22px] font-bold leading-none mt-1" id="read-recovery-word" style="color:#ECE6D8">—</div>
         <div class="text-[11.5px] text-muted font-medium mt-1.5 stat-num" id="read-metrics"></div>
         <!-- Read -->
         <div class="text-[10px] uppercase tracking-wider text-muted font-semibold mt-3.5 mb-1" id="read-label">Read</div>
         <div class="text-[13px] leading-relaxed text-neutral-200" id="read-body">First read drops at 9:05 AM</div>
         <!-- Optional closing posture line -->
-        <div class="text-[12.5px] font-semibold mt-2.5 hidden" id="read-closing" style="color:#9A6BFF;text-shadow:0 0 12px rgba(154,107,255,0.45)"></div>
+        <div class="text-[12.5px] font-semibold mt-2.5 hidden" id="read-closing" style="color:#C8A24E;text-shadow:0 0 12px rgba(169,138,62,0.45)"></div>
         <p class="hidden" id="read-basis"></p>
       </div>
     </section>
@@ -815,7 +815,7 @@
     <section class="grid grid-cols-2 md:grid-cols-3 gap-2.5 mb-2.5" id="support-cards" aria-label="Supporting metrics">
       <!-- Nutrition -->
       <button type="button" data-target="nutrition-panel" class="lpi-card p-2.5 text-left focus:outline-none">
-        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#39D98A">
+        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#F0B429">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3v7a3 3 0 006 0V3M7 3v18M17 3c-1.5 0-2.5 2-2.5 5s1 4 2.5 4 2.5-1 2.5-4-1-5-2.5-5zM17 16v5"/></svg>
           Nutrition
         </div>
@@ -827,12 +827,12 @@
           <div id="sc-nutrition-ring" class="shrink-0"></div>
         </div>
         <div class="text-[9px] text-muted mt-2 leading-tight whitespace-nowrap" id="sc-nutrition-macros"></div>
-        <div class="text-[10px] font-semibold mt-2 flex items-center gap-0.5 whitespace-nowrap" style="color:#39D98A">View details
+        <div class="text-[10px] font-semibold mt-2 flex items-center gap-0.5 whitespace-nowrap" style="color:#F0B429">View details
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
       </button>
       <!-- Activity -->
       <button type="button" data-target="activity" class="lpi-card p-2.5 text-left focus:outline-none">
-        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#FF8A3D">
+        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#D9A52E">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13H11l-1 9 8.5-11H12z"/></svg>
           Activity
         </div>
@@ -844,20 +844,20 @@
           <div id="sc-activity-ring" class="shrink-0"></div>
         </div>
         <div class="flex justify-between text-[9px] mt-2 gap-1" id="sc-activity-stats"></div>
-        <div class="text-[10px] font-semibold mt-2 flex items-center gap-0.5 whitespace-nowrap" style="color:#FF8A3D">View activity
+        <div class="text-[10px] font-semibold mt-2 flex items-center gap-0.5 whitespace-nowrap" style="color:#D9A52E">View activity
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
       </button>
       <!-- Calories Burned (display-only; no detail panel) -->
       <article class="lpi-card p-2.5" aria-label="Calories burned today">
-        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#FF5E62">
+        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#C8841E">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3 3 4 3 7a3 3 0 01-6 0c0-1.5.5-2.5 1-3M12 22a6 6 0 006-6c0-4-3-5-3-8 0 0-2 2-3 5-1-1.5-1-3-1-3-2 1.5-4 4-4 6a6 6 0 004 6z"/></svg>
           Calories Burned
         </div>
         <div class="text-[20px] font-bold stat-num leading-none mt-1.5 text-white" id="cal-total">—</div>
         <div class="text-[10px] text-muted mt-0.5">kcal today</div>
-        <div class="text-[10px] mt-2 leading-tight whitespace-nowrap" id="cal-sub" style="color:#FF5E62">active —</div>
+        <div class="text-[10px] mt-2 leading-tight whitespace-nowrap" id="cal-sub" style="color:#C8841E">active —</div>
         <!-- Recent-burn badge: derived active-cal rise over trailing 4h; hidden when below workout threshold -->
-        <div class="text-[9.5px] italic leading-tight whitespace-nowrap mt-1" id="cal-workout" style="color:#FF8A8C;display:none"></div>
+        <div class="text-[9.5px] italic leading-tight whitespace-nowrap mt-1" id="cal-workout" style="color:#D08A2E;display:none"></div>
       </article>
     </section>
 
@@ -913,23 +913,23 @@
     </div><!-- /tab-active -->
     <div id="tab-recovery" class="tab-view">
     <!-- Recovery view eyebrow + 3-col summary header (SLEEP · ANS · HRV) -->
-    <div class="text-[11px] uppercase tracking-[2px] font-bold mb-2 px-1 mt-1" style="color:#FF5E8A;opacity:0.9" aria-hidden="true">Recovery</div>
+    <div class="text-[11px] uppercase tracking-[2px] font-bold mb-2 px-1 mt-1" style="color:#C8841E;opacity:0.9" aria-hidden="true">Recovery</div>
     <section class="gradient-card p-3 mb-2.5" id="recovery-big3" aria-label="Recovery summary">
       <div class="big3-row">
-        <div class="big3-cell" style="background:rgba(155,92,255,0.10);border:1px solid rgba(155,92,255,0.22)">
+        <div class="big3-cell" style="background:rgba(169,138,62,0.10);border:1px solid rgba(169,138,62,0.22)">
           <div class="big3-cap">Sleep</div>
-          <div class="big3-val" id="rb-sleep-val" style="color:#C9B8FF">—</div>
-          <div class="big3-sub" id="rb-sleep-sub" style="color:#9B5CFF"></div>
+          <div class="big3-val" id="rb-sleep-val" style="color:#F6D88A">—</div>
+          <div class="big3-sub" id="rb-sleep-sub" style="color:#A98A3E"></div>
         </div>
-        <div class="big3-cell" style="background:rgba(0,200,255,0.10);border:1px solid rgba(0,200,255,0.22)">
+        <div class="big3-cell" style="background:rgba(240,180,41,0.10);border:1px solid rgba(240,180,41,0.22)">
           <div class="big3-cap">ANS Charge</div>
-          <div class="big3-val" id="rb-ans-val" style="color:#7FE9FF">—</div>
-          <div class="big3-sub" id="rb-ans-sub" style="color:#00C8FF"></div>
+          <div class="big3-val" id="rb-ans-val" style="color:#F6D88A">—</div>
+          <div class="big3-sub" id="rb-ans-sub" style="color:#F0B429"></div>
         </div>
-        <div class="big3-cell" style="background:rgba(255,94,138,0.10);border:1px solid rgba(255,94,138,0.22)">
+        <div class="big3-cell" style="background:rgba(200,132,30,0.10);border:1px solid rgba(200,132,30,0.22)">
           <div class="big3-cap">HRV</div>
-          <div class="big3-val" id="rb-hrv-val" style="color:#FFB3C8">—</div>
-          <div class="big3-sub" id="rb-hrv-sub" style="color:#FF5E8A"></div>
+          <div class="big3-val" id="rb-hrv-val" style="color:#F6D88A">—</div>
+          <div class="big3-sub" id="rb-hrv-sub" style="color:#C8841E"></div>
         </div>
       </div>
     </section>
@@ -938,7 +938,7 @@
          renderCoach() in app.js; gold accent. Lives on the Recovery tab (moved from Active). -->
     <section class="coach-card p-3.5 mb-2.5" id="coach-card" aria-label="This week">
       <div class="flex items-center justify-between mb-2">
-        <h2 class="font-bold text-[14px]" style="color:#FFB020;letter-spacing:0.3px">This week</h2>
+        <h2 class="font-bold text-[14px]" style="color:#F0B429;letter-spacing:0.3px">This week</h2>
         <span class="text-[10.5px] text-muted stat-num" id="coach-ts"></span>
       </div>
       <!-- synthesized read — styled like a text from your trainer: emphasized, italic-ish bubble -->
@@ -968,18 +968,18 @@
     <!-- ════════════════ MONTHLY HISTORY — static monthly retrospective (polar/history/) ═══════ -->
     <!-- ════════════════ RECOVERY WINDOW (full-width; now hosts System Conditions inline) ═══════════════ -->
     <section class="lpi-card p-3 mb-3" id="recovery-window">
-      <div class="flex items-center gap-1.5 text-[10px] uppercase tracking-wide font-bold" style="color:#39D98A">
+      <div class="flex items-center gap-1.5 text-[10px] uppercase tracking-wide font-bold" style="color:#F0B429">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         Recovery Window
       </div>
       <div class="text-[10px] text-muted font-medium mb-1.5 ml-[18px]">Recovery Environment</div>
       <div class="flex items-baseline gap-2">
-        <span class="text-[18px] font-bold glow-nutri" id="rw-status" style="color:#39D98A">—</span>
+        <span class="text-[18px] font-bold glow-nutri" id="rw-status" style="color:#F0B429">—</span>
         <span class="text-[12px] text-muted font-medium" id="rw-now"></span>
       </div>
       <div class="relative mt-2.5 mb-1 h-2 rounded-full overflow-visible" style="background:rgba(255,255,255,0.08)">
-        <div class="h-full rounded-full" id="rw-bar" style="width:0%;background:linear-gradient(90deg,#1f8f5f,#39D98A)"></div>
-        <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full border-2 border-white" id="rw-dot" style="left:0%;background:#39D98A;box-shadow:0 0 8px rgba(57,217,138,.8)"></div>
+        <div class="h-full rounded-full" id="rw-bar" style="width:0%;background:linear-gradient(90deg,#A9781C,#F0B429)"></div>
+        <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full border-2 border-white" id="rw-dot" style="left:0%;background:#F0B429;box-shadow:0 0 8px rgba(240,180,41,.8)"></div>
       </div>
       <div class="flex justify-between text-[10px] text-muted stat-num">
         <span id="rw-bar-left"></span><span id="rw-bar-right"></span>
@@ -991,7 +991,7 @@
       <div class="mt-3 pt-3 border-t border-line" id="lunar-stress">
         <div class="flex items-baseline gap-1.5">
           <span class="text-[10px] uppercase tracking-wide font-bold text-muted">System Conditions</span>
-          <span class="text-[12px] font-bold leading-none" id="lsi-band" style="color:#9A6BFF">—</span>
+          <span class="text-[12px] font-bold leading-none" id="lsi-band" style="color:#C8A24E">—</span>
         </div>
         <div id="lsi-empty" class="text-[12px] text-muted mt-1">First read computes on the next Polar sync.</div>
         <div id="lsi-content" class="hidden">
@@ -1050,7 +1050,7 @@
     </section>
 
     <!-- ════════════════ TRENDS — historical / analytical section eyebrow ═══════ -->
-    <div class="text-[11px] uppercase tracking-[2px] font-bold mt-6 mb-2 px-1" style="color:#9A6BFF;opacity:0.85" aria-hidden="true">Trends</div>
+    <div class="text-[11px] uppercase tracking-[2px] font-bold mt-6 mb-2 px-1" style="color:#C8A24E;opacity:0.85" aria-hidden="true">Trends</div>
 
     <!-- ════════════════ PATTERN ENGINE — canonical container for ALL historical/trend
          data. Monthly retrospective (primary) above; lunar-phase correlations
@@ -1061,9 +1061,9 @@
       </div>
       <!-- Monthly retrospective sub-block (primary historical summary) -->
       <div class="hidden" id="monthly-history-card">
-        <div class="text-[11px] uppercase tracking-wider font-bold" style="color:#9A6BFF;text-shadow:0 0 12px rgba(154,107,255,0.35)" id="mh-title">— · —</div>
-        <div class="text-[14px] font-semibold stat-num mt-2" id="mh-stats-1" style="color:#E9EDF5"></div>
-        <div class="text-[14px] font-semibold stat-num mt-0.5" id="mh-stats-2" style="color:#E9EDF5"></div>
+        <div class="text-[11px] uppercase tracking-wider font-bold" style="color:#C8A24E;text-shadow:0 0 12px rgba(169,138,62,0.35)" id="mh-title">— · —</div>
+        <div class="text-[14px] font-semibold stat-num mt-2" id="mh-stats-1" style="color:#ECE6D8"></div>
+        <div class="text-[14px] font-semibold stat-num mt-0.5" id="mh-stats-2" style="color:#ECE6D8"></div>
         <div class="text-[10px] uppercase tracking-wider text-muted font-semibold mt-3 mb-1">Recommendation</div>
         <div class="text-[13px] leading-relaxed text-neutral-200" id="mh-recommendation"></div>
       </div>
@@ -1081,7 +1081,7 @@
     </div><!-- /tab-recovery -->
     <div id="tab-body" class="tab-view">
     <!-- Body view eyebrow + prominent latest scale reading -->
-    <div class="text-[11px] uppercase tracking-[2px] font-bold mb-2 px-1 mt-1" style="color:#9B5CFF;opacity:0.9" aria-hidden="true">Body</div>
+    <div class="text-[11px] uppercase tracking-[2px] font-bold mb-2 px-1 mt-1" style="color:#A98A3E;opacity:0.9" aria-hidden="true">Body</div>
     <section class="gradient-card p-4 mb-2.5" id="body-hero" aria-label="Latest body composition">
       <div class="flex items-end justify-between gap-3 flex-wrap">
         <div class="min-w-0">
@@ -1095,25 +1095,25 @@
         </div>
         <div class="flex gap-4 text-right shrink-0">
           <div><div class="text-[9px] uppercase tracking-wide text-muted font-semibold">Body fat</div>
-            <div class="text-[18px] font-bold stat-num mt-0.5" id="bh-bf" style="color:#FF8A3D">—</div></div>
+            <div class="text-[18px] font-bold stat-num mt-0.5" id="bh-bf" style="color:#D9A52E">—</div></div>
           <div><div class="text-[9px] uppercase tracking-wide text-muted font-semibold">Muscle</div>
-            <div class="text-[18px] font-bold stat-num mt-0.5" id="bh-muscle" style="color:#39D98A">—</div></div>
+            <div class="text-[18px] font-bold stat-num mt-0.5" id="bh-muscle" style="color:#F0B429">—</div></div>
           <div><div class="text-[9px] uppercase tracking-wide text-muted font-semibold">BMI</div>
-            <div class="text-[18px] font-bold stat-num mt-0.5" id="bh-bmi" style="color:#9B5CFF">—</div></div>
+            <div class="text-[18px] font-bold stat-num mt-0.5" id="bh-bmi" style="color:#A98A3E">—</div></div>
         </div>
       </div>
     </section>
       <!-- Scale -->
       <button type="button" data-target="snapshot-panel" class="lpi-card p-2.5 text-left focus:outline-none block w-full mb-2.5">
-        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#8A5CFF">
+        <div class="flex items-center gap-1 text-[10.5px] uppercase tracking-wide font-bold" style="color:#A98A3E">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M5 21V9l7-3 7 3v12M5 13h14"/></svg>
           Scale
         </div>
         <div class="text-[20px] font-bold stat-num leading-none mt-1.5 text-white" id="sc-scale-val">—</div>
         <div class="text-[10px] text-muted mt-0.5">lbs</div>
-        <div id="sc-scale-spark" class="mt-2 h-6" style="color:#8A5CFF"></div>
+        <div id="sc-scale-spark" class="mt-2 h-6" style="color:#A98A3E"></div>
         <div class="text-[9px] mt-1" id="sc-scale-detail"></div>
-        <div class="text-[10px] font-semibold mt-1.5 flex items-center gap-0.5 whitespace-nowrap" style="color:#8A5CFF">View progress
+        <div class="text-[10px] font-semibold mt-1.5 flex items-center gap-0.5 whitespace-nowrap" style="color:#A98A3E">View progress
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
       </button>
     <!-- Scale snapshot detail -->
@@ -1165,23 +1165,23 @@
 
   <!-- ════════════════ BOTTOM TAB BAR — Active / Recovery / Body ═══════ -->
   <nav id="tab-bar" aria-label="Dashboard views">
-    <button type="button" class="tabnav-item active" data-tab="active" style="--tc:#00C8FF" aria-label="Active view">
+    <button type="button" class="tabnav-item active" data-tab="active" style="--tc:#F0B429" aria-label="Active view">
       <span class="tabnav-bar"></span><span class="tabnav-name">Active</span>
     </button>
-    <button type="button" class="tabnav-item" data-tab="recovery" style="--tc:#FF5E8A" aria-label="Recovery view">
+    <button type="button" class="tabnav-item" data-tab="recovery" style="--tc:#C8841E" aria-label="Recovery view">
       <span class="tabnav-bar"></span><span class="tabnav-name">Recovery</span>
     </button>
-    <button type="button" class="tabnav-item" data-tab="body" style="--tc:#9B5CFF" aria-label="Body view">
+    <button type="button" class="tabnav-item" data-tab="body" style="--tc:#A98A3E" aria-label="Body view">
       <span class="tabnav-bar"></span><span class="tabnav-name">Body</span>
     </button>
   </nav>
 
   <!-- Safe-area filler: solid deep-navy strip pinned to the very bottom.
-       Guarantees the home-indicator safe-area is painted #03050F on iOS so the
+       Guarantees the home-indicator safe-area is painted #040405 on iOS so the
        page ends in deep navy rather than bare white below the last card.
        Height = the safe-area inset (0 on desktop). -->
   <div aria-hidden="true" class="fixed bottom-0 inset-x-0 z-20"
-       style="height:env(safe-area-inset-bottom);background:#03050F"></div>
+       style="height:env(safe-area-inset-bottom);background:#040405"></div>
 
   <!-- Cinematic hero intro — play the entrance once per load, then release the
        gate so switching back to the Active tab doesn't replay it. Degrades safe:
@@ -1190,7 +1190,7 @@
     (function () { try {
       var release = function () { setTimeout(function () {
         document.body.classList.remove('hero-intro');
-      }, 4200); };
+      }, 1400); };
       if (document.readyState === 'loading') addEventListener('DOMContentLoaded', release);
       else release();
     } catch (e) {} })();

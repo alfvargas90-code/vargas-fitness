@@ -5,6 +5,28 @@ description: Lunar Performance Dashboard — locked state as of 2026-06-05. Cano
 
 # Lunar Performance Dashboard — LOCKED 2026-06-05
 
+## ⚡ COLOR OVERRIDE — 2026-06-24
+
+> Alfredo explicitly overrode the 2026-06-05 color lock to ship the **Eclipse** palette (black + gold variant 4). Approved in Dispatch.
+
+**Old (overridden):** Strain coral · Recovery cyan · Sleep violet · cyan-from-left + coral-from-right wave field
+
+**New (Eclipse, locked 2026-06-24):**
+- Background: near-pure black (`#000`)
+- No wave field (Layer 2 removed)
+- Three concentric arcs: hairline gold (`#F0B429` family, graduated)
+- Moon: thin-corona treatment, photographic LRO texture preserved
+- Cards: "engraved" treatment (gold hairline borders, no glass blur)
+- Accents: gold-only (no coral, cyan, violet)
+
+**Backups:** `index.html.bak-2026-06-24-pre-eclipse`, `app.js.bak-2026-06-24-pre-eclipse`, `data.js.bak-2026-06-24-pre-eclipse` — preserved alongside the new canonical for rollback.
+
+**Source of override:** `design_exploration_2026-06-23_black_gold/eclipse_full/` — promoted to canonical 2026-06-24 02:28 UTC.
+
+---
+
+
+
 > **You have a dashboard.** This file captures what it is, how we got here, what's protected, and what's parked.
 
 ---

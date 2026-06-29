@@ -29,10 +29,10 @@ const latestScale = () => [...scale].sort(byDate).at(-1);
 // never contradict. The Python side (polar/lunar_stress.py LOAD_BANDS,
 // polar/summary.py) mirrors these exact bands for the LSI + AI prompts.
 const LOAD_BANDS = [
-  { name: "—",        min: 0,   max: 49,       dot: "#64748b" }, // slate-500 (faint — no real activity yet)
+  { name: "—",        min: 0,   max: 49,       dot: "#6E6656" }, // slate-500 (faint — no real activity yet)
   { name: "Light",    min: 50,  max: 399,      dot: "#94A3B8" }, // slate-400 — minimal
-  { name: "Moderate", min: 400, max: 799,      dot: "#06B6D4" }, // cyan — engaged
-  { name: "Heavy",    min: 800, max: Infinity, dot: "#F59E0B" }, // amber — heavy load (warning)
+  { name: "Moderate", min: 400, max: 799,      dot: "#C8841E" }, // cyan — engaged
+  { name: "Heavy",    min: 800, max: Infinity, dot: "#D9A52E" }, // amber — heavy load (warning)
 ];
 function loadBandFor(activeCal) {
   const c = (activeCal == null || isNaN(activeCal)) ? 0 : Number(activeCal);
@@ -71,8 +71,8 @@ const POLAR_STATUS_WORD = ["—", "Very poor", "Poor", "Compromised", "OK", "Goo
 const polarStatusWord = s => (s == null ? "—" : (POLAR_STATUS_WORD[s] || "—"));
 // Status → semantic color (ascending red→amber→cyan→green), matching the dashboard
 // recovery palette so the word's hue matches its meaning.
-const POLAR_STATUS_COLOR = ["#8A90A6", "#FF5E62", "#FF5E62", "#FF8A3D", "#00C8FF", "#39D98A", "#39D98A"];
-const polarStatusColor = s => (s == null ? "#8A90A6" : (POLAR_STATUS_COLOR[s] || "#8A90A6"));
+const POLAR_STATUS_COLOR = ["#8C8270", "#C8841E", "#C8841E", "#D9A52E", "#F0B429", "#F0B429", "#F0B429"];
+const polarStatusColor = s => (s == null ? "#8C8270" : (POLAR_STATUS_COLOR[s] || "#8C8270"));
 
 // ---------- Last Synced badge (Now row) ----------
 // Reads polar/manifest.json `synced_at` (ISO, rewritten every polar/sync.py run) and
@@ -90,24 +90,24 @@ async function renderLastSynced() {
   const txt = document.getElementById("last-synced-text");
   if (!txt) return;
   try {
-    const manifest = await fetchJSON("polar/manifest.json");
+    const manifest = await fetchJSON("../../polar/manifest.json");
     const t = manifest.synced_at ? new Date(manifest.synced_at).getTime() : NaN;
     if (!isFinite(t)) {
-      txt.textContent = "sync time unknown"; txt.style.color = "#8A90A6";
-      if (dot) { dot.style.background = "#8A90A6"; dot.style.boxShadow = "none"; }
+      txt.textContent = "sync time unknown"; txt.style.color = "#8C8270";
+      if (dot) { dot.style.background = "#8C8270"; dot.style.boxShadow = "none"; }
       return;
     }
     const mins = Math.max(0, Math.floor((Date.now() - t) / 60000));  // clamp clock skew
     let color, warn = "";
-    if (mins < 30)       color = "#39D98A";            // green — fresh
-    else if (mins < 120) color = "#FFC400";            // yellow — aging
-    else { color = "#FF5E62"; warn = "⚠ "; }           // red — stale
+    if (mins < 30)       color = "#F0B429";            // green — fresh
+    else if (mins < 120) color = "#F0B429";            // yellow — aging
+    else { color = "#C8841E"; warn = "⚠ "; }           // red — stale
     if (dot) { dot.style.background = color; dot.style.boxShadow = `0 0 6px ${color}`; }
     txt.textContent = `${warn}synced ${relSyncPhrase(mins)}`;
     txt.style.color = color;
   } catch (e) {
-    txt.textContent = "sync offline"; txt.style.color = "#8A90A6";
-    if (dot) { dot.style.background = "#8A90A6"; dot.style.boxShadow = "none"; }
+    txt.textContent = "sync offline"; txt.style.color = "#8C8270";
+    if (dot) { dot.style.background = "#8C8270"; dot.style.boxShadow = "none"; }
   }
 }
 // Tap-to-refresh — re-fetch the freshness + the live data renderers (no full
@@ -165,8 +165,8 @@ const baseChartOpts = {
   maintainAspectRatio: false,
   plugins: { legend: { labels: { color: "#cbd5e1" } } },
   scales: {
-    x: { ticks: { color: "#9ca3af" }, grid: { color: "#374151" } },
-    y: { ticks: { color: "#9ca3af" }, grid: { color: "#374151" } },
+    x: { ticks: { color: "#8C8270" }, grid: { color: "#2A2515" } },
+    y: { ticks: { color: "#8C8270" }, grid: { color: "#2A2515" } },
   },
 };
 
@@ -186,7 +186,7 @@ async function renderMonthlyHistory() {
   const card = document.getElementById("monthly-history-card");
   if (!card) return;
   try {
-    const h = await fetchJSON("polar/history/2026-05.json");
+    const h = await fetchJSON("../../polar/history/2026-05.json");
     if (!h || !h.headlines) return; // malformed → stay hidden
     const hl = h.headlines;
     const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
@@ -216,7 +216,7 @@ async function fetchJSON(path) {
 // null on any failure, so displays render WITHOUT deltas (graceful = current behavior).
 let _baselinePromise = null;
 function loadBaseline() {
-  if (!_baselinePromise) _baselinePromise = fetchJSON("polar/baseline.json").catch(() => null);
+  if (!_baselinePromise) _baselinePromise = fetchJSON("../../polar/baseline.json").catch(() => null);
   return _baselinePromise;
 }
 
@@ -240,13 +240,13 @@ async function renderPolar() {
   if (!empty || !content) return;
   const showEmpty = () => { empty.classList.remove("hidden"); content.classList.add("hidden"); };
   try {
-    const manifest = await fetchJSON("polar/manifest.json");
+    const manifest = await fetchJSON("../../polar/manifest.json");
     const cats = manifest.categories || {};
     const recDates = (cats.recharge || []).slice().sort(), sleepDates = (cats.sleep || []).slice().sort();
     if (!recDates.length && !sleepDates.length) return showEmpty();
 
-    const recArr   = await Promise.all(recDates.map(d => fetchJSON(`polar/recharge/${d}.json`).catch(() => null)));
-    const sleepArr = await Promise.all(sleepDates.map(d => fetchJSON(`polar/sleep/${d}.json`).catch(() => null)));
+    const recArr   = await Promise.all(recDates.map(d => fetchJSON(`../../polar/recharge/${d}.json`).catch(() => null)));
+    const sleepArr = await Promise.all(sleepDates.map(d => fetchJSON(`../../polar/sleep/${d}.json`).catch(() => null)));
     const recMap = {}, sleepMap = {};
     recDates.forEach((d, i) => { if (recArr[i]) recMap[d] = recArr[i]; });
     sleepDates.forEach((d, i) => { if (sleepArr[i]) sleepMap[d] = sleepArr[i]; });
@@ -291,21 +291,21 @@ const RESERVE_DEPLETION_CAL = 800;
 // applied uniformly in orbitGroup().
 function sleepColor(v) {              // Sleep — recovery family (cyan)
   return v >= 90 ? "#22D3EE"   // bright cyan — excellent sleep
-       : v >= 50 ? "#06B6D4"   // cyan — good
+       : v >= 50 ? "#C8841E"   // cyan — good
        : v >= 30 ? "#0891B2"   // dim cyan — low
        :           "#155E75";  // deep cyan — chronic-low
 }
 function energyColor(v) {             // Recovery — cyan when restored, warns as it falls
-  return v >= 90 ? "#10B981"   // green — peak recovery (performance-ready)
-       : v >= 50 ? "#06B6D4"   // cyan — good recovery
-       : v >= 30 ? "#F59E0B"   // amber — low (caution)
-       :           "#FF6B6B";  // coral — poor (recovery risk)
+  return v >= 90 ? "#C8841E"   // green — peak recovery (performance-ready)
+       : v >= 50 ? "#C8841E"   // cyan — good recovery
+       : v >= 30 ? "#D9A52E"   // amber — low (caution)
+       :           "#C8841E";  // coral — poor (recovery risk)
 }
 function strainColor(pct) {           // Strain — graduated; RED ONLY near max load
-  return pct < 30 ? "#7d84a8"   // muted metadata gray — low load, no urgency
-       : pct < 60 ? "#FFBA00"   // gold — building (warm caution)
-       : pct < 80 ? "#FF6B6B"   // coral — heavy load
-       :            "#FF5E62";  // red — approaching max (the only red zone)
+  return pct < 30 ? "#8C8270"   // muted metadata gray — low load, no urgency
+       : pct < 60 ? "#E0A030"   // gold — building (warm caution)
+       : pct < 80 ? "#C8841E"   // coral — heavy load
+       :            "#C8841E";  // red — approaching max (the only red zone)
 }
 // Visual-PRESENCE color for the Strain ring glow + corner: same graduation as
 // strainColor() except the low-load band floors to warm coral instead of cold gray,
@@ -314,7 +314,7 @@ function strainColor(pct) {           // Strain — graduated; RED ONLY near max
 // strainColor(); this only governs the rendered hue.
 function strainPresenceColor(pct) {
   const c = strainColor(pct);
-  return c === "#7d84a8" ? "#FF8A7A" : c;   // floor: warm coral, not gray-zone
+  return c === "#8C8270" ? "#D08A2E" : c;   // floor: warm coral, not gray-zone
 }
 
 // Overnight recovery score — combines recharge + sleep + HRV vs an adaptive HRV
@@ -339,12 +339,12 @@ function computeRecoveryScore(rec, sleep, hrvBaseline) {
 // LPI v1 flat semantic colors (spec color table) — one fixed hue per metric,
 // replacing the Concept 02 severity gradients on the orbital rings + corners.
 const LPI = {
-  recovery: "#00C8FF",  // Recovery
-  sleep:    "#9B5CFF",  // Sleep
-  strain:   "#FF5E62",  // Strain
-  activity: "#FF8A3D",  // Activity
-  nutrition:"#39D98A",  // Nutrition
-  context:  "#8A5CFF",  // Context (Lunar)
+  recovery: "#F0B429",  // Recovery
+  sleep:    "#A98A3E",  // Sleep
+  strain:   "#C8841E",  // Strain
+  activity: "#D9A52E",  // Activity
+  nutrition:"#F0B429",  // Nutrition
+  context:  "#A98A3E",  // Context (Lunar)
 };
 
 // LPI v1 replica — FLAT concentric gradient rings (matching the source mockup).
@@ -361,25 +361,25 @@ const ORBIT = {
   cx: 130, cy: 130,
   moonR: 62,                 // was 40 → +15% (moon is now the anchor)
   rings: {                   // inside → out
-    sleep:    { r: 76,  grad: "gSleep",  glow: "#8A5CFF" },
-    recovery: { r: 90,  grad: "gRecov",  glow: "#00C8FF" },
-    strain:   { r: 104, grad: "gStrain", glow: "#FF5E62" },
+    sleep:    { r: 76,  grad: "gSleep",  glow: "#A98A3E" },
+    recovery: { r: 90,  grad: "gRecov",  glow: "#F0B429" },
+    strain:   { r: 104, grad: "gStrain", glow: "#C8841E" },
   },
-  arcW: 6.5, baseW: 6.5,     // BOLD rings — match the mockup's prominent glowing orbits
-  arcOpacity: 0.97,          // vivid arcs (mockup reads at near-full opacity)
+  arcW: 1.6, baseW: 1.2,     // ECLIPSE — fine engraved filaments, gold as line not glow
+  arcOpacity: 0.96,
   base: "rgba(255,255,255,0.028)", // (track now tints to each ring's hue — see orbitGroup)
 };
 
 // SVG <defs> — per-ring linear gradients tuned to the mockup's ring hues.
 const ORBIT_DEFS = `<defs>
   <linearGradient id="gSleep" x1="0.15" y1="0" x2="0.85" y2="1">
-    <stop offset="0" stop-color="#6E3FD6"/><stop offset="1" stop-color="#B58CFF"/>
+    <stop offset="0" stop-color="#8A6C22"/><stop offset="1" stop-color="#F6D88A"/>
   </linearGradient>
   <linearGradient id="gRecov" x1="0" y1="0.2" x2="1" y2="0.9">
-    <stop offset="0" stop-color="#5CEBFF"/><stop offset="1" stop-color="#00B4FF"/>
+    <stop offset="0" stop-color="#F6D88A"/><stop offset="1" stop-color="#D9A52E"/>
   </linearGradient>
   <linearGradient id="gStrain" x1="0.1" y1="0" x2="0.95" y2="1">
-    <stop offset="0" stop-color="#FF9A3D"/><stop offset="0.55" stop-color="#FF5E62"/><stop offset="1" stop-color="#FF2E55"/>
+    <stop offset="0" stop-color="#D9A52E"/><stop offset="0.55" stop-color="#C8841E"/><stop offset="1" stop-color="#B4731A"/>
   </linearGradient>
 </defs>`;
 
@@ -395,31 +395,16 @@ function orbitGroup(r, pct, gradId, glowColor, solidColor, emphasis) {
   // Full track tinted to the ring's own hue (low alpha + faint bloom) so all three
   // read as COMPLETE glowing orbits — the mockup look — while the bright arc on top
   // still encodes the metric value.
-  const track = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="#243056" stroke-opacity="0.55" stroke-width="${ORBIT.baseW}"/>`;
+  const track = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="#2A2515" stroke-opacity="0.55" stroke-width="${ORBIT.baseW}"/>`;
   if (!(pct > 0)) return track;
-  const stroke = solidColor || `url(#${gradId})`;
-  const glow = solidColor || glowColor;
+  // ECLIPSE — a single fine engraved gold filament. No aura, no halo: gold is a line.
+  // The faintest 2.5px shadow keeps the arc from looking flat-printed, nothing more.
+  const glow = solidColor || glowColor || "#F0B429";
   const dash = `stroke-dasharray="${arc.toFixed(2)} ${(c - arc).toFixed(2)}" transform="rotate(-90 130 130)"`;
-  const haloOpacity = emphasis ? 0.34 : 0.28;   // restrained bloom — clean concentric rings
-  const haloBlur    = emphasis ? 21 : 17;        // tighter halo, less inter-ring bleed
-  const progBlur    = emphasis ? 15 : 12;         // crisp arc with soft glow
-  // Soft color bleed — a wide, very low-alpha echo of the arc that lets each ring's
-  // hue diffuse outward (cyan / coral / violet aura), separate from the tighter halo.
-  const auraOpacity = emphasis ? 0.16 : 0.13;
-  const auraBlur    = emphasis ? 33 : 27;
-  const aura = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${glow}"
-      stroke-width="${ORBIT.arcW + 8}" stroke-linecap="round" stroke-opacity="${auraOpacity}"
-      ${dash} style="filter:drop-shadow(0 0 ${auraBlur}px ${glow})"/>`;
-  // Outer bloom halo — a low-alpha, wide-blur echo of the arc so the ring reads
-  // as energy emanating outward rather than a hard progress stroke.
-  const halo = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${glow}"
-      stroke-width="${ORBIT.arcW + 3}" stroke-linecap="round" stroke-opacity="${haloOpacity}"
-      ${dash} style="filter:drop-shadow(0 0 ${haloBlur}px ${glow})"/>`;
-  // Bright arc — softer, dreamier bloom (drop-shadow 4 → 7px, → 10px when emphasized).
-  const prog = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${stroke}"
+  const prog = `<circle cx="130" cy="130" r="${r}" fill="none" stroke="${glow}"
       stroke-width="${ORBIT.arcW}" stroke-linecap="round" stroke-opacity="${ORBIT.arcOpacity}"
-      ${dash} style="filter:drop-shadow(0 0 ${progBlur}px ${glow})"/>`;
-  return track + aura + halo + prog;
+      ${dash} style="filter:drop-shadow(0 0 2.5px ${glow}99)"/>`;
+  return track + prog;
 }
 
 // Phase name → {illum 0-1, waning}. lunar_stress.json carries no
@@ -462,22 +447,22 @@ function moonSVG(r, illum, waning) {
   return `<defs>
       <clipPath id="moonClip"><circle cx="0" cy="0" r="${r}"/></clipPath>
       <radialGradient id="moonOuterHalo" cx="50%" cy="50%" r="50%">
-        <stop offset="0%"   stop-color="#E4ECFF" stop-opacity="0.22"/>
-        <stop offset="38%"  stop-color="#C8D8FF" stop-opacity="0.14"/>
-        <stop offset="72%"  stop-color="#AAC3F0" stop-opacity="0.045"/>
-        <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"/>
+        <stop offset="0%"   stop-color="#F6E2A8" stop-opacity="0.22"/>
+        <stop offset="38%"  stop-color="#E8C268" stop-opacity="0.14"/>
+        <stop offset="72%"  stop-color="#C79A38" stop-opacity="0.045"/>
+        <stop offset="100%" stop-color="#A9781C" stop-opacity="0"/>
       </radialGradient>
       <radialGradient id="moonHalo" cx="50%" cy="50%" r="50%">
-        <stop offset="0%"   stop-color="#E4ECFF" stop-opacity="0.34"/>
-        <stop offset="42%"  stop-color="#C8D8FF" stop-opacity="0.22"/>
-        <stop offset="70%"  stop-color="#AAC3F0" stop-opacity="0.11"/>
-        <stop offset="100%" stop-color="#96B4EB" stop-opacity="0"/>
+        <stop offset="0%"   stop-color="#F6E2A8" stop-opacity="0.34"/>
+        <stop offset="42%"  stop-color="#E8C268" stop-opacity="0.22"/>
+        <stop offset="70%"  stop-color="#C79A38" stop-opacity="0.11"/>
+        <stop offset="100%" stop-color="#A9781C" stop-opacity="0"/>
       </radialGradient>
       <radialGradient id="moonInnerHalo" cx="50%" cy="50%" r="50%">
-        <stop offset="0%"   stop-color="#F4F8FF" stop-opacity="0.36"/>
-        <stop offset="46%"  stop-color="#E4ECFF" stop-opacity="0.24"/>
-        <stop offset="78%"  stop-color="#C8D8FF" stop-opacity="0.09"/>
-        <stop offset="100%" stop-color="#AAC3F0" stop-opacity="0"/>
+        <stop offset="0%"   stop-color="#FBE7B0" stop-opacity="0.36"/>
+        <stop offset="46%"  stop-color="#F6E2A8" stop-opacity="0.24"/>
+        <stop offset="78%"  stop-color="#E8C268" stop-opacity="0.09"/>
+        <stop offset="100%" stop-color="#C79A38" stop-opacity="0"/>
       </radialGradient>
       <radialGradient id="moonLimb" cx="42%" cy="38%" r="62%">
         <stop offset="0%"   stop-color="#FFFCF4" stop-opacity="0.10"/>
@@ -487,8 +472,8 @@ function moonSVG(r, illum, waning) {
       </radialGradient>
       <radialGradient id="moonSpec" cx="34%" cy="28%" r="50%">
         <stop offset="0%" stop-color="#FFFDF6" stop-opacity="0.20"/>
-        <stop offset="45%" stop-color="#EAF1FF" stop-opacity="0.07"/>
-        <stop offset="100%" stop-color="#EAF1FF" stop-opacity="0"/>
+        <stop offset="45%" stop-color="#FBEFCC" stop-opacity="0.07"/>
+        <stop offset="100%" stop-color="#FBEFCC" stop-opacity="0"/>
       </radialGradient>
       <filter id="moonRimBlur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDev="${f(0.05)}"/></filter>
       <filter id="moonOuterHaloBlur" x="-120%" y="-120%" width="340%" height="340%">
@@ -502,19 +487,17 @@ function moonSVG(r, illum, waning) {
       <filter id="moonCast" x="-140%" y="-140%" width="380%" height="380%">
         <feGaussianBlur stdDev="${f(0.16)}"/></filter>
     </defs>
-    <ellipse cx="0" cy="${f(0.32)}" rx="${f(1.14)}" ry="${f(0.42)}" fill="#02030A" opacity="0.44" filter="url(#moonCast)"/>
-    <circle cx="0" cy="0" r="${outerHaloR}" fill="url(#moonOuterHalo)" filter="url(#moonOuterHaloBlur)"/>
-    <circle cx="0" cy="0" r="${haloR}" fill="url(#moonHalo)" filter="url(#moonHaloBlur)"/>
-    <circle cx="0" cy="0" r="${innerHaloR}" fill="url(#moonInnerHalo)" filter="url(#moonInnerHaloBlur)"/>
+    <!-- ECLIPSE — broad bloom dropped; a single thin gold corona hugs the limb. -->
+    <circle cx="0" cy="0" r="${haloR}" fill="url(#moonHalo)" filter="url(#moonHaloBlur)" opacity="0.30"/>
     <g clip-path="url(#moonClip)">
-      <image href="assets/moon-lro.webp" x="${-r}" y="${-r}" width="${2 * r}" height="${2 * r}"
-             preserveAspectRatio="xMidYMid slice" style="filter:brightness(1.12)"/>
+      <image href="../../assets/moon-lro.webp" x="${-r}" y="${-r}" width="${2 * r}" height="${2 * r}"
+             preserveAspectRatio="xMidYMid slice" style="filter:brightness(1.02) saturate(0.9)"/>
       <circle cx="0" cy="0" r="${r}" fill="url(#moonLimb)"/>
       <circle cx="0" cy="0" r="${r}" fill="url(#moonSpec)"/>
       ${dim ? "" : `<path d="${shadow}" fill="#070B16" opacity="0.86" filter="url(#moonTerm)"/>`}
     </g>
-    <circle cx="0" cy="0" r="${r}" fill="none" stroke="#CFE0FF" stroke-opacity="0.50" stroke-width="${f(0.045)}" filter="url(#moonRimBlur)"/>
-    <circle cx="0" cy="0" r="${r}" fill="none" stroke="#EAF1FF" stroke-opacity="0.60" stroke-width="${f(0.018)}"/>`;
+    <circle cx="0" cy="0" r="${r}" fill="none" stroke="#F0B429" stroke-opacity="0.50" stroke-width="${f(0.045)}" filter="url(#moonRimBlur)"/>
+    <circle cx="0" cy="0" r="${r}" fill="none" stroke="#FBEFCC" stroke-opacity="0.60" stroke-width="${f(0.018)}"/>`;
 }
 
 // Assemble the composite SVG and inject; null pct → empty orbit (faint only).
@@ -558,16 +541,16 @@ function setMetricCorner(key, val, label, detail, color, numColor) {
   const detEl = document.getElementById(`m-${key}-detail`);
   if (numEl) {
     numEl.textContent = val ?? "—";
-    numEl.style.color = val != null ? (numColor || color || "#8A90A6") : "#5A607A";
+    numEl.style.color = val != null ? (numColor || color || "#8C8270") : "#5A607A";
     // Layered illuminated glow: faint dark seat (legibility over the moon) +
     // tight bright core + wide soft bloom — numbers read as lit, not printed.
     numEl.style.textShadow = (val != null)
-      ? `0 0 1px rgba(3,5,15,0.65), 0 0 10px ${color}, 0 0 22px ${color}b3, 0 0 40px ${color}59`
+      ? `0 0 1px rgba(4,4,5,0.7), 0 0 6px ${color}55`
       : "none";
   }
   if (lblEl) {
     lblEl.textContent = label || "";
-    lblEl.style.color = color || "#8A90A6";
+    lblEl.style.color = color || "#8C8270";
     lblEl.style.textShadow = label ? `0 0 12px ${color}99` : "none";
   }
   if (detEl) detEl.textContent = detail || "";
@@ -585,7 +568,7 @@ async function renderRings() {
       strainCal = null, hrvDeltaPct = null;
 
   try {
-    const lunar = await fetchJSON("polar/lunar_stress.json").catch(() => null);
+    const lunar = await fetchJSON("../../polar/lunar_stress.json").catch(() => null);
     if (lunar?.lunar) {
       const { illum, waning } = phaseToIllum(lunar.lunar.phase);
       moon = { illum, waning };
@@ -598,18 +581,18 @@ async function renderRings() {
     if (moonCtxHero && lunar?.lunar) {
       const L = lunar.lunar;
       const rows = [];
-      if (L.phase) rows.push(`<div class="text-[10px] font-semibold tracking-wide" style="color:#B6A0FF;text-shadow:0 0 2px rgba(3,5,15,0.95),0 1px 7px rgba(3,5,15,0.85),0 0 13px rgba(154,107,255,0.5)">${L.phase}</div>`);
+      if (L.phase) rows.push(`<div class="text-[10px] font-semibold tracking-wide" style="color:#C8A24E;text-shadow:0 0 2px rgba(3,5,15,0.95),0 1px 7px rgba(3,5,15,0.85),0 0 13px rgba(169,138,62,0.5)">${L.phase}</div>`);
       if (L.sign)  rows.push(`<div class="text-[15px] font-semibold leading-tight mt-0.5" style="color:#F4F7FF;text-shadow:0 0 12px rgba(3,5,15,0.85)">Moon in ${L.sign}</div>`);
       const nsc = L.next_sign_change;
       if (nsc) {
-        if (nsc.sign) rows.push(`<div class="text-[10px] font-semibold tracking-wide mt-1" style="color:#B6A0FF;text-shadow:0 0 2px rgba(3,5,15,0.92),0 1px 6px rgba(3,5,15,0.8)">Enters ${nsc.sign}</div>`);
+        if (nsc.sign) rows.push(`<div class="text-[10px] font-semibold tracking-wide mt-1" style="color:#C8A24E;text-shadow:0 0 2px rgba(3,5,15,0.92),0 1px 6px rgba(3,5,15,0.8)">Enters ${nsc.sign}</div>`);
         const mt = (nsc.at || "").match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
-        if (mt) { let h = +mt[4]; const ap = h >= 12 ? "PM" : "AM"; h = h % 12 || 12; rows.push(`<div class="text-[10px] font-semibold tracking-wide" style="color:#B6A0FF;text-shadow:0 0 2px rgba(3,5,15,0.92),0 1px 6px rgba(3,5,15,0.8)">${+mt[2]}/${+mt[3]} · ${h}:${mt[5]} ${ap}</div>`); }
+        if (mt) { let h = +mt[4]; const ap = h >= 12 ? "PM" : "AM"; h = h % 12 || 12; rows.push(`<div class="text-[10px] font-semibold tracking-wide" style="color:#C8A24E;text-shadow:0 0 2px rgba(3,5,15,0.92),0 1px 6px rgba(3,5,15,0.8)">${+mt[2]}/${+mt[3]} · ${h}:${mt[5]} ${ap}</div>`); }
       }
       moonCtxHero.innerHTML = rows.join("");
     }
 
-    const cats = (await fetchJSON("polar/manifest.json")).categories || {};
+    const cats = (await fetchJSON("../../polar/manifest.json")).categories || {};
     const recDates   = (cats.recharge || []).slice().sort();
     const sleepDates = (cats.sleep || []).slice().sort();
     const actDates   = (cats.daily_activity || []).slice().sort();
@@ -617,7 +600,7 @@ async function renderRings() {
     // --- SLEEP — most recent sleep_score, only if fresh (≤1 day old) ---
     const sleepDate = sleepDates.at(-1) || null;
     const sleepFresh = sleepDate && (daysSinceDate(sleepDate) ?? 99) <= 1;
-    const sleepData = sleepDate ? await fetchJSON(`polar/sleep/${sleepDate}.json`).catch(() => null) : null;
+    const sleepData = sleepDate ? await fetchJSON(`../../polar/sleep/${sleepDate}.json`).catch(() => null) : null;
     if (sleepFresh && sleepData) {
       // Duration = sleep_start → sleep_end SPAN (time in bed), matching the Polar
       // app exactly. NOT the sum of light+deep+rem stages — that excludes
@@ -645,8 +628,8 @@ async function renderRings() {
     const latestRecovDate = [recDate, sleepDate].filter(Boolean).sort().at(-1);
     const recovFresh = latestRecovDate && (daysSinceDate(latestRecovDate) ?? 99) <= 1;
     if (recovFresh) {
-      const rec = recDate ? await fetchJSON(`polar/recharge/${recDate}.json`).catch(() => null) : null;
-      const hrvs = (await Promise.all(recDates.map(d => fetchJSON(`polar/recharge/${d}.json`).catch(() => null))))
+      const rec = recDate ? await fetchJSON(`../../polar/recharge/${recDate}.json`).catch(() => null) : null;
+      const hrvs = (await Promise.all(recDates.map(d => fetchJSON(`../../polar/recharge/${d}.json`).catch(() => null))))
         .map(r => r?.heart_rate_variability_avg).filter(v => v != null);
       const hrvBaseline = hrvs.length ? hrvs.reduce((a, b) => a + b, 0) / hrvs.length : null;
       recoveryScore = computeRecoveryScore(rec, sleepData, hrvBaseline);
@@ -663,7 +646,7 @@ async function renderRings() {
     // --- STRAIN — inverse of the old Reserve bar (depletion % of 800 cal) ---
     const actDate = actDates.at(-1) || null;
     const actFresh = actDate && (daysSinceDate(actDate) ?? 99) <= 1;
-    const act = actDate ? await fetchJSON(`polar/daily_activity/${actDate}.json`).catch(() => null) : null;
+    const act = actDate ? await fetchJSON(`../../polar/daily_activity/${actDate}.json`).catch(() => null) : null;
     if (actFresh && act && act["active-calories"] != null) {
       strainCal = Math.round(Number(act["active-calories"]));
       strainPct = Math.min(100, (strainCal / RESERVE_DEPLETION_CAL) * 100);
@@ -680,12 +663,12 @@ async function renderRings() {
     recoveryScore != null ? `${recoveryScore}` : null,
     recoveryScore != null ? recoveryLabel(recoveryScore) : "",
     hrvDeltaPct != null ? `HRV ${hrvDeltaPct >= 0 ? "+" : ""}${hrvDeltaPct}%` : "",
-    LPI.recovery, "#E9F7FF");
+    LPI.recovery, "#F6EFDC");
   setMetricCorner("sleep",
     sleepScore != null ? `${sleepScore}` : null,
     sleepScore != null ? sleepLabel(sleepScore) : "",
     sleepDur || "",
-    LPI.sleep, "#9A6BFF");
+    LPI.sleep, "#C8A24E");
   // Strain hue graduates with load (coral → gold → coral → red) — red is the
   // approaching-max signal, not the default. Number, label, glow + caption all
   // share the PRESENCE color so a low-load morning still reads coral and alive
@@ -741,7 +724,7 @@ function renderRecoveryWindow(s) {
   const rec = s.recoveryScore, slp = s.sleepScore, str = s.strainPct;
   if (rec == null) {
     statusEl.textContent = "Awaiting";
-    statusEl.style.color = "#8A90A6";
+    statusEl.style.color = "#8C8270";
     if (nowEl) nowEl.textContent = "";
     if (bar) bar.style.width = "0%";
     if (dot) dot.style.left = "0%";
@@ -757,17 +740,17 @@ function renderRecoveryWindow(s) {
   const heavy = (str ?? 0) >= 50;
   const shortSleep = slp != null && slp < 55;
   if (rec >= 75) {
-    status = "Optimal"; color = LPI.nutrition; grad = "linear-gradient(90deg,#1f8f5f,#39D98A)";
+    status = "Optimal"; color = LPI.nutrition; grad = "linear-gradient(90deg,#A9781C,#F0B429)";
     derived = "Your body is in a good place to recover.";
   } else if (rec >= 55) {
-    status = "Building"; color = LPI.recovery; grad = "linear-gradient(90deg,#0a6f8f,#00C8FF)";
+    status = "Building"; color = LPI.recovery; grad = "linear-gradient(90deg,#0a6f8f,#F0B429)";
     derived = heavy ? "Recovered enough to build — keep effort controlled and bank the rest."
                     : "Mid-range charge — steady, moderate effort builds without digging a hole.";
   } else if (rec >= 40) {
-    status = "Recover"; color = LPI.activity; grad = "linear-gradient(90deg,#a85a1f,#FF8A3D)";
+    status = "Recover"; color = LPI.activity; grad = "linear-gradient(90deg,#a85a1f,#D9A52E)";
     derived = "Charge is down — feed the rebuild: protein, hydration, an earlier night.";
   } else {
-    status = "Rest"; color = LPI.strain; grad = "linear-gradient(90deg,#a82e3a,#FF5E62)";
+    status = "Rest"; color = LPI.strain; grad = "linear-gradient(90deg,#a82e3a,#C8841E)";
     derived = "Recovery is low — let the nervous system reset before the next hard session.";
   }
 
@@ -802,11 +785,11 @@ async function renderPhysiology() {
   if (!grid) return;
   let hrv = null, hrvDelta = null, rhr = null, rhrDelta = null, resp = null, respDelta = null;
   try {
-    const manifest = await fetchJSON("polar/manifest.json");
+    const manifest = await fetchJSON("../../polar/manifest.json");
     const recDates = ((manifest.categories || {}).recharge || []).slice().sort();
     const recDate = recDates.at(-1);
     if (recDate && (daysSinceDate(recDate) ?? 99) <= 2) {
-      const rec = await fetchJSON(`polar/recharge/${recDate}.json`).catch(() => null);
+      const rec = await fetchJSON(`../../polar/recharge/${recDate}.json`).catch(() => null);
       if (rec) {
         hrv = rec.heart_rate_variability_avg ?? null;
         rhr = rec.heart_rate_avg ?? null;
@@ -814,7 +797,7 @@ async function renderPhysiology() {
       }
     }
     // Deltas from the LSI physiology block (HRV % vs baseline, RHR Δbpm).
-    const lunar = await fetchJSON("polar/lunar_stress.json").catch(() => null);
+    const lunar = await fetchJSON("../../polar/lunar_stress.json").catch(() => null);
     if (lunar?.physiology) {
       if (lunar.physiology.hrv_pct_baseline != null) hrvDelta = lunar.physiology.hrv_pct_baseline;
       if (lunar.physiology.rhr_delta_bpm != null) rhrDelta = lunar.physiology.rhr_delta_bpm;
@@ -840,7 +823,7 @@ async function renderPhysiology() {
     if (delta != null && delta !== 0) {
       const up = delta > 0;
       const good = goodIsUp ? up : !up;
-      const dcolor = good ? "#39D98A" : "#FF8A3D";
+      const dcolor = good ? "#F0B429" : "#D9A52E";
       deltaHTML = `<span class="text-[10.5px] font-bold stat-num shrink-0" style="color:${dcolor}">${up ? "▲" : "▼"}${Math.abs(delta)}${deltaSuffix}</span>`;
     }
     const valHTML = value != null
@@ -858,11 +841,11 @@ async function renderPhysiology() {
   };
 
   grid.innerHTML =
-    row("heart",  "#FF5E62", "HRV",   hrv,  "", hrvDelta, "%",   true,
+    row("heart",  "#C8841E", "HRV",   hrv,  "", hrvDelta, "%",   true,
         hrvState(hrvDelta)) +
-    row("heart",  "#FF5E62", "RHR",   rhr,  "", rhrDelta, "",    false,
+    row("heart",  "#C8841E", "RHR",   rhr,  "", rhrDelta, "",    false,
         rhrState(rhrDelta)) +
-    row("lungs",  "#00C8FF", "Resp",  resp, "", respDelta, "",   false,
+    row("lungs",  "#F0B429", "Resp",  resp, "", respDelta, "",   false,
         respState(resp));
 }
 
@@ -904,7 +887,7 @@ async function renderSupportCards() {
   try {
     let n = null;
     for (const day of lastN(8).slice().reverse()) {
-      try { n = await fetchJSON(`nutrition/daily/${day}.json`); if (!n.date) n.date = day; break; } catch {}
+      try { n = await fetchJSON(`../../nutrition/daily/${day}.json`); if (!n.date) n.date = day; break; } catch {}
     }
     const valEl = document.getElementById("sc-nutrition-val");
     const unitEl = document.getElementById("sc-nutrition-unit");
@@ -916,7 +899,7 @@ async function renderSupportCards() {
       valEl.textContent = remain != null ? remain.toLocaleString() : (t.calories != null ? Math.round(t.calories).toLocaleString() : "—");
       if (unitEl) unitEl.textContent = remain != null ? "cal left" : "cal";
       const pct = (t.calories != null && g.calories) ? (t.calories / g.calories) * 100 : 0;
-      if (ringEl) ringEl.innerHTML = donutSVG(pct, "#39D98A");
+      if (ringEl) ringEl.innerHTML = donutSVG(pct, "#F0B429");
       // macros: compact single line — "P 78  C 257  F 127" (goals live in detail).
       const m = (lbl, v) => v == null ? "" :
         `<span class="mr-1"><span class="text-muted">${lbl}</span> <span class="text-neutral-200 font-semibold stat-num">${Math.round(v)}g</span></span>`;
@@ -926,13 +909,13 @@ async function renderSupportCards() {
 
   // ── Scale — latest weight + 7-day delta + history sparkline ──
   try {
-    const s = await fetchJSON("vesync/snapshot.json");
+    const s = await fetchJSON("../../vesync/snapshot.json");
     const valEl = document.getElementById("sc-scale-val");
     const detEl = document.getElementById("sc-scale-detail");
     const sparkEl = document.getElementById("sc-scale-spark");
     if (valEl) valEl.textContent = s.weight_lb != null ? fmt(s.weight_lb, 1) : "—";
     // history sparkline + delta vs ~7 days prior
-    let hist = await fetchJSON("vesync/history.json").catch(() => null);
+    let hist = await fetchJSON("../../vesync/history.json").catch(() => null);
     let delta = null;
     if (Array.isArray(hist) && hist.length) {
       const sorted = [...hist].filter(r => r.weight_lb != null).sort((a, b) => a.date.localeCompare(b.date));
@@ -944,7 +927,7 @@ async function renderSupportCards() {
     }
     if (detEl) {
       if (delta != null) {
-        const c = delta < 0 ? "#39D98A" : delta > 0 ? "#FF8A3D" : "#8A90A6";
+        const c = delta < 0 ? "#F0B429" : delta > 0 ? "#D9A52E" : "#8C8270";
         detEl.innerHTML = `<span style="color:${c}" class="font-semibold stat-num">${delta > 0 ? "+" : ""}${delta} lbs</span><span class="text-muted"> vs last 7d</span>`;
       } else detEl.innerHTML = "";
     }
@@ -952,10 +935,10 @@ async function renderSupportCards() {
 
   // ── Activity — steps + Apple-style multi-ring (steps / active cal / active min) ──
   try {
-    const manifest = await fetchJSON("polar/manifest.json");
+    const manifest = await fetchJSON("../../polar/manifest.json");
     const dates = ((manifest.categories || {}).daily_activity || []).slice().sort();
     const latest = dates.at(-1);
-    const a = latest ? await fetchJSON(`polar/daily_activity/${latest}.json`).catch(() => null) : null;
+    const a = latest ? await fetchJSON(`../../polar/daily_activity/${latest}.json`).catch(() => null) : null;
     const valEl = document.getElementById("sc-activity-val");
     const ringEl = document.getElementById("sc-activity-ring");
     const statsEl = document.getElementById("sc-activity-stats");
@@ -966,9 +949,9 @@ async function renderSupportCards() {
       valEl.textContent = steps != null ? Number(steps).toLocaleString() : "—";
       // Move/Exercise/Stand analogue: steps/10k (outer), active-cal/800 (mid), active-min/60 (inner)
       if (ringEl) ringEl.innerHTML = multiRingSVG([
-        { pct: steps != null ? steps / 10000 * 100 : 0, color: "#FF8A3D" },
-        { pct: activeCal != null ? activeCal / 800 * 100 : 0, color: "#FF5E62" },
-        { pct: activeMin != null ? activeMin / 60 * 100 : 0, color: "#FFD43D" },
+        { pct: steps != null ? steps / 10000 * 100 : 0, color: "#D9A52E" },
+        { pct: activeCal != null ? activeCal / 800 * 100 : 0, color: "#C8841E" },
+        { pct: activeMin != null ? activeMin / 60 * 100 : 0, color: "#F0B429" },
       ]);
       // Two stats under the ring (mockup: Distance / Active kcal — distance isn't in
       // the Loop Gen 2 feed, so we surface Active min + Active kcal honestly).
@@ -1012,7 +995,7 @@ async function renderRecentBurnBadge() {
   const hide = () => { el.style.display = "none"; el.textContent = ""; };
   let rows;
   try {
-    const txt = await fetch("polar/metrics_history.jsonl", { cache: "no-store" }).then(r => r.ok ? r.text() : "");
+    const txt = await fetch("../../polar/metrics_history.jsonl", { cache: "no-store" }).then(r => r.ok ? r.text() : "");
     rows = txt.split("\n").map(l => l.trim()).filter(Boolean).map(l => { try { return JSON.parse(l); } catch { return null; } })
       .filter(r => r && r.ts && r.active_cal != null)
       .map(r => ({ t: new Date(r.ts), cal: +r.active_cal }))
@@ -1100,7 +1083,7 @@ function renderRechargeStack(days, recMap) {
   const rows = days.slice().reverse().map(d => {
     const st = recMap[d]?.ans_charge_status ?? 0;
     const cells = Array.from({ length: 6 }, (_, i) => i < st
-      ? `<span class="inline-block w-3 h-3 rounded-full" style="background:#06B6D4"></span>`
+      ? `<span class="inline-block w-3 h-3 rounded-full" style="background:#C8841E"></span>`
       : `<span class="inline-block w-3 h-3 rounded-full bg-card border border-line"></span>`).join("");
     return `<div class="flex items-center gap-2">
       <span class="text-xs text-muted w-12 shrink-0">${labelMD(d)}</span>
@@ -1159,14 +1142,14 @@ function renderPolarSleep(sleep) {
   wrap.innerHTML = `
     <h3 class="text-sm font-medium text-cobalt/80 mb-2">Sleep stages · ${labelMD(sleep.date)}</h3>
     <div class="stage-bar">
-      <div style="width:${pct(deep)};background:#2E1F6B" title="Deep ${secsToHM(deep)}"></div>
-      <div style="width:${pct(light)};background:#DCCBFF" title="Light ${secsToHM(light)}"></div>
-      <div style="width:${pct(rem)};background:#7B4DE0" title="REM ${secsToHM(rem)}"></div>
+      <div style="width:${pct(deep)};background:#2A2210" title="Deep ${secsToHM(deep)}"></div>
+      <div style="width:${pct(light)};background:#F6D88A" title="Light ${secsToHM(light)}"></div>
+      <div style="width:${pct(rem)};background:#A98A3E" title="REM ${secsToHM(rem)}"></div>
     </div>
     <div class="flex flex-wrap gap-4 text-xs text-muted mt-2">
-      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#2E1F6B"></span> Deep ${secsToHM(deep)}</span>
-      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#DCCBFF"></span> Light ${secsToHM(light)}</span>
-      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#7B4DE0"></span> REM ${secsToHM(rem)}</span>
+      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#2A2210"></span> Deep ${secsToHM(deep)}</span>
+      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#F6D88A"></span> Light ${secsToHM(light)}</span>
+      <span><span class="inline-block w-2 h-2 rounded-full align-middle" style="background:#A98A3E"></span> REM ${secsToHM(rem)}</span>
     </div>`;
 }
 
@@ -1184,7 +1167,7 @@ function renderRechargeDetail(rec, sleep) {
       <span class="text-[9px] uppercase tracking-wide text-muted font-semibold shrink-0">${label}</span>
       <span class="flex items-baseline gap-1.5 min-w-0">
         <span class="text-[13px] font-bold stat-num text-white whitespace-nowrap">${valHTML}</span>
-        ${sub ? `<span class="text-[10px] font-semibold whitespace-nowrap" style="color:${subColor || "#8A90A6"}">${sub}</span>` : ""}
+        ${sub ? `<span class="text-[10px] font-semibold whitespace-nowrap" style="color:${subColor || "#8C8270"}">${sub}</span>` : ""}
       </span>
     </div>`;
   const rows = [];
@@ -1204,7 +1187,7 @@ function renderRechargeDetail(rec, sleep) {
   // from the app (source-tagged) on nights AccessLink didn't finalize a Sleep Score.
   if (sleep && sleep.sleep_boost != null) {
     rows.push(row("Boost from sleep", `${sleep.sleep_boost}/10`,
-      sleep.sleep_boost_status || "", "#39D98A"));
+      sleep.sleep_boost_status || "", "#F0B429"));
   }
   // Nightly Recharge — overall status word (the dot stack above is its history).
   if (rec && rec.nightly_recharge_status != null) {
@@ -1255,7 +1238,7 @@ function fillRecoveryHeader(rec, sleep, recDates, recMap) {
   if (rec && rec.ans_charge != null) {
     const a = Number(rec.ans_charge);
     const word = a > 0.1 ? "Recharging" : (a < -0.1 ? "Depleting" : "Steady");
-    const wc = a > 0.1 ? "#39D98A" : (a < -0.1 ? "#FF8A3D" : "#8A90A6");
+    const wc = a > 0.1 ? "#F0B429" : (a < -0.1 ? "#D9A52E" : "#8C8270");
     set("rb-ans-val", `${a > 0 ? "+" : ""}${a.toFixed(1)}`,
         rec.ans_charge_status != null ? `${word} · ${polarStatusWord(rec.ans_charge_status)}` : word, wc);
   } else { set("rb-ans-val", "—", "", null); }
@@ -1264,11 +1247,11 @@ function fillRecoveryHeader(rec, sleep, recDates, recMap) {
   if (hrvs.length) {
     const last7 = hrvs.slice(-7), prior7 = hrvs.slice(-14, -7);
     const avg = a => a.reduce((x, y) => x + y, 0) / a.length;
-    let sub = "", sc = "#FF5E8A";
+    let sub = "", sc = "#C8841E";
     if (prior7.length) {
       const d = Math.round(avg(last7) - avg(prior7));
       sub = `${d > 0 ? "▲" : d < 0 ? "▼" : "="}${Math.abs(d)} vs 7d`;
-      sc = d > 0 ? "#39D98A" : d < 0 ? "#FF8A3D" : "#8A90A6";
+      sc = d > 0 ? "#F0B429" : d < 0 ? "#D9A52E" : "#8C8270";
     }
     set("rb-hrv-val", `${hrvs.at(-1)} ms`, sub, sc);
   } else { set("rb-hrv-val", "—", "", null); }
@@ -1411,7 +1394,7 @@ function renderBrief(host, text) {
 // LPI v1 replica — compact Today's read: a color-coded Recovery word + a
 // full-length summary paragraph (Currents IS the full analysis), with an
 // "Updated HH:MM" timestamp in the header. Mirrors the source mockup.
-const READ_WORD_COLOR = { poor: "#FF5E62", average: "#FF8A3D", good: "#00C8FF", excellent: "#39D98A" };
+const READ_WORD_COLOR = { poor: "#C8841E", average: "#D9A52E", good: "#F0B429", excellent: "#F0B429" };
 
 // Currents v3 brief parser. summary.py writes:
 //   State\n{Word}\n{Recovery N • Sleep N • Strain N%}\n\nRead\n{paragraph}\n\n{optional close}
@@ -1446,7 +1429,7 @@ async function renderTodaysRead() {
   const readLabel = document.getElementById("read-label");
   if (!body) return;
   try {
-    const s = await fetchJSON("polar/summary.json");
+    const s = await fetchJSON("../../polar/summary.json");
     const simple = s.simple || null;
     const raw = (simple && (simple.reading || simple.performance)) || s.summary || "";
     const p = parseCurrents(raw);
@@ -1490,7 +1473,7 @@ async function renderTodaysRead() {
 let _lastSummarySig = null;
 async function pollCurrents() {
   try {
-    const s = await fetchJSON("polar/summary.json");
+    const s = await fetchJSON("../../polar/summary.json");
     const sig = s.data_hash || s.generated_at || null;
     if (sig && sig !== _lastSummarySig) {
       _lastSummarySig = sig;
@@ -1503,7 +1486,7 @@ async function pollCurrents() {
   } catch (e) { /* offline / file missing → keep last render */ }
 }
 function startCurrentsPolling() {
-  fetchJSON("polar/summary.json")
+  fetchJSON("../../polar/summary.json")
     .then(s => { _lastSummarySig = s.data_hash || s.generated_at || null; })
     .catch(() => {});
   setInterval(pollCurrents, 60000);
@@ -1563,7 +1546,7 @@ async function renderLunarStress() {
   if (!content) return;
   let d;
   try {
-    d = await fetchJSON("polar/lunar_stress.json");
+    d = await fetchJSON("../../polar/lunar_stress.json");
   } catch (e) {
     if (empty) empty.classList.remove("hidden");
     content.classList.add("hidden");
@@ -1595,7 +1578,7 @@ async function renderLunarStress() {
   const sparkEl = document.getElementById("lsi-spark");
   if (sparkEl) {
     const days = lastN(7);
-    const arr = await Promise.all(days.map(dd => fetchJSON(`polar/lunar_daily/${dd}.json`).catch(() => null)));
+    const arr = await Promise.all(days.map(dd => fetchJSON(`../../polar/lunar_daily/${dd}.json`).catch(() => null)));
     const series = arr.map(a => a && a.score != null ? scoreToIndex10(a.score) : null).filter(v => v != null);
     sparkEl.innerHTML = series.length >= 2 ? sparkline(series) : "";
   }
@@ -1654,7 +1637,7 @@ async function renderNutrition() {
   // No nutrition manifest — probe today back 7 days for the most recent logged day.
   let n = null;
   for (const day of lastN(8).slice().reverse()) {
-    try { n = await fetchJSON(`nutrition/daily/${day}.json`); if (!n.date) n.date = day; break; } catch {}
+    try { n = await fetchJSON(`../../nutrition/daily/${day}.json`); if (!n.date) n.date = day; break; } catch {}
   }
   try {
     if (!n) throw new Error("no nutrition days");
@@ -1697,7 +1680,7 @@ async function renderNutritionNudge() {
   const el = document.getElementById("nutrition-nudge");
   if (!el) return;
   try {
-    const s = await fetchJSON("polar/summary.json");
+    const s = await fetchJSON("../../polar/summary.json");
     const nudge = (s.nutrition_nudge || "").trim();
     if (nudge) {
       el.textContent = "→ " + nudge;
@@ -1737,7 +1720,7 @@ async function renderScaleSnapshot() {
     if (sub) sub.textContent = "";
   };
   try {
-    const s = await fetchJSON("vesync/snapshot.json");
+    const s = await fetchJSON("../../vesync/snapshot.json");
     const tiles = [
       { label: "Weight",       value: s.weight_lb,           unit: " lbs", d: 1 },
       { label: "Body fat",     value: s.body_fat_pct,        unit: "%",    d: 1 },
@@ -1777,7 +1760,7 @@ function fillBodyHero(s) {
     if (d == null || d === 0) { dEl.textContent = ""; }
     else {
       dEl.textContent = `${d > 0 ? "+" : "−"}${Math.abs(d).toFixed(1)} lb`;
-      dEl.style.color = d < 0 ? "#39D98A" : "#FF8A3D"; // down = progress (green)
+      dEl.style.color = d < 0 ? "#F0B429" : "#D9A52E"; // down = progress (green)
     }
   }
 }
@@ -1804,7 +1787,7 @@ async function renderDayReview() {
     const dl = document.getElementById("day-review-date"); if (dl) dl.textContent = "";
   };
   try {
-    const r = await fetchJSON("polar/day_review.json");
+    const r = await fetchJSON("../../polar/day_review.json");
     const s = r.stats || {};
 
     // Header date — "· Mon, Jun 1" from the frozen date.
@@ -1898,7 +1881,7 @@ async function renderScaleHistory() {
     if (caption) caption.textContent = "";
   };
   try {
-    const hist = await fetchJSON("vesync/history.json");
+    const hist = await fetchJSON("../../vesync/history.json");
     if (!Array.isArray(hist) || hist.length === 0) return showEmpty();
     const sorted = [...hist].sort((a, b) => (a.date < b.date ? 1 : -1)); // newest first
     rows.innerHTML = sorted.map(r => `
@@ -1963,7 +1946,7 @@ async function renderActivity() {
     if (sub) sub.textContent = "";
   };
   try {
-    const manifest = await fetchJSON("polar/manifest.json");
+    const manifest = await fetchJSON("../../polar/manifest.json");
 
     // "Updated N min ago" stamp from polar/sync.py's per-run manifest timestamp.
     const upd = document.getElementById("activity-updated");
@@ -1977,7 +1960,7 @@ async function renderActivity() {
     const dates = ((manifest.categories || {}).daily_activity || []).slice().sort();
     if (!dates.length) return showEmpty();                       // no synced activity → empty
     const latest = dates.at(-1);
-    const a = await fetchJSON(`polar/daily_activity/${latest}.json`).catch(() => null);
+    const a = await fetchJSON(`../../polar/daily_activity/${latest}.json`).catch(() => null);
     if (!a) return showEmpty();                                   // file missing / file:// → empty
     const day = (a.date || latest).slice(0, 10);
 
@@ -2057,7 +2040,7 @@ async function renderActivity() {
 // compares to his overall average — as signed deltas. Historical card family
 // (quieter, no glow). Honest about sample size: below 3 phase-days it shows the
 // count + "Not enough data yet" and renders "—" instead of noisy deltas.
-const PE_GREEN = "#10B981", PE_CORAL = "#FF6B6B", PE_AMBER = "#FBBF24";
+const PE_GREEN = "#C8841E", PE_CORAL = "#C8841E", PE_AMBER = "#F0B429";
 const PE_MIN_SAMPLE = 3;
 
 // Sign-based color: positive → green, negative → coral, within ±neutral → gray.
@@ -2092,7 +2075,7 @@ async function renderPatternEngine() {
   const card = document.getElementById("pattern-engine");
   if (!card) return;
   try {
-    const data = await fetchJSON("polar/patterns.json");
+    const data = await fetchJSON("../../polar/patterns.json");
     const phase = data.current_phase || "—";
     const phaseLc = phase === "—" ? phase : phase.toLowerCase();   // lowercase throughout this card
     const ps = (data.phase_stats || {})[phase] || null;
@@ -2147,9 +2130,9 @@ async function renderPatternEngine() {
 // from data we already sync (no new sources, no LLM, zero ongoing cost) plus one
 // synthesized Coach's Note picked from ~8 contextual templates by today's real
 // data state. All fetches fail gracefully → the default note still renders.
-const CG_GREEN = ["#9BE6BE", "rgba(57,217,138,0.15)"];   // healthy / holding
-const CG_AMBER = ["#FFD27A", "rgba(255,176,32,0.16)"];   // watch / cooling
-const CG_RED   = ["#FF7A7D", "rgba(255,94,98,0.16)"];    // problem / debt
+const CG_GREEN = ["#9BE6BE", "rgba(240,180,41,0.15)"];   // healthy / holding
+const CG_AMBER = ["#F6D88A", "rgba(240,180,41,0.16)"];   // watch / cooling
+const CG_RED   = ["#D08A2E", "rgba(200,132,30,0.16)"];    // problem / debt
 const CG_NEU   = ["#C2C8D4", "rgba(255,255,255,0.07)"];  // neutral
 // signed number with a real minus glyph: −1.8, +24.7, 0.0
 function coachSign(n, unit = "", dp = 1) {
@@ -2179,7 +2162,7 @@ async function renderCoach() {
   // ── RECOMP — weight vs muscle deltas (vesync/history.json, newest-first array).
   // Weigh-ins are sparse, so match the reading nearest to the 7d / 30d target. ──
   try {
-    const hist = await fetchJSON("vesync/history.json");
+    const hist = await fetchJSON("../../vesync/history.json");
     const rows = (hist || []).filter(r => r && r.date && r.weight_lb != null)
       .sort((a, b) => a.date < b.date ? 1 : -1); // newest first
     if (rows.length >= 2) {
@@ -2205,7 +2188,7 @@ async function renderCoach() {
   // Total sleep = light+deep+rem (seconds → min); shortfall-only, never credited. ──
   try {
     const dates = lastN(7); // oldest → newest
-    const files = await Promise.all(dates.map(d => fetchJSON(`polar/sleep/${d}.json`).catch(() => null)));
+    const files = await Promise.all(dates.map(d => fetchJSON(`../../polar/sleep/${d}.json`).catch(() => null)));
     let debtMin = 0, have = 0, lastMin = null;
     files.forEach(f => {
       if (!f) return;
@@ -2220,7 +2203,7 @@ async function renderCoach() {
   // ── RECOVERY RESERVE — 14d sum of ANS Charge + consecutive net-negative streak. ──
   try {
     const dates = lastN(14);
-    const files = await Promise.all(dates.map(d => fetchJSON(`polar/recharge/${d}.json`).catch(() => null)));
+    const files = await Promise.all(dates.map(d => fetchJSON(`../../polar/recharge/${d}.json`).catch(() => null)));
     const vals = [];
     files.forEach(f => { if (f && f.ans_charge != null) vals.push(f.ans_charge); });
     if (vals.length) {
@@ -2236,7 +2219,7 @@ async function renderCoach() {
   try {
     for (const day of lastN(3).slice().reverse()) {
       try {
-        const n = await fetchJSON(`nutrition/daily/${day}.json`);
+        const n = await fetchJSON(`../../nutrition/daily/${day}.json`);
         const t = n.totals || {}, g = n.goals || {};
         if (t.protein_g != null) {
           S.proteinG = Math.round(t.protein_g);
@@ -2249,7 +2232,7 @@ async function renderCoach() {
   try {
     for (const day of lastN(2).slice().reverse()) {
       try {
-        const a = await fetchJSON(`polar/daily_activity/${day}.json`);
+        const a = await fetchJSON(`../../polar/daily_activity/${day}.json`);
         if (a["active-calories"] != null) { S.activeCal = Math.round(a["active-calories"]); break; }
       } catch {}
     }
