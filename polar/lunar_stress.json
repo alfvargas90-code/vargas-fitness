@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-29T07:32:34-05:00",
+  "generated_at": "2026-06-29T08:02:54-05:00",
   "score": 30,
   "band": "Mild Compression",
   "trigger": "Moon in Capricorn",
@@ -12,7 +12,7 @@
   "recommendation": "Keep the day structured and move work forward; no need to back off.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "2\u00b0 Cap 36'",
+    "degree": "2\u00b0 Cap 51'",
     "phase": "Full",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -37,7 +37,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 272.59,
+    "moon_longitude": 272.84,
     "moon_sign": "Capricorn",
     "moon_phase": "Full",
     "moon_house_natal": 12,
