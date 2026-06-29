@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-28T22:06:12-05:00",
-  "data_hash": "cf94e029b96a8aad",
-  "slot": "day-review",
-  "summary": "Recovery: Excellent\n\nReading: State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 18%\n\nRead\nThe morning opens on a strong recovery base, with sleep doing more of the lifting than strain. For muscle gain while leaning out, the day favors quality resistance work and enough protein over chasing extra movement.\n\nCapacity is clean.\n\nPerformance: Capacity is clean.\n\nTransit: none",
+  "generated_at": "2026-06-29T04:00:00-05:00",
+  "data_hash": "d15aa3e7781bcbb4",
+  "slot": "sleep",
+  "summary": "Recovery: Excellent\n\nReading: State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 0%\n\nRead\nLast night restored a strong reserve, with sleep doing most of the heavy lifting despite a slightly muted internal signal. The day favors composed output and muscle-preserving consistency, where protein carries more consequence than extra movement.\n\nSteady reserve.\n\nPerformance: Steady reserve.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 18%\n\nRead\nThe morning opens on a strong recovery base, with sleep doing more of the lifting than strain. For muscle gain while leaning out, the day favors quality resistance work and enough protein over chasing extra movement.\n\nCapacity is clean."
+      "text": "State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 0%\n\nRead\nLast night restored a strong reserve, with sleep doing most of the heavy lifting despite a slightly muted internal signal. The day favors composed output and muscle-preserving consistency, where protein carries more consequence than extra movement.\n\nSteady reserve."
     },
     {
       "label": "Performance",
-      "text": "Capacity is clean."
+      "text": "Steady reserve."
     },
     {
       "label": "Transit",
@@ -23,8 +23,8 @@
   ],
   "simple": {
     "recovery": "Excellent",
-    "reading": "State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 18%\n\nRead\nThe morning opens on a strong recovery base, with sleep doing more of the lifting than strain. For muscle gain while leaning out, the day favors quality resistance work and enough protein over chasing extra movement.\n\nCapacity is clean.",
-    "performance": "Capacity is clean.",
+    "reading": "State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 0%\n\nRead\nLast night restored a strong reserve, with sleep doing most of the heavy lifting despite a slightly muted internal signal. The day favors composed output and muscle-preserving consistency, where protein carries more consequence than extra movement.\n\nSteady reserve.",
+    "performance": "Steady reserve.",
     "transit": null
   },
   "nutrition_nudge": "",
