@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-30T16:38:33-05:00",
+  "generated_at": "2026-06-30T17:08:45-05:00",
   "score": 28,
   "band": "Mild Compression",
   "trigger": "Moon in Capricorn",
@@ -9,10 +9,10 @@
     "sleep_score": 72
   },
   "workout_intensity": "moderate",
-  "recommendation": "Load protein at every meal and put the heaviest compound lifts at the front of the session; keep the moderate workout structured\u2014work sets logged, rest timed\u2014and let that be the day's main output.",
+  "recommendation": "Channel the activation into resistance work\u2014load the bar, prioritize the heavy compound sets, and anchor the day around hitting your protein target.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "19\u00b0 Cap 02'",
+    "degree": "19\u00b0 Cap 18'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -43,7 +43,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 289.04,
+    "moon_longitude": 289.29,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
@@ -64,7 +64,7 @@
       "hrv_7d": 54.3,
       "rhr_7d": 56
     },
-    "active_calories": 439,
+    "active_calories": 458,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
