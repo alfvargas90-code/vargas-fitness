@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-30T17:50:51-05:00",
+  "generated_at": "2026-06-30T18:21:04-05:00",
   "score": 28,
   "band": "Mild Compression",
   "trigger": "Moon in Capricorn",
@@ -9,10 +9,10 @@
     "sleep_score": 72
   },
   "workout_intensity": "moderate",
-  "recommendation": "Hold the morning to one sequenced block before opening anything reactive\u2014clear it, then move. Point the first hard effort at resistance work and load protein early, deciding each later commitment on whether it actually needs you now.",
+  "recommendation": "Hold the morning to one resistance session and structure protein around it; on inbound asks, respond only if the day actually requires it\u2014calibrate the call before you make it, then keep the rest of your output in tight, finite blocks.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "19\u00b0 Cap 39'",
+    "degree": "19\u00b0 Cap 54'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -25,7 +25,7 @@
       "until_display": "7/1 at 2:32 PM"
     },
     "active_transits": [
-      "Mercury retrograde (until 7/24)"
+      "Mercury retrograde (until 7/23)"
     ]
   },
   "bars": {
@@ -43,7 +43,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 289.64,
+    "moon_longitude": 289.89,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
@@ -64,7 +64,7 @@
       "hrv_7d": 54.3,
       "rhr_7d": 56
     },
-    "active_calories": 483,
+    "active_calories": 526,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
