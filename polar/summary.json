@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-06-29T07:00:00-05:00",
-  "data_hash": "e3227289ef3d19de",
-  "slot": "recovery",
-  "summary": "Recovery: Excellent\n\nReading: State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 0%\n\nRead\nYou woke on a strong recovery base, helped by deeper rest than your recent norm. The day is open and unspent, favoring measured strength output and enough nourishment to turn capacity into muscle-preserving progress rather than a sharp deficit.\n\nClean runway.\n\nPerformance: Clean runway.\n\nTransit: none",
+  "generated_at": "2026-06-30T17:30:05-05:00",
+  "data_hash": "a4937bdf7c2d6702",
+  "slot": "train-1",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 35%\n\nRead\nRecovery is holding well against a light day already spent, though sleep left a small drag in the background. The open window favors measured resistance work, with protein and a modest deficit carrying the muscle-preservation side of the equation.\n\nMeasured strength.\n\nPerformance: Measured strength.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
-      "text": "Excellent"
+      "text": "Good"
     },
     {
       "label": "Reading",
-      "text": "State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 0%\n\nRead\nYou woke on a strong recovery base, helped by deeper rest than your recent norm. The day is open and unspent, favoring measured strength output and enough nourishment to turn capacity into muscle-preserving progress rather than a sharp deficit.\n\nClean runway."
+      "text": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 35%\n\nRead\nRecovery is holding well against a light day already spent, though sleep left a small drag in the background. The open window favors measured resistance work, with protein and a modest deficit carrying the muscle-preservation side of the equation.\n\nMeasured strength."
     },
     {
       "label": "Performance",
-      "text": "Clean runway."
+      "text": "Measured strength."
     },
     {
       "label": "Transit",
@@ -22,20 +22,20 @@
     }
   ],
   "simple": {
-    "recovery": "Excellent",
-    "reading": "State\nExcellent\nRecovery 75 \u2022 Sleep 80 \u2022 Strain 0%\n\nRead\nYou woke on a strong recovery base, helped by deeper rest than your recent norm. The day is open and unspent, favoring measured strength output and enough nourishment to turn capacity into muscle-preserving progress rather than a sharp deficit.\n\nClean runway.",
-    "performance": "Clean runway.",
+    "recovery": "Good",
+    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 35%\n\nRead\nRecovery is holding well against a light day already spent, though sleep left a small drag in the background. The open window favors measured resistance work, with protein and a modest deficit carrying the muscle-preservation side of the equation.\n\nMeasured strength.",
+    "performance": "Measured strength.",
     "transit": null
   },
-  "nutrition_nudge": "Start breakfast with 35g protein and keep meals evenly paced today.",
+  "nutrition_nudge": "",
   "transits": [],
   "data_basis": {
-    "recharge_today": 6,
-    "sleep_hours": 7.9,
-    "hrv_today": 50,
-    "hrv_7d_avg": 54.7,
-    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
-    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "0m active, 83 calories burned, \u2014 training load"
+    "recharge_today": 5,
+    "sleep_hours": 6.4,
+    "hrv_today": 47,
+    "hrv_7d_avg": 54.3,
+    "nutrition": null,
+    "nutrition_detail": null,
+    "activity_today": "2,260 steps so far, 2h 1m active, 1,123 calories burned, Light training load"
   }
 }
