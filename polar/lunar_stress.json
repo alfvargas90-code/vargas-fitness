@@ -1,68 +1,69 @@
 {
-  "generated_at": "2026-06-29T17:51:36-05:00",
-  "score": 43,
-  "band": "Mild Compression",
+  "generated_at": "2026-06-30T13:25:45-05:00",
+  "score": 25,
+  "band": "Stable Control",
   "trigger": "Moon in Capricorn",
   "physiology": {
     "hrv_pct_baseline": -13,
-    "rhr_delta_bpm": 4,
-    "sleep_score": 80
+    "rhr_delta_bpm": 0,
+    "sleep_score": 72
   },
-  "workout_intensity": "moderate",
-  "recommendation": "Keep the day structured and move work forward; no need to back off.",
+  "workout_intensity": "rest",
+  "recommendation": "Load the charge into resistance work today\u2014drive the heavy sets and anchor the day on a high-protein intake. Initiate the harder calls selectively; calibrate each against the data before you commit, then move.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "7\u00b0 Cap 43'",
-    "phase": "Full",
+    "degree": "17\u00b0 Cap 26'",
+    "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
       "at": "2026-07-01T14:32-05:00",
       "display": "Enters Aquarius 7/1 at 2:32 PM"
     },
-    "void_of_course": null,
+    "void_of_course": {
+      "active": true,
+      "until": "2026-07-01T14:32-05:00",
+      "until_display": "7/1 at 2:32 PM"
+    },
     "active_transits": [
       "Mercury retrograde (until 7/24)"
     ]
   },
   "bars": {
     "transit": {
-      "filled": 5,
+      "filled": 2,
       "total": 10,
-      "points": 25,
+      "points": 10,
       "max": 55
     },
     "body": {
       "filled": 4,
       "total": 10,
-      "points": 18,
+      "points": 15,
       "max": 40
     }
   },
   "transit_detail": {
-    "moon_longitude": 277.71,
+    "moon_longitude": 287.44,
     "moon_sign": "Capricorn",
-    "moon_phase": "Full",
-    "moon_house_natal": 12,
+    "moon_phase": "Waning Gibbous",
+    "moon_house_natal": 1,
     "aspect_to_natal_moon": null,
-    "is_full_moon": true
+    "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 43,
-    "transit_points": 25,
-    "physiology_points": 18,
+    "raw_score": 25,
+    "transit_points": 10,
+    "physiology_points": 15,
     "breakdown": [
       "+10 Moon in Capricorn",
-      "+10 Full Moon",
-      "+5 Moon transiting natal 12th house",
       "+10 HRV -13% below baseline",
-      "+5 RHR +4 bpm vs baseline",
-      "+3 Moderate-intensity day"
+      "+5 Sleep score 72 (70-80)"
     ],
     "baselines": {
-      "hrv_7d": 53.9,
-      "rhr_7d": 55.9
+      "hrv_7d": 54.3,
+      "rhr_7d": 56
     },
-    "active_calories": 442,
+    "active_calories": 304,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
