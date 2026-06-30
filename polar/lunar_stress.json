@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-06-30T17:20:36-05:00",
-  "score": 25,
-  "band": "Stable Control",
+  "generated_at": "2026-06-30T17:50:51-05:00",
+  "score": 28,
+  "band": "Mild Compression",
   "trigger": "Moon in Capricorn",
   "physiology": {
     "hrv_pct_baseline": -13,
     "rhr_delta_bpm": 0,
     "sleep_score": 72
   },
-  "workout_intensity": "rest",
-  "recommendation": "Hold the line on resistance work today and drive the protein load to spec; initiate the harder calls and outreach selectively, calibrating each against actual stakes before you commit.",
+  "workout_intensity": "moderate",
+  "recommendation": "Hold the morning to one sequenced block before opening anything reactive\u2014clear it, then move. Point the first hard effort at resistance work and load protein early, deciding each later commitment on whether it actually needs you now.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "19\u00b0 Cap 23'",
+    "degree": "19\u00b0 Cap 39'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -38,12 +38,12 @@
     "body": {
       "filled": 4,
       "total": 10,
-      "points": 15,
+      "points": 18,
       "max": 40
     }
   },
   "transit_detail": {
-    "moon_longitude": 289.39,
+    "moon_longitude": 289.64,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
@@ -51,19 +51,20 @@
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 25,
+    "raw_score": 28,
     "transit_points": 10,
-    "physiology_points": 15,
+    "physiology_points": 18,
     "breakdown": [
       "+10 Moon in Capricorn",
       "+10 HRV -13% below baseline",
-      "+5 Sleep score 72 (70-80)"
+      "+5 Sleep score 72 (70-80)",
+      "+3 Moderate-intensity day"
     ],
     "baselines": {
       "hrv_7d": 54.3,
       "rhr_7d": 56
     },
-    "active_calories": 277,
+    "active_calories": 483,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
