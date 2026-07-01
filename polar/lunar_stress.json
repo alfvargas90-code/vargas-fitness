@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-30T18:51:18-05:00",
+  "generated_at": "2026-06-30T19:21:31-05:00",
   "score": 28,
   "band": "Mild Compression",
   "trigger": "Moon in Capricorn",
@@ -9,10 +9,10 @@
     "sleep_score": 72
   },
   "workout_intensity": "moderate",
-  "recommendation": "Hold the first hour for one resistance block and a protein-anchored first meal before anything reactive lands on you.",
+  "recommendation": "Channel the charge into one structured resistance block and hit your protein first, not last. Take incoming calls and decisions on merit \u2014 respond if the case holds, hold if it doesn't.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "20\u00b0 Cap 09'",
+    "degree": "20\u00b0 Cap 24'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -43,7 +43,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 290.15,
+    "moon_longitude": 290.4,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
