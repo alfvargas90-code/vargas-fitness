@@ -59,7 +59,7 @@ import swisseph as swe
 # --- paths ---------------------------------------------------------------
 HERE = os.path.dirname(os.path.abspath(__file__))               # .../fitness-dashboard/timing-weather
 DASH = os.path.dirname(HERE)                                     # .../fitness-dashboard
-VAULT = os.path.dirname(os.path.dirname(DASH))                   # .../alfredo.v
+VAULT = "/Volumes/Alfie&Co2/alfredo.v"  # hardcoded 2026-07-01 — internal repo lives outside the vault
 ASTRO = os.path.join(VAULT, "02_Astrology", "Alfie")
 COUNCIL = os.path.join(VAULT, "05_Council", "octopus-debates")
 CACHE_DIR = os.path.join(DASH, "polar", "cache")                 # forecast-trend cache (idempotent)
