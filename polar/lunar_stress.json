@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-01T15:32:43-05:00",
+  "generated_at": "2026-07-01T16:02:56-05:00",
   "score": 18,
   "band": "Stable Control",
   "trigger": "No active lunar trigger",
@@ -9,10 +9,10 @@
     "sleep_score": 72
   },
   "workout_intensity": "moderate",
-  "recommendation": "Load today at full output \u2014 the system is green, so bias toward resistance training and hit your protein target early. If a hard call needs making, make it; if it can wait, calibrate before you fire.",
+  "recommendation": "Load protein first thing\u201440g before the day pulls you elsewhere\u2014then take the day's biggest task under load and run it hard while the system is this clean.",
   "lunar": {
     "sign": "Aquarius",
-    "degree": "0\u00b0 Aqu 30'",
+    "degree": "0\u00b0 Aqu 45'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Pisces",
@@ -39,7 +39,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 300.5,
+    "moon_longitude": 300.75,
     "moon_sign": "Aquarius",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
@@ -59,7 +59,7 @@
       "hrv_7d": 54.3,
       "rhr_7d": 56
     },
-    "active_calories": 428,
+    "active_calories": 469,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
