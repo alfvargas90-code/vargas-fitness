@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-30T19:51:43-05:00",
-  "score": 28,
+  "generated_at": "2026-06-30T20:22:01-05:00",
+  "score": 35,
   "band": "Mild Compression",
   "trigger": "Moon in Capricorn",
   "physiology": {
@@ -8,11 +8,11 @@
     "rhr_delta_bpm": 0,
     "sleep_score": 72
   },
-  "workout_intensity": "moderate",
-  "recommendation": "Channel the charge into one structured block of resistance work and hit your protein target before noon; initiate outbound calls selectively, and calibrate against the actual stakes before firing off anything reactive.",
+  "workout_intensity": "high",
+  "recommendation": "Load protein to 1g per pound of bodyweight and route today's charge into a structured resistance session\u2014compound lifts, logged sets, progressive load. Keep decisions batched and sequenced; if a call must be made, calibrate against the data before you commit.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "20\u00b0 Cap 39'",
+    "degree": "20\u00b0 Cap 54'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -36,14 +36,14 @@
       "max": 55
     },
     "body": {
-      "filled": 4,
+      "filled": 6,
       "total": 10,
-      "points": 18,
+      "points": 25,
       "max": 40
     }
   },
   "transit_detail": {
-    "moon_longitude": 290.65,
+    "moon_longitude": 290.9,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
@@ -51,20 +51,20 @@
     "is_full_moon": false
   },
   "scoring_detail": {
-    "raw_score": 28,
+    "raw_score": 35,
     "transit_points": 10,
-    "physiology_points": 18,
+    "physiology_points": 25,
     "breakdown": [
       "+10 Moon in Capricorn",
       "+10 HRV -13% below baseline",
       "+5 Sleep score 72 (70-80)",
-      "+3 Moderate-intensity day"
+      "+10 High-intensity day on suppressed HRV"
     ],
     "baselines": {
       "hrv_7d": 54.3,
       "rhr_7d": 56
     },
-    "active_calories": 590,
+    "active_calories": 839,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
