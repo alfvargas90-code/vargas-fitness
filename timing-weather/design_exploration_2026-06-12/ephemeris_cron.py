@@ -26,7 +26,7 @@ deploy-watch jobs that also commit to this repo.
 import os, sys, subprocess, importlib.util
 from datetime import datetime
 
-REPO = "/Volumes/Alfie&Co2/alfredo.v/04_Projects/fitness-dashboard"
+REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SUBDIR = os.path.join(REPO, "timing-weather/design_exploration_2026-06-12")
 LIVE = os.path.join(REPO, "timing-weather")        # the live PWA serves ephemeris.json + state.json from here
 ENGINE = os.path.join(LIVE, "engine.py")
