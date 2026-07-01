@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-01T09:28:42-05:00",
+  "generated_at": "2026-07-01T09:58:58-05:00",
   "score": 25,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -9,10 +9,10 @@
     "sleep_score": 72
   },
   "workout_intensity": "rest",
-  "recommendation": "Load protein first\u2014anchor the day at 1g per pound of target bodyweight\u2014then put the compression from the poor HRV read into resistance work, not conditioning. Initiate hard output and calls as needed; the system is calibrated to run today.",
+  "recommendation": "Load protein at 1g per pound of bodyweight before noon, then put the charge into a hard resistance session\u2014compound lifts, progressive load\u2014and initiate outreach or hard calls selectively, only where the move clears a clear judgment check.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "27\u00b0 Cap 27'",
+    "degree": "27\u00b0 Cap 43'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -43,7 +43,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 297.46,
+    "moon_longitude": 297.71,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
@@ -63,7 +63,7 @@
       "hrv_7d": 54.3,
       "rhr_7d": 56
     },
-    "active_calories": 144,
+    "active_calories": 196,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
