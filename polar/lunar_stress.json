@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-30T21:22:33-05:00",
+  "generated_at": "2026-06-30T21:52:48-05:00",
   "score": 35,
   "band": "Mild Compression",
   "trigger": "Moon in Capricorn",
@@ -9,10 +9,10 @@
     "sleep_score": 72
   },
   "workout_intensity": "high",
-  "recommendation": "Load today's charge into resistance work\u2014hit the top protein target and keep the structure tight; if any calls or launches must be made, calibrate against the data before you commit, and initiate only what clears that bar.",
+  "recommendation": "Load protein at 1g per pound of lean mass across three fixed feeds today, and open with the heaviest compound lift while the charge is high. Route any nonessential message to a scratch draft and send only what still reads as necessary after the workout.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "21\u00b0 Cap 24'",
+    "degree": "21\u00b0 Cap 39'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -43,7 +43,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 291.4,
+    "moon_longitude": 291.66,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
