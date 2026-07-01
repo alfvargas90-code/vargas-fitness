@@ -1,19 +1,19 @@
 {
-  "date": "2026-06-27",
-  "generated_at": "2026-06-27T21:45:00-05:00",
+  "date": "2026-06-30",
+  "generated_at": "2026-06-30T21:45:00-05:00",
   "verdict": "Big",
   "stats": {
-    "steps": 12010,
-    "active_minutes": 527,
-    "active_time_display": "8h 47m",
-    "calories_burned": 2824,
-    "active_calories": 1298,
-    "calories_eaten": 0,
-    "net_deficit": 2824,
+    "steps": 6303,
+    "active_minutes": 372,
+    "active_time_display": "6h 12m",
+    "calories_burned": 2431,
+    "active_calories": 890,
+    "calories_eaten": 1110,
+    "net_deficit": 1321,
     "calorie_target": 2574,
-    "protein_g": 0,
+    "protein_g": 59,
     "protein_target_g": 138,
-    "protein_gap_g": 138
+    "protein_gap_g": 79
   },
-  "prose": "Big engine day with about 12,000 steps and a lot of time moving, but eating nothing turns that into a muscle-protection problem, not a clean fat-loss win. A nearly 2,800-calorie deficit and missing about 140 grams of protein is too steep if you want to keep building while leaning out. Push protein hard tomorrow and keep the deficit modest."
+  "prose": "Big output day, but the food side was too light for building muscle while leaning out: about 6,300 steps and plenty of movement, but only about 1,100 calories eaten left you in too deep a hole. The bigger miss was protein, with only about 60 grams in, and that is where muscle protection starts to slip. Push protein hard tomorrow and keep the deficit smaller."
 }
