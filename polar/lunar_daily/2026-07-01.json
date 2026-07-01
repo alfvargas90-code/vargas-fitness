@@ -1,10 +1,10 @@
 {
   "date": "2026-07-01",
-  "moon_sign": "Capricorn",
-  "moon_degree": "30\u00b0 Cap 00'",
+  "moon_sign": "Aquarius",
+  "moon_degree": "0\u00b0 Aqu 15'",
   "moon_phase": "Waning Gibbous",
   "active_major_transits": [
     "Mercury retrograde (until 7/24)"
   ],
-  "score": 25
+  "score": 18
 }
