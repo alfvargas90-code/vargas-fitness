@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-01T04:00:00-05:00",
-  "data_hash": "11c4eb4ff68dce61",
-  "slot": "sleep",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 2%\n\nRead\nYou\u2019re waking with useful reserve, not a full surplus; last night restored enough to support a productive day, while the shorter sleep keeps the ceiling moderated. For muscle gain while leaning down, the day favors measured effort and adequate protein over aggressive deficit.\n\nQuiet capacity.\n\nPerformance: Quiet capacity.\n\nTransit: none",
+  "generated_at": "2026-07-01T07:00:00-05:00",
+  "data_hash": "3984431634eb09dd",
+  "slot": "recovery",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 3%\n\nRead\nYou woke with solid capacity, though the night was a little shorter and less settled than your recent pattern. The day favors steady output and muscle-preserving choices, with protein carrying more weight than early movement.\n\nSteady, not forceful.\n\nPerformance: Steady, not forceful.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 2%\n\nRead\nYou\u2019re waking with useful reserve, not a full surplus; last night restored enough to support a productive day, while the shorter sleep keeps the ceiling moderated. For muscle gain while leaning down, the day favors measured effort and adequate protein over aggressive deficit.\n\nQuiet capacity."
+      "text": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 3%\n\nRead\nYou woke with solid capacity, though the night was a little shorter and less settled than your recent pattern. The day favors steady output and muscle-preserving choices, with protein carrying more weight than early movement.\n\nSteady, not forceful."
     },
     {
       "label": "Performance",
-      "text": "Quiet capacity."
+      "text": "Steady, not forceful."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 2%\n\nRead\nYou\u2019re waking with useful reserve, not a full surplus; last night restored enough to support a productive day, while the shorter sleep keeps the ceiling moderated. For muscle gain while leaning down, the day favors measured effort and adequate protein over aggressive deficit.\n\nQuiet capacity.",
-    "performance": "Quiet capacity.",
+    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 3%\n\nRead\nYou woke with solid capacity, though the night was a little shorter and less settled than your recent pattern. The day favors steady output and muscle-preserving choices, with protein carrying more weight than early movement.\n\nSteady, not forceful.",
+    "performance": "Steady, not forceful.",
     "transit": null
   },
-  "nutrition_nudge": "",
+  "nutrition_nudge": "Start breakfast with 35g protein and keep meals evenly paced today.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.3,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": null
+    "activity_today": "2 steps so far, 8m active, 486 calories burned, \u2014 training load"
   }
 }
