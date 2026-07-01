@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-30T23:23:40-05:00",
+  "generated_at": "2026-06-30T23:53:54-05:00",
   "score": 35,
   "band": "Mild Compression",
   "trigger": "Moon in Capricorn",
@@ -9,10 +9,10 @@
     "sleep_score": 72
   },
   "workout_intensity": "high",
-  "recommendation": "Route today's charge into one structured block of resistance work, and load protein first so the build has material to work with. Initiate outbound calls selectively\u2014make the ones that move something, calibrate before the rest.",
+  "recommendation": "Channel the charge into loaded resistance work and hit protein early, not scattered output. Calibrate before firing off any nonessential call\u2014send only the ones that clear a clear-purpose check.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "22\u00b0 Cap 25'",
+    "degree": "22\u00b0 Cap 40'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -43,7 +43,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 292.41,
+    "moon_longitude": 292.66,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
