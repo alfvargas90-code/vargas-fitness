@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-30T22:53:23-05:00",
+  "generated_at": "2026-06-30T23:23:40-05:00",
   "score": 35,
   "band": "Mild Compression",
   "trigger": "Moon in Capricorn",
@@ -9,10 +9,10 @@
     "sleep_score": 72
   },
   "workout_intensity": "high",
-  "recommendation": "Load extra protein into today's first meal and put the highest-quality set of your training under the barbell early, while output holds steady; screen incoming asks and initiate the non-essential ones only if they still read as necessary after a second look.",
+  "recommendation": "Route today's charge into one structured block of resistance work, and load protein first so the build has material to work with. Initiate outbound calls selectively\u2014make the ones that move something, calibrate before the rest.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "22\u00b0 Cap 10'",
+    "degree": "22\u00b0 Cap 25'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -43,7 +43,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 292.16,
+    "moon_longitude": 292.41,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
@@ -64,7 +64,7 @@
       "hrv_7d": 54.3,
       "rhr_7d": 56
     },
-    "active_calories": 949,
+    "active_calories": 973,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
