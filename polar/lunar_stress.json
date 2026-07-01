@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-01T00:24:12-05:00",
+  "generated_at": "2026-07-01T00:54:26-05:00",
   "score": 25,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -9,10 +9,10 @@
     "sleep_score": 72
   },
   "workout_intensity": "rest",
-  "recommendation": "Load protein first \u2014 anchor the day on a resistance session and a high-protein first meal, then push into your hardest output block. Initiate the calls and commitments that need making; you're calibrated to execute, so trust the read and move.",
+  "recommendation": "Load the day heavy: put the largest lift under the bar and drive protein toward bodyweight in grams. Initiate calls and hard conversations selectively\u2014make the one that moves the needle, hold the rest until the reason is clear.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "22\u00b0 Cap 55'",
+    "degree": "23\u00b0 Cap 10'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -43,7 +43,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 292.92,
+    "moon_longitude": 293.17,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
