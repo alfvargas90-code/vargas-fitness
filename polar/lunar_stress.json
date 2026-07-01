@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-01T10:29:16-05:00",
+  "generated_at": "2026-07-01T10:59:35-05:00",
   "score": 25,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -9,10 +9,10 @@
     "sleep_score": 72
   },
   "workout_intensity": "rest",
-  "recommendation": "Load the biggest lever first and put the surplus charge into resistance work; hit protein hard and initiate the calls that actually move things, gating each on whether it needs you today.",
+  "recommendation": "Load protein first \u2014 anchor the day on a resistance session and hit your intake target before you touch the queue. Initiate the hard outputs while the system's steady, but calibrate each outbound call against the data before you send, not against the urge to clear it.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "27\u00b0 Cap 58'",
+    "degree": "28\u00b0 Cap 13'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -43,7 +43,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 297.96,
+    "moon_longitude": 298.22,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
@@ -63,7 +63,7 @@
       "hrv_7d": 54.3,
       "rhr_7d": 56
     },
-    "active_calories": 214,
+    "active_calories": 222,
     "natal": {
       "moon_lon": 275.531,
       "uranus_lon": 275.693
