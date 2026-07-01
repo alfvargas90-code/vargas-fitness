@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-30T20:00:03-05:00",
-  "data_hash": "4241ad328c720bf9",
-  "slot": "train-2",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 74%\n\nRead\nThe day landed as moderate effort on solid but not peak readiness, with movement running lighter than usual as the workout window closes. It favors muscle-preserving consistency over intensity, where protein carries more weight than extra steps tonight.\n\nSteady, not spent.\n\nPerformance: Steady, not spent.\n\nTransit: none",
+  "generated_at": "2026-07-01T04:00:00-05:00",
+  "data_hash": "11c4eb4ff68dce61",
+  "slot": "sleep",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 2%\n\nRead\nYou\u2019re waking with useful reserve, not a full surplus; last night restored enough to support a productive day, while the shorter sleep keeps the ceiling moderated. For muscle gain while leaning down, the day favors measured effort and adequate protein over aggressive deficit.\n\nQuiet capacity.\n\nPerformance: Quiet capacity.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 74%\n\nRead\nThe day landed as moderate effort on solid but not peak readiness, with movement running lighter than usual as the workout window closes. It favors muscle-preserving consistency over intensity, where protein carries more weight than extra steps tonight.\n\nSteady, not spent."
+      "text": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 2%\n\nRead\nYou\u2019re waking with useful reserve, not a full surplus; last night restored enough to support a productive day, while the shorter sleep keeps the ceiling moderated. For muscle gain while leaning down, the day favors measured effort and adequate protein over aggressive deficit.\n\nQuiet capacity."
     },
     {
       "label": "Performance",
-      "text": "Steady, not spent."
+      "text": "Quiet capacity."
     },
     {
       "label": "Transit",
@@ -23,8 +23,8 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 74%\n\nRead\nThe day landed as moderate effort on solid but not peak readiness, with movement running lighter than usual as the workout window closes. It favors muscle-preserving consistency over intensity, where protein carries more weight than extra steps tonight.\n\nSteady, not spent.",
-    "performance": "Steady, not spent.",
+    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 2%\n\nRead\nYou\u2019re waking with useful reserve, not a full surplus; last night restored enough to support a productive day, while the shorter sleep keeps the ceiling moderated. For muscle gain while leaning down, the day favors measured effort and adequate protein over aggressive deficit.\n\nQuiet capacity.",
+    "performance": "Quiet capacity.",
     "transit": null
   },
   "nutrition_nudge": "",
@@ -34,8 +34,8 @@
     "sleep_hours": 6.4,
     "hrv_today": 47,
     "hrv_7d_avg": 54.3,
-    "nutrition": null,
-    "nutrition_detail": null,
-    "activity_today": "4,196 steps so far, 4h 22m active, 1,939 calories burned, Moderate training load"
+    "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
+    "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
+    "activity_today": null
   }
 }
