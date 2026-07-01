@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-30T17:30:05-05:00",
-  "data_hash": "a4937bdf7c2d6702",
-  "slot": "train-1",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 35%\n\nRead\nRecovery is holding well against a light day already spent, though sleep left a small drag in the background. The open window favors measured resistance work, with protein and a modest deficit carrying the muscle-preservation side of the equation.\n\nMeasured strength.\n\nPerformance: Measured strength.\n\nTransit: none",
+  "generated_at": "2026-06-30T20:00:03-05:00",
+  "data_hash": "4241ad328c720bf9",
+  "slot": "train-2",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 74%\n\nRead\nThe day landed as moderate effort on solid but not peak readiness, with movement running lighter than usual as the workout window closes. It favors muscle-preserving consistency over intensity, where protein carries more weight than extra steps tonight.\n\nSteady, not spent.\n\nPerformance: Steady, not spent.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 35%\n\nRead\nRecovery is holding well against a light day already spent, though sleep left a small drag in the background. The open window favors measured resistance work, with protein and a modest deficit carrying the muscle-preservation side of the equation.\n\nMeasured strength."
+      "text": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 74%\n\nRead\nThe day landed as moderate effort on solid but not peak readiness, with movement running lighter than usual as the workout window closes. It favors muscle-preserving consistency over intensity, where protein carries more weight than extra steps tonight.\n\nSteady, not spent."
     },
     {
       "label": "Performance",
-      "text": "Measured strength."
+      "text": "Steady, not spent."
     },
     {
       "label": "Transit",
@@ -23,8 +23,8 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 35%\n\nRead\nRecovery is holding well against a light day already spent, though sleep left a small drag in the background. The open window favors measured resistance work, with protein and a modest deficit carrying the muscle-preservation side of the equation.\n\nMeasured strength.",
-    "performance": "Measured strength.",
+    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 74%\n\nRead\nThe day landed as moderate effort on solid but not peak readiness, with movement running lighter than usual as the workout window closes. It favors muscle-preserving consistency over intensity, where protein carries more weight than extra steps tonight.\n\nSteady, not spent.",
+    "performance": "Steady, not spent.",
     "transit": null
   },
   "nutrition_nudge": "",
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.3,
     "nutrition": null,
     "nutrition_detail": null,
-    "activity_today": "2,260 steps so far, 2h 1m active, 1,123 calories burned, Light training load"
+    "activity_today": "4,196 steps so far, 4h 22m active, 1,939 calories burned, Moderate training load"
   }
 }
