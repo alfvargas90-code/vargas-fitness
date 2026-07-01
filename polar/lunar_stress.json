@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-01T08:58:27-05:00",
+  "generated_at": "2026-07-01T09:28:42-05:00",
   "score": 25,
   "band": "Stable Control",
   "trigger": "Moon in Capricorn",
@@ -9,10 +9,10 @@
     "sleep_score": 72
   },
   "workout_intensity": "rest",
-  "recommendation": "Load protein first \u2014 hit your target grams before noon \u2014 then put the surplus drive into a hard resistance session, working sets heavy. Initiate the high-stakes calls and decisions selectively: run each against the data before you commit, then move.",
+  "recommendation": "Load protein first\u2014anchor the day at 1g per pound of target bodyweight\u2014then put the compression from the poor HRV read into resistance work, not conditioning. Initiate hard output and calls as needed; the system is calibrated to run today.",
   "lunar": {
     "sign": "Capricorn",
-    "degree": "27\u00b0 Cap 12'",
+    "degree": "27\u00b0 Cap 27'",
     "phase": "Waning Gibbous",
     "next_sign_change": {
       "sign": "Aquarius",
@@ -43,7 +43,7 @@
     }
   },
   "transit_detail": {
-    "moon_longitude": 297.2,
+    "moon_longitude": 297.46,
     "moon_sign": "Capricorn",
     "moon_phase": "Waning Gibbous",
     "moon_house_natal": 1,
