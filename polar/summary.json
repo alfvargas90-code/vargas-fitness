@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-07-01T11:30:00-05:00",
-  "data_hash": "9ea49349277c2e35",
-  "slot": "fuel-1",
-  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 29%\n\nRead\nRecovery is solid, but the day is running underfed and lighter than usual so far. With no recent meal logged, the afternoon favors a protein-forward first meal and a modest deficit, so muscle is supported rather than borrowed from.\n\nPreserve the base.\n\nPerformance: Preserve the base.\n\nTransit: none",
+  "generated_at": "2026-07-01T15:00:04-05:00",
+  "data_hash": "1d68980eead03951",
+  "slot": "fuel-2",
+  "summary": "Recovery: Good\n\nReading: State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 47%\n\nRead\nRecovery is supportive, but the day is underfed and output is running lighter than usual. With a long food gap and no protein logged, the evening favors measured strength work over intensity, with muscle preservation depending on the next fueling window.\n\nSteady over sharp.\n\nPerformance: Steady over sharp.\n\nTransit: none",
   "sections": [
     {
       "label": "Recovery",
@@ -10,11 +10,11 @@
     },
     {
       "label": "Reading",
-      "text": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 29%\n\nRead\nRecovery is solid, but the day is running underfed and lighter than usual so far. With no recent meal logged, the afternoon favors a protein-forward first meal and a modest deficit, so muscle is supported rather than borrowed from.\n\nPreserve the base."
+      "text": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 47%\n\nRead\nRecovery is supportive, but the day is underfed and output is running lighter than usual. With a long food gap and no protein logged, the evening favors measured strength work over intensity, with muscle preservation depending on the next fueling window.\n\nSteady over sharp."
     },
     {
       "label": "Performance",
-      "text": "Preserve the base."
+      "text": "Steady over sharp."
     },
     {
       "label": "Transit",
@@ -23,11 +23,11 @@
   ],
   "simple": {
     "recovery": "Good",
-    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 29%\n\nRead\nRecovery is solid, but the day is running underfed and lighter than usual so far. With no recent meal logged, the afternoon favors a protein-forward first meal and a modest deficit, so muscle is supported rather than borrowed from.\n\nPreserve the base.",
-    "performance": "Preserve the base.",
+    "reading": "State\nGood\nRecovery 63 \u2022 Sleep 72 \u2022 Strain 47%\n\nRead\nRecovery is supportive, but the day is underfed and output is running lighter than usual. With a long food gap and no protein logged, the evening favors measured strength work over intensity, with muscle preservation depending on the next fueling window.\n\nSteady over sharp.",
+    "performance": "Steady over sharp.",
     "transit": null
   },
-  "nutrition_nudge": "On pace so far; start lunch with 50g protein and keep meal timing steady.",
+  "nutrition_nudge": "Front-load protein in your next meal with 50g to protect muscle while the day is still catchable.",
   "transits": [],
   "data_basis": {
     "recharge_today": 5,
@@ -36,6 +36,6 @@
     "hrv_7d_avg": 54.3,
     "nutrition": "calories 0 of 2574 goal, protein 0g of 138g goal, carbs 0g of 290g goal, fat 0g of 72g goal",
     "nutrition_detail": "calories 0 of 2574 goal -> 2574 left; protein 0g of 138g goal -> 138g gap; carbs 0g of 290g goal; fat 0g of 72g goal",
-    "activity_today": "1,288 steps so far, 1h 45m active, 1,021 calories burned, Light training load"
+    "activity_today": "2,004 steps so far, 2h 48m active, 1,434 calories burned, Light training load"
   }
 }
